@@ -1,1 +1,2 @@
 odoo-enterprise git@github.com:odoo/enterprise.git
+ingadhoc-odoo-support git@github.com:ingadhoc/odoo-support.git

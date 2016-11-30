@@ -32,6 +32,7 @@
     'depends': [
         'base',
         'sale_contract',
+        'web_support_client',  # for demo data, we should improove this
         # 'account_analytic_analysis',
     ],
     'data': [
