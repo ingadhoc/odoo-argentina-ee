@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<openerp>
+<data>
+
+        <record id="action_update_lines_prices" model="ir.actions.server">
+            <field name="name">Update Lines Data</field>
+            <field name="model_id" ref="sale_contract.model_sale_subscription"/>
+            <field name="state">code</field>
+            <field name="code">
+ids = context['active_ids']
+object.browse(ids).update_lines_prices_from_products()
+            </field>
+        </record>
+
+        <record model="ir.values" id="ir_action_update_lines_prices">
+            <field name="model_id" ref="sale_contract.model_sale_subscription" />
+            <field name="name">Update Lines Data</field>
+            <field name="key2">client_action_multi</field>
+            <field eval="'ir.actions.server,%d'%action_update_lines_prices" name="value"/>
+            <field name="key">action</field>
+            <field name="model">sale.subscription</field>
+        </record>
+
+    </data>
+</openerp>
