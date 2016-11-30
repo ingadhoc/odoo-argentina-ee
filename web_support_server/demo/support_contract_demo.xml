@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="demo_support_contract" model="support.contract">
+            <field name="name">Same Database Support Contract</field>
+            <field name="user">demo</field>
+            <field name="database">support_server</field>
+            <field name="server_host">http://localhost:8069</field>
+            <field name="contract_id" ref="analytic_internal_support_contract"/>
+            <field name="talkusID"></field>
+        </record>
+    </data>
+</openerp>
