@@ -1,0 +1,1 @@
+odoo-enterprise git@github.com:odoo/enterprise.git
