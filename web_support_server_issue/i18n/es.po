@@ -1,0 +1,57 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * web_support_server_issue
+# 
+# Translators:
+msgid ""
+msgstr ""
+"Project-Id-Version: odoo-support (8.0)\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-10-05 19:44+0000\n"
+"PO-Revision-Date: 2015-09-01 15:55+0000\n"
+"Last-Translator: ADHOC SA <admin@adhoc.com.ar>\n"
+"Language-Team: Spanish (http://www.transifex.com/adhoc/ingadhoc-odoo-support-8-0/language/es/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: web_support_server_issue
+#: model:ir.model,name:web_support_server_issue.model_account_analytic_account
+msgid "Analytic Account"
+msgstr "Cuenta analítica"
+
+#. module: web_support_server_issue
+#: field:infrastructure.database.user,authorized_for_issues:0
+msgid "Authorized For Issues?"
+msgstr "Autorizado Para Incidencias?"
+
+#. module: web_support_server_issue
+#: model:ir.model,name:web_support_server_issue.model_infrastructure_database_user
+msgid "Infrastructure Database User"
+msgstr "Infrastructure Database User"
+
+#. module: web_support_server_issue
+#: code:addons/web_support_server_issue/models/account_analytic_account.py:26
+#, python-format
+msgid "No database found"
+msgstr "No se encontró la base de datos"
+
+#. module: web_support_server_issue
+#: code:addons/web_support_server_issue/models/account_analytic_account.py:20
+#, python-format
+msgid "No open contract for id %s"
+msgstr "No hay contrato abierto para el id %s"
+
+#. module: web_support_server_issue
+#: code:addons/web_support_server_issue/models/account_analytic_account.py:36
+#, python-format
+msgid "User is not authorized to register issues"
+msgstr "El usuario no está autorizado para registrar incidencias"
+
+#. module: web_support_server_issue
+#: code:addons/web_support_server_issue/models/account_analytic_account.py:32
+#, python-format
+msgid "User is not registered on support provider database"
+msgstr "El usuario no está registrado en la base de datos del proveedor de soporte"

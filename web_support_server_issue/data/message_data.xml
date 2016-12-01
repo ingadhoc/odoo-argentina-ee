@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data noupdate="0">
+        <record id="server_issue_title" model="ir.config_parameter">
+            <field name="key">server_issue_title</field>
+            <field name="value">Issue succesfully loaded!</field>
+        </record>
+        <record id="server_issue_message" model="ir.config_parameter">
+            <field name="key">server_issue_message</field>
+            <field name="value">For your reference and if you contact support by another channel, issue ID: %s</field>
+        </record>
+    </data>
+</openerp>
