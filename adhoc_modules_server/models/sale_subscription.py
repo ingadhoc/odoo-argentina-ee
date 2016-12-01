@@ -4,7 +4,7 @@
 # directory
 ##############################################################################
 from openerp import models, fields, api, _
-# from openerp.exceptions import Warning
+# from openerp.exceptions import ValidationError
 
 
 class SaleSubscription(models.Model):

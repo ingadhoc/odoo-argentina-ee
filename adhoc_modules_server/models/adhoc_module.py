@@ -4,7 +4,7 @@
 # directory
 ##############################################################################
 from openerp import models, fields, api, _
-from openerp.exceptions import Warning
+from openerp.exceptions import ValidationError
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -20,7 +20,7 @@ class AdhocModuleModule(models.Model):
         if self._context.get('stop'):
             return True
         if self in self.incompatible_module_ids:
-            raise Warning(_('Can be incompatible with same module'))
+            raise ValidationError(_('Can be incompatible with same module'))
         # update modules that are not more incompatible
         no_more = self.search([
             ('incompatible_module_ids', 'in', [self.id]),
@@ -160,7 +160,7 @@ class AdhocModuleModule(models.Model):
     @api.onchange('conf_visibility')
     def change_conf_visibility(self):
         if self.conf_visibility == 'auto_install_by_code':
-            raise Warning(_(
+            raise ValidationError(_(
                 'You can not set visibility "auto_install_by_code"'))
 
     @api.model

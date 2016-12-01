@@ -5,7 +5,7 @@
 ##############################################################################
 from openerp import models, fields, api, modules, tools
 from openerp.modules.module import adapt_version
-from openerp.exceptions import Warning
+from openerp.exceptions import ValidationError
 from openerp.addons.adhoc_modules_server.octohub.connection import Connection
 # from octohub.connection import Connection
 from openerp.addons.server_mode.mode import get_mode
@@ -52,7 +52,7 @@ def load_information_from_contents(
     try:
         info.update(eval(manifest_content))
     except:
-        _logger.warning('could not ')
+        _logger.ValidationError('could not ')
         return {}
     # if not info.get('description'):
     #     readme_path = [opj(mod_path, x) for x in README
@@ -158,7 +158,7 @@ class AdhocModuleRepository(models.Model):
             response = conn.send(
                 'GET', uri, params={'ref': self.branch})
         except Exception, ResponseError:
-            raise Warning(
+            raise ValidationError(
                 'Could not get modules for:\n'
                 '* Repository: %s\n'
                 '* URI: %s\n'
@@ -250,7 +250,7 @@ class AdhocModuleRepository(models.Model):
                     msg = ('Module %s already exist in repository %s' % (
                         mod_name, mod.repository_id.name))
                     errors.append(msg)
-                    _logger.warning(msg)
+                    _logger.ValidationError(msg)
                     continue
                 updated_values = {}
                 # if mod alread y exist, we pop new_sequence value because
