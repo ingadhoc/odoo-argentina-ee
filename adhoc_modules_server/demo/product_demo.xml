@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="odoo_apps" model="product.category">
+            <field name="parent_id" ref="product.product_category_all"/>
+            <field name="name">Odoo Apps</field>
+        </record>
+
+        <record id="product_website_app" model="product.product">
+            <field name="name">Subscription Website App</field>
+            <field name="categ_id" ref="odoo_apps"/>
+            <field name="standard_price">0.0</field>
+            <field name="list_price">100.0</field>
+            <field name="type">service</field>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="uom_po_id" ref="product.product_uom_unit"/>
+            <field name="description_sale">Odoo website app and support</field>
+            <field name="contract_type">app</field>
+        </record>
+
+        <record id="product_project_app" model="product.product">
+            <field name="name">Subscription Project App</field>
+            <field name="categ_id" ref="odoo_apps"/>
+            <field name="standard_price">0.0</field>
+            <field name="list_price">100.0</field>
+            <field name="type">service</field>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="uom_po_id" ref="product.product_uom_unit"/>
+            <field name="description_sale">Odoo project app and support</field>
+            <field name="contract_type">app</field>
+        </record>
+
+        <record id="product_nautical_app" model="product.product">
+            <field name="name">Subscription Nautical App</field>
+            <field name="categ_id" ref="odoo_apps"/>
+            <field name="standard_price">0.0</field>
+            <field name="list_price">100.0</field>
+            <field name="type">service</field>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="uom_po_id" ref="product.product_uom_unit"/>
+            <field name="description_sale">Odoo Nautical app and support</field>
+            <field name="contract_type">app</field>
+        </record>
+
+        <!-- contrato interno de misma bd -->
+        <record id="analytic_internal_support_contract_line_website" model="sale.subscription.line">
+            <field name="name">Subscription Project App</field>
+            <field name="price_unit" eval="100.0"/>
+            <field name="quantity" eval="1.0"/>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="product_id" ref="product_project_app"/>
+            <field name="analytic_account_id" ref="web_support_server.analytic_internal_support_contract"/>
+        </record>
+
+        <!-- contrato de portal de otra bd -->
+        <record id="analytic_demo_user_support_contract_line_website" model="sale.subscription.line">
+            <field name="name">Subscription Website App</field>
+            <field name="price_unit" eval="100.0"/>
+            <field name="quantity" eval="1.0"/>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="product_id" ref="product_website_app"/>
+            <field name="analytic_account_id" ref="web_support_server.analytic_demo_user_support_contract"/>
+        </record>
+
+    </data>
+</openerp>

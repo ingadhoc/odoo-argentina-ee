@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <record id="action_server_copy_data_from_also_available" model="ir.actions.server">
+            <field name="name">Copy data from first</field>
+            <field name="condition">True</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="model_adhoc_module_module" />
+            <field name="state">code</field>
+            <field name="code">self.copy_data_from_also_available(cr, uid, context.get('active_ids', []), context=context)</field>
+        </record>
+
+        <record model="ir.values" id="action_copy_data_from_also_available">
+            <field name="name">action_copy_data_from_also_available</field>
+            <field name="action_id" ref="action_server_copy_data_from_also_available" />
+            <field name="value" eval="'ir.actions.server,' + str(ref('action_server_copy_data_from_also_available'))" />
+            <field name="key">action</field>
+            <field name="model_id" ref="model_adhoc_module_module" />
+            <field name="model">adhoc.module.module</field>
+            <field name="key2">client_action_multi</field>
+        </record>
+    </data>
+</openerp>

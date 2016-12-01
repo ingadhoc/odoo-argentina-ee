@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="sale_subscription_view_form" model="ir.ui.view">
+            <field name="name">sale.subscription.form.inherit</field>
+            <field name="model">sale.subscription</field>
+            <field name="inherit_id" ref="sale_contract.sale_subscription_view_form"/>
+            <field name="arch" type="xml">
+                <notebook>
+                    <page string="Configurator">
+                        <group>
+                            <group string="Requirements">
+                                <field name="requirements_product_ids" context="{'tree_view_ref': 'adhoc_modules_server.product_product_tree_view', 'active_id': active_id, 'active_model': 'sale.subscription'}" nolabel="1"/>
+                            </group>
+                            <!-- TODO hacer vista mas linda, directamete campos calculados. Apps, esto, y aquello -->
+                            <group string="Value">
+                                <field name="recurring_invoice_line_copy_ids" nolabel="1">
+                                    <tree>
+                                        <field name="name"/>
+                                        <field name="price_subtotal" sum="Total"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </group>
+                        <separator string="Apps"/>
+                        <field name="apps_product_ids" mode="kanban" context="{'kanban_view_ref': 'adhoc_modules_server.product_product_kanban_view', 'active_id': active_id, 'active_model': 'sale.subscription'}"/>
+                    </page>
+                </notebook>
+<!--                 <field name="recurring_next_date" position="after">
+                    <field name="product_categ_id"/>
+                </field> -->
+
+                <div name="button_box" position="inside">
+                    <button name="select_contract_products" type="object" class="oe_stat_button" icon="fa-plus" string="Select Products"/>
+                </div>
+
+                <field name="quantity" position="before">
+                    <field name="implemented"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

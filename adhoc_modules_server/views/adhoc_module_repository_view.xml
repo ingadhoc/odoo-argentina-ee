@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <!-- FORM VIEW -->
+        <record id="view_adhoc_module_repository_form" model="ir.ui.view">
+            <field name="name">adhoc.module.repository.form</field>
+            <field name="model">adhoc.module.repository</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button string="Scan" type="object" name="scan_repository"/>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="user"/>
+                            <field name="branch"/>
+                            <field name="subdirectory"/>
+                            <field name="auto_update"/>
+                            <field name="token"/>
+                        </group>
+                        <field name="module_ids"/>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- SEARCH VIEW -->
+        <record id="view_adhoc_module_repository_search" model="ir.ui.view">
+            <field name="name">adhoc.module.repository.search</field>
+            <field name="model">adhoc.module.repository</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="user"/>
+                    <field name="branch"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Branch" domain="[]" context="{'group_by':'branch'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <!-- TREE VIEW -->
+        <record id="view_adhoc_module_repository_tree" model="ir.ui.view">
+            <field name="name">adhoc.module.repository.tree</field>
+            <field name="model">adhoc.module.repository</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="user"/>
+                    <field name="branch"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_adhoc_module_repository">
+            <field name="name">ADHOC Repositories</field>
+            <field name="res_model">adhoc.module.repository</field>
+            <field name="view_type">form</field>
+            <field name='view_mode'>tree,form</field>
+        </record>
+
+        <menuitem name="Adhoc Modules" sequence="308" id="menu_adhoc_modules_conf"/>
+        <!-- <menuitem parent="base.menu_administration" name="ADHOC Modules Config" sequence="0" id="menu_adhoc_modules_conf"/> -->
+
+        <menuitem parent="menu_adhoc_modules_conf" sequence="30" action="action_adhoc_module_repository" id="menu_adhoc_module_repository"/>
+
+    </data>
+</openerp>

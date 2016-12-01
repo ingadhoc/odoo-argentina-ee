@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="repository_ingadhoc_account_analytic_80" model="adhoc.module.repository">
+            <field name="user">ingadhoc</field>
+            <field name="name">account-analytic</field>
+            <field name="branch">9.0</field>
+        </record>
+
+        <record id="repository_odoo_addons_80" model="adhoc.module.repository">
+            <field name="user">odoo</field>
+            <field name="name">odoo</field>
+            <field name="subdirectory">addons</field>
+            <field name="branch">9.0</field>
+        </record>
+
+        <record id="repository_odoo_openerp_addons_80" model="adhoc.module.repository">
+            <field name="user">odoo</field>
+            <field name="name">odoo</field>
+            <field name="subdirectory">openerp/addons</field>
+            <field name="branch">9.0</field>
+        </record>
+    </data>
+</openerp>
