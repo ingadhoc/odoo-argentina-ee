@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<openerp>
+<data>
+
+<!-- SEARCHVIEW -->
+<record id="view_infrastructure_database_filter" model="ir.ui.view">
+    <field name="name">infrastructure.database.select</field>
+    <field name="model">infrastructure.database</field>
+    <field name="inherit_id" ref="infrastructure.view_infrastructure_database_filter"/>
+    <field name="arch" type="xml">
+        <field name="instance_id" position="before">
+            <field name="contract_id"/>
+        </field>
+        <group position="before">
+            <field name="contract_state"/>
+        </group>
+    </field>
+</record>
+
+<!-- FORMVIEW -->
+<record id="view_infrastructure_database_form" model="ir.ui.view">
+    <field name="name">infrastructure.database.form</field>
+    <field name="model">infrastructure.database</field>
+    <field name="inherit_id" ref="infrastructure.view_infrastructure_database_form"/>
+    <field name="arch" type="xml">
+        <field name="demo_data" position="before">
+            <label for="contract_id"/>
+            <div>
+                <field
+                    name="contract_id"
+                    class="oe_inline"
+                    options="{'no_create': True}"/>
+                <button
+                    name="upload_contract_data"
+                    string="⇒ Upload Contract"
+                    type="object"
+                    class="oe_link oe_read_only" attrs="{'invisible':['|',('state','!=','active'), ('contract_id','=',False)]}"
+                    />
+                <!-- no lo agregamos para no confundir -->
+<!--                 <button name="update_contract_data_from_database"
+                    string="⇒ Update Contract Data"
+                    type="object"
+                    class="oe_link oe_read_only" attrs="{'invisible':['|',('state','!=','active'), ('contract_id','=',False)]}"/> -->
+            </div>
+        </field>
+    </field>
+</record>
+
+<!-- TREEVIEW -->
+<record id="view_infrastructure_database_tree" model="ir.ui.view">
+    <field name="name">infrastructure.database.tree</field>
+    <field name="model">infrastructure.database</field>
+    <field name="inherit_id" ref="infrastructure.view_infrastructure_database_tree"/>
+    <field name="arch" type="xml">
+        <field name="state" position="after">
+            <field name="contract_id"/>
+            <field name="contract_state"/>
+        </field>
+    </field>
+</record>
+
+</data>
+</openerp>

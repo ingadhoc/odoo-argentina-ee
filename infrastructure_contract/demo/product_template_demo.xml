@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="product_subscription_users" model="product.product">
+            <field name="name">Subscription - Users</field>
+            <field name="categ_id" ref="adhoc_modules_server.odoo_apps"/>
+            <field name="standard_price">0.0</field>
+            <field name="list_price">100.0</field>
+            <field name="type">service</field>
+            <field name="contracted_quantity_expression">result = len(client.model('res.users').search([('share','=',False)]))</field>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="uom_po_id" ref="product.product_uom_unit"/>
+            <field name="contract_type">requirement</field>
+        </record>
+
+        <record id="product_subscription_companies" model="product.product">
+            <field name="name">Subscription - Companies</field>
+            <field name="categ_id" ref="adhoc_modules_server.odoo_apps"/>
+            <field name="standard_price">0.0</field>
+            <field name="list_price">100.0</field>
+            <field name="contracted_quantity_expression">result = len(client.model('res.company').search([]))</field>
+            <field name="type">service</field>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="uom_po_id" ref="product.product_uom_unit"/>
+            <field name="contract_type">requirement</field>
+        </record>
+
+        <!-- contrato interno de misma bd -->
+        <record id="analytic_internal_support_contract_line_users" model="sale.subscription.line">
+            <field name="name">Subscription - Users</field>
+            <field name="price_unit" eval="100.0"/>
+            <field name="quantity" eval="1.0"/>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="product_id" ref="product_subscription_users"/>
+            <field name="analytic_account_id" ref="web_support_server.analytic_internal_support_contract"/>
+        </record>
+        <record id="analytic_internal_support_contract_line_companies" model="sale.subscription.line">
+            <field name="name">Subscription - Companies</field>
+            <field name="price_unit" eval="100.0"/>
+            <field name="quantity" eval="1.0"/>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="product_id" ref="product_subscription_companies"/>
+            <field name="analytic_account_id" ref="web_support_server.analytic_internal_support_contract"/>
+        </record>
+
+        <!-- contrato de portal de otra bd -->
+        <record id="analytic_demo_user_support_contract_line_users" model="sale.subscription.line">
+            <field name="name">Subscription - Users</field>
+            <field name="price_unit" eval="100.0"/>
+            <field name="quantity" eval="1.0"/>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="product_id" ref="product_subscription_users"/>
+            <field name="analytic_account_id" ref="web_support_server.analytic_demo_user_support_contract"/>
+        </record>
+        <record id="analytic_demo_user_support_contract_line_companies" model="sale.subscription.line">
+            <field name="name">Subscription - Companies</field>
+            <field name="price_unit" eval="100.0"/>
+            <field name="quantity" eval="1.0"/>
+            <field name="uom_id" ref="product.product_uom_unit"/>
+            <field name="product_id" ref="product_subscription_companies"/>
+            <field name="analytic_account_id" ref="web_support_server.analytic_demo_user_support_contract"/>
+        </record>
+
+    </data>
+</openerp>

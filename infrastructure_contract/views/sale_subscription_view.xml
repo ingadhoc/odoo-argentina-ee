@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<openerp>
+<data>
+
+<record id="sale_subscription_view_form" model="ir.ui.view">
+    <field name="name">sale.subscription.form</field>
+    <field name="model">sale.subscription</field>
+    <field name="inherit_id" ref="sale_contract.sale_subscription_view_form"/>
+    <!-- <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/> -->
+    <field name="arch" type="xml">
+        <field name="quantity" position="after">
+            <field name="db_quantity"/>
+        </field>
+
+        <button name="recurring_invoice" position="after">
+            <button
+                name="update_lines_data_from_database"
+                string="⇒ Update from remote DB"
+                help="Update lines from remote database (a production database linked to this contract)"
+                class="oe_link"
+                type="object"
+                groups="base.group_no_one"
+                />
+            <button
+                name="update_remote_contracted_products"
+                string="⇒ Update remote DB"
+                help="Update contracted products on remote database (a production database linked to this contract)"
+                class="oe_link"
+                type="object"
+                groups="base.group_no_one"
+                />
+            <!-- <button class="oe_link" name="update_remote_database_contract" attrs="{'invisible': [('recurring_invoices','!=',True)]}" string="⇒ Update quantity from database" type="object" groups="base.group_no_one"/> -->
+        </button>
+
+        <div name="button_box">
+            <button name="action_view_databases" icon="fa-th-list" type="object" class="oe_stat_button">
+                <field name="database_count" widget="statinfo"/>
+            </button>
+        </div>
+        <field name="manager_id" position="after">
+            <field name="odoo_version_id"/>
+            <field name="support_validity"/>
+        </field>
+    </field>
+</record>
+
+</data>
+</openerp>
