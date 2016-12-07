@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+
+      <record id="purchase_subscription_action" model="ir.actions.act_window">
+            <field name="name">Contract</field>
+            <field name="res_model">purchase.subscription</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref=""/>
+            <field name="search_view_id" ref=""/> 
+            <field name="domain">[('type','=','contract')]</field>
+            <field name="context">{'search_default_open':1, 'search_default_pending':1}</field>
+        </record>
+
+
+    <!-- Action Purchase/Configuration/Contract template -->
+    <record id="purchase_subscription_template_action" model="ir.actions.act_window">
+        <field name="name">Subscription Template</field>
+        <field name="res_model">purchase.subscription</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="purchase_subscription_view_list_template"/>
+        <field name="domain">[('type','=','template')]</field>
+        <field name="context">{'search_default_type':'template','default_type' : 'template', 'search_default_open':1, 'default_state': 'open'}</field>
+        <field name="search_view_id" ref="purchase_subscription_view_search_template"/>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click here to create a template of subscription.
+            </p><p>
+                Templates are used to prefigure subscription that
+                can be selected by the salespeople to quickly configure the
+                terms and conditions of the subscription.
+            </p>
+        </field>
+    </record>
+        
+        <menuitem name="Contracts" id="purchase_subscription" parent="base.menu_purchase_root" action="purchase_subscription_action" sequence="2"/>
+        <menuitem name="Contract Template" id="purchase_template_subscription" parent="purchase.menu_purchase_config" action="purchase_subscription_template_action" sequence="2"/>
+	</data>
+</openerp>
