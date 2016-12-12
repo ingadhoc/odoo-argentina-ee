@@ -34,23 +34,6 @@
             </field>
         </record>
 
-        <!-- Search view for contract templates -->
-    <record id="purchase_subscription_view_search_template" model="ir.ui.view">
-        <field name="name">purchase.subscription.template.search</field>
-        <field name="model">purchase.subscription</field>
-        <field name="arch" type="xml">
-            <search string="subscription Templates">
-                <field name="name" filter_domain="['|', ('name','ilike',self),('code','ilike',self)]" string="Template"/>
-                <filter name="open" string="Active" domain="[('state','=','open')]" help="Active templates"/>
-                <filter name="closed" string="Inactive" domain="[('state','=','close')]" help="Inactive templates"/>
-                <group expand="0" string="Group By">
-                    <filter string="Company" domain="[]" context="{'group_by':'company_id'}"/>
-                </group>
-            </search>
-        </field>
-    </record>
-
-
         <record id="view_purchase_subscription_tree" model="ir.ui.view">
         <field name="name">purchase.subscription.list</field>
         <field name="model">purchase.subscription</field>
@@ -64,19 +47,6 @@
                 <field name="recurring_next_date"/>
                 <field name="recurring_total"/>
                 <field name="pricelist_id" invisible="1"/>
-                <field name="company_id" groups="base.group_multi_company"/>
-            </tree>
-        </field>
-    </record>
-
-    <record id="purchase_subscription_view_list_template" model="ir.ui.view">
-        <field name="name">purchase.subscription.list.template</field>
-        <field name="model">purchase.subscription</field>
-        <field name="arch" type="xml">
-            <tree toolbar="1" decoration-muted="state=='close'" string="Subscription Templates">
-                <field name="display_name"/>
-                <field name="recurring_rule_type"/>
-                <field name="state" invisible="1"/>
                 <field name="company_id" groups="base.group_multi_company"/>
             </tree>
         </field>

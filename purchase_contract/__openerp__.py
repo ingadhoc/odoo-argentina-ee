@@ -34,8 +34,8 @@
         'purchase',
     ],
     'data': [
-        'view/purchase_subscription_view.xml',
         'view/purchase_subscription_menu.xml',
+        'view/purchase_subscription_view.xml',
         'data/subscription_cron.xml'
     ],
     'demo': [

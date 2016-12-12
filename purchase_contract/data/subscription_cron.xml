@@ -2,12 +2,8 @@
 <openerp>
     <data>
 
-      
-
-       
-
         <record model="ir.cron" id="subscription_cron_for_invoice_supplier">
-           <field name="name">Generate Recurring Invoices Suppliers from Contracts </field>
+           <field name="name">Generate Recurring Invoices Suppliers from Contracts</field>
            <field name="interval_number">1</field>
            <field name="interval_type">days</field>
            <field name="numbercall">-1</field>

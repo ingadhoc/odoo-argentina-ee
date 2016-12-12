@@ -6,8 +6,7 @@
 Purchase Contract
 =================
 
-Manage Purchase Contracts and generate Recurring Invoices as you can do in
-sales.
+Manage Purchase Contracts and generate Recurring Invoices as you can do in sales.
 
 
 Installation
@@ -22,8 +21,8 @@ Configuration
 
 To configure this module, you need to:
 
-#.To create a purchase contract go to Purchase/Contract.
-#.To create a purchase contract template go to Purchase/Configuration/Contract Template.
+#. To create a purchase contract go to Purchase/Contracts.
+#. To create a purchase contract template go to Purchase/Configuration/Contracts Template.
 
 .. figure:: path/to/local/image.png
    :alt: alternative description

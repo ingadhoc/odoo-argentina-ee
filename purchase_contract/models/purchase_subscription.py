@@ -51,33 +51,23 @@ class PurchaseSubscription(models.Model):
         fpos = self.partner_id.property_account_position_id or False
         journal_ids = journal_obj.search([(
             'type', '=', 'purchase'), ('company_id', '=', self.
-                                       company_id.id or False)], limit=1)
+                                       company_id.id)], limit=1)
         if not journal_ids:
             raise UserError(_('Error!'),
                             _('Please define a pruchase journal\
                                   for the company "%s".') % (
                 self.company_id.name or '', ))
-
-        currency_id = False
-        if self.pricelist_id:
-            currency_id = self.pricelist_id.currency_id.id
-        elif self.partner_id.property_product_pricelist:
-            currency_id = self.partner_id.\
-                property_product_pricelist.currency_id.id
-        elif self.company_id:
-            currency_id = self.company_id.currency_id.id
-
         invoice = {
             'account_id': self.partner_id.property_account_payable_id.id,
             'type': 'in_invoice',
             'reference': self.name,
             'partner_id': self.partner_id.id,
-            'currency_id': currency_id,
+            'currency_id': self.company_id.currency_id.id,
             'journal_id': len(journal_ids) and journal_ids[0].id or False,
             'date_invoice': self.recurring_next_date,
             'origin': self.code,
             'fiscal_position_id': fpos and fpos.id,
-            'company_id': self.company_id.id or False,
+            'company_id': self.company_id.id,
         }
         return invoice
 
