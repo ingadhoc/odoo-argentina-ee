@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+    
+    <record id="group_purchase_contract_view" model="res.groups">
+        <field name="name">See Purchase Contracts</field>
+        <field name="category_id" ref="sale_contract.module_category_contract_management"/>
+        <field name="comment">The user will have read access to contracts.</field>
+    </record>
+
+    <record id="group_purchase_contract_manager" model="res.groups">
+        <field name="name">Manage Purchase Contracts</field>
+        <field name="category_id" ref="sale_contract.module_category_contract_management"/>
+        <field name="comment">The user will have write access to contracts.</field>
+        <field name="implied_ids" eval="[(4, ref('purchase_contract.group_purchase_contract_view'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root'))]"/>
+    </record>
+
+    <record id="purchase.group_purchase_user" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('purchase_contract.group_purchase_contract_view'))]"/>
+    </record>
+
+    </data>
+</openerp>

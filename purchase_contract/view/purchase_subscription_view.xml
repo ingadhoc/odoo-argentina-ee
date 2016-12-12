@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+	<data>
+        <record id="view_purchase_subscription_form" model="ir.ui.view">
+            <field name="name">purchase.subscription.form</field>
+            <field name="model">purchase.subscription</field>
+            <field name="inherit_id" ref="sale_contract.sale_subscription_view_form"/>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="attributes">
+                    <attribute name="domain">[('supplier','=',True)]</attribute>
+                    <attribute name="string">Supplier</attribute>
+                    <attribute name="context">{'default_supplier':True, 'default_customer':False}</attribute>
+                </field>
+                <field name="pricelist_id" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <field name="template_id" position="attributes">
+                    <attribute name="attrs">{'invisible': [('type','=','template')]}</attribute>
+                </field>
+                <field name="quantity" position="after">
+                    <field name="purchase_quantity"/>
+                </field>
+                <field name="quantity" position="attributes">
+                    <attribute name="invisible">True</attribute>
+                </field>
+                <button name="%(sale_contract.sale_subscription_action)d" position="attributes">
+                    <attribute name="name">%(purchase_subscription_action)d</attribute>
+                </button>
+                <button name="prepare_renewal_order" position="replace"/>
+                <field name="manager_id" position="replace"/>
+                <field name="actual_quantity" position="replace"/>
+                <field name="sold_quantity" position="replace"/>
+            </field>
+        </record>
+
+        <record id="view_purchase_subscription_tree" model="ir.ui.view">
+        <field name="name">purchase.subscription.list</field>
+        <field name="model">purchase.subscription</field>
+        <field name="groups_id" eval="[(4, ref('account.group_account_invoice'))]"/>
+        <field name="arch" type="xml">
+            <tree string="Purchase Subscriptions" decoration-info="state=='draft'" decoration-danger="state=='pending'" decoration-muted="state in ('cancel','close')">
+                <field name="display_name"/>
+                <field name="state" invisible="1"/>
+                <field name="code"/>
+                <field name="partner_id" string="Supplier" invisible="'recurring_invoices' not in context"/>
+                <field name="recurring_next_date"/>
+                <field name="recurring_total"/>
+                <field name="pricelist_id" invisible="1"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
+        </field>
+    </record>
+
+	</data>
+</openerp>
