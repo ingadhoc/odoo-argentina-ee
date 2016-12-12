@@ -52,7 +52,7 @@ def load_information_from_contents(
     try:
         info.update(eval(manifest_content))
     except:
-        _logger.ValidationError('could not ')
+        _logger.warning('could not ')
         return {}
     # if not info.get('description'):
     #     readme_path = [opj(mod_path, x) for x in README
@@ -250,7 +250,7 @@ class AdhocModuleRepository(models.Model):
                     msg = ('Module %s already exist in repository %s' % (
                         mod_name, mod.repository_id.name))
                     errors.append(msg)
-                    _logger.ValidationError(msg)
+                    _logger.warning(msg)
                     continue
                 updated_values = {}
                 # if mod alread y exist, we pop new_sequence value because
