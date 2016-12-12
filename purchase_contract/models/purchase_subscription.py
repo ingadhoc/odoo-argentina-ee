@@ -76,6 +76,7 @@ class PurchaseSubscription(models.Model):
 
         fpos_obj = self.env['account.fiscal.position']
         fiscal_position = None
+        print 'fiscal_position_id', fiscal_position_id
         if fiscal_position_id:
             fiscal_position = fpos_obj.browse(
                 fiscal_position_id)
@@ -90,11 +91,12 @@ class PurchaseSubscription(models.Model):
                 account_id = fiscal_position.map_account(account_id)
 
             taxes = res.taxes_id.filtered(
-                lambda r: r.company_id == line.analytic_account_id.company_id)
+                lambda r: r.company_id == line.
+                analytic_account_id.company_id.id)
             if fiscal_position:
-                tax_id = fiscal_position.map_tax(taxes)
+                taxes = fiscal_position.map_tax(taxes)
             else:
-                tax_id = res.taxes_id.id
+                taxes = res.taxes_id
 
             invoice_lines.append((0, 0, {
                 'name': line.name,
@@ -104,7 +106,7 @@ class PurchaseSubscription(models.Model):
                 'quantity': line.quantity,
                 'uom_id': line.uom_id.id or False,
                 'product_id': line.product_id.id or False,
-                'invoice_line_tax_id': [(6, 0, tax_id)],
+                'invoice_line_tax_ids': [(6, 0, taxes)],
             }))
         return invoice_lines
 
@@ -113,7 +115,7 @@ class PurchaseSubscription(models.Model):
         current_date = time.strftime('%Y-%m-%d')
         contract_ids = self.search(
             [('recurring_next_date', '<=', current_date), (
-                'state', '=', 'open'), ('recurring_invoices', '=', True)])
+                'state', '=', 'open')])
         return contract_ids._recurring_create_invoice()
 
     @api.multi
@@ -149,6 +151,7 @@ class PurchaseSubscription(models.Model):
                 for contract in self.with_context(context_company):
                     try:
                         invoice_values = contract._prepare_invoice()
+                        print 'invoice_values', invoice_values
                         invoice_ids.append(self.env['account.invoice'].create(
                             invoice_values))
                         invoice_ids[-1].compute_taxes()
