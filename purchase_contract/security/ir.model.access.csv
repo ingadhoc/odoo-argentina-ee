@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+purchase_subscription_line contract_manager,access.purchase.sucription.line.manager,model_purchase_subscription_line,group_purchase_contract_manager,1,1,1,1
+purchase_subscription_line_view ,access.purchase.sucription.line.user,model_purchase_subscription_line,group_purchase_contract_view,1,0,0,0
