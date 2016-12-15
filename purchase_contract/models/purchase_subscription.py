@@ -45,17 +45,16 @@ class PurchaseSubscription(models.Model):
         invoice = {}
         if not self.partner_id:
             raise UserError(_('No Supplier Defined!'), _(
-                "You must first select a Supplier for\
-                 Contract %s!") % self.name)
+                "You must first select a Supplier for "
+                "Contract %s!") % self.name)
 
         fpos = self.partner_id.property_account_position_id or False
         journal_ids = journal_obj.search([(
             'type', '=', 'purchase'), ('company_id', '=', self.
                                        company_id.id)], limit=1)
         if not journal_ids:
-            raise UserError(_('Error!'),
-                            _('Please define a pruchase journal\
-                                  for the company "%s".') % (
+            raise UserError(_('Error!'), _(
+                'Please define a pruchase journal for the company "%s".') % (
                 self.company_id.name or '', ))
         invoice = {
             'account_id': self.partner_id.property_account_payable_id.id,
@@ -180,8 +179,8 @@ class PurchaseSubscription(models.Model):
                         if automatic:
                             self._cr.rollback()
                             _logger.exception(
-                                'Fail to create recurring invoice\
-                                 for contract %s', contract.code)
+                                'Fail to create recurring invoice '
+                                'for contract %s', contract.code)
                         else:
                             raise
         return invoice_ids
