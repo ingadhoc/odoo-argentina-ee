@@ -20,5 +20,13 @@
         <field name="implied_ids" eval="[(4, ref('purchase_contract.group_purchase_contract_view'))]"/>
     </record>
 
+    <!-- Company Rule -->
+    <record model="ir.rule" id="purchase_subscription_comp_rule">
+        <field name="name">Purchase Subscription multi-company</field>
+        <field name="model_id" ref="model_purchase_subscription"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id','child_of',[user.company_id.id])]</field>
+    </record>
+
     </data>
 </openerp>
