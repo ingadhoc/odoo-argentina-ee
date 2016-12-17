@@ -27,7 +27,7 @@ class res_users(models.Model):
             _logger.info('Could not get contract_id from password')
             raise exceptions.AccessDenied()
         domain = [
-            ('id', '=', contract_id),
+            ('analytic_account_id', '=', contract_id),
             ('state', '=', 'open')]
         contracts = self.env['sale.subscription'].sudo().search(
             domain)
