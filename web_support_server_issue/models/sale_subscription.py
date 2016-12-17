@@ -31,7 +31,7 @@ class SaleSubscription(models.Model):
         _logger.info('Creating issue for contract %s, db %s, login %s' % (
             contract_id, db_name, login))
         contract = self.sudo().search([
-            ('analytic_account_id', '=', contract_id),
+            ('analytic_account_id', '=', int(contract_id)),
             ('state', '=', 'open')], limit=1)
         if not contract:
             return {'error': _(

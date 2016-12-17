@@ -65,7 +65,8 @@ class AdhocModuleCategory(models.Model):
         self.ensure_one()
         analytic_lines = self.env[
             'sale.subscription.line'].sudo().search([
-                ('analytic_account_id.analytic_account_id', '=', contract_id),
+                ('analytic_account_id.analytic_account_id', '=',
+                    int(contract_id)),
                 ('product_id.product_tmpl_id', 'in',
                     self.product_tmpl_ids.ids),
             ])
