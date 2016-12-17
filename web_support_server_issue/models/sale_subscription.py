@@ -9,6 +9,18 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
+# because of compatibility with v8 we keep this
+class AccountAnalyticAccount(models.Model):
+    _inherit = 'account.analytic.account'
+
+    @api.model
+    def create_issue(
+            self, contract_id, db_name, login,
+            vals, attachments_data):
+        return self.env['sale.subscription'].create_issue(
+            contract_id, db_name, login, vals, attachments_data)
+
+
 class SaleSubscription(models.Model):
     _inherit = 'sale.subscription'
 
@@ -19,7 +31,8 @@ class SaleSubscription(models.Model):
         _logger.info('Creating issue for contract %s, db %s, login %s' % (
             contract_id, db_name, login))
         contract = self.sudo().search([
-            ('id', '=', contract_id), ('state', '=', 'open')], limit=1)
+            ('analytic_account_id', '=', contract_id),
+            ('state', '=', 'open')], limit=1)
         if not contract:
             return {'error': _(
                 "No open contract for id %s" % contract_id)}
