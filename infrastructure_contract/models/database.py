@@ -89,6 +89,6 @@ class database(models.Model):
             user.login,
             self._cr.dbname,
             server_host,
-            self.contract_id.id,
+            self.contract_id.analytic_account_id.id,
         ]]
         client.model('support.contract').load(imp_fields, rows)
