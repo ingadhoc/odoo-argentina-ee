@@ -26,16 +26,16 @@ class SaleSubscription(models.Model):
 
     @api.model
     def create_issue(
-            self, contract_id, db_name, login,
+            self, analytic_account_id, db_name, login,
             vals, attachments_data):
         _logger.info('Creating issue for contract %s, db %s, login %s' % (
-            contract_id, db_name, login))
+            analytic_account_id, db_name, login))
         contract = self.sudo().search([
-            ('analytic_account_id', '=', int(contract_id)),
+            ('analytic_account_id', '=', int(analytic_account_id)),
             ('state', '=', 'open')], limit=1)
         if not contract:
             return {'error': _(
-                "No open contract for id %s" % contract_id)}
+                "No open contract for id %s" % analytic_account_id)}
         database = self.env['infrastructure.database'].sudo().search([
             ('name', '=', db_name), ('contract_id', '=', contract.id),
             ('state', '=', 'active')],
@@ -60,7 +60,8 @@ class SaleSubscription(models.Model):
         vals['email_from'] = user.partner_id.email
 
         project = self.env['project.project'].sudo().search(
-            [('analytic_account_id', '=', contract.id)], limit=1)
+            [('analytic_account_id', '=',
+                contract.analytic_account_id.id)], limit=1)
         if project:
             vals['project_id'] = project.id
 
