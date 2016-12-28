@@ -20,15 +20,13 @@
 ##############################################################################
 {
     "name": "ADHOC Modules Server",
-    "version": "9.0.1.0.0",
+    "version": "9.0.1.1.0",
     'author': 'ADHOC SA',
     'website': 'www.adhoc.com.ar',
     'license': 'AGPL-3',
     'depends': [
         'adhoc_modules',
         'web_support_server',
-        # we add lines sequence to add order in lines
-        'sale_contract_lines_sequence',
     ],
     # 'external_dependencies': {
     #     'python': ['octuhub']
