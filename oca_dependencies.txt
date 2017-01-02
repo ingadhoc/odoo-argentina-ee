@@ -1,3 +1,4 @@
 odoo-enterprise git@github.com:odoo/enterprise.git
 ingadhoc-odoo-support git@github.com:ingadhoc/odoo-support.git
 ingadhoc-odoo-infrastructure https://github.com/ingadhoc/odoo-infrastructure.git
+server-tools
