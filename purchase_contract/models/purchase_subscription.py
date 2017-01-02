@@ -150,7 +150,6 @@ class PurchaseSubscription(models.Model):
                 for contract in self.with_context(context_company):
                     try:
                         invoice_values = contract._prepare_invoice()
-                        print 'invoice_values', invoice_values
                         invoice_ids.append(self.env['account.invoice'].create(
                             invoice_values))
                         invoice_ids[-1].compute_taxes()
