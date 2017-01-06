@@ -19,7 +19,6 @@
                 help="Update lines from remote database (a production database linked to this contract)"
                 class="oe_link"
                 type="object"
-                groups="base.group_no_one"
                 />
             <button
                 name="update_remote_contracted_products"
@@ -27,7 +26,6 @@
                 help="Update contracted products on remote database (a production database linked to this contract)"
                 class="oe_link"
                 type="object"
-                groups="base.group_no_one"
                 />
             <!-- <button class="oe_link" name="update_remote_database_contract" attrs="{'invisible': [('recurring_invoices','!=',True)]}" string="⇒ Update quantity from database" type="object" groups="base.group_no_one"/> -->
         </button>
