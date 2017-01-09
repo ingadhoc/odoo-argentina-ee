@@ -50,6 +50,11 @@
             <field name="inherit_id" ref="adhoc_modules.module_tree"/>
             <field name="mode">primary</field>
             <field name="arch" type="xml">
+                <!-- make tech name visible without tec features -->
+                <field name="name" position="attributes">
+                    <attribute name="groups"></attribute>
+                </field>
+
                 <tree position="attributes">
                     <attribute name="editable">top</attribute>
                     <attribute name="edit"></attribute>
@@ -83,6 +88,11 @@
             <field name="inherit_id" ref="adhoc_modules.view_adhoc_module_module_form"/>
             <field name="mode">primary</field>
             <field name="arch" type="xml">
+                <!-- make tech name visible without tec features -->
+                <notebook groups="base.group_no_one" position="attributes">
+                    <attribute name="groups"></attribute>
+                </notebook>
+
                 <form position="attributes">
                     <attribute name="edit"/>
                 </form>
