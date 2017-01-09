@@ -9,7 +9,7 @@ import datetime
 import logging
 import time
 from openerp import models, fields, api, _
-from openerp.exceptions import UserError
+from openerp.exceptions import ValidationError
 
 _logger = logging.getLogger(__name__)
 
@@ -44,7 +44,8 @@ class PurchaseSubscription(models.Model):
         journal_obj = self.env['account.journal']
         invoice = {}
         if not self.partner_id:
-            raise UserError(_('No Supplier Defined!'), _(
+            raise ValidationError(_(
+                "No Supplier Defined!\n"
                 "You must first select a Supplier for "
                 "Contract %s!") % self.name)
 
@@ -53,7 +54,7 @@ class PurchaseSubscription(models.Model):
             'type', '=', 'purchase'), ('company_id', '=', self.
                                        company_id.id)], limit=1)
         if not journal_ids:
-            raise UserError(_('Error!'), _(
+            raise ValidationError(_(
                 'Please define a pruchase journal for the company "%s".') % (
                 self.company_id.name or '', ))
         invoice = {
@@ -73,12 +74,9 @@ class PurchaseSubscription(models.Model):
     @api.model
     def _prepare_invoice_lines(self, fiscal_position_id):
 
-        fpos_obj = self.env['account.fiscal.position']
-        fiscal_position = None
-        print 'fiscal_position_id', fiscal_position_id
-        if fiscal_position_id:
-            fiscal_position = fpos_obj.browse(
-                fiscal_position_id)
+        fiscal_position = self.env['account.fiscal.position'].browse(
+            fiscal_position_id)
+
         invoice_lines = []
         for line in self.recurring_invoice_line_ids:
 
@@ -86,26 +84,24 @@ class PurchaseSubscription(models.Model):
             account_id = res.property_account_expense_id.id
             if not account_id:
                 account_id = res.categ_id.property_account_expense_categ_id.id
-            if fiscal_position:
-                account_id = fiscal_position.map_account(account_id)
+            account_id = fiscal_position.map_account(account_id)
 
-            taxes = res.taxes_id.filtered(
+            taxes = res.supplier_taxes_id.filtered(
                 lambda r: r.company_id == line.
-                analytic_account_id.company_id.id)
-            if fiscal_position:
-                taxes = fiscal_position.map_tax(taxes)
-            else:
-                taxes = res.taxes_id
+                analytic_account_id.company_id)
+
+            taxes = fiscal_position.map_tax(taxes)
 
             invoice_lines.append((0, 0, {
                 'name': line.name,
                 'account_id': account_id,
-                'account_analytic_id': self.analytic_account_id.id,
+                'account_analytic_id': (
+                    line.analytic_account_id.analytic_account_id.id),
                 'price_unit': line.price_unit or 0.0,
                 'quantity': line.quantity,
                 'uom_id': line.uom_id.id or False,
                 'product_id': line.product_id.id or False,
-                'invoice_line_tax_ids': [(6, 0, taxes)],
+                'invoice_line_tax_ids': [(6, 0, taxes.ids)],
             }))
         return invoice_lines
 
