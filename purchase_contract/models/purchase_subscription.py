@@ -16,6 +16,7 @@ _logger = logging.getLogger(__name__)
 
 class PurchaseSubscription(models.Model):
     _name = "purchase.subscription"
+    _description = "Purchase Subscription"
     _inherit = "sale.subscription"
 
     @api.multi
