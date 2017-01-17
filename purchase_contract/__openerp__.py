@@ -20,7 +20,7 @@
 ##############################################################################
 {
     "name": "Purchase Contract",
-    'version': '9.0.1.1.0',
+    'version': '9.0.1.2.0',
     'category': 'Accounting',
     'sequence': 14,
     'summary': 'Contract Purchase, Invoicing',
@@ -36,9 +36,9 @@
     'data': [
         'security/purchase_contract_security.xml',
         'security/ir.model.access.csv',
-        'view/purchase_subscription_menu.xml',
         'view/purchase_subscription_view.xml',
-        'data/subscription_cron.xml'
+        'view/purchase_subscription_menu.xml',
+        'data/subscription_cron.xml',
     ],
     'demo': [
     ],
