@@ -76,8 +76,13 @@ class ProductProduct(models.Model):
                     lambda x: x.product_id == product)
             # if requirement, we want quantity, else, yes, no
             if product.contract_type == 'requirement':
-                product.contract_quantity = (
-                    lines and lines[0].quantity or False)
+                if contract._name == 'sale.order':
+                    quantity = (
+                        lines and lines[0].product_uom_qty or False)
+                elif contract._name == 'sale.subscription':
+                    quantity = (
+                        lines and lines[0].quantity or False)
+                product.contract_quantity = quantity
             else:
                 if lines:
                     product.contract_state = 'contracted'
@@ -106,7 +111,10 @@ class ProductProduct(models.Model):
                 ('product_id', '=', product.id)], limit=1)
             # just in case quantity is zero
             if line:
-                line.quantity = quantity
+                if contract._name == 'sale.order':
+                    line.product_uom_qty = quantity
+                elif contract._name == 'sale.subscription':
+                    line.quantity = quantity
             else:
                 if contract._name == 'sale.order':
                     contract_line = contract_line.create({
