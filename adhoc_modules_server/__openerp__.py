@@ -20,13 +20,14 @@
 ##############################################################################
 {
     "name": "ADHOC Modules Server",
-    "version": "9.0.1.2.0",
+    "version": "9.0.1.3.0",
     'author': 'ADHOC SA',
     'website': 'www.adhoc.com.ar',
     'license': 'AGPL-3',
     'depends': [
         'adhoc_modules',
         'web_support_server',
+        'website_contract',
     ],
     # 'external_dependencies': {
     #     'python': ['octuhub']
@@ -38,6 +39,7 @@
         'views/product_template_view.xml',
         'views/product_product_view.xml',
         'views/sale_subscription_view.xml',
+        'views/sale_order_view.xml',
         'security/ir.model.access.csv',
         'data/cron_data.xml',
         'data/server_acion_data.xml',

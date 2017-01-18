@@ -68,8 +68,12 @@ class ProductProduct(models.Model):
             return False
         for product in self:
             # we use filtered instead of compute because of cache
-            lines = contract.recurring_invoice_line_ids.filtered(
-                lambda x: x.product_id == product)
+            if contract._name == 'sale.order':
+                lines = contract.order_line.filtered(
+                    lambda x: x.product_id == product)
+            elif contract._name == 'sale.subscription':
+                lines = contract.recurring_invoice_line_ids.filtered(
+                    lambda x: x.product_id == product)
             # if requirement, we want quantity, else, yes, no
             if product.contract_type == 'requirement':
                 product.contract_quantity = (
@@ -82,7 +86,12 @@ class ProductProduct(models.Model):
 
     @api.multi
     def _add_to_contract(self, contract):
-        contract_line = self.env['sale.subscription.line']
+        if contract._name == 'sale.order':
+            contract_line = self.env['sale.order.line']
+            parent_field = 'order_id'
+        elif contract._name == 'sale.subscription':
+            contract_line = self.env['sale.subscription.line']
+            parent_field = 'analytic_account_id'
         partner = contract.partner_id
         pricelist = contract.pricelist_id
         company = contract.company_id
@@ -93,39 +102,52 @@ class ProductProduct(models.Model):
                 quantity = 1.0
 
             line = contract_line.search([
-                ('analytic_account_id', '=', contract.id),
+                (parent_field, '=', contract.id),
                 ('product_id', '=', product.id)], limit=1)
             # just in case quantity is zero
             if line:
                 line.quantity = quantity
             else:
-                vals = contract_line.product_id_change(
-                    product.id, False, qty=quantity,
-                    name=False, partner_id=partner.id, price_unit=False,
-                    pricelist_id=pricelist.id, company_id=company.id).get(
-                    'value', {})
-                # we create only with mandatory fields
-                contract_line = contract_line.create({
-                    'analytic_account_id': contract.id,
-                    'product_id': product.id,
-                    'name': vals.pop('name'),
-                    'price_unit': vals.pop('price_unit'),
-                    'uom_id': vals.pop('uom_id'),
-                })
-                # we use setattr instead of write so tax_id m2m field can be
-                # setted and also because other modules can add more fields
-                for k, v in vals.iteritems():
-                    setattr(contract_line, k, v)
+                if contract._name == 'sale.order':
+                    contract_line = contract_line.create({
+                        'order_id': contract.id,
+                        'product_uom_qty': quantity,
+                        'product_id': product.id,
+                    })
+                    # contract_line.product_id_change()
+                elif contract._name == 'sale.subscription':
+                    vals = contract_line.product_id_change(
+                        product.id, False, qty=quantity,
+                        name=False, partner_id=partner.id, price_unit=False,
+                        pricelist_id=pricelist.id, company_id=company.id).get(
+                        'value', {})
+                    # we create only with mandatory fields
+                    contract_line = contract_line.create({
+                        parent_field: contract.id,
+                        'product_id': product.id,
+                        'name': vals.pop('name'),
+                        'price_unit': vals.pop('price_unit'),
+                        'uom_id': vals.pop('uom_id'),
+                    })
+                    # we use setattr instead of write so tax_id m2m field can be
+                    # setted and also because other modules can add more fields
+                    for k, v in vals.iteritems():
+                        setattr(contract_line, k, v)
             dep_prods = product.adhoc_product_dependency_ids.mapped(
                 'product_variant_ids')
             dep_prods._add_to_contract(contract)
 
     @api.multi
     def _remove_from_contract(self, contract):
-        contract_line = self.env['sale.subscription.line']
+        if contract._name == 'sale.order':
+            contract_line = self.env['sale.order.line']
+            parent_field = 'order_id'
+        elif contract._name == 'sale.subscription':
+            contract_line = self.env['sale.subscription.line']
+            parent_field = 'analytic_account_id'
         for product in self:
             contract_line.search([
-                ('analytic_account_id', '=', contract.id),
+                (parent_field, '=', contract.id),
                 ('product_id', '=', product.id)]).unlink()
             upper_prods = self.search([(
                 'adhoc_product_dependency_ids',
@@ -143,7 +165,7 @@ class ProductProduct(models.Model):
             if params:
                 contract_id = params.get('id')
                 model = params.get('model')
-        if not contract_id or model != 'sale.subscription':
+        if not contract_id or model not in ['sale.subscription', 'sale.order']:
             return False
         return self.env[model].browse(contract_id)
 
