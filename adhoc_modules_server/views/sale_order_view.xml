@@ -15,7 +15,7 @@
                             </group>
                             <!-- TODO hacer vista mas linda, directamete campos calculados. Apps, esto, y aquello -->
                             <group string="Value">
-                                <field name="order_line" nolabel="1">
+                                <field name="order_line_copy" nolabel="1">
                                     <tree>
                                         <field name="name"/>
                                         <field name="price_subtotal" sum="Total"/>
