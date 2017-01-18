@@ -60,7 +60,7 @@
                                 <field name="company_id" groups="base.group_multi_company"/>
                                 <field name="currency_id" invisible="1"/>
                                 <field name="date_start"/>
-                                <field name="date" states="close"/>
+                                <field name="date"/>
                                 <field name="close_reason_id" attrs="{'invisible': ['|',('type','!=','contract'),('state','in',['draft','open','pending'])]}"/>
                             </group>
                         </group>
@@ -113,7 +113,7 @@
             </field>
         </record>
 
-        <record id="view_purchase_subscription_tree" model="ir.ui.view">
+    <record id="view_purchase_subscription_tree" model="ir.ui.view">
         <field name="name">purchase.subscription.list</field>
         <field name="model">purchase.subscription</field>
         <field name="groups_id" eval="[(4, ref('account.group_account_invoice'))]"/>
@@ -128,6 +128,45 @@
                 <field name="pricelist_id" invisible="1"/>
                 <field name="company_id" groups="base.group_multi_company"/>
             </tree>
+        </field>
+    </record>
+
+    <record id="purchase_subscription_view_search" model="ir.ui.view">
+        <field name="name">purchase.subscription.search</field>
+        <field name="model">purchase.subscription</field>
+        <field name="arch" type="xml">
+            <search string="Purchase Subscriptions">
+                <field name="name" string="Contract"/>
+                <field name="date"/>
+                <field name="partner_id" operator="child_of"/>
+                <field name="manager_id"/>
+                <field name="template_id"/>
+                <filter name="new" string="New" domain="[('state','=','draft')]" help="New Contracts"/>
+                <filter name="open" string="In Progress" domain="[('state','=','open')]" help="Contracts in progress"/>
+                <filter name="pending" string="To Renew" domain="[('state','=','pending')]" help="Pending contracts"/>
+                <filter name="closed" string="Closed" domain="[('state','=','close')]" help="Closed contracts"/>
+                <filter name="cancelled" string="Cancelled" domain="[('state','=','cancelled')]" help="Cancelled contracts"/>
+                <separator/>
+                <filter
+                    string="Expired"
+                    domain="[('state','in',('open','draft','pending')), '|', ('date', '!=', False), ('date', '&lt;=', time.strftime('%%Y-%%m-%%d'))]"
+                    help="End date passed" />
+                <filter
+                    string="Expiring soon"
+                    domain="[('date', '!=', False), ('date', '&lt;=', (context_today() + datetime.timedelta(30)).strftime('%%Y-%%m-%%d') )]"
+                    help="End date is in the next month" />
+                <separator/>
+                <filter string="Contracts not assigned" help="Contracts that are not assigned to an account manager." domain="[('manager_id', '=', False)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Status" domain="[]" context="{'group_by':'state'}"/>
+                    <filter string="Account Manager" domain="[]" context="{'group_by':'manager_id'}"/>
+                    <filter string="Partner" domain="[]" context="{'group_by':'partner_id'}"/>
+                    <filter string="Template" domain="[]" context="{'group_by':'template_id'}"/>
+                    <filter string="Start Month" domain="[]" context="{'group_by' : 'date_start'}" />
+                    <filter string="End Month" domain="[]" context="{'group_by' : 'date'}" />
+                </group>
+            </search>
         </field>
     </record>
 
