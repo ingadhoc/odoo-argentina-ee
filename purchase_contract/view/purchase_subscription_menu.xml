@@ -39,6 +39,7 @@
             <field name="view_id" ref=""/>
             <field name="search_view_id" ref=""/> 
             <field name="domain">[('type','=','contract')]</field>
+            <field name="search_view_id" ref="purchase_subscription_view_search"/>
             <field name="context">{'search_default_open':1, 'search_default_pending':1}</field>
         </record>
 
