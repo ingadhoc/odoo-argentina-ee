@@ -8,8 +8,10 @@ from dateutil.relativedelta import relativedelta
 import datetime
 import logging
 import time
+from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
 from openerp import models, fields, api, _
 from openerp.exceptions import ValidationError
+from openerp.addons.decimal_precision import decimal_precision as dp
 
 _logger = logging.getLogger(__name__)
 
@@ -17,7 +19,8 @@ _logger = logging.getLogger(__name__)
 class PurchaseSubscription(models.Model):
     _name = "purchase.subscription"
     _description = "Purchase Subscription"
-    _inherit = "sale.subscription"
+    _inherits = {'account.analytic.account': 'analytic_account_id'}
+    _inherit = 'mail.thread'
 
     @api.multi
     @api.depends('recurring_invoice_line_ids')
@@ -39,6 +42,84 @@ class PurchaseSubscription(models.Model):
         'Subscription Template',
         domain=[('type', '=', 'template')],
         track_visibility='onchange')
+    state = fields.Selection(
+        [('draft', 'New'),
+         ('open', 'In Progress'),
+         ('pending', 'To Renew'),
+         ('close', 'Closed'),
+         ('cancel', 'Cancelled')],
+        'Status',
+        required=True,
+        track_visibility='onchange', copy=False, default='draft')
+    analytic_account_id = fields.Many2one(
+        'account.analytic.account',
+        'Analytic Account', required=True, ondelete="cascade", auto_join=True)
+    date_start = fields.Date('Start Date', default=time.strftime('%Y-%m-%d'))
+    date = fields.Date('End Date', track_visibility='onchange')
+    currency_id = fields.Many2one(
+        'res.currency',
+        string='Currency', required=True)
+    recurring_rule_type = fields.Selection(
+        [('daily', 'Day(s)'),
+         ('weekly', 'Week(s)'),
+         ('monthly', 'Month(s)'), (
+            'yearly', 'Year(s)'), ],
+        'Recurrency',
+        help="Invoice automatically repeat at specified interval",
+        default='monthly')
+    recurring_interval = fields.Integer(
+        'Repeat Every',
+        help="Repeat every (Days/Week/Month/Year)", default=1)
+    recurring_next_date = fields.Date(
+        'Date of Next Invoice')
+    close_reason_id = fields.Many2one(
+        "purchase.subscription.close.reason",
+        "Close Reason", track_visibility='onchange')
+    type = fields.Selection(
+        [('contract', 'Contract'),
+         ('template', 'Template')], 'Type',
+        default='contract')
+    description = fields.Text('Description')
+    user_id = fields.Many2one(
+        'res.users', 'Responsible', track_visibility='onchange')
+    manager_id = fields.Many2one(
+        'res.users', 'Purchase Rep', track_visibility='onchange')
+
+    _defaults = {
+        'name': 'New',
+        'code': lambda s, c, u, ctx: s.pool['ir.sequence'].next_by_code(
+            c, u, 'purchase.subscription', context=ctx) or 'New',
+    }
+
+    @api.multi
+    def set_open(self):
+        return self.write({'state': 'open', 'date': False})
+
+    @api.multi
+    def set_pending(self):
+        return self.write({'state': 'pending'})
+
+    @api.multi
+    def set_cancel(self):
+        return self.write({'state': 'cancel'})
+
+    @api.multi
+    def set_close(self):
+        return self.write({'state': 'close', 'date': datetime.date.today(
+        ).strftime(DEFAULT_SERVER_DATE_FORMAT)})
+
+    @api.multi
+    def recurring_invoice(self):
+        return self._recurring_create_invoice()
+
+    @api.model
+    def create(self, vals):
+        if not vals.get('code', False):
+            vals['code'] = self.env['ir.sequence'].next_by_code(
+                'purchase.subscription') or 'New'
+        if vals.get('name', 'New') == 'New':
+            vals['name'] = vals['code']
+        return super(PurchaseSubscription, self).create(vals)
 
     @api.multi
     def _prepare_invoice_data(self):
@@ -58,12 +139,22 @@ class PurchaseSubscription(models.Model):
             raise ValidationError(_(
                 'Please define a pruchase journal for the company "%s".') % (
                 self.company_id.name or '', ))
+
+        currency_id = False
+        if self.currency_id:
+            currency_id = self.currency_id.id
+        elif self.partner_id.property_product_pricelist:
+            currency_id = self.partner_id.\
+                property_product_pricelist.currency_id.id
+        elif self.company_id:
+            currency_id = self.company_id.currency_id.id
+
         invoice = {
             'account_id': self.partner_id.property_account_payable_id.id,
             'type': 'in_invoice',
             'reference': self.name,
             'partner_id': self.partner_id.id,
-            'currency_id': self.company_id.currency_id.id,
+            'currency_id': currency_id,
             'journal_id': len(journal_ids) and journal_ids[0].id or False,
             'date_invoice': self.recurring_next_date,
             'origin': self.code,
@@ -181,6 +272,54 @@ class PurchaseSubscription(models.Model):
                             raise
         return invoice_ids
 
+    @api.onchange('partner_id')
+    def on_change_partner(self):
+        currency_id = self.\
+            partner_id.property_purchase_currency_id.id or self.\
+            env.user.company_id.currency_id.id
+        self.currency_id = currency_id
+
+    @api.multi
+    def name_get(self):
+        res = []
+        for sub in self:
+            if sub.type != 'template':
+                name = '%s - %s' % (
+                    sub.code,
+                    sub.partner_id.name) if sub.code else sub.partner_id.name
+                res.append((sub.id, '%s/%s' % (
+                    sub.template_id.code,
+                    name) if sub.template_id.code else name))
+            else:
+                name = '%s - %s' % (
+                    sub.code,
+                    sub.name) if sub.code else sub.name
+                res.append((sub.id, name))
+        return res
+
+    @api.onchange('template_id')
+    def on_change_template(self):
+        if self.template_id.currency_id:
+            self.currency_id = self.template_id.currency_id.id
+        if self.template_id.description:
+            self.description = self.template_id.description
+        if self.template_id:
+            self.recurring_interval = self.template_id.recurring_interval
+            self.recurring_rule_type = self.template_id.recurring_rule_type
+        invoice_line_ids = []
+        for x in self.template_id.recurring_invoice_line_ids:
+            invoice_line_ids.append((0, 0, {
+                'product_id': x.product_id.id,
+                'uom_id': x.uom_id.id,
+                'name': x.name,
+                'quantity': x.quantity,
+                'price_unit': x.price_unit,
+                'analytic_account_id': x.
+                analytic_account_id and x.
+                analytic_account_id.id or False,
+            }))
+        self.recurring_invoice_line_ids = invoice_line_ids
+
     @api.multi
     def action_subscription_invoice(self):
         analytic_ids = [sub.analytic_account_id.id for sub in self]
@@ -216,7 +355,7 @@ class PurchaseSubscription(models.Model):
                     account.write({'state': 'pending'})
                 remind_user = remind.setdefault(account.manager_id.id, {})
                 remind_type = remind_user.setdefault(key, {})
-                remind_partner = remind_type.setdefault(
+                remind_type.setdefault(
                     account.partner_id, []).append(account)
 
         # Already expired
@@ -251,15 +390,103 @@ class PurchaseSubscription(models.Model):
 
 class PurchaseSubscriptionLine(models.Model):
     _name = "purchase.subscription.line"
-    _inherit = "sale.subscription.line"
+    _description = "Purchase Subscription Line"
+
+    @api.multi
+    def _amount_line(self):
+        for line in self:
+            price = line.product_id.taxes_id.\
+                _fix_tax_included_price(
+                    line.price_unit, line.product_id.taxes_id, [])
+            line.price_subtotal = line.\
+                quantity * price * (100.0 - line.discount) / 100.0
+            if line.analytic_account_id.currency_id:
+                line.price_subtotal = line.analytic_account_id\
+                    .currency_id.round(line.price_subtotal)
 
     analytic_account_id = fields.Many2one(
         'purchase.subscription', 'Subscription', ondelete='cascade')
     quantity = fields.Float('Quantity', compute='_compute_quantity')
     purchase_quantity = fields.Float('Purchase Quantity')
+    product_id = fields.Many2one(
+        'product.product', string='Product', required=True)
+    name = fields.Text('Description', required=True)
+    uom_id = fields.Many2one('product.uom', 'Unit of Measure', required=True)
+    price_unit = fields.Float('Unit Price', required=True)
+    discount = fields.Float(
+        'Discount (%)', digits_compute=dp.get_precision('Discount'))
+    price_subtotal = fields.Float(
+        compute=_amount_line,
+        string='Sub Total', digits_compute=dp.get_precision('Account'))
 
     @api.multi
     @api.depends('purchase_quantity')
     def _compute_quantity(self):
         for rec in self:
             rec.quantity = rec.purchase_quantity
+
+    @api.onchange('product_id')
+    def product_id_change(self):
+        product = self.product_id.with_context({
+            'lang': self.analytic_account_id.partner_id.lang,
+            'partner_id': self.analytic_account_id.partner_id.id,
+        })
+        name = product.display_name
+        if product.name:
+            name = product.name_get()[0][1]
+            if product.description_purchase:
+                name += '\n' + product.description_purchase
+
+        self.name = name
+        self.uom_id = self.uom_id.id or product.uom_id.id or False
+        self.price_unit = product.list_price
+        seller = self.product_id._select_seller(
+            self.product_id,
+            partner_id=self.analytic_account_id.partner_id,
+            quantity=self.quantity,
+            uom_id=self.uom_id)
+
+        if seller:
+            self.price_unit = seller.price
+            if self.price_unit and seller and self.analytic_account_id.\
+                    currency_id and seller.currency_id != self.\
+                    analytic_account_id.currency_id:
+                self.price_unit = seller.currency_id.compute(
+                    self.price_unit, self.analytic_account_id.currency_id)
+
+            if seller and self.uom_id and seller.product_uom != self.uom_id:
+                self.price_unit = self.env['product.uom']._compute_price(
+                    seller.product_uom.id, self.price_unit, self.uom_id.id)
+
+        if self.uom_id.id != product.uom_id.id:
+            self.price_unit = self.env['product.uom']._compute_price(
+                product.uom_id.id,
+                self.price_unit, self.uom_id.id)
+        if self.uom_id:
+            return {'domain': {'uom_id': [
+                ('category_id', '=', product.uom_id.category_id.id)]}}
+        else:
+            return {'domain': {'uom_id': []}}
+
+    @api.onchange('uom_id')
+    def product_uom_change(self):
+        if not self.uom_id:
+            self.price_unit = 0.0
+            self.uom_id = self.uom_id or False
+        return self.product_id_change()
+
+
+class PurchaseSubscriptionCloseReason(models.Model):
+    _name = "purchase.subscription.close.reason"
+    _order = "sequence, id"
+
+    name = fields.Char('Name', required=True)
+    sequence = fields.Integer('Sequence', default=10)
+
+
+class AccountAnalyticAccount(models.Model):
+    _inherit = 'account.analytic.account'
+
+    purchase_subscription_ids = fields.One2many(
+        'purchase.subscription',
+        'analytic_account_id', 'Purchase Subscriptions')
