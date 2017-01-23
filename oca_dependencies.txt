@@ -4,3 +4,4 @@ ingadhoc-odoo-infrastructure https://github.com/ingadhoc/odoo-infrastructure.git
 server-tools
 # solo para transindar per
 ingadhoc-sale https://github.com/ingadhoc/sale.git
+ingadhoc-odoo-argentina https://github.com/ingadhoc/odoo-argentina.git
