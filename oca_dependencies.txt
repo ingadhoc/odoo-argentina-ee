@@ -3,7 +3,6 @@ ingadhoc-odoo-support git@github.com:ingadhoc/odoo-support.git
 ingadhoc-odoo-infrastructure https://github.com/ingadhoc/odoo-infrastructure.git
 server-tools
 # solo para transindar per
+ingadhoc-product https://github.com/ingadhoc/product.git
 ingadhoc-sale https://github.com/ingadhoc/sale.git
-ingadhoc-odoo-argentina https://github.com/ingadhoc/odoo-argentina.git
-ingadhoc-argentina-reporting https://github.com/ingadhoc/argentina-reporting.git
-ingadhoc-purchase https://github.com/ingadhoc/purchase.git
+ingadhoc-account-invoicing https://github.com/ingadhoc/account-invoicing.git
