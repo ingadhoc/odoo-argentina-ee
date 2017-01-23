@@ -5,3 +5,4 @@ server-tools
 # solo para transindar per
 ingadhoc-sale https://github.com/ingadhoc/sale.git
 ingadhoc-odoo-argentina https://github.com/ingadhoc/odoo-argentina.git
+ingadhoc-argentina-reporting https://github.com/ingadhoc/argentina-reporting.git
