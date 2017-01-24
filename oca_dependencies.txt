@@ -6,3 +6,4 @@ server-tools
 ingadhoc-product https://github.com/ingadhoc/product.git
 ingadhoc-sale https://github.com/ingadhoc/sale.git
 ingadhoc-account-invoicing https://github.com/ingadhoc/account-invoicing.git
+ingadhoc-payment https://github.com/ingadhoc/account-payment.git
