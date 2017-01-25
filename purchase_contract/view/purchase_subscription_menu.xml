@@ -31,19 +31,6 @@
             </field>
         </record>
 
-        <record id="purchase_subscription_action" model="ir.actions.act_window">
-            <field name="name">Contract</field>
-            <field name="res_model">purchase.subscription</field>
-            <field name="view_type">form</field>
-            <field name="view_mode">tree,form</field>
-            <field name="view_id" ref=""/>
-            <field name="search_view_id" ref=""/> 
-            <field name="domain">[('type','=','contract')]</field>
-            <field name="search_view_id" ref="purchase_subscription_view_search"/>
-            <field name="context">{'search_default_open':1, 'search_default_pending':1}</field>
-        </record>
-
-
         <!-- Action Purchase/Configuration/Contract template -->
         <record id="purchase_subscription_template_action" model="ir.actions.act_window">
             <field name="name">Subscription Template</field>

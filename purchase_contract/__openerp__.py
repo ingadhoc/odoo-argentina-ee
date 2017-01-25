@@ -30,7 +30,6 @@
     'images': [
     ],
     'depends': [
-        'sale_contract',
         'purchase',
     ],
     'data': [
@@ -39,6 +38,7 @@
         'view/purchase_subscription_view.xml',
         'view/purchase_subscription_menu.xml',
         'data/subscription_cron.xml',
+        'data/purchase_contract_data.xml'
     ],
     'demo': [
     ],
