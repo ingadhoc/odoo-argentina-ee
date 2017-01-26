@@ -20,7 +20,7 @@
 ##############################################################################
 {
     "name": "Purchase Contract",
-    'version': '9.0.1.2.0',
+    'version': '9.0.1.3.0',
     'category': 'Accounting',
     'sequence': 14,
     'summary': 'Contract Purchase, Invoicing',
