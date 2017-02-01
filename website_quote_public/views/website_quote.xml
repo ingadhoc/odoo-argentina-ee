@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+    <!-- Template to public users -->
+    <template id="so_template_public" name="SO Template Public" inherit_id="website_quote.so_template">
+        <xpath expr="//div[@class='alert alert-info alert-dismissable']" position="replace"/>
+        <xpath expr="//t[@t-foreach='template.quote_line']//div[@class='alert alert-info alert-dismissable']" position="replace"/>
+        <xpath expr="//t[@t-foreach='template.options']//div[@class='alert alert-info alert-dismissable']" position="replace"/>
+    </template>
+
+    </data>
+</openerp>
