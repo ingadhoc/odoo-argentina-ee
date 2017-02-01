@@ -19,26 +19,25 @@
 #
 ##############################################################################
 {
-    "name": "Purchase Contract",
-    'version': '9.0.1.3.0',
-    'category': 'Accounting',
-    'sequence': 14,
-    'summary': 'Contract Purchase, Invoicing',
+    'name': 'Online Quotes Templates Public',
+    'version': '9.0.1.0.0',
     'author': 'ADHOC SA',
+    'category': 'Support',
+    'sequence': 14,
+    'summary': '',
     'website': 'www.adhoc.com.ar',
     'license': 'AGPL-3',
     'images': [
     ],
     'depends': [
-        'purchase',
+        # 'website_quote',
+        'website_contract',
     ],
     'data': [
-        'security/purchase_contract_security.xml',
+        'views/website_quote.xml',
         'security/ir.model.access.csv',
-        'view/purchase_subscription_view.xml',
-        'view/purchase_subscription_menu.xml',
-        'data/subscription_cron.xml',
-        'data/purchase_contract_data.xml'
+    ],
+    'qweb': [
     ],
     'demo': [
     ],
@@ -46,5 +45,5 @@
     ],
     'installable': True,
     'auto_install': False,
-    'application': True,
+    'application': False,
 }

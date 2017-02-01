@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    Copyright (C) 2015  ADHOC SA  (http://www.adhoc.com.ar)
+#    Copyright (C) 2016  ADHOC SA  (http://www.adhoc.com.ar)
 #    All Rights Reserved.
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -19,32 +19,30 @@
 #
 ##############################################################################
 {
-    "name": "Purchase Contract",
-    'version': '9.0.1.3.0',
-    'category': 'Accounting',
+    'name': 'Contracts and Online quotations Usability',
+    'version': '9.0.1.0.0',
+    'category': 'Sales Management',
     'sequence': 14,
-    'summary': 'Contract Purchase, Invoicing',
+    'summary': '',
     'author': 'ADHOC SA',
     'website': 'www.adhoc.com.ar',
     'license': 'AGPL-3',
     'images': [
     ],
     'depends': [
-        'purchase',
+        'sale_contract',
+        'website_quote',
+        'project',
     ],
     'data': [
-        'security/purchase_contract_security.xml',
-        'security/ir.model.access.csv',
-        'view/purchase_subscription_view.xml',
-        'view/purchase_subscription_menu.xml',
-        'data/subscription_cron.xml',
-        'data/purchase_contract_data.xml'
+        'views/sale_quote_template_view.xml',
+        'views/sale_contract_view.xml',
     ],
     'demo': [
     ],
     'test': [
     ],
     'installable': True,
-    'auto_install': False,
-    'application': True,
+    'auto_install': True,
+    'application': False,
 }
