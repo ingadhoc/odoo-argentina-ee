@@ -62,6 +62,9 @@ class AdhocModuleCategory(models.Model):
         """
         Function called from remote databases to get contracted products
         """
+        # we run in sudo because remote user cant see product_tmpl_ids and
+        # perhups other things
+        self = self.sudo()
         self.ensure_one()
         analytic_lines = self.env[
             'sale.subscription.line'].sudo().search([
