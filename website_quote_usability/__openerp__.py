@@ -32,6 +32,7 @@
     'depends': [
         'sale_contract',
         'website_quote',
+        'project',
     ],
     'data': [
         'views/sale_quote_template_view.xml',

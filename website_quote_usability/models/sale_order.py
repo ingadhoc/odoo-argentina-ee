@@ -12,8 +12,9 @@ class SaleOrder(models.Model):
     @api.multi
     def _create_analytic_account(self, prefix=None):
         for order in self:
-            analytic_template = order.template_id.analytic_template_id
-            if analytic_template:
+            template = order.template_id.analytic_template_id
+            projects = template.project_ids
+            if projects and len(projects) == 1:
                 name = order.name
                 if prefix:
                     name = prefix + ": " + order.name
@@ -24,4 +25,5 @@ class SaleOrder(models.Model):
                     'company_id': order.company_id.id,
                     'partner_id': order.partner_id.id
                 }
-                order.project_id = analytic_template.copy(default=default)
+                order.project_id = projects.copy(
+                    default=default).analytic_account_id
