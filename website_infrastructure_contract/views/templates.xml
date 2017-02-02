@@ -39,7 +39,7 @@
                                         <th>Tipo</th>
                                         <th>Fecha Creación</th>
                                         <th>Fecha Desactivación</th>
-                                        <th>Fecha Caducidad</th>
+                                        <th>Fecha Borrado</th>
                                         <th></th><!-- Borrar -->
                                         <th></th><!-- Duplicar -->
                                     </tr>
