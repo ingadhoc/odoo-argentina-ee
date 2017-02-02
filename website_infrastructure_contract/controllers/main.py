@@ -15,7 +15,6 @@ class PortalInfrastructureWebsiteAccount(website_account):
 
     @http.route([
         '/my/duplicate_database/<int:database_id>/',
-        # '/my/duplicate_database/<int:database_id>/<string:uuid>'
     ],
         type='http',
         auth="user",
@@ -41,7 +40,6 @@ class PortalInfrastructureWebsiteAccount(website_account):
 
     @http.route([
         '/my/delete_database/<int:database_id>/',
-        # '/my/duplicate_database/<int:database_id>/<string:uuid>'
     ],
         type='http',
         auth="user",
@@ -62,7 +60,6 @@ class PortalInfrastructureWebsiteAccount(website_account):
 
     @http.route([
         '/my/contract_databases/<int:account_id>/',
-        # '/my/contract_databases/<int:account_id>/<string:uuid>'
     ],
         type='http',
         auth="user",
