@@ -16,3 +16,7 @@ class ProductTempalte(models.Model):
         help='Expression to evaluate quantity on a contract for a customer '
         'database. It must return a float',
     )
+    installation_command = fields.Text(
+        help='Expression to be run on database installation. Return will be'
+        ' appended like a message'
+    )

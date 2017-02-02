@@ -39,6 +39,31 @@ class database(models.Model):
                 line.db_quantity = result
 
     @api.one
+    def run_installation_command_on_remote_database(self):
+        client = self.get_client()
+        localdict = {'client': client}
+        for line in self.contract_id.recurring_invoice_line_ids:
+            expression = line.product_id.installation_command
+            if not expression:
+                continue
+            eval(
+                expression,
+                localdict,
+                mode="exec",
+                nocopy=True)
+            result = localdict.get('result', False)
+            if result:
+                self.message_post(
+                    subject=_('Installation response'),
+                    body=result)
+
+    @api.one
+    def create_db(self):
+        res = super(database, self).create_db()
+        self.run_installation_command_on_remote_database()
+        return res
+
+    @api.one
     def update_remote_contracted_products(self):
         client = self.get_client()
         modules = ['adhoc_modules']

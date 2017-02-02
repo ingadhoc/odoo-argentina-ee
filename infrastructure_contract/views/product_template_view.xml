@@ -7,6 +7,7 @@
              <field name="arch" type="xml">
                 <field name="adhoc_product_dependency_ids" position="after">
                     <field name="contracted_quantity_expression"/>
+                    <field name="installation_command"/>
                 </field>
             </field>
         </record>

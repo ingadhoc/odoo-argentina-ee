@@ -64,6 +64,12 @@ class SaleSubscription(models.Model):
             contract.get_main_database().update_remote_contracted_products()
 
     @api.multi
+    def run_installation_command_on_remote_database(self):
+        for contract in self:
+            contract.get_main_database(
+            ).run_installation_command_on_remote_database()
+
+    @api.multi
     def update_lines_data_from_database(self):
         for contract in self:
             contract.get_main_database().update_contract_data_from_database()

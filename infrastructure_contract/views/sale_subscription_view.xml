@@ -27,6 +27,15 @@
                 class="oe_link"
                 type="object"
                 />
+            <button
+                name="run_installation_command_on_remote_database"
+                string="⇒ Run Install on remote DB"
+                help="Run installation commands of subscription products."
+                confirm="Are you sure you want to install run this? This runs automatically on database creation"
+                class="oe_link"
+                groups="base.group_no_one"
+                type="object"
+                />
             <!-- <button class="oe_link" name="update_remote_database_contract" attrs="{'invisible': [('recurring_invoices','!=',True)]}" string="⇒ Update quantity from database" type="object" groups="base.group_no_one"/> -->
         </button>
 
