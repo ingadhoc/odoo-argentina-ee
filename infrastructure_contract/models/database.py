@@ -19,6 +19,7 @@ class database(models.Model):
     contract_state = fields.Selection(
         related='contract_id.state',
         string='Contact Status',
+        readonly=True,
     )
 
     @api.one

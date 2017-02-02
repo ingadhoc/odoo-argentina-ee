@@ -21,6 +21,7 @@ class SaleSubscriptionLine(models.Model):
     sequence = fields.Integer(
         related='product_id.contract_sequence',
         store=True,
+        readonly=True,
     )
 
     _sql_constraints = [(
