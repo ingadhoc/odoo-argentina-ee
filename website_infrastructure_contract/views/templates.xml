@@ -38,6 +38,7 @@
                                         <th width="35%">Dominio</th>
                                         <th>Tipo</th>
                                         <th>Fecha Creación</th>
+                                        <th>Fecha Desactivación</th>
                                         <th>Fecha Caducidad</th>
                                         <th></th><!-- Borrar -->
                                         <th></th><!-- Duplicar -->
@@ -48,6 +49,7 @@
                                         <td><a target="_blank" t-att-href="database.main_hostname"><span t-field="database.main_hostname"/></a></td>
                                         <td><span t-field="database.instance_type_id.name"/></td>
                                         <td><span t-field="database.issue_date"/></td>
+                                        <td><span t-field="database.deactivation_date"/></td>
                                         <td><span t-field="database.drop_date"/></td>
                                         <td><a class="btn btn-danger pull-right" t-if="not database.protected"  t-att-href="'/my/delete_database/'+str(database.id)"><span class="fa fa-trash-o"/> Borrar</a></td>
                                         <!-- <td><a class="btn btn-danger pull-right" t-if="not database.instance_type_id.is_production"  t-att-href="'/my/delete_database/'+str(database.id)"><span class="fa fa-trash-o"/> Borrar</a></td> -->
