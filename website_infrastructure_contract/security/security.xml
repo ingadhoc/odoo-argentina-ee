@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Portal -->
+    <record id="database_portal" model="ir.rule">
+        <field name="name">Database portal access</field>
+        <field name="model_id" ref="infrastructure.model_infrastructure_database"/>
+        <field name="domain_force">[('partner_id','in',[user.partner_id.id,user.commercial_partner_id.id])]</field>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+    </record>
+    <record id="instance_portal" model="ir.rule">
+        <field name="name">Instance portal access</field>
+        <field name="model_id" ref="infrastructure.model_infrastructure_instance"/>
+        <field name="domain_force">[('environment_id.partner_id','in',[user.partner_id.id,user.commercial_partner_id.id])]</field>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+    </record>
+    <!-- TODO ver si es necesaria o no -->
+    <!-- <record id="instance_host_portal" model="ir.rule">
+        <field name="name">Instance host portal access</field>
+        <field name="model_id" ref="infrastructure.model_infrastructure_instance_host"/>
+        <field name="domain_force">[('instance_id.environment_id.partner_id','in',[user.partner_id.id,user.commercial_partner_id.id])]</field>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+    </record> -->
+    <record id="environment_portal" model="ir.rule">
+        <field name="name">environment portal access</field>
+        <field name="model_id" ref="infrastructure.model_infrastructure_environment"/>
+        <field name="domain_force">[('partner_id','in',[user.partner_id.id,user.commercial_partner_id.id])]</field>
+        <field name="groups" eval="[(4, ref('base.group_portal'))]"/>
+    </record>
+</odoo>
