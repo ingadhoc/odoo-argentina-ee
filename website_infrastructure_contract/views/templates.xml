@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+
+    <template id="contracts_databases" name="Contracts" inherit_id="website_contract.contracts">
+        <xpath expr="//thead/tr" position="inside">
+            <th/>
+        </xpath>
+        <xpath expr="//t[@t-foreach='accounts']/tr" position="inside">
+            <td><t t-if="account.state in ['open', 'pending']"><a t-att-href="'/my/contract_databases/'+str(account.id)"><span class="label label-success"><t t-raw="len(account.database_ids)"/> Databases</span></a></t></td>
+            <!-- <td><t t-if="account.state in ['open', 'pending']"><a t-att-href="'/my/contract_databases/'+str(account.id)+'/'+str(account.uuid)"><span class="label label-success"><t t-raw="len(account.database_ids)"/> Databases</span></a></t></td> -->
+        </xpath>
+    </template>
+
+
+    <template id="contract_databases" name="Contract">
+        <t t-call="website.layout">
+            <div id="wrap">
+                <div class="container mb64">
+                    <div class="row" t-if="user.partner_id == account.partner_id">
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb mt8 mb0">
+                                <li><a href="/my/home">My Account</a></li>
+                                <li><a t-att-href="'/my/contract/'+str(account.id)+'/'+str(account.uuid)">Contract <t t-esc="account.name"/></a></li>
+                                <li>Databases</li>
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="oe_structure"/>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h3 class="page-header">Databases for contract <span t-field="account.name"/>
+                            </h3>
+                            <div class="oe_structure"/>
+                            <table class="table mt32" id="wc-account-table">
+                                <thead>
+                                    <tr class="active">
+                                        <th width="35%">Dominio</th>
+                                        <th>Tipo</th>
+                                        <th>Fecha Creación</th>
+                                        <th>Fecha Caducidad</th>
+                                        <th></th><!-- Borrar -->
+                                        <th></th><!-- Duplicar -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="account.database_ids.filtered(lambda x: x.instance_type_id.portal_visible)" t-as="database">
+                                        <td><a target="_blank" t-att-href="database.main_hostname"><span t-field="database.main_hostname"/></a></td>
+                                        <td><span t-field="database.instance_type_id.name"/></td>
+                                        <td><span t-field="database.issue_date"/></td>
+                                        <td><span t-field="database.drop_date"/></td>
+                                        <td><a class="btn btn-danger pull-right" t-if="not database.protected"  t-att-href="'/my/delete_database/'+str(database.id)"><span class="fa fa-trash-o"/> Borrar</a></td>
+                                        <!-- <td><a class="btn btn-danger pull-right" t-if="not database.instance_type_id.is_production"  t-att-href="'/my/delete_database/'+str(database.id)"><span class="fa fa-trash-o"/> Borrar</a></td> -->
+                                        <td><a class="btn btn-primary pull-right" t-att-href="'/my/duplicate_database/'+str(database.id)"><span class="fa fa-copy"/> Duplicar</a></td>
+                                        <!-- <td><button type="button" class="btn btn-default fa fa-trash-o" data-dismiss="modal">Borrar</button></td> -->
+                                        <!-- <td><button type="button" class="btn btn-default fa fa-copy" data-dismiss="modal">Duplicar</button></td> -->
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</data>
+</openerp>
