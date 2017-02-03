@@ -32,7 +32,8 @@ class SaleSubscription(models.Model):
             analytic_account_id, db_name, login))
         contract = self.sudo().search([
             ('analytic_account_id', '=', int(analytic_account_id)),
-            ('state', '=', 'open')], limit=1)
+            # ('state', '=', 'open')], limit=1)
+            ('state', 'in', ['open', 'pending'])], limit=1)
         if not contract:
             return {'error': _(
                 "No open contract for id %s" % analytic_account_id)}

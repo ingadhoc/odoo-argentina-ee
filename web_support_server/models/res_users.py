@@ -28,7 +28,8 @@ class res_users(models.Model):
             raise exceptions.AccessDenied()
         domain = [
             ('analytic_account_id', '=', int(contract_id)),
-            ('state', '=', 'open')]
+            # ('state', '=', 'open')]
+            ('state', 'in', ['open', 'pending'])]
         contracts = self.env['sale.subscription'].sudo().search(
             domain)
 
