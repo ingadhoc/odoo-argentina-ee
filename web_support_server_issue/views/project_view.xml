@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="project_view_inherit_sale_contract">
+        <field name="name">project.project.view.buttons.susbcription_count</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project" />
+        <field name="priority" eval="22"/>
+        <field name="groups_id" eval="[(4, ref('sale_contract.group_sale_contract_view'))]"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button class="oe_stat_button" type="object" name="subscriptions_action"
+                    icon="fa-book" attrs="{'invisible': [('subscription_count', '=', 0)]}">
+                    <field string="Subscriptions" name="subscription_count" widget="statinfo"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="project_view_inherit_infrastructure">
+        <field name="name">project.project.view.buttons.databases</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project" />
+        <field name="priority" eval="24"/>
+        <field name="groups_id" eval="[(4, ref('infrastructure.group_user'))]"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_databases" icon="fa-th-list" type="object" class="oe_stat_button">
+                    <field name="database_count" widget="statinfo"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+</odoo>

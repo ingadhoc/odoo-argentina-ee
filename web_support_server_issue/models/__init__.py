@@ -5,3 +5,4 @@
 ##############################################################################
 from . import sale_subscription
 from . import database_user
+from . import project
