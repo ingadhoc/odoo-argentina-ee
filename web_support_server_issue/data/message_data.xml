@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <openerp>
-    <data noupdate="0">
+    <data noupdate="1">
         <record id="server_issue_title" model="ir.config_parameter">
             <field name="key">server_issue_title</field>
             <field name="value">Issue succesfully loaded!</field>

@@ -107,6 +107,7 @@ class AdhocModuleModule(models.Model):
     )
     version = fields.Selection(
         related='repository_id.branch',
+        readonly=True,
         store=True,
     )
     also_available_ids = fields.Many2many(
