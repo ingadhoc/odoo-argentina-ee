@@ -30,6 +30,7 @@ class database(models.Model):
             expression = line.product_id.contracted_quantity_expression
             if not expression:
                 continue
+            localdict['recurring_line'] = line
             eval(
                 expression,
                 localdict,
@@ -47,6 +48,7 @@ class database(models.Model):
             expression = line.product_id.installation_command
             if not expression:
                 continue
+            localdict['recurring_line'] = line
             eval(
                 expression,
                 localdict,
