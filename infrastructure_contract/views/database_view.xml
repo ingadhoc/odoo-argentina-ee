@@ -26,9 +26,11 @@
         <field name="demo_data" position="before">
             <label for="contract_id"/>
             <div>
+                <!-- we make contract required on production databases -->
                 <field
                     name="contract_id"
                     class="oe_inline"
+                    attrs="{'required': [('is_production', '=', True)]}"
                     options="{'no_create': True}"/>
                 <button
                     name="upload_contract_data"
