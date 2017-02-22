@@ -79,7 +79,9 @@ class report_account_followup_report(models.AbstractModel):
                     'name': aml.document_number,
                     # 'name': aml.move_id.name,
                     'action': aml.get_model_id_and_name(),
-                    # 'move_id': aml.move_id.id,
+                    # TODO ver que hacemos cuando el resultado es mas de un
+                    # move
+                    'move_id': aml.move_id.id,
                     'type': is_payment and 'payment' or 'unreconciled_aml',
                     'footnotes': {},
                     'unfoldable': False,
