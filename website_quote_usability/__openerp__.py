@@ -30,7 +30,9 @@
     'images': [
     ],
     'depends': [
-        'sale_contract',
+        # 'sale_contract',
+        # requerimos website_contract para campo contract_template
+        'website_contract',
         'website_quote',
         'project',
     ],
