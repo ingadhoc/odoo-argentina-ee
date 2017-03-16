@@ -13,5 +13,5 @@ class SaleSubscription(models.Model):
     def _prepare_invoice_data(self, contract):
         res = super(SaleSubscription, self)._prepare_invoice_data(contract)
         if contract.company_id.copy_contract_description:
-            res.update({'internal_notes': contract.description})
+            res.update({'comment': contract.description})
         return res
