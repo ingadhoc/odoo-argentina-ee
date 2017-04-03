@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
+        <!-- TODO cuando pasemos a user saas_provider esta categoria ya la crea aquel modulo -->
         <record id="odoo_apps" model="product.category">
             <field name="parent_id" ref="product.product_category_all"/>
             <field name="name">Odoo Apps</field>

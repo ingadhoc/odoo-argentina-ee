@@ -20,7 +20,7 @@
 ##############################################################################
 {
     'name': 'Accounting Reports Customized for Argentina',
-    'version': '9.0.1.1.0',
+    'version': '9.0.1.2.0',
     'category': 'Accounting',
     'sequence': 14,
     'summary': '',
@@ -37,6 +37,8 @@
     'data': [
         'views/report_followup.xml',
         'views/account_journal_dashboard_view.xml',
+        'reports/account_checks_to_date_report.xml',
+        'wizards/checks_to_date_view.xml',
     ],
     'demo': [
     ],
