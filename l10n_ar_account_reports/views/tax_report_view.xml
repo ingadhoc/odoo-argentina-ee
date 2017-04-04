@@ -1,0 +1,7 @@
+<odoo>
+<data noupdate="1">
+    <!-- TODO ocultar -->
+    <!-- borramos menu a tax reports ya que no aporta nada y no es compatible con nuestros impuestos de retencion-->
+    <delete id="account_reports.menu_action_account_report_gt" model="ir.ui.menu"/>
+</data>
+</odoo>
