@@ -65,6 +65,7 @@ class SaleSubscription(models.Model):
                 contract.analytic_account_id.id)], limit=1)
         if project:
             vals['project_id'] = project.id
+            vals['user_id'] = project.user_id.id
 
         issue = self.env['project.issue'].sudo().create(vals)
         # suscribe partner
