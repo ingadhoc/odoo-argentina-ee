@@ -20,7 +20,7 @@
 ##############################################################################
 {
     'name': 'Sale Contract Usability',
-    'version': '9.0.0.0.0',
+    'version': '9.0.0.1.0',
     'category': 'Sales Management',
     'sequence': 14,
     'summary': '',
@@ -34,6 +34,7 @@
     ],
     'data': [
         'views/res_company_view.xml'
+        'views/sale_subscription_view.xml',
     ],
     'demo': [
     ],

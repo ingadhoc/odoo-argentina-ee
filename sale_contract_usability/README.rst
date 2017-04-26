@@ -7,6 +7,7 @@ Sale Contract Usability
 =======================
 
 This module add to company form a boolean to take the field description in subcritions to recurring invoices.
+Make date (date nd) field visible in every state, by default is is only visible on close state (that does not make much sense)
 
 Installation
 ============

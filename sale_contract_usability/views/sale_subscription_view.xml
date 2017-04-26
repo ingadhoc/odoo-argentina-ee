@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<odoo>
+
+    <record id="sale_subscription_view_form" model="ir.ui.view">
+        <field name="name">sale.subscription.form</field>
+        <field name="model">sale.subscription</field>
+        <field name="inherit_id" ref="sale_contract.sale_subscription_view_form"/>
+        <field name="arch" type="xml">
+            <field name="date" position="attributes">
+                <attribute name="states"></attribute>
+            </field>
+        </field>
+    </record>
+
+
+</odoo>
