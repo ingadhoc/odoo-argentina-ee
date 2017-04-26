@@ -33,7 +33,7 @@
         'sale_contract',
     ],
     'data': [
-        'views/res_company_view.xml'
+        'views/res_company_view.xml',
         'views/sale_subscription_view.xml',
     ],
     'demo': [
