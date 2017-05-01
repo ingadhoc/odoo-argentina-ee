@@ -52,6 +52,5 @@
     ],
     'test': [],
     'installable': True,
-    'active': False,
     'auto_install': True
 }
