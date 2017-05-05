@@ -414,10 +414,10 @@ class PurchaseSubscriptionLine(models.Model):
     uom_id = fields.Many2one('product.uom', 'Unit of Measure', required=True)
     price_unit = fields.Float('Unit Price', required=True)
     discount = fields.Float(
-        'Discount (%)', digits_compute=dp.get_precision('Discount'))
+        'Discount (%)', digits=dp.get_precision('Discount'))
     price_subtotal = fields.Float(
         compute=_amount_line,
-        string='Sub Total', digits_compute=dp.get_precision('Account'))
+        string='Sub Total', digits=dp.get_precision('Account'))
 
     @api.multi
     @api.depends('purchase_quantity')
