@@ -33,6 +33,7 @@
         'account_reports',
         'account_debt_management',
         'l10n_ar_account',
+        'account_check',
     ],
     'data': [
         'views/report_followup.xml',
