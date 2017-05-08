@@ -24,12 +24,12 @@
         <field name="context" eval="{'url': '/account_reports/output_format/account_invoice_by_state_purchase/1', 'model': 'account.invoice_by_state.purchase'}" />
     </record>
 
-    <menuitem id="menu_iva_f2002_report" name="Reporte IVA f2002 (BETA)" action="action_iva_f2002_report" parent="l10n_ar_account.account_reports_ar_statements_menu"/>
+    <menuitem id="menu_iva_f2002_report" name="Reporte IVA f2002 (BETA)" action="action_iva_f2002_report" groups="group_beta_argentina_reports" parent="l10n_ar_account.account_reports_ar_statements_menu"/>
     
     <!-- <menuitem id="menu_ret_and_perc_report" name="Retenciones y Percepciones (BETA)" action="action_ret_and_perc_report" parent="l10n_ar_account.account_reports_ar_statements_menu"/> -->
 
-    <menuitem id="menu_invoice_by_state_sale" name="Ventas por provincia (BETA)" action="action_invoice_by_state_sale" parent="l10n_ar_account.account_reports_ar_statements_menu"/>
+    <menuitem id="menu_invoice_by_state_sale" name="Ventas por provincia (BETA)" action="action_invoice_by_state_sale" groups="group_beta_argentina_reports" parent="l10n_ar_account.account_reports_ar_statements_menu"/>
     
-    <menuitem id="menu_invoice_by_state_purchase" name="Compras por provincia (BETA)" action="action_invoice_by_state_purchase" parent="l10n_ar_account.account_reports_ar_statements_menu"/>
+    <menuitem id="menu_invoice_by_state_purchase" name="Compras por provincia (BETA)" action="action_invoice_by_state_purchase" groups="group_beta_argentina_reports" parent="l10n_ar_account.account_reports_ar_statements_menu"/>
 
 </odoo>

@@ -24,17 +24,8 @@ class account_iva_f2002_report(models.AbstractModel):
         return self.with_context(
             date_from=context_id.date_from,
             date_to=context_id.date_to,
-            state=context_id.all_entries and 'all' or 'posted',
-            comparison=False,
-            # comparison=context_id.comparison,
-            date_from_cmp=context_id.date_from_cmp,
-            date_to_cmp=context_id.date_to_cmp,
-            # cash_basis=context_id.cash_basis,
-            periods_number=context_id.periods_number,
-            periods=context_id.get_cmp_periods(),
             context_id=context_id,
             company_ids=context_id.company_ids.ids,
-            strict_range=True,
         )._lines()
 
     def _get_lines_vals(self, date_from, date_to, categs_list, tax_group_list):
@@ -117,7 +108,8 @@ class account_iva_f2002_report(models.AbstractModel):
         categs_list = [('Sin Categoría', False)] + categs.mapped(
             lambda x: (x.name, x))
 
-        for iva in ['IVA débito', 'IVA crédito']:
+        # for iva in ['IVA débito', 'IVA crédito']:
+        for iva in ['sale', 'purchase']:
             # TODO ver como scamos esta suma
             line_vals = self._get_lines_vals(
                 date_from, date_to, categs_list, tax_group_list)
