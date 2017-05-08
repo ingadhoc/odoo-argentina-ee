@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_iva_f2002_report" model="ir.actions.client">
+        <field name="name">Reporte IVA f2002</field>
+        <field name="tag">account_report_generic</field>
+        <field name="context" eval="{'url': '/account_reports/output_format/account_iva_f2002_report/1', 'model': 'account.iva_f2002.report'}" />
+    </record>
+
+    <!-- <record id="action_ret_and_perc_report" model="ir.actions.client">
+        <field name="name">Retenciones y Percepciones</field>
+        <field name="tag">account_report_generic</field>
+        <field name="context" eval="{'url': '/account_reports/output_format/account_ret_and_perc_report/1', 'model': 'account.ret_and_perc.report'}" />
+    </record> -->
+
+    <record id="action_invoice_by_state_sale" model="ir.actions.client">
+        <field name="name">Ventas por provincia</field>
+        <field name="tag">account_report_generic</field>
+        <field name="context" eval="{'url': '/account_reports/output_format/account_invoice_by_state_sale/1', 'model': 'account.invoice_by_state.sale'}" />
+    </record>
+
+    <record id="action_invoice_by_state_purchase" model="ir.actions.client">
+        <field name="name">Compras por provincia</field>
+        <field name="tag">account_report_generic</field>
+        <field name="context" eval="{'url': '/account_reports/output_format/account_invoice_by_state_purchase/1', 'model': 'account.invoice_by_state.purchase'}" />
+    </record>
+
+    <menuitem id="menu_iva_f2002_report" name="Reporte IVA f2002 (BETA)" action="action_iva_f2002_report" parent="l10n_ar_account.account_reports_ar_statements_menu"/>
+    
+    <!-- <menuitem id="menu_ret_and_perc_report" name="Retenciones y Percepciones (BETA)" action="action_ret_and_perc_report" parent="l10n_ar_account.account_reports_ar_statements_menu"/> -->
+
+    <menuitem id="menu_invoice_by_state_sale" name="Ventas por provincia (BETA)" action="action_invoice_by_state_sale" parent="l10n_ar_account.account_reports_ar_statements_menu"/>
+    
+    <menuitem id="menu_invoice_by_state_purchase" name="Compras por provincia (BETA)" action="action_invoice_by_state_purchase" parent="l10n_ar_account.account_reports_ar_statements_menu"/>
+
+</odoo>
