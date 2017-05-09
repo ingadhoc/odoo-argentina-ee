@@ -28,7 +28,9 @@ class account_iva_f2002_report(models.AbstractModel):
             company_ids=context_id.company_ids.ids,
         )._lines()
 
-    def _get_lines_vals(self, date_from, date_to, categs_list, tax_group_list):
+    def _get_lines_vals(
+            self, date_from, date_to, categs_list, tax_group_list,
+            type_tax_use):
         """
         Hicimos esta funcion que genera un diccionario con:
         * tax groups: donde para cada tax group hay un diccionario con
@@ -43,18 +45,23 @@ class account_iva_f2002_report(models.AbstractModel):
         Entonces de esta manera sumamos todos los ivas netos y los distribuimos
         """
         vals = {}
+        if type_tax_use == 'sale':
+            sign = 1.0
+        else:
+            sign = -1.0
+
         for base_column, tax_group in tax_group_list:
             tax_group_base = self.env[
                 'account.move.line']._get_tax_move_lines_balance(
                     date_from, date_to, 'base',
-                    tax_groups=tax_group)
+                    tax_groups=tax_group, type_tax_use=type_tax_use)
             tax_group_tax = self.env[
                 'account.move.line']._get_tax_move_lines_balance(
                     date_from, date_to, 'tax',
-                    tax_groups=tax_group)
+                    tax_groups=tax_group, type_tax_use=type_tax_use)
             vals[tax_group] = {
-                'base': tax_group_base,
-                'tax': tax_group_tax,
+                'base': tax_group_base * sign,
+                'tax': tax_group_tax * sign,
                 'categs': {},
             }
             for categ_name, categ in categs_list:
@@ -67,18 +74,19 @@ class account_iva_f2002_report(models.AbstractModel):
                     tax_group_categ_base = self.env[
                         'account.move.line']._get_tax_move_lines_balance(
                             date_from, date_to, 'base',
-                            tax_groups=tax_group, f2002_category=categ)
+                            tax_groups=tax_group, f2002_category=categ,
+                            type_tax_use=type_tax_use)
                     tax_group_categ_tax = tax_group_base and (
                         tax_group_tax *
                         tax_group_categ_base / tax_group_base) or 0.0
                     vals[tax_group]['categs'][categ] = {
-                        'base': tax_group_categ_base,
-                        'tax': tax_group_categ_tax,
+                        'base': tax_group_categ_base * sign,
+                        'tax': tax_group_categ_tax * sign,
                     }
                 elif categ is False:
                     vals[tax_group]['categs'][categ] = {
-                        'base': tax_group_base,
-                        'tax': tax_group_tax,
+                        'base': tax_group_base * sign,
+                        'tax': tax_group_tax * sign,
                     }
                 else:
                     vals[tax_group]['categs'][categ] = {
@@ -95,13 +103,14 @@ class account_iva_f2002_report(models.AbstractModel):
         lines = []
         categs = self.env['afip.vat.f2002_category'].search([])
 
-        ref = self.env.ref
+        tax_group_list = self.get_tax_group_list()
+        # ref = self.env.ref
         # If True, then we add a columns for base, if false, only tax amount
-        tax_group_list = [
-            (True, ref('l10n_ar_account.tax_group_iva_21')),
-            (True, ref('l10n_ar_account.tax_group_iva_10')),
-            (False, ref('l10n_ar_account.tax_group_percepcion_iva')),
-        ]
+        # tax_group_list = [
+        #     (True, ref('l10n_ar_account.tax_group_iva_21')),
+        #     (True, ref('l10n_ar_account.tax_group_iva_10')),
+        #     (False, ref('l10n_ar_account.tax_group_percepcion_iva')),
+        # ]
         # tax_groups = [x[1] for x in tax_group_list]
 
         line_id = 0
@@ -109,22 +118,21 @@ class account_iva_f2002_report(models.AbstractModel):
             lambda x: (x.name, x))
 
         # for iva in ['IVA débito', 'IVA crédito']:
-        for iva in ['sale', 'purchase']:
+        for type_tax_use in ['sale', 'purchase']:
             # TODO ver como scamos esta suma
             line_vals = self._get_lines_vals(
-                date_from, date_to, categs_list, tax_group_list)
-            print 'line_vals', line_vals
+                date_from, date_to, categs_list, tax_group_list, type_tax_use)
             columns = []
             for base_column, tax_group in tax_group_list:
                 if base_column:
                     columns.append(line_vals[tax_group]['base'])
                 columns.append(line_vals[tax_group]['tax'])
             lines.append({
-                'id': line_id,
-                'name': iva,
+                'id': type_tax_use,
+                'name': type_tax_use == 'sale' and 'Ventas' or 'Compras',
                 'type': 'line',
                 'footnotes': context['context_id']._get_footnotes(
-                    'line', line_id),
+                    'line', type_tax_use),
                 'unfoldable': False,
                 'columns': columns,
                 'level': 1,
@@ -142,14 +150,15 @@ class account_iva_f2002_report(models.AbstractModel):
                 #         line_vals[tax_group]['categs'][categ]['base'],
                 #         line_vals[tax_group]['categs'][categ]['tax'])
                 lines.append({
-                    'id': line_id,
+                    'id': "%s_%s" % (
+                        type_tax_use, categ and categ.id or False),
+                    # 'id': line_id,
                     'name': categ_name,
                     'type': 'tax_id',
                     'footnotes': context['context_id']._get_footnotes(
                         'line', line_id),
                     'unfoldable': False,
                     'columns': columns,
-                    # 'columns': [net_21, tax_21],
                     'level': 1,
                 })
                 line_id += 1
@@ -165,21 +174,58 @@ class account_iva_f2002_report(models.AbstractModel):
 
     @api.model
     def get_report_type(self):
-        # return self.env.ref(
-        #     'account_reports.account_report_type_no_date_range')
         return self.env.ref(
             'account_reports.account_report_type_date_range_no_comparison')
-        # return self.env.ref('account_reports.account_report_type_date_range')
 
     @api.model
     def get_template(self):
         return 'account_reports.report_financial'
+
+    @api.model
+    def get_tax_group_list(self):
+        ref = self.env.ref
+        return [
+            (True, ref('l10n_ar_account.tax_group_iva_21')),
+            (True, ref('l10n_ar_account.tax_group_iva_10')),
+            (False, ref('l10n_ar_account.tax_group_percepcion_iva')),
+        ]
 
 
 class AccountReportContextTax(models.TransientModel):
     _name = "account.report.context.iva_f2002"
     _description = "A particular context for IVA f2002 report"
     _inherit = "account.report.context.common"
+
+    def get_tax_action(self, tax_type, active_id):
+        """
+        So that we dont need to modify view, we use odoo tax_id drop list
+        We need to send a dict with name, model and domain, and we get the
+        active_id and tax_type. So on active_id we send type_tax_use
+        concatenated with the f2002 category
+        """
+        tax_group_list = self.get_report_obj().get_tax_group_list()
+        tax_groups = self.env['account.tax.group']
+        for rec in tax_group_list:
+            tax_groups += rec[1]
+        type_tax_use, categ_id = active_id.split('_')
+        # we get integer of False from string
+        categ_id = eval(categ_id)
+        f2002_category = self.env['afip.vat.f2002_category'].browse(categ_id)
+
+        domain = self.env['account.move.line']._get_tax_move_lines_domain(
+            self.date_from,
+            self.date_to,
+            # odoo sends "net" for base
+            tax_type == 'tax' and 'tax' or 'base',
+            tax_groups=tax_groups,
+            f2002_category=f2002_category and f2002_category or False,
+            type_tax_use=type_tax_use,
+        )
+        return {
+            'name': 'as',
+            'res_model': 'account.move.line',
+            'domain': domain,
+        }
 
     def get_report_obj(self):
         return self.env['account.iva_f2002.report']
