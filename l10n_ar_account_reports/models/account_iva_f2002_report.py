@@ -26,6 +26,9 @@ class account_iva_f2002_report(models.AbstractModel):
             date_to=context_id.date_to,
             context_id=context_id,
             company_ids=context_id.company_ids.ids,
+            # es para que el query de los moves no traiga todo lo anterior
+            strict_range=True,
+            state=context_id.all_entries and 'all' or 'posted',
         )._lines()
 
     def _get_lines_vals(
@@ -50,6 +53,7 @@ class account_iva_f2002_report(models.AbstractModel):
         else:
             sign = -1.0
 
+        # TODO implementar el state de los moves en la consulta
         for base_column, tax_group in tax_group_list:
             tax_group_base = self.env[
                 'account.move.line']._get_tax_move_lines_balance(

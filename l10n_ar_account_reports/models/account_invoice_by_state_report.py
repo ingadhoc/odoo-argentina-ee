@@ -98,7 +98,7 @@ GROUP BY move_id
                 self._format(vals['total_amount']),
             ],
             'level': 0,
-            'colspan': 6,
+            'colspan': 5,
         })
         for state_id, state_name in states_dict.items():
             # esto es necesario para que al expandir no muestre los nombres
@@ -129,7 +129,7 @@ GROUP BY move_id
                     self._format(state_vals['total_amount']),
                 ],
                 'level': 2,
-                'colspan': 6,
+                'colspan': 5,
                 'unfoldable': state_id and True or False,
                 # 'unfolded': state_id and (
                 #     state_id in context.unfolded_states.ids) or False,
@@ -156,7 +156,6 @@ GROUP BY move_id
                         move.display_name,
                         move.partner_id.name,
                         move.partner_id.cuit,
-                        move.ref,
                         self._format(read['base_amount']),
                         self._format(read['tax_amount']),
                         self._format(read['total_amount']),
@@ -202,6 +201,7 @@ class account_invoice_by_state_purchase(models.AbstractModel):
             journal_type='purchase',
             # es para que el query de los moves no traiga todo lo anterior
             strict_range=True,
+            state=context_id.all_entries and 'all' or 'posted',
         )._lines(line_id=line_id)
 
 
@@ -221,7 +221,7 @@ class AccountReportContextPurchase(models.TransientModel):
     def get_columns_names(self):
         columns = [
             "Fecha",
-            "Documento", "Proveedor", "CUIT", "Observaciones",
+            "Comprobante", "Proveedor", "CUIT",
             "Importe Bruto", "Impuestos", "Total",
         ]
         return columns
@@ -263,6 +263,7 @@ class account_invoice_by_state_sale(models.AbstractModel):
             journal_type='sale',
             # es para que el query de los moves no traiga todo lo anterior
             strict_range=True,
+            state=context_id.all_entries and 'all' or 'posted',
         )._lines(line_id=line_id)
 
 
@@ -282,7 +283,7 @@ class AccountReportContextsale(models.TransientModel):
     def get_columns_names(self):
         columns = [
             "Fecha",
-            "Documento", "Proveedor", "CUIT", "Observaciones",
+            "Comprobante", "Cliente", "CUIT",
             "Importe Bruto", "Impuestos", "Total",
         ]
         return columns
