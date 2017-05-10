@@ -200,6 +200,8 @@ class account_invoice_by_state_purchase(models.AbstractModel):
             context_id=context_id,
             company_ids=context_id.company_ids.ids,
             journal_type='purchase',
+            # es para que el query de los moves no traiga todo lo anterior
+            strict_range=True,
         )._lines(line_id=line_id)
 
 
@@ -259,6 +261,8 @@ class account_invoice_by_state_sale(models.AbstractModel):
             context_id=context_id,
             company_ids=context_id.company_ids.ids,
             journal_type='sale',
+            # es para que el query de los moves no traiga todo lo anterior
+            strict_range=True,
         )._lines(line_id=line_id)
 
 
