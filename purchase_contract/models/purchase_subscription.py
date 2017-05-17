@@ -199,11 +199,7 @@ class PurchaseSubscription(models.Model):
 
     @api.model
     def _cron_recurring_create_invoice_purchase(self):
-        current_date = time.strftime('%Y-%m-%d')
-        contract_ids = self.search(
-            [('recurring_next_date', '<=', current_date), (
-                'state', '=', 'open')])
-        return contract_ids._recurring_create_invoice()
+        return self._recurring_create_invoice(automatic=True)
 
     @api.multi
     def _prepare_invoice(self):
@@ -214,15 +210,14 @@ class PurchaseSubscription(models.Model):
 
     @api.multi
     def _recurring_create_invoice(self, automatic=False):
-        invoice_ids = []
+        invoices = []
         current_date = time.strftime('%Y-%m-%d')
-        ids = [c.id for c in self]
-        if ids:
-            contract_ids = ids
+        if self.ids:
+            contract_ids = self.ids
         else:
             contract_ids = self.search([(
                 'recurring_next_date', '<=', current_date),
-                ('state', '=', 'open'), ('type', '=', 'contract')])
+                ('state', '=', 'open'), ('type', '=', 'contract')]).ids
 
         if contract_ids:
             self.env.cr.execute(
@@ -235,12 +230,12 @@ class PurchaseSubscription(models.Model):
             for company_id, ids in self._cr.fetchall():
                 context_company = dict(
                     company_id=company_id, force_company=company_id)
-                for contract in self.with_context(context_company):
+                for contract in self.with_context(context_company).browse(ids):
                     try:
                         invoice_values = contract._prepare_invoice()
-                        invoice_ids.append(self.env['account.invoice'].create(
+                        invoices.append(self.env['account.invoice'].create(
                             invoice_values))
-                        invoice_ids[-1].compute_taxes()
+                        invoices[-1].compute_taxes()
                         next_date = datetime.datetime.strptime(
                             contract.recurring_next_date or current_date,
                             "%Y-%m-%d")
@@ -270,7 +265,7 @@ class PurchaseSubscription(models.Model):
                                 'for contract %s', contract.code)
                         else:
                             raise
-        return invoice_ids
+        return invoices
 
     @api.onchange('partner_id')
     def on_change_partner(self):
