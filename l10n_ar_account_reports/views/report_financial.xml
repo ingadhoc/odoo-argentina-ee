@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>    
+    <template id="report_financial_line" inherit_id="account_reports.report_financial_line">
+<!--         <li role="presentation" position="before">
+            <li role="presentation" t-if="a['type'] == 'iva_f2002'"><a role="menuitem" tabindex="-1" t-att-data-res-model="context.get_tax_action('net', a.get('id'))['res_model']" t-att-data-action-name="context.get_tax_action('net', a.get('id'))['name']" t-att-data-action-domain="context.get_tax_action('net', a.get('id'))['domain']" class="o_account_reports_web_action">Net Audit</a></li>
+            <li role="presentation" t-if="a['type'] == 'iva_f2002'"><a role="menuitem" tabindex="-1" t-att-data-res-model="context.get_tax_action('tax', a.get('id'))['res_model']" t-att-data-action-name="context.get_tax_action('tax', a.get('id'))['name']" t-att-data-action-domain="context.get_tax_action('tax', a.get('id'))['domain']" class="o_account_reports_web_action">Tax Audit</a></li>
+        </li> -->
+
+        <!-- agregado de link a journal items -->
+        <a data-action-name="account.action_move_select" position="after">
+            &amp;nbsp;<a t-att-data-active-id="a.get('id')" data-action-name="account.action_move_line_select_posted" class="o_account_reports_web_action o_account_reports_display_when_unfolded"> ⇒ journal items</a>
+        </a>
+    </template>
+</data>
+</odoo>
