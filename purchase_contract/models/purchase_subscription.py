@@ -123,7 +123,6 @@ class PurchaseSubscription(models.Model):
 
     @api.multi
     def _prepare_invoice_data(self):
-        journal_obj = self.env['account.journal']
         invoice = {}
         if not self.partner_id:
             raise ValidationError(_(
@@ -131,11 +130,13 @@ class PurchaseSubscription(models.Model):
                 "You must first select a Supplier for "
                 "Contract %s!") % self.name)
 
-        fpos = self.partner_id.property_account_position_id or False
-        journal_ids = journal_obj.search([(
-            'type', '=', 'purchase'), ('company_id', '=', self.
-                                       company_id.id)], limit=1)
-        if not journal_ids:
+        partner = self.partner_id
+        fpos = partner.property_account_position_id
+        journals = self.env['account.journal'].search([
+            ('type', '=', 'purchase'),
+            ('company_id', '=', self.company_id.id)], limit=1)
+
+        if not journals:
             raise ValidationError(_(
                 'Please define a pruchase journal for the company "%s".') % (
                 self.company_id.name or '', ))
@@ -143,42 +144,43 @@ class PurchaseSubscription(models.Model):
         currency_id = False
         if self.currency_id:
             currency_id = self.currency_id.id
-        elif self.partner_id.property_product_pricelist:
-            currency_id = self.partner_id.\
+        elif partner.property_product_pricelist:
+            currency_id = partner.\
                 property_product_pricelist.currency_id.id
         elif self.company_id:
             currency_id = self.company_id.currency_id.id
 
         invoice = {
-            'account_id': self.partner_id.property_account_payable_id.id,
+            'account_id': partner.property_account_payable_id.id,
             'type': 'in_invoice',
             'reference': self.name,
-            'partner_id': self.partner_id.id,
+            'partner_id': partner.id,
             'currency_id': currency_id,
-            'journal_id': len(journal_ids) and journal_ids[0].id or False,
+            'journal_id': journals.id,
             'date_invoice': self.recurring_next_date,
             'origin': self.code,
-            'fiscal_position_id': fpos and fpos.id,
+            'fiscal_position_id': fpos.id,
             'company_id': self.company_id.id,
         }
         return invoice
 
-    @api.model
+    @api.multi
     def _prepare_invoice_lines(self, fiscal_position_id):
-
+        self.ensure_one()
         fiscal_position = self.env['account.fiscal.position'].browse(
             fiscal_position_id)
 
         invoice_lines = []
         for line in self.recurring_invoice_line_ids:
 
-            res = line.product_id
-            account_id = res.property_account_expense_id.id
+            product = line.product_id
+            account_id = product.property_account_expense_id.id
             if not account_id:
-                account_id = res.categ_id.property_account_expense_categ_id.id
+                account_id = (
+                    product.categ_id.property_account_expense_categ_id.id)
             account_id = fiscal_position.map_account(account_id)
 
-            taxes = res.supplier_taxes_id.filtered(
+            taxes = product.supplier_taxes_id.filtered(
                 lambda r: r.company_id == line.
                 analytic_account_id.company_id)
 
@@ -210,32 +212,31 @@ class PurchaseSubscription(models.Model):
 
     @api.multi
     def _recurring_create_invoice(self, automatic=False):
-        invoices = []
         current_date = time.strftime('%Y-%m-%d')
-        if self.ids:
-            contract_ids = self.ids
-        else:
-            contract_ids = self.search([(
+        invoices = self.env['account.invoice']
+        if not self:
+            self = self.search([(
                 'recurring_next_date', '<=', current_date),
-                ('state', '=', 'open'), ('type', '=', 'contract')]).ids
+                ('state', '=', 'open'), ('type', '=', 'contract')])
 
-        if contract_ids:
+        if self:
             self.env.cr.execute(
-                'SELECT a.company_id, array_agg(psub.id) as ids '
+                'SELECT a.company_id, array_agg(psub.id) as contract_ids '
                 'FROM purchase_subscription as psub JOIN'
                 ' account_analytic_account as a'
                 ' ON psub.analytic_account_id = a.id '
                 'WHERE psub.id IN %s GROUP BY a.company_id',
-                (tuple(contract_ids),))
-            for company_id, ids in self._cr.fetchall():
+                (tuple(self.ids),))
+            for company_id, contract_ids in self._cr.fetchall():
                 context_company = dict(
                     company_id=company_id, force_company=company_id)
-                for contract in self.with_context(context_company).browse(ids):
+                for contract in self.with_context(context_company).browse(
+                        contract_ids):
                     try:
                         invoice_values = contract._prepare_invoice()
-                        invoices.append(self.env['account.invoice'].create(
-                            invoice_values))
-                        invoices[-1].compute_taxes()
+                        invoice = invoices.create(invoice_values)
+                        invoice.compute_taxes()
+                        invoices += invoice
                         next_date = datetime.datetime.strptime(
                             contract.recurring_next_date or current_date,
                             "%Y-%m-%d")
