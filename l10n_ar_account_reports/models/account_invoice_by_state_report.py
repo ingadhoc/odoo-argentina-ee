@@ -199,6 +199,7 @@ class account_invoice_by_state_purchase(models.AbstractModel):
             context_id=context_id,
             company_ids=context_id.company_ids.ids,
             journal_type='purchase',
+            journal_ids=context_id.journal_ids.ids,
             # es para que el query de los moves no traiga todo lo anterior
             strict_range=True,
             state=context_id.all_entries and 'all' or 'posted',
@@ -214,6 +215,24 @@ class AccountReportContextPurchase(models.TransientModel):
     unfolded_states = fields.Many2many(
         'res.country.state', 'account_invoice_by_state_puchase',
         string='Unfolded lines')
+    journal_ids = fields.Many2many(
+        'account.journal', relation='account_report_ibsp_journals')
+    available_journal_ids = fields.Many2many(
+        'account.journal', relation='account_report_ibsp_available_journal',
+        default=lambda s: [(6, 0, s.env['account.journal'].search(
+            [('type', '=', 'purchase')]).ids)])
+
+    @api.multi
+    def get_html_and_data(self, given_context=None):
+        result = super(AccountReportContextPurchase, self).get_html_and_data()
+        result['report_context'].update(self.read(['journal_ids'])[0])
+        result['available_journals'] = (
+            self.get_available_journal_ids_names_and_codes())
+        return result
+
+    @api.multi
+    def get_available_journal_ids_names_and_codes(self):
+        return [[c.id, c.name, c.code] for c in self.available_journal_ids]
 
     def get_report_obj(self):
         return self.env['account.invoice_by_state.purchase']
@@ -261,6 +280,7 @@ class account_invoice_by_state_sale(models.AbstractModel):
             context_id=context_id,
             company_ids=context_id.company_ids.ids,
             journal_type='sale',
+            journal_ids=context_id.journal_ids.ids,
             # es para que el query de los moves no traiga todo lo anterior
             strict_range=True,
             state=context_id.all_entries and 'all' or 'posted',
@@ -276,6 +296,24 @@ class AccountReportContextsale(models.TransientModel):
     unfolded_states = fields.Many2many(
         'res.country.state', 'account_invoice_by_state_sale',
         string='Unfolded lines')
+    journal_ids = fields.Many2many(
+        'account.journal', relation='account_report_ibss_journals')
+    available_journal_ids = fields.Many2many(
+        'account.journal', relation='account_report_ibss_available_journal',
+        default=lambda s: [(6, 0, s.env['account.journal'].search(
+            [('type', '=', 'sale')]).ids)])
+
+    @api.multi
+    def get_html_and_data(self, given_context=None):
+        result = super(AccountReportContextsale, self).get_html_and_data()
+        result['report_context'].update(self.read(['journal_ids'])[0])
+        result['available_journals'] = (
+            self.get_available_journal_ids_names_and_codes())
+        return result
+
+    @api.multi
+    def get_available_journal_ids_names_and_codes(self):
+        return [[c.id, c.name, c.code] for c in self.available_journal_ids]
 
     def get_report_obj(self):
         return self.env['account.invoice_by_state.sale']

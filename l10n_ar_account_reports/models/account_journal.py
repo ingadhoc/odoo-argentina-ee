@@ -25,6 +25,8 @@ class AccountJournal(models.Model):
                 self.default_credit_account_id:
             ctx.update({
                 'active_id': self.default_credit_account_id.id,
+                # TODO ver como forzar compania de la cuenta
+                # 'company_ids': self.default_credit_account_id.company_id.id,
                 'force_account': True,
                 'addActiveId': True,
             })

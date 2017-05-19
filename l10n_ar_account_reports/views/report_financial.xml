@@ -12,5 +12,12 @@
             &amp;nbsp;<a t-att-data-active-id="a.get('id')" data-action-name="account.action_move_line_select_posted" class="o_account_reports_web_action o_account_reports_display_when_unfolded"> ⇒ journal items</a>
         </a>
     </template>
+    
+    <!-- odoo journals filter is only available on general ledger, we make it visible if there are available journals -->
+<!--     <template id="report_financial_body" inherit_id="account_reports.report_financial_body">
+        <t t-if="context.get_report_obj().get_name() == 'general_ledger'" position="attributes">
+            <attribute name="t-if">context.available_journals</attribute>
+        </t>
+    </template> -->
 </data>
 </odoo>
