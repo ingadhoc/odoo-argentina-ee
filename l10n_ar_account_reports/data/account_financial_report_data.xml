@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+
+    <record id="action_vat_sale" model="ir.actions.client">
+        <field name="name">Libro IVA Ventas</field>
+        <field name="tag">account_report_generic</field>
+        <field name="context" eval="{'url': '/account_reports/output_format/account_vat_report_sale/1', 'model': 'account.vat.report.sale'}" />
+    </record>
+
+    <record id="action_vat_purchase" model="ir.actions.client">
+        <field name="name">Libro IVA Compras</field>
+        <field name="tag">account_report_generic</field>
+        <field name="context" eval="{'url': '/account_reports/output_format/account_vat_report_purchase/1', 'model': 'account.vat.report.purchase'}" />
+    </record>
+
     <record id="action_iva_f2002_report" model="ir.actions.client">
         <field name="name">Reporte IVA f2002</field>
         <field name="tag">account_report_generic</field>
@@ -24,12 +37,16 @@
         <field name="context" eval="{'url': '/account_reports/output_format/account_invoice_by_state_purchase/1', 'model': 'account.invoice_by_state.purchase'}" />
     </record>
 
-    <menuitem id="menu_iva_f2002_report" name="Reporte IVA f2002 (BETA)" action="action_iva_f2002_report" groups="group_beta_argentina_reports" parent="l10n_ar_account.account_reports_ar_statements_menu"/>
+    <menuitem id="menu_vat_sale" sequence="8" name="Libro IVA Ventas (BETA)" action="action_vat_sale" groups="group_beta_argentina_reports" parent="l10n_ar_account.account_reports_ar_statements_menu"/>
+
+    <menuitem id="menu_vat_purchase" sequence="10" name="Libro IVA Compras (BETA)" action="action_vat_purchase" groups="group_beta_argentina_reports" parent="l10n_ar_account.account_reports_ar_statements_menu"/>
+
+    <menuitem id="menu_iva_f2002_report" sequence="12" name="Reporte IVA f2002 (BETA)" action="action_iva_f2002_report" groups="group_beta_argentina_reports" parent="l10n_ar_account.account_reports_ar_statements_menu"/>
     
     <!-- <menuitem id="menu_ret_and_perc_report" name="Retenciones y Percepciones (BETA)" action="action_ret_and_perc_report" parent="l10n_ar_account.account_reports_ar_statements_menu"/> -->
 
-    <menuitem id="menu_invoice_by_state_sale" name="Ventas por provincia (BETA)" action="action_invoice_by_state_sale" groups="group_beta_argentina_reports" parent="l10n_ar_account.account_reports_ar_statements_menu"/>
+    <menuitem id="menu_invoice_by_state_sale" sequence="14" name="Ventas por provincia (BETA)" action="action_invoice_by_state_sale" groups="group_beta_argentina_reports" parent="l10n_ar_account.account_reports_ar_statements_menu"/>
     
-    <menuitem id="menu_invoice_by_state_purchase" name="Compras por provincia (BETA)" action="action_invoice_by_state_purchase" groups="group_beta_argentina_reports" parent="l10n_ar_account.account_reports_ar_statements_menu"/>
+    <menuitem id="menu_invoice_by_state_purchase" sequence="16" name="Compras por provincia (BETA)" action="action_invoice_by_state_purchase" groups="group_beta_argentina_reports" parent="l10n_ar_account.account_reports_ar_statements_menu"/>
 
 </odoo>

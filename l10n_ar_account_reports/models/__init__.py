@@ -12,3 +12,4 @@ from . import account_journal
 from . import account_report_context_common
 from . import account_iva_f2002_report
 from . import account_invoice_by_state_report
+from . import account_vat_report
