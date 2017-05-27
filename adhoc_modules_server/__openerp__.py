@@ -26,7 +26,7 @@
     'license': 'AGPL-3',
     'depends': [
         'adhoc_modules',
-        'web_support_server',
+        # 'web_support_server',
         'website_contract',
     ],
     # 'external_dependencies': {

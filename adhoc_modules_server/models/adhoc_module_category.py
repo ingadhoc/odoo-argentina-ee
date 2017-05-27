@@ -58,6 +58,20 @@ class AdhocModuleCategory(models.Model):
     )
 
     @api.multi
+    def _get_category_is_contracted(self, subscription):
+        """
+        We search for a intersection of required products and producst on
+        subscription, if any, return True. Else, return False
+        """
+        self.ensure_one()
+        subscription_products = subscription.recurring_invoice_line_ids.mapped(
+            'product_id.product_tmpl_id')
+        categ_products = self.product_tmpl_ids
+        contracted_products = subscription_products & categ_products
+        return contracted_products and True or False
+
+    # TODO borrar esto cuando migremos todos a saas_client
+    @api.multi
     def get_related_contracted_product(self, contract_id):
         """
         Function called from remote databases to get contracted products

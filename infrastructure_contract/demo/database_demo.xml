@@ -3,6 +3,7 @@
     <data>
 
         <!-- link internal contract to databases -->
+        <!-- depreciada esta data demo -->
         <record id="infrastructure.inv_env_1_inst_1_db_1" model="infrastructure.database">
             <field name="contract_id" ref="web_support_server.analytic_internal_support_contract"/>
         </record>

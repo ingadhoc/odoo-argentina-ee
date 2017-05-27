@@ -12,6 +12,18 @@
             <!-- <field name="product_tmpl_ids" eval=""/> -->
         </record>
 
+        <record id="module_category_sale" model="adhoc.module.category.server">
+            <field name="name">Sale</field>
+            <field name="code">sale</field>
+            <!-- <field name="description"></field> -->
+            <!-- <field name="sequence" eval=""/> -->
+            <field name="parent_id" ref=""/>
+            <field name="visibility">product_required</field>
+            <!-- we add cotnracted product so we can see this -->
+            <field name="contracted_product">project</field>
+            <field name="product_tmpl_ids" eval="[(4, ref('product_sale_app_product_template'))]"/>
+        </record>
+
         <record id="module_category_project" model="adhoc.module.category.server">
             <field name="name">Project</field>
             <field name="code">project</field>
@@ -41,9 +53,9 @@
             <!-- <field name="description"></field> -->
             <!-- <field name="sequence" eval=""/> -->
             <field name="parent_id" ref=""/>
-            <field name="visibility">normal</field>
-            <!-- <field name="contracted_product"></field> -->
-            <!-- <field name="product_tmpl_ids" eval=""/> -->
+            <field name="visibility">product_required</field>
+            <field name="contracted_product">accounting</field>
+            <field name="product_tmpl_ids" eval="[(4, ref('product_accounting_app_product_template'))]"/>
         </record>
 
         <record id="module_category_analytic" model="adhoc.module.category.server">

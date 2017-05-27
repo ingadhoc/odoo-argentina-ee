@@ -38,6 +38,7 @@ Destiny database must have web_support_client module installed
         'sale_contract',
         # modulo requerido para obtener data de que productos contrataron
         'adhoc_modules_server',
+        'web_support_server',
     ],
     'sequence': 14,
     'summary': '',
