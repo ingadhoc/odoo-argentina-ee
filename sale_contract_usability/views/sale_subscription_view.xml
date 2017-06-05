@@ -6,8 +6,18 @@
         <field name="model">sale.subscription</field>
         <field name="inherit_id" ref="sale_contract.sale_subscription_view_form"/>
         <field name="arch" type="xml">
+            <field name="pricelist_id" position="before">
+                <field name="template_dates_required" attrs="{'invisible': [('type','!=','template')]}"/>
+            </field>
+            <field name="date" position="before">
+                <field name="dates_required" invisible="1"/>
+            </field>
             <field name="date" position="attributes">
                 <attribute name="states"></attribute>
+                <attribute name="attrs">{'required': [('dates_required', '=', True)]}</attribute>
+            </field>
+            <field name="date_start" position="attributes">
+                <attribute name="attrs">{'required': [('dates_required', '=', True)]}</attribute>
             </field>
         </field>
     </record>

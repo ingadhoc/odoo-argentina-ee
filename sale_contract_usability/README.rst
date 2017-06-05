@@ -6,8 +6,11 @@
 Sale Contract Usability
 =======================
 
-This module add to company form a boolean to take the field description in subcritions to recurring invoices.
-Make date (date nd) field visible in every state, by default is is only visible on close state (that does not make much sense)
+#. This module add to company form a boolean to take the field description in subcritions to recurring invoices.
+#. Make date (date end) field visible in every state, by default is is only visible on close state (that does not make much sense)
+#. Odoo cleans date end when you set contract opened, we delete that behviour and leave date end value
+#. We add constraint so that date end must by greater than start date
+#. Add require dates (template_dates_required) parameter on contract template and make them required on contracts if needed
 
 Installation
 ============
