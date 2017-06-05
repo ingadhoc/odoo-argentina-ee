@@ -10,9 +10,13 @@ from openerp.exceptions import UserError
 class SaleSubscription(models.Model):
     _inherit = "sale.subscription"
 
-    template_dates_required = fields.Boolean("Dates Required")
+    template_dates_required = fields.Boolean(
+        "Dates Required",
+    )
     dates_required = fields.Boolean(
-        related="template_id.template_dates_required")
+        related="template_id.template_dates_required",
+        readonly=True,
+    )
 
     @api.model
     def _prepare_invoice_data(self, contract):
