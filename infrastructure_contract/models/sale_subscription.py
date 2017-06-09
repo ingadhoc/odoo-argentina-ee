@@ -10,12 +10,12 @@ from openerp.exceptions import ValidationError
 class SaleSubscription(models.Model):
     _inherit = "sale.subscription"
 
-    database_ids = fields.One2many(
+    infra_database_ids = fields.One2many(
         'infrastructure.database',
         'contract_id',
         'Databases',
     )
-    database_count = fields.Integer(
+    infra_database_count = fields.Integer(
         string='# Databases',
         compute='_get_databases'
     )
@@ -29,14 +29,14 @@ class SaleSubscription(models.Model):
     )
 
     @api.one
-    @api.depends('database_ids')
+    @api.depends('infra_database_ids')
     def _get_databases(self):
-        self.database_count = len(self.database_ids)
+        self.infra_database_count = len(self.infra_database_ids)
 
     @api.one
-    @api.constrains('state', 'database_ids')
+    @api.constrains('state', 'infra_database_ids')
     def check_databases_state(self):
-        not_inactive_dbs = self.database_ids.filtered(
+        not_inactive_dbs = self.infra_database_ids.filtered(
             lambda x: x.state != 'inactive')
         if self.state == 'close' and not_inactive_dbs:
             raise ValidationError(_(
@@ -46,7 +46,7 @@ class SaleSubscription(models.Model):
 
     @api.multi
     def get_main_database(self):
-        prod_dbs = self.database_ids.filtered(
+        prod_dbs = self.infra_database_ids.filtered(
             lambda x: x.instance_type_id.is_production and x.state == 'active')
         if len(prod_dbs) > 1:
             raise ValidationError(_(
@@ -80,7 +80,7 @@ class SaleSubscription(models.Model):
         This function returns an action that display a form or tree view
         '''
         self.ensure_one()
-        databases = self.database_ids
+        databases = self.infra_database_ids
         action = self.env['ir.model.data'].xmlid_to_object(
             'infrastructure.action_infrastructure_database_databases')
 

@@ -20,7 +20,7 @@
 ##############################################################################
 {
     'name': 'Infrastructure and Contracts Integration',
-    'version': '9.0.1.3.0',
+    'version': '9.0.1.4.0',
     'description': """
 Infrastructure Contract
 =======================

@@ -7,7 +7,7 @@
             <th/>
         </xpath>
         <xpath expr="//t[@t-foreach='accounts']/tr" position="inside">
-            <td><t t-if="account.state in ['open', 'pending']"><a t-att-href="'/my/contract_databases/'+str(account.id)"><span class="label label-success"><t t-raw="len(account.database_ids.filtered(lambda x: x.instance_type_id.portal_visible))"/> Databases</span></a></t></td>
+            <td><t t-if="account.state in ['open', 'pending']"><a t-att-href="'/my/contract_databases/'+str(account.id)"><span class="label label-success"><t t-raw="len(account.infra_database_ids.filtered(lambda x: x.instance_type_id.portal_visible))"/> Databases</span></a></t></td>
             <!-- <td><t t-if="account.state in ['open', 'pending']"><a t-att-href="'/my/contract_databases/'+str(account.id)+'/'+str(account.uuid)"><span class="label label-success"><t t-raw="len(account.database_ids)"/> Databases</span></a></t></td> -->
         </xpath>
     </template>
@@ -45,7 +45,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr t-foreach="account.database_ids.filtered(lambda x: x.instance_type_id.portal_visible)" t-as="database">
+                                    <tr t-foreach="account.infra_database_ids.filtered(lambda x: x.instance_type_id.portal_visible)" t-as="database">
                                         <td><a target="_blank" t-att-href="database.main_hostname"><span t-field="database.main_hostname"/></a></td>
                                         <td><span t-field="database.instance_type_id.name"/></td>
                                         <td><span t-field="database.issue_date"/></td>

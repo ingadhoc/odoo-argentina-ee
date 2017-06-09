@@ -8,9 +8,10 @@
     <field name="inherit_id" ref="sale_contract.sale_subscription_view_form"/>
     <!-- <field name="inherit_id" ref="analytic.view_account_analytic_account_form"/> -->
     <field name="arch" type="xml">
-        <field name="quantity" position="after">
+        <!-- ahora lo carga saas provider -->
+        <!-- <field name="quantity" position="after">
             <field name="db_quantity"/>
-        </field>
+        </field> -->
 
         <button name="recurring_invoice" position="after">
             <button
@@ -19,6 +20,7 @@
                 help="Update lines from remote database (a production database linked to this contract)"
                 class="oe_link"
                 type="object"
+                attrs="{'invisible': [('infra_database_count', '=', 0)]}" 
                 />
             <button
                 name="update_remote_contracted_products"
@@ -26,8 +28,10 @@
                 help="Update contracted products on remote database (a production database linked to this contract)"
                 class="oe_link"
                 type="object"
+                attrs="{'invisible': [('infra_database_count', '=', 0)]}" 
                 />
-            <button
+                <!-- ahora en saas client -->
+            <!-- <button
                 name="run_installation_command_on_remote_database"
                 string="⇒ Run Install on remote DB"
                 help="Run installation commands of subscription products."
@@ -35,19 +39,20 @@
                 class="oe_link"
                 groups="base.group_no_one"
                 type="object"
-                />
+                /> -->
             <!-- <button class="oe_link" name="update_remote_database_contract" attrs="{'invisible': [('recurring_invoices','!=',True)]}" string="⇒ Update quantity from database" type="object" groups="base.group_no_one"/> -->
         </button>
 
         <div name="button_box">
-            <button name="action_view_databases" icon="fa-th-list" type="object" class="oe_stat_button">
-                <field name="database_count" widget="statinfo"/>
+            <button name="action_view_databases" attrs="{'invisible': [('infra_database_count', '=', 0)]}" icon="fa-th-list" type="object" class="oe_stat_button">
+                <field name="infra_database_count" widget="statinfo"/>
             </button>
         </div>
-        <field name="manager_id" position="after">
+        <!-- no queremos ensuciar vista, no los usamos mas -->
+        <!-- <field name="manager_id" position="after">
             <field name="odoo_version_id"/>
             <field name="support_validity"/>
-        </field>
+        </field> -->
     </field>
 </record>
 
