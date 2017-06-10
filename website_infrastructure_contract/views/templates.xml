@@ -3,11 +3,11 @@
 <data>
 
     <template id="contracts_databases" name="Contracts" inherit_id="website_contract.contracts">
-        <xpath expr="//thead/tr" position="inside">
+        <xpath expr="//thead/tr" t-if="account.infra_database_ids" position="inside">
             <th/>
         </xpath>
         <xpath expr="//t[@t-foreach='accounts']/tr" position="inside">
-            <td><t t-if="account.state in ['open', 'pending']"><a t-att-href="'/my/contract_databases/'+str(account.id)"><span class="label label-success"><t t-raw="len(account.infra_database_ids.filtered(lambda x: x.instance_type_id.portal_visible))"/> Databases</span></a></t></td>
+            <td><t t-if="account.infra_database_ids and account.state in ['open', 'pending']"><a t-att-href="'/my/contract_databases/'+str(account.id)"><span class="label label-success"><t t-raw="len(account.infra_database_ids.filtered(lambda x: x.instance_type_id.portal_visible))"/> Databases</span></a></t></td>
             <!-- <td><t t-if="account.state in ['open', 'pending']"><a t-att-href="'/my/contract_databases/'+str(account.id)+'/'+str(account.uuid)"><span class="label label-success"><t t-raw="len(account.database_ids)"/> Databases</span></a></t></td> -->
         </xpath>
     </template>
