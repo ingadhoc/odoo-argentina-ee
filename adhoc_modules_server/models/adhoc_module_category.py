@@ -4,6 +4,7 @@
 # directory
 ##############################################################################
 from openerp import models, fields, api
+import string
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -56,6 +57,16 @@ class AdhocModuleCategory(models.Model):
     sequence = fields.Integer(
         readonly=False,
     )
+
+    @api.one
+    @api.constrains('child_ids', 'name', 'parent_id')
+    def set_code(self):
+        # if not self.code:
+        code = self.display_name
+        valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
+        code = ''.join(c for c in code if c in valid_chars)
+        code = code.replace(' ', '').replace('.', '').lower()
+        self.code = code
 
     @api.multi
     def _get_category_is_contracted(self, subscription):
