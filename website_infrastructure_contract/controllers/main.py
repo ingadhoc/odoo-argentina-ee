@@ -20,7 +20,7 @@ class PortalInfrastructureWebsiteAccount(website_account):
         auth="user",
         # auth="public",
         website=True)
-    def duplicate_database(
+    def old_duplicate_database(
             self, database_id, message='', message_class='', **kw):
         request.env['res.users'].browse(request.uid).has_group(
             'base.group_sale_salesman')
@@ -45,7 +45,7 @@ class PortalInfrastructureWebsiteAccount(website_account):
         auth="user",
         # auth="public",
         website=True)
-    def delete_database(
+    def old_delete_database(
             self, database_id, message='', message_class='', **kw):
         request.env['res.users'].browse(request.uid).has_group(
             'base.group_sale_salesman')
@@ -65,7 +65,7 @@ class PortalInfrastructureWebsiteAccount(website_account):
         auth="user",
         # auth="public",
         website=True)
-    def contract_databases(
+    def old_contract_databases(
             self, account_id, uuid='', message='', message_class='', **kw):
         """
         No usamos ni mandamos lo de uuid porque lo hicimos privado
