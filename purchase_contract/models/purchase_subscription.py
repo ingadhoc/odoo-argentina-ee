@@ -435,7 +435,7 @@ class PurchaseSubscriptionLine(models.Model):
 
         self.name = name
         self.uom_id = self.uom_id.id or product.uom_id.id or False
-        self.price_unit = product.list_price
+        self.price_unit = product.standard_price
         seller = self.product_id._select_seller(
             self.product_id,
             partner_id=self.analytic_account_id.partner_id,
