@@ -40,4 +40,6 @@
         'views/account_view.xml',
     ],
     "installable": True,
+    # como no esta en adhoc modules lo hacemos auto install por aca
+    'auto_install': True,
 }
