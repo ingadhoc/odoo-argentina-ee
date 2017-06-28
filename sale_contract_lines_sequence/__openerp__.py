@@ -30,6 +30,9 @@
     'images': [
     ],
     'depends': [
+        # no lo integramos en usability porque por ahora nosotros no lo
+        # queremos, el orden lo esta escribiendo otro campo de infra, tal vez
+        # mas adelante  lo emprolijamos
         'sale_contract',
     ],
     'data': [
@@ -40,6 +43,7 @@
     'test': [
     ],
     'installable': True,
+    # no auto install porque al menos nosotros no lo queremos
     'auto_install': False,
     'application': False,
 }
