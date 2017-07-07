@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <!-- agregado de account type en búsqueda de apuntes -->
+    <record id="view_account_move_line_filter" model="ir.ui.view">
+        <field name="name">account.move.line.search</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_account_move_line_filter"/>
+        <field name="arch" type="xml">
+            <field name="account_id" position="after">
+                <field name="account_user_type_id"/>
+            </field>
+            <group>
+                <filter string="Account Type" context="{'group_by':'account_user_type_id'}"/>
+            </group>
+        </field>
+    </record>
+
     <!-- agregado de boton para abrir documento relacionado -->
     <record id="view_move_line_tree" model="ir.ui.view">
         <field name="name">account.move.line.tree</field>

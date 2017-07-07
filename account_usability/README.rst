@@ -18,6 +18,7 @@ Several Improvements to accounting:
 #. Add send email button on bank statement lines to confirm payment to customers.
 #. Add journal items menu item menu on reports with tree, grahp and pivot views (no debug mode required)
 #. Add on move lines a button to open related documents
+#. Add on move lines a related field to account type and allow to search and group by this field
 
 
 Installation
