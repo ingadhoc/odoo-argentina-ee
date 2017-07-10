@@ -20,7 +20,7 @@
 ##############################################################################
 {
     'name': 'Contracts and Online quotations Usability',
-    'version': '9.0.1.0.0',
+    'version': '9.0.1.1.0',
     'category': 'Sales Management',
     'sequence': 14,
     'summary': '',
@@ -39,6 +39,7 @@
     'data': [
         'views/sale_quote_template_view.xml',
         'views/sale_contract_view.xml',
+        'views/templates.xml',
     ],
     'demo': [
     ],

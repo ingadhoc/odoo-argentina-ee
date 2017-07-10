@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<template id="so_quotation" inherit_id="website_quote.so_quotation">
+    <div class="alert alert-success alert-dismissable" position="after">
+        <div class="alert alert-danger alert-dismissable" t-if="tx_id and tx_state == 'error'">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&amp;times;</button>Error al procesar el pago, esto es lo que obtuvimos:<br/>
+            * <span t-if="tx_error_msg" t-raw="tx_error_msg"/>
+        </div>
+    </div>
+</template>
+
+</odoo>

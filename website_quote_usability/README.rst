@@ -10,6 +10,7 @@ Several modification to contracts and sales:
 #. When confirming a sale order, if a sale contract is going to be created and if there is a template quote with a subscription quote and the analytic account of the subscription quote has one project linked, dupliacte project so that project information is kept.
 #. When confirming a sale order that is going to create an analytic account, if there is a quote template with template account, then duplicate this template
 #. Make analytic account of contracts editable and visible also for templates
+#. Add message for errored payment transactions (for eg. used by todopago)
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
    :alt: Try me on Runbot
