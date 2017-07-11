@@ -11,6 +11,8 @@ Sale Contract Usability
 #. Odoo cleans date end when you set contract opened, we delete that behviour and leave date end value
 #. We add constraint so that date end must by greater than start date
 #. Add require dates (template_dates_required) parameter on contract template and make them required on contracts if needed
+#. Add default term (template_default_term) parameter on contract template and, if setted, compute automatically end date field when start date changes
+
 
 Installation
 ============

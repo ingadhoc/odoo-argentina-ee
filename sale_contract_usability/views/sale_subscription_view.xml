@@ -8,6 +8,7 @@
         <field name="arch" type="xml">
             <field name="pricelist_id" position="before">
                 <field name="template_dates_required" attrs="{'invisible': [('type','!=','template')]}"/>
+                <field name="template_default_term" attrs="{'invisible': [('type','!=','template')]}"/>
             </field>
             <field name="date" position="before">
                 <field name="dates_required" invisible="1"/>

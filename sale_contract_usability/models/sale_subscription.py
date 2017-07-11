@@ -5,6 +5,7 @@
 ##############################################################################
 from openerp import models, api, fields, _
 from openerp.exceptions import UserError
+from dateutil.relativedelta import relativedelta
 
 
 class SaleSubscription(models.Model):
@@ -12,6 +13,11 @@ class SaleSubscription(models.Model):
 
     template_dates_required = fields.Boolean(
         "Dates Required",
+    )
+    template_default_term = fields.Integer(
+        string='Default Term (days)',
+        help='If you set a default term, then when changing date "Start Date" '
+        'the "End Date" will be automatically updated'
     )
     dates_required = fields.Boolean(
         related="template_id.template_dates_required",
@@ -28,6 +34,17 @@ class SaleSubscription(models.Model):
     @api.multi
     def set_open(self):
         return self.write({'state': 'open'})
+
+    @api.multi
+    @api.onchange('date_start', 'template_id')
+    @api.constrains('date_start', 'template_id')
+    def update_date(self):
+        for rec in self:
+            term = rec.template_id.template_default_term
+            if term and rec.date_start:
+                date_start = fields.Date.from_string(rec.date_start)
+                rec.date = fields.Date.to_string(
+                    date_start + relativedelta(days=+term))
 
     @api.multi
     @api.constrains('date', 'date_start')
