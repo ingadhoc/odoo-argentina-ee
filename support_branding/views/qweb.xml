@@ -15,7 +15,8 @@
                 </span>
             </xpath>
         </template> -->
-        <template id="login_layout" inherit_id="web.login_layout">
+        <!-- priority de 10 por compatibilidad con website para que no de error porque hace desaparecer este position -->
+        <template id="login_layout" inherit_id="web.login_layout" priority="10">
             <xpath expr="//a[@href='https://www.odoo.com']" position="after">
                 <span>, supported by <a target="_new" t-att-href="request.env['ir.config_parameter'].get_param('support_branding.company_url')"><t t-esc="request.env['ir.config_parameter'].get_param('support_branding.company_name')" /></a>
                 <div t-if="request.env['ir.config_parameter'].get_param('support_branding.release')">Version <t t-esc="request.env['ir.config_parameter'].get_param('support_branding.release')" /></div>

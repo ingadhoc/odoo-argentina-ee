@@ -6,7 +6,7 @@
     "name": "Support branding",
     "summary": "Adds your branding to an Odoo instance",
     "category": "Dependecy/Hidden",
-    "version": "9.0.2.0.0",
+    "version": "9.0.2.1.0",
     "license": "AGPL-3",
     "author": "Therp BV,Tecnativa,Odoo Community Association (OCA)",
     "website": 'http://therp.nl',
