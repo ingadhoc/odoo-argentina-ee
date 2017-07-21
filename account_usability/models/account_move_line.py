@@ -14,6 +14,11 @@ class AccountMoveLine(models.Model):
         related='account_id.user_type_id',
         store=True,
     )
+    analytic_tag_ids = fields.Many2many(
+        related='analytic_account_id.tag_ids',
+        readonly=True,
+        string='Analytic Tags',
+    )
 
     @api.multi
     def action_open_related_document(self):

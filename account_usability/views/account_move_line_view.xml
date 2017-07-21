@@ -9,9 +9,12 @@
         <field name="arch" type="xml">
             <field name="account_id" position="after">
                 <field name="account_user_type_id"/>
+                <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
+                <field name="analytic_tag_ids" groups="analytic.group_analytic_accounting"/>
             </field>
             <group>
                 <filter string="Account Type" context="{'group_by':'account_user_type_id'}"/>
+                <filter string="Analytic Account" context="{'group_by':'analytic_account_id'}" groups="analytic.group_analytic_accounting"/>
             </group>
         </field>
     </record>
