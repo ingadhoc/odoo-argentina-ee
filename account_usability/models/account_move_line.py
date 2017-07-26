@@ -13,6 +13,7 @@ class AccountMoveLine(models.Model):
         string='Account Type',
         related='account_id.user_type_id',
         store=True,
+        readonly=True,
     )
     analytic_tag_ids = fields.Many2many(
         related='analytic_account_id.tag_ids',
