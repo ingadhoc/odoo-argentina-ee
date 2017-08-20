@@ -58,7 +58,9 @@ class PurchaseSubscription(models.Model):
     date = fields.Date('End Date', track_visibility='onchange')
     currency_id = fields.Many2one(
         'res.currency',
-        string='Currency', required=True)
+        string='Currency',
+        required=True,
+        default=lambda self: self.env.user.company_id.currency_id.id,)
     recurring_rule_type = fields.Selection(
         [('daily', 'Day(s)'),
          ('weekly', 'Week(s)'),
@@ -141,14 +143,7 @@ class PurchaseSubscription(models.Model):
                 'Please define a pruchase journal for the company "%s".') % (
                 self.company_id.name or '', ))
 
-        currency_id = False
-        if self.currency_id:
-            currency_id = self.currency_id.id
-        elif partner.property_product_pricelist:
-            currency_id = partner.\
-                property_product_pricelist.currency_id.id
-        elif self.company_id:
-            currency_id = self.company_id.currency_id.id
+        currency_id = self.currency_id.id
 
         invoice = {
             'account_id': partner.property_account_payable_id.id,

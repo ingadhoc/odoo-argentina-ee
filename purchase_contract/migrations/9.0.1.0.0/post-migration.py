@@ -37,6 +37,7 @@ def create_purchase_subscriptions(env):
             name,
             partner_id,
             manager_id,
+            currency_id,
             code,
             date_start,
             date,
@@ -56,6 +57,7 @@ def create_purchase_subscriptions(env):
             name,
             partner_id,
             manager_id,
+            currency_id,
             code,
             date_start,
             date,
@@ -112,4 +114,6 @@ def create_purchase_subscriptions(env):
             'type': 'contract',
             'recurring_invoice_line_ids': contract_line_vals,
         }
+        if currency_id:
+            contract_vals['currency_id'] = currency_id
         env['purchase.subscription'].create(contract_vals)
