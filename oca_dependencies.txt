@@ -7,4 +7,5 @@ ingadhoc-product https://github.com/ingadhoc/product.git
 ingadhoc-sale https://github.com/ingadhoc/sale.git
 ingadhoc-account-invoicing https://github.com/ingadhoc/account-invoicing.git
 ingadhoc-account-payment https://github.com/ingadhoc/account-payment.git
+ingadhoc-purchase https://github.com/ingadhoc/purchase.git
 ingadhoc-stock https://github.com/ingadhoc/stock.git
