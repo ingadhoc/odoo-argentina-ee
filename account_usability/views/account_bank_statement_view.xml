@@ -6,6 +6,9 @@
             <field name="model">account.bank.statement</field>
             <field name="inherit_id" ref="account.view_bank_statement_form"/>
             <field name="arch" type="xml">
+                <button name="check_confirm_bank" position="after">
+                    <button name="cancel_all_lines" string="Cancel All" type="object" states="open" groups="base.group_no_one" confirm="Si confirma se van a cancelar las conciliaciones de todas las líneas (y borrar los asientos que se hayan generado con las mismas), esto no puede deshacerce. Seguro que desea continuar?"/>
+                </button>
                 <field name="bank_account_id" position="after">
                     <field name="sent" invisible="1"/>
                     <button

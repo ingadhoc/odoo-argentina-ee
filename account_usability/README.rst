@@ -19,6 +19,7 @@ Several Improvements to accounting:
 #. Add journal items menu item menu on reports with tree, grahp and pivot views (no debug mode required)
 #. Add on move lines a button to open related documents
 #. Add on move lines a related field to account type and allow to search and group by this field
+#. Add a button on statemens (only with on dev mode) to cancell all statement lines
 #. Backport from v10 of analytic report
 #. Add on journal items availability to search and group by analytic account and to search by analytic tags
 
