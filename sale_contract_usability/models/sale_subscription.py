@@ -23,12 +23,18 @@ class SaleSubscription(models.Model):
         related="template_id.template_dates_required",
         readonly=True,
     )
+    journal_id = fields.Many2one(
+        'account.journal',
+        string='Journal',
+        domain="[('type', '=', 'sale'),('company_id', '=', company_id)]")
 
     @api.model
     def _prepare_invoice_data(self, contract):
         res = super(SaleSubscription, self)._prepare_invoice_data(contract)
         if contract.company_id.copy_contract_description:
             res.update({'comment': contract.description})
+        if contract.journal_id:
+            res.update({'journal_id': contract.journal_id.id})
         return res
 
     @api.multi

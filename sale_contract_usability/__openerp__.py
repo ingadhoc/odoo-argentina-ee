@@ -20,7 +20,7 @@
 ##############################################################################
 {
     'name': 'Sale Contract Usability',
-    'version': '9.0.0.3.0',
+    'version': '9.0.0.4.0',
     'category': 'Sales Management',
     'sequence': 14,
     'summary': '',
