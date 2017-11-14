@@ -20,8 +20,10 @@
             <field name="date_start" position="attributes">
                 <attribute name="attrs">{'required': [('dates_required', '=', True)]}</attribute>
             </field>
+            <field name="analytic_account_id" position="after">
+                <field name="journal_id"/>
+            </field>
         </field>
     </record>
-
 
 </odoo>
