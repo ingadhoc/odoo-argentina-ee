@@ -35,6 +35,8 @@ class SaleSubscription(models.Model):
             res.update({'comment': contract.description})
         if contract.journal_id:
             res.update({'journal_id': contract.journal_id.id})
+        if contract.partner_id.user_id:
+            res.update({'user_id': contract.partner_id.user_id.id})
         return res
 
     @api.multi
