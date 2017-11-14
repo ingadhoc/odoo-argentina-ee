@@ -107,7 +107,8 @@ def create_purchase_subscriptions(env):
             'recurring_next_date': recurring_next_date,
             'recurring_rule_type': recurring_rule_type,
             'recurring_interval': recurring_interval,
-            'state': state,
+            # en v8 cancelled, en v9 cancel
+            'state': state == 'cancelled' and 'cancel' or state,
             'user_id': user_id,
             'company_id': company_id,
             'description': description,
