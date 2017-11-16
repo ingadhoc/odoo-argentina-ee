@@ -149,7 +149,7 @@ class PurchaseSubscription(models.Model):
             'account_id': partner.property_account_payable_id.id,
             'type': 'in_invoice',
             'reference': "%s %s" % (self.name, fields.Date.from_string(
-                self.recurring_next_date).strftime('%m-%Y')),
+                self.recurring_next_date).strftime('%d-%m-%Y')),
             'partner_id': partner.id,
             'currency_id': currency_id,
             'journal_id': journals.id,
