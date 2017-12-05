@@ -158,6 +158,8 @@ class PurchaseSubscription(models.Model):
             'fiscal_position_id': fpos.id,
             'company_id': self.company_id.id,
         }
+        if partner.user_id:
+            invoice.update({'user_id': partner.user_id.id})
         return invoice
 
     @api.multi
