@@ -54,7 +54,7 @@ class PurchaseSubscription(models.Model):
     analytic_account_id = fields.Many2one(
         'account.analytic.account',
         'Analytic Account', required=True, ondelete="cascade", auto_join=True)
-    date_start = fields.Date('Start Date', default=time.strftime('%Y-%m-%d'))
+    date_start = fields.Date('Start Date', default=fields.Date.today)
     date = fields.Date('End Date', track_visibility='onchange')
     currency_id = fields.Many2one(
         'res.currency',
@@ -158,6 +158,8 @@ class PurchaseSubscription(models.Model):
             'fiscal_position_id': fpos.id,
             'company_id': self.company_id.id,
         }
+        if partner.user_id:
+            invoice.update({'user_id': partner.user_id.id})
         return invoice
 
     @api.multi

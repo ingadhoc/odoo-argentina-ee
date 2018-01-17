@@ -28,6 +28,8 @@ class SaleSubscription(models.Model):
         string='Journal',
         domain="[('type', '=', 'sale'),('company_id', '=', company_id)]")
 
+    date_start = fields.Date(default=fields.Date.today)
+
     @api.model
     def _prepare_invoice_data(self, contract):
         res = super(SaleSubscription, self)._prepare_invoice_data(contract)
