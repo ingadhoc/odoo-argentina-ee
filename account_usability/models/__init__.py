@@ -10,3 +10,4 @@ from . import account_payment_term
 from . import payment_acquirer
 from . import account_bank_statements
 from . import account_move_line
+from . import account_invoice

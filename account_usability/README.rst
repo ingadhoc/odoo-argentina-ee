@@ -22,6 +22,7 @@ Several Improvements to accounting:
 #. Add a button on statemens (only with on dev mode) to cancell all statement lines
 #. Backport from v10 of analytic report
 #. Add on journal items availability to search and group by analytic account and to search by analytic tags
+#. Add button to cancel paid invoices that don't have related payments. This happends, for eg, if invoice amount is zero or if counterpart account is no receivable or payable.
 
 
 Installation
