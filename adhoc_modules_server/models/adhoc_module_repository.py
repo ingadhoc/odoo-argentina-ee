@@ -3,13 +3,13 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from openerp import models, fields, api, modules, tools
-from openerp.modules.module import adapt_version
-from openerp.exceptions import ValidationError
-from openerp.addons.adhoc_modules_server.octohub.connection import Connection
+from odoo import models, fields, api, modules, tools
+from odoo.modules.module import adapt_version
+from odoo.exceptions import ValidationError
+from odoo.addons.adhoc_modules_server.octohub.connection import Connection
 # from octohub.connection import Connection
-from openerp.addons.server_mode.mode import get_mode
-from openerp.tools.parse_version import parse_version
+from odoo.addons.server_mode.mode import get_mode
+from odoo.tools.parse_version import parse_version
 import base64
 import logging
 import itertools

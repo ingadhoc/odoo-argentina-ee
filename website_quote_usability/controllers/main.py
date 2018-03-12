@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from openerp import http
-from openerp.addons.web.http import request
-from openerp.addons.website_quote.controllers.main import sale_quote
+from odoo import http
+from odoo.addons.web.http import request
+from odoo.addons.website_quote.controllers.main import sale_quote
 
 
 class sale_quote_contract(sale_quote):

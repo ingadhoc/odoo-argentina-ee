@@ -1,10 +1,10 @@
 import logging
 
-from openerp import http, SUPERUSER_ID
+from odoo import http, SUPERUSER_ID
 import werkzeug
-from openerp.addons.web.controllers.main import ensure_db
-from openerp.modules.registry import RegistryManager
-from openerp.addons.web.controllers.main import (
+from odoo.addons.web.controllers.main import ensure_db
+from odoo.modules.registry import RegistryManager
+from odoo.addons.web.controllers.main import (
     db_monodb, set_cookie_and_redirect, login_and_redirect)
 _logger = logging.getLogger(__name__)
 

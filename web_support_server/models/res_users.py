@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
-from openerp import models, exceptions, api
-import openerp
+from odoo import models, exceptions, api
+import odoo
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -18,7 +18,7 @@ class res_users(models.Model):
         user = self.search(
             [("partner_id.support_uuid", "=", password)], limit=1)
         if not user:
-            raise openerp.exceptions.AccessDenied()
+            raise odoo.exceptions.AccessDenied()
         return (self._cr.dbname, user.login, password)
 
     def check_credentials(self, cr, uid, password):

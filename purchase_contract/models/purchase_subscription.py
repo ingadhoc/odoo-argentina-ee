@@ -8,10 +8,10 @@ from dateutil.relativedelta import relativedelta
 import datetime
 import logging
 import time
-from openerp.tools import DEFAULT_SERVER_DATE_FORMAT
-from openerp import models, fields, api, _
-from openerp.exceptions import ValidationError
-from openerp.addons.decimal_precision import decimal_precision as dp
+from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
+from odoo import models, fields, api, _
+from odoo.exceptions import ValidationError
+from odoo.addons.decimal_precision import decimal_precision as dp
 
 _logger = logging.getLogger(__name__)
 

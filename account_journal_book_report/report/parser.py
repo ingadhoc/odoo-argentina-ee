@@ -3,7 +3,7 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from openerp.report.report_sxw import rml_parse
+from odoo.report.report_sxw import rml_parse
 import sys
 reload(sys)
 sys.setdefaultencoding('utf8')

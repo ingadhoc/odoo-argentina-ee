@@ -3,9 +3,9 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from openerp import models, api, fields
-# from openerp.exceptions import UserError
-from openerp.tools.misc import formatLang
+from odoo import models, api, fields
+# from odoo.exceptions import UserError
+from odoo.tools.misc import formatLang
 
 
 class AccountJournal(models.Model):

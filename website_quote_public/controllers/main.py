@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from openerp.addons.web import http
-from openerp.http import request
+from odoo.addons.web import http
+from odoo.http import request
 
 
 class WebsiteQuotePublished(http.Controller):
