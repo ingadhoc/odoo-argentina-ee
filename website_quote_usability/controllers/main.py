@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from odoo import http
 from odoo.addons.web.http import request
 from odoo.addons.website_quote.controllers.main import sale_quote

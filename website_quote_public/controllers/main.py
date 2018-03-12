@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from odoo.addons.web import http
 from odoo.http import request
 
