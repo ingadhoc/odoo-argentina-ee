@@ -1,4 +1,4 @@
-<openerp>
+<odoo>
     <data>
     <menuitem
     id="sale_menu"
@@ -22,4 +22,4 @@
     </template>
    
     </data>
-</openerp>
+</odoo>

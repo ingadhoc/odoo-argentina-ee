@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
 	<data>
         <!-- Tree view for contract templates -->
         <record id="purchase_subscription_view_list_template" model="ir.ui.view">
@@ -55,4 +55,4 @@
         <menuitem name="Contracts" id="purchase_subscription" parent="base.menu_purchase_root" action="purchase_subscription_action" sequence="2"/>
         <menuitem name="Contract Template" id="purchase_template_subscription" parent="purchase.menu_purchase_config" action="purchase_subscription_template_action" sequence="2"/>
 	</data>
-</openerp>
+</odoo>

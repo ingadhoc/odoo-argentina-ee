@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
 
         <!-- SEARCH VIEW -->
@@ -145,4 +145,4 @@
         <menuitem parent="menu_adhoc_modules_conf" sequence="10" action="action_adhoc_module_module" id="menu_adhoc_module_module"/>
 
     </data>
-</openerp>
+</odoo>

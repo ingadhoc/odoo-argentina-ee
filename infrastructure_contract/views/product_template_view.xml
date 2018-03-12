@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
         <!-- ahora lo carga saas provider -->
 <!--         <record id="product_template_form_view" model="ir.ui.view" >
@@ -13,4 +13,4 @@
             </field>
         </record> -->
     </data>
-</openerp>
+</odoo>

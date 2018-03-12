@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
 <data>
 
     <template id="contracts_databases" name="Contracts" inherit_id="website_contract.contracts">
@@ -67,4 +67,4 @@
     </template>
 
 </data>
-</openerp>
+</odoo>

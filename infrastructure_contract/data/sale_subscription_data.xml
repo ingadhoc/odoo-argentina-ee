@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<openerp>
+<odoo>
 <data>
 
         <record id="action_update_lines_quantities_from_dbs" model="ir.actions.server">
@@ -22,4 +22,4 @@ object.browse(ids).update_lines_data_from_database()
         </record>
 
     </data>
-</openerp>
+</odoo>

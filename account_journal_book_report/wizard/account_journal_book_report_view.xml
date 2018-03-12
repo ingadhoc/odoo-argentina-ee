@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
+<odoo>
     <data>
         <record id="account_journal_book_report_view" model="ir.ui.view">
             <field name="name">Print journal by entries</field>
@@ -41,4 +41,4 @@
             id="menu_account_journal_book_report"/>
 
     </data>
-</openerp>
+</odoo>

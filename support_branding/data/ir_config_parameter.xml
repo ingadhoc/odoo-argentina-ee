@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<openerp>
+<odoo>
     <data noupdate="1">
         <record id="config_parameter_company_name" model="ir.config_parameter">
             <field name="key">support_branding.company_name</field>
@@ -22,4 +22,4 @@
             <field name="value" eval="''"/>
         </record>
     </data>
-</openerp>
+</odoo>

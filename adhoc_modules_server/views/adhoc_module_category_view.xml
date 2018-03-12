@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
 
         <!-- KANBAN VIEW -->
@@ -80,4 +80,4 @@
         <menuitem parent="menu_adhoc_modules_conf" sequence="20" action="action_adhoc_module_category" id="menu_adhoc_module_category"/>
 
     </data>
-</openerp>
+</odoo>

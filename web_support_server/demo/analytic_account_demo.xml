@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
         <record id="contract_support_template" model="sale.subscription">
             <field name="name">Support Template</field>
@@ -44,4 +44,4 @@
             <!-- <field name="to_invoice" ref="hr_timesheet_invoice.timesheet_invoice_factor1"/> -->
         </record>
     </data>
-</openerp>
+</odoo>

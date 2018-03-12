@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- infrastructure.odoo_version -->
-<openerp>
+<odoo>
 <data>
 
 
@@ -34,4 +34,4 @@
 
 
 </data>
-</openerp>
+</odoo>

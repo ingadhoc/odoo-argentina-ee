@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- infrastructure.database.user -->
-<openerp>
+<odoo>
 <data>
 
 <!-- TREEVIEW -->
@@ -16,4 +16,4 @@
 </record>
 
 </data>
-</openerp>
+</odoo>

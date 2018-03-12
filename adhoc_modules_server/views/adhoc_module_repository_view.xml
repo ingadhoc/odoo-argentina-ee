@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
 
         <!-- FORM VIEW -->
@@ -73,4 +73,4 @@
         <menuitem parent="menu_adhoc_modules_conf" sequence="30" action="action_adhoc_module_repository" id="menu_adhoc_module_repository"/>
 
     </data>
-</openerp>
+</odoo>

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<openerp>
+<odoo>
     <data>
     <!-- <data noupdate="1"> -->
         <record id="email_template_bank_statement" model="mail.template">
@@ -56,4 +56,4 @@
             ]]></field>
         </record>
     </data>
-</openerp>
+</odoo>
