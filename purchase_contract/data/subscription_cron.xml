@@ -80,9 +80,8 @@ Odoo Automatic Email
             <field name="interval_type">weeks</field>
             <field name="numbercall">-1</field>
             <field name="doall" eval="False"/>
-            <field name="model" eval="'purchase.subscription'"/>
-            <field name="function" eval="'cron_account_analytic_account'"/>
-            <field name="args" eval="'()'" />
+            <field name="model_id" ref="model_purchase_subscription"/>
+            <field name="code">cron_account_analytic_account()</field>
         </record>
 
         <record model="ir.cron" id="subscription_cron_for_invoice_supplier">
@@ -90,9 +89,8 @@ Odoo Automatic Email
            <field name="interval_number">1</field>
            <field name="interval_type">days</field>
            <field name="numbercall">-1</field>
-           <field name="model" eval="'purchase.subscription'"/>
-           <field name="function" eval="'_cron_recurring_create_invoice_purchase'"/>
-           <field name="args" eval="'()'"/>
+           <field name="model_id" ref="model_purchase_subscription"/>
+           <field name="code">_cron_recurring_create_invoice_purchase()</field>
         </record>
 
     </data>

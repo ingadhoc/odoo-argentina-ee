@@ -6,9 +6,8 @@
            <field name="interval_number">1</field>
            <field name="interval_type">days</field>
            <field name="numbercall">-1</field>
-           <field name="model" eval="'adhoc.module.repository'"/>
-           <field name="function" eval="'_cron_scan_repositories'"/>
-           <field name="args" eval="'()'"/>
+           <field name="model_id" ref="model_adhoc_module_repository"/>
+           <field name="code">_cron_scan_repositories()</field>
         </record>
     </data>
 </odoo>

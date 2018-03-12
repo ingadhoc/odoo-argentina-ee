@@ -28,7 +28,7 @@ class AdhocModuleCategory(models.Model):
     parent_id = fields.Many2one(
         'adhoc.module.category.server',
         'Parent Category',
-        select=True,
+        index=True,
         ondelete='restrict',
         readonly=False,
     )

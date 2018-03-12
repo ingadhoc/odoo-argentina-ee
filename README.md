@@ -1,4 +1,4 @@
-[![Runbot Status](http://runbot.adhoc.com.ar/runbot/badge/flat/36/11.0.svg)](http://runbot.adhoc.com.ar/runbot/repo/github-com-ingadhoc-enterprise-extensions-36)
+[![Runbot Status](http://runbot.adhoc.com.ar/runbot/badge/flat/3/11.0.svg)](http://runbot.adhoc.com.ar/runbot/repo/github-com-ingadhoc-enterprise-extensions-3)
 
 # ADHOC Odoo Addons that extends odoo Enteprise
 

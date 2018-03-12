@@ -83,7 +83,8 @@ class SaleSubscription(models.Model):
 
         # try to add title
         try:
-            server_issue_title = self.env['ir.config_parameter'].get_param(
+            server_issue_title = self.env[
+                'ir.config_parameter'].sudo().get_param(
                 'server_issue_title')
             res['title'] = server_issue_title
         except:
@@ -92,7 +93,8 @@ class SaleSubscription(models.Model):
 
         # try to add message
         try:
-            server_issue_message = self.env['ir.config_parameter'].get_param(
+            server_issue_message = self.env[
+                'ir.config_parameter'].sudo().get_param(
                 'server_issue_message')
             res['message'] = server_issue_message % (issue.id)
         except:
