@@ -1,11 +1,10 @@
-[![Runbot Status](http://runbot.adhoc.com.ar/runbot/badge/flat/36/9.0.svg)](http://runbot.adhoc.com.ar/runbot/repo/github-com-ingadhoc-enterprise-extensions-36)
+[![Runbot Status](http://runbot.adhoc.com.ar/runbot/badge/flat/36/11.0.svg)](http://runbot.adhoc.com.ar/runbot/repo/github-com-ingadhoc-enterprise-extensions-36)
 
 # ADHOC Odoo Addons that extends odoo Enteprise
 
 ADHOC Odoo Addons that extends odoo Enteprise
 
 [//]: # (addons)
-This part will be replaced when running the oca-gen-addons-table script from OCA/maintainer-tools.
 [//]: # (end addons)
 
 ----
