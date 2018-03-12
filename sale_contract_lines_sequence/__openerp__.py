@@ -42,7 +42,7 @@
     ],
     'test': [
     ],
-    'installable': True,
+    'installable': False,
     # no auto install porque al menos nosotros no lo queremos
     'auto_install': False,
     'application': False,

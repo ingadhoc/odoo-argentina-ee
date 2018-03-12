@@ -40,6 +40,6 @@
         'views/portal_sale_view.xml',
         'views/portal_menu.xml',
     ],
-    'installable': True,
+    'installable': False,
     'auto_install': False,
 }
