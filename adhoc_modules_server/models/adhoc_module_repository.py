@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
-# For copyright and license notices, see __openerp__.py file in module root
+# For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
 from openerp import models, fields, api, modules, tools
@@ -16,7 +16,7 @@ import itertools
 import os
 
 _logger = logging.getLogger(__name__)
-MANIFEST = '__openerp__.py'
+MANIFEST = '__manifest__.py'
 README = ['README.rst', 'README.md', 'README.txt']
 
 
@@ -173,7 +173,7 @@ class AdhocModuleRepository(models.Model):
     def get_module_info(self, name):
         info = {}
         try:
-            response = self.read_remote_path("%s/__openerp__.py" % name)
+            response = self.read_remote_path("%s/__manifest__.py" % name)
             encoded_content = response.parsed['content']
             info = load_information_from_contents(
                 base64.b64decode(encoded_content))
