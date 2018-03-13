@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<odoo>
-<data>
-
-    <menuitem parent="portal.portal_projects" action="project_issue.project_issue_categ_act0" id="menu_portal_issue" sequence="20"/>
-
-</data>
-</odoo>
