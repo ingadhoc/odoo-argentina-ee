@@ -1,19 +1,12 @@
 # © 2016 ADHOC SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import models, fields, api, _
+from odoo import models, api, _
 from odoo.exceptions import ValidationError
 
 
 class PaymentAcquirer(models.Model):
     _inherit = "payment.acquirer"
-
-    journal_id = fields.Many2one(
-        'account.journal',
-        'Journal',
-        help='Journal to be used to record journal entry of this payment '
-        'acquirer'
-    )
 
     @api.constrains('journal_id', 'company_id')
     def check_company(self):

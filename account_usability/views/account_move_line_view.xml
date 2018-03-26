@@ -8,12 +8,12 @@
         <field name="inherit_id" ref="account.view_account_move_line_filter"/>
         <field name="arch" type="xml">
             <field name="account_id" position="after">
-                <field name="account_user_type_id"/>
+                <field name="user_type_id"/>
                 <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
                 <field name="analytic_tag_ids" groups="analytic.group_analytic_accounting"/>
             </field>
             <group>
-                <filter string="Account Type" context="{'group_by':'account_user_type_id'}"/>
+                <filter string="Account Type" context="{'group_by':'user_type_id'}"/>
                 <filter string="Analytic Account" context="{'group_by':'analytic_account_id'}" groups="analytic.group_analytic_accounting"/>
             </group>
             <!-- add name to this group so it can be send as default by other modules -->
@@ -30,13 +30,13 @@
         <field name="inherit_id" ref="account.view_move_line_tree"/>
         <field name="arch" type="xml">
             <tree>
-                <button type="object" string="Open Document" icon="STOCK_JUSTIFY_LEFT" help="Open Related Document" name="action_open_related_document"/>
+                <button type="object" string="Open Document" icon="fa-file-o" help="Open Related Document" name="action_open_related_document"/>
             </tree>
         </field>
     </record>
 
     <!-- TODO mejorar en payment group heredando de move line para no necesitar esto -->
-    <record id="view_move_line_payment_group_tree" model="ir.ui.view">
+<!--     <record id="view_move_line_payment_group_tree" model="ir.ui.view">
         <field name="name">account.move.line.tree</field>
         <field name="model">account.move.line</field>
         <field name="inherit_id" ref="account_payment_group.view_move_line_tree"/>
@@ -45,7 +45,7 @@
                 <button type="object" string="Open Document" icon="STOCK_JUSTIFY_LEFT" help="Open Related Document" name="action_open_related_document"/>
             </tree>
         </field>
-    </record>
+    </record> -->
 
     <record id="action_move_line_analisis" model="ir.actions.act_window">
         <field name="name">Análisis de Apuntes Contables</field>

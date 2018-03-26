@@ -1,24 +1,27 @@
 # © 2016 ADHOC SA
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
 
-from odoo import models, api, fields
-# from odoo.exceptions import UserError, ValidationError
+from odoo import models, api, _
 
 
 class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
-    account_user_type_id = fields.Many2one(
-        string='Account Type',
-        related='account_id.user_type_id',
-        store=True,
-        readonly=True,
-    )
-    analytic_tag_ids = fields.Many2many(
-        related='analytic_account_id.tag_ids',
-        readonly=True,
-        string='Analytic Tags',
-    )
+    @api.multi
+    def get_model_id_and_name(self):
+        # Function used to display the right action on journal
+        # items on dropdown lists, in reports like general ledger
+        if self.statement_id:
+            return ['account.bank.statement',
+                    self.statement_id.id, _('View Bank Statement'), False]
+        if self.payment_id:
+            return ['account.payment',
+                    self.payment_id.id, _('View Payment'), False]
+        if self.invoice_id:
+            view_id = self.invoice_id.get_formview_id()
+            return ['account.invoice',
+                    self.invoice_id.id, _('View Invoice'), view_id]
+        return ['account.move', self.move_id.id, _('View Move'), False]
 
     @api.multi
     def action_open_related_document(self):

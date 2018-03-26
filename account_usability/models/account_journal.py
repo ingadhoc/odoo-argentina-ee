@@ -10,7 +10,6 @@ from odoo.tools.misc import formatLang
 class AccountJournal(models.Model):
     _inherit = 'account.journal'
 
-    @api.one
     @api.onchange('bank_id', 'bank_acc_number')
     def set_name_from_bank_account(self):
         # we only use this onchange if we are on banks menu

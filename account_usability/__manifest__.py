@@ -19,7 +19,7 @@
 ##############################################################################
 {
     'name': 'Accoount Usability Improvements',
-    'version': '9.0.1.12.0',
+    'version': '11.0.1.0.0',
     'category': 'Accounting',
     'sequence': 14,
     'summary': '',
@@ -30,13 +30,11 @@
     ],
     'depends': [
         'account',
-        # por método get_model_id_and_name
-        'account_reports',
         "payment",
         # para agregar boton en move lines de payment group
         # TODO deberiamos evitar esta dependencia y hacer que
         # payment group herede de move line
-        "account_payment_group",
+        # "account_payment_group",
     ],
     'data': [
         'views/account_journal_view.xml',
@@ -45,7 +43,6 @@
         'views/account_invoice_view.xml',
         'views/account_bank_statement_view.xml',
         'views/account_move_line_view.xml',
-        'views/account_analytic_view.xml',
         'data/account_payment_method_data.xml',
         'data/mail_data.xml',
     ],
@@ -53,7 +50,7 @@
     ],
     'test': [
     ],
-    'installable': False,
+    'installable': True,
     # lo hacemos auto install porque este repo no lo podemos agregar en otros
     # por build de travis (ej sipreco) y queremos que para runbot se auto
     # instale

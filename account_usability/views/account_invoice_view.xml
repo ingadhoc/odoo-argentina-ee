@@ -9,7 +9,7 @@
             <form>
                 <field name="payment_move_line_ids" invisible="1"/>
             </form>
-            <button name="invoice_cancel" position="after">
+            <button name="action_invoice_draft" position="after">
                 <button name="invoice_cancel_from_done" type="object" string="Cancel Invoice" groups="base.group_no_one" attrs="{'invisible': ['|', ('payment_move_line_ids', '!=', []), ('state', '!=', 'paid')]}"/>
             </button>
 
@@ -28,7 +28,7 @@
             <form>
                 <field name="payment_move_line_ids" invisible="1"/>
             </form>
-            <button name="invoice_cancel" position="after">
+            <button name="action_invoice_draft" position="after">
                 <button name="invoice_cancel_from_done" type="object" string="Cancel Invoice" groups="base.group_no_one" attrs="{'invisible': ['|', ('payment_move_line_ids', '!=', []), ('state', '!=', 'paid')]}"/>
             </button>
         </field>
