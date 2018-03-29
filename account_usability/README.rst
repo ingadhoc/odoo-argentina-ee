@@ -30,6 +30,7 @@ Several Improvements to accounting:
     #. Add a button on statemens (only with on dev mode) to cancell all statement lines
     #. Add on journal items availability to search and group by analytic account and to search by analytic tags
     #. Add button to cancel paid invoices that don't have related payments. This happends, for eg, if invoice amount is zero or if counterpart account is no receivable or payable.
+    #. Add by default, when creating invoices manually, actual partner is choose, with this module the partner salesperson will be choosen. It also choose the salesperson when creating invoices from stock.picking
 
 
 Installation
