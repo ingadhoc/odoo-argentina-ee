@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
         <!-- TODO cuando pasemos a user saas_provider esta categoria ya la crea aquel modulo -->
         <record id="odoo_apps" model="product.category">
             <field name="parent_id" ref="product.product_category_all"/>
@@ -17,7 +16,6 @@
             <field name="uom_po_id" ref="product.product_uom_unit"/>
             <field name="description_sale">Odoo Accounting app and support</field>
             <field name="contract_type">app</field>
-            <field name="website_published" eval="True"/>
             <field name="recurring_invoice" eval="True"/>
         </record>
 
@@ -31,7 +29,6 @@
             <field name="uom_po_id" ref="product.product_uom_unit"/>
             <field name="description_sale">Odoo Sales app and support</field>
             <field name="contract_type">app</field>
-            <field name="website_published" eval="True"/>
             <field name="recurring_invoice" eval="True"/>
         </record>
 
@@ -45,7 +42,6 @@
             <field name="uom_po_id" ref="product.product_uom_unit"/>
             <field name="description_sale">Odoo website app and support</field>
             <field name="contract_type">app</field>
-            <field name="website_published" eval="True"/>
             <field name="recurring_invoice" eval="True"/>
         </record>
 
@@ -59,7 +55,6 @@
             <field name="uom_po_id" ref="product.product_uom_unit"/>
             <field name="description_sale">Odoo project app and support</field>
             <field name="contract_type">app</field>
-            <field name="website_published" eval="True"/>
             <field name="recurring_invoice" eval="True"/>
         </record>
 
@@ -73,9 +68,7 @@
             <field name="uom_po_id" ref="product.product_uom_unit"/>
             <field name="description_sale">Odoo Nautical app and support</field>
             <field name="contract_type">app</field>
-            <field name="website_published" eval="True"/>
             <field name="recurring_invoice" eval="True"/>
         </record>
 
-    </data>
 </odoo>

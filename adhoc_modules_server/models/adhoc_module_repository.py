@@ -6,7 +6,6 @@ from odoo import models, fields, api, modules, tools
 from odoo.modules.module import adapt_version
 from odoo.exceptions import ValidationError
 from odoo.addons.adhoc_modules_server.octohub.connection import Connection
-# from octohub.connection import Connection
 from odoo.addons.server_mode.mode import get_mode
 from odoo.tools.parse_version import parse_version
 import base64
@@ -114,14 +113,14 @@ class AdhocModuleRepository(models.Model):
         store=True,
     )
 
-    @api.one
     @api.depends('user', 'name', 'branch')
     def get_display_name(self):
-        self.display_name = "%s/%s:%s" % (
-            self.user or '',
-            self.name or '',
-            self.branch or '',
-        )
+        for record in self:
+            record.display_name = "%s/%s:%s" % (
+                record.user or '',
+                record.name or '',
+                record.branch or '',
+            )
 
     @api.multi
     def get_token(self):
@@ -156,7 +155,7 @@ class AdhocModuleRepository(models.Model):
         try:
             response = conn.send(
                 'GET', uri, params={'ref': self.branch})
-        except Exception, ResponseError:
+        except Exception as ResponseError:
             raise ValidationError(
                 'Could not get modules for:\n'
                 '* Repository: %s\n'
@@ -170,9 +169,13 @@ class AdhocModuleRepository(models.Model):
 
     @api.model
     def get_module_info(self, name):
+        descriptor = {'8.0': '__openerp__.py',
+                      '9.0': '__openerp__.py',
+                      '11.0': '__manifest__.py'}
         info = {}
         try:
-            response = self.read_remote_path("%s/__manifest__.py" % name)
+            response = self.read_remote_path("%s/%s" % (
+                name, descriptor.get(self.branch, '__manifest__.py')))
             encoded_content = response.parsed['content']
             info = load_information_from_contents(
                 base64.b64decode(encoded_content))

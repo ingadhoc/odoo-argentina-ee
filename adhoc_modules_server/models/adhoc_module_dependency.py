@@ -42,12 +42,13 @@ class AdhocModuleDependency(models.Model):
         compute='_compute_depend'
     )
 
-    @api.one
     @api.depends('name')
     def _compute_depend(self):
-        mod = self.env['adhoc.module.module'].search([
-            ('name', '=', self.name),
-            ('repository_id.branch', '=', self.module_id.repository_id.branch),
-        ], limit=1)
-        self.depend_id = mod
-        self.state = self.depend_id.state or 'unknown'
+        for record in self:
+            mod = self.env['adhoc.module.module'].search([
+                ('name', '=', record.name),
+                ('repository_id.branch', '=',
+                 record.module_id.repository_id.branch),
+            ], limit=1)
+            record.depend_id = mod
+            record.state = record.depend_id.state or 'unknown'

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
         <record id="module_category_usability" model="adhoc.module.category.server">
             <field name="name">Usability</field>
             <field name="code">usability</field>
@@ -148,5 +147,4 @@
             <field name="product_tmpl_ids" eval="[(4, ref('product_nautical_app_product_template'))]"/>
         </record>
 
-    </data>
 </odoo>

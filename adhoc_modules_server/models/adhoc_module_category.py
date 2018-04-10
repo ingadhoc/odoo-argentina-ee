@@ -57,7 +57,6 @@ class AdhocModuleCategory(models.Model):
         readonly=False,
     )
 
-    @api.one
     @api.constrains('child_ids', 'name', 'parent_id')
     def set_code(self):
         # if not self.code:

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
         <record id="product_product_tree_view" model="ir.ui.view">
             <field name="name">Product.product.product.tree</field>
             <field name="model">product.product</field>
             <field eval="90" name="priority"/>
             <field name="arch" type="xml">
-                <tree editable="bottom" create="false" unlink="false">
+                <tree editable="bottom" create="false" delete="false">
                     <field name="name"/>
                     <field name="contract_quantity"/>
                 </tree>
@@ -49,5 +48,4 @@
                 </kanban>
             </field>
         </record>
-    </data>
 </odoo>

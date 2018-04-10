@@ -13,7 +13,6 @@ class AdhocModuleModule(models.Model):
     _inherit = 'ir.module.module'
     _name = 'adhoc.module.module'
 
-    @api.one
     @api.constrains('incompatible_module_ids')
     def change_incompatible_module_ids(self):
         if self._context.get('stop'):
@@ -32,15 +31,15 @@ class AdhocModuleModule(models.Model):
         self.incompatible_module_ids.with_context(stop=True).write(
             {'incompatible_module_ids': [(4, self.id, _)]})
 
-    @api.one
     @api.depends('incompatible_module_ids')
     def _compute_incompatible_modules(self):
-        if not self.incompatible_module_ids:
-            res = False
-        else:
-            res = "['%s']" % (("','").join(
-                self.incompatible_module_ids.mapped('name')))
-        self.incompatible_modules = res
+        for record in self:
+            if not record.incompatible_module_ids:
+                res = False
+            else:
+                res = "['%s']" % (("','").join(
+                    record.incompatible_module_ids.mapped('name')))
+            record.incompatible_modules = res
 
     incompatible_modules = fields.Char(
         # readonly=False,
