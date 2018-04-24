@@ -1,4 +1,4 @@
-# odoo-enterprise git@github.com:odoo/enterprise.git
+odoo-enterprise git@github.com:odoo/enterprise.git
 # ingadhoc-odoo-support git@github.com:ingadhoc/odoo-support.git
 # ingadhoc-odoo-infrastructure https://github.com/ingadhoc/odoo-infrastructure.git
 # server-tools
@@ -9,3 +9,4 @@
 # ingadhoc-account-payment https://github.com/ingadhoc/account-payment.git
 # ingadhoc-purchase https://github.com/ingadhoc/purchase.git
 # ingadhoc-stock https://github.com/ingadhoc/stock.git
+oca-sale_workflow https://github.com/OCA/sale-workflow.git

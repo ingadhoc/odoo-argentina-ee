@@ -5,9 +5,10 @@
 from odoo import models, fields
 
 
-class ProductProduct(models.Model):
-    _inherit = 'product.product'
+class SaleOrder(models.Model):
+    _inherit = 'sale.order'
 
-    standard_price = fields.Float(
-        groups='base.group_user,\
-        portal_sale_distributor.group_portal_distributor')
+    activity_date_deadline = fields.Date(
+        groups="base.group_user,"
+        "portal_sale_distributor.group_portal_distributor"
+    )
