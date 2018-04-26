@@ -35,7 +35,7 @@ class AccountBankStatementLine(models.Model):
     @api.multi
     def send_mail(self):
         template_id = self.env['ir.model.data'].get_object_reference(
-            'account_usability',
+            'account_ux',
             'email_template_bank_statement')[1]
         for record in self:
             record['sent'] = True
