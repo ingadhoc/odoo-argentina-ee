@@ -32,7 +32,14 @@ Several Improvements to accounting:
 #. Add on journal items availability to search and group by analytic account and to search by analytic tags
 #. Add button to cancel paid invoices that don't have related payments. This happends, for eg, if invoice amount is zero or if counterpart account is no receivable or payable.
 #. Add by default, when creating invoices manually, actual partner is choose, with this module the partner salesperson will be choosen. It also choose the salesperson when creating invoices from stock.picking
+#. This replace original odoo wizard for changing currency on an invoice with serveral improvements:
 
+  * Preview and allow to change the rate thats is going to be used.
+  * Log the currency change on the chatter.
+  * Add this functionality to supplier invoices.
+  * Change currency wizard only works when multi currency is activated
+  * In order to see the change button in the invoice we should be added to the "Technical Settings / Show Full Accounting Features" group
+  * We can restrict the change of the currency for a group of users by adding them to "Restrict Change Invoice Currency Exchange" group
 
 Installation
 ============

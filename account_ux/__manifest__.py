@@ -18,8 +18,8 @@
 #
 ##############################################################################
 {
-    'name': 'Accoount Usability Improvements',
-    'version': '11.0.1.0.0',
+    'name': 'Account Usability Improvements',
+    'version': '11.0.1.1.0',
     'category': 'Accounting',
     'sequence': 14,
     'summary': '',
@@ -37,12 +37,14 @@
         # "account_payment_group",
     ],
     'data': [
-        'views/account_journal_view.xml',
-        'views/account_payment_term_view.xml',
-        'views/payment_acquirer_view.xml',
-        'views/account_invoice_view.xml',
-        'views/account_bank_statement_view.xml',
-        'views/account_move_line_view.xml',
+        'security/account_ux_security.xml',
+        'wizards/account_change_currency_views.xml',
+        'views/account_journal_views.xml',
+        'views/account_payment_term_views.xml',
+        'views/payment_acquirer_views.xml',
+        'views/account_invoice_views.xml',
+        'views/account_bank_statement_views.xml',
+        'views/account_move_line_views.xml',
         'data/account_payment_method_data.xml',
         'data/mail_data.xml',
     ],

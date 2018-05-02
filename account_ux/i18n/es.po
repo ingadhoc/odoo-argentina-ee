@@ -1,29 +1,27 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# * account_usability
-# 
-# Translators:
-# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2017
-# Nicolas Mac Rouillon <nmr@ingadhoc.com>, 2017
+# 	* account_ux
+#
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 9.0c\n"
+"Project-Id-Version: Odoo Server 11.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-21 14:20+0000\n"
-"PO-Revision-Date: 2017-05-21 14:20+0000\n"
-"Last-Translator: Nicolas Mac Rouillon <nmr@ingadhoc.com>, 2017\n"
-"Language-Team: Spanish (https://www.transifex.com/adhoc/teams/46451/es/)\n"
+"POT-Creation-Date: 2018-04-30 13:42+0000\n"
+"PO-Revision-Date: 2018-04-30 10:43-0300\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: \n"
 "Language: es\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
-#. module: account_usability
-#: model:mail.template,body_html:account_usability.email_template_bank_statement
+#. module: account_ux
+#: model:mail.template,body_html:account_ux.email_template_bank_statement
 msgid ""
 "\n"
-"<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); \">\n"
+"    <div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); \">\n"
 "\n"
 "    <p>Hello ${object.name},</p>\n"
 "\n"
@@ -63,18 +61,18 @@ msgid ""
 "        % endif\n"
 "        <p></p>\n"
 "    </div>\n"
-"</div>\n"
+"    </div>\n"
 "            "
 msgstr ""
 "\n"
-"<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); \">\n"
+"    <div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: rgb(255, 255, 255); \">\n"
 "\n"
-"    <p>Hola ${object.name},</p>\n"
+"    <p>Hello ${object.name},</p>\n"
 "\n"
-"    <p>Confirmamos la recepción de su pago por $ ${ctx.get('statement_line').amount} del día ${ctx.get('date')} </p>\n"
+"    <p>We confirm receipt of your payment for $ ${ctx.get('statement_line').amount} of the day ${ctx.get('date')} </p>\n"
 "    <br/>\n"
-"    <p>Si tiene alguna pregunta, no dude en contactarnos.</p>\n"
-"    <p>Gracias por elegir ${object.company_id.name or 'us'}!</p>\n"
+"    <p>If you have any question, do not hesitate to contact us.</p>\n"
+"    <p>Thank you for choosing ${object.company_id.name or 'us'}!</p>\n"
 "    <br/>\n"
 "    <div style=\"width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;\">\n"
 "        <h3 style=\"margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;\">\n"
@@ -107,213 +105,322 @@ msgstr ""
 "        % endif\n"
 "        <p></p>\n"
 "    </div>\n"
-"</div>\n"
+"    </div>\n"
 "            "
 
-#. module: account_usability
-#: model:ir.ui.view,arch_db:account_usability.view_invoice_report_extended_form
-msgid ""
-"<?xml version=\"1.0\"?>\n"
-"<button name=\"invoice_print\" position=\"after\">\n"
-"                <button name=\"invoice_print\" string=\"Print\" type=\"object\" states=\"paid\" groups=\"base.group_user\"/>\n"
-"            </button>\n"
-"        "
-msgstr ""
-"<?xml version=\"1.0\"?>\n"
-"<button name=\"invoice_print\" position=\"after\">\n"
-"                <button name=\"invoice_print\" string=\"Print\" type=\"object\" states=\"paid\" groups=\"base.group_user\"/>\n"
-"            </button>\n"
-"        "
+#. module: account_ux
+#: model:ir.ui.view,arch_db:account_ux.invoice_supplier_form
+#: model:ir.ui.view,arch_db:account_ux.view_invoice_report_extended_form
+msgid "(change)"
+msgstr "(change)"
 
-#. module: account_usability
-#: model:ir.ui.view,arch_db:account_usability.view_account_bank_statement_form
-msgid ""
-"<?xml version=\"1.0\"?>\n"
-"<field name=\"bank_account_id\" position=\"after\">\n"
-"                    <field name=\"sent\" invisible=\"1\"/>\n"
-"                    <button name=\"send_mail\" string=\"Send payment confirmation email\" type=\"object\" attrs=\"{'invisible':['|','|','&amp;',('journal_entry_ids', '=', []),('partner_id','=',False),('amount','&lt;',0),('sent','=',True)]}\" help=\"Send payment confirmation email\" icon=\"fa-envelope-o\"/>\n"
-"                    <button name=\"send_mail_copy\" string=\"Forward payment confirmation email\" type=\"object\" confirm=\"An email has already been sent to this partner. Do you want to send it again?\" icon=\"fa-envelope\" attrs=\"{'invisible':['|','|','&amp;',('journal_entry_ids', '=', []),('partner_id','=',False),('amount','&lt;',0),('sent','=',False)]}\"/>\n"
-"                </field>\n"
-"            "
-msgstr ""
+#. module: account_ux
+#: model:ir.ui.view,arch_db:account_ux.view_account_move_line_filter
+msgid "Account Type"
+msgstr "Tipo de Cuenta"
 
-#. module: account_usability
-#: model:ir.ui.view,arch_db:account_usability.view_account_bank_journal_form
-msgid ""
-"<?xml version=\"1.0\"?>\n"
-"<field name=\"bank_id\" position=\"after\">\n"
-"                    <field name=\"name\"/>\n"
-"                </field>\n"
-"            "
-msgstr ""
-"<?xml version=\"1.0\"?>\n"
-"<field name=\"bank_id\" position=\"after\">\n"
-"                    <field name=\"name\"/>\n"
-"                </field>\n"
-"            "
+#. module: account_ux
+#: model:ir.model.fields,help:account_ux.field_account_journal_acquirer_ids
+msgid "Acquirer that use this journal to register online payments journal entries"
+msgstr "Comprador que utiliza esta revista para registrar entradas de diario de pagos en línea"
 
-#. module: account_usability
-#: model:ir.ui.view,arch_db:account_usability.view_payment_term_form
-msgid ""
-"<?xml version=\"1.0\"?>\n"
-"<field name=\"company_id\" position=\"attributes\">\n"
-"                    <attribute name=\"invisible\">0</attribute>\n"
-"                    <attribute name=\"groups\">base.group_multi_company</attribute>\n"
-"                </field>\n"
-"            "
-msgstr ""
-"<?xml version=\"1.0\"?>\n"
-"<field name=\"company_id\" position=\"attributes\">\n"
-"                    <attribute name=\"invisible\">0</attribute>\n"
-"                    <attribute name=\"groups\">base.group_multi_company</attribute>\n"
-"                </field>\n"
-"            "
-
-#. module: account_usability
-#: model:ir.ui.view,arch_db:account_usability.acquirer_form
-msgid ""
-"<?xml version=\"1.0\"?>\n"
-"<field name=\"environment\" position=\"after\">\n"
-"                    <field name=\"journal_id\"/>\n"
-"                </field>\n"
-"            "
-msgstr ""
-"<?xml version=\"1.0\"?>\n"
-"<field name=\"environment\" position=\"after\">\n"
-"                    <field name=\"journal_id\"/>\n"
-"                </field>\n"
-"            "
-
-#. module: account_usability
-#: model:ir.ui.view,arch_db:account_usability.view_account_journal_form
-msgid ""
-"<?xml version=\"1.0\"?>\n"
-"<field name=\"inbound_payment_method_ids\" position=\"after\">\n"
-"                    <field name=\"debit_card_days_for_collection\" attrs=\"{'invisible':[('type', 'not in', ['bank','cash'])]}\"/>\n"
-"                    <field name=\"credit_card_days_for_collection\" attrs=\"{'invisible':[('type', 'not in', ['bank','cash'])]}\"/>\n"
-"                </field>\n"
-"            "
-msgstr ""
-"<?xml version=\"1.0\"?>\n"
-"<field name=\"inbound_payment_method_ids\" position=\"after\">\n"
-"                    <field name=\"debit_card_days_for_collection\" attrs=\"{'invisible':[('type', 'not in', ['bank','cash'])]}\"/>\n"
-"                    <field name=\"credit_card_days_for_collection\" attrs=\"{'invisible':[('type', 'not in', ['bank','cash'])]}\"/>\n"
-"                </field>\n"
-"            "
-
-#. module: account_usability
-#: model:ir.ui.view,arch_db:account_usability.acquirer_search
-msgid ""
-"<?xml version=\"1.0\"?>\n"
-"<field name=\"provider\" position=\"after\">\n"
-"                    <field name=\"journal_id\"/>\n"
-"                </field>\n"
-"            "
-msgstr ""
-"<?xml version=\"1.0\"?>\n"
-"<field name=\"provider\" position=\"after\">\n"
-"                    <field name=\"journal_id\"/>\n"
-"                </field>\n"
-"            "
-
-#. module: account_usability
-#: help:account.journal,acquirer_ids:0
-#: model:ir.model.fields,help:account_usability.field_account_journal_acquirer_ids
-msgid ""
-"Acquirer that use this journal to register online payments journal entries"
-msgstr ""
-"Comprador que utiliza esta revista para registrar entradas de diario de "
-"pagos en línea"
-
-#. module: account_usability
-#: field:account.journal,acquirer_ids:0
-#: model:ir.model.fields,field_description:account_usability.field_account_journal_acquirer_ids
+#. module: account_ux
+#: model:ir.model.fields,field_description:account_ux.field_account_journal_acquirer_ids
 msgid "Acquirers"
 msgstr "Comprador"
 
-#. module: account_usability
-#: model:ir.model,name:account_usability.model_account_bank_statement_line
+#. module: account_ux
+#: model:ir.ui.view,arch_db:account_ux.view_account_bank_statement_form
+msgid "An email has already been sent to this partner. Do you want to send it again?"
+msgstr "An email has already been sent to this partner. Do you want to send it again?"
+
+#. module: account_ux
+#: model:ir.ui.view,arch_db:account_ux.view_account_move_line_filter
+msgid "Analytic Account"
+msgstr "Cuenta Analítica"
+
+#. module: account_ux
+#: model:ir.actions.act_window,name:account_ux.action_move_line_analisis
+#: model:ir.ui.menu,name:account_ux.menu_move_line_analisis
+msgid "Análisis de Apuntes Contables"
+msgstr "Análisis de Apuntes Contables"
+
+#. module: account_ux
+#: model:ir.model,name:account_ux.model_account_bank_statement
+msgid "Bank Statement"
+msgstr "Extracto bancario"
+
+#. module: account_ux
+#: model:ir.model,name:account_ux.model_account_bank_statement_line
 msgid "Bank Statement Line"
 msgstr "Línea de extracto bancario"
 
-#. module: account_usability
-#: field:account.journal,credit_card_days_for_collection:0
-#: model:ir.model.fields,field_description:account_usability.field_account_journal_credit_card_days_for_collection
-msgid "Credit card days for collection"
-msgstr "Días de tarjeta de crédito para el cobro"
+#. module: account_ux
+#: model:ir.ui.view,arch_db:account_ux.view_account_change_currency
+msgid "Cancel"
+msgstr "Cancelar"
 
-#. module: account_usability
-#: field:account.journal,debit_card_days_for_collection:0
-#: model:ir.model.fields,field_description:account_usability.field_account_journal_debit_card_days_for_collection
-msgid "Debit card days for collection"
-msgstr "Días de tarjeta de débito para el cobro"
+#. module: account_ux
+#: model:ir.ui.view,arch_db:account_ux.view_account_bank_statement_form
+msgid "Cancel All"
+msgstr "Cancel All"
 
-#. module: account_usability
-#: model:ir.model,name:account_usability.model_account_journal
-#: model:ir.model.fields,field_description:account_usability.field_payment_acquirer_journal_id
-#: field:payment.acquirer,journal_id:0
+#. module: account_ux
+#: model:ir.ui.view,arch_db:account_ux.invoice_supplier_form
+#: model:ir.ui.view,arch_db:account_ux.view_invoice_report_extended_form
+msgid "Cancel Invoice"
+msgstr "Cancel Invoice"
+
+#. module: account_ux
+#: model:ir.actions.act_window,name:account_ux.action_account_change_currency
+#: model:ir.model,name:account_ux.model_account_change_currency
+#: model:ir.ui.view,arch_db:account_ux.view_account_change_currency
+msgid "Change Currency"
+msgstr "Change Currency"
+
+#. module: account_ux
+#: selection:account.change.currency,change_type:0
+msgid "Change Only Currency"
+msgstr "Change Only Currency"
+
+#. module: account_ux
+#: model:ir.model.fields,field_description:account_ux.field_account_change_currency_change_type
+msgid "Change Type"
+msgstr "Change Type"
+
+#. module: account_ux
+#: model:ir.model.fields,field_description:account_ux.field_account_change_currency_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: account_ux
+#: model:ir.model.fields,field_description:account_ux.field_account_change_currency_create_date
+msgid "Created on"
+msgstr "Creado en"
+
+#. module: account_ux
+#: model:account.payment.method,name:account_ux.account_payment_method_inbound_credit_card
+#: model:account.payment.method,name:account_ux.account_payment_method_outbound_credit_card
+msgid "Credit Card"
+msgstr "Credit Card"
+
+#. module: account_ux
+#: model:ir.model.fields,field_description:account_ux.field_account_journal_credit_card_days_for_collection
+msgid "Credit Card Days For Collection"
+msgstr "Credit Card Days For Collection"
+
+#. module: account_ux
+#: model:ir.model.fields,field_description:account_ux.field_account_change_currency_currency_from_id
+msgid "Currency From"
+msgstr "Currency From"
+
+#. module: account_ux
+#: model:ir.model.fields,field_description:account_ux.field_account_change_currency_currency_rate
+#: model:ir.model.fields,field_description:account_ux.field_account_change_currency_currency_rate_readonly
+msgid "Currency Rate"
+msgstr "Tasa Monetaria"
+
+#. module: account_ux
+#: code:addons/account_ux/wizards/account_change_currency.py:72
+#, python-format
+msgid "Currency changed from %s to %s with rate %s"
+msgstr "Currency changed from %s to %s with rate %s"
+
+#. module: account_ux
+#: model:ir.model.fields,help:account_ux.field_account_change_currency_currency_from_id
+msgid "Currency from Invoice"
+msgstr "Currency from Invoice"
+
+#. module: account_ux
+#: model:ir.model.fields,field_description:account_ux.field_account_change_currency_currency_to_id
+msgid "Currency to"
+msgstr "Currency to"
+
+#. module: account_ux
+#: model:account.payment.method,name:account_ux.account_payment_method_inbound_debit_card
+#: model:account.payment.method,name:account_ux.account_payment_method_outbound_debit_card
+msgid "Debit Card"
+msgstr "Debit Card"
+
+#. module: account_ux
+#: model:ir.model.fields,field_description:account_ux.field_account_journal_debit_card_days_for_collection
+msgid "Debit Card Days For Collection"
+msgstr "Debit Card Days For Collection"
+
+#. module: account_ux
+#: model:ir.model.fields,field_description:account_ux.field_account_change_currency_display_name
+msgid "Display Name"
+msgstr "Mostrar Nombre"
+
+#. module: account_ux
+#: model:ir.ui.view,arch_db:account_ux.view_account_bank_statement_form
+msgid "Forward payment confirmation email"
+msgstr "Forward payment confirmation email"
+
+#. module: account_ux
+#: model:ir.model.fields,field_description:account_ux.field_account_change_currency_id
+msgid "ID"
+msgstr "ID"
+
+#. module: account_ux
+#: model:ir.model,name:account_ux.model_account_invoice
+#: model:ir.model.fields,field_description:account_ux.field_account_change_currency_invoice_id
+msgid "Invoice"
+msgstr "Factura"
+
+#. module: account_ux
+#: model:ir.ui.view,arch_db:account_ux.view_account_change_currency
+msgid "Invoice Currency"
+msgstr "Invoice Currency"
+
+#. module: account_ux
+#: model:ir.model,name:account_ux.model_account_journal
 msgid "Journal"
 msgstr "Diario"
 
-#. module: account_usability
-#: model:ir.model.fields,help:account_usability.field_payment_acquirer_journal_id
-#: help:payment.acquirer,journal_id:0
-msgid "Journal to be used to record journal entry of this payment acquirer"
-msgstr ""
-"Diario que se utilizará para registrar el asiento de diario de este pago de "
-"comprado"
+#. module: account_ux
+#: model:ir.model,name:account_ux.model_account_move_line
+msgid "Journal Item"
+msgstr "Apunte contable"
 
-#. module: account_usability
-#: model:ir.model,name:account_usability.model_payment_acquirer
+#. module: account_ux
+#: model:ir.model.fields,field_description:account_ux.field_account_change_currency___last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: account_ux
+#: model:ir.model.fields,field_description:account_ux.field_account_change_currency_write_uid
+msgid "Last Updated by"
+msgstr "Última actualización realizada por"
+
+#. module: account_ux
+#: model:ir.model.fields,field_description:account_ux.field_account_change_currency_write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: account_ux
+#: model:account.payment.method,name:account_ux.account_payment_method_inbound_online
+#: model:account.payment.method,name:account_ux.account_payment_method_outbound_online
+msgid "Online"
+msgstr "Online"
+
+#. module: account_ux
+#: model:ir.ui.view,arch_db:account_ux.view_move_line_tree
+msgid "Open Document"
+msgstr "Abrir documento"
+
+#. module: account_ux
+#: model:ir.ui.view,arch_db:account_ux.view_move_line_tree
+msgid "Open Related Document"
+msgstr "Open Related Document"
+
+#. module: account_ux
+#: model:ir.model,name:account_ux.model_payment_acquirer
 msgid "Payment Acquirer"
 msgstr "Método de pago"
 
-#. module: account_usability
-#: model:ir.model,name:account_usability.model_account_payment_term
-msgid "Payment Term"
-msgstr "Término de Pago"
+#. module: account_ux
+#: model:ir.model,name:account_ux.model_account_payment_term
+msgid "Payment Terms"
+msgstr "Plazos de pago"
 
-#. module: account_usability
-#: model:ir.model,name:account_usability.model_account_payment
+#. module: account_ux
+#: model:ir.model,name:account_ux.model_account_payment
 msgid "Payments"
 msgstr "Pagos"
 
-#. module: account_usability
-#: field:account.bank.statement.line,sent:0
-#: model:ir.model.fields,field_description:account_usability.field_account_bank_statement_line_sent
+#. module: account_ux
+#: model:ir.ui.view,arch_db:account_ux.view_invoice_report_extended_form
+msgid "Print"
+msgstr "Imprimir"
+
+#. module: account_ux
+#: model:res.groups,name:account_ux.group_restrict_change_currency_exchange
+msgid "Restrict Change Invoice Currency Exchange"
+msgstr "Restrict Change Invoice Currency Exchange"
+
+#. module: account_ux
+#: model:ir.model.fields,help:account_ux.field_account_change_currency_currency_to_id
+msgid "Select a currency to apply on the invoice"
+msgstr "Select a currency to apply on the invoice"
+
+#. module: account_ux
+#: model:ir.model.fields,help:account_ux.field_account_change_currency_currency_rate
+#: model:ir.model.fields,help:account_ux.field_account_change_currency_currency_rate_readonly
+msgid "Select a rate to apply on the invoice"
+msgstr "Select a rate to apply on the invoice"
+
+#. module: account_ux
+#: model:ir.ui.view,arch_db:account_ux.view_account_bank_statement_form
+msgid "Send payment confirmation email"
+msgstr "Send payment confirmation email"
+
+#. module: account_ux
+#: model:ir.model.fields,field_description:account_ux.field_account_bank_statement_line_sent
 msgid "Sent"
 msgstr "Enviado"
 
-#. module: account_usability
-#: code:addons/account_usability/models/payment_acquirer.py:25
+#. module: account_ux
+#: model:ir.ui.view,arch_db:account_ux.view_account_bank_statement_form
+msgid "Si confirma se van a cancelar las conciliaciones de todas las líneas (y borrar los asientos que se hayan generado con las mismas), esto no puede deshacerce. Seguro que desea continuar?"
+msgstr "Si confirma se van a cancelar las conciliaciones de todas las líneas (y borrar los asientos que se hayan generado con las mismas), esto no puede deshacerce. Seguro que desea continuar?"
+
+#. module: account_ux
+#: code:addons/account_ux/models/payment_acquirer.py:17
 #, python-format
 msgid "The journal company must belong to the same company of the aquirer"
-msgstr ""
-"La Compania del Diario debe pertenecer a la misma empresa de el comprador"
+msgstr "The journal company must belong to the same company of the aquirer"
 
-#. module: account_usability
-#: help:account.journal,credit_card_days_for_collection:0
-#: model:ir.model.fields,help:account_usability.field_account_journal_credit_card_days_for_collection
-msgid ""
-"This number of days will be added to the date of inbound credit card "
-"payments to get the due date, usefull for cashflow analysis"
-msgstr ""
-"Este número de días se agregará a la fecha de los pagos de tarjetas de "
-"crédito entrantes para obtener la fecha de vencimiento, útil para el "
-"análisis de flujo de caja"
+#. module: account_ux
+#: model:ir.model.fields,help:account_ux.field_account_journal_credit_card_days_for_collection
+msgid "This number of days will be added to the date of inbound credit card payments to get the due date, usefull for cashflow analysis"
+msgstr "Este número de días se agregará a la fecha de los pagos de tarjetas de crédito entrantes para obtener la fecha de vencimiento, útil para el análisis de flujo de caja"
 
-#. module: account_usability
-#: help:account.journal,debit_card_days_for_collection:0
-#: model:ir.model.fields,help:account_usability.field_account_journal_debit_card_days_for_collection
-msgid ""
-"This number of days will be added to the date of inbound debit card payments"
-" to get the due date, usefull for cashflow analysis"
-msgstr ""
-"Este número de días se agregará a la fecha de los pagos de tarjetas de "
-"crédito entrantes para obtener la fecha de vencimiento, útil para el "
-"análisis de flujo de caja"
+#. module: account_ux
+#: model:ir.model.fields,help:account_ux.field_account_journal_debit_card_days_for_collection
+msgid "This number of days will be added to the date of inbound debit card payments to get the due date, usefull for cashflow analysis"
+msgstr "Este número de días se agregará a la fecha de los pagos de tarjetas de crédito entrantes para obtener la fecha de vencimiento, útil para el análisis de flujo de caja"
 
-#. module: account_usability
-#: model:mail.template,subject:account_usability.email_template_bank_statement
+#. module: account_ux
+#: model:ir.ui.view,arch_db:account_ux.view_account_change_currency
+msgid "This wizard will change the currency of the invoice"
+msgstr "This wizard will change the currency of the invoice"
+
+#. module: account_ux
+#: selection:account.change.currency,change_type:0
+msgid "Update both currency and values"
+msgstr "Update both currency and values"
+
+#. module: account_ux
+#: code:addons/account_ux/models/account_move_line.py:16
+#, python-format
+msgid "View Bank Statement"
+msgstr "View Bank Statement"
+
+#. module: account_ux
+#: code:addons/account_ux/models/account_move_line.py:23
+#, python-format
+msgid "View Invoice"
+msgstr "View Invoice"
+
+#. module: account_ux
+#: code:addons/account_ux/models/account_move_line.py:24
+#, python-format
+msgid "View Move"
+msgstr "View Move"
+
+#. module: account_ux
+#: code:addons/account_ux/models/account_move_line.py:19
+#, python-format
+msgid "View Payment"
+msgstr "View Payment"
+
+#. module: account_ux
+#: model:mail.template,subject:account_ux.email_template_bank_statement
 msgid "We confirm receipt of your payment"
-msgstr "Confirmamos la recepción de su pago"
+msgstr "We confirm receipt of your payment"
+
+#. module: account_ux
+#: model:ir.ui.view,arch_db:account_ux.view_account_change_currency
+msgid "or"
+msgstr "or"
