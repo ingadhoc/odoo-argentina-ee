@@ -23,7 +23,7 @@ Several Improvements to accounting:
 #. Add online payment method on journals
 #. Add link between payment acquirer and journals
 #. Fix the balance of the "journals" in the accounting table, so that it shows the value of the column "to pay" not "total" as it does until now.
-#. Add print invoice button on paid state.
+#. Add print invoice button on paid and proforma states.
 #. Add send email button on bank statement lines to confirm payment to customers.
 #. Add journal items menu item menu on reports with tree, grahp and pivot views (no debug mode required)
 #. Add on move lines a button to open related documents
@@ -32,6 +32,8 @@ Several Improvements to accounting:
 #. Add on journal items availability to search and group by analytic account and to search by analytic tags
 #. Add button to cancel paid invoices that don't have related payments. This happends, for eg, if invoice amount is zero or if counterpart account is no receivable or payable.
 #. Add by default, when creating invoices manually, actual partner is choose, with this module the partner salesperson will be choosen. It also choose the salesperson when creating invoices from stock.picking
+#. Make origin always visible on invoices. By default odoo only make it visible when it has a value. The issue is that a user can delete the value but can't restore it again. We also think is a good idea to make it editable in case you want to link a manual invoice to, for eg, a sale order
+#. Agregamos opción para que al cancelar conciliaciones con asiento de ajuste de diferencia de cambio, este último, en vez de revertirse, se borre. Esto además permite desconciliar en casos donde por defecto no se pueda (esto es un bug). Para activar este borrado se debe crear parámetro "delete_exchange_rate_entry" con valor "True"
 #. This replace original odoo wizard for changing currency on an invoice with serveral improvements:
 
   * Preview and allow to change the rate thats is going to be used.
@@ -40,6 +42,7 @@ Several Improvements to accounting:
   * Change currency wizard only works when multi currency is activated
   * In order to see the change button in the invoice we should be added to the "Technical Settings / Show Full Accounting Features" group
   * We can restrict the change of the currency for a group of users by adding them to "Restrict Change Invoice Currency Exchange" group
+
 
 Installation
 ============

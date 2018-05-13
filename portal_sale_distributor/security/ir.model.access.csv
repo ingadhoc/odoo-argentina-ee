@@ -25,3 +25,5 @@ access_ir_model_data_portal_distributor,ir.model.model.data.portal.distributor,b
 access_crm_portal_distributor,crm.portal.ditributor,website_sale.model_crm_team,group_portal_distributor,1,0,0,0
 access_stock_move_line_portal_distributor,account.stock.move.line.portal.ditributor,stock_account.model_stock_move_line,group_portal_distributor,1,0,1,0
 access_sale_exception_distributor,sale.exception.distributor.portal.distributor,sale_exception.model_exception_rule,group_portal_distributor,1,0,0,0
+access_delivery_carrier_distributor,delivery.carrier.distributor,delivery.model_delivery_carrier,group_portal_distributor,1,0,0,0
+access_delivery_carrier_price_rule_distributor,delivery.carrier.price.rule.distributor,delivery.model_delivery_price_rule,group_portal_distributor,1,0,0,0

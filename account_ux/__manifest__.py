@@ -47,6 +47,7 @@
         'views/account_move_line_views.xml',
         'data/account_payment_method_data.xml',
         'data/mail_data.xml',
+        'data/ir_parameters_data.xml',
     ],
     'demo': [
     ],
