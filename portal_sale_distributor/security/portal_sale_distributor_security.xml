@@ -4,6 +4,7 @@
     <record id="group_portal_distributor" model="res.groups">
         <field name="name">Portal - Distributor</field>
         <field name="is_portal" eval="True"/>
+        <field name="category_id" ref="base.module_category_extra"/>
         <field name="implied_ids" eval="[(4,ref('base.group_portal'))]"/>
     </record>
 
@@ -18,7 +19,7 @@
         <field eval="1" name="perm_read"/>
         <field eval="1" name="perm_create"/>
     </record>
-    
+
     <!-- Sale Portal Disrtibutor CRUD all orders -->
     <record id="portal_sale_order_line_user_rule" model="ir.rule">
         <field name="name">Portal Distributor same partner Quotations/Sales Orders</field>
@@ -41,5 +42,5 @@
         <field eval="0" name="perm_create"/>
         <field eval="0" name="perm_unlink"/>
     </record>
-   
+
 </odoo>
