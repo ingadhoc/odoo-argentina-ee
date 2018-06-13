@@ -1,7 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-purchase_subscription_line manager,access.purchase.sucription.line.manager,model_purchase_subscription_line,group_purchase_contract_manager,1,1,1,1
-purchase_subscription_line_view ,access.purchase.sucription.line.user,model_purchase_subscription_line,group_purchase_contract_view,1,0,0,0
-purchase_subscription_manager,access.purchase.sucription.manager,model_purchase_subscription,group_purchase_contract_manager,1,1,1,1
-purchase_subscription_view ,access.purchase.sucription.user,model_purchase_subscription,group_purchase_contract_view,1,0,0,0
-purchase_subscription_close_manager,access.purchase.sucription.close.manager,model_purchase_subscription_close_reason,group_purchase_contract_manager,1,1,1,1
-purchase_subscription_close_view ,access.purchase.sucription.close.user,model_purchase_subscription_close_reason,group_purchase_contract_view,1,0,0,0
