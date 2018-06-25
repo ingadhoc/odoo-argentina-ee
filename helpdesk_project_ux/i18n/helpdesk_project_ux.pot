@@ -1,0 +1,76 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* helpdesk_project_ux
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 11.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-06-11 13:32+0000\n"
+"PO-Revision-Date: 2018-06-11 13:32+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: helpdesk_project_ux
+#: model:ir.ui.view,arch_db:helpdesk_project_ux.edit_project
+msgid "(Un)archiving a project automatically (un)archives its tasks and tickets. Do you want to proceed?"
+msgstr ""
+
+#. module: helpdesk_project_ux
+#: model:ir.ui.view,arch_db:helpdesk_project_ux.view_project_kanban
+msgid "<span class=\"o_label\">Tickets</span>"
+msgstr ""
+
+#. module: helpdesk_project_ux
+#: model:ir.model.fields,field_description:helpdesk_project_ux.field_project_project_allow_tickets
+msgid "Allow tickets"
+msgstr ""
+
+#. module: helpdesk_project_ux
+#: model:ir.actions.act_window,help:helpdesk_project_ux.act_ticket_by_project
+msgid "Here, you can create new tickets"
+msgstr ""
+
+#. module: helpdesk_project_ux
+#: model:ir.model,name:helpdesk_project_ux.model_project_project
+msgid "Project"
+msgstr ""
+
+#. module: helpdesk_project_ux
+#: model:ir.model,name:helpdesk_project_ux.model_helpdesk_ticket
+msgid "Ticket"
+msgstr ""
+
+#. module: helpdesk_project_ux
+#: model:ir.actions.act_window,name:helpdesk_project_ux.helpdesk_ticket_project_analysis_action
+msgid "Ticket Analysis"
+msgstr ""
+
+#. module: helpdesk_project_ux
+#: model:ir.actions.act_window,name:helpdesk_project_ux.act_ticket_by_project
+#: model:ir.ui.view,arch_db:helpdesk_project_ux.view_project_kanban
+msgid "Tickets"
+msgstr ""
+
+#. module: helpdesk_project_ux
+#: code:addons/helpdesk_project_ux/models/project_project.py:21
+#, python-format
+msgid "You can not close a project with active tickets, we consider active ticket the one in stages without option 'folded' (ticket IDs %s)"
+msgstr ""
+
+#. module: helpdesk_project_ux
+#: code:addons/helpdesk_project_ux/models/helpdesk_ticket.py:20
+#, python-format
+msgid "You can not close a ticket with active task, we consider active task the one in stages without option 'closed' (ticket ID %s)"
+msgstr ""
+
+#. module: helpdesk_project_ux
+#: model:ir.actions.act_window,help:helpdesk_project_ux.act_ticket_by_project
+msgid "You can now manage your tickets in order to get things done\n"
+"                efficiently. Track progress, discuss, attach documents, etc."
+msgstr ""
+
