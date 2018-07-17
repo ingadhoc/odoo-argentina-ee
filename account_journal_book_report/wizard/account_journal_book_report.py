@@ -66,9 +66,9 @@ class AccountJournalBookReport(models.TransientModel):
         if self.date_to:
             domain.append(('date', '<=', self.date_to))
         moves = self.env['account.move'].search(domain)
-
-        return self.env['report'].with_context(
+        return self.env['ir.actions.report'].search(
+            [('report_name', '=', 'account_journal_book_report')], limit=1
+        ).with_context(
             periods=periods,
             last_entry_number=self.last_entry_number,
-        ).get_action(
-            moves, 'account_journal_book_report')
+        ).report_action(moves)
