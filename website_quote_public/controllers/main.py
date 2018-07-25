@@ -1,4 +1,4 @@
-from odoo.addons.web import http
+from odoo import http
 from odoo.http import request
 
 
@@ -10,5 +10,5 @@ class WebsiteQuotePublished(http.Controller):
     def public_template_view(self, quote, **post):
         quote = quote.sudo()
         values = {'template': quote}
-        return request.website.render(
+        return request.render(
             'website_quote_public.so_template_public', values)

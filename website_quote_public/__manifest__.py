@@ -19,7 +19,7 @@
 ##############################################################################
 {
     'name': 'Online Quotes Templates Public',
-    'version': '9.0.1.0.0',
+    'version': '11.0.1.0.0',
     'author': 'ADHOC SA',
     'category': 'Support',
     'sequence': 14,
@@ -29,20 +29,13 @@
     'images': [
     ],
     'depends': [
-        # 'website_quote',
-        'website_contract',
+        'website_quote_subscription',
     ],
     'data': [
-        'views/website_quote.xml',
+        'views/website_quote_views.xml',
         'security/ir.model.access.csv',
     ],
-    'qweb': [
-    ],
-    'demo': [
-    ],
-    'test': [
-    ],
-    'installable': False,
+    'installable': True,
     'auto_install': False,
     'application': False,
 }
