@@ -50,7 +50,7 @@
                 <a t-if="record.allow_tickets.raw_value" class="o_project_kanban_box" name="%(act_ticket_by_project)d" type="action" groups="helpdesk.group_helpdesk_user">
                     <div>
                         <span class="o_value"><t t-esc="record.ticket_count.value"/></span>
-                        <span class="o_label">Tickets</span>
+                        <span class="o_label"><span title="Tickets" class="fa fa-life-ring"/></span>
                     </div>
                 </a>
             </xpath>
