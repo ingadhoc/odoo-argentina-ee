@@ -4,5 +4,6 @@
 ##############################################################################
 
 from . import project_project
+from . import project_task_type
 from . import helpdesk_ticket
 from . import helpdesk_team

@@ -33,3 +33,15 @@ class ProjectProject(models.Model):
             self.with_context(active_test=False).mapped('ticket_ids').write({
                 'active': vals['active']})
         return res
+
+    @api.depends('ticket_ids.project_id')
+    def _compute_ticket_count(self):
+        if not self.user_has_groups('helpdesk.group_helpdesk_user'):
+            return
+        result = self.env['helpdesk.ticket'].read_group([
+            ('project_id', 'in', self.ids), ('stage_id.is_close', '=', False)
+        ], ['project_id'], ['project_id'])
+        data = {data['project_id'][0]: data['project_id_count']
+                for data in result}
+        for project in self:
+            project.ticket_count = data.get(project.id, 0)
