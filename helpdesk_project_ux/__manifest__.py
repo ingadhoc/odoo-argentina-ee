@@ -19,7 +19,7 @@
 ##############################################################################
 {
     'name': 'Helpdesk Project UX',
-    'version': '11.0.1.1.0',
+    'version': '11.0.1.2.0',
     'category': 'Projects & Services',
     'sequence': 14,
     'summary': '',
@@ -34,6 +34,7 @@
     'data': [
         'views/helpdesk_ticket_views.xml',
         'views/project_project_views.xml',
+        'views/helpdesk_team_views.xml',
     ],
     'demo': [
     ],

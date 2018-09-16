@@ -12,6 +12,17 @@
         </field>
     </record>
 
+    <record id="helpdesk_ticket_view_form" model="ir.ui.view">
+        <field name="name">helpdesk.ticket.form.inherit</field>
+        <field name="model">helpdesk.ticket</field>
+        <field name="inherit_id" ref="helpdesk.helpdesk_ticket_view_form"/>
+        <field name="arch" type="xml">
+            <field name="team_id" position="attributes">
+                <attribute name="required">True</attribute>
+            </field>
+        </field>
+    </record>
+
     <record id="act_ticket_by_project" model="ir.actions.act_window">
         <field name="name">Tickets</field>
         <field name="res_model">helpdesk.ticket</field>
@@ -26,7 +37,8 @@
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">
                 Here, you can create new tickets
-            </p><p>
+            </p>
+            <p>
                 You can now manage your tickets in order to get things done
                 efficiently. Track progress, discuss, attach documents, etc.
             </p>
@@ -38,8 +50,7 @@
         <field name="res_model">helpdesk.ticket</field>
         <field name="view_type">form</field>
         <field name="view_mode">pivot,graph</field>
-        <field name="view_ids"
-               eval="[(5, 0, 0),
+        <field name="view_ids" eval="[(5, 0, 0),
                       (0, 0, {'view_mode': 'graph', 'view_id': ref('helpdesk.helpdesk_ticket_view_graph_analysis')}),
                       (0, 0, {'view_mode': 'pivot', 'view_id': ref('helpdesk.helpdesk_ticket_view_pivot_analysis')})]"/>
         <field name="search_view_id" ref="helpdesk_timesheet.helpdesk_ticket_view_search_inherit_helpdesk_timesheet"/>
