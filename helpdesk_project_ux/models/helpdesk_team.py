@@ -39,13 +39,3 @@ class HelpdeskTeam(models.Model):
             'project_id')
         if projects:
             projects.write({'allow_tickets': True})
-
-    @api.multi
-    def get_new_user(self):
-        """ Project_responsable case is implemented as a constraint in tickets
-        because we dont
-        """
-        new_user = super(HelpdeskTeam, self).get_new_user()
-        if self.assign_method == 'specific_user':
-            new_user = self.user_id
-        return new_user
