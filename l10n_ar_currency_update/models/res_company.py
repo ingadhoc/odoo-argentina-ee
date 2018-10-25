@@ -40,7 +40,7 @@ class ResCompany(models.Model):
         ar_companies = self.search([]).filtered(
             lambda company: company.country_id.code == 'AR')
         if ar_companies:
-            ar_companies.update({
+            ar_companies.write({
                 'currency_provider': 'afip',
                 'currency_interval_unit': 'daily',
             })
