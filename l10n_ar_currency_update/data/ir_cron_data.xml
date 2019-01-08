@@ -1,0 +1,10 @@
+<odoo>
+
+    <!-- The scheduled action that will be run to update the currency rates will
+    be run after 21 hours (GMT-3), this is required since the rates are
+    published by AFIP after 9 pm -->
+    <record id="currency_rate_live.ir_cron_currency_update" model="ir.cron">
+        <field name="nextcall" eval="DateTime.now().strftime('%Y-%m-%d 00:%M:%S')"/>
+    </record>
+
+</odoo>
