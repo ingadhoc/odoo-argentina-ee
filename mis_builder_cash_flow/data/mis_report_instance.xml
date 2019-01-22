@@ -5,7 +5,7 @@
     <field name="name">Cash Flow</field>
     <field name="report_id" ref="mis_report_cash_flow"/>
     <field name="comparison_mode" eval="True"/>
-    <field name="landscapte_pdf" eval="True"/>
+    <field name="landscape_pdf" eval="True"/>
   </record>
 
   <record id="mis_period_current" model="mis.report.instance.period">
