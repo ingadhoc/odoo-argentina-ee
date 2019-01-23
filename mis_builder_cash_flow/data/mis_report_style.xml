@@ -7,6 +7,8 @@
     <field name="font_style">italic</field>
     <field name="indent_level_inherit" eval="False"/>
     <field name="indent_level">2</field>
+    <field name="font_size_inherit" eval="False"/>
+    <field name="font_size">x-small</field>
   </record>
 
   <record id="mis_style_account_line" model="mis.report.style">
@@ -35,8 +37,6 @@
     <field name="color">#FFFFFF</field>
     <field name="background_color_inherit" eval="False"/>
     <field name="background_color">#7A6571</field>
-    <field name="font_size_inherit" eval="False"/>
-    <field name="font_size">medium</field>
     <field name="font_weight_inherit" eval="False"/>
     <field name="font_weight">bold</field>
   </record>

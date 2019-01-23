@@ -11,6 +11,7 @@ class MisCashFlowForecastLine(models.Model):
 
     date = fields.Date(
         required=True,
+        index=True,
     )
     account_id = fields.Many2one(
         comodel_name='account.account',
@@ -28,7 +29,8 @@ class MisCashFlowForecastLine(models.Model):
         'res.company',
         string='Company',
         required=True,
-        default=lambda self: self.env.user.company_id.id
+        default=lambda self: self.env.user.company_id.id,
+        index=True,
     )
 
     def _get_adjust_grid_domain(self, column_value):

@@ -80,7 +80,7 @@
     <field name="sequence">40</field>
   </record>
 
-  <record id="mis_period_plus_5w" model="mis.report.instance.period">
+  <!-- <record id="mis_period_plus_5w" model="mis.report.instance.period">
     <field name="name">+5w</field>
     <field name="report_instance_id" ref="mis_instance_cash_flow"/>
     <field name="source">actuals_alt</field>
@@ -126,6 +126,18 @@
     <field name="offset">8</field>
     <field name="duration">1</field>
     <field name="sequence">80</field>
+  </record> -->
+
+  <record id="mis_period_plus_second_month" model="mis.report.instance.period">
+    <field name="name">second month</field>
+    <field name="report_instance_id" ref="mis_instance_cash_flow"/>
+    <field name="source">actuals_alt</field>
+    <field name="source_aml_model_id" ref="model_mis_cash_flow"/>
+    <field name="mode">relative</field>
+    <field name="type">w</field>
+    <field name="offset">5</field>
+    <field name="duration">4</field>
+    <field name="sequence">80</field>
   </record>
 
   <record id="mis_period_plus_third_month" model="mis.report.instance.period">
@@ -150,6 +162,18 @@
     <field name="offset">13</field>
     <field name="duration">4</field>
     <field name="sequence">90</field>
+  </record>
+
+  <record id="mis_period_plus_fifth_month" model="mis.report.instance.period">
+    <field name="name">fifth month</field>
+    <field name="report_instance_id" ref="mis_instance_cash_flow"/>
+    <field name="source">actuals_alt</field>
+    <field name="source_aml_model_id" ref="model_mis_cash_flow"/>
+    <field name="mode">relative</field>
+    <field name="type">w</field>
+    <field name="offset">17</field>
+    <field name="duration">4</field>
+    <field name="sequence">100</field>
   </record>
 
 </odoo>
