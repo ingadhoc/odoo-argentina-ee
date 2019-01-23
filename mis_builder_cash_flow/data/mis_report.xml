@@ -3,6 +3,7 @@
 
   <record id="mis_report_cash_flow" model="mis.report">
     <field name="name">Cash Flow</field>
+    <field name="style_id" ref="mis_style_cash_flow"/>
   </record>
 
   <record id="mis_kpi_acum_accounting" model="mis.report.kpi">

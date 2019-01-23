@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+  <record id="mis_style_cash_flow" model="mis.report.style">
+    <field name="name">Cash flow</field>
+    <field name="hide_empty_inherit" eval="False"/>
+    <field name="hide_empty" eval="True"/>
+  </record>
+
   <record id="mis_style_account_detail" model="mis.report.style">
     <field name="name">Cash flow style account detail</field>
     <field name="font_style_inherit" eval="False"/>
