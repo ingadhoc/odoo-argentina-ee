@@ -56,6 +56,9 @@
                 <separator/>
                 <field name="account_id"/>
                 <field name="company_id" groups="base.group_multi_company"/>
+                <separator/>
+                <filter string="Unreconciled" domain="[('full_reconcile_id', '=', False), ('balance','!=', 0), ('account_id.reconcile','=',True)]" help="Journal items where matching number isn't set" name="unreconciled"/>
+                <separator/>
                 <filter string="Journal Item" domain="[('line_type','=', 'move_line')]"/>
                 <filter string="Forecast Line" domain="[('line_type','=', 'forecast_line')]"/>
                 <group expand="0" string="Group By">

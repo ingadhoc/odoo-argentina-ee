@@ -1,4 +1,5 @@
 from odoo import api, fields, models, tools
+from psycopg2.extensions import AsIs
 
 
 class MisCashFlow(models.Model):
@@ -49,6 +50,12 @@ class MisCashFlow(models.Model):
     reconciled = fields.Boolean(
         readonly=True,
     )
+    full_reconcile_id = fields.Many2one(
+        'account.full.reconcile',
+        string="Matching Number",
+        readonly=True,
+        index=True,
+    )
     user_type_id = fields.Many2one(
         'account.account.type',
         auto_join=True,
@@ -72,6 +79,7 @@ class MisCashFlow(models.Model):
                 aml.debit as debit,
                 aml.credit as credit,
                 aml.reconciled as reconciled,
+                aml.full_reconcile_id as full_reconcile_id,
                 aml.company_id as company_id,
                 aml.user_type_id as user_type_id,
                 aml.name as name,
@@ -102,7 +110,8 @@ class MisCashFlow(models.Model):
                     THEN -fl.balance
                     ELSE 0.0
                 END AS credit,
-                False as reconciled,
+                Null as reconciled,
+                Null as full_reconcile_id,
                 fl.company_id as company_id,
                 aa.user_type_id as user_type_id,
                 fl.name as name,
@@ -111,8 +120,10 @@ class MisCashFlow(models.Model):
             JOIN account_account aa ON aa.id = fl.account_id
         """
         tools.drop_view_if_exists(self.env.cr, self._table)
-        self._cr.execute("""CREATE or REPLACE VIEW %s as (%s
-        )""" % (self._table, query))
+        self._cr.execute(
+            'CREATE OR REPLACE VIEW %s AS %s',
+            (AsIs(self._table), AsIs(query))
+        )
 
     @api.multi
     def action_open_related_document(self):

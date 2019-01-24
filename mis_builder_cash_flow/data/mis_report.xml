@@ -12,7 +12,7 @@
     <field name="description">Acum Accountiong</field>
     <field name="style_id" ref="mis_style_hidden"/>
     <field name="sequence">10</field>
-    <field name="expression">bale[][('account_id.internal_type', 'in', ('liquidity', 'receivable', 'payable')), ('reconciled', '=', False), ('line_type', '=', 'move_line')]</field>
+    <field name="expression">bale[][('line_type', '=', 'move_line'), '|', ('account_id.internal_type', '=', 'liquidity'), ('account_id.internal_type', 'in', ('receivable', 'payable')), ('full_reconcile_id', '=', False)]</field>
   </record>
 
   <record id="mis_kpi_acum_forecast" model="mis.report.kpi">
@@ -52,7 +52,7 @@
     <field name="auto_expand_accounts" eval="True"/>
     <field name="auto_expand_accounts_style_id" ref="mis_style_account_detail"/>
     <field name="sequence">50</field>
-    <field name="expression">bal[][('account_id.internal_type', '=', 'receivable'), ('reconciled', '=', False), ('line_type', '=', 'move_line')]</field>
+    <field name="expression">bal[][('account_id.internal_type', '=', 'receivable'), ('full_reconcile_id', '=', False), ('line_type', '=', 'move_line')]</field>
   </record>
 
   <record id="mis_kpi_in_forecast" model="mis.report.kpi">
@@ -83,7 +83,7 @@
     <field name="auto_expand_accounts" eval="True"/>
     <field name="auto_expand_accounts_style_id" ref="mis_style_account_detail"/>
     <field name="sequence">100</field>
-    <field name="expression">bal[][('account_id.internal_type', '=', 'payable'), ('reconciled', '=', False), ('line_type', '=', 'move_line')]</field>
+    <field name="expression">bal[][('account_id.internal_type', '=', 'payable'), ('full_reconcile_id', '=', False), ('line_type', '=', 'move_line')]</field>
   </record>
 
   <record id="mis_kpi_out_forecast" model="mis.report.kpi">
