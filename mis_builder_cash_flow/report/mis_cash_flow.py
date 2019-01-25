@@ -65,14 +65,11 @@ class MisCashFlow(models.Model):
 
     @api.model_cr
     def init(self):
-        """ TODO find another alternative instead of multiplying
-        aml.id * 10000.
-        We do it that way because if we use "SELECT ROW_NUMBER() OVER()..."
-        the performance was very poor (due to the union of two tables I think)
-        """
         query = """
             SELECT
-                aml.id * 10000 as id,
+                -- we use neagative id to avoid duplicates and we don't use
+                -- ROW_NUMBER() because the performance was very poor
+                -aml.id as id,
                 CAST('move_line' AS varchar) as line_type,
                 aml.id as move_line_id,
                 aml.account_id as account_id,
