@@ -81,10 +81,12 @@ class MisCashFlow(models.Model):
                 aml.user_type_id as user_type_id,
                 aml.name as name,
                 CASE
-                    WHEN aml.expected_pay_date is not null
-                        THEN aml.expected_pay_date
-                    WHEN aml.date_maturity is not null
-                        THEN aml.date_maturity
+                    WHEN aat.type IN ('receivable', 'payable') and
+                        aml.expected_pay_date is not null
+                            THEN aml.expected_pay_date
+                    WHEN aat.type IN ('receivable', 'payable') and
+                        aml.date_maturity is not null
+                            THEN aml.date_maturity
                     ELSE aml.date
                 END AS date
             FROM account_move_line as aml
