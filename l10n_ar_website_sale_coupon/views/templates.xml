@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="cart_discount" name="Discount" inherit_id="website_sale_coupon.cart_discount">
+        <xpath expr="//span[@t-field='website_sale_order.reward_amount']" position="attributes">
+            <attribute name="t-field">website_sale_order.report_reward_amount</attribute>
+        </xpath>
+    </template>
+
+</odoo>
