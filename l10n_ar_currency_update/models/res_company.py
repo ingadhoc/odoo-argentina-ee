@@ -100,13 +100,14 @@ class ResCompany(models.Model):
             [('name', 'in', currency_to_update)])
         rate_name = fields.Date.today()
         for currency in currency_to_update:
+            rate = False
+            msg = ''
             try:
                 # Do not pass company since we need to find the one that has
                 # certificate
                 rate, msg = currency.get_pyafipws_currency_rate()
             except Exception as exc:
                 _logger.error(repr(exc))
-
             if rate:
                 # impr when ARS is not base currency (rate 1.0)
                 # company_rate = rate / base_currency_rate
@@ -123,8 +124,11 @@ class ResCompany(models.Model):
                     'Updated currency %s via provider %s',
                     currency.name, self.currency_provider)
             else:
-                raise UserError(_(
+                _logger.error(
                     'Could not update currency %s via provider %s. %s',
-                    currency.name, self.currency_provider, msg
-                ))
+                    currency.name, self.currency_provider, msg)
+                raise UserError(_(
+                    'Could not update currency %s via provider %s. %s') %
+                    (currency.name, self.currency_provider, msg)
+                )
         return True
