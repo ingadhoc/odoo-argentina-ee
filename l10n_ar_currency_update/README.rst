@@ -14,11 +14,15 @@
 Argentinian Currency Rate Update
 ================================
 
-This will configure and activate AFIP Web Service as your currency provider
-(official argentinian provider).
+This will add AFIP Web Service as your currency provider (official argentinian provider).
 
-This way the currency rates of your companies will be updated daily. This will
-work if you have your companies contry Argentina and main currency ARS.
+By default the automatic rate updates are inactive, you can active them by company
+by going to *Accounting / Configuration / Settings* menu and there found and set
+the *Interval* and *Next Run* date in the *Automatic Currecy Rates* section
+(dont forget to click Save button)
+
+When actived the currency rates of your companies will be updated automatically.
+We recommend to use daily interval since AFIP update the rates daily.
 
 The scheduled action that will be run to update the currency rates will be run
 after 21 hours (GMT-3), this is required since the rates are published by

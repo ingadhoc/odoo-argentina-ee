@@ -42,7 +42,6 @@ class ResCompany(models.Model):
         if ar_companies:
             ar_companies.write({
                 'currency_provider': 'afip',
-                'currency_interval_unit': 'daily',
             })
             _logger.log(
                 25, "Currency Provider configured as AFIP for next"
@@ -52,8 +51,7 @@ class ResCompany(models.Model):
     def update_currency_rates(self):
         """ Overwrite to include new currency provider """
         res = super(ResCompany, self).update_currency_rates()
-        afip_companies = self.search([]).filtered(
-            lambda company: company.currency_provider == 'afip')
+        afip_companies = self.filtered(lambda x: x.currency_provider == 'afip')
         for company in afip_companies:
             _logger.log(25, "Connecting to AFIP to update the currency rates"
                         " for %s", company.name)

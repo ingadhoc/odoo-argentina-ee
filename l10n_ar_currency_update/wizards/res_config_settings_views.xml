@@ -18,6 +18,19 @@
                    </div>
                 </div>
             </xpath>
+
+            <label for="module_currency_rate_live" position="after">
+                <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." groups="base.group_multi_company"/>
+            </label>
+
+            <button name="update_currency_rates" position="attributes">
+                <attribute name="attrs">{'invisible': [('currency_interval_unit', '!=', 'manually')]}</attribute>
+            </button>
+
+            <field name="module_currency_rate_live" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+
         </field>
     </record>
 
