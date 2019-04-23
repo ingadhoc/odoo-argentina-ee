@@ -31,5 +31,5 @@
     'data': [
         'views/website_quote_template_views.xml',
     ],
-    'installable': True,
+    'installable': False,
 }

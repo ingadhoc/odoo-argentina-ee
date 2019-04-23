@@ -35,7 +35,7 @@
         'wizards/res_config_settings_views.xml',
     ],
     'post_init_hook': 'post_init_hook',
-    'installable': True,
+    'installable': False,
     'auto_install': True,
     'application': False,
 }

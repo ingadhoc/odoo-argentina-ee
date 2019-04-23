@@ -20,7 +20,7 @@
         'data/mis_report.xml',
         'data/mis_report_instance.xml',
     ],
-    'installable': True,
+    'installable': False,
     'maintainers': ['jjscarafia'],
     'development_status': 'Beta',
 }
