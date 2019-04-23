@@ -34,7 +34,7 @@
     'data': [
         'wizards/account_change_lock_date_views.xml',
     ],
-    'installable': True,
+    'installable': False,
     'auto_install': False,
     'application': False,
 }
