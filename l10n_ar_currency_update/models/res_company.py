@@ -81,10 +81,6 @@ class ResCompany(models.Model):
         main_currency = self.currency_id
         if not main_currency:
             raise UserError(_('There is no main currency defined!'))
-        if main_currency.name != 'ARS':
-            raise UserError(_('For AFIP WS base currency must be ARS!'))
-        if main_currency.rate != 1:
-            raise UserError(_('Base currency rate should be 1.00!'))
 
         # Obtain the currencies to be updated
         afip_supported_currency = [
