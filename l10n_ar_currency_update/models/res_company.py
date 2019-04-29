@@ -77,11 +77,6 @@ class ResCompany(models.Model):
             self.currency_provider, self.name)
         rate_obj = self.env['res.currency.rate']
 
-        # Check proper main currency configuration
-        main_currency = self.currency_id
-        if not main_currency:
-            raise UserError(_('There is no main currency defined!'))
-
         # Obtain the currencies to be updated
         afip_supported_currency = [
             'USD', 'EUR', 'AUD', 'CAD', 'GBP', 'JPY', 'MXN', 'UYU', 'VEF']
