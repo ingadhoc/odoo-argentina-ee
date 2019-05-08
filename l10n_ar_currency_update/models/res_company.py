@@ -97,6 +97,33 @@ class ResCompany(models.Model):
         currency_to_update = self.env['res.currency'].search(
             [('name', 'in', currency_to_update)])
         rate_name = fields.Date.today()
+        factor = 1.0
+
+        # Get factor when ARS is not the main company
+        base_currency = self.env['res.currency.rate'].search([
+            ('rate', '=', 1.0)], order='name desc', limit=1).currency_id
+        currency_ars = self.env.ref('base.ARS')
+        if base_currency != currency_ars:
+            rate = False
+            msg = ''
+            try:
+                # Do not pass company since we need to find the one that has
+                # certificate
+                rate, msg = base_currency.get_pyafipws_currency_rate()
+            except Exception as exc:
+                _logger.error(repr(exc) + '\n' + msg)
+            if rate:
+                rate = rate * (1.0 + (self.rate_perc or 0.0))
+                rate += self.rate_surcharge or 0.0
+                rate_obj.create({
+                    'currency_id': currency_ars.id,
+                    'rate': rate,
+                    'name': rate_name,
+                    'company_id': self.id
+                })
+                factor = 1.0 / rate
+            currency_to_update -= base_currency
+
         for currency in currency_to_update:
             rate = False
             msg = ''
@@ -107,9 +134,7 @@ class ResCompany(models.Model):
             except Exception as exc:
                 _logger.error(repr(exc))
             if rate:
-                # impr when ARS is not base currency (rate 1.0)
-                # company_rate = rate / base_currency_rate
-                rate = rate * (1.0 + (self.rate_perc or 0.0))
+                rate = (rate * factor) * (1.0 + (self.rate_perc or 0.0))
                 rate += self.rate_surcharge or 0.0
                 rate = 1.0 / rate
                 rate_obj.create({
