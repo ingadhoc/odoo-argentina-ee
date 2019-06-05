@@ -100,7 +100,7 @@ class ResCompany(models.Model):
             try:
                 # Do not pass company since we need to find the one that has
                 # certificate
-                rate, msg = base_currency.get_pyafipws_currency_rate()
+                rate, msg, date = base_currency.get_pyafipws_currency_rate()
             except Exception as exc:
                 _logger.error(repr(exc) + '\n' + msg)
             if rate:
@@ -121,7 +121,7 @@ class ResCompany(models.Model):
             try:
                 # Do not pass company since we need to find the one that has
                 # certificate
-                rate, msg = currency.get_pyafipws_currency_rate()
+                rate, msg, date = currency.get_pyafipws_currency_rate()
             except Exception as exc:
                 _logger.error(repr(exc))
             if rate:
