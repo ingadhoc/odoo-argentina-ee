@@ -79,7 +79,9 @@ class ResCompany(models.Model):
 
         # Obtain the currencies to be updated
         afip_supported_currency = [
-            'USD', 'EUR', 'AUD', 'CAD', 'GBP', 'JPY', 'MXN', 'UYU', 'VEF']
+            'USD', 'EUR', 'AUD', 'CAD', 'GBP', 'JPY', 'MXN', 'UYU', 'VEF',
+            'CHF',
+        ]
         available_currencies = self.env['res.currency'].search([])
         currency_to_update = list(
             set(available_currencies.mapped('name')).intersection(
