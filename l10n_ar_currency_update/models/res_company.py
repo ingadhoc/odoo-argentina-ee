@@ -3,7 +3,9 @@
 # directory
 ##############################################################################
 from odoo import fields, models, api, _
+from datetime import datetime
 from odoo.exceptions import UserError
+from dateutil.relativedelta import relativedelta
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -50,24 +52,39 @@ class ResCompany(models.Model):
     @api.multi
     def update_currency_rates(self):
         """ Overwrite to include new currency provider """
-        res = super(ResCompany, self).update_currency_rates()
+        all_good = True
         afip_companies = self.filtered(lambda x: x.currency_provider == 'afip')
         for company in afip_companies:
             _logger.log(25, "Connecting to AFIP to update the currency rates"
                         " for %s", company.name)
             res = company._update_currency_afip()
             if not res:
+                all_good = False
                 _logger.warning(_(
                     'Unable to connect to the online exchange rate platform'
                     ' %s. The web service may be temporary down.') %
                     company.currency_provider)
-                continue
-            company.last_currency_sync_date = fields.Date.today()
-        return res
+            elif company.currency_provider:
+                company.last_currency_sync_date = fields.Date.today()
+        res = super(ResCompany, self - afip_companies).update_currency_rates()
+        return all_good and res
+
+    @api.model
+    def re_check_afip_currency_rate(self):
+        """ If afip provider and set interval unit daily then check the
+        currency multiple times at day (in case the default odoo cron couldn't
+        update the currency with AFIP)
+        """
+        records = self.search([
+            ('currency_interval_unit', '=', 'daily'),
+            ('currency_provider', '=', 'afip'),
+            ('last_currency_sync_date', '<', fields.Date.today()),
+        ])
+        records.update_currency_rates()
 
     @api.multi
     def _update_currency_afip(self):
-        """ This method is used to update the currency rates using AFIP provider
+        """ This method is used to update the currency rates using AFIP
         provider. Rates are given against AR.
         """
         self.ensure_one()
@@ -89,62 +106,74 @@ class ResCompany(models.Model):
         )
         currency_to_update = self.env['res.currency'].search(
             [('name', 'in', currency_to_update)])
-        rate_name = fields.Date.today()
         factor = 1.0
 
         # Get factor when ARS is not the main company
         base_currency = self.env['res.currency.rate'].search([
-            ('rate', '=', 1.0)], order='name desc', limit=1).currency_id
+            ('rate', '=', 1.0)], order='name desc, write_date desc',
+            limit=1).currency_id
+
         currency_ars = self.env.ref('base.ARS')
+        rate_date = fields.Date.today()
         if base_currency != currency_ars:
+            _logger.log(25, "Compute ARS from Base Currency %s",
+                        base_currency.name)
             rate = False
             msg = ''
             try:
                 # Do not pass company since we need to find the one that has
                 # certificate
-                rate, msg, date = base_currency.get_pyafipws_currency_rate()
+                rate, msg, afip_date = base_currency.get_pyafipws_currency_rate()
             except Exception as exc:
                 _logger.error(repr(exc) + '\n' + msg)
-            if rate:
-                rate = rate * (1.0 + (self.rate_perc or 0.0))
-                rate += self.rate_surcharge or 0.0
-                rate_obj.create({
-                    'currency_id': currency_ars.id,
-                    'rate': rate,
-                    'name': rate_name,
-                    'company_id': self.id
-                })
-                factor = 1.0 / rate
+            if datetime.strptime(afip_date, "%Y%m%d").date() + \
+               relativedelta(days=1) != fields.Date.from_string(rate_date) or \
+               not rate:
+                _logger.error(
+                    'Could not update currency %s via provider %s. %s',
+                    currency_ars.name, self.currency_provider, msg)
+                return False
+            rate = rate * (1.0 + (self.rate_perc or 0.0))
+            rate += self.rate_surcharge or 0.0
+            values = {
+                'currency_id': currency_ars.id,
+                'rate': rate,
+                'name': rate_date,
+                'company_id': self.id
+            }
+            factor = 1.0 / rate
+            rate_obj.create(values)
             currency_to_update -= base_currency
 
+        all_good = True
         for currency in currency_to_update:
             rate = False
             msg = ''
             try:
                 # Do not pass company since we need to find the one that has
                 # certificate
-                rate, msg, date = currency.get_pyafipws_currency_rate()
+                rate, msg, afip_date = currency.get_pyafipws_currency_rate()
             except Exception as exc:
                 _logger.error(repr(exc))
-            if rate:
-                rate = (rate * factor) * (1.0 + (self.rate_perc or 0.0))
-                rate += self.rate_surcharge or 0.0
-                rate = 1.0 / rate
-                rate_obj.create({
-                    'currency_id': currency.id,
-                    'rate': rate,
-                    'name': rate_name,
-                    'company_id': self.id
-                })
-                _logger.info(
-                    'Updated currency %s via provider %s',
-                    currency.name, self.currency_provider)
-            else:
+            if datetime.strptime(afip_date, "%Y%m%d").date() + \
+               relativedelta(days=1) != fields.Date.from_string(rate_date) or \
+               not rate:
+                all_good = False
                 _logger.error(
                     'Could not update currency %s via provider %s. %s',
                     currency.name, self.currency_provider, msg)
-                raise UserError(_(
-                    'Could not update currency %s via provider %s. %s') %
-                    (currency.name, self.currency_provider, msg)
-                )
-        return True
+                continue
+            rate = (rate * factor) * (1.0 + (self.rate_perc or 0.0))
+            rate += self.rate_surcharge or 0.0
+            rate = 1.0 / rate
+            values = {
+                'currency_id': currency.id,
+                'rate': rate,
+                'name': rate_date,
+                'company_id': self.id
+            }
+            rate_obj.create(values)
+            _logger.info(
+                'Updated currency %s via provider %s',
+                currency.name, self.currency_provider)
+        return all_good
