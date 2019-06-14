@@ -126,9 +126,8 @@ class ResCompany(models.Model):
                 rate, msg, afip_date = base_currency.get_pyafipws_currency_rate()
             except Exception as exc:
                 _logger.error(repr(exc) + '\n' + msg)
-            if datetime.strptime(afip_date, "%Y%m%d").date() + \
-               relativedelta(days=1) != fields.Date.from_string(rate_date) or \
-               not rate:
+            if not rate or datetime.strptime(afip_date, "%Y%m%d").date() + \
+               relativedelta(days=1) != fields.Date.from_string(rate_date):
                 _logger.error(
                     'Could not update currency %s via provider %s. %s',
                     currency_ars.name, self.currency_provider, msg)
@@ -155,9 +154,8 @@ class ResCompany(models.Model):
                 rate, msg, afip_date = currency.get_pyafipws_currency_rate()
             except Exception as exc:
                 _logger.error(repr(exc))
-            if datetime.strptime(afip_date, "%Y%m%d").date() + \
-               relativedelta(days=1) != fields.Date.from_string(rate_date) or \
-               not rate:
+            if not rate or datetime.strptime(afip_date, "%Y%m%d").date() + \
+               relativedelta(days=1) != fields.Date.from_string(rate_date):
                 all_good = False
                 _logger.error(
                     'Could not update currency %s via provider %s. %s',
