@@ -108,22 +108,27 @@ class ResCompany(models.Model):
             [('name', 'in', currency_to_update)])
         factor = 1.0
 
-        # Get factor when ARS is not the main company
-        base_currency = self.env['res.currency.rate'].search([
-            ('rate', '=', 1.0)], order='name desc, write_date desc',
-            limit=1).currency_id
-
         currency_ars = self.env.ref('base.ARS')
         rate_date = fields.Date.today()
-        if base_currency != currency_ars:
+        if currency_ars.with_context(company_id=self.id).rate != 1.0:
+
+            # we get one base currency to get ARS rates
+            base_currency = self.env['res.currency.rate'].search([
+                ('rate', '=', 1.0), '|', ('company_id', '=', self.id),
+                ('company_id', '=', False)],
+                limit=1, order='company_id, name desc').currency_id
+            base_currency = base_currency or self.currency_id
+
             _logger.log(25, "Compute ARS from Base Currency %s",
                         base_currency.name)
+
             rate = False
             msg = ''
             try:
                 # Do not pass company since we need to find the one that has
                 # certificate
-                rate, msg, afip_date = base_currency.get_pyafipws_currency_rate()
+                rate, msg, afip_date = \
+                    base_currency.get_pyafipws_currency_rate()
             except Exception as exc:
                 _logger.error(repr(exc) + '\n' + msg)
             if not rate or datetime.strptime(afip_date, "%Y%m%d").date() + \
