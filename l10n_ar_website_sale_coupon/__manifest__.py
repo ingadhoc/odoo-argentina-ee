@@ -19,7 +19,7 @@
 ##############################################################################
 {
     'name': 'Website Sale Coupon with taxes included',
-    'version': '11.0.1.0.0',
+    'version': '12.0.1.0.0',
     'category': 'Website',
     'author': 'ADHOC SA',
     'website': 'www.adhoc.com.ar',

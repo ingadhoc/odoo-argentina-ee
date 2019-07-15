@@ -20,7 +20,7 @@
 {
     'name': 'Website Quote UX',
     'category': 'base.module_category_knowledge_management',
-    'version': '11.0.1.0.1',
+    'version': '12.0.1.0.0',
     'author': 'ADHOC SA',
     'website': 'www.adhoc.com.ar',
     'license': 'AGPL-3',
