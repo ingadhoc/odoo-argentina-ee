@@ -95,20 +95,10 @@ class ResCompany(models.Model):
         rate_obj = self.env['res.currency.rate']
 
         # Obtain the currencies to be updated
-        afip_supported_currency = [
-            'USD', 'EUR', 'AUD', 'CAD', 'GBP', 'JPY', 'MXN', 'UYU', 'VEF',
-            'CHF',
-        ]
-        available_currencies = self.env['res.currency'].search([])
-        currency_to_update = list(
-            set(available_currencies.mapped('name')).intersection(
-                set(afip_supported_currency))
-        )
-        currency_to_update = self.env['res.currency'].search(
-            [('name', 'in', currency_to_update)])
         factor = 1.0
-
         currency_ars = self.env.ref('base.ARS')
+        currency_to_update = self.env['res.currency'].search([
+            ('afip_code', '!=', False)]) - currency_ars
         rate_date = fields.Date.today()
         if currency_ars.with_context(company_id=self.id).rate != 1.0:
 
