@@ -20,6 +20,9 @@ class HelpdeskTeam(models.Model):
     user_id = fields.Many2one(
         'res.users',
         'Specific user',
+        domain=lambda self: [
+            ('groups_id', 'in', self.env.ref(
+                'helpdesk.group_helpdesk_user').id)],
     )
 
     @api.constrains('assign_method', 'member_ids')
