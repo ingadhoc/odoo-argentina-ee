@@ -2,9 +2,7 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from odoo import models, api, fields, _
-from odoo.exceptions import ValidationError
-from dateutil.relativedelta import relativedelta
+from odoo import models, api, fields
 
 
 class SaleSubscription(models.Model):

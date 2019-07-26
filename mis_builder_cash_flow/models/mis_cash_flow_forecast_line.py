@@ -1,7 +1,7 @@
 from odoo import api, fields, models, _
 # from odoo.addons.web_grid.models import END_OF, STEP_BY, START_OF
 from odoo.osv import expression
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
 
 class MisCashFlowForecastLine(models.Model):
@@ -72,7 +72,6 @@ class MisCashFlowForecastLine(models.Model):
             })
         return False
 
-    @api.multi
     @api.constrains('company_id', 'account_id')
     def _check_company_id_employee_id(self):
         if self.filtered(lambda x: x.company_id != x.account_id.company_id):

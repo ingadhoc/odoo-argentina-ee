@@ -4,7 +4,6 @@
 ##############################################################################
 from odoo import fields, models, api, _
 from datetime import datetime
-from odoo.exceptions import UserError
 from dateutil.relativedelta import relativedelta
 import logging
 
