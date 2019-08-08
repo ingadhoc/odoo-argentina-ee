@@ -17,6 +17,7 @@
         'report/account_journal_book_report.xml',
         'security/ir.model.access.csv',
         'views/account_views.xml',
+        'views/account_journal_book_group_views.xml',
     ],
     'installable': False,
 }

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="action_account_journal_book_group" model="ir.actions.act_window">
+        <field name="name">Group Book</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.journal.book.group</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+        parent="account.account_account_menu"
+        sequence="60"
+        action="action_account_journal_book_group"
+        id="menu_account_journal_book_group"/>
+</odoo>
