@@ -53,9 +53,9 @@
                 <field name="account_id"/>
                 <field name="company_id" groups="base.group_multi_company"/>
                 <group expand="0" string="Group By">
-                    <filter string="Account" context="{'group_by':'account_id'}"/>
-                    <filter string="Date" domain="[]" context="{'group_by':'date'}"/>
-                    <filter string="Company" domain="[]" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
+                    <filter string="Account" name="groupby_account" context="{'group_by':'account_id'}"/>
+                    <filter string="Date" name="groupby_date" domain="[]" context="{'group_by':'date'}"/>
+                    <filter string="Company" name="groupby_company_id" domain="[]" context="{'group_by':'company_id'}" groups="base.group_multi_company"/>
                 </group>
             </search>
         </field>

@@ -9,6 +9,7 @@
     'website': 'https://github.com/OCA/mis-builder',
     'depends': [
         'mis_builder',
+        'account_reports',
         'account_ux',  # for get_model_id_and_name method
     ],
     'data': [
@@ -20,7 +21,7 @@
         'data/mis_report.xml',
         'data/mis_report_instance.xml',
     ],
-    'installable': False,
+    'installable': True,
     'maintainers': ['jjscarafia'],
     'development_status': 'Beta',
 }
