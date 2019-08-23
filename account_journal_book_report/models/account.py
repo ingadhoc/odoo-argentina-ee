@@ -10,6 +10,7 @@ _logger = logging.getLogger(__name__)
 
 class AccountJournalBookGroup(models.Model):
     _name = 'account.journal.book.group'
+    _description = 'Account Journal Book Group'
 
     name = fields.Char(
         required=True,
