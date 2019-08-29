@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<odoo>
-    <!-- Template to public users -->
-    <template id="so_template_public" name="SO Template Public" inherit_id="website_quote.so_template">
-        <xpath expr="//div[hasclass('alert', 'alert-info', 'alert-dismissable')]" position="replace"/>
-        <xpath expr="//t[@t-foreach='template.quote_line']//div[hasclass('alert', 'alert-info', 'alert-dismissable')]" position="replace"/>
-        <xpath expr="//t[@t-foreach='template.options']//div[hasclass('alert', 'alert-info', 'alert-dismissable')]" position="replace"/> 
-    </template>
-</odoo>
