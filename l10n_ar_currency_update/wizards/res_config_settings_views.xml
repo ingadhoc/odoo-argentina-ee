@@ -23,7 +23,7 @@
                 <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." groups="base.group_multi_company"/>
             </label>
 
-            <button name="update_currency_rates" position="attributes">
+            <button name="update_currency_rates_manually" position="attributes">
                 <attribute name="attrs">{'invisible': [('currency_interval_unit', '!=', 'manually')]}</attribute>
             </button>
 

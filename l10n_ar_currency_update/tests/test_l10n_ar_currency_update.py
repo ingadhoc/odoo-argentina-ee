@@ -13,11 +13,11 @@ class TestL10nArCurrencyUpdate(common.TransactionCase):
 
     def setUp(self):
 
-        self.ARS_USD = 38.126
-        self.ARS_EUR = 60.126
-        self.USD_EUR = 1.5770
+        self.ARS_USD = 38.241
+        self.ARS_EUR = 60.241
+        self.USD_EUR = 1.575
 
-        super(TestL10nArCurrencyUpdate, self).setUp()
+        super().setUp()
         rates = self.env['res.currency.rate'].search([
             ('name', '=', fields.Date.today())])
         if rates:
@@ -46,10 +46,10 @@ class TestL10nArCurrencyUpdate(common.TransactionCase):
 
         self.assertEqual(self.ARS.rate, 1.0)
 
-        self.assertAlmostEqual(self.USD.rate, 1.0 / self.ARS_USD, 3)
+        self.assertAlmostEqual(self.USD.rate, 1.0 / self.ARS_USD, places=3)
         self.assertAlmostEqual(self.USD.inverse_rate, self.ARS_USD)
 
-        self.assertAlmostEqual(self.EUR.rate, 1.0 / self.ARS_EUR, 3)
+        self.assertAlmostEqual(self.EUR.rate, 1.0 / self.ARS_EUR, places=3)
         self.assertAlmostEqual(self.EUR.inverse_rate, self.ARS_EUR)
 
     def test_USD(self):
@@ -63,12 +63,12 @@ class TestL10nArCurrencyUpdate(common.TransactionCase):
         self.assertEqual(self.USD.rate, 1.0)
 
         self.assertAlmostEqual(self.ARS.rate, self.ARS_USD)
-        self.assertAlmostEqual(self.ARS.inverse_rate, 1.0 / self.ARS_USD, 3)
+        self.assertAlmostEqual(self.ARS.inverse_rate, 1.0 / self.ARS_USD, places=3)
 
         self.assertAlmostEqual(
-            self.EUR.rate, 1.0 / self.USD_EUR, 3, msg='EUR RATE')
+            self.EUR.rate, 1.0 / self.USD_EUR, places=3, msg='EUR RATE')
         self.assertAlmostEqual(
-            self.EUR.inverse_rate, self.USD_EUR, 3, msg='EUR INV RATE')
+            self.EUR.inverse_rate, self.USD_EUR, places=3, msg='EUR INV RATE')
 
     def test_EUR(self):
         """ When the base currency is EUR
@@ -82,8 +82,8 @@ class TestL10nArCurrencyUpdate(common.TransactionCase):
 
         self.assertAlmostEqual(self.ARS.rate, self.ARS_EUR, msg='ARS RATE')
         self.assertAlmostEqual(
-            self.ARS.inverse_rate, 1.0 / self.ARS_EUR, 3, msg='ARS INV RATE')
+            self.ARS.inverse_rate, 1.0 / self.ARS_EUR, places=3, msg='ARS INV RATE')
 
-        self.assertAlmostEqual(self.USD.rate, self.USD_EUR, 3, msg='USD RATE')
+        self.assertAlmostEqual(self.USD.rate, self.USD_EUR, places=3, msg='USD RATE')
         self.assertAlmostEqual(
-            self.USD.inverse_rate, 1.0 / self.USD_EUR, 3, msg='USD INV RATE')
+            self.USD.inverse_rate, 1.0 / self.USD_EUR, places=3, msg='USD INV RATE')

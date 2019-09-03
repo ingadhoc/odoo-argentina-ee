@@ -32,10 +32,10 @@
     ],
     'data': [
         'data/ir_cron_data.xml',
+        'data/res_company_data.xml',
         'wizards/res_config_settings_views.xml',
     ],
-    'post_init_hook': 'post_init_hook',
-    'installable': False,
+    'installable': True,
     'auto_install': True,
     'application': False,
 }

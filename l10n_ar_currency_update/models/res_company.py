@@ -32,12 +32,12 @@ class ResCompany(models.Model):
             country = self.env['res.country'].browse(values['country_id'])
             if country.code.upper() == 'AR':
                 values['currency_provider'] = 'afip'
-        return super(ResCompany, self).create(values)
+        return super().create(values)
 
     @api.model
     def set_special_defaults_on_install(self):
         """ Overwrite to include new currency provider """
-        super(ResCompany, self).set_special_defaults_on_install()
+        super().set_special_defaults_on_install()
         ar_companies = self.search([]).filtered(
             lambda company: company.country_id.code == 'AR')
         if ar_companies:
@@ -77,7 +77,8 @@ class ResCompany(models.Model):
         records = self.search([
             ('currency_interval_unit', '=', 'daily'),
             ('currency_provider', '=', 'afip'),
-            ('last_currency_sync_date', '<', fields.Date.today()),
+            '|', ('last_currency_sync_date', '<', fields.Date.today()),
+            ('last_currency_sync_date', '=', False),
         ])
         records.update_currency_rates()
 
