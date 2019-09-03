@@ -26,9 +26,8 @@ class ProjectProject(models.Model):
     @api.multi
     def write(self, vals):
         """ When project.project status active/archived change also apply
-        to its tickets.
-        """
-        res = super(ProjectProject, self).write(vals)
+        to its tickets """
+        res = super().write(vals)
         if 'active' in vals:
             self.with_context(active_test=False).mapped('ticket_ids').write({
                 'active': vals['active']})

@@ -22,9 +22,8 @@ class HelpdeskTicket(models.Model):
     @api.model
     def create(self, vals):
         """ On creating a ticket, if not user is set, then we get if from
-        _onchange_team_id
-        """
-        rec = super(HelpdeskTicket, self).create(vals)
+        _onchange_team_id """
+        rec = super().create(vals)
         if not rec.user_id:
             rec._onchange_team_id()
         return rec
@@ -37,10 +36,16 @@ class HelpdeskTicket(models.Model):
         pero en estos casos nuevos que implementamos queremos que al cambiar de
         equipo, por mas que ya tenga user, sugiera un cambio de user.
         """
-        super(HelpdeskTicket, self)._onchange_team_id()
+        super()._onchange_team_id()
         if self.team_id.assign_method == 'project_responsable':
             self.user_id = self.project_id.user_id
         elif self.team_id.assign_method == 'unassigned':
             self.user_id = False
         elif self.team_id.assign_method == 'specific_user':
             self.user_id = self.team_id.user_id
+
+    @api.onchange('project_id')
+    def _onchange_project(self):
+        """ Bring default partner_id if ticket created from project """
+        if self.project_id and self.project_id.partner_id:
+            self.partner_id = self.project_id.partner_id

@@ -35,7 +35,9 @@ This module ensures that:
   the team will be set to be ticket allowed even if the project is a new
   project or we are linking an old one.
 
-* When you (un)archive a project with also (un)archive
+* When you (un)archive a project will also (un)archive the related tickets
+
+* When a ticket is created from a project, the default partner will be project's partner.
 
 Installation
 ============
