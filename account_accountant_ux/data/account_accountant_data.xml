@@ -1,0 +1,5 @@
+<odoo>
+    <record id="account_payment_fix.menu_finance_bank_and_cash" model="ir.ui.menu">
+        <field name="parent_id" ref="account_accountant.menu_accounting"/>
+    </record>
+</odoo>

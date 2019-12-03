@@ -1,0 +1,54 @@
+<odoo>
+
+    <!-- dummy search view para que no de error al disparar acción desde reportes -->
+    <record id="view_account_tax_settlement_wizard_search" model="ir.ui.view">
+         <field name="name">account.tax.settlement.wizard</field>
+         <field name="model">account.tax.settlement.wizard</field>
+         <field name="arch" type="xml">
+            <search string="Tax Settlement">
+            </search>
+         </field>
+     </record>
+
+    <record id="view_account_tax_settlement_wizard_form" model="ir.ui.view">
+         <field name="name">account.tax.settlement.wizard</field>
+         <field name="model">account.tax.settlement.wizard</field>
+         <field name="arch" type="xml">
+            <form string="Tax Settlement">
+                <field name="select_journal" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                <field name="report_id" invisible="1"/>
+                <field name="move_line_ids" invisible="1"/>
+                <p attrs="{'invisible': ['|', ('report_id', '=', False), ('message', '!=', False)]}">
+                    Se va a crear un asiento de liquidación con la información del reporte. Desea continuar?
+                </p>
+                <p attrs="{'invisible': ['|', ('report_id', '=', False), ('message', '=', False)]}">
+                    <field name="message" readonly="1"/>
+                </p>
+                <p attrs="{'invisible': [('report_id', '!=', False)]}">
+                    Se va a crear un asiento de liquidación para los apuntes seleccionados. Desea continuar?
+                </p>
+                <group>
+                    <field name="date"/>
+                    <field name="settlement_journal_id" attrs="{'invisible': [('select_journal', '=', False)], 'required': [('select_journal', '=', True)]}" domain="[('company_id', '=', company_id), ('type', '=', 'general')]"/>
+                </group>
+                <footer>
+                    <button name="confirm" string="Confirm" type="object" class="oe_highlight"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+         </field>
+     </record>
+
+    <!-- se usa tanto para liquidar impuestos como, por ejemplo, para hacer asiento de cierre -->
+    <act_window id="action_account_tax_settlement_wizard_form"
+                key2="client_action_multi"
+                name="Liquidación de Impuestos"
+                res_model="account.tax.settlement.wizard"
+                src_model="account.move.line"
+                view_mode="form"
+                target="new"
+                view_type="form"/>
+
+</odoo>
