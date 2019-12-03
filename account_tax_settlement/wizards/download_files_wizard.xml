@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- dummy search view para que no de error al disparar acción desde reportes -->
+    <record id="view_download_files_wizard_search" model="ir.ui.view">
+         <field name="name">download_files_wizard.search</field>
+         <field name="model">download_files_wizard</field>
+         <field name="arch" type="xml">
+            <search string="Download File">
+            </search>
+         </field>
+     </record>
+
+    <record id="download_files_wizard" model="ir.ui.view">
+        <field name="name">download_files_wizard</field>
+        <field name="model">download_files_wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Download Files">
+                <field name="line_ids">
+                    <tree>
+                        <!-- en v11 no funciona mas el boton de download, por ahora hacemos que tenga que abrir el pop up. TODO mejorar (una alternativa seria widget "many2many_binary" pero requiere m2m a attachments aparentemente -->
+                        <field name="txt_filename" invisible="0"/>
+                        <!-- <field name="txt_binary" filename="txt_filename" readonly="1"/> -->
+                    </tree>
+                    <form>
+                        <center>
+                            <i class="fa fa-5x fa-download" style="padding: 0.25em;" aria-hidden="true"></i>
+                            <field name="txt_filename" invisible="1"/>
+                            <h1><field name="txt_binary" filename="txt_filename" readonly="1"/></h1>
+                        </center>
+                    </form>
+                </field>
+                <footer>
+                    <button string="Close" special="cancel" class="oe_highlight"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- no anduvo si haciamos que el wizard tomara los valores por defecto, entonces lo creamos y luego lo abrimos -->
+<!--     <act_window id="action_download_files_wizard"
+                key2="client_action_multi"
+                name="Descargar Archivo"
+                res_model="download_files_wizard"
+                src_model="account.move.line"
+                view_mode="form"
+                target="new"
+                view_type="form"/> -->
+
+    <record model="ir.actions.server" id="action_download_files_wizard">
+        <field name="name">Download File</field>
+        <field name="model_id" ref="account.model_account_move_line"/>
+        <field name="state">code</field>
+        <field name="code">
+action = records.get_tax_settlement_file()
+        </field>
+        <field name="binding_model_id" ref="account.model_account_move_line"/>
+    </record>
+
+</odoo>

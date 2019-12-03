@@ -1,0 +1,106 @@
+<odoo>
+    <record id="account_journal_dashboard_kanban_view_inherited" model="ir.ui.view">
+        <field name="name">account.journal.dashboard.kanban.inherited</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.account_journal_dashboard_kanban_view" />
+        <field name="arch" type="xml">
+            <field name="kanban_dashboard" position="after">
+                <field name="tax_settlement"/>
+                <field name="settlement_financial_report_id"/>
+            </field>
+            <div class="row">
+                <t t-if="record.tax_settlement.raw_value" t-call="JournalBodyTaxSettlement"/>
+            </div>
+            <!-- add new payment after existing journal entries button -->
+            <div class="col-6 o_kanban_primary_left">
+                <button type="object" name="action_create_payment" class="btn btn-primary">
+                    <span>New Payment</span>
+                </button>
+            </div>
+            <!-- modify native div with 5 col -->
+            <div class="col-6 o_kanban_primary_left" position="attributes">
+                <attribute name="class">col-5 o_kanban_primary_left</attribute>
+            </div>
+            <templates>
+                <t t-name="JournalBodyTaxSettlement">
+                    <div class="col-7 o_kanban_primary_right">
+                        <div class="row" t-if="record.tax_settlement.raw_value == 'allow_per_line'">
+                            <div class="col-6">
+                                <a role="menuitem" type="object" name="open_action" context="{'tax_settlement': True}">
+                                    <span><t t-esc="dashboard.unsettled_count"/> Líneas a liquidar</span>
+                                </a>
+                            </div>
+                            <div class="col-6 text-right">
+                                <span><t t-esc="dashboard.unsettled_amount"/></span>
+                            </div>
+                        </div>
+                        <!-- lo mostramos si no mostamos el de reporte -->
+                        <div class="row" t-if="!record.settlement_financial_report_id.raw_value">
+                            <div class="col-6">
+                                <a role="menuitem" type="object" name="open_action" context="{'accounts_balance': True}">
+                                    <span title="Accounts Balance">Accounts Balance</span>
+                                </a>
+                            </div>
+                            <div class="col-6 text-right">
+                                <span><t t-esc="dashboard.tax_balance"/></span>
+                            </div>
+                        </div>
+                        <div class="row" t-if="record.settlement_financial_report_id.raw_value">
+                            <div class="col-6">
+                                <a role="menuitem" type="object" name="open_action" context="{'open_report': True}">
+                                    <span>Posición según informe</span>
+                                </a>
+                            </div>
+                            <div class="col-6 text-right">
+                                <span><t t-esc="dashboard.report_position"/></span>
+                            </div>
+                        </div>
+                        <!-- TODO, seria interesante? -->
+<!--                         <div class="row">
+                            <div class="col-6">
+                                <a type="object" name="open_action">
+                                    <span>Retenciones y percepciones</span>
+                                </a>
+                            </div>
+                            <div class="col-6 text-right">
+                                <span><t t-esc="dashboard.debit_amount"/></span>
+                            </div>
+                        </div> -->
+                        <div class="row">
+                            <div class="col-6">
+                                <a role="menuitem" type="object" name="open_action" context="{'debt_balance': True}">
+                                    <span>Saldo a pagar</span>
+                                </a>
+                            </div>
+                            <div class="col-6 text-right">
+                                <span><t t-esc="dashboard.debit_amount"/></span>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </templates>
+        </field>
+    </record>
+
+    <record id="open_account_tax_settlement_kanban" model="ir.actions.act_window">
+        <field name="name">Tax Settlement Dashboard</field>
+        <field name="res_model">account.journal</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban,form</field>
+        <field name="view_id" ref="account.account_journal_dashboard_kanban_view"/>
+        <field name="usage">menu</field>
+        <!-- <field name="context">{'search_default_tax_settlement':1}</field> -->
+        <field name="domain">[('tax_settlement', '!=', False)]</field>
+    </record>
+
+
+    <!-- nuevo menu padre para los tableros -->
+    <menuitem id="menu_board" name="Dashboard" parent="account_accountant.menu_accounting" sequence="1"/>
+
+    <record id="account.menu_board_journal_1" model="ir.ui.menu">
+        <field name="parent_id" ref="menu_board"/>
+    </record>
+
+    <menuitem id="menu_board_journal_10" name="Tax Settlement Dashboard" action="open_account_tax_settlement_kanban" parent="menu_board" sequence="20" groups="account.group_account_user"/>
+
+</odoo>
