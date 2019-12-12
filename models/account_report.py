@@ -9,7 +9,7 @@ class AccountReport(models.AbstractModel):
     def _build_options(self, previous_options=None):
         """ Remove inactive companies from financial report filters.
         """
-        if not previous_options or "multi_company" not in previous_options:
+        if not previous_options or not previous_options.get('multi_company'):
             # First time execution, we inject the property adding a filtered()
             previous_options = dict()
             company_ids = get_user_companies(self._cr, self.env.user.id)
@@ -20,7 +20,7 @@ class AccountReport(models.AbstractModel):
                     {'id': c.id, 'name': c.name, 'selected': True
                      if c.id == self.env.user.company_id.id else False}
                     for c in companies]
-        elif "multi_company" in previous_options:
+        elif previous_options.get('multi_company'):
             # Previous options are stored in web browser's internal storage.
             company_ids = [item['id']
                            for item in previous_options["multi_company"]]
