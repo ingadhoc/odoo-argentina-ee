@@ -63,13 +63,13 @@ class InflationAdjustment(models.TransientModel):
     @api.model
     def default_get(self, field_list):
         res = super(InflationAdjustment, self).default_get(field_list)
-        today = fields.Datetime.from_string(fields.Datetime.now())
+        today = fields.Datetime.now()
         company = self.env.user.company_id
         res['company_id'] = company.id
         company_fiscalyear_dates = company.compute_fiscalyear_dates(
             (today - relativedelta(year=today.year-1)))
         for key, value in company_fiscalyear_dates.items():
-            company_fiscalyear_dates[key] = fields.Date.to_string(value)
+            company_fiscalyear_dates[key] = value
         res.update(company_fiscalyear_dates)
         return res
 
@@ -114,21 +114,18 @@ class InflationAdjustment(models.TransientModel):
                 'Por favor indique el rango de fecha de inicio y fin'))
 
         res = []
-        cur_date = fields.Date.from_string(start_date)
-        end = fields.Date.from_string(end_date)
-        to_string = fields.Date.to_string
+        cur_date = start_date
+        end = end_date
 
         indexes = self.env['inflation.adjustment.index'].search([])
 
         while cur_date < end:
-            date_from = to_string(cur_date)
             date_to = cur_date + relativedelta(months=1, days=-1)
             if date_to > end:
                 date_to = end
-            date_to = to_string(date_to)
 
             index = indexes.filtered(
-                lambda x: x.date >= date_from and x.date < date_to)
+                lambda x: x.date >= cur_date and x.date < date_to)
             if not index:
                 raise UserError(_(
                     'El asiento de ajuste por inflación no puede ser generado'
@@ -137,7 +134,7 @@ class InflationAdjustment(models.TransientModel):
                         cur_date.strftime("%B"), cur_date.year)))
 
             res.append({
-                'date_from': date_from,
+                'date_from': cur_date,
                 'date_to': date_to,
                 'index': index,
                 'factor': (end_index / index.value) - 1.0,
@@ -171,7 +168,6 @@ class InflationAdjustment(models.TransientModel):
 
         self.ensure_one()
         account_move_line = self.env['account.move.line']
-        to_string = fields.Date.to_string
         adjustment_total = {'debit': 0.0, 'credit': 0.0}
         lines = []
 
@@ -183,15 +179,12 @@ class InflationAdjustment(models.TransientModel):
         init_data = account_move_line.read_group(
             domain, ['account_id', 'balance'], ['account_id'],
         )
-        date_from = fields.Date.from_string(self.date_from)
-        date_to = fields.Date.from_string(self.date_to)
-        before_date_from = fields.Date.from_string(
-            self.date_from) + relativedelta(months=-1)
-        before_index = self.env['inflation.adjustment.index'].find(
-            to_string(before_date_from))
+        date_from = self.date_from
+        date_to = self.date_to
+        before_date_from = self.date_from + relativedelta(months=-1)
+        before_index = self.env['inflation.adjustment.index'].find(before_date_from)
 
-        periods = self.env['inflation.adjustment'].get_periods(
-            to_string(before_date_from), self.date_from)
+        periods = self.env['inflation.adjustment'].get_periods(before_date_from, self.date_from)
 
         initial_factor = (self.end_index / before_index.value) - 1.0
         for line in init_data:
@@ -205,7 +198,7 @@ class InflationAdjustment(models.TransientModel):
                 'name': _('Ajuste por inflación cuentas al inicio '
                 '(%s * %.2f%%)') % (
                     FormatAmount(line.get('balance')), initial_factor * 100.0),
-                'date_maturity': to_string(before_date_from),
+                'date_maturity': before_date_from,
                 'debit' if adjustment > 0 else 'credit': abs(adjustment),
                 'analytic_account_id': self.analytic_account_id.id,
             })
@@ -222,7 +215,7 @@ class InflationAdjustment(models.TransientModel):
                        ('date', '<=', period.get('date_to'))]
             data = account_move_line.read_group(
                 domain, ['account_id', 'balance'], ['account_id', 'date'])
-            date_from = fields.Date.from_string(period.get('date_from'))
+            date_from = period.get('date_from')
             for line in data:
                 adjustment = line.get('balance') * period.get('factor')
                 if self.company_id.currency_id.is_zero(adjustment):
