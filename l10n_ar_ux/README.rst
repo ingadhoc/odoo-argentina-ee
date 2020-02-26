@@ -18,6 +18,7 @@ This module extends the l10n_ar module to add some usability improvesment:
 
 1. Change USD symbol to "USD" instead of "$". This to avoid confusion when using multi company environment with ARS and USD at the same time.
 2. Change postion of EUR symbol, Put it before the amounts in order to match to the ARS and USD currencies format,
+3. Show Identification Type, Identification Numner and AFIP Responsilbity in portal view.
 
 Installation
 ============

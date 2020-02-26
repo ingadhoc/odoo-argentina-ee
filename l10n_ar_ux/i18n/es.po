@@ -1,0 +1,77 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ar_ux
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 13.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-02-26 19:37+0000\n"
+"PO-Revision-Date: 2020-02-26 19:37+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ar_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_ux.partner_info
+msgid "AFIP Responsibility"
+msgstr "Responsabilidad AFIP"
+
+#. module: l10n_ar_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_ux.partner_info
+msgid "AFIP Responsibility..."
+msgstr "Responsabilidad AFIP..."
+
+#. module: l10n_ar_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_ux.partner_info
+msgid "Billing information"
+msgstr "Datos de facturación"
+
+#. module: l10n_ar_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_ux.partner_info
+msgid ""
+"Changing your document type is not allowed. Please contact us directly for "
+"this operation."
+msgstr ""
+"Cambiar tu tipo de documento no esta permitido. Por favor contáctenos "
+"directamente para realizar esta operación."
+
+#. module: l10n_ar_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_ux.partner_info
+msgid "Company Name"
+msgstr "Nombre de la compañía"
+
+#. module: l10n_ar_ux
+#: model:ir.model,name:l10n_ar_ux.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: l10n_ar_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_ux.partner_info
+msgid "Document Number"
+msgstr "Número de Documento"
+
+#. module: l10n_ar_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_ux.partner_info
+msgid "Document Type"
+msgstr "Tipo de Identificación"
+
+#. module: l10n_ar_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_ux.partner_info
+msgid "Document Type..."
+msgstr "Tipo de Identificación..."
+
+#. module: l10n_ar_ux
+#: code:addons/l10n_ar_ux/controllers/portal.py:0
+#, python-format
+msgid "Please add the document number."
+msgstr "Por favor agregue el número de documento."
+
+#. module: l10n_ar_ux
+#: code:addons/l10n_ar_ux/controllers/portal.py:0
+#, python-format
+msgid "Please add the type of document."
+msgstr "Por favor agregue el tipo de identificación."
