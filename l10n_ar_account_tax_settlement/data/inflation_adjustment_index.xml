@@ -401,4 +401,24 @@
         <field name="value">239.6077</field>
     </record>
 
+    <record id="index_09_2019" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2019-09-01')"/>
+        <field name="value">253.7102</field>
+    </record>
+
+    <record id="index_10_2019" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2019-10-01')"/>
+        <field name="value">262.0661</field>
+    </record>
+
+    <record id="index_11_2019" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2019-11-01')"/>
+        <field name="value">273.2158</field>
+    </record>
+
+    <record id="index_12_2019" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2019-12-01')"/>
+        <field name="value">283.4442</field>
+    </record>
+
 </odoo>

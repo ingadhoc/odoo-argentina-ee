@@ -34,7 +34,6 @@ Inflation Adjustment
 --------------------
 
 The index are extracted from https://www.facpce.org.ar/Indices-seccion.php# page
-The direct link is https://www.facpce.org.ar/pdf/IndiceResJG539-18.xlsx".
 
 Installation
 ============
