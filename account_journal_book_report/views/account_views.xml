@@ -5,9 +5,11 @@
         <field name="model">account.journal</field>
         <field name="inherit_id" ref="account.view_account_journal_form"/>
         <field name="arch" type="xml">
-            <field name="group_invoice_lines" position="after">
-                <field name="book_group_id"/>
-            </field>
+            <xpath expr="//page[@name='advanced_settings']/group">
+                <group string="Journal Book Report">
+                    <field name="book_group_id"/>
+                </group>
+            </xpath>
         </field>
     </record>
 </odoo>
