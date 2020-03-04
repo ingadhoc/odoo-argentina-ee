@@ -43,7 +43,6 @@ class AccountJournalBookReport(models.TransientModel):
             self.date_from = dates['date_from']
             self.date_to = dates['date_to']
 
-    @api.multi
     def _print_report(self, data):
         date_from = fields.Date.from_string(self.date_from)
         date_to = fields.Date.from_string(self.date_to)

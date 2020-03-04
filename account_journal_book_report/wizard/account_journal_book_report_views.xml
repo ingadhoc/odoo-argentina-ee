@@ -28,7 +28,6 @@
         <field name="name">Libro Diario</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">account.journal.book.report</field>
-        <field name="view_type">form</field>
         <field name="view_mode">form</field>
         <field name="view_id" ref="account_journal_book_report_view"/>
         <field name="target">new</field>
