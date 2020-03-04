@@ -19,10 +19,12 @@ class AccountChangeLockDate(models.TransientModel):
     def onchange_company_id(self):
         self.period_lock_date = self.company_id.period_lock_date
         self.fiscalyear_lock_date = self.company_id.fiscalyear_lock_date
+        self.tax_lock_date = self.company_id.tax_lock_date
 
-    @api.multi
     def change_lock_date(self):
-        self.company_id.sudo().write(
-            {'period_lock_date': self.period_lock_date,
-                'fiscalyear_lock_date': self.fiscalyear_lock_date})
+        self.company_id.sudo().write({
+            'period_lock_date': self.period_lock_date,
+            'fiscalyear_lock_date': self.fiscalyear_lock_date,
+            'tax_lock_date': self.tax_lock_date,
+        })
         return {'type': 'ir.actions.act_window_close'}

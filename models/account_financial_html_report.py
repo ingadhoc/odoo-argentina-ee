@@ -8,7 +8,6 @@ from odoo import models, api
 class ReportAccountFinancialHtmlReport(models.Model):
     _inherit = "account.financial.html.report"
 
-    @api.multi
     def button_create_menu_and_action(self):
         self._create_action_and_menu(self.parent_id.id)
 
