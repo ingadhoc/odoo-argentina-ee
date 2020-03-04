@@ -19,7 +19,7 @@
 ##############################################################################
 {
     'name': 'Accounting Reports UX',
-    'version': '12.0.1.0.0',
+    'version': '13.0.1.0.0',
     'category': 'Accounting',
     'sequence': 14,
     'summary': '',
@@ -35,11 +35,12 @@
     ],
     'data': [
         'views/account_financial_html_report_views.xml',
+        'wizards/account_change_lock_date_views.xml',
         'data/account_accountant_data.xml',
     ],
     'demo': [
     ],
-    'installable': False,
+    'installable': True,
     'auto_install': True,
     'application': False,
 }
