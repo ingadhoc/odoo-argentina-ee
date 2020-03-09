@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
+    <function model="res.users" name="write">
+        <value eval="[ref('base.user_root'), ref('base.user_admin'), ref('base.user_demo')]"/>
+        <value eval="{'company_ids': [(4, ref('l10n_ar.company_ri'))],
+                     'company_id': ref('l10n_ar.company_ri')}"/>
+    </function>
+
 <!-- pago a adhoc con banco y con retención ganancias -->
     <record model="account.payment.group" id="demo_payment_1">
-        <field name="company_id" ref="base.main_company"/>
-        <field name="partner_id" ref="l10n_ar_partner.res_partner_adhoc"/>
+        <field name="company_id" ref="l10n_ar.company_ri"/>
+        <field name="partner_id" ref="l10n_ar.res_partner_adhoc"/>
         <field name="partner_type">customer</field>
     </record>
 
@@ -13,7 +19,7 @@
         <field name="payment_group_id" ref="demo_payment_1"/>
         <field name="partner_type">customer</field>
         <field name="payment_type">inbound</field>
-        <field name="partner_id" ref="l10n_ar_partner.res_partner_adhoc"/>
+        <field name="partner_id" ref="l10n_ar.res_partner_adhoc"/>
         <field name="amount" eval="500.0"/>
         <field name="payment_method_id" ref="account.account_payment_method_manual_in"/>
     </record>
@@ -23,7 +29,7 @@
         <field name="payment_group_id" ref="demo_payment_1"/>
         <field name="partner_type">customer</field>
         <field name="payment_type">inbound</field>
-        <field name="partner_id" ref="l10n_ar_partner.res_partner_adhoc"/>
+        <field name="partner_id" ref="l10n_ar.res_partner_adhoc"/>
         <field name="amount" eval="50.0"/>
         <field name="tax_withholding_id" search="[('type_tax_use', '=', 'customer'), ('name', '=', 'Retención Ganancias Sufrida')]"/>
         <field name="withholding_number">123465</field>
@@ -36,8 +42,8 @@
 
 <!-- pago a adhoc con banco y con retención iibb -->
     <record model="account.payment.group" id="demo_payment_2">
-        <field name="company_id" ref="base.main_company"/>
-        <field name="partner_id" ref="l10n_ar_partner.res_partner_adhoc"/>
+        <field name="company_id" ref="l10n_ar.company_ri"/>
+        <field name="partner_id" ref="l10n_ar.res_partner_adhoc"/>
         <field name="partner_type">customer</field>
     </record>
 
@@ -46,7 +52,7 @@
         <field name="payment_group_id" ref="demo_payment_2"/>
         <field name="partner_type">customer</field>
         <field name="payment_type">inbound</field>
-        <field name="partner_id" ref="l10n_ar_partner.res_partner_adhoc"/>
+        <field name="partner_id" ref="l10n_ar.res_partner_adhoc"/>
         <field name="amount" eval="700.0"/>
         <field name="payment_method_id" ref="account.account_payment_method_manual_in"/>
     </record>
@@ -56,7 +62,7 @@
         <field name="payment_group_id" ref="demo_payment_2"/>
         <field name="partner_type">customer</field>
         <field name="payment_type">inbound</field>
-        <field name="partner_id" ref="l10n_ar_partner.res_partner_adhoc"/>
+        <field name="partner_id" ref="l10n_ar.res_partner_adhoc"/>
         <field name="amount" eval="100.0"/>
         <field name="tax_withholding_id" search="[('type_tax_use', '=', 'customer'), ('name', '=', 'Retención IIBB CABA Sufrida')]"/>
         <field name="withholding_number">0001-12345</field>
