@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_partner_form" model="ir.ui.view">
+        <field name="name">res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="vat" position="after">
+                <button name="button_update_partner_data_from_afip" string="Update From AFIP" class="oe_link oe_inline" type="object" attrs="{'invisible': [('vat', '=', False)]}"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>
