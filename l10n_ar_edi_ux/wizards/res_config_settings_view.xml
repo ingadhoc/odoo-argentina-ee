@@ -3,7 +3,7 @@
 
     <!-- disable arg localization secion added by l10n_ar_ux and use l10n_ar_edi one -->
     <record model="ir.ui.view" id="l10n_ar_ux.res_config_settings_view_form">
-        <field name="priority">15</field>
+        <field name="active" eval="False"/>
     </record>
 
     <!-- change priority so that view is correctly loaded -->
