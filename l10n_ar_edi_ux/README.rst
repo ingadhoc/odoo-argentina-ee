@@ -10,15 +10,20 @@
    :target: https://www.gnu.org/licenses/agpl
    :alt: License: AGPL-3
 
-===========================
-Argentinian Localization UX
-===========================
+===================================
+Argentinian Electronic Invoicing UX
+===================================
 
-This module extends the l10n_ar module to add some usability improvesment:
+* Disable l10n_ar_ux view that add Argentinian Localization accounting settings and use the one added by l10n_ar_edi
+* Logic to connecto to AFIP Padron using connection approach in enterprise module l10n_ar_edi
 
-1. Change USD symbol to "USD" instead of "$". This to avoid confusion when using multi company environment with ARS and USD at the same time.
-2. Change postion of EUR symbol, Put it before the amounts in order to match to the ARS and USD currencies format,
-3. Show Identification Type, Identification Numner and AFIP Responsilbity in portal view.
+About Padron:
+
+#. If you want to disable Title Case for afip retrived data, you can change or create a paremeter "use_title_case_on_padron_afip" with value False (by default title case is used)
+#. para actualizar tenemos básicamente dos opciones:
+
+    * Desde un partner cualquiera, si el mismo tiene configurado CUIT, entonces puede hacer click en el botón "Actualizar desde AFIP"
+    * Hacerlo masivamente desde ""
 
 Installation
 ============

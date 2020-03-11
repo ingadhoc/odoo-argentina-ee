@@ -17,16 +17,6 @@ msgstr ""
 
 #. module: l10n_ar_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_ux.partner_info
-msgid "AFIP Responsibility"
-msgstr "Responsabilidad AFIP"
-
-#. module: l10n_ar_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_ux.partner_info
-msgid "AFIP Responsibility..."
-msgstr "Responsabilidad AFIP..."
-
-#. module: l10n_ar_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_ux.partner_info
 msgid "Billing information"
 msgstr "Datos de facturación"
 
