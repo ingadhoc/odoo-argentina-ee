@@ -29,7 +29,6 @@
     'images': [
     ],
     'depends': [
-        'base_ux',
         'account_reports',
         'account_payment_fix',
     ],

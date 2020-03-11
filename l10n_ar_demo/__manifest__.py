@@ -19,7 +19,7 @@
 ##############################################################################
 {
     'name': 'More demo data for Argentina Localization (Enterprise version)',
-    'version': '12.0.1.0.0',
+    'version': '13.0.1.0.0',
     'category': 'Accounting',
     'sequence': 14,
     'summary': '',
@@ -29,41 +29,22 @@
     'images': [
     ],
     'depends': [
-        'account_accountant',
-        'l10n_ar_afipws_fe',
-        'l10n_ar_chart',
-        'l10n_ar_account_tax_settlement',
+        'account_accountant_ux',
+        # 'l10n_ar_ux_edi',
+        'l10n_ar_ux',
+        # 'l10n_ar_account_tax_settlement',
         'l10n_ar_account_withholding',
     ],
     'data': [
     ],
     'demo': [
-        # De l10n_ar_chart
-        # para datos demo agregamos alicuotas a las percepciones aplicadas y
-        # sufridas
-        '../l10n_ar_account/demo/account_tax_template_demo.xml',
-        '../l10n_ar_chart/demo/account_chart_template.xml',
-        '../l10n_ar_account/demo/account_journal_demo.xml',
-        '../l10n_ar_account/demo/product_product_demo.xml',
-        '../l10n_ar_account/demo/account_customer_invoice_demo.xml',
-        '../l10n_ar_account/demo/account_customer_expo_invoice_demo.xml',
-        '../l10n_ar_account/demo/account_customer_invoice_validate_demo.xml',
-        '../l10n_ar_account/demo/account_customer_refund_demo.xml',
-        '../l10n_ar_account/demo/account_supplier_invoice_demo.xml',
-        '../l10n_ar_account/demo/account_supplier_invoice_validate_demo.xml',
-        '../l10n_ar_account/demo/account_supplier_refund_demo.xml',
-
-        # de l10n_ar_account_withholding
         'demo/customer_payment_demo.xml',
         'demo/supplier_payment_demo.xml',
-
-        # de l10n_ar_afipws_fe
-        '../l10n_ar_afipws_fe/demo/account_journal_expo_demo.xml',
-        '../l10n_ar_afipws_fe/demo/account_journal_demo.xml',
     ],
     'test': [
     ],
-    'installable': False,
+    'installable': True,
     'auto_install': False,
     'application': False,
+    'pre_init_hook': '_load_l10n_ar_demo_data'
 }
