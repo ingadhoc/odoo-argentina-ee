@@ -1,14 +1,14 @@
 odoo-enterprise git@github.com:odoo/enterprise.git
 ingadhoc-odoo-argentina git@github.com:ingadhoc/odoo-argentina.git
-oca-mis-builder https://github.com/oca/mis-builder.git
-# solo para transindar per
-ingadhoc-product https://github.com/ingadhoc/product.git
-ingadhoc-sale https://github.com/ingadhoc/sale.git
-ingadhoc-account-invoicing https://github.com/ingadhoc/account-invoicing.git
-ingadhoc-account-payment https://github.com/ingadhoc/account-payment.git
-ingadhoc-purchase https://github.com/ingadhoc/purchase.git
-# ingadhoc-stock https://github.com/ingadhoc/stock.git
 ingadhoc-reporting-engine https://github.com/ingadhoc/reporting-engine.git
-oca-sale_workflow https://github.com/OCA/sale-workflow.git
-ingadhoc-website https://github.com/ingadhoc/website.git
-oca-product-attribute https://github.com/oca/product-attribute.git
+# oca-mis-builder https://github.com/oca/mis-builder.git
+# solo para transindar per
+# ingadhoc-product https://github.com/ingadhoc/product.git
+# ingadhoc-sale https://github.com/ingadhoc/sale.git
+# ingadhoc-account-invoicing https://github.com/ingadhoc/account-invoicing.git
+# ingadhoc-account-payment https://github.com/ingadhoc/account-payment.git
+# ingadhoc-purchase https://github.com/ingadhoc/purchase.git
+# # ingadhoc-stock https://github.com/ingadhoc/stock.git
+# oca-sale_workflow https://github.com/OCA/sale-workflow.git
+# ingadhoc-website https://github.com/ingadhoc/website.git
+# oca-product-attribute https://github.com/oca/product-attribute.git
