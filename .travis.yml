@@ -71,6 +71,7 @@ install:
   - export PATH=${HOME}/maintainer-quality-tools/travis:${PATH}
   - travis_install_nightly
   # - echo 'server_wide_modules = base,web,l10n_ar_demo' >> ${HOME}/.openerp_serverrc
+  - printf '[options]\n\nserver_wide_modules = base,web,l10n_ar_demo\n' > ${HOME}/.openerp_serverrc
 
 script:
   - travis_run_tests
