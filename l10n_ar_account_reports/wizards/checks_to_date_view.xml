@@ -22,8 +22,8 @@
         <act_window id="action_account_check_to_date_report"
             name="Cheques a fecha"
             res_model="account.check.to_date.report.wizard"
-            src_model="account.check"
-            view_mode="form" target="new" view_type="form"/>
+            binding_model="account.check"
+            view_mode="form" target="new"/>
 
         <menuitem
             id="menu_account_check_to_date_report"

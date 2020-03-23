@@ -72,7 +72,6 @@ class InflationAdjustmentIndex(models.Model):
             }
             model_data.create(metadata)
 
-    @api.multi
     def get_dates(self, date=None):
         """ Get the begining and end date of a period.
 

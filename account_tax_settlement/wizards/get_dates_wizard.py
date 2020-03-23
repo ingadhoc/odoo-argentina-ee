@@ -65,7 +65,6 @@ class get_dates_wizard(models.TransientModel):
         required=True,
     )
 
-    @api.multi
     def confirm(self):
         self.ensure_one()
         method = self._context.get('method')

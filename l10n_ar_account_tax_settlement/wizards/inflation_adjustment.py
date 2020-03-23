@@ -86,7 +86,6 @@ class InflationAdjustment(models.TransientModel):
         self.start_index = start_index.value
         self.end_index = end_index.value
 
-    @api.multi
     def get_periods(self, start_date=None, end_date=None):
         """ return a list of periods were the inflation adjustment will be
         apply.
@@ -142,11 +141,9 @@ class InflationAdjustment(models.TransientModel):
             cur_date += relativedelta(months=1, day=1)
         return res
 
-
-    @api.multi
     def get_move_line_domain(self):
         self.ensure_one()
-        no_monetaria_tag = self.env.ref('l10n_ar_account.no_monetaria_tag')
+        no_monetaria_tag = self.env.ref('l10n_ar_ux.no_monetaria_tag')
         res = [
             ('account_id.tag_ids', 'in', no_monetaria_tag.id),
             ('company_id', '=', self.company_id.id),
@@ -157,7 +154,6 @@ class InflationAdjustment(models.TransientModel):
             res += [('move_id', '!=', self.closure_move_id.id)]
         return res
 
-    @api.multi
     def confirm(self):
         """ Search all the related account.move.line and will create the
         related inflation adjustment journal entry for the specification.

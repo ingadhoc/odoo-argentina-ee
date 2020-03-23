@@ -7,7 +7,6 @@ import datetime
 class AccountJournal(models.Model):
     _inherit = 'account.journal'
 
-    @api.multi
     def get_journal_dashboard_datas(self):
         res = super(AccountJournal, self).get_journal_dashboard_datas()
         company = self.company_id
@@ -66,7 +65,6 @@ class AccountJournal(models.Model):
         })
         return res
 
-    @api.multi
     def open_action(self):
         """
         Modificamos funcion para que si hay un reporte vinculado

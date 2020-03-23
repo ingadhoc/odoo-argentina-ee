@@ -24,7 +24,6 @@ class AccountCheckToDateReportWizard(models.TransientModel):
         default=fields.Date.today,
     )
 
-    @api.multi
     def action_confirm(self):
         self.ensure_one()
         force_domain = self.journal_id and [

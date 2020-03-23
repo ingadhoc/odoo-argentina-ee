@@ -68,7 +68,6 @@
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">account.move.line</field>
         <field name="view_id" ref="view_account_move_line_tree"/>
-        <field name="view_type">form</field>
         <field name="view_mode">tree</field>
         <field name="domain">[('tax_line_id', '!=', False)]</field>
         <field name="context">{'search_default_unsettled_tax': 1}</field>

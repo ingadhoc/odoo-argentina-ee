@@ -5,7 +5,6 @@ from odoo import fields, models, api
 class AccountMove(models.Model):
     _inherit = 'account.move'
 
-    # @api.multi
     # def action_export_file(self):
     #     self.ensure_one()
     #     self.journal_id.adas()
@@ -22,7 +21,6 @@ class AccountMove(models.Model):
         auto_join=True,
     )
 
-    @api.multi
     def download_tax_settlement_file(self):
         self.ensure_one()
         # para los que se liquidan desde reporte, no se encuentra el diario,

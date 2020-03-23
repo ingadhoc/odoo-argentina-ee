@@ -66,7 +66,7 @@ class ResCompany(models.Model):
         currency_ars = self.env.ref('base.ARS')
         if currency_ars in available_currencies:
             res['ARS'] = (1.0, fields.Date.today())
-        available_currencies = available_currencies.filtered('l10n_ar_afip_code') - currency_ars
+        available_currencies = available_currencies.filtered('l10n_ar_l10n_ar_afip_code') - currency_ars
 
         # Obtain the currencies to be updated
         _logger.log(25, "Connecting to AFIP to update the currency rates for %s", self.name)

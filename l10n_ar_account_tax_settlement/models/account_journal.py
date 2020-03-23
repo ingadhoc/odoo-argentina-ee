@@ -63,7 +63,6 @@ class AccountJournal(models.Model):
         # ('other', 'Other')
     ])
 
-    # @api.multi
     # def action_create_tax_settlement_entry(self):
     #     if self.settlement_tax == 'profits':
     #         self = self.with_context(quincenal=True)
@@ -85,7 +84,6 @@ class AccountJournal(models.Model):
                 ' si no tiene instalado el módulo de retenciones'
                 ' automáticas (account_withholding_automatic)'))
 
-    @api.multi
     def iibb_aplicado_api_files_values(self, move_lines):
         """ Implementado segun especificación en carpeta doc de este repo
         """
@@ -177,7 +175,7 @@ class AccountJournal(models.Model):
                     line.invoice_id.invoice_number)
                 content += '    '
             else:
-                content += '%016s' % (move.document_number or '')
+                content += '%016s' % (move.l10n_latam_document_number or '')
 
             # 7 - fecha comprobante
             content += fields.Date.from_string(move.date).strftime('%d/%m/%Y')
@@ -213,7 +211,7 @@ class AccountJournal(models.Model):
 
             # 13 - Situación frente a IVA donde:
             # ri (1), rni (2), exento (3), monotr (4)
-            res_iva = partner.afip_responsability_type_id
+            res_iva = partner.l10n_ar_afip_responsibility_type_id
             if res_iva.code in ['1', '1FM']:
                 # RI
                 content += '1'
@@ -326,7 +324,6 @@ class AccountJournal(models.Model):
                 'txt_content': perc + ret,
             }]
 
-    @api.multi
     def iibb_aplicado_agip_files_values(self, move_lines):
         """ Ver readme del modulo para descripcion del formato. Tambien
         archivos de ejemplo en /doc
@@ -352,7 +349,7 @@ class AccountJournal(models.Model):
             partner = line.partner_id
             internal_type = line.document_type_id.internal_type
 
-            if not partner.main_id_number:
+            if not partner.vat:
                 raise ValidationError(_(
                     'El partner "%s" (id %s) no tiene número de identificación '
                     'seteada') % (partner.name, partner.id))
@@ -378,7 +375,7 @@ class AccountJournal(models.Model):
             if internal_type == 'credit_note':
                 # 2 - Nro. Nota de crédito
                 content += '%012d' % int(
-                    re.sub('[^0-9]', '', move.document_number or ''))
+                    re.sub('[^0-9]', '', move.l10n_latam_document_number or ''))
 
                 # 3 - Fecha Nota de crédito
                 content += fields.Date.from_string(
@@ -425,10 +422,10 @@ class AccountJournal(models.Model):
 
                 # 8 - Nro de comprobante (original)
                 content += '%016d' % int(
-                    re.sub('[^0-9]', '', or_inv.document_number or ''))
+                    re.sub('[^0-9]', '', or_inv.l10n_latam_document_number or ''))
 
                 # 9 - Nro de documento del Retenido
-                content += partner.main_id_number
+                content += partner.vat
 
                 # 10 - Código de norma
                 # por ahora solo padron regimenes generales
@@ -474,7 +471,7 @@ class AccountJournal(models.Model):
 
             # 6 - Nro de comprobante
             content += '%016d' % int(
-                re.sub('[^0-9]', '', move.document_number or ''))
+                re.sub('[^0-9]', '', move.l10n_latam_document_number or ''))
 
             # 7 - Fecha del comprobante
             content += fields.Date.from_string(move.date).strftime('%d/%m/%Y')
@@ -526,17 +523,17 @@ class AccountJournal(models.Model):
             content += (payment.withholding_number or '').rjust(16, ' ')
 
             # 10 - Tipo de documento del Retenido
-            # main_id_number
-            if partner.main_id_category_id.code not in ['CUIT', 'CUIL', 'CDI']:
+            # vat
+            if partner.l10n_latam_identification_type_id.code not in ['CUIT', 'CUIL', 'CDI']:
                 raise ValidationError(_(
                     'EL el partner "%s" (id %s), el tipo de identificación '
                     'debe ser una de siguientes: CUIT, CUIL, CDI.' % (
                         partner.id, partner.name)))
             doc_type_mapping = {'CUIT': '3', 'CUIL': '2', 'CDI': '1'}
-            content += doc_type_mapping[partner.main_id_category_id.code]
+            content += doc_type_mapping[partner.l10n_latam_identification_type_id.code]
 
             # 11 - Nro de documento del Retenido
-            content += partner.main_id_number
+            content += partner.vat
 
             # 12 - Situación IB del Retenido
             # 1: Local 2: Convenio Multilateral
@@ -562,7 +559,7 @@ class AccountJournal(models.Model):
             # 1 - Responsable Inscripto
             # 3 - Exento
             # 4 - Monotributo
-            res_iva = partner.afip_responsability_type_id
+            res_iva = partner.l10n_ar_afip_responsibility_type_id
             if res_iva.code in ['1', '1FM']:
                 # RI
                 content += '1'
@@ -611,11 +608,9 @@ class AccountJournal(models.Model):
                 'txt_content': credito,
                 }]
 
-    @api.multi
     def iibb_aplicado_act_7_files_values(self, move_lines):
         return self.iibb_aplicado_files_values(move_lines, act_7=True)
 
-    @api.multi
     def iibb_aplicado_files_values(self, move_lines, act_7=None):
         """
         Por ahora es el de arba, renombrar o generalizar para otros
@@ -652,7 +647,7 @@ class AccountJournal(models.Model):
 
             pto_venta, nro_documento = \
                 move.document_type_id.validator_id.validate_value(
-                    move.document_number, return_parts=True)
+                    move.l10n_latam_document_number, return_parts=True)
             content += pto_venta
             content += nro_documento
 
@@ -709,7 +704,6 @@ class AccountJournal(models.Model):
                 'txt_content': ret,
             }]
 
-    @api.multi
     def iibb_aplicado_sircar_files_values(self, move_lines):
         """ Especificacion en /doc/sircar
         """
@@ -751,7 +745,7 @@ class AccountJournal(models.Model):
 
             # 4 Número del comprobante
             content.append('%012d' % int(
-                re.sub('[^0-9]', '', line.move_id.document_number or '')))
+                re.sub('[^0-9]', '', line.move_id.l10n_latam_document_number or '')))
 
             # 5 Cuit del contribuyene
             content.append(line.partner_id.cuit_required())
@@ -833,7 +827,7 @@ class AccountJournal(models.Model):
 
             # 4 Número del comprobante
             content.append('%012d' % int(
-                re.sub('[^0-9]', '', line.move_id.document_number or '')))
+                re.sub('[^0-9]', '', line.move_id.l10n_latam_document_number or '')))
 
             # 5 Cuit del contribuyene
             content.append(line.partner_id.cuit_required())
@@ -889,7 +883,6 @@ class AccountJournal(models.Model):
                 'txt_content': ret,
             }]
 
-    @api.multi
     def iibb_sufrido_files_values(self, move_lines):
         """
         Especificación según:
@@ -930,11 +923,11 @@ class AccountJournal(models.Model):
                 if move.document_type_id.validator_id:
                     pos, number = \
                         move.document_type_id.validator_id.validate_value(
-                            move.document_number, return_parts=True)
+                            move.l10n_latam_document_number, return_parts=True)
                 else:
                     # por ej. para tipo de documento 99 que no tiene
                     # validator
-                    pos, number = get_pos_and_number(move.document_number)
+                    pos, number = get_pos_and_number(move.l10n_latam_document_number)
                 # si el punto de venta es de 5 digitos no encontramos doc
                 # que diga como proceder, tomamos los ultimos 4 digitos
                 pto_venta = pos.zfill(4)[-4:]
@@ -971,7 +964,7 @@ class AccountJournal(models.Model):
             # pero solo en digitos
             if payment:
                 content += '%020d' % int(
-                    re.sub('[^0-9]', '', move.document_number))
+                    re.sub('[^0-9]', '', move.l10n_latam_document_number))
             content += format_amount(line.balance, 11, 2, ',')
             content += '\r\n'
 
@@ -989,7 +982,6 @@ class AccountJournal(models.Model):
                 'txt_content': ret,
             }]
 
-    @api.multi
     def sicore_aplicado_files_values(self, move_lines):
         self.ensure_one()
 
@@ -998,11 +990,11 @@ class AccountJournal(models.Model):
 
         for line in move_lines:
             partner = line.partner_id
-            if not partner.main_id_category_id.afip_code:
+            if not partner.l10n_latam_identification_type_id.l10n_ar_afip_code:
                 raise ValidationError(_(
                     'EL tipo de identificación "%s" no tiene código de afip'
-                    'configurado') % (partner.main_id_category_id.name))
-            if not partner.main_id_number:
+                    'configurado') % (partner.l10n_latam_identification_type_id.name))
+            if not partner.vat:
                 raise ValidationError(_(
                     'El partner "%s" (id %s) no tiene número de identificación '
                     'seteada') % (partner.name, partner.id))
@@ -1025,28 +1017,30 @@ class AccountJournal(models.Model):
 
             # Numbero Comprobante            [16]
             content += '%016d' % int(
-                re.sub('[^0-9]', '', move.document_number))
+                re.sub('[^0-9]', '', move.l10n_latam_document_number))
 
             # Importe Comprobante            [16]
             content += '%016.2f' % payment.payment_group_id.payments_amount
 
             # Codigo de Impuesto             [ 3]
             # Codigo de Regimen              [ 3]
-            tax = line.tax_line_id.tax_group_id.tax
-            if tax == 'profits':
+            if line.tax_line_id.tax_group_id in (
+                    self.env.ref('l10n_ar_ux.tax_group_retencion_ganancias'),
+                    self.env.ref('l10n_ar.tax_group_percepcion_ganancias')):
                 content += '217'
                 regimen = pay_group.regimen_ganancias_id
                 # necesitamos lo de filter porque hay dos regimenes que le
                 # agregamos caracteres
                 content += regimen and '%03d' % int(''.join(filter(
                     str.isdigit, str(regimen.codigo_de_regimen)))) or '000'
-            elif tax == 'vat':
+            elif line.tax_line_id.tax_group_id in (
+                    self.env.ref('l10n_ar_ux.tax_group_retencion_iva'),
+                    self.env.ref('l10n_ar.tax_group_percepcion_iva')):
                 content += '767'
                 # por ahora el unico implementado es para factura M
                 content += '499'
             else:
-                raise ValidationError(_(
-                    'Tax %s not implemented for SICORE txt.') % (tax))
+                raise ValidationError(_('Para sicore solo IVA y Ganancias están implementados'))
 
             # Codigo de Operacion            [ 1]
             content += '1'  # TODO: ????
@@ -1075,10 +1069,10 @@ class AccountJournal(models.Model):
                 payment.payment_date).strftime('%d/%m/%Y')
 
             # Tipo Documento Retenido        [ 2]
-            content += '%02d' % partner.main_id_category_id.afip_code
+            content += '%02d' % int(partner.l10n_latam_identification_type_id.l10n_ar_afip_code)
 
             # Numero Documento Retenido      [20]
-            content += partner.main_id_number.ljust(20)
+            content += partner.vat.ljust(20)
 
             # Numero Certificado Original    [14]
             content += '%014d' % 0  # TODO: ????

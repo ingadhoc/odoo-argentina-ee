@@ -40,11 +40,11 @@
     <act_window id="action_closure_journal_entry"
                 name="Generar asiento de cierre (BETA)"
                 res_model="account.tax.settlement.wizard"
-                src_model="account.financial.html.report.line"
+                binding_model="account.financial.html.report.line"
                 view_mode="form"
                 target="new"
                 context="{'default_message': 'Antes de generar el asiento de cierre recuerde generar el asiento de refundición. Luego de generar el asiento de cierre recuerde revertirlo para generar el asiento de apertura!', 'entry_ref': 'Asiento de cierre', 'tax_settlement_link': False}"
-                view_type="form"/>
+    />
 
     <record id="report_line_asiento_de_cierre" model="account.financial.html.report.line">
         <field name="name">Generar asiento de cierre (BETA)</field>
@@ -75,11 +75,11 @@
     <act_window id="action_recast_journal_entry"
                 name="Generar asiento de refundición (BETA)"
                 res_model="account.tax.settlement.wizard"
-                src_model="account.financial.html.report.line"
+                binding_model="account.financial.html.report.line"
                 view_mode="form"
                 target="new"
                 context="{'default_message': 'Se va a generar el asiento de refundición a partir de los datos visualizados', 'entry_ref': 'Asiento de refundición', 'tax_settlement_link': False}"
-                view_type="form"/>
+    />
 
     <record id="report_line_asiento_de_refundicion" model="account.financial.html.report.line">
         <field name="name">Generar asiento de refundición (BETA)</field>
@@ -91,7 +91,7 @@
 
     <record id="account_reports.account_financial_report_net_profit0" model="account.financial.html.report.line">
         <field name="settlement_type">new_line</field>
-        <field name="settement_account_tag_id" ref="l10n_ar_account.tag_unaffected_earnings"/>
+        <field name="settement_account_tag_id" ref="l10n_ar_ux.tag_unaffected_earnings"/>
     </record>
 
     <record id="account_reports.account_financial_report_totalincome0" model="account.financial.html.report.line">
