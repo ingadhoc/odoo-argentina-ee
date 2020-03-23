@@ -10,13 +10,12 @@ _logger = logging.getLogger(__name__)
 class AccountChartTemplate(models.Model):
     _inherit = 'account.chart.template'
 
-    @api.multi
     def _create_bank_journals(self, company, acc_template_ref):
         res = super(
             AccountChartTemplate, self)._create_bank_journals(
             company, acc_template_ref)
 
-        if company.localization != 'argentina':
+        if company.country_id != self.env.ref('base.ar'):
             return res
 
         ref = self.env.ref
@@ -25,31 +24,31 @@ class AccountChartTemplate(models.Model):
             """
             Helper para obtener referencia a alguna cuenta
             """
-            return acc_template_ref.get(ref('l10n_ar_chart.%s' % ext_id).id)
+            return acc_template_ref.get(ref('l10n_ar.%s' % ext_id).id)
 
         # add more journals commonly used in argentina localization
         journals = [
             ('Liquidación de IIBB', 'IIBB', 'allow_per_line', 'iibb_sufrido',
-                ref('l10n_ar_account.par_iibb_pagar'),
+                ref('l10n_ar.par_iibb_pagar'),
                 get_account('base_iibb_a_pagar'),
                 get_account('base_iibb_a_pagar'),
-                ref('l10n_ar_account.tax_tag_a_cuenta_iibb'))
+                ref('l10n_ar_ux.tax_tag_a_cuenta_iibb'))
         ]
 
         chart = company.chart_template_id
-        ri_chart = ref('l10n_ar_chart.l10nar_ri_chart_template', False)
-        ex_chart = ref('l10n_ar_chart.l10nar_ex_chart_template', False)
+        ri_chart = ref('l10n_ar.l10nar_ri_chart_template', False)
+        ex_chart = ref('l10n_ar.l10nar_ex_chart_template', False)
 
         # iva solo para RI
         if chart == ri_chart:
             journals += [
                 ('Liquidación de IVA', 'IVA', 'yes', False,
-                    # ref('l10n_ar_account_reports.'
+                    # ref('l10n_ar_ux_reports.'
                     #     'account_financial_report_vat_position'),
-                    ref('l10n_ar_account.partner_afip'),
+                    ref('l10n_ar.partner_afip'),
                     get_account('ri_iva_saldo_tecnico_favor'),
                     get_account('ri_iva_saldo_a_pagar'),
-                    ref('l10n_ar_account.tax_tag_a_cuenta_iva'))]
+                    ref('l10n_ar_ux.tax_tag_a_cuenta_iva'))]
 
         account_withholding_automatic = self.env['ir.module.module'].search([
             ('name', '=', 'account_withholding_automatic'),
@@ -63,27 +62,27 @@ class AccountChartTemplate(models.Model):
         if chart in (ri_chart, ex_chart):
             journals += [
                 ('Liquidación de Ganancias', 'GAN', 'yes', False,
-                    # ref('l10n_ar_account_reports.'
+                    # ref('l10n_ar_ux_reports.'
                     #     'account_financial_report_profits_position'),
-                    ref('l10n_ar_account.partner_afip'),
+                    ref('l10n_ar.partner_afip'),
                     get_account('base_saldo_favor_ganancias'),
                     get_account('base_impuesto_ganancias_a_pagar'),
-                    ref('l10n_ar_account.tax_tag_a_cuenta_ganancias')),
+                    ref('l10n_ar_ux.tax_tag_a_cuenta_ganancias')),
                 # only if account_withholding_automatic installed we
                 # set sicore_aplicado for txt
                 ('Liquidación SICORE Aplicado', 'SICORE', 'allow_per_line',
                     account_withholding_automatic and 'sicore_aplicado',
-                    ref('l10n_ar_account.partner_afip'),
+                    ref('l10n_ar.partner_afip'),
                     get_account('ri_retencion_sicore_a_pagar'),
                     get_account('ri_retencion_sicore_a_pagar'),
-                    ref('l10n_ar_account.tag_ret_perc_sicore_aplicada')),
+                    ref('l10n_ar_ux.tag_ret_perc_sicore_aplicada')),
                 ('Liquidación IIBB Aplicado', 'IB_AP', 'allow_per_line',
                     False,  # 'iibb_aplicado', (Se debe elegir segun provincia)
-                    ref('l10n_ar_account.par_iibb_pagar'),
+                    ref('l10n_ar.par_iibb_pagar'),
                     # TODO flatan crear estas cuentas!
                     get_account('ri_retencion_iibb_a_pagar'),
                     get_account('ri_retencion_iibb_a_pagar'),
-                    ref('l10n_ar_account.tag_ret_perc_iibb_aplicada')),
+                    ref('l10n_ar_ux.tag_ret_perc_iibb_aplicada')),
             ]
 
         # for name, code, tax, report, partner, credit_id, debit_id, tag \
@@ -103,7 +102,6 @@ class AccountChartTemplate(models.Model):
                 'company_id': company.id,
                 # al final hicimos otro dashboard
                 'show_on_dashboard': False,
-                'update_posted': True,
                 'settlement_account_tag_ids': tag and [(4, tag.id, False)],
             })
 

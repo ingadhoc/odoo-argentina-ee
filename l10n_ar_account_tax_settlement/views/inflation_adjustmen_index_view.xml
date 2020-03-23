@@ -26,7 +26,6 @@
         <field name="name">Indices de Ajuste de Inflación</field>
         <field name="res_model">inflation.adjustment.index</field>
         <field name="view_mode">tree,form</field>
-        <field name="view_type">form</field>
         <field name="help" type="html">
             <p class="oe_view_nocontent_create">
                 No hay indices de ajuste por inflación aún. Por favor cree uno.

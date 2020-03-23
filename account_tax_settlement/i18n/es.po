@@ -94,11 +94,6 @@ msgid "Created on"
 msgstr "Creado en"
 
 #. module: account_tax_settlement
-#: model:ir.ui.menu,name:account_tax_settlement.menu_board
-msgid "Dashboard"
-msgstr "Tablero"
-
-#. module: account_tax_settlement
 #: model:ir.model.fields,field_description:account_tax_settlement.field_account_tax_settlement_wizard__display_name
 #: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard__display_name
 #: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard_line__display_name
@@ -475,8 +470,8 @@ msgstr "Liquidación de Impuesto"
 #. module: account_tax_settlement
 #: model:ir.actions.act_window,name:account_tax_settlement.open_account_tax_settlement_kanban
 #: model:ir.ui.menu,name:account_tax_settlement.menu_board_journal_10
-msgid "Tax Settlement Dashboard"
-msgstr "Tablero de Liq. de Impuestos"
+msgid "Tax Settlement"
+msgstr "Liq. de Impuestos"
 
 #. module: account_tax_settlement
 #: model:ir.model.fields,field_description:account_tax_settlement.field_account_move_line__tax_settlement_move_id

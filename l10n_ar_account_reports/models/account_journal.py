@@ -8,7 +8,6 @@ from odoo import models, api
 class AccountJournal(models.Model):
     _inherit = 'account.journal'
 
-    @api.multi
     def action_general_ledger(self):
         params = {}
         if self.default_debit_account_id and self.default_debit_account_id == \

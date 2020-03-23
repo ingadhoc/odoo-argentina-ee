@@ -19,7 +19,7 @@
 ##############################################################################
 {
     'name': 'Accounting Reports Customized for Argentina',
-    'version': '12.0.1.1.0',
+    'version': '13.0.1.0.0',
     'category': 'Accounting',
     'sequence': 14,
     'summary': '',
@@ -30,14 +30,11 @@
     ],
     'depends': [
         'account_reports',
-        'account_debt_management',
-        'l10n_ar_account',
+        'l10n_ar',
         'account_check',
     ],
     'data': [
         'views/account_journal_dashboard_view.xml',
-        'views/account_debt_report_line_views.xml',
-        'reports/invoice_analysis.xml',
         'wizards/checks_to_date_view.xml',
         'reports/account_checks_to_date_report.xml',
     ],
@@ -45,7 +42,7 @@
     ],
     'test': [
     ],
-    'installable': False,
+    'installable': True,
     'auto_install': True,
     'application': False,
 }

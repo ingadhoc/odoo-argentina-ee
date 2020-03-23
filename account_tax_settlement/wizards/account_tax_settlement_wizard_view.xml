@@ -1,15 +1,5 @@
 <odoo>
 
-    <!-- dummy search view para que no de error al disparar acción desde reportes -->
-    <record id="view_account_tax_settlement_wizard_search" model="ir.ui.view">
-         <field name="name">account.tax.settlement.wizard</field>
-         <field name="model">account.tax.settlement.wizard</field>
-         <field name="arch" type="xml">
-            <search string="Tax Settlement">
-            </search>
-         </field>
-     </record>
-
     <record id="view_account_tax_settlement_wizard_form" model="ir.ui.view">
          <field name="name">account.tax.settlement.wizard</field>
          <field name="model">account.tax.settlement.wizard</field>
@@ -43,12 +33,11 @@
 
     <!-- se usa tanto para liquidar impuestos como, por ejemplo, para hacer asiento de cierre -->
     <act_window id="action_account_tax_settlement_wizard_form"
-                key2="client_action_multi"
                 name="Liquidación de Impuestos"
                 res_model="account.tax.settlement.wizard"
-                src_model="account.move.line"
+                binding_model="account.move.line"
                 view_mode="form"
                 target="new"
-                view_type="form"/>
+    />
 
 </odoo>

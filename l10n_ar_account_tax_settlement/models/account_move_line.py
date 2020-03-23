@@ -5,7 +5,6 @@ class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
     # por ahora no extendemos, vamos a ver si lo resolvemos con etiquetas
-    # @api.multi
     # def _get_tax_settlement_journal(self):
     #     """
     #     This method return the journal that can settle this move line

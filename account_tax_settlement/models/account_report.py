@@ -25,7 +25,7 @@ class AccountReport(models.AbstractModel):
 
         # necesitamos comparar los .id porque en realidad son dos modelos !=
         if action.type == 'ir.actions.act_window' and \
-                self.env['ir.actions.act_window'].browse(action.id).src_model \
+                self.env['ir.actions.act_window'].browse(action.id).binding_model_id.model \
                 == 'account.financial.html.report.line':
 
             context = action_read.get('context') or {}
@@ -33,7 +33,7 @@ class AccountReport(models.AbstractModel):
             # convertimos las options a un context que mandamos con clave
             # context dentro del context para que sea interpretado por
             # report_move_lines_action
-            ctx = self.set_context(options)
+            ctx = self._set_context(options)
             # en reportes que no usan rango de fechas no hay seteada date_from
             # y eso hace que report_move_lines_action no evalue dominio.
             # reportes sin from date deberian evaluar desde siempre

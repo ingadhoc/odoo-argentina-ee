@@ -6,7 +6,6 @@ from odoo.osv import expression
 class AccountFinancialReport(models.Model):
     _inherit = "account.financial.html.report"
 
-    @api.multi
     def create_tax_settlement_entry(self, journal):
         """
         Funcion que crea asiento de liquidación a partir de información del

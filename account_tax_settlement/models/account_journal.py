@@ -76,7 +76,6 @@ class AccountJournal(models.Model):
         # help="Taxes with this tags are going to be settled by this journal"
     )
 
-    @api.multi
     @api.constrains('tax_settlement', 'type')
     def check_tax_settlement(self):
         for rec in self:
@@ -95,7 +94,6 @@ class AccountJournal(models.Model):
                         'Si usa "Impuesto de liquidación" debe setear cuentas '
                         'de débito y crédito'))
 
-    @api.multi
     def action_create_payment(self):
         partner = self.settlement_partner_id
         if not partner:
@@ -126,7 +124,6 @@ class AccountJournal(models.Model):
     # este metodo funciona pero no lo usamos porque por ahora estamos haciendo
     # que se use seleccioando varias líneas desde lineas a liquidar
     # lo dejamos por si sirve para algun otro caso de uso
-    # @api.multi
     # def action_create_tax_settlement_entry(self):
     #     # hacemos que sea obligatorio una fecha hasta, si no viene, llamamos
     #     # al wizard para definir fechas y luego recien continuamos
@@ -152,7 +149,6 @@ class AccountJournal(models.Model):
     #         'type': 'ir.actions.act_window',
     #     }
 
-    @api.multi
     def create_tax_settlement_entry(self, move_lines):
         """
         Función que recibe move lines y crea una liquidación en este diario
@@ -192,7 +188,6 @@ class AccountJournal(models.Model):
         move_lines.write({'tax_settlement_move_id': move.id})
         return move
 
-    @api.multi
     def _get_tax_settlement_entry_lines_vals(self, domain=None):
         # TODO agregar la parte dinamica
         grouped_move_lines = self.env['account.move.line'].read_group(
@@ -237,7 +232,6 @@ class AccountJournal(models.Model):
                 })
         return new_move_lines
 
-    @api.multi
     def _get_tax_settlement_entry_vals(self, lines_vals):
         """
         Esta funcion recibe las values de las lineas de liquidación (lineas
@@ -301,7 +295,6 @@ class AccountJournal(models.Model):
 # Métodos de liquidación por tags
 #################################
 
-    @api.multi
     def _get_tax_settlement_move_lines_by_tags(self):
         """
         Funcion que devuelve apuntes a liquidar por este diario
@@ -311,7 +304,6 @@ class AccountJournal(models.Model):
             self._get_tax_settlement_lines_domain_by_tags() + [
                 ('tax_state', '=', 'to_settle')])
 
-    @api.multi
     def _get_tax_settlement_lines_domain_by_tags(self):
         """
         Funcion que devuelve apuntes contables que se liquidan con este diario
@@ -320,7 +312,7 @@ class AccountJournal(models.Model):
         self.ensure_one()
         domain = [
             ('company_id', '=', self.company_id.id),
-            ('tax_line_id.tag_ids', 'in', self.settlement_account_tag_ids.ids),
+            ('tax_repartition_line_id.tag_ids', 'in', self.settlement_account_tag_ids.ids),
         ]
 
         from_date = self._context.get('from_date')
@@ -333,7 +325,6 @@ class AccountJournal(models.Model):
 
         return domain
 
-    @api.multi
     def _get_tax_settlement_lines_domain_by_tags_accounts(self):
         """
         Funcion que devuelve apuntes contables de cuentas contables de
@@ -341,18 +332,16 @@ class AccountJournal(models.Model):
         necesitamos esta busqueda así ya que actualmente estamos buscando por
         tags en impuestos y, para calcular saldo de las cuentas, necesitamos
         buscar por cuenta ya que las liquidaciones no tienen nada seteado en
-        tax_line_id
+        tax_line_id / tax_repartition_line_id
         """
         self.ensure_one()
-        taxes = self.env['account.tax'].search([
+        rep_lines = self.env['account.tax.repartition.line'].search([
             ('company_id', '=', self.company_id.id),
             ('tag_ids', 'in', self.settlement_account_tag_ids.ids),
         ])
-        account_ids = taxes.mapped('account_id').ids + taxes.mapped(
-            'refund_account_id').ids
         domain = [
             ('company_id', '=', self.company_id.id),
-            ('account_id', 'in', account_ids),
+            ('account_id', 'in', rep_lines.mapped('account_id').ids),
         ]
 
         from_date = self._context.get('from_date')
@@ -369,7 +358,6 @@ class AccountJournal(models.Model):
 # Métodos de generación de archivos
 ###################################
 
-    @api.multi
     def get_tax_settlement_files_values(self, move_lines):
         """
         Funciónque de devuelve lista de diccionarios con "nombre de archivo"

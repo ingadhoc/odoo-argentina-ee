@@ -79,7 +79,6 @@ class AccountTaxSettlementWizard(models.TransientModel):
         })
         return res
 
-    @api.multi
     def confirm(self):
         self.ensure_one()
         self = self.with_context(entry_date=self.date)

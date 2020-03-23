@@ -15,7 +15,6 @@ class AccountMoveLine(models.Model):
         copy=False,
     )
 
-    @api.multi
     def _update_check(self):
         res = super(AccountMoveLine, self)._update_check()
         if self.mapped('tax_settlement_move_id'):
@@ -24,7 +23,6 @@ class AccountMoveLine(models.Model):
                 'settled'))
         return res
 
-    @api.multi
     def get_tax_settlement_journal(self):
         """
         Metodo para obtener el diario de liquidacion arrojando mensajes
@@ -44,17 +42,16 @@ class AccountMoveLine(models.Model):
                 'diarios %s') % (self.ids, settlement_journal.ids))
         return settlement_journal
 
-    @api.multi
     def _get_tax_settlement_journal(self):
         """
         This method return the journal that can settle this move line.
         This can be overwrited by other modules
         """
         self.ensure_one()
-        return self.tax_line_id.settlement_journal_id
-        # return self.env['account.journal']
+        return self.env['account.journal'].search([
+            ('settlement_account_tag_ids', 'in', self.tax_repartition_line_id.tag_ids.ids),
+            ('company_id', '=', self.company_id.id)], limit=1)
 
-    @api.multi
     def button_create_tax_settlement_entry(self):
         """
         Botón para el 1 a 1 que crea y postea el move
@@ -63,7 +60,6 @@ class AccountMoveLine(models.Model):
         move.post()
         return move
 
-    @api.multi
     def create_tax_settlement_entry(self):
         """
         Funcion que crear, para los apuntes seleccionados, una liquidacion
@@ -82,24 +78,23 @@ class AccountMoveLine(models.Model):
         store=True,
     )
 
-    @api.multi
     @api.depends(
-        'tax_line_id',
-        'tax_settlement_move_id.matched_percentage',
+        'tax_repartition_line_id',
+        'tax_settlement_move_id.line_ids.reconciled',
     )
     def _compute_tax_state(self):
-        for rec in self.filtered(lambda x: x.tax_line_id):
-            # en los moves existe matched_percentage que es igual a 1
-            # cuando se pago completamente
-            if rec.tax_settlement_move_id.matched_percentage == 1.0:
-                state = 'paid'
-            elif rec.tax_settlement_move_id:
-                state = 'to_pay'
-            else:
+        for rec in self:
+            if not rec.tax_repartition_line_id:
+                state = False
+            elif not rec.tax_settlement_move_id:
                 state = 'to_settle'
+            elif all(x.reconciled for x in rec.tax_settlement_move_id.line_ids.filtered(
+                    lambda x: x.account_id.user_type_id.type in ('receivable', 'payable'))):
+                state = 'paid'
+            else:
+                state = 'to_pay'
             rec.tax_state = state
 
-    @api.multi
     def action_open_tax_settlement_entry(self):
         self.ensure_one()
         return {
@@ -112,7 +107,6 @@ class AccountMoveLine(models.Model):
             'type': 'ir.actions.act_window',
         }
 
-    @api.multi
     def action_pay_tax_settlement(self):
         self.ensure_one()
         open_move_line_ids = self.tax_settlement_move_id.line_ids.filtered(
@@ -138,7 +132,6 @@ class AccountMoveLine(models.Model):
 
 # preparacion de archivos de arba, sicore, sifere, etc
 
-    @api.multi
     def get_tax_settlement_file(self, journal=None):
         """
         Metodo que encuentra el diario para liquidar los apuntes y devuelve
