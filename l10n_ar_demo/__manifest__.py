@@ -32,7 +32,7 @@
         'account_accountant_ux',
         'l10n_ar_edi_ux',
         'l10n_ar_ux',
-        # 'l10n_ar_account_tax_settlement',
+        'l10n_ar_account_tax_settlement',
         'l10n_ar_account_withholding',
     ],
     'data': [
