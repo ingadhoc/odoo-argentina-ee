@@ -630,6 +630,7 @@ class AccountJournal(models.Model):
             move = line.move_id
             payment = line.payment_id
             internal_type = line.document_type_id.internal_type
+            document_code = line.document_type_id.code
 
             line.partner_id.cuit_required()
 
@@ -640,9 +641,12 @@ class AccountJournal(models.Model):
             # solo para percepciones
             if not payment:
                 content += (
+                    document_code in ['201', '206', '211'] and 'E' or
+                    document_code in ['203', '208', '213'] and 'H' or
+                    document_code in ['202', '207', '212'] and 'I' or
                     internal_type == 'invoice' and 'F' or
                     internal_type == 'credit_note' and 'C' or
-                    internal_type == 'debit_not' and 'D' or 'R')
+                    internal_type == 'debit_note' and 'D' or 'R')
                 content += line.document_type_id.document_letter_id.name
 
             pto_venta, nro_documento = \
@@ -947,7 +951,7 @@ class AccountJournal(models.Model):
                 doc_type = (
                     internal_type in ['invoice', 'ticket'] and 'F' or
                     internal_type == 'credit_note' and 'C' or
-                    internal_type == 'debit_not' and 'D' or
+                    internal_type == 'debit_note' and 'D' or
                     internal_type == 'receipt_invoice' and 'R' or 'O')
                 # si es ticket y es negativo entonces en NC (TODO) cambiar
                 # si ya implementamos nc de ticket de otra manera
