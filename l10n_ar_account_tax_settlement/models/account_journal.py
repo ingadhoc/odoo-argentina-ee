@@ -785,11 +785,21 @@ class AccountJournal(models.Model):
 
             content.append(line.tax_line_id.jurisdiction_code)
 
-            # TODO implementar tipo de registro 2 (12, 13, 14, 15)
+            # Tipo registro 2. Provincia Cordoba
             if line.tax_line_id.jurisdiction_code == '904':
-                raise ValidationError(_(
-                    'El TXT para Jurisdicción 904 no está implementado '
-                    'todavia. Por favor consulte a ADHOC.'))
+
+                # 12 Tipo de Operación (1-Efectuada, 2-Anulada, 3-Omitida)
+                content.append('1')
+
+                # 13 Fecha de Emisión de Constancia (en formato dd/mm/aaaa)
+                content.append(fields.Date.from_string(line.date).strftime('%d/%m/%Y'))
+
+                # 14 Número de Constancia - Numeric(14)
+                content.append('%014s' % int(re.sub('[^0-9]', '', payment.withholding_number or '0')[:14]))
+
+                # 15 Número de Constancia original (sólo para las Anulaciones –ver códigos por jur-)  - Numeric(14)
+                content.append('%014d' % 0)
+
             ret += ','.join(content) + '\r\n'
             line_nbr += 1
 
@@ -866,14 +876,15 @@ class AccountJournal(models.Model):
 
             content.append(line.tax_line_id.jurisdiction_code)
 
-            # TODO implementar tipo de registro 2
-            # 12 Tipo de Operación (1-Efectuada, 2-Anulada, 3-Omitida,
-            # 4-Informativa)
-            # 13 Número de Constancia original (sólo para 2-Anulaciones)
+            # Tipo registro 2. Provincia Cordoba
             if line.tax_line_id.jurisdiction_code == '904':
-                raise ValidationError(_(
-                    'El TXT para Jurisdicción 904 no está implementado '
-                    'todavia. Por favor consulte a ADHOC.'))
+
+                # 12 Tipo de Operación (1-Efectuada, 2-Anulada, 3-Omitida, 4-Informativa)
+                content.append('1')
+
+                # 13 Número de Constancia original (sólo para 2-Anulaciones) Alfanumérico (14) - ejemplo 1A002311312221
+                content.append('%014d' % 0)
+
             perc += ','.join(content) + '\r\n'
             line_nbr += 1
 
