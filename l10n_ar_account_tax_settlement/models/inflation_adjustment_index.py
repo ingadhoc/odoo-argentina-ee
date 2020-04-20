@@ -15,6 +15,7 @@ class InflationAdjustmentIndex(models.Model):
     )
     value = fields.Float(
         required=True,
+        digits=(12,4),
     )
     xml_id = fields.Char(compute='_compute_xml_id', string="External ID")
 
