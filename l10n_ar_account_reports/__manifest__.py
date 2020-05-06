@@ -32,6 +32,7 @@
         'account_reports',
         'l10n_ar',
         'account_check',
+        'report_aeroo',
     ],
     'data': [
         'views/account_journal_dashboard_view.xml',
