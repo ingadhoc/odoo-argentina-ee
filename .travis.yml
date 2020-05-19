@@ -22,21 +22,6 @@ addons:
       - python-simplejson
       - python-serial
       - python-yaml
-      # TODO BORRAR ESTOS SON SOLO DE TRANSINDAR
-      # for aeroo
-      - cups
-      - libcups2-dev
-      # FE
-      - python-dev
-      - swig
-      - libffi-dev
-      - libssl-dev
-      - python-m2crypto
-      - python-httplib2
-      # - wkhtmltopdf # for odoo pdf reports (tested on sale for eg.)
-#     Search your packages here:
-#       https://github.com/travis-ci/apt-package-whitelist/blob/master/ubuntu-precise
-#      - wkhtmltopdf  # only add if needed and check the before_install section below
 
 # set up an X server to run wkhtmltopdf.
 #before_install:
