@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_account_change_lock_date" model="ir.ui.view">
+        <field name="name">account.change.lock.date.form.inherit</field>
+        <field name="model">account.change.lock.date</field>
+        <field name="inherit_id" ref="account_accountant.view_account_change_lock_date"/>
+        <field name="arch" type="xml">
+            <field name="period_lock_date" position="before">
+                <field name="company_id" options="{'no_create': True, 'no_open': True}"/>
+            </field>
+        </field>
+    </record>
+</odoo>
