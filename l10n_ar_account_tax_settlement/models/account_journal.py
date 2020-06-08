@@ -789,7 +789,7 @@ class AccountJournal(models.Model):
             if line.tax_line_id.jurisdiction_code == '904':
 
                 # 12 Tipo de Operación (1-Efectuada, 2-Anulada, 3-Omitida)
-                content.append('1')
+                content.append('2' if internal_type == 'credit_note' else '1')
 
                 # 13 Fecha de Emisión de Constancia (en formato dd/mm/aaaa)
                 content.append(fields.Date.from_string(line.date).strftime('%d/%m/%Y'))
@@ -798,7 +798,8 @@ class AccountJournal(models.Model):
                 content.append('%014s' % int(re.sub('[^0-9]', '', payment.withholding_number or '0')[:14]))
 
                 # 15 Número de Constancia original (sólo para las Anulaciones –ver códigos por jur-)  - Numeric(14)
-                content.append('%014d' % 0)
+                content.append('%014d' % int(re.sub('[^0-9]', '', line.move_id.document_number or ''))
+                               if internal_type == 'credit_note' else '%014d' % 0)
 
             ret += ','.join(content) + '\r\n'
             line_nbr += 1
@@ -880,10 +881,11 @@ class AccountJournal(models.Model):
             if line.tax_line_id.jurisdiction_code == '904':
 
                 # 12 Tipo de Operación (1-Efectuada, 2-Anulada, 3-Omitida, 4-Informativa)
-                content.append('1')
+                content.append('2' if internal_type == 'credit_note' else '1')
 
                 # 13 Número de Constancia original (sólo para 2-Anulaciones) Alfanumérico (14) - ejemplo 1A002311312221
-                content.append('%014d' % 0)
+                content.append('%014d' % int(re.sub('[^0-9]', '', line.move_id.document_number or ''))
+                               if internal_type == 'credit_note' else '%014d' % 0)
 
             perc += ','.join(content) + '\r\n'
             line_nbr += 1
