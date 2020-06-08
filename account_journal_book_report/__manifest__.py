@@ -8,9 +8,7 @@
     'license': "AGPL-3",
     'depends': [
         "account_reports",
-        # depends on report_extended instaed of report_aeroo because the first
-        # one adds myget/myset functionality
-        "report_extended",
+        "report_aeroo",
     ],
     'data': [
         'wizard/account_journal_book_report_views.xml',
