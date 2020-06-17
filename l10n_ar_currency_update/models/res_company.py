@@ -75,10 +75,10 @@ class ResCompany(models.Model):
             try:
                 # Do not pass company since we need to find the one that has certificate
                 afip_date, rate = currency._l10n_ar_get_afip_ws_currency_rate()
-                res.update({currency.name: (rate, datetime.strptime(afip_date, "%Y%m%d").date())})
 
                 rate = rate * (1.0 + (self.rate_perc or 0.0))
                 rate += (self.rate_surcharge or 0.0)
+                res.update({currency.name: (1.0 / rate, datetime.strptime(afip_date, "%Y%m%d").date())})
 
                 _logger.log(25, "Currency %s %s %s", currency.name, afip_date, rate)
             except Exception:
