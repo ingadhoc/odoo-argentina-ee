@@ -165,6 +165,35 @@ class AccountJournal(models.Model):
             'txt_content': ret,
         }]
 
+    def _get_perception_original_invoice_number(self, line):
+        self.ensure_one()
+        res = ''
+        related_invoice = line.invoice_id.get_related_invoices_data() or line.invoice_id
+        letter = related_invoice.document_type_id.document_letter_id.name
+        internal_type = related_invoice.document_type_id.internal_type
+
+        # 2 Tipo de comprobante
+        if internal_type == 'invoice':
+            document_type = letter == 'E' and 5 or 1
+        elif internal_type == 'credit_note':
+            document_type = letter == 'E' and 106 or 102
+        elif internal_type == 'debit_note':
+            document_type = letter == 'E' and 6 or 2
+        elif related_invoice.type == 'out_invoice':
+            document_type = 20
+        elif related_invoice.type == 'out_refund':
+            document_type = 120
+        else:
+            raise ValidationError(_('Tipo de comprobante no reconocido'))
+        res += str(document_type)[:1]
+
+        # 3 Letra del comprobante
+        res += letter
+
+        # 4 Número del comprobante
+        res += '%012d' % int(re.sub('[^0-9]', '', related_invoice.document_number or ''))
+        return res
+
     def iibb_aplicado_api_files_values(self, move_lines):
         """ Implementado segun especificación en carpeta doc de este repo
         """
@@ -965,7 +994,7 @@ class AccountJournal(models.Model):
                 content.append('2' if internal_type == 'credit_note' else '1')
 
                 # 13 Número de Constancia original (sólo para 2-Anulaciones) Alfanumérico (14) - ejemplo 1A002311312221
-                content.append('%014d' % int(re.sub('[^0-9]', '', line.move_id.document_number or ''))
+                content.append(self._get_perception_original_invoice_number(line)
                                if internal_type == 'credit_note' else '%014d' % 0)
 
             perc += ','.join(content) + '\r\n'
