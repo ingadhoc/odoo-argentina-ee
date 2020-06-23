@@ -4,6 +4,7 @@ from odoo.exceptions import ValidationError
 from datetime import datetime
 # from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 import re
+import math
 
 # from odoo.exceptions import ValidationError
 
@@ -22,6 +23,11 @@ def format_amount(amount, padding=15, decimals=2, sep=""):
     if sep:
         res = "{0}{1}{2}".format(res[:-decimals], sep, res[-decimals:])
     return res
+
+
+def round_half_up(n, decimals=0):
+    multiplier = 10 ** decimals
+    return math.floor(n*multiplier + 0.5) / multiplier
 
 
 def get_line_tax_base(move_line):
@@ -839,7 +845,8 @@ class AccountJournal(models.Model):
                 alicuot_line.alicuota_retencion, 6, 2, '.'))
 
             # 9 Monto retenido
-            content.append(format_amount(-line.balance, 12, 2, '.'))
+            # TODO this need to be changed when we properly compute the perception amounts and use line.balance again
+            content.append(format_amount(round_half_up(-get_line_tax_base(line) * (alicuot_line.alicuota_percepcion / 100.0), 2), 12, 2, '.'))
 
             # 10 Tipo de Régimen de Percepción
             # (código correspondiente según tabla definida por la jurisdicción)
@@ -931,7 +938,8 @@ class AccountJournal(models.Model):
                 alicuot_line.alicuota_percepcion, 6, 2, '.'))
 
             # 9 Monto percibido
-            content.append(format_amount(-line.balance, 12, 2, '.'))
+            # TODO this need to be changed when we properly compute the perception amounts and use line.balance again
+            content.append(format_amount(round_half_up(-get_line_tax_base(line) * (alicuot_line.alicuota_percepcion / 100.0), 2), 12, 2, '.'))
 
             # 10 Tipo de Régimen de Percepción
             # (código correspondiente según tabla definida por la jurisdicción)
