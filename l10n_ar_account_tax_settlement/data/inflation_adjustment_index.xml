@@ -1,0 +1,424 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<odoo noupdate="1">
+
+    <record id="index_01_2013" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2013-01-01')"/>
+        <field name="value">43.5098</field>
+    </record>
+
+    <record id="index_02_2013" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2013-02-01')"/>
+        <field name="value">43.9693</field>
+    </record>
+
+    <record id="index_03_2013" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2013-03-01')"/>
+        <field name="value">44.4123</field>
+    </record>
+
+    <record id="index_04_2013" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2013-04-01')"/>
+        <field name="value">44.8386</field>
+    </record>
+
+    <record id="index_05_2013" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2013-05-01')"/>
+        <field name="value">45.4021</field>
+    </record>
+
+    <record id="index_06_2013" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2013-06-01')"/>
+        <field name="value">46.0130</field>
+    </record>
+
+    <record id="index_07_2013" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2013-07-01')"/>
+        <field name="value">46.5343</field>
+    </record>
+
+    <record id="index_08_2013" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2013-08-01')"/>
+        <field name="value">47.0609</field>
+    </record>
+
+    <record id="index_09_2013" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2013-09-01')"/>
+        <field name="value">47.5754</field>
+    </record>
+
+    <record id="index_10_2013" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2013-10-01')"/>
+        <field name="value">48.1178</field>
+    </record>
+
+    <record id="index_11_2013" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2013-11-01')"/>
+        <field name="value">48.7031</field>
+    </record>
+
+    <record id="index_12_2013" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2013-12-01')"/>
+        <field name="value">49.4301</field>
+    </record>
+
+    <record id="index_01_2014" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2014-01-01')"/>
+        <field name="value">51.8783</field>
+    </record>
+
+    <record id="index_02_2014" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2014-02-01')"/>
+        <field name="value">54.5353</field>
+    </record>
+
+    <record id="index_03_2014" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2014-03-01')"/>
+        <field name="value">55.8626</field>
+    </record>
+
+    <record id="index_04_2014" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2014-04-01')"/>
+        <field name="value">56.8231</field>
+    </record>
+
+    <record id="index_05_2014" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2014-05-01')"/>
+        <field name="value">57.8845</field>
+    </record>
+
+    <record id="index_06_2014" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2014-06-01')"/>
+        <field name="value">58.7561</field>
+    </record>
+
+    <record id="index_07_2014" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2014-07-01')"/>
+        <field name="value">59.5470</field>
+    </record>
+
+    <record id="index_08_2014" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2014-08-01')"/>
+        <field name="value">60.5188</field>
+    </record>
+
+    <record id="index_09_2014" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2014-09-01')"/>
+        <field name="value">61.4838</field>
+    </record>
+
+    <record id="index_10_2014" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2014-10-01')"/>
+        <field name="value">62.2371</field>
+    </record>
+
+    <record id="index_11_2014" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2014-11-01')"/>
+        <field name="value">62.8051</field>
+    </record>
+
+    <record id="index_12_2014" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2014-12-01')"/>
+        <field name="value">63.4032</field>
+    </record>
+
+    <record id="index_01_2015" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2015-01-01')"/>
+        <field name="value">63.5306</field>
+    </record>
+
+    <record id="index_02_2015" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2015-02-01')"/>
+        <field name="value">63.6887</field>
+    </record>
+
+    <record id="index_03_2015" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2015-03-01')"/>
+        <field name="value">64.3132</field>
+    </record>
+
+    <record id="index_04_2015" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2015-04-01')"/>
+        <field name="value">64.7923</field>
+    </record>
+
+    <record id="index_05_2015" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2015-05-01')"/>
+        <field name="value">65.7528</field>
+    </record>
+
+    <record id="index_06_2015" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2015-06-01')"/>
+        <field name="value">66.6176</field>
+    </record>
+
+    <record id="index_07_2015" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2015-07-01')"/>
+        <field name="value">67.5751</field>
+    </record>
+
+    <record id="index_08_2015" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2015-08-01')"/>
+        <field name="value">68.5401</field>
+    </record>
+
+    <record id="index_09_2015" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2015-09-01')"/>
+        <field name="value">69.4659</field>
+    </record>
+
+    <record id="index_10_2015" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2015-10-01')"/>
+        <field name="value">70.1100</field>
+    </record>
+
+    <record id="index_11_2015" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2015-11-01')"/>
+        <field name="value">71.5122</field>
+    </record>
+
+    <record id="index_12_2015" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2015-12-01')"/>
+        <field name="value">74.3012</field>
+    </record>
+
+    <record id="index_01_2016" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2016-01-01')"/>
+        <field name="value">80.9883</field>
+    </record>
+
+    <record id="index_02_2016" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2016-02-01')"/>
+        <field name="value">85.0377</field>
+    </record>
+
+    <record id="index_03_2016" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2016-03-01')"/>
+        <field name="value">87.0786</field>
+    </record>
+
+    <record id="index_04_2016" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2016-04-01')"/>
+        <field name="value">88.3847</field>
+    </record>
+
+    <record id="index_05_2016" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2016-05-01')"/>
+        <field name="value">91.5666</field>
+    </record>
+
+    <record id="index_06_2016" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2016-06-01')"/>
+        <field name="value">94.2220</field>
+    </record>
+
+    <record id="index_07_2016" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2016-07-01')"/>
+        <field name="value">96.7660</field>
+    </record>
+
+    <record id="index_08_2016" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2016-08-01')"/>
+        <field name="value">97.1531</field>
+    </record>
+
+    <record id="index_09_2016" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2016-09-01')"/>
+        <field name="value">97.5417</field>
+    </record>
+
+    <record id="index_10_2016" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2016-10-01')"/>
+        <field name="value">98.1270</field>
+    </record>
+
+    <record id="index_11_2016" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2016-11-01')"/>
+        <field name="value">99.2063</field>
+    </record>
+
+    <record id="index_12_2016" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2016-12-01')"/>
+        <field name="value">100.000</field>
+    </record>
+
+    <record id="index_01_2017" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2017-01-01')"/>
+        <field name="value">101.5859</field>
+    </record>
+
+    <record id="index_02_2017" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2017-02-01')"/>
+        <field name="value">103.6859</field>
+    </record>
+
+    <record id="index_03_2017" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2017-03-01')"/>
+        <field name="value">106.1476</field>
+    </record>
+
+    <record id="index_04_2017" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2017-04-01')"/>
+        <field name="value">108.9667</field>
+    </record>
+
+    <record id="index_05_2017" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2017-05-01')"/>
+        <field name="value">110.5301</field>
+    </record>
+
+    <record id="index_06_2017" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2017-06-01')"/>
+        <field name="value">111.8477</field>
+    </record>
+
+    <record id="index_07_2017" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2017-07-01')"/>
+        <field name="value">113.7852</field>
+    </record>
+
+    <record id="index_08_2017" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2017-08-01')"/>
+        <field name="value">115.3819</field>
+    </record>
+
+    <record id="index_09_2017" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2017-09-01')"/>
+        <field name="value">117.5719</field>
+    </record>
+
+    <record id="index_10_2017" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2017-10-01')"/>
+        <field name="value">119.3528</field>
+    </record>
+
+    <record id="index_11_2017" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2017-11-01')"/>
+        <field name="value">120.994</field>
+    </record>
+
+    <record id="index_12_2017" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2017-12-01')"/>
+        <field name="value">124.7956</field>
+    </record>
+
+    <record id="index_01_2018" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2018-01-01')"/>
+        <field name="value">126.9887</field>
+    </record>
+
+    <record id="index_02_2018" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2018-02-01')"/>
+        <field name="value">130.0606</field>
+    </record>
+
+    <record id="index_03_2018" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2018-03-01')"/>
+        <field name="value">133.1054</field>
+    </record>
+
+    <record id="index_04_2018" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2018-04-01')"/>
+        <field name="value">136.7512</field>
+    </record>
+
+    <record id="index_05_2018" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2018-05-01')"/>
+        <field name="value">139.5893</field>
+    </record>
+
+    <record id="index_06_2018" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2018-06-01')"/>
+        <field name="value">144.8053</field>
+    </record>
+
+    <record id="index_07_2018" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2018-07-01')"/>
+        <field name="value">149.2966</field>
+    </record>
+
+    <record id="index_08_2018" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2018-08-01')"/>
+        <field name="value">155.1034</field>
+    </record>
+
+    <record id="index_09_2018" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2018-09-01')"/>
+        <field name="value">165.2383</field>
+    </record>
+
+    <record id="index_10_2018" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2018-10-01')"/>
+        <field name="value">174.1473</field>
+    </record>
+
+    <record id="index_11_2018" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2018-11-01')"/>
+        <field name="value">179.6388</field>
+    </record>
+
+    <record id="index_12_2018" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2018-12-01')"/>
+        <field name="value">184.2552</field>
+    </record>
+
+    <record id="index_01_2019" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2019-01-01')"/>
+        <field name="value">189.6101</field>
+    </record>
+
+    <record id="index_02_2019" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2019-02-01')"/>
+        <field name="value">196.7501</field>
+    </record>
+
+    <record id="index_03_2019" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2019-03-01')"/>
+        <field name="value">205.9571</field>
+    </record>
+
+    <record id="index_04_2019" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2019-04-01')"/>
+        <field name="value">213.0517</field>
+    </record>
+
+    <record id="index_05_2019" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2019-05-01')"/>
+        <field name="value">219.5691</field>
+    </record>
+
+    <record id="index_06_2019" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2019-06-01')"/>
+        <field name="value">225.5370</field>
+    </record>
+
+    <record id="index_07_2019" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2019-07-01')"/>
+        <field name="value">230.4940</field>
+    </record>
+
+    <record id="index_08_2019" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2019-08-01')"/>
+        <field name="value">239.6077</field>
+    </record>
+
+    <record id="index_09_2019" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2019-09-01')"/>
+        <field name="value">253.7102</field>
+    </record>
+
+    <record id="index_10_2019" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2019-10-01')"/>
+        <field name="value">262.0661</field>
+    </record>
+
+    <record id="index_11_2019" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2019-11-01')"/>
+        <field name="value">273.2158</field>
+    </record>
+
+    <record id="index_12_2019" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2019-12-01')"/>
+        <field name="value">283.4442</field>
+    </record>
+
+</odoo>

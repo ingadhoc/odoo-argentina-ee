@@ -1,0 +1,5 @@
+<odoo noupdate="1">
+
+    <function model="res.company" name="set_special_defaults_on_install"/>
+
+</odoo>

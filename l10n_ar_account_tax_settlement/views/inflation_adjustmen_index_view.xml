@@ -1,0 +1,41 @@
+<odoo>
+
+    <record id="inflation_adjustment_index_tree" model="ir.ui.view">
+        <field name="name">inflation.adjustment.index.tree</field>
+        <field name="model">inflation.adjustment.index</field>
+        <field name="arch" type="xml">
+            <tree editable="top">
+                <field name="date"/>
+                <field name="value"/>
+                <field name="xml_id" groups="base.group_no_one"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="inflation_adjustment_index_search" model="ir.ui.view">
+        <field name="name">inflation.adjustment.index.search</field>
+        <field name="model">inflation.adjustment.index</field>
+        <field name="arch" type="xml">
+            <search string="Search Description">
+                <field name="date"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="inflation_adjustment_index_action" model="ir.actions.act_window">
+        <field name="name">Indices de Ajuste de Inflación</field>
+        <field name="res_model">inflation.adjustment.index</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_type">form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                No hay indices de ajuste por inflación aún. Por favor cree uno.
+            </p><p>
+                Estos son necesarios para generar el asitento de ajuste por inflación.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="inflation_adjustment_index_menu" parent="account.account_account_menu" action="inflation_adjustment_index_action" sequence="100" groups="base.group_no_one"/>
+
+</odoo>

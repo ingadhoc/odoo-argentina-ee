@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account_debt_management.menu_current_account" model="ir.ui.menu">
+        <field name="parent_id" ref="account_reports.account_reports_partners_reports_menu"/>
+        <field name="sequence" eval="15"/>
+    </record>
+</odoo>

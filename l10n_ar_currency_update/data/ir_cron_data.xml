@@ -1,0 +1,21 @@
+<odoo>
+
+    <!-- The scheduled action that will be run to update the currency rates will
+    be run after 21 hours (GMT-3), this is required since the rates are
+    published by AFIP after 9 pm -->
+    <record id="currency_rate_live.ir_cron_currency_update" model="ir.cron">
+        <field name="nextcall" eval="DateTime.now().strftime('%Y-%m-%d 03:%M:%S')"/>
+    </record>
+
+    <record id="ir_cron_re_check_afip_currency_rate" model="ir.cron">
+        <field name="name">Currency: Re Check Afip Currency Rate</field>
+        <field name="model_id" ref="base.model_res_company"/>
+        <field name="state">code</field>
+        <field name="code">model.re_check_afip_currency_rate()</field>
+        <field name="interval_number">3</field>
+        <field name="interval_type">hours</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+    </record>
+
+</odoo>

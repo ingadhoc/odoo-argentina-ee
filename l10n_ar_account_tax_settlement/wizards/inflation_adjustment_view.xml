@@ -1,0 +1,68 @@
+<odoo>
+
+    <record id="inflation_adjustment_form" model="ir.ui.view">
+        <field name="name">inflation.adjustment.form</field>
+        <field name="model">inflation.adjustment</field>
+        <field name="arch" type="xml">
+            <form string="Inflation Adjustment">
+                <sheet>
+                    <group>
+                        <group colspan="4">
+                            <field name="company_id" options="{'no_create': True, 'no_open': True}" groups="base.group_multi_company"/>
+                            <field name="account_id" domain="[('company_id', '=', company_id), ('deprecated', '=', False)]" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="journal_id" domain="[('company_id', '=', company_id)]"/>
+                            <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
+                        </group>
+                        <group colspan="4">
+                            <label for="open_cloure_entry"/>
+                            <div class="o_row">
+                                <field name="open_cloure_entry" widget="radio" nolabel="1"/>
+                                <div attrs="{'invisible': [('open_cloure_entry', '=', 'no')]}">
+                                    <label for="closure_move_id"/>
+                                    <field name="closure_move_id" attrs="{'required': [('open_cloure_entry', '=', 'yes')]}" options="{'no_create': True, 'no_open': True}"/>
+                                </div>
+                                <div attrs="{'invisible': [('open_cloure_entry', '=', 'no')]}">
+                                    <label for="open_move_id"/>
+                                    <field name="open_move_id" attrs="{'required': [('open_cloure_entry', '=', 'yes')]}" options="{'no_create': True, 'no_open': True}"/>
+                                </div>
+                            </div>
+                        </group>
+                        <group colspan="1">
+                            <label for="date_from"/>
+                            <div class="o_row">
+                                <field name="date_from"/>
+                                <field name="start_index"/>
+                                <span>
+                                    %
+                                </span>
+                            </div>
+                            <label for="date_to"/>
+                            <div class="o_row">
+                                <field name="date_to"/>
+                                <field name="end_index"/>
+                                <span>
+                                    %
+                                </span>
+                            </div>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Confirm" name="confirm" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="inflation_adjustment_action" model="ir.actions.act_window">
+        <field name="name">Asiento de ajuste por inflación</field>
+        <field name="res_model">inflation.adjustment</field>
+        <field name="view_mode">form</field>
+        <field name="view_type">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="inflation_adjustment_menu" parent="account.menu_finance_entries_actions" action="inflation_adjustment_action" sequence="100"/>
+
+</odoo>
