@@ -16,7 +16,9 @@ class AccountChartTemplate(models.Model):
             AccountChartTemplate, self)._create_bank_journals(
             company, acc_template_ref)
 
-        if company.localization != 'argentina':
+        # When creating a DB with multicompany and there another chart template is installed from another
+        # localization or the company localization is not argentina we should not install the journals from argentina
+        if company.localization != 'argentina' or company.chart_template_id:
             return res
 
         ref = self.env.ref
