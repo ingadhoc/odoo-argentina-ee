@@ -875,7 +875,7 @@ class AccountJournal(models.Model):
 
             # 9 Monto retenido
             # TODO this need to be changed when we properly compute the perception amounts and use line.balance again
-            content.append(format_amount(round_half_up(-get_line_tax_base(line) * (alicuot_line.alicuota_percepcion / 100.0), 2), 12, 2, '.'))
+            content.append(format_amount(round_half_up(-get_line_tax_base(line) * (alicuot_line.alicuota_retencion / 100.0), 2), 12, 2, '.'))
 
             # 10 Tipo de Régimen de Percepción
             # (código correspondiente según tabla definida por la jurisdicción)
