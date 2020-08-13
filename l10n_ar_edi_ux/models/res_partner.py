@@ -76,8 +76,13 @@ class ResPartner(models.Model):
         impuestos = [imp["idImpuesto"]
                      for imp in data_mt.get("impuesto", []) + data_rg.get("impuesto", [])
                      if data.get('estadoClave') == 'ACTIVO']
+
+        data_mt_actividades = data_mt.get("actividadMonotributista", [])
+        if isinstance(data_mt_actividades, (dict,)):
+            data_mt_actividades = [data_mt_actividades]
+
         actividades = [act["idActividad"]
-                       for act in data_rg.get("actividad", []) + data_mt.get("actividadMonotributista", [])]
+                       for act in data_rg.get("actividad", []) + data_mt_actividades]
         cat_mt = data_mt.get("categoriaMonotributo", {})
         monotributo = "S" if cat_mt else "N"
         map_pronvincias = {
