@@ -39,7 +39,13 @@ class ResPartner(models.Model):
         self.ensure_one()
         vat = self.ensure_vat()
 
-        client, auth = self.env.company._l10n_ar_get_connection('ws_sr_padron_a5')._get_client()
+        # if there is certificate for current company use that one, if not use the company with first certificate found
+        company = self.env.company if self.env.company.l10n_ar_afip_ws_crt else self.env['res.company'].search(
+            [('l10n_ar_afip_ws_crt', '!=', False)], limit=1)
+        if not company:
+            raise UserError(_('Please configure an AFIP Certificate in order to continue'))
+        client, auth = company._l10n_ar_get_connection('ws_sr_padron_a5')._get_client()
+
         error_msg = _(
             'No pudimos actualizar desde padron afip al partner %s (%s).\nRecomendamos verificar manualmente en la'
             ' página de AFIP.\nObtuvimos este error:\n%s')
