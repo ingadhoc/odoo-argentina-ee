@@ -421,4 +421,38 @@
         <field name="value">283.4442</field>
     </record>
 
+    <record id="index_01_2020" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2020-01-01')"/>
+        <field name="value">289.8299</field>
+    </record>
+
+    <record id="index_02_2020" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2020-02-01')"/>
+        <field name="value">295.666</field>
+    </record>
+
+    <record id="index_03_2020" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2020-03-01')"/>
+        <field name="value">305.5515</field>
+    </record>
+
+    <record id="index_04_2020" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2020-04-01')"/>
+        <field name="value">310.1243</field>
+    </record>
+
+    <record id="index_05_2020" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2020-05-01')"/>
+        <field name="value">314.9087</field>
+    </record>
+
+    <record id="index_06_2020" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2020-06-01')"/>
+        <field name="value">321.9738</field>
+    </record>
+
+    <record id="index_07_2020" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2020-07-01')"/>
+        <field name="value">328.2014</field>
+    </record>
 </odoo>
