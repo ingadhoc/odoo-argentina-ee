@@ -56,7 +56,7 @@ class AccountFinancialReport(models.Model):
             ('settlement_type', 'in', ['new_line', 'new_line_negative'])])
 
         # pasamos por contexto lo que viene adentro del contetxo como contexto
-        # porque asi lo interpreta get_balance (en vez aparentemente
+        # porque asi lo interpreta _get_balance (en vez aparentemente
         # report_move_lines_action busca dentro del contexto)
         new_lines = new_lines.with_context(
             new_lines._context.get('context'))
@@ -73,7 +73,7 @@ class AccountFinancialReport(models.Model):
                     new_line.settement_account_tag_id.id,
                     journal.company_id.name))
             balance = sum(
-                [x['balance'] for x in new_line.get_balance(
+                [x['balance'] for x in new_line._get_balance(
                     {}, {}, self, field_names=['balance'])])
             if journal.company_id.currency_id.is_zero(balance):
                 continue
