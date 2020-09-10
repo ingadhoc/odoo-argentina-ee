@@ -151,16 +151,16 @@ class AccountJournal(models.Model):
 
             # 4 - tipo de comprobante y
             # 5 - letra de comprobante
-            internal_type = line.document_type_id.internal_type
+            internal_type = line.l10n_latam_document_type_id.internal_type
             move = line.move_id
 
             if internal_type in ('invoice', 'credit_note'):
                 # factura
-                content += '01' + line.document_type_id.document_letter_id.name
+                content += '01' + line.l10n_latam_document_type_id.l10n_ar_letter
 
             elif internal_type == 'debit_note':
                 # ND
-                content += '02' + line.document_type_id.document_letter_id.name
+                content += '02' + line.l10n_latam_document_type_id.l10n_ar_letter
             else:
                 # orden de pago (sin letra)
                 # 09 sería otro comprobante y 10 reinitegro de perc/ret
@@ -188,7 +188,7 @@ class AccountJournal(models.Model):
             content += '3'
 
             # 10 - numero de documento
-            content += partner.cuit_required()
+            content += partner.ensure_vat()
 
             # 11 - Condición frente a Ingresos Brutos
             # 1 es inscripto, 2 no inscripto con oblig. a insc y 3 no insc sin
@@ -347,7 +347,7 @@ class AccountJournal(models.Model):
             payment = line.payment_id
             tax = line.tax_line_id
             partner = line.partner_id
-            internal_type = line.document_type_id.internal_type
+            internal_type = line.l10n_latam_document_type_id.internal_type
 
             if not partner.vat:
                 raise ValidationError(_(
@@ -418,7 +418,7 @@ class AccountJournal(models.Model):
                 if payment:
                     content += ' '
                 else:
-                    content += or_inv.document_type_id.document_letter_id.name
+                    content += or_inv.l10n_latam_document_type_id.l10n_ar_letter
 
                 # 8 - Nro de comprobante (original)
                 content += '%016d' % int(
@@ -467,7 +467,7 @@ class AccountJournal(models.Model):
             if payment:
                 content += ' '
             else:
-                content += line.document_type_id.document_letter_id.name
+                content += line.l10n_latam_document_type_id.l10n_ar_letter
 
             # 6 - Nro de comprobante
             content += '%016d' % int(
@@ -490,7 +490,7 @@ class AccountJournal(models.Model):
                     total_amount - taxable_amount - vat_amount)
             elif line.invoice_id:
                 # segun especificacion el iva solo se reporta para estos
-                if line.document_type_id.document_letter_id.name in ['A', 'M']:
+                if line.l10n_latam_document_type_id.l10n_ar_letter in ['A', 'M']:
                     vat_amount = line.invoice_id.cc_vat_amount
                 else:
                     vat_amount = 0.0
@@ -553,7 +553,7 @@ class AccountJournal(models.Model):
             if partner.gross_income_type == 'no_liquida':
                 content += '00000000000'
             else:
-                content += partner.cuit_required()
+                content += partner.ensure_vat()
 
             # 14 - Situación frente al IVA del Retenido
             # 1 - Responsable Inscripto
@@ -629,12 +629,12 @@ class AccountJournal(models.Model):
             # pay_group = payment.payment_group_id
             move = line.move_id
             payment = line.payment_id
-            internal_type = line.document_type_id.internal_type
-            document_code = line.document_type_id.code
+            internal_type = line.l10n_latam_document_type_id.internal_type
+            document_code = line.l10n_latam_document_type_id.code
 
-            line.partner_id.cuit_required()
+            line.partner_id.ensure_vat()
 
-            content = line.partner_id.formated_cuit
+            content = line.partner_id.l10n_ar_formatted_vat
             content += fields.Date.from_string(
                 line.date).strftime('%d/%m/%Y')
 
@@ -647,11 +647,12 @@ class AccountJournal(models.Model):
                     internal_type == 'invoice' and 'F' or
                     internal_type == 'credit_note' and 'C' or
                     internal_type == 'debit_note' and 'D' or 'R')
-                content += line.document_type_id.document_letter_id.name
+                content += line.l10n_latam_document_type_id.l10n_ar_letter
 
-            pto_venta, nro_documento = \
-                move.document_type_id.validator_id.validate_value(
-                    move.l10n_latam_document_number, return_parts=True)
+            document_parts = move._l10n_ar_get_document_number_parts(
+                move.l10n_latam_document_number, move.l10n_latam_document_type_id.code)
+            pto_venta = document_parts['point_of_sale']
+            nro_documento = document_parts['invoice_number']
             content += pto_venta
             content += nro_documento
 
@@ -732,7 +733,7 @@ class AccountJournal(models.Model):
                         line.partner_id.name, line.partner_id.id))
 
             payment = line.payment_id
-            internal_type = line.document_type_id.internal_type
+            internal_type = line.l10n_latam_document_type_id.internal_type
 
             # 1 Número de Renglón (único por archivo)
             content = []
@@ -752,7 +753,7 @@ class AccountJournal(models.Model):
                 re.sub('[^0-9]', '', line.move_id.l10n_latam_document_number or '')))
 
             # 5 Cuit del contribuyene
-            content.append(line.partner_id.cuit_required())
+            content.append(line.partner_id.ensure_vat())
 
             # 6 Fecha de la percepción
             content.append(
@@ -819,10 +820,10 @@ class AccountJournal(models.Model):
             content = []
             content.append('%05d' % line_nbr)
 
-            letter = line.document_type_id.document_letter_id.name
+            letter = line.l10n_latam_document_type_id.l10n_ar_letter
 
             # 2 Tipo de comprobante
-            internal_type = line.document_type_id.internal_type
+            internal_type = line.l10n_latam_document_type_id.internal_type
             if  internal_type == 'invoice':
                 tipo_comprobante = letter == 'E' and 5 or 1
             elif  internal_type == 'credit_note':
@@ -838,14 +839,14 @@ class AccountJournal(models.Model):
             content.append('%03d' % tipo_comprobante)
 
             # 3 Letra del comprobante
-            content.append(line.document_type_id.document_letter_id.name)
+            content.append(line.l10n_latam_document_type_id.l10n_ar_letter)
 
             # 4 Número del comprobante
             content.append('%012d' % int(
                 re.sub('[^0-9]', '', line.move_id.l10n_latam_document_number or '')))
 
             # 5 Cuit del contribuyene
-            content.append(line.partner_id.cuit_required())
+            content.append(line.partner_id.ensure_vat())
 
             # 6 Fecha de la percepción
             content.append(
@@ -919,12 +920,12 @@ class AccountJournal(models.Model):
             payment = line.payment_id
             # pay_group = payment.payment_group_id
             move = line.move_id
-            internal_type = line.document_type_id.internal_type
+            internal_type = line.l10n_latam_document_type_id.internal_type
 
-            line.partner_id.cuit_required()
+            line.partner_id.ensure_vat()
 
             content = line.tax_line_id.jurisdiction_code or '000'
-            content += line.partner_id.formated_cuit
+            content += line.partner_id.l10n_ar_formatted_vat
             content += fields.Date.from_string(
                 line.date).strftime('%d/%m/%Y')
 
@@ -937,14 +938,10 @@ class AccountJournal(models.Model):
                 content += '{:>04s}'.format(pos)
                 content += '{:>016s}'.format(number)
             else:
-                if move.document_type_id.validator_id:
-                    pos, number = \
-                        move.document_type_id.validator_id.validate_value(
-                            move.l10n_latam_document_number, return_parts=True)
-                else:
-                    # por ej. para tipo de documento 99 que no tiene
-                    # validator
-                    pos, number = get_pos_and_number(move.l10n_latam_document_number)
+                document_parts = move._l10n_ar_get_document_number_parts(
+                    move.l10n_latam_document_number, move.l10n_latam_document_type_id.code)
+                pos = document_parts['point_of_sale']
+                number = document_parts['invoice_number']
                 # si el punto de venta es de 5 digitos no encontramos doc
                 # que diga como proceder, tomamos los ultimos 4 digitos
                 pto_venta = pos.zfill(4)[-4:]
@@ -975,7 +972,7 @@ class AccountJournal(models.Model):
                     content += ' '
                 else:
                     content += (
-                        line.document_type_id.document_letter_id.name or ' ')
+                        line.l10n_latam_document_type_id.l10n_ar_letter or ' ')
 
             # en retencíones hay que poner el número de comprobante original
             # pero solo en digitos
