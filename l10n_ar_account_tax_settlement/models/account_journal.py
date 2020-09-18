@@ -653,8 +653,8 @@ class AccountJournal(models.Model):
                 move.l10n_latam_document_number, move.l10n_latam_document_type_id.code)
             pto_venta = document_parts['point_of_sale']
             nro_documento = document_parts['invoice_number']
-            content += pto_venta
-            content += nro_documento
+            content += str(pto_venta)
+            content += str(nro_documento)
 
             # solo para percepciones
             if not payment:
@@ -687,14 +687,14 @@ class AccountJournal(models.Model):
 
         # AR-CUIT-PERIODO-ACTIVIDAD-LOTE_MD5
         perc_txt_filename = "AR-%s-%s-%s-LOTEX.txt" % (
-            self.company_id.cuit,
+            self.company_id.vat,
             period,
             "7",  # 7 serian las percepciones
         )
 
-        # AR-CUIT-PERIODO-ACTIVIDAD-LOTE_MD5
+        # AR-vat-PERIODO-ACTIVIDAD-LOTE_MD5
         ret_txt_filename = "AR-%s-%s-%s-LOTEX.txt" % (
-            self.company_id.cuit,
+            self.company_id.vat,
             period,
             "6",  # 6 serian las retenciones
         )
@@ -944,8 +944,8 @@ class AccountJournal(models.Model):
                 number = document_parts['invoice_number']
                 # si el punto de venta es de 5 digitos no encontramos doc
                 # que diga como proceder, tomamos los ultimos 4 digitos
-                pto_venta = pos.zfill(4)[-4:]
-                nro_documento = number.zfill(8)[-8:]
+                pto_venta = str(pos).zfill(4)[-4:]
+                nro_documento = str(number).zfill(8)[-8:]
                 content += pto_venta
                 content += nro_documento
 
