@@ -9,5 +9,5 @@ class ResConfigSettings(models.TransientModel):
 
     _inherit = 'res.config.settings'
 
-    rate_perc = fields.Float(related="company_id.rate_perc")
-    rate_surcharge = fields.Float(related="company_id.rate_surcharge")
+    rate_perc = fields.Float(related="company_id.rate_perc", readonly=False)
+    rate_surcharge = fields.Float(related="company_id.rate_surcharge", readonly=False)
