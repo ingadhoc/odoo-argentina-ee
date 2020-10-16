@@ -83,7 +83,7 @@ class ResPartner(models.Model):
                      for imp in data_mt.get("impuesto", []) + data_rg.get("impuesto", [])
                      if data.get('estadoClave') == 'ACTIVO']
 
-        data_mt_actividades = data_mt.get("actividadMonotributista", [])
+        data_mt_actividades = data_mt.get("actividadMonotributista", []) or []
         if isinstance(data_mt_actividades, (dict,)):
             data_mt_actividades = [data_mt_actividades]
 
