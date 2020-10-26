@@ -24,6 +24,7 @@ class ResCompany(models.Model):
     rate_surcharge = fields.Float(
         digits=(16, 4),
     )
+    l10n_ar_last_currency_sync_date = fields.Date(string="AFIP Last Sync Date", readonly=True)
 
     @api.model
     def create(self, values):
@@ -52,11 +53,11 @@ class ResCompany(models.Model):
         records = self.search([
             ('currency_provider', '=', 'afip'),
             ('currency_interval_unit', '!=', False),
-            '|', ('currency_next_execution_date', '<', fields.Date.today()),
-            ('currency_next_execution_date', '=', False),
+            ('currency_interval_unit', '!=', 'manually'),
+            '|', ('l10n_ar_last_currency_sync_date', '<', fields.Date.today()),
+            ('l10n_ar_last_currency_sync_date', '=', False),
         ])
-        for rec in records:
-            rec.update_currency_rates()
+        records.update_currency_rates()
 
     def _parse_afip_data(self, available_currencies):
         """ This method is used to update the currency rates using AFIP provider. Rates are given against AR """
@@ -68,6 +69,13 @@ class ResCompany(models.Model):
         available_currencies = available_currencies.filtered('l10n_ar_afip_code') - currency_ars
 
         for currency in available_currencies:
+            company = self.env.company if self.env.company.sudo().l10n_ar_afip_ws_crt else self.env['res.company'].search(
+                [('l10n_ar_afip_ws_crt', '!=', False)], limit=1)
+            if not company:
+                _logger.log(25, "No pudimos encontrar compañía con certificados de AFIP validos")
+                return False
+            env_company = self.env.company
+            self.env.company = company
             try:
                 # Obtain the currencies to be updated
                 _logger.log(25, "Connecting to AFIP to update the currency rates for %s", currency.name)
@@ -78,8 +86,10 @@ class ResCompany(models.Model):
                 res.update({currency.name: (1.0 / rate, datetime.strptime(afip_date, "%Y%m%d").date())})
 
                 _logger.log(25, "Currency %s %s %s", currency.name, afip_date, rate)
-            except Exception:
-                return False
+                self.env.company = env_company
+            except Exception as e:
+                self.env.company = env_company
+                _logger.log(25, "Could not get rate for currency %s. This is what we get:\n%s", currency.name, e)
         return res or False
 
     def _generate_currency_rates(self, parsed_data):
@@ -97,3 +107,5 @@ class ResCompany(models.Model):
                 super(ResCompany, company)._generate_currency_rates(new_parsed_data)
             else:
                 super(ResCompany, company)._generate_currency_rates(parsed_data)
+            if company.currency_provider == 'afip':
+                company.l10n_ar_last_currency_sync_date = fields.Date.today()
