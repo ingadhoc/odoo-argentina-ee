@@ -29,6 +29,7 @@ Especificación de archivos:
 
 * AGIP: https://www.agip.gob.ar/filemanager/source/Agentes/DocTecnicoImpoOperacionesDise%C3%B1odeRegistro.pdf y https://www.agip.gob.ar/agentes/agentes-de-recaudacion/ib-agentes-recaudacion/aplicativo-arciba/ag-rec-arciba-codigo-de-normas
 
+* MENDOZA https://www.atm.mendoza.gov.ar/portalatm/zoneBottom/serviciosDescargas/sarepe/files/SAREPE.pdf
 
 Inflation Adjustment
 --------------------
