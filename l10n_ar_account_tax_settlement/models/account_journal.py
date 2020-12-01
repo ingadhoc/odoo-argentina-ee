@@ -60,6 +60,7 @@ class AccountJournal(models.Model):
         ('iibb_aplicado_agip', 'TXT Perc/Ret IIBB aplicadas AGIP'),
         ('iibb_aplicado_api', 'TXT Perc/Ret IIBB aplicadas API'),
         ('iibb_aplicado_sircar', 'TXT Perc/Ret IIBB aplicadas SIRCAR'),
+        ('iibb_aplicado_dgr_mendoza', 'TXT  Perc/Ret IIBB aplicado DGR Mendonza'),
         # ('other', 'Other')
     ])
 
@@ -83,6 +84,80 @@ class AccountJournal(models.Model):
                 ' o "Perc/Ret IIBB aplicadas API"'
                 ' si no tiene instalado el módulo de retenciones'
                 ' automáticas (account_withholding_automatic)'))
+
+    def iibb_aplicado_dgr_mendoza_files_values(self, move_lines):
+
+        self.ensure_one()
+        ret = ''
+        for line in move_lines:
+            # Agente de Retención del Impuesto sobre los Ingresos Brutos
+
+            partner = line.partner_id
+            payment = line.payment_id
+            move = line.move_id
+            tax = line.tax_line_id
+
+            alicuot_line = tax.get_partner_alicuot(partner, line.date)
+            if not alicuot_line:
+                raise ValidationError(_('No hay alicuota configurada en el partner "%s" (id: %s)') % (
+                    partner.name, partner.id))
+
+            if not payment:
+                continue
+
+            # Campo 1: CUIT char(13). CUIT del Sujeto retenido o percibido. Ejemplo: 20-10111222-3
+            # Example "30-58710878-6"
+            partner.cuit_required()
+            content = partner.formated_cuit
+
+            # Campo 2: Denominación char(80). Apellido y Nombre o Razón Social. Formato: 80 posiciones, se completa con
+            # blancos a la derecha.
+            # Example "ELECTRICIDAD MAZA SRL                                                           "
+            content += '{:80.80}'.format(partner.name)
+
+            # Campo 3: Fecha Comprobante char(8). Fecha del Comprobante de Retención/Percepción según Res.40/2012 (ddmmaaaa)
+            # Example s"16052020"
+            content += fields.Date.from_string(move.date).strftime('%d%m%Y')
+
+            # Campo 4: Comprobante char(12)- Número de Comprobante de Retención/Percepción según Res.40/2012.
+            # Formato: 999999999999 (rellenar con ceros (0) a la izquierda) Ejemplo: 000000001521
+            # Example "000000027860"
+            content += (payment.withholding_number or '').rjust(12, '0')[:12]  # we are forcing 12 first numbers always.
+
+            # Campo 5: Fecha Ret./Perc. char(8)- Fecha de efectuada la retención / percepción (ddmmaaaa)
+            # Example "16052020"
+            content += fields.Date.from_string(payment.payment_date).strftime('%d%m%Y')
+
+            # Campo 6. Base Imponible char(15). Formato: 999999999999.99 (doce enteros, punto decimal y dos decimales,
+            # dejando espacios en blanco a izquierda para completar las 15 posiciones). Ejemplo: "         345.21"
+            # Example "000000027229.33"
+            content += '%15.2f' % payment.withholdable_base_amount
+
+            # Campo 7: Alícuota char(5). Alícuota para la retención y/o percepción. Formato: 99.99 (dos enteros,
+            # punto decimal y dos decimales. Ejemplo: " 3.00"
+            # Example "03.00"
+            content += '%5.2f' % alicuot_line.alicuota_retencion
+
+            # Campo 8: Importe Ret./Perc. char(15). Importe retenido y/o percibido. Formato: 999999999999.99 (doce enteros,
+            # punto decimal y dos decimales, dejando espacios en blanco a izquierda para completar las 15 posiciones).
+            # Ejemplo: "          34.50" "000000000816.88"
+            content += '%15.2f' % line.balance
+
+            content += '\r\n'
+            ret += content
+
+        # File name
+        move_line = move_lines and move_lines[0] or self.env['account.move.line']
+        tipo_agente = 'rr'  # This value is fixed just because we are doing the retention txt, when adding the
+        # perception we need to change it
+        cuit = move_line.company_id.cuit
+        periodo = fields.Date.from_string(move_line.date).strftime('%Y') or ""  # 'pppp' AÑO '2020'
+        cuota = fields.Date.from_string(move_line.date).strftime('%m') or ""  # 'cc'
+
+        return [{
+            'txt_filename': '%s%s%s%s.txt' % (tipo_agente, cuit, periodo, cuota),
+            'txt_content': ret,
+        }]
 
     def iibb_aplicado_api_files_values(self, move_lines):
         """ Implementado segun especificación en carpeta doc de este repo
