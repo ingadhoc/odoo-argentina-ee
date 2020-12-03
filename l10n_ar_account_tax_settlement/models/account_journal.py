@@ -186,7 +186,7 @@ class AccountJournal(models.Model):
                     '"%s" (id: %s)') % (partner.name, partner.id))
 
             # 1 - tipo de operacion
-            if tax.tax_group_id.type == 'perception' and \
+            if tax.type_tax_use in ['sale', 'purchase'] and \
                     tax.amount_type == 'partner_tax':
                 content = '2'
                 alicuot = alicuot_line.alicuota_percepcion
@@ -197,7 +197,7 @@ class AccountJournal(models.Model):
                     or '000'
                 articulo_inciso_retiene = \
                     alicuot_line.api_codigo_articulo_percepcion
-            elif tax.tax_group_id.type == 'withholding' and \
+            elif tax.type_tax_use in ['customer', 'supplier'] and \
                     tax.withholding_type == 'partner_tax':
                 content = '1'
                 alicuot = alicuot_line.alicuota_retencion
@@ -379,9 +379,9 @@ class AccountJournal(models.Model):
             # new line
             content += '\r\n'
 
-            if tax.tax_group_id.type == 'perception':
+            if tax.type_tax_use in ['sale', 'purchase']:
                 perc += content
-            elif tax.tax_group_id.type == 'withholding':
+            elif tax.type_tax_use in ['customer', 'supplier']:
                 ret += content
 
         # return [
@@ -437,11 +437,11 @@ class AccountJournal(models.Model):
 
 
             # 1 - Tipo de Operación
-            if tax.tax_group_id.type == 'perception':
+            if tax.type_tax_use in ['sale', 'purchase']:
                     # tax.amount_type == 'partner_tax':
                 content = '2'
                 alicuot = alicuot_line.alicuota_percepcion
-            elif tax.tax_group_id.type == 'withholding':
+            elif tax.type_tax_use in ['customer', 'supplier']:
                     # tax.withholding_type == 'partner_tax':
                 content = '1'
                 alicuot = alicuot_line.alicuota_retencion
