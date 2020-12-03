@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_move_form" model="ir.ui.view">
+        <field name="name">account.move.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="l10n_ar_edi.view_move_form_ar"/>
+        <field name="arch" type="xml">
+            <field name="l10n_ar_afip_fce_is_cancellation" position="after">
+                <label for="l10n_ar_afip_asoc_period_start" string="Associated Period"/>
+                <div>
+                    <field name="l10n_ar_afip_asoc_period_start" class="oe_inline"/> to <field name="l10n_ar_afip_asoc_period_end" class="oe_inline"/>
+                </div>
+            </field>
+        </field>
+    </record>
+
+</odoo>
