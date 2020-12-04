@@ -156,6 +156,11 @@ class AccountJournal(models.Model):
         Devuelve un browse del move creado
         """
         self.ensure_one()
+        draft_lines = move_lines.filtered(lambda x: x.move_id.state == 'draft')
+        if draft_lines:
+            raise ValidationError(_(
+                'A seleccionado apuntes contables de asientos en borrador. '
+                'Solo puede liquidar apuntes de asientos publicados. Apuntes: %s') % draft_lines.ids)
         if not self.tax_settlement:
             raise ValidationError(_(
                 'Settlement only allowed on journals with Tax Settlement '
@@ -366,6 +371,11 @@ class AccountJournal(models.Model):
         [{'txt_filename': 'Nombre', 'txt_content': 'Contenido'}
         """
         self.ensure_one()
+        draft_lines = move_lines.filtered(lambda x: x.move_id.state == 'draft')
+        if draft_lines:
+            raise ValidationError(_(
+                'A seleccionado apuntes contables de asientos en borrador. '
+                'Solo puede generar el txt de apuntes de asientos publicados. Apuntes: %s') % draft_lines.ids)
         _logger.info(
             "Getting tax settlement tax values for '%s'" % (self.name))
         if self.settlement_tax and hasattr(
