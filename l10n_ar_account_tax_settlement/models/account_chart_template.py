@@ -88,6 +88,9 @@ class AccountChartTemplate(models.Model):
         # for name, code, tax, report, partner, credit_id, debit_id, tag \
         for name, code, type, tax, partner, credit_id, debit_id, tag \
                 in journals:
+            if not credit_id or debit_id:
+                _logger.info("Skip creation of journal %s because we didn't found debit/credit account")
+                continue
             # journal_data.append({
             self.env['account.journal'].create({
                 'type': 'general',
