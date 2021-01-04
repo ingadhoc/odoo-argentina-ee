@@ -18,7 +18,7 @@ class AccountJournal(models.Model):
             currency_table = {}
             # para el caso donde el usuario esta en una cia con moneda
             # distinta a la moneda de la cia del diario
-            used_currency = self.env.user.company_id.currency_id
+            used_currency = self.env.company.currency_id
             # no importa la del diario, solo la de la cia del diario
             if company.currency_id != used_currency:
                 currency_table[company.currency_id.id] = (
