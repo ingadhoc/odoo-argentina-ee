@@ -64,7 +64,7 @@ class InflationAdjustment(models.TransientModel):
     def default_get(self, field_list):
         res = super(InflationAdjustment, self).default_get(field_list)
         today = fields.Datetime.now()
-        company = self.env.user.company_id
+        company = self.env.company
         res['company_id'] = company.id
         company_fiscalyear_dates = company.compute_fiscalyear_dates(
             (today - relativedelta(year=today.year-1)))
