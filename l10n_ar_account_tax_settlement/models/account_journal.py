@@ -895,15 +895,15 @@ class AccountJournal(models.Model):
 
             # 2 Tipo de comprobante
             internal_type = line.l10n_latam_document_type_id.internal_type
-            if  internal_type == 'invoice':
+            if internal_type == 'invoice':
                 tipo_comprobante = letter == 'E' and 5 or 1
-            elif  internal_type == 'credit_note':
+            elif internal_type == 'credit_note':
                 tipo_comprobante = letter == 'E' and 106 or 102
-            elif  internal_type == 'debit_note':
+            elif internal_type == 'debit_note':
                 tipo_comprobante = letter == 'E' and 6 or 2
-            elif invoice.type == 'out_invoice':
+            elif line.move_id.type == 'out_invoice':
                 tipo_comprobante = 20
-            elif invoice.type == 'out_refund':
+            elif line.move_id.type == 'out_refund':
                 tipo_comprobante = 120
             else:
                 raise ValidationError(_('Tipo de comprobante no reconocido'))
