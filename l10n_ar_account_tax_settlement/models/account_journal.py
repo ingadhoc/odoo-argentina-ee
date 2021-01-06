@@ -168,9 +168,9 @@ class AccountJournal(models.Model):
     def _get_perception_original_invoice_number(self, line):
         self.ensure_one()
         res = ''
-        related_invoice = line.invoice_id.get_related_invoices_data() or line.invoice_id
-        letter = related_invoice.document_type_id.document_letter_id.name
-        internal_type = related_invoice.document_type_id.internal_type
+        related_invoice = line.move_id._found_related_invoice() or line.move_id
+        letter = related_invoice.l10n_latam_document_type_id.l10n_ar_letter
+        internal_type = related_invoice.l10n_latam_document_type_id.internal_type
 
         # 2 Tipo de comprobante
         if internal_type == 'invoice':
@@ -191,7 +191,7 @@ class AccountJournal(models.Model):
         res += letter
 
         # 4 Número del comprobante
-        res += '%012d' % int(re.sub('[^0-9]', '', related_invoice.document_number or ''))
+        res += '%012d' % int(re.sub('[^0-9]', '', related_invoice.l10n_latam_document_number or ''))
         return res
 
     def iibb_aplicado_api_files_values(self, move_lines):
@@ -906,7 +906,7 @@ class AccountJournal(models.Model):
                 content.append('%014s' % int(re.sub('[^0-9]', '', payment.withholding_number or '0')[:14]))
 
                 # 15 Número de Constancia original (sólo para las Anulaciones –ver códigos por jur-)  - Numeric(14)
-                original_invoice = line.invoice_id.get_related_invoices_data() or line.invoice_id
+                original_invoice = line.move_id._found_related_invoice() or line.move_id
                 content.append('%014d' % int(re.sub('[^0-9]', '', original_invoice.document_number or ''))
                                if internal_type == 'credit_note' else '%014d' % 0)
 
