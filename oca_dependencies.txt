@@ -1,3 +1,0 @@
-odoo-enterprise git@github.com:odoo/enterprise.git
-ingadhoc-odoo-argentina https://github.com/ingadhoc/odoo-argentina
-ingadhoc-reporting-engine https://github.com/ingadhoc/reporting-engine.git
