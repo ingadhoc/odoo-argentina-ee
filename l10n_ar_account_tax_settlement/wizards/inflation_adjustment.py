@@ -170,7 +170,7 @@ class InflationAdjustment(models.TransientModel):
         # Generate account.move.line adjustment for start of the period
         domain = self.get_move_line_domain()
         domain += [
-            ("user_type_id.include_initial_balance", '=', True),
+            ("account_id.user_type_id.include_initial_balance", '=', True),
             ('date', '<', self.date_from)]
         init_data = account_move_line.read_group(
             domain, ['account_id', 'balance'], ['account_id'],
