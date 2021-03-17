@@ -34,7 +34,7 @@ Especificación de archivos:
 Inflation Adjustment
 --------------------
 
-The index are extracted from https://www.facpce.org.ar/Indices-seccion.php# page
+The index are extracted from https://www.facpce.org.ar/indices-facpce/ page
 
 Installation
 ============
