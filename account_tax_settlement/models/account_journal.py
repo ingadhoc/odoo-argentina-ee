@@ -219,12 +219,20 @@ class AccountJournal(models.Model):
             }
             # if we find an account with secondary currency, we consider that
             #  the new aml must have currency and amount currency
-            currency_id = group['account_id'][0] and self.env['account.account'].browse(
-                group['account_id'][0]).currency_id.id
-            if currency_id:
+            account = group['account_id'][0] and self.env['account.account'].browse(group['account_id'][0])
+            if account.currency_id:
+                if account.user_type_id.type == 'payable':
+                    amount_currency = group['amount_currency'] < 0.0 and\
+                        -group['amount_currency'] or group['amount_currency']
+                elif account.user_type_id.type == 'receivable':
+                    amount_currency = group['amount_currency'] > 0.0 and\
+                        -group['amount_currency'] or group['amount_currency']
+                else:
+                    amount_currency = group['amount_currency']
                 new_vals_line.update({
-                    'currency_id': currency_id,
-                    'amount_currency': -group['amount_currency']})
+                    'currency_id': account.currency_id.id,
+                    'amount_currency': amount_currency
+                })
             new_move_lines.append(new_vals_line)
 
         # agregamos la info para que se creen lineas para cada cuenta
