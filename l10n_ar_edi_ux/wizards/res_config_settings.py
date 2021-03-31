@@ -8,6 +8,13 @@ class ResConfigSettings(models.TransientModel):
 
     arba_cit = fields.Char(related='company_id.arba_cit', readonly=False)
 
+    # TODO remove this when migration to 15.0 because it is already in odoo master branch
+    l10n_ar_afip_fce_transmission = fields.Selection(
+        [('SCA', 'SCA - TRANSFERENCIA AL SISTEMA DE CIRCULACION ABIERTA'),
+         ('ADC', 'ADC - AGENTE DE DEPOSITO COLECTIVO')],
+        'FCE: Transmission Option', config_parameter='l10n_ar_edi.fce_transmission',
+        help="This field only need to be set when you are reporting a MiPyME FCE documents")
+
     def refresh_taxes_from_padron(self):
         self.refresh_from_padron("impuestos")
 
