@@ -1145,12 +1145,12 @@ class AccountJournal(models.Model):
             # Importe Comprobante            [16]
             content += '%016.2f' % payment.payment_group_id.payments_amount
 
-            # Codigo de Impuesto             [ 3]
+            # Codigo de Impuesto             [ 4]
             # Codigo de Regimen              [ 3]
             if line.tax_line_id.tax_group_id in (
                     self.env.ref('l10n_ar_ux.tax_group_retencion_ganancias'),
                     self.env.ref('l10n_ar.tax_group_percepcion_ganancias')):
-                content += '217'
+                content += '0217'
                 regimen = pay_group.regimen_ganancias_id
                 # necesitamos lo de filter porque hay dos regimenes que le
                 # agregamos caracteres
@@ -1159,7 +1159,7 @@ class AccountJournal(models.Model):
             elif line.tax_line_id.tax_group_id in (
                     self.env.ref('l10n_ar_ux.tax_group_retencion_iva'),
                     self.env.ref('l10n_ar.tax_group_percepcion_iva')):
-                content += '767'
+                content += '0767'
                 # por ahora el unico implementado es para factura M
                 content += '499'
             else:
