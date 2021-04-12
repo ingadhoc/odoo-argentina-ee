@@ -219,18 +219,16 @@ class AccountJournal(models.Model):
             }
             # if we find an account with secondary currency, we consider that
             #  the new aml must have currency and amount currency
-            account = group['account_id'][0] and self.env['account.account'].browse(group['account_id'][0])
-            if account.currency_id:
-                if account.user_type_id.type == 'payable':
+            currency = group['account_id'][0] and self.env['account.account'].browse(group['account_id'][0]).currency_id
+            if currency:
+                if new_vals_line['debit'] > 0.0:
                     amount_currency = group['amount_currency'] < 0.0 and\
                         -group['amount_currency'] or group['amount_currency']
-                elif account.user_type_id.type == 'receivable':
+                else:
                     amount_currency = group['amount_currency'] > 0.0 and\
                         -group['amount_currency'] or group['amount_currency']
-                else:
-                    amount_currency = group['amount_currency']
                 new_vals_line.update({
-                    'currency_id': account.currency_id.id,
+                    'currency_id': currency.id,
                     'amount_currency': amount_currency
                 })
             new_move_lines.append(new_vals_line)
