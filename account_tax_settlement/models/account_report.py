@@ -40,7 +40,9 @@ class AccountReport(models.AbstractModel):
             # (cuentas patrimoniales) asique ponemos una fecha bien al inicio
             if 'date_to' in ctx:
                 context['default_date'] = ctx['date_to']
-            if 'date_from' not in ctx:
+            # TODO we need a refactor of all this. Provably, to get the dates domain, the bet way would be
+            # calling _get_options_date_domain or maybe _get_options_domain with the options but later when used
+            if options.get('date', {}).get('mode') == 'single':
                 ctx['date_from'] = '1900-01-01'
             context['context'] = ctx
 
