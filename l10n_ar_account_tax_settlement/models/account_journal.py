@@ -1024,8 +1024,11 @@ class AccountJournal(models.Model):
 
         ret = ''
         perc = ''
-
+        desp_imp = ''
         for line in move_lines:
+            if line.l10n_latam_document_type_id.code in ['66', '67']:
+                desp_imp += ' - ' + line.move_id.display_name + '\n'
+                continue
             payment = line.payment_id
             # pay_group = payment.payment_group_id
             move = line.move_id
@@ -1096,6 +1099,9 @@ class AccountJournal(models.Model):
             else:
                 perc += content
 
+        if desp_imp:
+            desp_imp = ('En los registros seleccionados encontramos algunos despachos de importación, los mismos deben'
+                        'cargarse a mano. Los registros despachos corrspondientes son:\n') + desp_imp
         return [
             {
                 'txt_filename': 'Percepciones sufridas SIFERE.txt',
@@ -1103,6 +1109,9 @@ class AccountJournal(models.Model):
             }, {
                 'txt_filename': 'Retenciones sufridas SIFERE.txt',
                 'txt_content': ret,
+            }, {
+                'txt_filename': 'Despachos de importación (no importar).txt',
+                'txt_content': desp_imp,
             }]
 
     def sicore_aplicado_files_values(self, move_lines):
