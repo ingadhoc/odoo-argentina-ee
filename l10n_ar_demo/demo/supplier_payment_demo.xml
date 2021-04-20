@@ -11,7 +11,7 @@
     </record>
 
     <record model="account.payment" id="demo_supplier_payment_1_line_1">
-        <field name="journal_id" search="[('type', '=', 'bank')]"/>
+        <field name="journal_id" search="[('type', '=', 'bank'), ('company_id', '=', ref('l10n_ar.company_ri'))]"/>
         <field name="payment_group_id" ref="demo_supplier_payment_1"/>
         <field name="partner_type">supplier</field>
         <field name="payment_type">outbound</field>
@@ -21,13 +21,13 @@
     </record>
 
     <record model="account.payment" id="demo_supplier_payment_1_line_2">
-        <field name="journal_id" search="[('name', '=', 'Retenciones')]"/>
+        <field name="journal_id" search="[('company_id', '=', ref('l10n_ar.company_ri')), ('name', '=', 'Retenciones')]"/>
         <field name="payment_group_id" ref="demo_supplier_payment_1"/>
         <field name="partner_type">supplier</field>
         <field name="payment_type">outbound</field>
         <field name="partner_id" ref="base.res_partner_1"/>
         <field name="amount" eval="50.0"/>
-        <field name="tax_withholding_id" search="[('type_tax_use', '=', 'supplier'), ('name', '=', 'Retención Ganancias Aplicada')]"/>
+        <field name="tax_withholding_id" search="[('company_id', '=', ref('l10n_ar.company_ri')), ('type_tax_use', '=', 'supplier'), ('name', '=', 'Retención Ganancias Aplicada')]"/>
         <field name="withholding_number">123465</field>
         <field name="payment_method_id" ref="account_withholding.account_payment_method_out_withholding"/>
     </record>
@@ -44,25 +44,27 @@
     </record>
 
     <record model="account.payment" id="demo_supplier_payment_2_line_1">
-        <field name="journal_id" search="[('type', '=', 'bank')]"/>
+        <field name="journal_id" search="[('company_id', '=', ref('l10n_ar.company_ri')), ('type', '=', 'bank')]"/>
         <field name="payment_group_id" ref="demo_supplier_payment_2"/>
         <field name="partner_type">supplier</field>
         <field name="payment_type">outbound</field>
         <field name="partner_id" ref="base.res_partner_1"/>
         <field name="amount" eval="700.0"/>
         <field name="payment_method_id" ref="account.account_payment_method_manual_out"/>
+        <field name="company_id" ref="l10n_ar.company_ri"/>
     </record>
 
     <record model="account.payment" id="demo_supplier_payment_2_line_2">
-        <field name="journal_id" search="[('name', '=', 'Retenciones')]"/>
+        <field name="journal_id" search="[('name', '=', 'Retenciones'), ('company_id', '=', ref('l10n_ar.company_ri'))]"/>
         <field name="payment_group_id" ref="demo_supplier_payment_2"/>
         <field name="partner_type">supplier</field>
         <field name="payment_type">outbound</field>
         <field name="partner_id" ref="base.res_partner_1"/>
         <field name="amount" eval="100.0"/>
-        <field name="tax_withholding_id" search="[('type_tax_use', '=', 'supplier'), ('name', '=', 'Retención IIBB Aplicada')]"/>
+        <field name="tax_withholding_id" search="[('company_id', '=', ref('l10n_ar.company_ri')), ('type_tax_use', '=', 'supplier'), ('name', '=', 'Retención IIBB CABA Aplicada')]"/>
         <field name="withholding_number">0001-12345</field>
         <field name="payment_method_id" ref="account_withholding.account_payment_method_out_withholding"/>
+        <field name="company_id" ref="l10n_ar.company_ri"/>
     </record>
 
     <function model="account.payment.group" name="post">
