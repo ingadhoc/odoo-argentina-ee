@@ -99,16 +99,12 @@ class AccountJournal(models.Model):
                     ('tag', '=', 'account_report')], limit=1)
                 return action.read()[0]
             elif debt_balance and self.settlement_partner_id:
-                action = self.env.ref(
-                    'account_debt_management.'
-                    'action_account_debt_line').read()[0]
+                action = self.settlement_partner_id.open_partner_ledger()
                 ctx = self._context.copy()
                 ctx.update({
-                    'show_balance': 1,
-                    'search_default_partner_id': self.settlement_partner_id.id
+                    'search_default_partner_id': self.settlement_partner_id.id,
+                    'model': 'account.partner.ledger'
                 })
-                # action['view_id'] = self.env.ref(
-                #     'account_tax_settlement.view_account_move_line_tree').id
                 action['context'] = ctx
                 return action
         return super(AccountJournal, self).open_action()
