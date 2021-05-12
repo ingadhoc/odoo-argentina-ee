@@ -914,7 +914,7 @@ class AccountJournal(models.Model):
             line_nbr += 1
 
         line_nbr = 1
-        for line in move_lines.filtered(lambda move: move.is_invoice()):
+        for line in move_lines.filtered(lambda x: x.move_id.is_invoice()):
             alicuot_line = line.tax_line_id.get_partner_alicuot(
                 line.partner_id, line.date)
             if not alicuot_line:
