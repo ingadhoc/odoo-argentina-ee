@@ -609,10 +609,6 @@ class AccountJournal(models.Model):
                 # la base la sacamos desde las lineas de impuesto
                 # taxable_amount = line.move_id.cc_amount_untaxed
                 taxable_amount = line.tax_base_amount
-                # convert to company currency if in another currency
-                if company_currency != line.move_id.currency_id:
-                    taxable_amount = company_currency.round(
-                        taxable_amount * line.move_id.l10n_ar_currency_rate)
 
                 # tambien lo sacamos por diferencia para no tener error (por el
                 # calculo trucado de taxable_amount por ejemplo) y
