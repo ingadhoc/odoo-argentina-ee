@@ -147,6 +147,7 @@ class InflationAdjustment(models.TransientModel):
         res = [
             ('account_id.tag_ids', 'in', no_monetaria_tag.id),
             ('company_id', '=', self.company_id.id),
+            ('move_id.state', '=', 'posted'),
         ]
         if self.open_move_id:
             res += [('move_id', '!=', self.open_move_id.id)]
