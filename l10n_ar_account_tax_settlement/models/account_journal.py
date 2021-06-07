@@ -1107,7 +1107,7 @@ class AccountJournal(models.Model):
         # build txt file
         content = ''
 
-        for line in move_lines.sorted(key=lambda r: r.date):
+        for line in move_lines.sorted(key=lambda r: (r.date, r.id)):
             partner = line.partner_id
             if not partner.l10n_latam_identification_type_id.l10n_ar_afip_code:
                 raise ValidationError(_(
