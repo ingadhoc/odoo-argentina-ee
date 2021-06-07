@@ -25,7 +25,7 @@ Especificación de archivos:
 
 * SIFERE en xml web?: http://www.comarb.gov.ar/descargar/faqs/sifere_web/importacion_xml_sifereweb.pdf
 
-* ARBA: https://drive.google.com/open?id=0B3trzV0e2WzveHhBTk9xWEl6RjA
+* ARBA: https://www.arba.gov.ar/Apartados/Agentes/PresentacionDDJJ.asp?lugar=P?apartado=AGENTES
 
 * AGIP: https://www.agip.gob.ar/filemanager/source/Agentes/DocTecnicoImpoOperacionesDise%C3%B1odeRegistro.pdf y https://www.agip.gob.ar/agentes/agentes-de-recaudacion/ib-agentes-recaudacion/aplicativo-arciba/ag-rec-arciba-codigo-de-normas
 
