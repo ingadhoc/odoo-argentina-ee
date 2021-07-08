@@ -192,7 +192,7 @@ class AccountJournal(models.Model):
         """
         def format_amount(amount, integers, decimals=2):
             # overwrite default format_amount
-            template = '%0%%ss' % (integers + decimals + 1)
+            template = "%0" + "%ss" % (integers + decimals + 1)
             # TODO se podria mejorar haciendo algo asi pero hace falta
             # hacer parametro el 16
             # "{0:>16.2f}".format(12.1)
@@ -309,7 +309,7 @@ class AccountJournal(models.Model):
             # 12 - Número de Inscripción en Ingresos Brutos
             content += (re.sub(
                 '[^0-9]', '',
-                partner.gross_income_number or '')).rjust(10, '0')
+                partner.l10n_ar_gross_income_number or '')).rjust(10, '0')
 
             # 13 - Situación frente a IVA donde:
             # ri (1), rni (2), exento (3), monotr (4)
