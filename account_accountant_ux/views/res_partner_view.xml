@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_partner_form" model="ir.ui.view">
+        <field name="name">res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <button id="partner_ledger_button" position="attributes">
+                <attribute name="icon">fa-file-text-o</attribute>
+                <attribute name="string">Partner Ledger Report</attribute>
+            </button>
+            <button id="partner_ledger_button" position="before">
+                <button
+                    type="action"
+                    class="oe_stat_button"
+                    id="partner_ledger_view_button"
+                    icon="fa-list"
+                    name="%(account.action_account_moves_ledger_partner)d"
+                    string="Partner Ledger"
+                    context="{'search_default_partner_id': active_id}"
+                    >
+                </button>
+            </button>
+        </field>
+    </record>
+
+</odoo>

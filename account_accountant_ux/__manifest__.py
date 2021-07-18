@@ -18,8 +18,8 @@
 #
 ##############################################################################
 {
-    'name': 'Accounting Reports UX',
-    'version': '13.0.1.0.0',
+    'name': 'Accounting Accountant UX',
+    'version': '13.0.1.1.0',
     'category': 'Accounting',
     'sequence': 14,
     'summary': '',
@@ -34,6 +34,7 @@
     ],
     'data': [
         'views/account_financial_html_report_views.xml',
+        'views/res_partner_view.xml',
         'wizards/account_change_lock_date_views.xml',
         'data/account_accountant_data.xml',
     ],
