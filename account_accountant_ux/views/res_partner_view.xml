@@ -4,7 +4,7 @@
     <record id="view_partner_form" model="ir.ui.view">
         <field name="name">res.partner.form</field>
         <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="inherit_id" ref="account_reports.partner_view_buttons"/>
         <field name="arch" type="xml">
             <button id="partner_ledger_button" position="attributes">
                 <attribute name="icon">fa-file-text-o</attribute>
