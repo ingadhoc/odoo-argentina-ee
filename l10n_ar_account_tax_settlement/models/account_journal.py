@@ -351,7 +351,7 @@ class AccountJournal(models.Model):
             content += format_amount(0.0, 9, 2)
 
             # 17 - Importe IVA (solo si factura)
-            if line.move_id:
+            if line.move_id.is_invoice():
                 amounts = line.move_id._l10n_ar_get_amounts(company_currency=True)
                 vat_amount = amounts['vat_amount']
                 base_amount = amounts['vat_untaxed_base_amount']
@@ -588,7 +588,7 @@ class AccountJournal(models.Model):
                 # lo sacamos por diferencia
                 other_taxes_amount = company_currency.round(
                     total_amount - taxable_amount - vat_amount)
-            elif line.move_id:
+            elif line.move_id.is_invoice():
                 amounts = line.move_id._l10n_ar_get_amounts(company_currency=True)
                 # segun especificacion el iva solo se reporta para estos
                 if line.l10n_latam_document_type_id.l10n_ar_letter in ['A', 'M']:
