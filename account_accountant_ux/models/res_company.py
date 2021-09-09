@@ -2,6 +2,10 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from . import account_financial_html_report
-from . import account_followup_report
-from . import res_company
+from odoo import models, fields
+
+
+class ResCompany(models.Model):
+    _inherit = "res.company"
+
+    use_company_currency_on_followup = fields.Boolean()
