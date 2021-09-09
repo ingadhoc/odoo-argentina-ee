@@ -140,7 +140,7 @@ class AccountJournal(models.Model):
             # Campo 8: Importe Ret./Perc. char(15). Importe retenido y/o percibido. Formato: 999999999999.99 (doce enteros,
             # punto decimal y dos decimales, dejando espacios en blanco a izquierda para completar las 15 posiciones).
             # Ejemplo: "          34.50" "000000000816.88"
-            content += '%15.2f' % line.balance
+            content += '%15.2f' % -line.balance
 
             content += '\r\n'
             ret += content
