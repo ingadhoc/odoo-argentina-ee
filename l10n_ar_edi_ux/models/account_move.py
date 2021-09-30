@@ -1,5 +1,6 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 from odoo.addons.l10n_ar_edi.models.account_move import WS_DATE_FORMAT
+from odoo.exceptions import UserError
 
 
 class AccountMove(models.Model):
@@ -38,3 +39,50 @@ class AccountMove(models.Model):
                     'FchDesde': self.l10n_ar_afip_asoc_period_start.strftime(WS_DATE_FORMAT['wsfe']),
                     'FchHasta': self.l10n_ar_afip_asoc_period_end.strftime(WS_DATE_FORMAT['wsfe'])}})
         return res
+
+    def post(self):
+        """ Be able to validate electronic vendor bills that are type AFIP POS """
+        purchase_ar_edi_invoices = self.filtered(lambda x: x.journal_id.type == 'purchase' and x.journal_id.l10n_ar_is_pos and x.journal_id.l10n_ar_afip_ws)
+
+        # Send invoices to AFIP and get the return info
+        validated = error_vendor_bill = self.env['account.move']
+        for bill in purchase_ar_edi_invoices:
+
+            # If we are on testing environment and we don't have certificates we validate only locally.
+            # This is useful when duplicating the production database for training purpose or others
+            if bill._is_dummy_afip_validation():
+                bill._dummy_afip_validation()
+                super(AccountMove, bill).post()
+                validated += bill
+                continue
+
+            client, auth, transport = bill.company_id._l10n_ar_get_connection(bill.journal_id.l10n_ar_afip_ws)._get_client(return_transport=True)
+            super(AccountMove, bill).post()
+            return_info = bill._l10n_ar_do_afip_ws_request_cae(client, auth, transport)
+            if return_info:
+                error_vendor_bill = bill
+                break
+            validated += bill
+
+            # If we get CAE from AFIP then we make commit because we need to save the information returned by AFIP
+            # in Odoo for consistency, this way if an error ocurrs later in another invoice we will have the ones
+            # correctly validated in AFIP in Odoo (CAE, Result, xml response/request).
+            if not self.env.context.get('l10n_ar_invoice_skip_commit'):
+                self._cr.commit()
+
+        if error_vendor_bill:
+            msg = _('We could not validate the vendor bill in AFIP') + (' "%s" %s. ' % (
+                error_vendor_bill.partner_id.name, error_vendor_bill.display_name) if error_vendor_bill.exists() else '. ') + _(
+                    'This is what we get:\n%s\n\nPlease make the required corrections and try again') % (return_info)
+            # if we've already validate any invoice, we've commit and we want to inform which invoices were validated
+            # which one were not and the detail of the error we get. This ins neccesary because is not usual to have a
+            # raise with changes commited on databases
+            if validated:
+                unprocess = self - validated - error_vendor_bill
+                msg = _('Some vendor bills where validated in AFIP but as we have an error with one vendor bill the batch validation was stopped\n'
+                        '\n* These vendor bills were validated:\n   * %s\n' % ('\n   * '.join(validated.mapped('name'))) +
+                        '\n* These vendor bills weren\'t validated:\n%s\n' % ('\n'.join(['   * %s: "%s" amount %s' % (
+                            item.display_name, item.partner_id.name, item.amount_total_signed) for item in unprocess])) + '\n\n\n' + msg)
+            raise UserError(msg)
+
+        return super(AccountMove, self - purchase_ar_edi_invoices).post()
