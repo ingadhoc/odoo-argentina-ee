@@ -44,7 +44,7 @@
     ],
     'test': [
     ],
-    'installable': True,
+    'installable': False,
     'auto_install': False,
     'application': False,
     'pre_init_hook': '_load_l10n_ar_demo_data'
