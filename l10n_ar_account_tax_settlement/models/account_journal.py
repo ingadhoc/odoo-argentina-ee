@@ -239,7 +239,7 @@ class AccountJournal(models.Model):
                     'Tipo de impuesto %s equivocado. Se aceptan solo '
                     'percepciones o retenciones con "Cálculo de impuestos" '
                     'igual a "Alícuota en el Partner". Id de impuestos '
-                    '"%s"') % (tax.tax_group_id.tax, tax.id))
+                    '"%s"') % (tax.tax_group_id.name, tax.id))
 
             if not articulo_inciso_calculo or not articulo_inciso_retiene:
                 raise ValidationError(_(
