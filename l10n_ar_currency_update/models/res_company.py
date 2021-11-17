@@ -94,16 +94,32 @@ class ResCompany(models.Model):
 
     def _generate_currency_rates(self, parsed_data):
         """ Apply surcharge for on afip rates """
+        currency_rate = self.env['res.currency.rate']
+        currency_object = self.env['res.currency']
         for company in self:
-            if company.currency_provider == 'afip' and (company.rate_surcharge or company.rate_perc):
+            if company.currency_provider == 'afip':
                 new_parsed_data = parsed_data.copy()
+
+                # condicion 1: si ya existe la tasa para el dia de una moneda en especifco usamos dicha tasa pre
+                # existente y no usamos las que nos dio AFIP
                 for currency, (rate, date_rate) in new_parsed_data.items():
-                    if rate and rate != 1.0:
-                        rate = 1.0 / rate
-                        rate = rate * (1.0 + (company.rate_perc or 0.0))
-                        rate += (company.rate_surcharge or 0.0)
-                        rate = 1.0 / rate
-                    new_parsed_data[currency] = (rate, date_rate)
+                    currency_object = currency_object.search([('name', '=', currency)])
+                    already_existing_rate = currency_rate.search([
+                        ('currency_id', '=', currency_object.id),
+                        ('name', '=', date_rate),
+                        ('company_id', '=', company.id)])
+                    if already_existing_rate:
+                        new_parsed_data[currency] = (already_existing_rate.rate, date_rate)
+                    elif company.rate_surcharge or company.rate_perc:
+                        # condicion 2: Si tenemos definido una tasa de recargo o una percepcion definido en la compañia
+                        # necesitamos volver a calcula la información de la tasa AFIP mas esos montos extras
+                        if rate and rate != 1.0:
+                            rate = 1.0 / rate
+                            rate = rate * (1.0 + (company.rate_perc or 0.0))
+                            rate += (company.rate_surcharge or 0.0)
+                            rate = 1.0 / rate
+                        new_parsed_data[currency] = (rate, date_rate)
+
                 super(ResCompany, company)._generate_currency_rates(new_parsed_data)
             else:
                 super(ResCompany, company)._generate_currency_rates(parsed_data)
