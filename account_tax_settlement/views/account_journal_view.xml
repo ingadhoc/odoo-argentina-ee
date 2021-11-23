@@ -11,14 +11,9 @@
                 <!-- <field name="settlement_file_template" attrs="{'invisible': [('tax_settlement', '=', False)]}"/> -->
                 <field name="settlement_tax" attrs="{'invisible': [('tax_settlement', '=', False)]}"/>
                 <field name="settlement_partner_id" attrs="{'invisible': [('tax_settlement', '=', False)], 'required': [('tax_settlement', '!=', False)]}"/>
+                <field name="default_account_id" string="Cuenta de contrapartida" attrs="{'required': [('type', '=','general'), ('tax_settlement', '!=', False)], 'invisible': ['|', ('type', '!=','general'), ('tax_settlement', '=', False)]}" groups="account.group_account_readonly"/>
                 <field name="settlement_financial_report_id" attrs="{'invisible': [('tax_settlement', '=', False)]}"/>
                 <field name="settlement_account_tag_ids" attrs="{'invisible': [('tax_settlement', '=', False)]}" widget="many2many_tags"/>
-            </field>
-            <field name="default_debit_account_id" position="attributes">
-                <attribute name="attrs">{'required': [('tax_settlement', '!=', False)]}</attribute>
-            </field>
-            <field name="default_credit_account_id" position="attributes">
-                <attribute name="attrs">{'required': [('tax_settlement', '!=', False)]}</attribute>
             </field>
         </field>
     </record>

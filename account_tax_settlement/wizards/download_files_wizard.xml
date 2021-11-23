@@ -25,7 +25,7 @@
                     </tree>
                     <form>
                         <center>
-                            <i class="fa fa-5x fa-download" style="padding: 0.25em;" aria-hidden="true"></i>
+                            <i class="fa fa-5x fa-download" title="Download" style="padding: 0.25em;" aria-hidden="true"></i>
                             <field name="txt_filename" invisible="1"/>
                             <h1><field name="txt_binary" filename="txt_filename" readonly="1"/></h1>
                         </center>

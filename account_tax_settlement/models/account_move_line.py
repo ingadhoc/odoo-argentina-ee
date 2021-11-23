@@ -15,14 +15,6 @@ class AccountMoveLine(models.Model):
         copy=False,
     )
 
-    def _update_check(self):
-        res = super(AccountMoveLine, self)._update_check()
-        if self.mapped('tax_settlement_move_id'):
-            raise ValidationError(_(
-                'You cannot do this modification on a tax entry that has been '
-                'settled'))
-        return res
-
     def get_tax_settlement_journal(self):
         """
         Metodo para obtener el diario de liquidacion arrojando mensajes
@@ -57,7 +49,7 @@ class AccountMoveLine(models.Model):
         Botón para el 1 a 1 que crea y postea el move
         """
         move = self.create_tax_settlement_entry()
-        move.post()
+        move.action_post()
         return move
 
     def create_tax_settlement_entry(self):
