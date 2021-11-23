@@ -37,14 +37,14 @@
 
     <!-- cierre ejercicio fiscal -->
 
-    <act_window id="action_closure_journal_entry"
-                name="Generar asiento de cierre (BETA)"
-                res_model="account.tax.settlement.wizard"
-                binding_model="account.financial.html.report.line"
-                view_mode="form"
-                target="new"
-                context="{'default_message': 'Antes de generar el asiento de cierre recuerde generar el asiento de refundición. Luego de generar el asiento de cierre recuerde revertirlo para generar el asiento de apertura!', 'entry_ref': 'Asiento de cierre', 'tax_settlement_link': False}"
-    />
+    <record id="action_closure_journal_entry" model="ir.actions.act_window">
+        <field name="name">Generar asiento de cierre (BETA)</field>
+        <field name="res_model">account.tax.settlement.wizard</field>
+        <field name="binding_model_id" ref="account_reports.model_account_financial_html_report_line"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_message': 'Antes de generar el asiento de cierre recuerde generar el asiento de refundición. Luego de generar el asiento de cierre recuerde revertirlo para generar el asiento de apertura!', 'entry_ref': 'Asiento de cierre', 'tax_settlement_link': False}</field>
+    </record>
 
     <record id="report_line_asiento_de_cierre" model="account.financial.html.report.line">
         <field name="name">Generar asiento de cierre (BETA)</field>
@@ -72,14 +72,14 @@
 
     <!-- refundición -->
 
-    <act_window id="action_recast_journal_entry"
-                name="Generar asiento de refundición (BETA)"
-                res_model="account.tax.settlement.wizard"
-                binding_model="account.financial.html.report.line"
-                view_mode="form"
-                target="new"
-                context="{'default_message': 'Se va a generar el asiento de refundición a partir de los datos visualizados', 'entry_ref': 'Asiento de refundición', 'tax_settlement_link': False}"
-    />
+    <record id="action_recast_journal_entry" model="ir.actions.act_window">
+        <field name="name">Generar asiento de refundición (BETA)</field>
+        <field name="res_model">account.tax.settlement.wizard</field>
+        <field name="binding_model_id" ref="account_reports.model_account_financial_html_report_line"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_message': 'Se va a generar el asiento de refundición a partir de los datos visualizados', 'entry_ref': 'Asiento de refundición', 'tax_settlement_link': False}</field>
+    </record>
 
     <record id="report_line_asiento_de_refundicion" model="account.financial.html.report.line">
         <field name="name">Generar asiento de refundición (BETA)</field>
