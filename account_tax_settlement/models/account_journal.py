@@ -88,11 +88,9 @@ class AccountJournal(models.Model):
                     raise ValidationError(_(
                         'Si usa "Impuesto de liquidación" debe setear un '
                         '"Partner de liquidación"'))
-                if not rec.default_debit_account_id or \
-                        not rec.default_credit_account_id:
+                if not rec.default_account_id:
                     raise ValidationError(_(
-                        'Si usa "Impuesto de liquidación" debe setear cuentas '
-                        'de débito y crédito'))
+                        'Si usa "Impuesto de liquidación" debe definir la cuenta de contrapartida por defecto'))
 
     def action_create_payment(self):
         partner = self.settlement_partner_id
@@ -267,14 +265,13 @@ class AccountJournal(models.Model):
         # si el balance es distinto de cero agregamos cuenta contable
         if not self.company_id.currency_id.is_zero(balance):
             # check account payable
+            account = self.default_account_id
             if balance >= 0.0:
                 debit = 0.0
                 credit = balance
-                account = self.default_debit_account_id
             else:
                 debit = -balance
                 credit = 0.0
-                account = self.default_credit_account_id
 
             if not account:
                 raise ValidationError(_(

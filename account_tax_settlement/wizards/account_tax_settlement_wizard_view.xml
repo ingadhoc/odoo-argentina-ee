@@ -32,12 +32,12 @@
      </record>
 
     <!-- se usa tanto para liquidar impuestos como, por ejemplo, para hacer asiento de cierre -->
-    <act_window id="action_account_tax_settlement_wizard_form"
-                name="Liquidación de Impuestos"
-                res_model="account.tax.settlement.wizard"
-                binding_model="account.move.line"
-                view_mode="form"
-                target="new"
-    />
+    <record id="action_account_tax_settlement_wizard_form" model="ir.actions.act_window">
+        <field name="name">Liquidaci&#243;n de Impuestos</field>
+        <field name="res_model">account.tax.settlement.wizard</field>
+        <field name="binding_model_id" ref="account.model_account_move_line"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
 
 </odoo>

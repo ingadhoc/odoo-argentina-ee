@@ -23,11 +23,11 @@
                         <div class="row" t-if="record.tax_settlement.raw_value == 'allow_per_line'">
                             <div class="col-6">
                                 <a role="menuitem" type="object" name="open_action" context="{'tax_settlement': True, 'search_default_posted': 1}">
-                                    <span><t t-esc="dashboard.unsettled_count"/> Líneas a liquidar</span>
+                                    <span><t t-out="dashboard.unsettled_count"/> Líneas a liquidar</span>
                                 </a>
                             </div>
                             <div class="col-6 text-right">
-                                <span><t t-esc="dashboard.unsettled_amount"/></span>
+                                <span><t t-out="dashboard.unsettled_amount"/></span>
                             </div>
                         </div>
                         <!-- lo mostramos si no mostamos el de reporte -->
@@ -38,7 +38,7 @@
                                 </a>
                             </div>
                             <div class="col-6 text-right">
-                                <span><t t-esc="dashboard.tax_balance"/></span>
+                                <span><t t-out="dashboard.tax_balance"/></span>
                             </div>
                         </div>
                         <div class="row" t-if="record.settlement_financial_report_id.raw_value">
@@ -48,7 +48,7 @@
                                 </a>
                             </div>
                             <div class="col-6 text-right">
-                                <span><t t-esc="dashboard.report_position"/></span>
+                                <span><t t-out="dashboard.report_position"/></span>
                             </div>
                         </div>
                         <div class="row">
@@ -58,7 +58,7 @@
                                 </a>
                             </div>
                             <div class="col-6 text-right">
-                                <span><t t-esc="dashboard.debit_amount"/></span>
+                                <span><t t-out="dashboard.debit_amount"/></span>
                             </div>
                         </div>
                     </div>
