@@ -1,2 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_inflation_adjustment_index_user,inflation.adjustment.index.user,model_inflation_adjustment_index,,1,1,1,1
+access_inflation_adjustment,access_inflation_adjustment,model_inflation_adjustment,base.group_user,1,1,1,1

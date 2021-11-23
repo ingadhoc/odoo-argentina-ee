@@ -172,9 +172,9 @@ class AccountJournal(models.Model):
             document_type = letter == 'E' and 106 or 102
         elif internal_type == 'debit_note':
             document_type = letter == 'E' and 6 or 2
-        elif related_invoice.type == 'out_invoice':
+        elif related_invoice.move_type == 'out_invoice':
             document_type = 20
-        elif related_invoice.type == 'out_refund':
+        elif related_invoice.move_type == 'out_refund':
             document_type = 120
         else:
             raise ValidationError(_('Tipo de comprobante no reconocido'))
