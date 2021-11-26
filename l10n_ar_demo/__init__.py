@@ -11,18 +11,18 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
-
-old_load_information_from_description_file = module.load_information_from_description_file
-
-
-def load_information_from_description_file(module, mod_path=None):
-    info = old_load_information_from_description_file(module, mod_path=mod_path)
-    if module in ['l10n_ar', 'l10n_ar_edi']:
-        info['demo'] = []
-    return info
+# DISABLE MONKEY PATCH TILL INSTALLABLE
+# old_load_information_from_description_file = module.load_information_from_description_file
 
 
-module.load_information_from_description_file = load_information_from_description_file
+# def load_information_from_description_file(module, mod_path=None):
+#     info = old_load_information_from_description_file(module, mod_path=mod_path)
+#     if module in ['l10n_ar', 'l10n_ar_edi']:
+#         info['demo'] = []
+#     return info
+
+
+# module.load_information_from_description_file = load_information_from_description_file
 
 
 def _load_l10n_ar_demo_data(cr):
