@@ -67,6 +67,7 @@ class ResCompany(models.Model):
         if currency_ars in available_currencies:
             res['ARS'] = (1.0, fields.Date.today())
         available_currencies = available_currencies.filtered('l10n_ar_afip_code') - currency_ars
+        rate_date = fields.Date.today()
 
         for currency in available_currencies:
             company = self.env.company if self.env.company.sudo().l10n_ar_afip_ws_crt else self.env['res.company'].search(
@@ -83,9 +84,9 @@ class ResCompany(models.Model):
                 # Do not pass company since we need to find the one that has certificate
                 afip_date, rate = currency._l10n_ar_get_afip_ws_currency_rate()
 
-                res.update({currency.name: (1.0 / rate, datetime.strptime(afip_date, "%Y%m%d").date())})
-
-                _logger.log(25, "Currency %s %s %s", currency.name, afip_date, rate)
+                if datetime.strptime(afip_date, "%Y%m%d").date() + relativedelta(days=1) == rate_date:
+                    res.update({currency.name: (1.0 / rate, rate_date)})
+                    _logger.log(25, "Currency %s %s %s", currency.name, rate_date, rate)
                 self.env.company = env_company
             except Exception as e:
                 self.env.company = env_company
