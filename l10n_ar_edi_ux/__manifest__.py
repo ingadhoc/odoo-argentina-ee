@@ -17,7 +17,8 @@
     'data': [
         'wizards/res_config_settings_view.xml',
         'wizards/res_partner_update_from_padron_wizard_view.xml',
-        'wizards/account_payment_group_invoice_wizard_view.xml',
+        # TODO: Temporally commented to avoid account_payment_group addon
+        # 'wizards/account_payment_group_invoice_wizard_view.xml',
         'views/res_partner_view.xml',
         'views/account_move_view.xml',
         'views/account_journal_view.xml',
