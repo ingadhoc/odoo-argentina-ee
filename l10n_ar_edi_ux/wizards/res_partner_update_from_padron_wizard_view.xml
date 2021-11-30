@@ -80,7 +80,7 @@
 
     <record id="action_partner_update" model="ir.actions.act_window">
         <field name="res_model">res.partner.update.from.padron.wizard</field>
-        <field name="binding_model">res.partner</field>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
         <field name="target">new</field>
         <field name="view_mode">form</field>
         <field name="name">Automatic Update from Padron</field>
