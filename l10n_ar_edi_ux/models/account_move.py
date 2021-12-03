@@ -9,11 +9,13 @@ class AccountMove(models.Model):
     l10n_ar_afip_asoc_period_start = fields.Date(
         string='Associated Period Start',
         states={'draft': [('readonly', False)]},
-        help='Set this field if it is you are reporting debit/credit note and have not related invoice')
+        help='Set this field if it is you are reporting debit/credit note and have not related invoice.'
+        ' IMPORTANT: This is only applies on "Electronic Invoice - Web Service"')
     l10n_ar_afip_asoc_period_end = fields.Date(
         string='Associated Perdio End',
         states={'draft': [('readonly', False)]},
-        help='Set this field if it is you are reporting debit/credit note and have not related invoice')
+        help='Set this field if it is you are reporting debit/credit note and have not related invoice.'
+        ' IMPORTANT: This is only applies on "Electronic Invoice - Web Service"')
 
     def _found_related_invoice(self):
         """
