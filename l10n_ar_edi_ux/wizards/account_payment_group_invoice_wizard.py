@@ -7,15 +7,12 @@ class AccountPaymentGroupInvoiceWizard(models.TransientModel):
     l10n_ar_afip_asoc_period_start = fields.Date(
         'Associate Period From',
     )
-
     l10n_ar_afip_asoc_period_end = fields.Date(
         'Associate Period To',
     )
-
     origin_invoice_id = fields.Many2one(
         'account.move',
     )
-
     commercial_partner_id = fields.Many2one(
         'res.partner',
         related="payment_group_id.partner_id.commercial_partner_id"

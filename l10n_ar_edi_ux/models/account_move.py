@@ -42,7 +42,7 @@ class AccountMove(models.Model):
                     'FchHasta': self.l10n_ar_afip_asoc_period_end.strftime(WS_DATE_FORMAT['wsfe'])}})
         return res
 
-    def post(self):
+    def _post(self, soft=True):
         """ Be able to validate electronic vendor bills that are type AFIP POS """
         purchase_ar_edi_invoices = self.filtered(lambda x: x.journal_id.type == 'purchase' and x.journal_id.l10n_ar_is_pos and x.journal_id.l10n_ar_afip_ws)
 
@@ -54,12 +54,12 @@ class AccountMove(models.Model):
             # This is useful when duplicating the production database for training purpose or others
             if bill._is_dummy_afip_validation():
                 bill._dummy_afip_validation()
-                super(AccountMove, bill).post()
+                super(AccountMove, bill)._post(soft=soft)
                 validated += bill
                 continue
 
             client, auth, transport = bill.company_id._l10n_ar_get_connection(bill.journal_id.l10n_ar_afip_ws)._get_client(return_transport=True)
-            super(AccountMove, bill).post()
+            super(AccountMove, bill)._post(soft=soft)
             return_info = bill._l10n_ar_do_afip_ws_request_cae(client, auth, transport)
             if return_info:
                 error_vendor_bill = bill
@@ -87,4 +87,4 @@ class AccountMove(models.Model):
                             item.display_name, item.partner_id.name, item.amount_total_signed) for item in unprocess])) + '\n\n\n' + msg)
             raise UserError(msg)
 
-        return super(AccountMove, self - purchase_ar_edi_invoices).post()
+        return super(AccountMove, self - purchase_ar_edi_invoices)._post(soft=soft)
