@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_res_partner_update_from_padron_field,access_res_partner_update_from_padron_field,model_res_partner_update_from_padron_field,base.group_user,1,1,1,1
+access_res_partner_update_from_padron_wizard,access_res_partner_update_from_padron_wizard,model_res_partner_update_from_padron_wizard,base.group_user,1,1,1,0
