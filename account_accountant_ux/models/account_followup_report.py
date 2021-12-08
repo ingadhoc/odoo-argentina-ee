@@ -9,7 +9,6 @@ from odoo.tools.misc import formatLang, format_date, get_lang
 class AccountFollowupReport(models.AbstractModel):
     _inherit = "account.followup.report"
 
-
     def _get_lines(self, options, line_id=None):
         """
         Override
