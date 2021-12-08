@@ -19,7 +19,7 @@
 ##############################################################################
 {
     'name': 'More demo data for Argentina Localization (Enterprise version)',
-    'version': '13.0.1.0.0',
+    'version': "15.0.1.0.0",
     'category': 'Accounting',
     'sequence': 14,
     'summary': '',
@@ -29,22 +29,23 @@
     'images': [
     ],
     'depends': [
-        'account_accountant_ux',
+        # 'account_accountant_ux',
         'l10n_ar_edi_ux',
         'l10n_ar_ux',
-        'l10n_ar_account_tax_settlement',
-        'l10n_ar_account_withholding',
+        # 'l10n_ar_account_tax_settlement',
+        # 'l10n_ar_account_withholding',
+        'l10n_ar_website_sale',
     ],
     'data': [
     ],
     'demo': [
-        'demo/account_tax_demo.xml',
-        'demo/customer_payment_demo.xml',
-        'demo/supplier_payment_demo.xml',
+        # 'demo/account_tax_demo.xml',
+        # 'demo/customer_payment_demo.xml',
+        # 'demo/supplier_payment_demo.xml',
     ],
     'test': [
     ],
-    'installable': False,
+    'installable': True,
     'auto_install': False,
     'application': False,
     'pre_init_hook': '_load_l10n_ar_demo_data'
