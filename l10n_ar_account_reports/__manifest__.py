@@ -19,7 +19,7 @@
 ##############################################################################
 {
     'name': 'Accounting Reports Customized for Argentina',
-    'version': '13.0.1.0.0',
+    'version': "15.0.1.0.0",
     'category': 'Accounting',
     'sequence': 14,
     'summary': '',
@@ -31,8 +31,7 @@
     'depends': [
         'account_reports',
         'l10n_ar',
-        'account_check',
-        'report_aeroo',
+        # 'l10n_latam_check',
     ],
     'data': [
         'views/account_journal_dashboard_view.xml',
@@ -43,7 +42,7 @@
     ],
     'test': [
     ],
-    'installable': False,
+    'installable': True,
     'auto_install': True,
     'application': False,
 }
