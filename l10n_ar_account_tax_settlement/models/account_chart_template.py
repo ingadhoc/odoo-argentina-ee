@@ -24,7 +24,7 @@ class AccountChartTemplate(models.Model):
             """
             Helper para obtener referencia a alguna cuenta
             """
-            return acc_template_ref.get(ref('l10n_ar.%s' % ext_id).id)
+            return acc_template_ref.get(ref('l10n_ar.%s' % ext_id))
 
         # add more journals commonly used in argentina localization
         journals = [
@@ -86,9 +86,9 @@ class AccountChartTemplate(models.Model):
             ]
 
         # for name, code, tax, report, partner, credit_id, debit_id, tag \
-        for name, code, type, tax, partner, credit_id, debit_id, tag \
+        for name, code, type, tax, partner, credit, debit, tag \
                 in journals:
-            if not credit_id or debit_id:
+            if not credit or not debit:
                 _logger.info("Skip creation of journal %s because we didn't found debit/credit account")
                 continue
             # journal_data.append({
@@ -100,8 +100,8 @@ class AccountChartTemplate(models.Model):
                 'settlement_tax': tax,
                 # 'settlement_financial_report_id': report and report.id,
                 'settlement_partner_id': partner and partner.id,
-                'default_credit_account_id': credit_id,
-                'default_debit_account_id': debit_id,
+                'default_credit_account_id': credit.id,
+                'default_debit_account_id': debit.id,
                 'company_id': company.id,
                 # al final hicimos otro dashboard
                 'show_on_dashboard': False,
