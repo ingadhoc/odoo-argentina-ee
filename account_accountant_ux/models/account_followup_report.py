@@ -49,7 +49,7 @@ class AccountFollowupReport(models.AbstractModel):
                     date_due = {'name': date_due, 'class': 'color-red date', 'style': 'white-space:nowrap;text-align:center;color: red;'}
                 if is_payment:
                     date_due = ''
-                move_line_name = self._format_aml_name(aml.name, aml.move_id.ref, aml.move_id.name)
+                move_line_name = self._format_aml_name(aml.name, aml.move_id.ref)
                 if self.env.context.get('print_mode'):
                     move_line_name = {'name': move_line_name, 'style': 'text-align:right; white-space:normal;'}
                 amount = formatLang(self.env, amount, currency_obj=currency)
