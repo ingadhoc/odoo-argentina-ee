@@ -163,10 +163,7 @@ class AccountJournal(models.Model):
             raise ValidationError(_(
                 'Settlement only allowed on journals with Tax Settlement '
                 'enable'))
-        # if not self.journal_id.sequence_id:
-        #     raise ValidationError(
-        #         _('Please define a sequence on the journal.'))
-        # queremos esta restriccion?
+
         if move_lines.filtered('tax_settlement_move_id'):
             raise ValidationError(_(
                 'You can not settle lines that has already been settled!\n'
@@ -292,10 +289,8 @@ class AccountJournal(models.Model):
         for vals in lines_vals:
             line_ids.append((0, False, vals))
 
-        name = self.sequence_id.next_by_id()
         move_vals = {
-            'ref': self._context.get('entry_ref', self.name),
-            'name': name,
+            'ref': self._context.get('entry_ref'),
             'date': self._context.get('entry_date', fields.Date.today()),
             'journal_id': self.id,
             'company_id': self.company_id.id,
