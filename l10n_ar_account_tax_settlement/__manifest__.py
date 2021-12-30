@@ -19,11 +19,7 @@
 ##############################################################################
 {
     'name': 'Tax Settlements For Argentina',
-<<<<<<< HEAD
     'version': "15.0.1.0.0",
-=======
-    'version': '13.0.1.3.0',
->>>>>>> 050409b... temp
     'category': 'Accounting',
     'website': 'www.adhoc.com.ar',
     'license': 'AGPL-3',
