@@ -125,7 +125,7 @@ class AccountJournal(models.Model):
 
             # Campo 5: Fecha Ret./Perc. char(8)- Fecha de efectuada la retención / percepción (ddmmaaaa)
             # Example "16052020"
-            content += fields.Date.from_string(payment.payment_date).strftime('%d%m%Y')
+            content += fields.Date.from_string(payment.date).strftime('%d%m%Y')
 
             # Campo 6. Base Imponible char(15). Formato: 999999999999.99 (doce enteros, punto decimal y dos decimales,
             # dejando espacios en blanco a izquierda para completar las 15 posiciones). Ejemplo: "         345.21"
@@ -1169,7 +1169,7 @@ class AccountJournal(models.Model):
 
             # Fecha Emision Retencion        [10] (dd/mm/yyyy)
             content += fields.Date.from_string(
-                payment.payment_date).strftime('%d/%m/%Y')
+                payment.date).strftime('%d/%m/%Y')
 
             # Codigo de Condicion            [ 2]
             content += '01'  # TODO: ????
@@ -1185,7 +1185,7 @@ class AccountJournal(models.Model):
 
             # Fecha Emision Boletin          [10] (dd/mm/yyyy)
             content += fields.Date.from_string(
-                payment.payment_date).strftime('%d/%m/%Y')
+                payment.date).strftime('%d/%m/%Y')
 
             # Tipo Documento Retenido        [ 2]
             content += '%02d' % int(partner.l10n_latam_identification_type_id.l10n_ar_afip_code)
