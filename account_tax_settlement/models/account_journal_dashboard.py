@@ -36,7 +36,7 @@ class AccountJournal(models.Model):
                 ('id', 'child_of', report.line_ids.ids),
                 ('settlement_type', '!=', False)])
             report_position = sum(
-                [x['balance'] for x in report_lines.get_balance(
+                [x['balance'] for x in report_lines._get_balance(
                     {}, currency_table, report,
                     field_names=['balance'])])
             # report_position = sum(
