@@ -75,6 +75,12 @@ class AccountJournal(models.Model):
         # string='Etiquetas de impuestos liquidados',
         # help="Taxes with this tags are going to be settled by this journal"
     )
+    # changing domain for default_account_id is not working, we create this related field just to change domain
+    settlement_account_id = fields.Many2one(
+        related='default_account_id',
+        string="Cuenta de contrapartida",
+        readonly=False,
+        domain="[('deprecated', '=', False), ('user_type_id.type', 'in', ('receivable', 'payable')), ('company_id', '=', company_id)]")
 
     @api.constrains('tax_settlement', 'type')
     def check_tax_settlement(self):
@@ -88,9 +94,6 @@ class AccountJournal(models.Model):
                     raise ValidationError(_(
                         'Si usa "Impuesto de liquidación" debe setear un '
                         '"Partner de liquidación"'))
-                if not rec.default_account_id:
-                    raise ValidationError(_(
-                        'Si usa "Impuesto de liquidación" debe definir la cuenta de contrapartida por defecto'))
 
     def action_create_payment(self):
         partner = self.settlement_partner_id
