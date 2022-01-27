@@ -16,7 +16,7 @@ class ReportPartnerLedger(models.AbstractModel):
         res = super()._get_report_line_partner(
             options=options, partner=partner, initial_balance=initial_balance, debit=debit, credit=credit, balance=balance)
         partner_name = res.get("name")
-        if partner.l10n_latam_identification_type_id.name and partner.vat:
+        if partner and partner.l10n_latam_identification_type_id.name and partner.vat:
             doc_info = partner.l10n_latam_identification_type_id.name + ": " + partner.vat
             res.update({"name": partner_name[:128 - len(doc_info) - 3] + " (%s)" % doc_info})
 
