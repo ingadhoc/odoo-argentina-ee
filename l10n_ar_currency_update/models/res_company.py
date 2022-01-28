@@ -54,7 +54,7 @@ class ResCompany(models.Model):
             ('currency_provider', '=', 'afip'),
             ('currency_interval_unit', '!=', False),
             ('currency_interval_unit', '!=', 'manually'),
-            '|', ('l10n_ar_last_currency_sync_date', '<', fields.Date.today()),
+            '|', ('l10n_ar_last_currency_sync_date', '<', fields.Date.context_today(self.with_context(tz='America/Argentina/Buenos_Aires'))),
             ('l10n_ar_last_currency_sync_date', '=', False),
         ])
         records.update_currency_rates()
@@ -64,10 +64,11 @@ class ResCompany(models.Model):
         res = {}
 
         currency_ars = self.env.ref('base.ARS')
+        today = fields.Date.context_today(self.with_context(tz='America/Argentina/Buenos_Aires'))
         if currency_ars in available_currencies:
-            res['ARS'] = (1.0, fields.Date.today())
+            res['ARS'] = (1.0, today)
         available_currencies = available_currencies.filtered('l10n_ar_afip_code') - currency_ars
-        rate_date = fields.Date.today()
+        rate_date = today
 
         for currency in available_currencies:
             company = self.env.company if self.env.company.sudo().l10n_ar_afip_ws_crt else self.env['res.company'].search(
@@ -125,4 +126,4 @@ class ResCompany(models.Model):
             else:
                 super(ResCompany, company)._generate_currency_rates(parsed_data)
             if company.currency_provider == 'afip':
-                company.l10n_ar_last_currency_sync_date = fields.Date.today()
+                company.l10n_ar_last_currency_sync_date = fields.Date.context_today(self.with_context(tz='America/Argentina/Buenos_Aires'))
