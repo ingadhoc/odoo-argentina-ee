@@ -4,8 +4,6 @@ from odoo.exceptions import ValidationError
 # from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
 import re
 
-# from odoo.exceptions import ValidationError
-
 #########
 # helpers
 #########
@@ -1121,71 +1119,102 @@ class AccountJournal(models.Model):
             payment = line.payment_id
             pay_group = payment.payment_group_id
             move = line.move_id
-            if not payment:
-                raise ValidationError(_(
-                    'La liquidación de percepciones todavía no está '
-                    'implementada. Apunte contable: %s' % line.id))
 
-            # Codigo del Comprobante         [ 2]
-            content += (payment.payment_type == 'inbound' and '02') or (
-                payment.payment_type == 'outbound' and '06') or '00'
+            #si tengo payment es una retención, sino es una percepción y tengo que sacar la información de la factura (del move)
+            if payment:
+                # Codigo del Comprobante         [ 2]
+                content += (payment.payment_type == 'inbound' and '02') or (
+                    payment.payment_type == 'outbound' and '06') or '00'
 
-            # Fecha Emision Comprobante      [10] (dd/mm/yyyy)
-            content += fields.Date.from_string(
-                pay_group.payment_date).strftime('%d/%m/%Y')
+                # Fecha Emision Comprobante      [10] (dd/mm/yyyy)
+                content += fields.Date.from_string(
+                    pay_group.payment_date).strftime('%d/%m/%Y')
+                # Numero Comprobante            [16]
+                content += '%016d' % int(re.sub('[^0-9]', '', move.l10n_latam_document_number))
+                #Importe del comprobante
+                codop = '1'
+                issue_date = payment.payment_date
+                amount_tot = abs(payment.payment_group_id.payments_amount)
+                base_amount = payment.withholdable_base_amount
 
-            # Numbero Comprobante            [16]
-            content += '%016d' % int(
-                re.sub('[^0-9]', '', move.l10n_latam_document_number))
+            elif move.is_invoice():
+                # Codigo del Comprobante         [ 2]
+                tipodoc = int(move.l10n_latam_document_type_id.code)
+
+                if tipodoc in [1, 6, 19, 51, 81, 82, 118, 201, 206]:
+                    # Factura
+                    content += '01'
+                elif tipodoc in [4, 9, 54]:
+                    # Recibo
+                    content += '02'
+                elif tipodoc in [3, 8, 21, 53, 43, 44, 110, 112, 113, 114, 119, 203, 208]:
+                    # Nota de Crédito
+                    content += '03'
+                elif tipodoc in [2, 7, 20, 52, 45, 46, 115, 116, 120, 202, 207]:
+                    # Nota de Débito
+                    content += '04'
+                else:
+                    # Otro comprobante
+                    content += '05'
+
+                # Fecha Emision Comprobante      [10] (dd/mm/yyyy)
+                content += fields.Date.from_string(
+                    move.invoice_date).strftime('%d/%m/%Y')
+                # Numero Comprobante            [16]
+                # content += '%016d' % int(re.sub('[^0-9]', '', move.l10n_latam_document_number))
+                content += '%05d' % int(re.sub('[^0-9]', '', move.l10n_latam_document_number)[:5])
+                content += '%011d' % int(re.sub('[^0-9]', '', move.l10n_latam_document_number)[11:])
+                issue_date = move.invoice_date
+                base_amount = line.tax_base_amount
+                codop = '2'
+                #Importe del comprobante
+                amount_tot = abs(move.amount_total_signed)
 
             # Importe Comprobante            [16]
-            content += '%016.2f' % payment.payment_group_id.payments_amount
-
+            content += '%016.2f' % amount_tot
             # Codigo de Impuesto             [ 4]
             # Codigo de Regimen              [ 3]
-            if line.tax_line_id.tax_group_id in (
-                    self.env.ref('l10n_ar_ux.tax_group_retencion_ganancias'),
-                    self.env.ref('l10n_ar.tax_group_percepcion_ganancias')):
+            if line.tax_line_id.tax_group_id == self.env.ref('l10n_ar_ux.tax_group_retencion_ganancias'):
                 content += '0217'
                 regimen = pay_group.regimen_ganancias_id
                 # necesitamos lo de filter porque hay dos regimenes que le
                 # agregamos caracteres
                 content += regimen and '%03d' % int(''.join(filter(
                     str.isdigit, str(regimen.codigo_de_regimen)))) or '000'
-            elif line.tax_line_id.tax_group_id in (
-                    self.env.ref('l10n_ar_ux.tax_group_retencion_iva'),
-                    self.env.ref('l10n_ar.tax_group_percepcion_iva')):
+            elif line.tax_line_id.tax_group_id == self.env.ref('l10n_ar_ux.tax_group_retencion_iva'):
                 content += '0767'
                 # por ahora el unico implementado es para factura M
-                content += '499'
+                content += '%03d' % int(line.tax_line_id.codigo_regimen) if line.tax_line_id.codigo_regimen else '499'
+            elif line.tax_line_id.tax_group_id == self.env.ref('l10n_ar.tax_group_percepcion_iva'):
+                content += '0767'
+                content +=  '%03d' % int(line.tax_line_id.codigo_regimen) # (ver account tax) DUDA cómo le aplico el código de régimen a las facturas viejas
             else:
-                raise ValidationError(_('Para sicore solo IVA y Ganancias están implementados'))
+                raise ValidationError(_('Grupos de impuestos %s no implementados para SICORE') % line.tax_line_id.tax_group_id.name)
 
             # Codigo de Operacion            [ 1]
-            content += '1'  # TODO: ????
+            content += codop  # TODO: ???? DUDA: SERÍA PARA VER SI ES RETENCION O PERCEPCION
 
             # Base de Calculo                [14]
-            content += '%014.2f' % payment.withholdable_base_amount
+            content += '%014.2f' % base_amount
 
             # Fecha Emision Retencion        [10] (dd/mm/yyyy)
-            content += fields.Date.from_string(
-                payment.payment_date).strftime('%d/%m/%Y')
+            content += fields.Date.from_string(issue_date).strftime('%d/%m/%Y')
 
             # Codigo de Condicion            [ 2]
-            content += '01'  # TODO: ????
+            content += '01'  # TODO: ???? ver tabla de condición sicore
 
             # Retención Pract. a Suj. ..     [ 1]
             content += '0'  # TODO: ????
 
-            # Importe de Retencion           [14]
-            content += '%014.2f' % -line.balance
+            # Importe de Retencion           [14] (también se usa para importe de percepción)
+            content += '%014.2f' % abs(line.balance)
 
             # Porcentaje de Exclusion        [ 6]
-            content += '000.00'  # TODO: ????
+            content += '%06.2f' % line.tax_line_id.porcentaje_exclusion or '000.00'
 
             # Fecha Emision Boletin          [10] (dd/mm/yyyy)
             content += fields.Date.from_string(
-                payment.payment_date).strftime('%d/%m/%Y')
+                issue_date).strftime('%d/%m/%Y')
 
             # Tipo Documento Retenido        [ 2]
             content += '%02d' % int(partner.l10n_latam_identification_type_id.l10n_ar_afip_code)
