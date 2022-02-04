@@ -19,7 +19,7 @@
 ##############################################################################
 {
     'name': 'Tax Settlements For Argentina',
-    'version': '13.0.1.3.0',
+    'version': '13.0.1.4.0',
     'category': 'Accounting',
     'website': 'www.adhoc.com.ar',
     'license': 'AGPL-3',
@@ -34,6 +34,7 @@
         'data/account_financial_report_data.xml',
         'data/inflation_adjustment_index.xml',
         'views/inflation_adjustmen_index_view.xml',
+        'views/account_tax_view.xml',
         'wizards/inflation_adjustment_view.xml',
         'security/ir.model.access.csv',
     ],
