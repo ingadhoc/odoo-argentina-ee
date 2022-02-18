@@ -2,8 +2,7 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from odoo import models, api, fields
-
+from odoo import models, fields
 
 class AccountCheckToDateReportWizard(models.TransientModel):
     _name = 'account.check.to_date.report.wizard'
@@ -31,13 +30,16 @@ class AccountCheckToDateReportWizard(models.TransientModel):
 
         # cheques de tercero en mano
         third_ops = self.env['account.check']._get_checks_to_date_on_state(
-            'holding', self.to_date, force_domain=force_domain)
+            'holding', self.to_date, force_domain=force_domain).sorted(key=lambda r:r.check_id.payment_date or r.check_id.issue_date)
         # cheques propios entregados
         issue_ops = self.env['account.check']._get_checks_to_date_on_state(
-            'handed', self.to_date, force_domain=force_domain)
+            'handed', self.to_date, force_domain=force_domain).sorted(key=lambda r:r.check_id.payment_date or r.check_id.issue_date)
 
-        return self.env['ir.actions.report'].search(
-            [('report_name', '=', 'account_checks_to_date_report')],
-            limit=1).with_context(
-                issue_op_ids=issue_ops.ids,
-                third_op_ids=third_ops.ids,).report_action(self)
+        datadict = {
+            'third_ops_ids': third_ops.ids,
+            'issue_ops_ids': issue_ops.ids,
+            'date': self.to_date.strftime('%d/%m/%Y'),
+            'journal': self.journal_id.id
+        }
+
+        return self.env.ref('l10n_ar_account_reports.checks_to_date_report').report_action([], data=datadict)
