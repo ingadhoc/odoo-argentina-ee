@@ -31,12 +31,13 @@
     'depends': [
         'account_reports',
         'l10n_ar',
-        # 'l10n_latam_check',
+        'l10n_latam_check',
     ],
     'data': [
         'views/account_journal_dashboard_view.xml',
         'wizards/checks_to_date_view.xml',
-        'reports/account_checks_to_date_report.xml',
+        'reports/report_checks_to_date.xml',
+        'security/ir.model.access.csv',
     ],
     'demo': [
     ],

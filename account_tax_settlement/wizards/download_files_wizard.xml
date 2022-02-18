@@ -38,16 +38,6 @@
         </field>
     </record>
 
-    <!-- no anduvo si haciamos que el wizard tomara los valores por defecto, entonces lo creamos y luego lo abrimos -->
-<!--     <act_window id="action_download_files_wizard"
-                key2="client_action_multi"
-                name="Descargar Archivo"
-                res_model="download_files_wizard"
-                src_model="account.move.line"
-                view_mode="form"
-                target="new"
-                view_type="form"/> -->
-
     <record model="ir.actions.server" id="action_download_files_wizard">
         <field name="name">Download File</field>
         <field name="model_id" ref="account.model_account_move_line"/>
