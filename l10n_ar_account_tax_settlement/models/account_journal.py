@@ -1163,7 +1163,7 @@ class AccountJournal(models.Model):
                 # Numero Comprobante            [16]
                 # content += '%016d' % int(re.sub('[^0-9]', '', move.l10n_latam_document_number))
                 content += '%05d' % int(re.sub('[^0-9]', '', move.l10n_latam_document_number)[:5])
-                content += '%011d' % int(re.sub('[^0-9]', '', move.l10n_latam_document_number)[11:])
+                content += '%011d' % int(re.sub('[^0-9]', '', move.l10n_latam_document_number)[5:])
                 issue_date = move.invoice_date
                 base_amount = line.tax_base_amount
                 codop = '2'
