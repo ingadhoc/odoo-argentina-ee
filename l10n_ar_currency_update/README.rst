@@ -28,6 +28,8 @@ The scheduled action that will be run to update the currency rates will be run
 after 21 hours (GMT-3), this is required since the rates are published by
 AFIP after 9 pm.
 
+The currency rates can be checked here: https://www.afip.gob.ar/aduana/cotizacionesMaria/
+
 Installation
 ============
 
