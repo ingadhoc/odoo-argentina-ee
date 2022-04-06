@@ -50,6 +50,7 @@ class AccountJournal(models.Model):
     settlement_tax = fields.Selection(selection_add=[
         # ('vat', 'VAT'),
         # ('profits', 'Profits'),
+        ('drei_aplicado', 'TXT DREI Aplicado'),
         ('sicore_aplicado', 'TXT SICORE Aplicado'),
         ('iibb_sufrido', 'TXT IIBB p/ SIFERE'),
         ('iibb_aplicado', 'TXT Perc/Ret IIBB aplicadas ARBA: Percepciones ( excepto actividad 29, 7 quincenal, 7 y 17 de Bancos)'),
@@ -1232,5 +1233,27 @@ class AccountJournal(models.Model):
             # 'txt_filename': 'SICORE_%s_%s_%s.txt' % (
             #     re.sub(r'[^\d\w]', '', self.company_id.name),
             #     self.from_date, self.to_date),
+            'txt_content': content,
+        }]
+
+    def drei_aplicado_files_values(self, move_lines):
+        """ Implementado segun especificación indicada en ticket 39347. También se puede ver detalles en readme
+        """
+        self.ensure_one()
+        content = ''
+        for line in move_lines.sorted(key=lambda r: (r.date, r.id)):
+            if line.payment_id:
+                date = line.payment_id.payment_date
+                content += line.partner_id.ensure_vat()
+                content += line.partner_id.name.ljust(80)[:80]
+                content += '%010d' % int(line.name)
+                content += fields.Date.from_string(date).strftime('%d/%m/%Y')
+                content += '%012.2f' % line.payment_id.withholdable_base_amount
+                content += "{:0>16.6f}".format(line.payment_id.tax_withholding_id._get_rule(line.payment_id.payment_group_id).percentage * 100)
+                content += '%012.2f' % line.payment_id.computed_withholding_amount
+                content += '\n'
+
+        return [{
+            'txt_filename': 'DREI retenciones aplicadas.txt',
             'txt_content': content,
         }]
