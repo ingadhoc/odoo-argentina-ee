@@ -1,0 +1,509 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ar_account_tax_settlement
+# 
+# Translators:
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2022
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-04-20 14:40+0000\n"
+"PO-Revision-Date: 2022-04-19 18:44+0000\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2022\n"
+"Language-Team: Spanish (https://www.transifex.com/adhoc/teams/133229/es/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: l10n_ar_account_tax_settlement
+#: model_terms:ir.ui.view,arch_db:l10n_ar_account_tax_settlement.inflation_adjustment_form
+msgid ""
+"<span>\n"
+"                                    %\n"
+"                                </span>"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__account_id
+msgid "Account"
+msgstr "Cuenta"
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model,name:l10n_ar_account_tax_settlement.model_account_chart_template
+msgid "Account Chart Template"
+msgstr "Plantilla de Plan de Cuentas"
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/wizards/inflation_adjustment.py:0
+#, python-format
+msgid "Ajuste por inflación %s"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/wizards/inflation_adjustment.py:0
+#, python-format
+msgid "Ajuste por inflación %s (%s * %.2f%%)"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/wizards/inflation_adjustment.py:0
+#, python-format
+msgid "Ajuste por inflación Global [%s] / [%s]"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/wizards/inflation_adjustment.py:0
+#, python-format
+msgid "Ajuste por inflación cuentas al inicio (%s * %.2f%%)"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__analytic_account_id
+msgid "Analytic Account"
+msgstr "Cuenta Analítica"
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.actions.act_window,name:l10n_ar_account_tax_settlement.inflation_adjustment_action
+#: model:ir.ui.menu,name:l10n_ar_account_tax_settlement.inflation_adjustment_menu
+msgid "Asiento de ajuste por inflación"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__open_move_id
+msgid "Asiento de apertura"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__closure_move_id
+msgid "Asiento de cierre"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model_terms:ir.ui.view,arch_db:l10n_ar_account_tax_settlement.inflation_adjustment_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_account_tax__codigo_regimen
+msgid "Codigo de regimen IVA"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: l10n_ar_account_tax_settlement
+#: model_terms:ir.ui.view,arch_db:l10n_ar_account_tax_settlement.inflation_adjustment_form
+msgid "Confirm"
+msgstr "Confirmar"
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__create_uid
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment_index__create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__create_date
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment_index__create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment_index__date
+msgid "Date"
+msgstr "Fecha"
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__date_from
+msgid "Date From"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__date_to
+msgid "Date To"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#, python-format
+msgid "Debe setear el tipo de inscripción de IIBB del partner \"%s\" (id: %s)"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#, python-format
+msgid ""
+"Debe setear la información de \"artículo/inciso\" en las alícutoas de "
+"contacto %s"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment_index__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#, python-format
+msgid ""
+"EL el partner \"%s\" (id %s), el tipo de identificación debe ser una de "
+"siguientes: CUIT, CUIL, CDI."
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#, python-format
+msgid "EL tipo de identificación \"%s\" no tiene código de afipconfigurado"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/wizards/inflation_adjustment.py:0
+#, python-format
+msgid ""
+"El asiento de ajuste por inflación no puede ser generado ya que hace falta "
+"el indice de ajuste para el periodo %s %s"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#, python-format
+msgid "El impuesto no está asociado"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/inflation_adjustment_index.py:0
+#, python-format
+msgid "El indice debe comenzar el primer día de cada mes"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#, python-format
+msgid "El partner \"%s\" (id %s) no tiene número de identificación seteada"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__end_index
+msgid "End Index"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model_terms:ir.actions.act_window,help:l10n_ar_account_tax_settlement.inflation_adjustment_index_action
+msgid "Estos son necesarios para generar el asitento de ajuste por inflación."
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment_index__xml_id
+msgid "External ID"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:account.financial.html.report.line,name:l10n_ar_account_tax_settlement.report_line_asiento_de_cierre
+#: model:ir.actions.act_window,name:l10n_ar_account_tax_settlement.action_closure_journal_entry
+msgid "Generar asiento de cierre (BETA)"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:account.financial.html.report.line,name:l10n_ar_account_tax_settlement.report_line_asiento_de_refundicion
+#: model:ir.actions.act_window,name:l10n_ar_account_tax_settlement.action_recast_journal_entry
+msgid "Generar asiento de refundición (BETA)"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#, python-format
+msgid "Grupos de impuestos %s no implementados para SICORE"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__open_cloure_entry
+msgid "Ha realizado asientos de cierre/apertura?"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#, python-format
+msgid ""
+"Hay lineas a liquidar que no estan enlazadas a pagos ni facturas lo cual es "
+"requerido para generar el TXT"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__id
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment_index__id
+msgid "ID"
+msgstr "ID (identificación)"
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_account_bank_statement_import_journal_creation__settlement_tax
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_account_journal__settlement_tax
+msgid "Impuesto de liquidación"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.actions.act_window,name:l10n_ar_account_tax_settlement.inflation_adjustment_index_action
+#: model:ir.ui.menu,name:l10n_ar_account_tax_settlement.inflation_adjustment_index_menu
+msgid "Indices de Ajuste de Inflación"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model_terms:ir.ui.view,arch_db:l10n_ar_account_tax_settlement.inflation_adjustment_form
+msgid "Inflation Adjustment"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model,name:l10n_ar_account_tax_settlement.model_inflation_adjustment_index
+msgid "Inflation Adjustment Index"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model,name:l10n_ar_account_tax_settlement.model_inflation_adjustment
+msgid "Inflation adjustment"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model,name:l10n_ar_account_tax_settlement.model_account_journal
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__journal_id
+msgid "Journal"
+msgstr "Diario"
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model,name:l10n_ar_account_tax_settlement.model_account_move_line
+msgid "Journal Item"
+msgstr "Apunte contable"
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#, python-format
+msgid ""
+"La responsabilidad frente a IVA \"%s\" no está soportada para ret/perc AGIP"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#, python-format
+msgid ""
+"La responsabilidad frente a IVA \"%s\" no está soportada para ret/perc Santa"
+" Fe"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment____last_update
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment_index____last_update
+msgid "Last Modified on"
+msgstr "Última modificación el"
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__write_uid
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment_index__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__write_date
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment_index__write_date
+msgid "Last Updated on"
+msgstr "Última actualización en"
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields.selection,name:l10n_ar_account_tax_settlement.selection__inflation_adjustment__open_cloure_entry__no
+msgid "No"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#, python-format
+msgid "No hay alicuota configurada en el partner \"%s\" (id: %s)"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#, python-format
+msgid "No hay etiqueta de jurisdicción configurada!"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model_terms:ir.actions.act_window,help:l10n_ar_account_tax_settlement.inflation_adjustment_index_action
+msgid "No hay indices de ajuste por inflación aún. Por favor cree uno."
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#, python-format
+msgid ""
+"No hay regimen de percepcion configurado para la alícuota del partner %s"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#, python-format
+msgid ""
+"No hay regimen de retencion configurado para la alícuota del partner %s"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/wizards/inflation_adjustment.py:0
+#, python-format
+msgid ""
+"No hemos encontrado ningún asiento contable asociado al periodo "
+"seleccionado."
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#, python-format
+msgid ""
+"No pudimos encontrar el comprobante original para %s (id %s). Verifique que "
+"en la nota de crédito \"%s\", el campo origen es el número de la factura "
+"original"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#, python-format
+msgid ""
+"No puede utilizar exportación a \"SICORE Aplicado\" o \"Perc/Ret IIBB "
+"aplicadas API\" si no tiene instalado el módulo de retenciones automáticas "
+"(account_withholding_automatic)"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#, python-format
+msgid ""
+"Por ahora solo esta implementado el padrón de Regímenes Generales, revise la"
+" configuración en \"Contabilidad / \"Configuración / Ajustes\""
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/wizards/inflation_adjustment.py:0
+#, python-format
+msgid "Por favor indique el rango de fecha de inicio y fin"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_account_tax__porcentaje_exclusion
+msgid "Porcentaje de exclusión"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model_terms:ir.ui.view,arch_db:l10n_ar_account_tax_settlement.inflation_adjustment_index_search
+msgid "Search Description"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields.selection,name:l10n_ar_account_tax_settlement.selection__inflation_adjustment__open_cloure_entry__yes
+msgid "Si"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,help:l10n_ar_account_tax_settlement.field_account_bank_statement_import_journal_creation__settlement_tax
+#: model:ir.model.fields,help:l10n_ar_account_tax_settlement.field_account_journal__settlement_tax
+msgid ""
+"Si elije un impuesto se puede agregar alguna funcionalidad, como por ej. "
+"descargar archivos txt"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,help:l10n_ar_account_tax_settlement.field_inflation_adjustment__open_cloure_entry
+msgid ""
+"Si usted ha realizado los asientos de cierre/apertura debe indicarnos cuales"
+" son para poder excluir los mismos en el cálculo."
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__start_index
+msgid "Start Index"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields.selection,name:l10n_ar_account_tax_settlement.selection__account_journal__settlement_tax__iibb_aplicado_dgr_mendoza
+msgid "TXT  Perc/Ret IIBB aplicado DGR Mendonza"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields.selection,name:l10n_ar_account_tax_settlement.selection__account_journal__settlement_tax__iibb_sufrido
+msgid "TXT IIBB p/ SIFERE"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields.selection,name:l10n_ar_account_tax_settlement.selection__account_journal__settlement_tax__iibb_aplicado_agip
+msgid "TXT Perc/Ret IIBB aplicadas AGIP"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields.selection,name:l10n_ar_account_tax_settlement.selection__account_journal__settlement_tax__iibb_aplicado_api
+msgid "TXT Perc/Ret IIBB aplicadas API"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields.selection,name:l10n_ar_account_tax_settlement.selection__account_journal__settlement_tax__iibb_aplicado
+msgid ""
+"TXT Perc/Ret IIBB aplicadas ARBA: Percepciones ( excepto actividad 29, 7 "
+"quincenal, 7 y 17 de Bancos)"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields.selection,name:l10n_ar_account_tax_settlement.selection__account_journal__settlement_tax__iibb_aplicado_act_7
+msgid ""
+"TXT Perc/Ret IIBB aplicadas ARBA: Percepciones Act. 7 método Percibido "
+"(quincenal)"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields.selection,name:l10n_ar_account_tax_settlement.selection__account_journal__settlement_tax__iibb_aplicado_sircar
+msgid "TXT Perc/Ret IIBB aplicadas SIRCAR"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields.selection,name:l10n_ar_account_tax_settlement.selection__account_journal__settlement_tax__sicore_aplicado
+msgid "TXT SICORE Aplicado"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model,name:l10n_ar_account_tax_settlement.model_account_tax
+msgid "Tax"
+msgstr "Impuesto"
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#, python-format
+msgid "Tipo de comprobante no reconocido"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#, python-format
+msgid ""
+"Tipo de impuesto %s equivocado. Se aceptan solo percepciones o retenciones "
+"con \"Cálculo de impuestos\" igual a \"Alícuota en el Partner\". Id de "
+"impuestos \"%s\""
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment_index__value
+msgid "Value"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: code:addons/l10n_ar_account_tax_settlement/models/inflation_adjustment_index.py:0
+#, python-format
+msgid ""
+"Ya existe un indice para el periodo %s %s. Solo puedes tener un indice de "
+"inflación por mes"
+msgstr ""

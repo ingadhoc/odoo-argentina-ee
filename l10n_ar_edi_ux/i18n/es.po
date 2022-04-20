@@ -1,67 +1,447 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* l10n_ar_ux
-#
+# 	* l10n_ar_edi_ux
+# 
+# Translators:
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2022
+# 
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 13.0+e\n"
+"Project-Id-Version: Odoo Server 15.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-26 19:37+0000\n"
-"PO-Revision-Date: 2020-02-26 19:37+0000\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"POT-Creation-Date: 2022-04-20 14:27+0000\n"
+"PO-Revision-Date: 2022-04-19 18:39+0000\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2022\n"
+"Language-Team: Spanish (https://www.transifex.com/adhoc/teams/133229/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: \n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#. module: l10n_ar_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_ux.partner_info
-msgid "Billing information"
-msgstr "Datos de facturación"
-
-#. module: l10n_ar_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_ux.partner_info
-msgid ""
-"Changing your document type is not allowed. Please contact us directly for "
-"this operation."
+#. module: l10n_ar_edi_ux
+#: code:addons/l10n_ar_edi_ux/models/account_journal.py:0
+#, python-format
+msgid "\"Get Document Types\" is not implemented for webservice %s"
 msgstr ""
-"Cambiar tu tipo de documento no esta permitido. Por favor contáctenos "
-"directamente para realizar esta operación."
 
-#. module: l10n_ar_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_ux.partner_info
-msgid "Company Name"
-msgstr "Nombre de la compañía"
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
+msgid "-> Actividades"
+msgstr ""
 
-#. module: l10n_ar_ux
-#: model:ir.model,name:l10n_ar_ux.model_res_partner
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
+msgid "-> Conceptos"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
+msgid "-> Impuestos"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_l10n_ar_afipws_connection
+msgid "AFIP Webservice Connection"
+msgstr "Conexión Webservice de AFIP"
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
+msgid ""
+"Al hacer click en los botones de mas abajo se van a sincronizar desde afip "
+"las Actividades, Impuestos y Conceptos. Estos datos son solo informativos y "
+"se utilizan para clasificar al partner al consultar datos del partner en el "
+"padron AFIP."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "Are you sure to execute the automatic update of your partners ?"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_payment_group_invoice_wizard__l10n_ar_afip_asoc_period_start
+msgid "Associate Period From"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_payment_group_invoice_wizard__l10n_ar_afip_asoc_period_end
+msgid "Associate Period To"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_asoc_period_end
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_asoc_period_end
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_payment__l10n_ar_afip_asoc_period_end
+msgid "Associated Perdio End"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_move_form
+msgid "Associated Period"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_asoc_period_start
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_asoc_period_start
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_payment__l10n_ar_afip_asoc_period_start
+msgid "Associated Period Start"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: code:addons/l10n_ar_edi_ux/models/account_journal.py:0
+#, python-format
+msgid ""
+"Authorized Document Clases on AFIP:\n"
+"%s"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.actions.act_window,name:l10n_ar_edi_ux.action_partner_update
+msgid "Automatic Update from Padron"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_config_settings__arba_cit
+msgid "CIT ARBA"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_config_settings__arba_cit
+msgid "Clave de Identificación Tributaria de ARBA"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "Close"
+msgstr "Cerrar"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_payment_group_invoice_wizard__commercial_partner_id
+msgid "Commercial Entity"
+msgstr "Entidad Comercial"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_res_config_settings
+msgid "Config Settings"
+msgstr "Opciones de configuración"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_res_partner
 msgid "Contact"
 msgstr "Contacto"
 
-#. module: l10n_ar_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_ux.partner_info
-msgid "Document Number"
-msgstr "Número de Documento"
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__title_case
+msgid "Converts retreived text fields to Title Case."
+msgstr ""
 
-#. module: l10n_ar_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_ux.partner_info
-msgid "Document Type"
-msgstr "Tipo de Identificación"
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__create_uid
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__create_uid
+msgid "Created by"
+msgstr "Creado por"
 
-#. module: l10n_ar_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_ux.partner_info
-msgid "Document Type..."
-msgstr "Tipo de Identificación..."
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__create_date
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__create_date
+msgid "Created on"
+msgstr "Creado el"
 
-#. module: l10n_ar_ux
-#: code:addons/l10n_ar_ux/controllers/portal.py:0
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__display_name
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__display_name
+msgid "Display Name"
+msgstr "Nombre mostrado"
+
+#. module: l10n_ar_edi_ux
+#: code:addons/l10n_ar_edi_ux/wizards/res_config_settings.py:0
 #, python-format
-msgid "Please add the document number."
-msgstr "Por favor agregue el número de documento."
+msgid "Error getting %s params from AFIP!"
+msgstr ""
 
-#. module: l10n_ar_ux
-#: code:addons/l10n_ar_ux/controllers/portal.py:0
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__field
+msgid "Field"
+msgstr "Campo"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__field_ids
+msgid "Fields"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__field_to_update_ids
+msgid "Fields To Update"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_partner_update_from_padron_wizard__state__finished
+msgid "Finished"
+msgstr "Finalizado"
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_account_journal_form
+msgid "Get Document Types"
+msgstr "Obtener tipos de Documentos"
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_account_journal_form
+msgid "Get valid document types for this webservice"
+msgstr "Obtener tipos de documento válidos para este servicio web"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__id
+msgid "ID"
+msgstr "ID (identificación)"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_account_journal
+msgid "Journal"
+msgstr "Diario"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_account_move
+msgid "Journal Entry"
+msgstr "Asiento contable"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field____last_update
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard____last_update
+msgid "Last Modified on"
+msgstr "Última modificación el"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__write_uid
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__write_date
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__write_date
+msgid "Last Updated on"
+msgstr "Última actualización en"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__new_value
+msgid "New Value"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: code:addons/l10n_ar_edi_ux/models/res_partner.py:0
 #, python-format
-msgid "Please add the type of document."
-msgstr "Por favor agregue el tipo de identificación."
+msgid ""
+"No pudimos actualizar desde padron afip al partner %s (%s).\n"
+"Recomendamos verificar manualmente en la página de AFIP.\n"
+"Obtuvimos este error:\n"
+"%s"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: code:addons/l10n_ar_edi_ux/wizards/res_partner_update_from_padron_wizard.py:0
+#, python-format
+msgid "No se encontró ningún partner con CUIT para actualizar"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__old_value
+msgid "Old Value"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid ""
+"Only Partners with cuit are going to be updated.<br/>\n"
+"                        Select the list of fields you want to update."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__field_to_update_ids
+msgid "Only this fields are going to be retrived and updated"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_partner_update_from_padron_wizard__state__option
+msgid "Option"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_payment_group_invoice_wizard__origin_invoice_id
+msgid "Origin Invoice"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__partner_id
+msgid "Partner"
+msgstr "Empresa"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__partner_ids
+msgid "Partners"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: code:addons/l10n_ar_edi_ux/models/res_partner.py:0
+#, python-format
+msgid "Please configure an AFIP Certificate in order to continue"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
+msgid "Refrescar datos del Padron AFIP"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: code:addons/l10n_ar_edi_ux/wizards/res_config_settings.py:0
+#, python-format
+msgid "Resource Type %s not implemented!"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_partner_update_from_padron_wizard__state__selection
+msgid "Selection"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: code:addons/l10n_ar_edi_ux/models/l10n_ar_afipws_connection.py:0
+#, python-format
+msgid "Servicio de Consulta de Padrón Alcance 5"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_asoc_period_end
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_asoc_period_start
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_asoc_period_end
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_asoc_period_start
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_payment__l10n_ar_afip_asoc_period_end
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_payment__l10n_ar_afip_asoc_period_start
+msgid ""
+"Set this field if it is you are reporting debit/credit note and have not "
+"related invoice. IMPORTANT: This is only applies on \"Electronic Invoice - "
+"Web Service\""
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "Skip these partner"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: code:addons/l10n_ar_edi_ux/models/account_move.py:0
+#, python-format
+msgid ""
+"Some vendor bills where validated in AFIP but as we have an error with one vendor bill the batch validation was stopped\n"
+"\n"
+"* These vendor bills were validated:\n"
+"   * %s\n"
+"\n"
+"* These vendor bills weren't validated:\n"
+"%s\n"
+"\n"
+"\n"
+"\n"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__state
+msgid "State"
+msgstr "Estado"
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "There are no more partners to update for this request..."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: code:addons/l10n_ar_edi_ux/models/account_move.py:0
+#, python-format
+msgid ""
+"This is what we get:\n"
+"%s\n"
+"\n"
+"Please make the required corrections and try again"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__title_case
+msgid "Title Case"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "Update Automatically"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__update_constancia
+msgid "Update Constancia"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_partner_form
+msgid "Update From AFIP"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "Update From Padron AFIP"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.actions.act_window,name:l10n_ar_edi_ux.action_base_partner_update_from_padron
+#: model:ir.ui.menu,name:l10n_ar_edi_ux.menu_base_partner_update_from_padron
+msgid "Update Partners From Padron AFIP"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "Update Selection"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "Update with Manual Check"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: code:addons/l10n_ar_edi_ux/models/account_move.py:0
+#, python-format
+msgid "We could not validate the vendor bill in AFIP"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__wizard_id
+msgid "Wizard"
+msgstr "Asistente"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_account_payment_group_invoice_wizard
+msgid "account.payment.group.invoice.wizard"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "or"
+msgstr "o"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_res_partner_update_from_padron_field
+msgid "res.partner.update.from.padron.field"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_res_partner_update_from_padron_wizard
+msgid "res.partner.update.from.padron.wizard"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_move_form
+msgid "to"
+msgstr ""
