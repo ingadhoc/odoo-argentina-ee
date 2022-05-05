@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="l10n_ar_caea_view_form" model="ir.ui.view">
+        <field name="name">l10n.ar.caea.view.form</field>
+        <field name="model">l10n.ar.caea</field>
+        <field name="arch" type="xml">
+            <form string="CAEA">
+                <header>
+                    <!-- No tiene mucho sentido, si queremos cargarlo manual?
+                    <button name="action_request_caea" string="Request CAEA" type="object"/> -->
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box" modifiers="{}">
+                        <button class="oe_stat_button" type="object" name="action_view_moves" ontext="{'default_l10n_ar_caea_id': active_id}">
+                            <field string="Invoices" name="moves_count" widget="statinfo" modifiers="{'readonly':true}"/>
+                        </button>
+                    </div>
+                    <h1>
+                        <field attrs="{'readonly': True}" name="name"/>
+                    </h1>
+                    <group>
+                        <field name="company_id"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="informed"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="l10n_ar_caea_action" model="ir.actions.act_window">
+        <field name="name">l10n.ar.caea.action</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">l10n.ar.caea</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="CAEA" action="l10n_ar_caea_action" id="menu_action_caea" parent="l10n_ar_edi.menu_afipws"/>
+
+</odoo>
