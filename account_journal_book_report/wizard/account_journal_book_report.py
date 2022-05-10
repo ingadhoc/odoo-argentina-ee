@@ -57,6 +57,17 @@ class AccountJournalBookReport(models.TransientModel):
                             fields.Date.to_string(dt_to)))
             # este va a se la date from del proximo
             dt_from = dt_to + relativedelta(days=1)
+        return self.env['ir.actions.report'].search(
+            [('report_name', '=', 'account_journal_book_report')], limit=1
+        ).with_context(
+            periods=periods,
+            last_entry_number=self.last_entry_number,
+        ).report_action(self)
+
+
+    def _retrive_moves_ids(self):
+        date_from = fields.Date.from_string(self.date_from)
+        date_to = fields.Date.from_string(self.date_to)
         domain = [('company_id', '=', self.company_id.id)]
         if self.target_move == 'posted':
             domain.append(('state', '=', 'posted'))
@@ -65,9 +76,4 @@ class AccountJournalBookReport(models.TransientModel):
         if self.date_to:
             domain.append(('date', '<=', self.date_to))
         moves = self.env['account.move'].search(domain)
-        return self.env['ir.actions.report'].search(
-            [('report_name', '=', 'account_journal_book_report')], limit=1
-        ).with_context(
-            periods=periods,
-            last_entry_number=self.last_entry_number,
-        ).report_action(moves)
+        return moves.ids
