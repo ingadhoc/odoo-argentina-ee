@@ -7,8 +7,7 @@
         <field name="arch" type="xml">
             <form string="CAEA">
                 <header>
-                    <!-- No tiene mucho sentido, si queremos cargarlo manual?
-                    <button name="action_request_caea" string="Request CAEA" type="object"/> -->
+                    <button name="request_caea_from_afip" string="Request CAEA" type="object"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box" modifiers="{}">
@@ -20,13 +19,31 @@
                         <field attrs="{'readonly': True}" name="name"/>
                     </h1>
                     <group>
-                        <field name="company_id"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
                         <field name="date_from"/>
                         <field name="date_to"/>
                         <field name="informed"/>
+                        <field name="process_deadline"/>
+                        <field name="process_datetime"/>
                     </group>
                 </sheet>
             </form>
+        </field>
+    </record>
+
+    <record id="l10n_ar_caea_view_tree" model="ir.ui.view">
+        <field name="name">l10n.ar.caea.view.tree</field>
+        <field name="model">l10n.ar.caea</field>
+        <field name="arch" type="xml">
+            <tree string="CAEA">
+                <field name="name"/>
+                <!-- <field name="month" optional="true"/>
+                <field name="year" optional="true"/> -->
+                <field name="order"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </tree>
         </field>
     </record>
 

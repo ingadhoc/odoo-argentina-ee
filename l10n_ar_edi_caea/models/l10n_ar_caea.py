@@ -1,18 +1,19 @@
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError
+from datetime import datetime
 
 
 class L10nArCaea(models.Model):
 
     _name = 'l10n.ar.caea'
-    _description = 'CAEA'
+    _description = 'CAEA (Anticipated Electronic Authorization Code)'
     _order = "date_from desc"
     _inherit = ['mail.thread', 'mail.activity.mixin']
 
     _sql_constraints = [
         ('unique_caea', 'unique (company_id,name)', 'CAEA already exists!'),
     ]
-    name = fields.Char("Anticipated Electronic Authorization Code")
+    name = fields.Char(copy=False)
 
     company_id = fields.Many2one('res.company', required=True, default=lambda self: self.env.company)
     date_from = fields.Date(string='from')
@@ -22,6 +23,9 @@ class L10nArCaea(models.Model):
     order = fields.Selection([('1', 'first Fortnight'), ('2', 'second Fortnight')], string='Fortnight')
 
     period = fields.Char(size=6)
+    process_deadline = fields.Date()        # FchTopeInf    Fecha de tope para informar los comprobantes vinculados al CAEA
+    process_datetime = fields.Datetime()    # FchProceso    Fecha de proceso, formato yyyymmddhhmiss
+
     # NTH? revisar si lo queremos realmente
     # year = fields.Integer()
     # month = fields.Selection(
@@ -107,18 +111,40 @@ class L10nArCaea(models.Model):
         self.ensure_one()
         afip_ws = 'wsfe'
         client, auth, _transport = self.company_id._l10n_ar_get_connection(afip_ws)._get_client(return_transport=True)
-        result = client.service.FECAEASolicitar(auth, {'FeCAEAReq': {'Periodo': self.period, 'Orden': self.order}})
+
+        period = self.date_from.strftime('%Y%m')
+        order = '1' if self.date_to.day < 16 else '2'
+
+        # 1 Consultar si ya existe, traernos el dato al Odoo
+        result = client.service.FECAEAConsultar(auth, Periodo=period, Orden=order)
         import pdb
         pdb.set_trace()
+        if result.Errors:
+            if result.Errors.Err[0].Code == 602:
+                # No existe el CAEA pero intentamos generarlo
+                pass
+            else:
+                raise UserError('No se consiguio un CAEA %s' % str(result.Errors))
+
+        # 2 Si no existe CAEA entonces pedir a AFIP para crearlo
+        if not result.ResultGet.CAEA:
+            result = client.service.FECAEASolicitar(auth, Periodo=period, Orden=order)
+
+            # Si ya existe no genero sino que consulto el CAE
+            if result.Errors:
+                raise UserError('No se pudo crear el CAEA %s' % str(result.Errors))
+
+        result = result.ResultGet
         self.name = result.CAEA
-        self.date_from = result.FchVigDesde
-        self.date_to = result.FchVigHasta
+        # self.date_from = result.FchVigDesde       20220501 datetime.strptime(result.FchVigDesde, "%Y%m%d").date()
+        # self.date_to = result.FchVigHasta
+        self.period = result.Periodo
+        self.order = str(result.Orden)
 
-        # TODO guardar?
-        # FchTopeInf    Fecha de tope para informar los comprobantes vinculados al CAEA
-        # FchProceso    Fecha de proceso, formato yyyymmddhhmiss
+        # TODO tomar en cuenta que debemos hacer el cambio a TZ AR
+        self.process_deadline = datetime.strptime(result.FchTopeInf, "%Y%m%d").date()
+        self.process_datetime = datetime.strptime(result.FchProceso, "%Y%m%d%H%M%S")
 
-        # self.process_deadline = datetime.strptime(result['FchTopeInf'], '%Y%m%d')
         if result.Observaciones:
             return_info = ''.join(['\n* Code %s: %s' % (ob.Code, ob.Msg) for ob in result.Observaciones.Obs])
             self.message_post(
