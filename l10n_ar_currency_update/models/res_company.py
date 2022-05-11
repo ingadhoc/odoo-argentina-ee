@@ -66,7 +66,7 @@ class ResCompany(models.Model):
         currency_ars = self.env.ref('base.ARS')
         today = fields.Date.context_today(self.with_context(tz='America/Argentina/Buenos_Aires'))
         if currency_ars in available_currencies:
-            res['ARS'] = (1.0, today)
+            res[currency_ars.name] = (1.0, today)
         available_currencies = available_currencies.filtered('l10n_ar_afip_code') - currency_ars
         rate_date = today
 
