@@ -1006,6 +1006,12 @@ class AccountJournal(models.Model):
 
         tal vez querramos agregar chequeo de que es "sifere" viendo que es
         cia multilateral
+
+        * el txt generado se puede probar en este aplicativo de pruebas
+        http://www.ca.gov.ar/descargar/sifereweb/SifereClientAppDEDUCCIONES.zip
+
+        * para consultas directo a sifere mesa de ayuda enviar correo electronico a
+        sifereweb@comisionarbitral.gob.ar
         """
         self.ensure_one()
 
