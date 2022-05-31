@@ -37,6 +37,9 @@ Especificación de archivos:
    cuit (req): 11, razon_soc (req): 80, nro_certificado: 10, fecha_ret: 10 (formato "dd/mm/aaaa"), base_imp: 09.2, alicuota: 09.6, importe (req): 09.2
    Los campos "base_imp","alicuota","importe" son  numéricos , deben completarse con ceros a la izquierda y tienen "." decimal.
 
+* MISIONES: https://www.atm.misiones.gob.ar/index.php/guia-de-tramites/instructivos/category/53-agentes
+            Correo DGR: mesadeayuda@tsgroup.com.ar
+
 Inflation Adjustment
 --------------------
 
