@@ -35,6 +35,8 @@
     ],
     'data': [
         'views/account_journal_dashboard_view.xml',
+        'wizards/checks_to_date_view.xml',
+        'reports/account_checks_to_date_report.xml',
     ],
     'demo': [
     ],
