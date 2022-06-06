@@ -1,6 +1,6 @@
 {
     'name': 'Argentinian Electronic Invoicing UX',
-    'version': "15.0.1.0.0",
+    'version': "15.0.1.1.0",
     'category': 'Localization/Argentina',
     'sequence': 14,
     'author': 'ADHOC SA',
@@ -10,6 +10,7 @@
     'depends': [
         'l10n_ar_ux',
         'l10n_ar_edi',
+        'sale_ux',
     ],
     'external_dependencies': {
         'python': ['zeep'],
