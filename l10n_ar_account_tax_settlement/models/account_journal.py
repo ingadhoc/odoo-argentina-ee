@@ -525,7 +525,7 @@ class AccountJournal(models.Model):
                     re.sub('[^0-9]', '', or_inv.l10n_latam_document_number or ''))
 
                 # 9 - Nro de documento del Retenido
-                content += partner.vat
+                content += str(partner._get_id_number_sanitize())
 
                 # 10 - Código de norma
                 # por ahora solo padron regimenes generales
@@ -628,7 +628,7 @@ class AccountJournal(models.Model):
             content += doc_type_mapping[partner.l10n_latam_identification_type_id.name]
 
             # 11 - Nro de documento del Retenido
-            content += partner.vat
+            content += str(partner._get_id_number_sanitize())
 
             # 12 - Situación IB del Retenido
             # 1: Local 2: Convenio Multilateral
