@@ -24,7 +24,7 @@ class AccountFollowupReport(models.AbstractModel):
         res = {}
         today = fields.Date.today()
         line_num = 0
-        for l in partner.unreconciled_aml_ids.filtered(lambda l: l.company_id == self.env.company):
+        for l in partner.unreconciled_aml_ids.sorted():
             if l.company_id == self.env.company:
                 if self.env.context.get('print_mode') and l.blocked:
                     continue
