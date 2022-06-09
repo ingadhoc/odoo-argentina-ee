@@ -21,3 +21,19 @@ class AccountJournal(models.Model):
         """ Depending on AFIP POS System selected set the proper AFIP WS """
         super()._compute_l10n_ar_afip_ws()
         self.filtered(lambda x: x.l10n_ar_afip_pos_system == 'RAW_MAW_CAEA').l10n_ar_afip_ws = 'wsfe_caea'
+
+    def _get_journal_codes(self):
+        self.ensure_one()
+
+        # CAEA documents
+        if 'CAEA' in self.l10n_ar_afip_pos_system:
+            usual_codes = ['1', '2', '3', '6', '7', '8', '11', '12', '13']
+            receipt_codes = ['4', '9', '15']
+            receipt_m_code = ['54']
+            invoice_m_code = ['51', '52', '53']
+            mipyme_codes = ['201', '202', '203', '206', '207', '208', '211', '212', '213']
+            return usual_codes + receipt_codes + invoice_m_code + receipt_m_code + mipyme_codes
+
+        return super()._get_journal_codes()
+
+

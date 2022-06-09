@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <form string="CAEA">
                 <header>
-                    <button name="request_caea_from_afip" string="Request CAEA" type="object"/>
+                    <button name="action_request_caea_from_afip" string="Request CAEA" type="object"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box" modifiers="{}">
@@ -20,13 +20,32 @@
                     </h1>
                     <group>
                         <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="period"/>
+                        <field name="order"/>
                         <field name="date_from"/>
                         <field name="date_to"/>
                         <field name="informed"/>
                         <field name="process_deadline"/>
                         <field name="process_datetime"/>
                     </group>
+                    <group>
+                        <button name="action_get_caea_pos" states="active" string="Update autorized CAEA pos" type="object"/>
+                        <button name="action_report_no_invoices" states="active" string="report no invoices" type="object"/>
+                        <field attrs="{'readonly':True}" name="journal_ids">
+                            <tree string="Journals">
+                                <field invisible="True" name="id"/>
+                                <field name="name"/>
+                                <field name="l10n_ar_afip_pos_number"/>
+                                <field name="l10n_ar_afip_pos_system"/>
+                            </tree>
+                        </field>
+                    </group>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
             </form>
         </field>
     </record>
@@ -48,7 +67,7 @@
     </record>
 
     <record id="l10n_ar_caea_action" model="ir.actions.act_window">
-        <field name="name">l10n.ar.caea.action</field>
+        <field name="name">CAEA</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">l10n.ar.caea</field>
         <field name="view_mode">tree,form</field>
