@@ -1290,7 +1290,7 @@ class AccountJournal(models.Model):
                 content += payment.partner_id.l10n_ar_formatted_vat + ','
 
                 # Monto de operación
-                content += '%.2f' % (payment.withholdable_invoiced_amount) + ','
+                content += '%.2f' % (payment.withholdable_base_amount) + ','
 
                 # Alícuota
                 alicuot_line = line.tax_line_id.get_partner_alicuot(
