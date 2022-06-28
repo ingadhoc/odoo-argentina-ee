@@ -13,15 +13,20 @@ class TestL10nArCurrencyUpdate(common.TransactionCase):
 
     def setUp(self):
 
-        self.ARS_USD = 62.073
-        self.ARS_EUR = 60.073
-        self.USD_EUR = 1.575
+        self.ARS_USD = 1 / 128.178
+        self.ARS_EUR = 1 / 60.178
+        # sin uso por ahora
+        # self.USD_EUR = self.ARS_USD / self.ARS_EUR
 
         super().setUp()
 
         self.ARS = self.env.ref('base.ARS')
         self.USD = self.env.ref('base.USD')
         self.EUR = self.env.ref('base.EUR')
+
+        # activamos monedas por las dudas
+        self.USD.active = True
+        self.EUR.active = True
 
     def test_ARS(self):
         """ When the base currency is ARS """
@@ -30,7 +35,6 @@ class TestL10nArCurrencyUpdate(common.TransactionCase):
         self.env.company = company
 
         company.update_currency_rates()
-        pprint.pprint(self.env['res.currency'].search([]).read(['name', 'date', 'rate']))
 
         self.assertEqual(self.ARS.rate, 1.0)
         self.assertAlmostEqual(self.USD.rate, self.ARS_USD, places=3)
