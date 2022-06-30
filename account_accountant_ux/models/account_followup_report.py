@@ -9,6 +9,7 @@ from odoo.tools.misc import formatLang, format_date, get_lang
 class AccountFollowupReport(models.AbstractModel):
     _inherit = "account.followup.report"
 
+
     def _get_lines(self, options, line_id=None):
         """
         Override
@@ -49,7 +50,7 @@ class AccountFollowupReport(models.AbstractModel):
                     date_due = {'name': date_due, 'class': 'color-red date', 'style': 'white-space:nowrap;text-align:center;color: red;'}
                 if is_payment:
                     date_due = ''
-                move_line_name = self._format_aml_name(aml.name, aml.move_id.ref)
+                move_line_name = self._format_aml_name(aml.name, aml.move_id.ref, aml.move_id.name)
                 if self.env.context.get('print_mode'):
                     move_line_name = {'name': move_line_name, 'style': 'text-align:right; white-space:normal;'}
                 amount = formatLang(self.env, amount, currency_obj=currency)
