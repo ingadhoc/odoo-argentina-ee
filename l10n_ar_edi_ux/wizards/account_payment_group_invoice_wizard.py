@@ -21,7 +21,7 @@ class AccountPaymentGroupInvoiceWizard(models.TransientModel):
     def get_invoice_vals(self):
         self.ensure_one()
         invoice_vals = super().get_invoice_vals()
-        origin_doc = "reversed_entry_id" if invoice_vals['type'] in ['in_refund', 'out_refund'] else "debit_origin_id"
+        origin_doc = "reversed_entry_id" if invoice_vals['move_type'] in ['in_refund', 'out_refund'] else "debit_origin_id"
         invoice_vals.update({
             'l10n_ar_afip_asoc_period_start': self.l10n_ar_afip_asoc_period_start,
             'l10n_ar_afip_asoc_period_end': self.l10n_ar_afip_asoc_period_end,
