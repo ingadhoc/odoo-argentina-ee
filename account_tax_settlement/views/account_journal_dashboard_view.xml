@@ -13,7 +13,7 @@
             </field>
             <!-- add new payment after existing journal entries button -->
             <xpath expr="//button[@name='action_create_new']" position="after">
-                <button type="object" name="action_create_payment" class="btn btn-primary">
+                <button type="object" name="action_create_payment" class="btn btn-primary" t-if="record.tax_settlement.raw_value">
                     <span>New Payment</span>
                 </button>
             </xpath>
