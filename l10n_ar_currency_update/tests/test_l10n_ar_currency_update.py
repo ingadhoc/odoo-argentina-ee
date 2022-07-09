@@ -2,11 +2,10 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from odoo.tests import common
-from odoo import fields
-import pprint
+from odoo.tests import common, tagged
 
 
+@tagged('-at_install', '-standard', 'currency_update')
 class TestL10nArCurrencyUpdate(common.TransactionCase):
 
     # TODO when runing this test please update this values to the day rate
