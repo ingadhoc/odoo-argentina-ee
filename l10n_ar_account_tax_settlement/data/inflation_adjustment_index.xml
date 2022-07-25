@@ -560,4 +560,14 @@
         <field name="date" eval="time.strftime('2022-04-01')"/>
         <field name="value">716.9399</field>
     </record>
+
+    <record id="index_05_2022" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2022-05-01')"/>
+        <field name="value">753.147</field>
+    </record>
+
+    <record id="index_06_2022" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2022-06-01')"/>
+        <field name="value">793.0278</field>
+    </record>
 </odoo>
