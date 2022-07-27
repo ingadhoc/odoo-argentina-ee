@@ -19,7 +19,11 @@
 ##############################################################################
 {
     'name': 'Accounting Reports Customized for Argentina',
+<<<<<<< HEAD
     'version': "15.0.1.0.0",
+=======
+    'version': '13.0.1.2.0',
+>>>>>>> 5a3d509... temp
     'category': 'Accounting',
     'sequence': 14,
     'summary': '',
