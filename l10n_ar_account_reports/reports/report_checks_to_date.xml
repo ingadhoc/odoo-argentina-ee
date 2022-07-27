@@ -3,6 +3,7 @@
 
 <template id="checks_to_date">
     <t t-call="web.html_container">
+    <t t-set="company" t-value="env.company"/>
         <t t-call="web.internal_layout">
             <t t-set="dat" t-value="docs.env['account.check.operation'].browse(date)"></t>
             <h3 class="text-center">Listado de cheques pendientes al <t t-esc="dat.id"/></h3>
