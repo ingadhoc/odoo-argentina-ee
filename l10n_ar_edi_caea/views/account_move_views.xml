@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_move_form" model="ir.ui.view">
+        <field name="name">account.move.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="l10n_ar_edi.view_move_form"/>
+        <field name="arch" type="xml">
+
+            <field name="l10n_latam_document_number" position="after">
+                <field name="is_caea"/>
+            </field>
+
+            <sheet position="before">
+                <field name="l10n_ar_afip_pos_system" invisible="True"/>
+                <div class="alert alert-warning" attrs="{'invisible': ['|', '|', ('is_caea', '=', False), ('state', '!=', 'draft'), ('l10n_ar_afip_pos_system', '=', 'RAW_MAW_CAEA')]}" role="alert">
+                    Está en modo contingencia, al validar la factura se intentará validar en el diario de contingencia correspondiente
+                </div>
+
+                <div class="alert alert-warning" attrs="{'invisible': [('l10n_caea_info', '=', False)]}" role="alert">
+                    Alerta: <field name="l10n_caea_info"/>
+                </div>
+            </sheet>
+
+            <button name="action_post" position="after">
+                <button name="action_reprocess_caea_afip" type="object" string="Reprocesar en AFIP" class="oe_highlight" attrs="{'invisible': ['|', ('l10n_ar_afip_result', '!=', 'R'), ('state', '!=', 'posted')]}" help="Solo funiona para facturas CAEA que han sido rechazadas"/>
+            </button>
+
+        </field>
+    </record>
+
+    <record id="view_move_tree_2" model="ir.ui.view">
+        <field name="name">account.move.tree</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_invoice_tree"/>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="l10n_ar_afip_result" optional="show" widget="badge" decoration-info="l10n_ar_afip_result in ['A', 'O']" decoration-danger="l10n_ar_afip_result == 'R'"/>
+            </tree>
+        </field>
+    </record>
+
+
+</odoo>
