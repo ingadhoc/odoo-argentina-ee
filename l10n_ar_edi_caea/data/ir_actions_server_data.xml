@@ -1,0 +1,27 @@
+<odoo>
+
+    <record id="action_report_to_afip_caea" model="ir.actions.server">
+        <field name="name">AFIP: Report to AFIP</field>
+        <field name="model_id" ref="l10n_ar_edi_caea.model_l10n_ar_caea"/>
+        <field name="binding_model_id" ref="l10n_ar_edi_caea.model_l10n_ar_caea"/>
+        <field name="state">code</field>
+        <field name="code">
+if record.informed:
+    raise UserError("There is nothing to inform")
+
+record.action_report_to_afip()</field>
+    </record>
+
+    <record id="action_request_caea_afip" model="ir.actions.server">
+        <field name="name">AFIP: Request CAEA</field>
+        <field name="model_id" ref="l10n_ar_edi_caea.model_l10n_ar_caea"/>
+        <field name="binding_model_id" ref="l10n_ar_edi_caea.model_l10n_ar_caea"/>
+        <field name="state">code</field>
+        <field name="code">
+if record.name:
+    raise UserError("You already have a CAEA number")
+
+record.action_request_caea_from_afip()</field>
+    </record>
+
+</odoo>

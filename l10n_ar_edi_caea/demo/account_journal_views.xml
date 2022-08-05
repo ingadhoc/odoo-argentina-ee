@@ -1,0 +1,30 @@
+<odoo noupdate="1">
+
+    <record id="ws_fe_caea_journal_ri" model="account.journal">
+        <field name='name'>CAEA - Electronic Invoice (FE)</field>
+        <field name='company_id' ref="l10n_ar.company_ri"/>
+        <field name='type'>sale</field>
+        <field name='l10n_latam_use_documents' eval="True"/>
+        <field name='code'>501</field>
+        <field name='l10n_ar_afip_pos_number'>501</field>
+        <field name='l10n_ar_afip_pos_partner_id' ref="l10n_ar.partner_ri"/>
+        <field name='l10n_ar_afip_pos_system'>RAW_MAW_CAEA</field>
+    </record>
+
+    <record id="ws_fe_caea_contingencia_journal_ri" model="account.journal">
+        <field name='name'>CAEA Contingencia - Electronic Invoice (FE)</field>
+        <field name='company_id' ref="l10n_ar.company_ri"/>
+        <field name='type'>sale</field>
+        <field name='l10n_latam_use_documents' eval="True"/>
+        <field name='code'>701</field>
+        <field name='l10n_ar_afip_pos_number'>701</field>
+        <field name='l10n_ar_afip_pos_partner_id' ref="l10n_ar.partner_ri"/>
+        <field name='l10n_ar_afip_pos_system'>RAW_MAW_CAEA</field>
+    </record>
+
+    <!-- electronic demo journals are set with refund_sequence = False by the related onchange. -->
+    <function name="_onchange_type" model="account.journal">
+        <value eval="[ref('l10n_ar_edi_caea.ws_fe_caea_journal_ri')]"/>
+    </function>
+
+</odoo>

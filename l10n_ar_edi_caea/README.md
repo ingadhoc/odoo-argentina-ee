@@ -1,0 +1,63 @@
+.. |company| replace:: ADHOC SA
+
+.. |company_logo| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-logo.png
+   :alt: ADHOC SA
+   :target: https://www.adhoc.com.ar
+
+.. |icon| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-icon.png
+
+.. image:: https://img.shields.io/badge/license-AGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/agpl
+   :alt: License: AGPL-3
+
+=============================================
+Argentinean EDI CAEA (Asynchronous invoicing)
+=============================================
+
+Installation
+============
+
+To install this module, you need to:
+
+#. Only install the module
+
+Configuration
+=============
+
+To configure this module, you need to:
+
+#. Nothing todo
+
+Usage
+=====
+
+To use this module, you need to:
+
+#. Nothing todo
+
+.. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
+   :alt: Try me on Runbot
+   :target: http://runbot.adhoc.com.ar/
+
+Credits
+=======
+
+* Filoquin https://github.com/filoquin
+* ADHOC SA https://github.com/ingadhoc
+
+Images
+------
+
+* |company| |icon|
+
+Contributors
+------------
+
+Maintainer
+----------
+
+|company_logo|
+
+This module is maintained by the |company|.
+
+To contribute to this module, please visit https://www.adhoc.com.ar.
