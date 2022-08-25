@@ -17,7 +17,7 @@ old_load_information_from_description_file = module.load_information_from_descri
 
 def load_information_from_description_file(module, mod_path=None):
     info = old_load_information_from_description_file(module, mod_path=mod_path)
-    if module in ['l10n_ar', 'l10n_ar_edi', 'l10n_ar_website_sale']:
+    if module in ['l10n_ar', 'l10n_ar_edi', 'l10n_ar_website_sale', 'l10n_ar_edi_caea']:
         info['demo'] = []
     return info
 
@@ -27,7 +27,7 @@ module.load_information_from_description_file = load_information_from_descriptio
 
 def _load_l10n_ar_demo_data(cr):
     env = api.Environment(cr, SUPERUSER_ID, {})
-    for module_name in ['l10n_ar', 'l10n_ar_edi', 'l10n_ar_website_sale']:
+    for module_name in ['l10n_ar', 'l10n_ar_edi', 'l10n_ar_website_sale', 'l10n_ar_edi_caea']:
         _logger.info('Loading demo data from %s' % module_name)
         manifest_file = module.module_manifest(module.get_module_path(module_name))
         f = tools.file_open(manifest_file, mode='rb')
