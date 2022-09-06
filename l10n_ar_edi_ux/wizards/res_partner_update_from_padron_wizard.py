@@ -63,7 +63,7 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
 
     @api.model
     def get_fields(self):
-        return self.env['ir.model.fields'].search(self._get_domain())
+        return self.env['ir.model.fields'].sudo().search(self._get_domain())
 
     state = fields.Selection([
         ('option', 'Option'),
@@ -115,7 +115,7 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
         self.ensure_one()
         self.field_ids.unlink()
         partner = self.partner_id
-        fields_names = self.field_to_update_ids.mapped('name')
+        fields_names = self.sudo().field_to_update_ids.mapped('name')
         if partner:
             partner_vals = partner.get_data_from_padron_afip()
             lines = []
