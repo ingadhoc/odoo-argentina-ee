@@ -13,9 +13,10 @@ class ResPartnerUpdateFromPadronField(models.TransientModel):
         'res.partner.update.from.padron.wizard',
         'Wizard',
     )
-    field = fields.Char()
+    field = fields.Char("Technical Name")
     old_value = fields.Char()
     new_value = fields.Char()
+    label = fields.Char("Field")
 
 
 class ResPartnerUpdateFromPadronWizard(models.TransientModel):
@@ -121,6 +122,7 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
         self.ensure_one()
         self.field_ids.unlink()
         partner = self.partner_id
+        field_label = dict([(item.real_name, item.name) for item in self.field_to_update_ids])
         fields_names = self.field_to_update_ids.mapped('real_name')
         if partner:
             partner_vals = partner.get_data_from_padron_afip()
@@ -141,6 +143,7 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
                     line_vals = {
                         'wizard_id': self.id,
                         'field': key,
+                        'label': field_label.get(key),
                         'old_value': old_value,
                         # 'new_value': new_value,
                         'new_value': new_value or False,
