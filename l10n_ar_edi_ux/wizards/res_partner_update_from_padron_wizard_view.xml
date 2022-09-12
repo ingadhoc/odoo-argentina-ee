@@ -67,7 +67,8 @@
                         <field name="partner_id" attrs="{'required': [('state', '=', 'selection')]}"/>
                         <field name="field_ids" nolabel="1">
                             <tree create="false">
-                                <field name="field"/>
+                                <field name="label"/>
+                                <field name="field" groups="base.group_no_one"/>
                                 <field name="old_value"/>
                                 <field name="new_value"/>
                             </tree>
