@@ -63,7 +63,14 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
 
     @api.model
     def get_fields(self):
-        return self.env['ir.model.fields'].sudo().search(self._get_domain())
+        res = self.env['res.partner.update.from.padron.info']
+        exsiting_info_field = res.search([])
+        for item in self.env['ir.model.fields'].sudo().search(self._get_domain()):
+            infof = exsiting_info_field.filtered(lambda x: x.real_name == item.name)
+            if not infof:
+                infof = res.create({'real_name': item.name, 'name': item.field_description})
+            res |= infof
+        return res
 
     state = fields.Selection([
         ('option', 'Option'),
@@ -100,13 +107,12 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
         default=_get_default_title_case,
     )
     field_to_update_ids = fields.Many2many(
-        'ir.model.fields',
-        'res_partner_update_fields',
+        'res.partner.update.from.padron.info',
+        'res_partner_update_fields_info',
         'update_id', 'field_id',
         string='Fields To Update',
         help='Only this fields are going to be retrived and updated',
         default=get_fields,
-        domain=_get_domain,
         required=True,
     )
 
@@ -115,7 +121,7 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
         self.ensure_one()
         self.field_ids.unlink()
         partner = self.partner_id
-        fields_names = self.sudo().field_to_update_ids.mapped('name')
+        fields_names = self.field_to_update_ids.mapped('real_name')
         if partner:
             partner_vals = partner.get_data_from_padron_afip()
             lines = []
@@ -223,3 +229,12 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
         """ Start the process. """
         self.ensure_one()
         return self._next_screen()
+
+
+class ResPartnerUpdateFromPadronInfo(models.TransientModel):
+    _name = 'res.partner.update.from.padron.info'
+    _description = 'res.partner.update.from.padron.info'
+
+    name = fields.Char("Nombre Campo")
+    real_name = fields.Char("Campo")
+    wizard_id = fields.Many2one('res.partner.update.from.padron.wizard')
