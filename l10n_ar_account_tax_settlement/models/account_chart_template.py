@@ -93,7 +93,7 @@ class AccountChartTemplate(models.Model):
                 'settlement_tax': tax,
                 # 'settlement_financial_report_id': report and report.id,
                 'settlement_partner_id': partner and partner.id or False,
-                'default_account_id': account.id,
+                'settlement_account_id': account.id,
                 'company_id': company.id,
                 # al final hicimos otro dashboard
                 'show_on_dashboard': False,

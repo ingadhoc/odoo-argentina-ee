@@ -75,11 +75,11 @@ class AccountJournal(models.Model):
         # string='Etiquetas de impuestos liquidados',
         # help="Taxes with this tags are going to be settled by this journal"
     )
-    # changing domain for default_account_id is not working, we create this related field just to change domain
     settlement_account_id = fields.Many2one(
-        related='default_account_id',
+        'account.account',
         string="Cuenta de contrapartida",
         readonly=False,
+        copy=False,
         domain="[('deprecated', '=', False), ('user_type_id.type', 'in', ('receivable', 'payable')), ('company_id', '=', company_id)]")
 
     @api.constrains('tax_settlement', 'type')
@@ -265,7 +265,7 @@ class AccountJournal(models.Model):
         # si el balance es distinto de cero agregamos cuenta contable
         if not self.company_id.currency_id.is_zero(balance):
             # check account payable
-            account = self.default_account_id
+            account = self.settlement_account_id
             if balance >= 0.0:
                 debit = 0.0
                 credit = balance
