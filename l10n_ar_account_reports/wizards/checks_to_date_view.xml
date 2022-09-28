@@ -19,11 +19,12 @@
             </field>
         </record>
 
-        <act_window id="action_account_check_to_date_report"
-            name="Cheques a fecha"
-            res_model="account.check.to_date.report.wizard"
-            binding_model="account.check"
-            view_mode="form" target="new"/>
+        <record id="action_account_check_to_date_report" model="ir.actions.act_window">
+            <field name="name">Cheques a fecha</field>
+            <field name="res_model">account.check.to_date.report.wizard</field>
+            <field name="target">new</field>
+            <field name="view_mode">form</field>
+        </record>
 
         <menuitem
             id="menu_account_check_to_date_report"
