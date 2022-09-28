@@ -5,7 +5,7 @@
     <t t-call="web.html_container">
     <t t-set="company" t-value="env.company"/>
         <t t-call="web.internal_layout">
-            <h3 class="text-center">Listado de cheques pendientes al <t t-out="date"/></h3>
+            <h3 class="text-center">Listado de cheques pendientes al <t t-field="docs.to_date"/></h3>
             <t t-if="journal">
                 Diario: <span t-esc="docs.env['account.journal'].browse(journal).name"/>
             </t>
@@ -26,28 +26,28 @@
                     </thead>
                     <tbody class="sale_tbody" style="font-size: 15px">
                         <t t-set="total_issue" t-value="0"/>
-                        <tr t-foreach="own_checks" t-as="tcheck">
-                            <t t-set="total_issue" t-value="tcheck.check_id.amount + total_issue"/>
+                        <tr t-foreach="self._get_checks_handed()" t-as="tcheck">
+                            <t t-set="total_issue" t-value="tcheck.amount + total_issue"/>
                             <td>
-                                <span t-raw="tcheck.check_id.name"/>
+                                <span t-raw="tcheck.name"/>
                             </td>
                             <td>
                                 <span t-field="tcheck.date"/>
                             </td>
                             <td>
-                                <span t-field="tcheck.check_id.issue_date"/>
+                                <span t-field="tcheck.issue_date"/>
                             </td>
                             <td>
-                                <span t-field="tcheck.check_id.payment_date"/>
+                                <span t-field="tcheck.payment_date"/>
                             </td>
                             <td>
-                                <span t-raw="tcheck.check_id.partner_id.name" />
+                                <span t-raw="tcheck.partner_id.name" />
                             </td>
                             <td>
-                                <span t-raw="tcheck.check_id.checkbook_id.name" />
+                                <span t-raw="tcheck.checkbook_id.name" />
                             </td>
                             <td>
-                                <span t-raw="tcheck.check_id.amount"/>
+                                <span t-raw="tcheck.amount"/>
                             </td>
                         </tr>
                     </tbody>
@@ -78,28 +78,28 @@
                     </thead>
                     <tbody class="sale_tbody" style="font-size: 14px">
                         <t t-set="total" t-value="0"/>
-                        <tr t-foreach="third_checks" t-as="tcheck">
-                            <t t-set="total" t-value="tcheck.check_id.amount + total"/>
+                        <tr t-foreach="self._get_checks_on_hand()" t-as="tcheck">
+                            <t t-set="total" t-value="tcheck.amount + total"/>
                             <td>
-                                <span t-raw="tcheck.check_id.name"/>
+                                <span t-raw="tcheck.name"/>
                             </td>
                             <td>
                                 <span t-field="tcheck.date"/>
                             </td>
                             <td>
-                                <span t-field="tcheck.check_id.issue_date"/>
+                                <span t-field="tcheck.issue_date"/>
                             </td>
                             <td>
-                                <span t-field="tcheck.check_id.payment_date"/>
+                                <span t-field="tcheck.payment_date"/>
                             </td>
                             <td>
-                                <span t-raw="tcheck.check_id.owner_name"/>
+                                <span t-raw="tcheck.owner_name"/>
                             </td>
                             <td>
-                                <span t-raw="tcheck.check_id.owner_vat" />
+                                <span t-raw="tcheck.owner_vat" />
                             </td>
                             <td>
-                                <span t-raw="tcheck.check_id.amount"/>
+                                <span t-raw="tcheck.amount"/>
                             </td>
                         </tr>
                     </tbody>
@@ -121,7 +121,7 @@
 
 <record id="checks_to_date_report" model="ir.actions.report">
     <field name="name">Cheques a fecha</field>
-    <field name="model">account.payment</field>
+    <field name="model">account.check.to_date.report.wizard</field>
     <field name="report_type">qweb-pdf</field>
     <field name="report_name">l10n_ar_account_reports.checks_to_date</field>
     <field name="report_file">l10n_ar_account_reports.checks_to_date</field>
