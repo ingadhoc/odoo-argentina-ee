@@ -23,7 +23,7 @@ class ResPartner(models.Model):
         wiz = self.env['res.partner.update.from.padron.wizard'].with_context(
             active_ids=self.ids, active_model=self._name).create({})
         wiz.change_partner()
-        action = self.env.ref('l10n_ar_edi_ux.action_partner_update').sudo().read()[0]
+        action = self.env["ir.actions.actions"]._for_xml_id('l10n_ar_edi_ux.action_partner_update')
         action['res_id'] = wiz.id
         return action
 
