@@ -48,12 +48,7 @@
                     </span>
                 </header>
                 <sheet>
-                    <group attrs="{'invisible': [('state', '!=', 'finished')]}" col="1">
-                        <h2>There are no more partners to update for this request...</h2>
-
-                        <!-- <button name="%(action_base_partner_update_from_padron)d" string="Update the other partners" class="oe_highlight"
-                        type="action"/> -->
-                    </group>
+                    <h2 attrs="{'invisible': [('state', '!=', 'finished')]}">There are no more partners to update for this request...</h2>
                     <p class="oe_grey" attrs="{'invisible': [('state', '!=', ('option'))]}">
                         Only Partners with cuit are going to be updated.<br/>
                         Select the list of fields you want to update.
@@ -63,9 +58,9 @@
                         <field name="update_constancia"/>
                         <field name="title_case"/>
                     </group>
-                    <group attrs="{'invisible': [('state', 'in', ('option', 'finished'))]}" col="1">
+                    <group attrs="{'invisible': [('state', 'in', ('option', 'finished'))]}">
                         <field name="partner_id" attrs="{'required': [('state', '=', 'selection')]}"/>
-                        <field name="field_ids" nolabel="1">
+                        <field name="field_ids" nolabel="1" colspan="2">
                             <tree create="false">
                                 <field name="label"/>
                                 <field name="field" groups="base.group_no_one"/>

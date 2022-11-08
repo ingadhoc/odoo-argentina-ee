@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <record id="res_partner_padron_0" model="res.partner">
-        <field name="name">Test Padron</field>
-    </record>
     <record id="res_partner_padron_1" model="res.partner">
         <field name="name">Test Padron 1: Funciona Ejemplo Responsable Inscripto</field>
         <field name="ref">Test Padron 1: Funciona Ejemplo Responsable Inscripto</field>
@@ -11,7 +8,6 @@
         <field name='vat'>20188192514</field>
         <field name="is_company">1</field>
         <field name="type">other</field>
-        <field name="parent_id" ref="l10n_ar_edi_ux.res_partner_padron_0"/>
     </record>
 
     <record id="res_partner_padron_2" model="res.partner">
@@ -21,7 +17,6 @@
         <field name='vat'>20200083394</field>
         <field name="is_company">1</field>
         <field name="type">other</field>
-        <field name="parent_id" ref="l10n_ar_edi_ux.res_partner_padron_0"/>
     </record>
 
     <record id="res_partner_padron_3" model="res.partner">
@@ -31,7 +26,6 @@
         <field name='vat'>20221062583</field>
         <field name="is_company">1</field>
         <field name="type">other</field>
-        <field name="parent_id" ref="l10n_ar_edi_ux.res_partner_padron_0"/>
     </record>
 
     <record id="res_partner_padron_4" model="res.partner">
@@ -41,7 +35,6 @@
         <field name='vat'>20002460123</field>
         <field name="is_company">1</field>
         <field name="type">other</field>
-        <field name="parent_id" ref="l10n_ar_edi_ux.res_partner_padron_0"/>
     </record>
 
     <record id="res_partner_padron_5" model="res.partner">
@@ -51,7 +44,6 @@
         <field name='vat'>20002307554</field>
         <field name="is_company">1</field>
         <field name="type">other</field>
-        <field name="parent_id" ref="l10n_ar_edi_ux.res_partner_padron_0"/>
     </record>
 
 </odoo>

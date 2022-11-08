@@ -1,6 +1,6 @@
 {
     'name': 'Argentinian Electronic Invoicing UX',
-    'version': "15.0.1.2.0",
+    'version': "16.0.1.0.0",
     'category': 'Localization/Argentina',
     'sequence': 14,
     'author': 'ADHOC SA',
@@ -26,7 +26,7 @@
     'demo': [
         'demo/res_partner_demo.xml',
     ],
-    'installable': False,
+    'installable': True,
     'auto_install': True,
     'application': False,
     'post_init_hook': 'post_init_hook',
