@@ -202,7 +202,6 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
 
     def _next_screen(self):
         self.ensure_one()
-        self.refresh()
         values = {}
         if self.partner_ids:
             # in this case, we try to find the next record.

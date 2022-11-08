@@ -14,6 +14,9 @@
 Argentinian Electronic Invoicing UX
 ===================================
 
+* Add l10n_ar_afip_asoc_period_start / l10n_ar_afip_asoc_period_end fields and functionality on invoices
+* Improve auto detecion of linked document when posting to afip an NC/ND by checking linked invoices on a sale order (for eg. a credit note created from a sale order will report as related invoice the invoice created from the same sale order)
+* Implement electronic validation of documents created as purchase documents (for eg. liquido producto). There is an open PR to include this in Odoo standard
 * Disable l10n_ar_ux view that add Argentinian Localization accounting settings and use the one added by l10n_ar_edi
 * Logic to connecto to AFIP Padron using connection approach in enterprise module l10n_ar_edi
 
