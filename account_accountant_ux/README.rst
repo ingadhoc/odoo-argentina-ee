@@ -14,9 +14,9 @@
 Accounting Reports UX
 =====================
 
-#. Agrega un boton en la vista form de los reportes financieros para generar el menu de acceso al reporte si no lo tiene establecido.
 #. Mueve el menu "Caja y bancos" a nuevo menú de Accounting
 #. This module add to set the company in the wizard to set the account lock date.
+#. Add an option to force company currency on follow ups
 
 Installation
 ============
