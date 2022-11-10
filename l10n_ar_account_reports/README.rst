@@ -33,6 +33,8 @@ To configure this module, you need to:
 Usage
 =====
 
+This module in order to show more information aside the partner's name, we add the identification type name and the related document number "Partner Name" (CUIT: 1234234235).
+
 To use this module, you need to:
 
 #. Go to ...
