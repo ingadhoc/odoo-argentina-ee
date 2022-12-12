@@ -47,6 +47,8 @@ To configure this module, you need to:
 Usage
 =====
 
+Este modulo permite la actualización automática del tipo de cambio de las monedas que esten activadas, tomando la información desde la pagina de AFIP, la cual coincide con la del banco nación, tipo de cambio DIVISA.
+
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
    :alt: Try me on Runbot
    :target: http://runbot.adhoc.com.ar/

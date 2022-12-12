@@ -26,19 +26,20 @@ class ResCompany(models.Model):
     )
     l10n_ar_last_currency_sync_date = fields.Date(string="AFIP Last Sync Date", readonly=True)
 
-    @api.model
+    @api.model_create_multi
     def create(self, values):
         """ Overwrite to include new currency provider """
-        if values.get('country_id') and 'currency_provider' not in values:
-            country = self.env['res.country'].browse(values['country_id'])
-            if country.code.upper() == 'AR':
-                values['currency_provider'] = 'afip'
+        for index in range(len(values)):
+            if values[index].get('country_id') and 'currency_provider' not in values[index]:
+                country = self.env['res.country'].browse(values[index]['country_id'])
+                if country.code.upper() == 'AR':
+                    values[index]['currency_provider'] = 'afip'
         return super().create(values)
 
     @api.model
-    def set_special_defaults_on_install(self):
+    def _compute_currency_provider(self):
         """ Overwrite to include new currency provider """
-        super().set_special_defaults_on_install()
+        super()._compute_currency_provider()
         ar_companies = self.search([]).filtered(lambda company: company.country_id.code == 'AR')
         if ar_companies:
             ar_companies.currency_provider = 'afip'
