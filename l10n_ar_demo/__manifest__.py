@@ -32,16 +32,16 @@
         'account_accountant_ux',
         'l10n_ar_edi_ux',
         'l10n_ar_ux',
-        'l10n_ar_account_tax_settlement',
-        'l10n_ar_account_withholding',
+        # 'l10n_ar_account_tax_settlement',
+        # 'l10n_ar_account_withholding',
         'l10n_ar_website_sale',
     ],
     'data': [
     ],
     'demo': [
-        'demo/account_tax_demo.xml',
-        'demo/customer_payment_demo.xml',
-        'demo/supplier_payment_demo.xml',
+        # 'demo/account_tax_demo.xml',
+        # 'demo/customer_payment_demo.xml',
+        # 'demo/supplier_payment_demo.xml',
     ],
     'test': [
     ],
