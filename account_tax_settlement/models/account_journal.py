@@ -23,32 +23,20 @@ class AccountJournal(models.Model):
     _inherit = 'account.journal'
 
     tax_settlement = fields.Selection([
+        # TODO deprecate yes
         ('yes', 'Yes'),
         ('allow_per_line', 'Yes, allow per line'),
     ],
     )
-    # lo re incorporamos ya
-    # quincenal de ganancias
-    # TODO analizar si renombrar si es que solo lo usamos para el tema de
-    # archivos
     settlement_tax = fields.Selection(
         [],
         string='Impuesto de liquidación',
         help='Si elije un impuesto se puede agregar alguna funcionalidad, como'
         ' por ej. descargar archivos txt'
     )
-    # viejo, no estaríamos usando más qweb
-    # settlement_file_template = fields.Many2one(
-    #     'ir.ui.view',
-    #     domain=[('type', '=', 'qweb')],
-    # )
     settlement_partner_id = fields.Many2one(
         'res.partner',
         'Partner de liquidación',
-    )
-    settlement_financial_report_id = fields.Many2one(
-        'account.financial.html.report',
-        'Informe de liquidación',
     )
     # lo hacemos con etiquetas ya que se puede resolver con datos en plan
     # de cuentas sin incorporar lógica
@@ -80,7 +68,9 @@ class AccountJournal(models.Model):
         string="Cuenta de contrapartida",
         readonly=False,
         copy=False,
-        domain="[('deprecated', '=', False), ('user_type_id.type', 'in', ('receivable', 'payable')), ('company_id', '=', company_id)]")
+        domain="""[
+            ('deprecated', '=', False), ('company_id', '=', company_id),
+            ('account_type', 'in', ('asset_receivable', 'liability_payable'))]""")
 
     @api.constrains('tax_settlement', 'type')
     def check_tax_settlement(self):
@@ -121,34 +111,6 @@ class AccountJournal(models.Model):
 ####################################
 # Métodos compartidos de liquidación
 ####################################
-
-    # este metodo funciona pero no lo usamos porque por ahora estamos haciendo
-    # que se use seleccioando varias líneas desde lineas a liquidar
-    # lo dejamos por si sirve para algun otro caso de uso
-    # def action_create_tax_settlement_entry(self):
-    #     # hacemos que sea obligatorio una fecha hasta, si no viene, llamamos
-    #     # al wizard para definir fechas y luego recien continuamos
-    #     if not self._context.get('to_date'):
-    #         return self.env['get_dates_wizard'].open_wizard(
-    #             'action_create_tax_settlement_entry')
-
-    #     if self.settlement_financial_report_id:
-    #         unsettled_lines = self._get_tax_settlement_move_lines_by_report()
-    #     else:
-    #         unsettled_lines = self._get_tax_settlement_move_lines_by_tags()
-    #     if not unsettled_lines:
-    #         raise ValidationError(_(
-    #             'No lines funded to be settled with this conditions'))
-    #     move = self.create_tax_settlement_entry(unsettled_lines)
-    #     return {
-    #         'name': _('Journal Entries'),
-    #         'view_type': 'form',
-    #         'view_mode': 'form',
-    #         'res_model': 'account.move',
-    #         'target': 'current',
-    #         'res_id': move.id,
-    #         'type': 'ir.actions.act_window',
-    #     }
 
     def create_tax_settlement_entry(self, move_lines):
         """

@@ -12,7 +12,6 @@
                 <field name="settlement_tax" attrs="{'invisible': [('tax_settlement', '=', False)]}"/>
                 <field name="settlement_partner_id" attrs="{'invisible': [('tax_settlement', '=', False)], 'required': [('tax_settlement', '!=', False)]}"/>
                 <field name="settlement_account_id" attrs="{'required': [('type', '=','general'), ('tax_settlement', '!=', False)], 'invisible': ['|', ('type', '!=','general'), ('tax_settlement', '=', False)]}" groups="account.group_account_readonly"/>
-                <field name="settlement_financial_report_id" attrs="{'invisible': [('tax_settlement', '=', False)]}"/>
                 <field name="settlement_account_tag_ids" attrs="{'invisible': [('tax_settlement', '=', False)]}" widget="many2many_tags"/>
             </field>
         </field>

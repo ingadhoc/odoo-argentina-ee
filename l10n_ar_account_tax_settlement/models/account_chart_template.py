@@ -91,7 +91,6 @@ class AccountChartTemplate(models.Model):
                 'code': code,
                 'tax_settlement': type,
                 'settlement_tax': tax,
-                # 'settlement_financial_report_id': report and report.id,
                 'settlement_partner_id': partner and partner.id or False,
                 'settlement_account_id': account.id,
                 'company_id': company.id,
