@@ -22,7 +22,7 @@
     'version': "15.0.1.3.0",
     'category': 'Accounting',
     'website': 'www.adhoc.com.ar',
-    'license': 'AGPL-3',
+    'license': 'LGPL-3',
     'images': [
     ],
     'depends': [

@@ -6,7 +6,6 @@
         <field name="arch" type="xml">
             <field name="kanban_dashboard" position="after">
                 <field name="tax_settlement"/>
-                <field name="settlement_financial_report_id"/>
             </field>
             <field name="json_activity_data" position="before">
                 <t t-if="record.tax_settlement.raw_value" t-call="JournalBodyTaxSettlement"/>
@@ -31,7 +30,8 @@
                             </div>
                         </div>
                         <!-- lo mostramos si no mostamos el de reporte -->
-                        <div class="row" t-if="!record.settlement_financial_report_id.raw_value">
+                        <!-- TODO revisar -->
+                        <!-- <div class="row">
                             <div class="col-6">
                                 <a role="menuitem" type="object" name="open_action" context="{'accounts_balance': True}">
                                     <span title="Accounts Balance">Accounts Balance</span>
@@ -40,17 +40,7 @@
                             <div class="col-6 text-right">
                                 <span><t t-out="dashboard.tax_balance"/></span>
                             </div>
-                        </div>
-                        <div class="row" t-if="record.settlement_financial_report_id.raw_value">
-                            <div class="col-6">
-                                <a role="menuitem" type="object" name="open_action" context="{'open_report': True}">
-                                    <span>Posición según informe</span>
-                                </a>
-                            </div>
-                            <div class="col-6 text-right">
-                                <span><t t-out="dashboard.report_position"/></span>
-                            </div>
-                        </div>
+                        </div> -->
                         <div class="row">
                             <div class="col-6">
                                 <a role="menuitem" type="object" name="open_action" context="{'debt_balance': True}">

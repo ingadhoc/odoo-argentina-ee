@@ -6,7 +6,7 @@
     'summary': '',
     'author': 'ADHOC SA',
     'website': 'www.adhoc.com.ar',
-    'license': 'AGPL-3',
+    'license': 'LGPL-3',
     'images': [
     ],
     'depends': [
@@ -24,7 +24,6 @@
         'views/account_move_view.xml',
         'views/account_journal_view.xml',
         'views/account_journal_dashboard_view.xml',
-        'views/account_financial_html_report_line_view.xml',
         'security/ir.model.access.csv',
     ],
     'demo': [

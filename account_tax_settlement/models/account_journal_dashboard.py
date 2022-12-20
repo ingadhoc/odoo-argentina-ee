@@ -11,38 +11,7 @@ class AccountJournal(models.Model):
         res = super(AccountJournal, self).get_journal_dashboard_datas()
         company = self.company_id
         currency = self.currency_id or self.company_id.currency_id
-        report = self.settlement_financial_report_id
         report_position = 0.0
-
-        if report:
-            currency_table = {}
-            # para el caso donde el usuario esta en una cia con moneda
-            # distinta a la moneda de la cia del diario
-            used_currency = self.env.company.currency_id
-            # no importa la del diario, solo la de la cia del diario
-            if company.currency_id != used_currency:
-                currency_table[company.currency_id.id] = (
-                    used_currency.rate / company.currency_id.rate)
-            date_from = datetime.date.today().replace(day=1)
-            date_to = date_from + relativedelta(months=1, days=-1)
-            to_string = fields.Date.to_string
-            report = report.with_context(
-                date_from=to_string(date_from), date_to=to_string(date_to))
-            # si calculamos con financial reports los importes estan en la
-            # moneda del usuario
-            currency = used_currency
-
-            report_lines = report.line_ids.search([
-                ('id', 'child_of', report.line_ids.ids),
-                ('settlement_type', '!=', False)])
-            report_position = sum(
-                [x['balance'] for x in report_lines._get_balance(
-                    {}, currency_table, report,
-                    field_names=['balance'])])
-            # report_position = sum(
-            #     [x['balance'] for x in report.line_ids.get_balance(
-            #         {}, currency_table, report,
-            #         field_names=['balance'])])
 
         # TODO hacer por sql por temas de performance?
         unsettled_lines = self._get_tax_settlement_move_lines_by_tags()
@@ -88,12 +57,13 @@ class AccountJournal(models.Model):
                     self._get_tax_settlement_lines_domain_by_tags_accounts())
                 action['context'] = {'search_default_account': 1}
                 return action
-            elif open_report and self.settlement_financial_report_id:
-                action = self.env['ir.actions.client'].search([
-                    ('name', '=',
-                        self.settlement_financial_report_id.get_report_name()),
-                    ('tag', '=', 'account_report')], limit=1)
-                return action.sudo().read()[0]
+            # TODO revisar
+            # elif open_report and self.settlement_financial_report_id:
+            #     action = self.env['ir.actions.client'].search([
+            #         ('name', '=',
+            #             self.settlement_financial_report_id.get_report_name()),
+            #         ('tag', '=', 'account_report')], limit=1)
+            #     return action.sudo().read()[0]
             elif debt_balance and self.settlement_partner_id:
                 action = self.settlement_partner_id.open_partner_ledger()
                 ctx = self._context.copy()

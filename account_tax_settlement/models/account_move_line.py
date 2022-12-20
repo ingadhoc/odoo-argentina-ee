@@ -81,7 +81,7 @@ class AccountMoveLine(models.Model):
             elif not rec.tax_settlement_move_id:
                 state = 'to_settle'
             elif all(x.reconciled for x in rec.tax_settlement_move_id.line_ids.filtered(
-                    lambda x: x.account_id.user_type_id.type in ('receivable', 'payable'))):
+                    lambda x: x.account_id.account_type in ('asset_receivable', 'liability_payable'))):
                 state = 'paid'
             else:
                 state = 'to_pay'

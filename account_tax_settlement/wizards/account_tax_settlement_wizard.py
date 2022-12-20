@@ -25,6 +25,7 @@ class AccountTaxSettlementWizard(models.TransientModel):
         'account.journal',
         string='Journal',
     )
+    # TODO REVIASR
     report_id = fields.Many2one(
         'account.financial.html.report',
     )
@@ -67,7 +68,6 @@ class AccountTaxSettlementWizard(models.TransientModel):
                 'compañía en el reporte'))
 
         journal = self.env['account.journal'].search([
-            ('settlement_financial_report_id', '=', report.id),
             ('company_id', '=', company_ids[0])], limit=1)
 
         res.update({
