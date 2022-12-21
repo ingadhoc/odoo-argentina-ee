@@ -7,6 +7,14 @@
                      'company_id': ref('l10n_ar.company_ri')}"/>
     </function>
 
+    <!-- Cuando colocamos la compania por defecto en los usuarios utilizados en el sistema esto hace que tambien se escriba automaticamente en el partner el campo compania del la compania por defecto. esto trae problemas a nivel del runbot
+    porque al correr otros test de modulos da problemas porque el partner esta en una compania especifica nueva diferente
+    a la de los test. quitandole la compania del partner esperamos solventar esto -->
+    <function model="res.partner" name="write">
+        <value eval="[ref('base.user_root'), ref('base.user_admin'), ref('base.user_demo')]"/>
+        <value eval="{'company_id': False}"/>
+    </function>
+
 <!-- pago a adhoc con banco y con retención ganancias -->
     <record model="account.payment.group" id="demo_payment_1">
         <field name="company_id" ref="l10n_ar.company_ri"/>
