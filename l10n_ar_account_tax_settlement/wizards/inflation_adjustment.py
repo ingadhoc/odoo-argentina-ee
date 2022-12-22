@@ -60,6 +60,10 @@ class InflationAdjustment(models.TransientModel):
         string="Asiento de apertura",
     )
 
+    def get_account_id(self, line):
+
+        return line.get('account_id')[0]
+
     @api.model
     def default_get(self, field_list):
         res = super(InflationAdjustment, self).default_get(field_list)
@@ -191,7 +195,7 @@ class InflationAdjustment(models.TransientModel):
             else:
                 adjustment = self.company_id.currency_id.round(adjustment)
             lines.append({
-                'account_id': line.get('account_id')[0],
+                'account_id': self.get_account_id(line),
                 'name': _('Ajuste por inflación cuentas al inicio '
                 '(%s * %.2f%%)') % (
                     FormatAmount(line.get('balance')), initial_factor * 100.0),
@@ -220,7 +224,7 @@ class InflationAdjustment(models.TransientModel):
                 else:
                     adjustment = self.company_id.currency_id.round(adjustment)
                 lines.append({
-                    'account_id': line.get('account_id')[0],
+                    'account_id': self.get_account_id(line),
                     'name': _('Ajuste por inflación %s '
                     '(%s * %.2f%%)') % (
                         format_date(self.env, date_from, date_format='MM/Y'),
