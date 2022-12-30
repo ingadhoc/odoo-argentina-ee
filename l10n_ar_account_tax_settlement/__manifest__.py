@@ -31,7 +31,6 @@
         'l10n_ar_ux',
     ],
     'data': [
-        'data/account_financial_report_data.xml',
         'data/inflation_adjustment_index.xml',
         'views/inflation_adjustmen_index_view.xml',
         'views/account_tax_view.xml',

@@ -25,7 +25,7 @@ class DownloadFilesWizard(models.TransientModel):
         wizard = self.env['download_files_wizard'].create({
             'line_ids': [(0, False, {
                 'txt_filename': x['txt_filename'],
-                'txt_binary': base64.encodestring(
+                'txt_binary': base64.b64encode(
                     x['txt_content'].encode('utf-8')),
             }) for x in files_values if x['txt_content']],
         })

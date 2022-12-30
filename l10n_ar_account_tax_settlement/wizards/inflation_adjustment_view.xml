@@ -8,6 +8,7 @@
                 <sheet>
                     <group>
                         <group colspan="4">
+                            <field name="company_id" invisible="1"/>
                             <field name="company_id" options="{'no_create': True, 'no_open': True}" groups="base.group_multi_company"/>
                             <field name="account_id" domain="[('company_id', '=', company_id), ('deprecated', '=', False)]" options="{'no_create': True, 'no_open': True}"/>
                             <field name="journal_id" domain="[('company_id', '=', company_id)]"/>

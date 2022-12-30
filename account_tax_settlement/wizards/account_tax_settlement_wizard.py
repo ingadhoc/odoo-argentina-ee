@@ -25,9 +25,8 @@ class AccountTaxSettlementWizard(models.TransientModel):
         'account.journal',
         string='Journal',
     )
-    # TODO REVIASR
     report_id = fields.Many2one(
-        'account.financial.html.report',
+        'account.report',
     )
     move_line_ids = fields.Many2many(
         'account.move.line',
@@ -44,47 +43,18 @@ class AccountTaxSettlementWizard(models.TransientModel):
     @api.model
     def default_get(self, fields):
         res = super(AccountTaxSettlementWizard, self).default_get(fields)
-
-        report = self.env['account.financial.html.report'].browse(
-            self._context.get('from_report_id'))
-
-        active_model = self._context.get('active_model')
-        if not report and active_model != 'account.move.line':
-            raise ValidationError(_(
-                'No "from_report_id" key on context and report not called '
-                'from journal entries'))
-
-        # solo si es del tipo reporte se devuelven estos campos
-        if not report:
+        if self._context.get('active_model') == 'account.move.line':
             active_ids = self._context.get('active_ids')
             res.update({'move_line_ids': active_ids})
             return res
-
-        company_ids = self._context.get('context', {}).get('company_ids')
-
-        if not company_ids or len(company_ids) != 1:
-            raise ValidationError(_(
-                'La liquidación se debe realizar filtrando por 1 y solo 1 '
-                'compañía en el reporte'))
-
-        journal = self.env['account.journal'].search([
-            ('company_id', '=', company_ids[0])], limit=1)
-
-        res.update({
-            'settlement_journal_id': journal.id,
-            'report_id': report.id,
-            'company_id': company_ids[0],
-            'select_journal': not bool(journal),
-            # 'select_journal': not bool(journal) and False or True,
-        })
         return res
 
     def confirm(self):
         self.ensure_one()
         self = self.with_context(entry_date=self.date)
         if self.report_id:
-            move = self.report_id.create_tax_settlement_entry(
-                self.settlement_journal_id)
+            move = self.report_id._report_create_settlement_entry(
+                self.settlement_journal_id, options=self._context.get('account_report_generation_options'))
         else:
             move = self.move_line_ids.create_tax_settlement_entry()
         return {

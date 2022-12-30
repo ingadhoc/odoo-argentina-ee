@@ -1,50 +1,78 @@
-from odoo import models
+from odoo import models, _
+from odoo.exceptions import ValidationError
 
 
 class AccountReport(models.AbstractModel):
     _inherit = 'account.report'
 
-    def execute_action(self, options, params=None):
-        """ Para liquidacioón de impuestos desde reportes agregamos en contexto
-        * from_report_id: para saber desde que reporte vamos
-        * context: con las options convertidas a context
+    def _init_options_buttons(self, options, previous_options=None):
+        super()._init_options_buttons(options, previous_options)
+        # TODO en vez de hacerlo por xmlid podamos agregar un campo en
+        # account.report o algo por el estilo
+        if self == self.env.ref('account_reports.profit_and_loss'):
+            options.setdefault('buttons', []).append({
+                'name': 'Generar asiento de refundición (BETA)',
+                'sequence': 150,
+                'action': 'action_closure_journal_entry',
+            })
+        elif self == self.env.ref('account_reports.balance_sheet'):
+            options.setdefault('buttons', []).append({
+                'name': 'Generar asiento de cierre (BETA)',
+                'sequence': 50,
+                'action': 'action_closure_journal_entry',
+            })
 
-        nativamente odoo solo pasa las options si el tipo de accion es url,
-        pero preferimos hacer accion tipo ventana porque es mas facil
-        implementar el que se abra la ventana, eso si, es necesario
-        mandar las options para saber los filtros porque odoo no las manda en
-        este caso
-        Podriamos evitar este maneje si usamos action tipo url pero que luego
-        devuelva la accion de ventana
+    def action_closure_journal_entry(self, options):
+        """ Abrimos wizard de liquidación para que se elija diario
         """
-        action_id = int(params.get('actionId'))
-        action = self.env['ir.actions.actions'].browse([action_id])
+        self.ensure_one()
 
-        action_read = super(AccountReport, self).execute_action(
-            options, params=params)
+        companies = self.env['account.journal'].browse([x['id'] for x in options.get('journals')]).mapped('company_id')
+        if len(companies) != 1:
+            raise ValidationError(_('La liquidación se debe realizar filtrando por 1 y solo 1 compañía en el reporte'))
+        if self == self.env.ref('account_reports.profit_and_loss'):
+            action_name = 'Generar asiento de refundición (BETA)'
+            entry_ref = 'Asiento de refundición'
+            default_message = 'Se va a generar el asiento de refundición a partir de los datos visualizados'
+        elif self == self.env.ref('account_reports.balance_sheet'):
+            action_name = 'Generar asiento de cierre (BETA)'
+            entry_ref = 'Asiento de cierre'
+            default_message = (
+                'Antes de generar el asiento de cierre recuerde generar el asiento de refundición. '
+                'Luego de generar el asiento de cierre recuerde revertirlo para generar el asiento de apertura!')
 
-        # necesitamos comparar los .id porque en realidad son dos modelos !=
-        if action.type == 'ir.actions.act_window' and \
-                self.env['ir.actions.act_window'].browse(action.id).binding_model_id.model \
-                == 'account.financial.html.report.line':
+        new_context = {
+            **self._context,
+            'account_report_generation_options': options,
+            'default_report_id': self.id,
+            'default_message': default_message,
+            'entry_ref': entry_ref,
+            'default_company_id': companies.id,
+        }
+        view_id = self.env.ref('account_tax_settlement.view_account_tax_settlement_wizard_form').id
 
-            context = action_read.get('context') or {}
-            context['from_report_id'] = self.id
-            # convertimos las options a un context que mandamos con clave
-            # context dentro del context para que sea interpretado por
-            # report_move_lines_action
-            ctx = self._set_context(options)
-            # en reportes que no usan rango de fechas no hay seteada date_from
-            # y eso hace que report_move_lines_action no evalue dominio.
-            # reportes sin from date deberian evaluar desde siempre
-            # (cuentas patrimoniales) asique ponemos una fecha bien al inicio
-            if 'date_to' in ctx:
-                context['default_date'] = ctx['date_to']
-            # TODO we need a refactor of all this. Provably, to get the dates domain, the bet way would be
-            # calling _get_options_date_domain or maybe _get_options_domain with the options but later when used
-            if options.get('date', {}).get('mode') == 'single':
-                ctx['date_from'] = '1900-01-01'
-            context['context'] = ctx
+        return {
+            'type': 'ir.actions.act_window',
+            'name': action_name,
+            'view_mode': 'form',
+            'res_model': 'account.tax.settlement.wizard',
+            'target': 'new',
+            'views': [[view_id, 'form']],
+            'context': new_context,
+        }
 
-            action_read['context'] = context
-        return action_read
+    def _report_create_settlement_entry(self, journal, options):
+        """
+        Funcion que crea asiento de liquidación a partir de información del
+        reporte y devuelve browse del asiento generado
+        * from_report_id
+        * force_context
+        * context: periods_number, cash_basis, date_filter_cmp, date_filter,
+        date_to, date_from, hierarchy_3, company_ids, date_to_cmp,
+        date_from_cmp, all_entries
+        * search_disable_custom_filters
+        * from_report_model
+        * active_id
+        """
+        self.ensure_one()
+        raise ValidationError('Esta funcionalidad todavía no ha sido implmentada. Por favor contacte a mesa de ayuda')

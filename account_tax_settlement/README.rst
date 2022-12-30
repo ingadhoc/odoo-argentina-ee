@@ -20,11 +20,8 @@ Módulo que implementa las siguientes funcionalidades:
 * Crea nuevo menú para ver tablero de dichos diarios
 * incorpora posibilidad de liquidar apuntes
 * incorpora lógica genérica para generar archivos de liquidación (se requiere extender en módulos que terminen de implementarlo). Al principió los formateabamos con qweb pero vimos que quedan feos y, además, que no tiene tanto sentido ya que no es algo que sea necesario estar actualizando desde interfaz.
+* Implementa funcionalidad para poder hacer liquidaciones sobre informes contables de odoo e implementa el caso específico de "Asiento de refundición" y "Asiento de cierre" utilizando esta funcionalidad
 
-
-TODO migracion:
-* tipo settlement a tipo general y setear impuesto
-* Mas adelante podemos hacer que se liquide impuesto desde reportes con un botón como el de exportar (requiere un poco más de js y xml), ahora lo hacemos con una acción
 
 Installation
 ============
