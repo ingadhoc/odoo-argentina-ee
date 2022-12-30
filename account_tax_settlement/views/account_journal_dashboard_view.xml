@@ -29,18 +29,6 @@
                                 <span><t t-out="dashboard.unsettled_amount"/></span>
                             </div>
                         </div>
-                        <!-- lo mostramos si no mostamos el de reporte -->
-                        <!-- TODO revisar -->
-                        <!-- <div class="row">
-                            <div class="col-6">
-                                <a role="menuitem" type="object" name="open_action" context="{'accounts_balance': True}">
-                                    <span title="Accounts Balance">Accounts Balance</span>
-                                </a>
-                            </div>
-                            <div class="col-6 text-right">
-                                <span><t t-out="dashboard.tax_balance"/></span>
-                            </div>
-                        </div> -->
                         <div class="row">
                             <div class="col-6">
                                 <a role="menuitem" type="object" name="open_action" context="{'debt_balance': True}">

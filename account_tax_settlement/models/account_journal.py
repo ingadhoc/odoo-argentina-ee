@@ -102,9 +102,6 @@ class AccountJournal(models.Model):
             'context': {
                 'default_partner_id': partner.id,
                 'default_partner_type': 'supplier',
-                # 'to_pay_move_line_ids': open_move_line_ids.ids,
-                # 'pop_up': True,
-                # 'default_company_id': self.company_id.id,
             },
         }
 
@@ -146,8 +143,7 @@ class AccountJournal(models.Model):
         #         'ser a pagar. Account id %s' % account.id))
 
         # TODO ver como implementamos el anterior!
-        lines_vals = self._get_tax_settlement_entry_lines_vals(
-            [('id', 'in', move_lines.ids)])
+        lines_vals = self._get_tax_settlement_entry_lines_vals([('id', 'in', move_lines.ids)])
         vals = self._get_tax_settlement_entry_vals(lines_vals)
         move = self.env['account.move'].create(vals)
         move_lines.write({'tax_settlement_move_id': move.id})
@@ -263,23 +259,13 @@ class AccountJournal(models.Model):
         }
         return move_vals
 
-####################################
-# Métodos de liquidación por reporte
-####################################
-
-
-#################################
-# Métodos de liquidación por tags
-#################################
-
     def _get_tax_settlement_move_lines_by_tags(self):
         """
         Funcion que devuelve apuntes a liquidar por este diario
         """
         self.ensure_one()
         return self.env['account.move.line'].search(
-            self._get_tax_settlement_lines_domain_by_tags() + [
-                ('tax_state', '=', 'to_settle')])
+            self._get_tax_settlement_lines_domain_by_tags() + [('tax_state', '=', 'to_settle')])
 
     def _get_tax_settlement_lines_domain_by_tags(self):
         """
@@ -290,35 +276,6 @@ class AccountJournal(models.Model):
         domain = [
             ('company_id', '=', self.company_id.id),
             ('tax_repartition_line_id.tag_ids', 'in', self.settlement_account_tag_ids.ids),
-        ]
-
-        from_date = self._context.get('from_date')
-        if from_date:
-            domain.append(('date', '>=', from_date))
-
-        to_date = self._context.get('to_date')
-        if to_date:
-            domain.append(('date', '<=', to_date))
-
-        return domain
-
-    def _get_tax_settlement_lines_domain_by_tags_accounts(self):
-        """
-        Funcion que devuelve apuntes contables de cuentas contables de
-        impuestos que usen los tags.
-        necesitamos esta busqueda así ya que actualmente estamos buscando por
-        tags en impuestos y, para calcular saldo de las cuentas, necesitamos
-        buscar por cuenta ya que las liquidaciones no tienen nada seteado en
-        tax_line_id / tax_repartition_line_id
-        """
-        self.ensure_one()
-        rep_lines = self.env['account.tax.repartition.line'].search([
-            ('company_id', '=', self.company_id.id),
-            ('tag_ids', 'in', self.settlement_account_tag_ids.ids),
-        ])
-        domain = [
-            ('company_id', '=', self.company_id.id),
-            ('account_id', 'in', rep_lines.mapped('account_id').ids),
         ]
 
         from_date = self._context.get('from_date')
@@ -355,57 +312,3 @@ class AccountJournal(models.Model):
             return getattr(
                 self, '%s_files_values' % self.settlement_tax)(move_lines)
         return []
-
-    # viejo código cuandolo haciamos con qweb
-    # report = self.settlement_file_template
-    # if not report:
-    #     raise ValidationError(_(
-    #         'No settlement file template found for journal "%s"') % (
-    #         self.name))
-
-    # lang = self.env['res.lang'].search(
-    #     [('code', '=', self.env.user.lang)], limit=1)
-    # date_format = lang.date_format or DEFAULT_SERVER_DATE_FORMAT
-
-    # def formatLangDate(date):
-    #     date_dt = datetime.strptime(date, DEFAULT_SERVER_DATE_FORMAT)
-    #     return date_dt.strftime(
-    #         date_format.encode('utf-8')).decode('utf-8')
-
-    # def get_line_tax_base(move_line):
-    #     return sum(move_line.move_id.line_ids.filtered(
-    #         lambda x: move_line.tax_line_id in x.tax_ids).mapped(
-    #         'balance'))
-
-    # # mas simple podriamos usar "'%016.2f'" como en sicore para los otros
-    # # pero tener en cuenta que habria que hacer replace si se requiere ","
-    # # como separador decimal
-    # def format_amount(amount, padding=15, decimals=2, sep=""):
-    #     if amount < 0:
-    #         template = "-{:0>%dd}" % (padding - 1 - len(sep))
-    #     else:
-    #         template = "{:0>%dd}" % (padding - len(sep))
-    #     res = template.format(
-    #         int(round(abs(amount) * 10**decimals, decimals)))
-    #     if sep:
-    #         res = "{0}{1}{2}".format(res[:-decimals], sep, res[-decimals:])
-    #     return res
-
-    # values = {
-    #     'get_line_tax_base': get_line_tax_base,
-    #     'formatLangDate': formatLangDate,
-    #     'format_amount': format_amount,
-    #     # 'formatLang': formatLang,
-    #     'journal': self,
-    #     'move_lines': move_lines,
-    #     'company': self.company_id,
-    #     're': re,
-    # }
-    # txt_content = self.env['report'].render(report.id, values)
-    # # TODO mejorar, por ahora, de manera horrible, borramos todas las
-    # # lineas vacias
-    # txt_content = txt_content.replace('\n\n', '\n')
-    # return {
-    #     'txt_filename': self.name,
-    #     'txt_content': txt_content,
-    # }

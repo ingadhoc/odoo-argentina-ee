@@ -1,14 +1,8 @@
 from odoo import fields, models, api
-# from odoo.exceptions import ValidationError
 
 
 class AccountMove(models.Model):
     _inherit = 'account.move'
-
-    # def action_export_file(self):
-    #     self.ensure_one()
-    #     self.journal_id.adas()
-    #     return {}
 
     settled_line_ids = fields.One2many(
         'account.move.line',

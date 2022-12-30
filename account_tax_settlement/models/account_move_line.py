@@ -102,20 +102,22 @@ class AccountMoveLine(models.Model):
     def action_pay_tax_settlement(self):
         self.ensure_one()
         open_move_line_ids = self.tax_settlement_move_id.line_ids.filtered(
-            lambda r: not r.reconciled and r.account_id.internal_type in (
-                'payable', 'receivable'))
+            lambda r: not r.reconciled and r.account_id.account_type in ('asset_receivable', 'liability_payable'))
         return {
             'name': _('Register Payment'),
-            'view_type': 'form',
             'view_mode': 'form',
             'res_model': 'account.payment.group',
-            'view_id': False,
             'target': 'current',
             'type': 'ir.actions.act_window',
             'context': {
-                'to_pay_move_line_ids': open_move_line_ids.ids,
-                'pop_up': True,
+                'default_partner_type': 'supplier',
+                'default_partner_id': open_move_line_ids.mapped('partner_id').id,
+                'default_to_pay_move_line_ids': open_move_line_ids.ids,
+                # We set this because if became from other view and in the context has 'create=False'
+                # you can't crate payment lines (for ej: subscription)
+                'create': True,
                 'default_company_id': self.company_id.id,
+                'pop_up': True,
                 # por defecto, en pago de retenciones, no hacemos double
                 # validation
                 'force_simple': True,
