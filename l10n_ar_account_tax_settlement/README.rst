@@ -14,6 +14,14 @@
 Tax Settlements For Argentina
 =============================
 
+Este módulo imlementa:
+
+* archivos para declaración de distintos impuestos (principalmente percepciones y retenciones)
+* Funcionalidad y datos para auste por inflación (The index are extracted from https://www.facpce.org.ar/indices-facpce/)
+
+Archivos para declaración de impuestos
+======================================
+
 TODO: implementar sicore para percepciones, por ahora solo esta para retenciones (y de ganancias)
 Especificación de archivos:
 
@@ -40,10 +48,6 @@ Especificación de archivos:
 * MISIONES: https://www.atm.misiones.gob.ar/index.php/guia-de-tramites/instructivos/category/53-agentes
             Correo DGR: mesadeayuda@tsgroup.com.ar
 
-Inflation Adjustment
---------------------
-
-The index are extracted from https://www.facpce.org.ar/indices-facpce/ page
 
 Installation
 ============
