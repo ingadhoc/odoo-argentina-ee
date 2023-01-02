@@ -1,24 +1,25 @@
-from odoo import models, _
+import ast
+from odoo import models, fields, _
 from odoo.exceptions import ValidationError
+from odoo.osv import expression
 
 
 class AccountReport(models.AbstractModel):
     _inherit = 'account.report'
 
+    allow_settlement = fields.Boolean(
+        help='This optin will enable a new button on this report to settle all the lines that are of engine "domain".')
+    settlement_title = fields.Char(translate=True)
+    settlement_allow_unbalanced = fields.Boolean(
+        help='If you enble this option, then an account will be required when creating the settlement entry and '
+        'so that the balance of the report is sent to this account.')
+
     def _init_options_buttons(self, options, previous_options=None):
         super()._init_options_buttons(options, previous_options)
-        # TODO en vez de hacerlo por xmlid podamos agregar un campo en
-        # account.report o algo por el estilo
-        if self == self.env.ref('account_reports.profit_and_loss'):
+        if self.allow_settlement and self.settlement_title:
             options.setdefault('buttons', []).append({
-                'name': 'Generar asiento de refundición (BETA)',
+                'name': '%s (BETA)' % self.settlement_title,
                 'sequence': 150,
-                'action': 'action_closure_journal_entry',
-            })
-        elif self == self.env.ref('account_reports.balance_sheet'):
-            options.setdefault('buttons', []).append({
-                'name': 'Generar asiento de cierre (BETA)',
-                'sequence': 50,
                 'action': 'action_closure_journal_entry',
             })
 
@@ -30,22 +31,14 @@ class AccountReport(models.AbstractModel):
         companies = self.env['account.journal'].browse([x['id'] for x in options.get('journals')]).mapped('company_id')
         if len(companies) != 1:
             raise ValidationError(_('La liquidación se debe realizar filtrando por 1 y solo 1 compañía en el reporte'))
-        if self == self.env.ref('account_reports.profit_and_loss'):
-            action_name = 'Generar asiento de refundición (BETA)'
-            entry_ref = 'Asiento de refundición'
-            default_message = 'Se va a generar el asiento de refundición a partir de los datos visualizados'
-        elif self == self.env.ref('account_reports.balance_sheet'):
-            action_name = 'Generar asiento de cierre (BETA)'
-            entry_ref = 'Asiento de cierre'
-            default_message = (
-                'Antes de generar el asiento de cierre recuerde generar el asiento de refundición. '
-                'Luego de generar el asiento de cierre recuerde revertirlo para generar el asiento de apertura!')
+        if self.allow_settlement and self.settlement_title:
+            action_name = '%s (BETA)' % self.settlement_title
+            entry_ref = self.settlement_title
 
         new_context = {
             **self._context,
             'account_report_generation_options': options,
             'default_report_id': self.id,
-            'default_message': default_message,
             'entry_ref': entry_ref,
             'default_company_id': companies.id,
         }
@@ -61,18 +54,39 @@ class AccountReport(models.AbstractModel):
             'context': new_context,
         }
 
-    def _report_create_settlement_entry(self, journal, options):
+    def _report_create_settlement_entry(self, journal, options, account):
         """
-        Funcion que crea asiento de liquidación a partir de información del
-        reporte y devuelve browse del asiento generado
-        * from_report_id
-        * force_context
-        * context: periods_number, cash_basis, date_filter_cmp, date_filter,
-        date_to, date_from, hierarchy_3, company_ids, date_to_cmp,
-        date_from_cmp, all_entries
-        * search_disable_custom_filters
-        * from_report_model
-        * active_id
+        Funcion que crea asiento de cierre / refundicon.
+        Basicamente busca todas las lineas del reporte que tienen engine domain, las evalua obteneindo domain de
+        cada una, los manda a _get_tax_settlement_entry_lines_vals para obtener el reverso de todas estsas lineas
+        y luego crea el asiento.
+        Para el caso del asiento de refundicion.. TODO
         """
         self.ensure_one()
-        raise ValidationError('Esta funcionalidad todavía no ha sido implmentada. Por favor contacte a mesa de ayuda')
+
+        options['unfold_all'] = True
+        report_expressions = self.env['account.report.expression'].search(
+            [('report_line_id', 'in', self.line_ids.ids), ('engine', '=', 'domain')])
+        domains = []
+        for report_expression in report_expressions:
+            options_domain = self._get_options_domain(options, report_expression.date_scope)
+            expression_domain = expression.AND([ast.literal_eval(report_expression.formula) + options_domain])
+            domains.append(expression_domain)
+        domain = expression.OR(domains)
+        lines_vals = journal._get_tax_settlement_entry_lines_vals(domain)
+
+        balance = sum([x['debit'] - x['credit'] for x in lines_vals])
+        if not journal.company_id.currency_id.is_zero(balance):
+            if not self.settlement_allow_unbalanced or not account:
+                raise ValidationError('Debe configurar bla bla')
+            lines_vals.append({
+                'name': self.settlement_title,
+                'debit': balance < 0.0 and -balance,
+                'credit': balance >= 0.0 and balance,
+                'account_id': account.id,
+            })
+
+        vals = journal._get_tax_settlement_entry_vals(lines_vals)
+        move = self.env['account.move'].with_context(allow_no_partner=True).create(vals)
+
+        return move

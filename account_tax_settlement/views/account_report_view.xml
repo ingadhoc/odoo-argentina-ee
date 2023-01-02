@@ -1,0 +1,16 @@
+<odoo>
+
+   <record id="account_report_form" model="ir.ui.view">
+        <field name="name">account.report.form</field>
+        <field name="model">account.report</field>
+        <field name="inherit_id" ref="account_reports.account_report_form"/>
+        <field name="arch" type="xml">
+            <field name="filter_date_range" position="before">
+                <field name="allow_settlement"/>
+                <field name="settlement_title" attrs="{'invisible': [('allow_settlement', '=', False)], 'required': [('allow_settlement', '!=', False)]}"/>
+                <field name="settlement_allow_unbalanced" attrs="{'invisible': [('allow_settlement', '=', False)]}"/>
+            </field>
+        </field>
+    </record>
+
+</odoo>

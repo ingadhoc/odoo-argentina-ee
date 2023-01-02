@@ -7,12 +7,10 @@
             <form string="Tax Settlement">
                 <field name="company_id" invisible="1"/>
                 <field name="report_id" invisible="1"/>
+                <field name="report_settlement_allow_unbalanced" invisible="1"/>
                 <field name="move_line_ids" invisible="1"/>
-                <p attrs="{'invisible': ['|', ('report_id', '=', False), ('message', '!=', False)]}">
+                <p attrs="{'invisible': [('report_id', '=', False)]}">
                     Se va a crear un asiento de liquidación con la información del reporte. Desea continuar?
-                </p>
-                <p attrs="{'invisible': ['|', ('report_id', '=', False), ('message', '=', False)]}">
-                    <field name="message" readonly="1"/>
                 </p>
                 <p attrs="{'invisible': [('report_id', '!=', False)]}">
                     Se va a crear un asiento de liquidación para los apuntes seleccionados. Desea continuar?
@@ -20,6 +18,7 @@
                 <group>
                     <field name="date"/>
                     <field name="settlement_journal_id" attrs="{'invisible': [('report_id', '=', False)], 'required': [('report_id', '!=', False)]}" domain="[('company_id', '=', company_id), ('type', '=', 'general')]"/>
+                    <field name="account_id" attrs="{'invisible': [('report_settlement_allow_unbalanced', '=', False)], 'required': [('report_settlement_allow_unbalanced', '!=', False)]}" domain="[('company_id', '=', company_id), ('deprecated', '=', False)]"/>
                 </group>
                 <footer>
                     <button name="confirm" string="Confirm" type="object" class="oe_highlight"/>

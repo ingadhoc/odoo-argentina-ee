@@ -24,7 +24,9 @@
         'views/account_move_view.xml',
         'views/account_journal_view.xml',
         'views/account_journal_dashboard_view.xml',
+        'views/account_report_view.xml',
         'security/ir.model.access.csv',
+        'data/account_report_data.xml',
     ],
     'demo': [
     ],

@@ -37,7 +37,11 @@ class AccountTaxSettlementWizard(models.TransientModel):
     company_id = fields.Many2one(
         'res.company',
     )
-    message = fields.Text(
+    account_id = fields.Many2one(
+        'account.account',
+    )
+    report_settlement_allow_unbalanced = fields.Boolean(
+        related='report_id.settlement_allow_unbalanced',
     )
 
     @api.model
@@ -54,7 +58,8 @@ class AccountTaxSettlementWizard(models.TransientModel):
         self = self.with_context(entry_date=self.date)
         if self.report_id:
             move = self.report_id._report_create_settlement_entry(
-                self.settlement_journal_id, options=self._context.get('account_report_generation_options'))
+                self.settlement_journal_id, options=self._context.get('account_report_generation_options'),
+                account=self.account_id)
         else:
             move = self.move_line_ids.create_tax_settlement_entry()
         return {
