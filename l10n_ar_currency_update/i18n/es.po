@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 15.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-25 15:36+0000\n"
+"POT-Creation-Date: 2023-01-06 13:51+0000\n"
 "PO-Revision-Date: 2022-04-19 18:38+0000\n"
 "Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2022\n"
 "Language-Team: Spanish (https://www.transifex.com/adhoc/teams/133229/es/)\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Language: es\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #. module: l10n_ar_currency_update
 #: model_terms:ir.ui.view,arch_db:l10n_ar_currency_update.res_config_settings_view_form
@@ -39,6 +39,15 @@ msgid "AFIP Web Service (Argentina)"
 msgstr "Web service AFIP (Argentina)"
 
 #. module: l10n_ar_currency_update
+#: code:addons/l10n_ar_currency_update/models/res_currency.py:0
+#, python-format
+msgid ""
+"Cambiar el nombre de la moneda puede repercutir tanto en el servicio de la "
+"sincronización automática de tasa de cambio como en el servicio de la "
+"facturación electrónica."
+msgstr ""
+
+#. module: l10n_ar_currency_update
 #: model:ir.model,name:l10n_ar_currency_update.model_res_company
 msgid "Companies"
 msgstr "Compañías"
@@ -47,6 +56,11 @@ msgstr "Compañías"
 #: model:ir.model,name:l10n_ar_currency_update.model_res_config_settings
 msgid "Config Settings"
 msgstr "Opciones de configuración"
+
+#. module: l10n_ar_currency_update
+#: model:ir.model,name:l10n_ar_currency_update.model_res_currency
+msgid "Currency"
+msgstr "Moneda"
 
 #. module: l10n_ar_currency_update
 #: model:ir.actions.server,name:l10n_ar_currency_update.ir_cron_re_check_afip_currency_rate_ir_actions_server
@@ -71,3 +85,9 @@ msgstr "Recargo Fijo de Tasa"
 #: model:ir.model.fields,field_description:l10n_ar_currency_update.field_res_company__currency_provider
 msgid "Service Provider"
 msgstr "Proveedor de servicio"
+
+#. module: l10n_ar_currency_update
+#: code:addons/l10n_ar_currency_update/models/res_currency.py:0
+#, python-format
+msgid "Warning"
+msgstr ""
