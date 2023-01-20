@@ -3,21 +3,21 @@
 # 	* l10n_ar_account_tax_settlement
 # 
 # Translators:
-# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2022
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2023
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 15.0+e\n"
+"Project-Id-Version: Odoo Server 16.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-04-25 15:30+0000\n"
-"PO-Revision-Date: 2022-04-19 18:44+0000\n"
-"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2022\n"
-"Language-Team: Spanish (https://www.transifex.com/adhoc/teams/133229/es/)\n"
+"POT-Creation-Date: 2023-01-13 14:03+0000\n"
+"PO-Revision-Date: 2023-01-13 14:03+0000\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2023\n"
+"Language-Team: Spanish (https://www.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Language: es\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #. module: l10n_ar_account_tax_settlement
 #: model_terms:ir.ui.view,arch_db:l10n_ar_account_tax_settlement.inflation_adjustment_form
@@ -38,27 +38,40 @@ msgid "Account Chart Template"
 msgstr "Plantilla de Plan de Cuentas"
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/wizards/inflation_adjustment.py:0
 #, python-format
 msgid "Ajuste por inflación %s"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/wizards/inflation_adjustment.py:0
 #, python-format
 msgid "Ajuste por inflación %s (%s * %.2f%%)"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/wizards/inflation_adjustment.py:0
 #, python-format
 msgid "Ajuste por inflación Global [%s] / [%s]"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/wizards/inflation_adjustment.py:0
 #, python-format
 msgid "Ajuste por inflación cuentas al inicio (%s * %.2f%%)"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_account_chart_template__algolia_search
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_account_journal__algolia_search
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_account_tax__algolia_search
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__algolia_search
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment_index__algolia_search
+msgid "Algolia Search"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
@@ -130,6 +143,7 @@ msgid "Date To"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #, python-format
@@ -137,6 +151,7 @@ msgid "Debe setear el tipo de inscripción de IIBB del partner \"%s\" (id: %s)"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #, python-format
 msgid ""
@@ -151,6 +166,7 @@ msgid "Display Name"
 msgstr "Nombre mostrado"
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #, python-format
 msgid ""
@@ -159,12 +175,14 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #, python-format
 msgid "EL tipo de identificación \"%s\" no tiene código de afipconfigurado"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/wizards/inflation_adjustment.py:0
 #, python-format
 msgid ""
@@ -173,18 +191,21 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #, python-format
 msgid "El impuesto no está asociado"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/inflation_adjustment_index.py:0
 #, python-format
 msgid "El indice debe comenzar el primer día de cada mes"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #, python-format
@@ -207,18 +228,7 @@ msgid "External ID"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
-#: model:account.financial.html.report.line,name:l10n_ar_account_tax_settlement.report_line_asiento_de_cierre
-#: model:ir.actions.act_window,name:l10n_ar_account_tax_settlement.action_closure_journal_entry
-msgid "Generar asiento de cierre (BETA)"
-msgstr ""
-
-#. module: l10n_ar_account_tax_settlement
-#: model:account.financial.html.report.line,name:l10n_ar_account_tax_settlement.report_line_asiento_de_refundicion
-#: model:ir.actions.act_window,name:l10n_ar_account_tax_settlement.action_recast_journal_entry
-msgid "Generar asiento de refundición (BETA)"
-msgstr ""
-
-#. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #, python-format
 msgid "Grupos de impuestos %s no implementados para SICORE"
@@ -230,6 +240,7 @@ msgid "Ha realizado asientos de cierre/apertura?"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #, python-format
 msgid ""
@@ -244,7 +255,6 @@ msgid "ID"
 msgstr "ID (identificación)"
 
 #. module: l10n_ar_account_tax_settlement
-#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_account_bank_statement_import_journal_creation__settlement_tax
 #: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_account_journal__settlement_tax
 msgid "Impuesto de liquidación"
 msgstr ""
@@ -277,11 +287,7 @@ msgid "Journal"
 msgstr "Diario"
 
 #. module: l10n_ar_account_tax_settlement
-#: model:ir.model,name:l10n_ar_account_tax_settlement.model_account_move_line
-msgid "Journal Item"
-msgstr "Apunte contable"
-
-#. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #, python-format
 msgid ""
@@ -289,6 +295,7 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #, python-format
 msgid ""
@@ -320,6 +327,9 @@ msgid "No"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
@@ -330,6 +340,7 @@ msgid "No hay alicuota configurada en el partner \"%s\" (id: %s)"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #, python-format
@@ -342,6 +353,7 @@ msgid "No hay indices de ajuste por inflación aún. Por favor cree uno."
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #, python-format
 msgid ""
@@ -349,6 +361,7 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #, python-format
 msgid ""
@@ -356,6 +369,7 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/wizards/inflation_adjustment.py:0
 #, python-format
 msgid ""
@@ -364,6 +378,7 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #, python-format
 msgid ""
@@ -373,6 +388,7 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #, python-format
 msgid ""
@@ -382,6 +398,7 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #, python-format
 msgid ""
@@ -390,6 +407,7 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/wizards/inflation_adjustment.py:0
 #, python-format
 msgid "Por favor indique el rango de fecha de inicio y fin"
@@ -411,7 +429,6 @@ msgid "Si"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
-#: model:ir.model.fields,help:l10n_ar_account_tax_settlement.field_account_bank_statement_import_journal_creation__settlement_tax
 #: model:ir.model.fields,help:l10n_ar_account_tax_settlement.field_account_journal__settlement_tax
 msgid ""
 "Si elije un impuesto se puede agregar alguna funcionalidad, como por ej. "
@@ -433,6 +450,16 @@ msgstr ""
 #. module: l10n_ar_account_tax_settlement
 #: model:ir.model.fields.selection,name:l10n_ar_account_tax_settlement.selection__account_journal__settlement_tax__iibb_aplicado_dgr_mendoza
 msgid "TXT  Perc/Ret IIBB aplicado DGR Mendonza"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields.selection,name:l10n_ar_account_tax_settlement.selection__account_journal__settlement_tax__drei_aplicado
+msgid "TXT DREI Aplicado"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields.selection,name:l10n_ar_account_tax_settlement.selection__account_journal__settlement_tax__misiones
+msgid "TXT IIBB aplicado DGR Misiones"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
@@ -480,6 +507,7 @@ msgid "Tax"
 msgstr "Impuesto"
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #, python-format
@@ -487,6 +515,7 @@ msgid "Tipo de comprobante no reconocido"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 #, python-format
 msgid ""
@@ -501,6 +530,7 @@ msgid "Value"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/inflation_adjustment_index.py:0
 #, python-format
 msgid ""
