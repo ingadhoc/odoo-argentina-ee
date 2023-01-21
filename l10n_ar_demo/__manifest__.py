@@ -34,6 +34,7 @@
         'l10n_ar_ux',
         'l10n_ar_account_tax_settlement',
         'l10n_ar_account_withholding',
+        'l10n_ar_website_sale',
     ],
     'data': [
     ],
