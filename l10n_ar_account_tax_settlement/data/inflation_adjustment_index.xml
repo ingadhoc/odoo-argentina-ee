@@ -580,4 +580,24 @@
         <field name="date" eval="time.strftime('2022-08-01')"/>
         <field name="value">911.1316</field>
     </record>
+
+    <record id="index_09_2022" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2022-09-01')"/>
+        <field name="value">967.3076</field>
+    </record>
+
+    <record id="index_10_2022" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2022-10-01')"/>
+        <field name="value">1028.706</field>
+    </record>
+
+    <record id="index_11_2022" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2022-11-01')"/>
+        <field name="value">1079.2787</field>
+    </record>
+
+    <record id="index_12_2022" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2022-12-01')"/>
+        <field name="value">1134.5875</field>
+    </record>
 </odoo>
