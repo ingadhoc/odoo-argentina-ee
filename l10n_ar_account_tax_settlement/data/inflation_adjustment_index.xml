@@ -590,4 +590,14 @@
         <field name="date" eval="time.strftime('2022-10-01')"/>
         <field name="value">1028.706</field>
     </record>
+
+    <record id="index_11_2022" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2022-11-01')"/>
+        <field name="value">1079.2787</field>
+    </record>
+
+    <record id="index_12_2022" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2022-12-01')"/>
+        <field name="value">1134.5875</field>
+    </record>
 </odoo>
