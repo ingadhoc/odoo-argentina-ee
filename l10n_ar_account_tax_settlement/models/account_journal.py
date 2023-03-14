@@ -1144,7 +1144,8 @@ class AccountJournal(models.Model):
                 codop = '1'
                 issue_date = payment.date or payment.payment_group_id.payment_date
                 amount_tot = abs(payment.payment_group_id.payments_amount)
-                base_amount = payment.withholdable_base_amount
+                # withholdable_base_amount es para ret de gcias, withholding_base_amount es para ret de iva
+                base_amount = payment.withholdable_base_amount or payment.withholding_base_amount
 
             elif move.is_invoice():
                 # Codigo del Comprobante         [ 2]
