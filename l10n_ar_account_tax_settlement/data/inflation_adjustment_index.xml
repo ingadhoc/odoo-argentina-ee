@@ -600,4 +600,14 @@
         <field name="date" eval="time.strftime('2022-12-01')"/>
         <field name="value">1134.5875</field>
     </record>
+
+    <record id="index_01_2023" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2023-01-01')"/>
+        <field name="value">1202.979</field>
+    </record>
+
+    <record id="index_02_2023" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2023-02-01')"/>
+        <field name="value">1282.7091</field>
+    </record>
 </odoo>
