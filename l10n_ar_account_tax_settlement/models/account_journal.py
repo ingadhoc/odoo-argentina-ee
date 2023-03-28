@@ -1274,7 +1274,7 @@ class AccountJournal(models.Model):
         }]
 
     def misiones_files_values(self, move_lines):
-        """ Implementado segun especificación indicada en ticket 51437. También se puede ver detalles en readme
+        """ Implementado segun especificación indicada en ticket 60295. También se puede ver detalles en readme
         """
         self.ensure_one()
         content = ''
@@ -1284,14 +1284,22 @@ class AccountJournal(models.Model):
                 # Fecha
                 content += fields.Date.from_string(payment.date).strftime('%d-%m-%Y') + ','
 
-                # Constancia
-                content += payment.withholding_number[-8:] + ','
+                # Tipo de comprobante
+                #    Aquí vemos si se está pagando al menos una nota de crédito
+                #    si es así interpretamos que es corresponde a un CAR
+                matched_move_code_prefix = payment.payment_group_id.matched_move_line_ids.move_id.l10n_latam_document_type_id.mapped('doc_code_prefix')
+                is_car = False
+                if any(prefix[:3]=='NC-' for prefix in matched_move_code_prefix):
+                    is_car = True
+                    content += 'CAR' + ','
+                else:
+                    content += 'CR' + ','
+
+                # Punto de Venta + Nro de Comprobante
+                content += payment.withholding_number.replace('-','')[:20] + ','
 
                 # Razón Social
                 content += payment.partner_id.name.replace(',','')[:100] + ','
-
-                # Domicilio
-                content += payment.partner_id.street.replace(',','')[:200] + ','
 
                 # CUIT
                 payment.partner_id.ensure_vat()
@@ -1304,18 +1312,63 @@ class AccountJournal(models.Model):
                 alicuot_line = line.tax_line_id.get_partner_alicuot(
                 line.partner_id, line.date)
                 if not alicuot_line:
-                    raise ValidationError(_(
+                    raise ValidationError(
                     'No hay alicuota configurada en el partner '
                     '"%s" (id: %s)') % (
-                        line.partner_id.name, line.partner_id.id))
+                        line.partner_id.name, line.partner_id.id)
 
                 content += str(line.tax_line_id.get_partner_alicuot(
-                line.partner_id, line.date).alicuota_retencion)
+                line.partner_id, line.date).alicuota_retencion) + ','
+
+                if is_car:
+
+                    # Tipo de comprobante original
+                    content += 'CR' + ','
+
+                    # Comprobante que dio origen a la nota de crédito
+
+                    # pago -> grupo de pagos --> nc --> factura --> grupo de pagos --> pago (con retenc misiones)
+                    origin_invoice = payment.payment_group_id.matched_move_line_ids.move_id.reversed_entry_id
+                    for payment_group in origin_invoice.payment_group_ids:
+                        cant_ret = 0
+                        for pay_cr in payment_group.payment_ids:
+                            if pay_cr.tax_withholding_id.tax_group_id.name == 'Retención IIBB Misiones':
+                                origin_payment_cr = pay_cr
+                                cant_ret += 1
+
+                        if cant_ret != 1 or origin_payment_cr.amount != payment.amount:
+                            raise ValidationError("Solo se admitirá un comprobante de anulación de retención referido a un solo comprobante de retención y la anulación debe ser por un importe igual al importe total de la retención original. Revisar recibo/s %s. El recibo que anula la retención es %s (id: %s)".format(origin_invoice.payment_group_ids.mapped('name'), payment.payment_group_id.name, payment.payment_group_id.id))
+
+                        payment_date = payment.payment_date
+                        origin_payment_cr_date = origin_payment_cr.payment_date
+                        if (payment_date.year - origin_payment_cr_date.year) * 12 + (payment_date.month - origin_payment_cr_date.month) > 2:
+                            raise ValidationError("Solo se admitirá un comprobante de anulación de retención para un comprobante de origen dentro de los dos períodos anteriores. Revisar recibo/s %s. El recibo que anula la retención es %s (id: %s)".format(origin_invoice.payment_group_ids.mapped('name'), payment.payment_group_id.name, payment.payment_group_id.id))
+
+                        if payment_date < origin_payment_cr_date:
+                            raise ValidationError("La fecha del comprobante de anulación de retención no puede ser anterior al de la retención que está anulando. Revisar recibo/s %s. El recibo que anula la retención es %s (id: %s)".format(origin_invoice.payment_group_ids.mapped('name'), payment.payment_group_id.name, payment.payment_group_id.id))
+
+                        payment_partner_vat = payment.partner_id.ensure_vat()
+                        origin_payment_partner_vat = origin_payment_cr.partner_id.ensure_vat()
+                        if payment_partner_vat != origin_payment_partner_vat:
+                            raise ValidationError("Deben coincidir los CUIT emisores del comprobante de anulación de retención y del comprobante de retención original.  Revisar recibo/s %s. El recibo que anula la retención es %s (id: %s)".format(origin_invoice.payment_group_ids.mapped('name'), payment.payment_group_id.name, payment.payment_group_id.id))
+
+                    # Nro de comprobante que dio origen a la nota de crédito
+                    content += origin_payment_cr.withholding_number.replace('-','')[:20] + ','
+
+                    # Fecha del comprobante que dio origen a la nota de crédito
+                    content += origin_payment_cr.payment_date.strftime('%d-%m-%Y') + ','
+
+                    # CUIT del comprobante que dio origen a la nota de crédito
+                    partner_vat = origin_payment_cr.partner_id.ensure_vat()
+                    content += partner_vat
+                else:
+                    content += ',,,'
 
                 content += '\n'
             elif line.move_id.is_invoice():
                 # Fecha
-                content += line.move_id.invoice_date.strftime('%d-%m-%Y') + ','
+                invoice_date = line.move_id.invoice_date
+                content += invoice_date.strftime('%d-%m-%Y') + ','
 
                 # Tipo de comprobante
                 content += line.move_id.l10n_latam_document_type_id.doc_code_prefix.replace('-','_') + ','
@@ -1327,7 +1380,8 @@ class AccountJournal(models.Model):
                 content += line.move_id.partner_id.name[:100] + ','
 
                 # CUIT
-                content += line.move_id.partner_id.ensure_vat() + ','
+                partner_vat = line.move_id.partner_id.ensure_vat()
+                content += partner_vat + ','
 
                 # Importe de la operación, consultar si l10n_latam_price_net es correcto
                 tax_group_id = line.tax_line_id.tax_group_id.id
@@ -1344,6 +1398,40 @@ class AccountJournal(models.Model):
                     '"%s" (id: %s)') % (
                         line.partner_id.name, line.partner_id.id))
                 content += str(line.tax_line_id.get_partner_alicuot(line.partner_id, line.date).alicuota_percepcion)
+
+                if line.move_id.l10n_latam_document_type_id.doc_code_prefix[:3] == 'NC-':
+
+                    # Comprobante de origen
+                    origin_invoice = line.move_id.reversed_entry_id
+
+                    # CUIT del partner del comprobante de origen
+                    partner_vat_origin_invoice = origin_invoice.partner_id.ensure_vat()
+
+                    # Fecha del comprobante original
+                    date_origin_invoice = origin_invoice.invoice_date
+
+                    if (invoice_date.year - date_origin_invoice.year) * 12 + (invoice_date.month - date_origin_invoice.month) > 2:
+                        raise ValidationError("Solo se admitirá una NC para un comprobante de origen dentro de los dos períodos anteriores, revisar %s (id: %s) asociado a la factura %s (id: %s)" % (line.move_id.name, line.move_id.id, origin_invoice.name, origin_invoice.id))
+
+                    if invoice_date < date_origin_invoice:
+                        raise ValidationError("La fecha de la NC no podrá ser anterior a la fecha del comprobante de origen, revisar %s (id: %s) asociado a la factura %s (id: %s)" % (line.move_id.name, line.move_id.id, origin_invoice.name, origin_invoice.id))
+
+                    if partner_vat != partner_vat_origin_invoice:
+                        raise ValidationError("Deben coincidir los CUIT emisores de la NC y del comprobante original, revisar: %s (id: %s) asociado a la factura %s (id: %s)" % (line.move_id.name, line.move_id.id, origin_invoice.name, origin_invoice.id))
+
+                    # Tipo de comprobante original
+                    content += ',' + origin_invoice.l10n_latam_document_type_id.doc_code_prefix.replace('-','_') + ','
+
+                    # Nro de comprobante original
+                    content += origin_invoice.l10n_latam_document_number.replace('-','')[:20] + ','
+
+                    # Fecha de comprobante original
+                    content += date_origin_invoice.strftime('%d-%m-%Y') + ','
+
+                    # CUIT de comprobante original
+                    content += partner_vat_origin_invoice
+                else:
+                    content += ',,,,'
 
                 content += '\n'
 
