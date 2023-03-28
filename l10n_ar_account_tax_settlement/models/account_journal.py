@@ -61,6 +61,7 @@ class AccountJournal(models.Model):
         ('iibb_aplicado_api', 'TXT Perc/Ret IIBB aplicadas API'),
         ('iibb_aplicado_sircar', 'TXT Perc/Ret IIBB aplicadas SIRCAR'),
         ('iibb_aplicado_dgr_mendoza', 'TXT  Perc/Ret IIBB aplicado DGR Mendonza'),
+        ('retenciones_iva', 'TXT Retenciones/Percepciones Sufridas IVA'),
         # ('other', 'Other')
     ])
 
@@ -1433,5 +1434,61 @@ class AccountJournal(models.Model):
 
         return [{
             'txt_filename': ('Retenciones ' if payment else 'Percepciones ') + 'Misiones.txt',
+            'txt_content': content,
+        }]
+
+    def retenciones_iva_files_values(self, move_lines):
+        """ Implementado segun especificación indicada en ticket 54274."""
+        self.ensure_one()
+        content = ''
+        for line in move_lines.sorted(key=lambda r: (r.date, r.id)):
+            payment = line.payment_id
+            if payment:
+                # regimen (long 3)
+                codigo_regimen = payment.tax_withholding_id.codigo_regimen
+                if not codigo_regimen:
+                    raise ValidationError(_('No hay código de régimen en la configuración del impuesto "%s"') % (
+                        payment.tax_withholding_id.name))
+                if len(codigo_regimen) < 3:
+                    raise ValidationError(_('El código de régimen tiene que tener 3 dígitos en la configuración del impuesto "%s"') % (payment.tax_withholding_id.name))
+                content += codigo_regimen[:3]
+
+                # cuit agente (long 11)
+                content += payment.partner_id.ensure_vat()
+
+                # fecha retención (long 10)
+                content += fields.Date.from_string(payment.date).strftime('%d/%m/%Y')
+
+                # número comprobante (long 16)
+                content += re.sub('[^0-9\.]', '', payment.withholding_number).ljust(16)
+
+                # importe retención (long 16)
+                content += '%16.2f' % payment.amount
+                content += '\r\n'
+            elif line.move_id.is_invoice():
+                # regimen (long 3)
+                codigo_regimen = line.tax_line_id.codigo_regimen
+                if not codigo_regimen:
+                    raise ValidationError(_('No hay código de régimen en la configuración del impuesto "%s"') % (
+                        line.tax_line_id.name))
+                if len(codigo_regimen) < 3:
+                    raise ValidationError(_('El código de régimen tiene que tener 3 dígitos en la configuración del impuesto "%s"') % (line.tax_line_id.name))
+                content += codigo_regimen[:3]
+
+                # cuit agente (long 11)
+                content += line.move_id.partner_id.ensure_vat()
+
+                # fecha retención (long 10)
+                content += fields.Date.from_string(line.move_id.invoice_date).strftime('%d/%m/%Y')
+
+                # número comprobante (long 16)
+                content += line.move_id.l10n_latam_document_number.ljust(16)
+
+                # importe retención (long 16)
+                content += '%16.2f' % line.balance
+                content += '\r\n'
+
+        return [{
+            'txt_filename': ('Retenciones' if payment else 'Percepciones') + '_iva.txt',
             'txt_content': content,
         }]

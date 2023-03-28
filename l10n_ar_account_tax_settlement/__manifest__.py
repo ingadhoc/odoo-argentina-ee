@@ -19,7 +19,11 @@
 ##############################################################################
 {
     'name': 'Tax Settlements For Argentina',
+<<<<<<< HEAD
     'version': "16.0.1.2.0",
+=======
+    'version': "16.0.1.3.0",
+>>>>>>> e973f54 ([FW][IMP]l10n_ar_account_tax_settlement: retenciones y percepciones IVA txt #163)
     'category': 'Accounting',
     'website': 'www.adhoc.com.ar',
     'license': 'LGPL-3',
