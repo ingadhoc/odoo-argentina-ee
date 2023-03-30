@@ -3,7 +3,7 @@
 # directory
 ##############################################################################
 from odoo import api, fields, models, _
-from odoo.exceptions import ValidationError, UserError
+from odoo.exceptions import UserError
 from odoo.tools.misc import formatLang, format_date
 from dateutil.relativedelta import relativedelta
 
@@ -59,10 +59,6 @@ class InflationAdjustment(models.TransientModel):
         'account.move',
         string="Asiento de apertura",
     )
-
-    def get_account_id(self, line):
-
-        return line.get('account_id')[0]
 
     @api.model
     def default_get(self, field_list):
@@ -159,6 +155,19 @@ class InflationAdjustment(models.TransientModel):
             res += [('move_id', '!=', self.closure_move_id.id)]
         return res
 
+    def get_init_data(self):
+        """ Get account init data information for making inflation adjustment entry """
+        account_move_line = self.env['account.move.line']
+        # Generate account.move.line adjustment for start of the period
+        domain = self.get_move_line_domain()
+        domain += [
+            ("account_id.user_type_id.include_initial_balance", '=', True),
+            ('date', '<', self.date_from)]
+        init_data = account_move_line.read_group(
+            domain, ['account_id', 'balance'], ['account_id'],
+        )
+        return init_data
+
     def confirm(self):
         """ Search all the related account.move.line and will create the
         related inflation adjustment journal entry for the specification.
@@ -172,14 +181,7 @@ class InflationAdjustment(models.TransientModel):
         adjustment_total = {'debit': 0.0, 'credit': 0.0}
         lines = []
 
-        # Generate account.move.line adjustment for start of the period
-        domain = self.get_move_line_domain()
-        domain += [
-            ("account_id.user_type_id.include_initial_balance", '=', True),
-            ('date', '<', self.date_from)]
-        init_data = account_move_line.read_group(
-            domain, ['account_id', 'balance'], ['account_id'],
-        )
+        init_data = self.get_init_data()
         date_from = self.date_from
         date_to = self.date_to
         before_date_from = self.date_from + relativedelta(months=-1)
@@ -195,7 +197,7 @@ class InflationAdjustment(models.TransientModel):
             else:
                 adjustment = self.company_id.currency_id.round(adjustment)
             lines.append({
-                'account_id': self.get_account_id(line),
+                'account_id': line.get('account_id')[0],
                 'name': _('Ajuste por inflación cuentas al inicio '
                 '(%s * %.2f%%)') % (
                     FormatAmount(line.get('balance')), initial_factor * 100.0),
@@ -224,7 +226,7 @@ class InflationAdjustment(models.TransientModel):
                 else:
                     adjustment = self.company_id.currency_id.round(adjustment)
                 lines.append({
-                    'account_id': self.get_account_id(line),
+                    'account_id': line.get('account_id')[0],
                     'name': _('Ajuste por inflación %s '
                     '(%s * %.2f%%)') % (
                         format_date(self.env, date_from, date_format='MM/Y'),
