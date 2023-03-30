@@ -158,7 +158,7 @@ class InflationAdjustment(models.TransientModel):
     def get_init_data(self):
         """ Get account init data information for making inflation adjustment entry """
         account_move_line = self.env['account.move.line']
-        # Generate account.move.line adjustment for start of the period
+                # Generate account.move.line adjustment for start of the period
         domain = self.get_move_line_domain()
         domain += [
             ("account_id.user_type_id.include_initial_balance", '=', True),
@@ -167,6 +167,13 @@ class InflationAdjustment(models.TransientModel):
             domain, ['account_id', 'balance'], ['account_id'],
         )
         return init_data
+
+    def get_data(self, domain):
+        """ Get account init data information for making inflation adjustment entry """
+        account_move_line = self.env['account.move.line']
+        data = account_move_line.read_group(
+            domain, ['account_id', 'balance'], ['account_id', 'date'])
+        return data
 
     def confirm(self):
         """ Search all the related account.move.line and will create the
@@ -177,7 +184,6 @@ class InflationAdjustment(models.TransientModel):
                 self.env, amount, currency_obj=self.company_id.currency_id)
 
         self.ensure_one()
-        account_move_line = self.env['account.move.line']
         adjustment_total = {'debit': 0.0, 'credit': 0.0}
         lines = []
 
@@ -216,8 +222,7 @@ class InflationAdjustment(models.TransientModel):
             domain = self.get_move_line_domain()
             domain += [('date', '>=', period.get('date_from')),
                        ('date', '<=', period.get('date_to'))]
-            data = account_move_line.read_group(
-                domain, ['account_id', 'balance'], ['account_id', 'date'])
+            data = self.get_data(domain)
             date_from = period.get('date_from')
             for line in data:
                 adjustment = line.get('balance') * period.get('factor')
