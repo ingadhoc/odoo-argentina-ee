@@ -25,7 +25,7 @@ class AccountPaymentGroupInvoiceWizard(models.TransientModel):
         invoice_vals.update({
             'l10n_ar_afip_asoc_period_start': self.l10n_ar_afip_asoc_period_start,
             'l10n_ar_afip_asoc_period_end': self.l10n_ar_afip_asoc_period_end,
-            origin_doc: self.origin_invoice_id
+            origin_doc: self.origin_invoice_id.id,
         })
 
         # Si estamos creando una ND automatica con el modulo de  account_payment_group_financial_surcharge entonces
