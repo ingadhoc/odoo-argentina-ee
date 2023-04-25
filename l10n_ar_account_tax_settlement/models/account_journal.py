@@ -470,10 +470,12 @@ class AccountJournal(models.Model):
                     'No hay alicuota configurada en el partner '
                     '"%s" (id: %s)') % (partner.name, partner.id))
 
-
+            ret_perc_applied = False
+            es_percepcion = False
             # 1 - Tipo de Operación
             if tax.type_tax_use in ['sale', 'purchase']:
                     # tax.amount_type == 'partner_tax':
+                es_percepcion = True
                 content = '2'
                 alicuot = alicuot_line.alicuota_percepcion
             elif tax.type_tax_use in ['customer', 'supplier']:
@@ -545,7 +547,12 @@ class AccountJournal(models.Model):
                     or_inv.invoice_date).strftime('%d/%m/%Y')
 
                 # 12 - Ret/percep a deducir
-                content += format_amount(line.balance, 16, 2, ',')
+
+                # si la línea tiene moneda diferente de la moneda de la compañía queremos que la ret/perc
+                # se calcule aplicando la alícuota sobre la base imponible en la moneda de la compañía
+                if line.currency_id and line.currency_id != line.company_id.currency_id:
+                    ret_perc_applied = float_round((taxable_amount*alicuot/100), precision_digits=2)
+                content += format_amount((line.balance if not ret_perc_applied else ret_perc_applied), 16, 2, ',')
 
                 # 13 - Alícuota
                 content += format_amount(alicuot, 5, 2, ',')
@@ -566,7 +573,10 @@ class AccountJournal(models.Model):
             if internal_type == 'invoice':
                 content += '01'
             elif internal_type == 'debit_note':
-                content += '02'
+                if es_percepcion:
+                    content += '09'
+                else:
+                    content += '02'
             else:
                 # orden de pago
                 content += '03'
@@ -693,10 +703,15 @@ class AccountJournal(models.Model):
             content += format_amount(alicuot, 5, 2, ',')
 
             # 20 - Retención/Percepción Practicada
-            content += format_amount(-line.balance, 16, 2, ',')
+
+            # si la línea tiene moneda diferente de la moneda de la compañía queremos que la ret/perc
+            # se calcule aplicando la alícuota sobre la base imponible en la moneda de la compañía
+            if line.currency_id and line.currency_id != line.company_id.currency_id:
+                ret_perc_applied = float_round((taxable_amount*alicuot/100), precision_digits=2)
+            content += format_amount((-line.balance if not ret_perc_applied else ret_perc_applied), 16, 2, ',')
 
             # 21 - Monto Total Retenido/Percibido
-            content += format_amount(-line.balance, 16, 2, ',')
+            content += format_amount((-line.balance if not ret_perc_applied else ret_perc_applied), 16, 2, ',')
 
             content += '\r\n'
 
