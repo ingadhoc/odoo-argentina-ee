@@ -83,40 +83,70 @@ class AccountCheckToDateReportWizard(models.TransientModel):
     def _get_checks_on_hand(self, journal_id, to_date):
         """
         Hacemos una query que:
-        * toma todos los pagos que representan un cheque
-        * le une los pagos que representan los movimientos de esos cheques
-        * con eso nos queda una tabla "t" que representa tods los movimientos de chques (new check, out check, in check).
-        Con columnas payment_id, check_id, operation_date y operation_code
+        * toma todos los pagos que representan un cheque hasta cierta fecha en una tabla t
+        * arma todas las operaciones de cheques hasta cierta fecha
         * de esa tabla obtenemos la ultima operación anterior a la fecha que queremos analizar
         * si esa ultima operación NO es enviar cheque, lo consideramos en mano
+        * a esta query le unimos otra query que tome los casos de delivered third check (a traves de las tablas t3/t4)
         """
         to_date = str(to_date)
         query = """
-            select check_id from (
-                select distinct on (check_id) check_id, operation_code, paired_code from
+        SELECT * FROM (
+            SELECT DISTINCT ON (t.check_id) t.check_id AS cheque
+            FROM
                 (
-                    SELECT ap.id as payment_id, ap.id as check_id, ap_move.date as operation_date, apm.code as operation_code, pair_apm.code as paired_code
+                    SELECT ap.id as check_id, ap_move.date as operation_date, apm.code as operation_code
                     FROM account_payment ap
                     LEFT JOIN account_payment_method AS apm ON apm.id = ap.payment_method_id
                     LEFT JOIN account_move AS ap_move ON ap.move_id = ap_move.id
                     LEFT JOIN account_journal AS journal ON ap_move.journal_id = journal.id
-                    LEFT JOIN account_payment AS pair_ap ON pair_ap.id = ap.paired_internal_transfer_payment_id
-                    LEFT JOIN account_payment_method as pair_apm ON pair_apm.id = pair_ap.payment_method_id
                     WHERE
-                    apm.code = 'new_third_party_checks'
-                    UNION ALL
-                    SELECT ap_check_op.id as payment_id, ap_check_op.l10n_latam_check_id as check_id, ap_check_op_move.date as operation_date, apm.code as operation_code, pair_apm.code as paired_code
+                    apm.code = 'new_third_party_checks' AND ap_move.date <= '%s' AND ap.l10n_latam_check_current_journal_id IS NOT NULL
+                ) t
+                LEFT JOIN
+                (
+                    SELECT DISTINCT ON (ap_check_op.l10n_latam_check_id) ap_check_op.l10n_latam_check_id as check_id, ap_check_op.id as payment_id, ap_check_op_move.date as operation_date, apm.code as operation_code, pair_apm.code as paired_code, ap_check_op.l10n_latam_check_current_journal_id as journal
                     FROM account_payment ap_check_op
                     LEFT JOIN account_move AS ap_check_op_move ON ap_check_op.move_id = ap_check_op_move.id
                     LEFT JOIN account_payment_method AS apm ON apm.id = ap_check_op.payment_method_id
                     LEFT JOIN account_payment AS pair_ap ON pair_ap.id = ap_check_op.paired_internal_transfer_payment_id
                     LEFT JOIN account_payment_method as pair_apm ON pair_apm.id = pair_ap.payment_method_id
-                ) t
-                WHERE operation_date <= '%s' order by check_id, operation_date desc, payment_id desc
-            ) t2
-            WHERE operation_code != 'out_third_party_checks' AND (paired_code != 'out_third_party_checks' OR paired_code IS NULL)
+                    WHERE
+                    ap_check_op.l10n_latam_check_id IS NOT NULL AND ap_check_op_move.date <= '%s'
+                    ORDER BY check_id, operation_date desc, payment_id desc
+                ) t2
+                ON t.check_id = t2.check_id
+            WHERE t2.operation_date IS NULL OR (t2.operation_code != 'out_third_party_checks' AND paired_code != 'out_third_party_checks')
+            UNION ALL
+            SELECT DISTINCT ON (t4.check_id) t4.check_id as cheque
+            FROM
+                (
+                    SELECT ap.l10n_latam_check_id as check_id
+                    FROM account_payment ap
+                    LEFT JOIN account_payment_method AS apm ON apm.id = ap.payment_method_id
+                    LEFT JOIN account_move AS ap_move ON ap.move_id = ap_move.id
+                    LEFT JOIN account_journal AS journal ON ap_move.journal_id = journal.id
+                    WHERE
+                    apm.code = 'out_third_party_checks' AND ap_move.date > '%s'
+                    AND
+                    ap.l10n_latam_check_current_journal_id IS NULL
+                ) t3
+                JOIN
+                (
+                    SELECT ap.id as check_id, ap.l10n_latam_check_current_journal_id as journal
+                    FROM account_payment ap
+                    LEFT JOIN account_payment_method AS apm ON apm.id = ap.payment_method_id
+                    LEFT JOIN account_move AS ap_move ON ap.move_id = ap_move.id
+                    LEFT JOIN account_journal AS journal ON ap_move.journal_id = journal.id
+                    WHERE
+                    apm.code = 'new_third_party_checks' AND ap_move.date <= '%s'
+                ) t4
+                ON t3.check_id = t4.check_id
+            WHERE t4.journal IS NULL
+            ) general
+            ORDER BY general.cheque
             ;
-        """ % (to_date)
+        """ % (to_date, to_date, to_date, to_date)
         self.env.cr.execute(query)
         res = self.env.cr.fetchall()
         check_ids = [x[0] for x in res]
