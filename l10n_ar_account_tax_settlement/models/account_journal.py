@@ -847,7 +847,7 @@ class AccountJournal(models.Model):
 
             # 4 Número del comprobante
             content.append('%012d' % int(
-                re.sub('[^0-9]', '', line.move_id.l10n_latam_document_number or '')))
+                re.sub('[^0-9]', '', line.payment_id.withholding_number or '')))
 
             # 5 Cuit del contribuyene
             content.append(line.partner_id.ensure_vat())
