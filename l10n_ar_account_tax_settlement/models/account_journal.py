@@ -1370,7 +1370,7 @@ class AccountJournal(models.Model):
                 content += fields.Date.from_string(payment.payment_date).strftime('%d/%m/%Y')
 
                 # número comprobante (long 16)
-                content += re.sub('[^0-9\.-]', '', payment.move_name)[1:].ljust(16)
+                content += re.sub('[^0-9\.]', '', payment.move_name).ljust(16)
 
                 # importe retención (long 16)
                 content += '%16.2f' % payment.amount
