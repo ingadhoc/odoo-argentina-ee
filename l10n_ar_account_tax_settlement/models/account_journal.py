@@ -873,7 +873,7 @@ class AccountJournal(models.Model):
 
             # 7 Monto sujeto a percepción
             content.append(format_amount(
-                payment.withholdable_base_amount, 12, 2, '.'))
+                payment.withholding_base_amount, 12, 2, '.'))
 
             # 8 alicuota de la retencion
             content.append(format_amount(
