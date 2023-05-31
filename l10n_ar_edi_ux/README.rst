@@ -25,7 +25,7 @@ About Padron:
     * Desde un partner cualquiera, si el mismo tiene configurado CUIT, entonces puede hacer click en el botón "Actualizar desde AFIP"
     * Hacerlo masivamente desde ""
 
-#. Si estas en un ambiente de testing pueden utilizar estos CUITs de prueba para el padrón 'ws_sr_padron_a5' https://gist.github.com/zaoral/245ea456c53aef5c8d2f12a099d30909
+#. Si estas en un ambiente de testing pueden utilizar estos CUITs de prueba para el padrón 'ws_sr_constancia_inscripcion' https://gist.github.com/zaoral/245ea456c53aef5c8d2f12a099d30909
 
 Installation
 ============

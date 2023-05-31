@@ -44,7 +44,7 @@ class ResPartner(models.Model):
             [('l10n_ar_afip_ws_crt', '!=', False)], limit=1)
         if not company:
             raise UserError(_('Please configure an AFIP Certificate in order to continue'))
-        client, auth = company._l10n_ar_get_connection('ws_sr_padron_a5')._get_client()
+        client, auth = company._l10n_ar_get_connection('ws_sr_constancia_inscripcion')._get_client()
 
         error_msg = _(
             'No pudimos actualizar desde padron afip al partner %s (%s).\nRecomendamos verificar manualmente en la'
