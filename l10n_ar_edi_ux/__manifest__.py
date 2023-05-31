@@ -1,6 +1,12 @@
 {
     'name': 'Argentinian Electronic Invoicing UX',
+<<<<<<< HEAD
     'version': "15.0.1.3.0",
+||||||| parent of 5f8c00b (temp)
+    'version': "13.0.1.6.0",
+=======
+    'version': "13.0.1.7.0",
+>>>>>>> 5f8c00b (temp)
     'category': 'Localization/Argentina',
     'sequence': 14,
     'author': 'ADHOC SA',
