@@ -9,7 +9,10 @@ class L10nArAfipwsConnection(models.Model):
     def _get_l10n_ar_afip_ws(self):
         """ Return the list of values of the selection field. """
         res = super()._get_l10n_ar_afip_ws()
-        return [('ws_sr_constancia_inscripcion', _('Servicio de Consulta a Padrón Constancia de Inscripción (ex A5)'))] + res
+        return res + [
+            ('ws_sr_constancia_inscripcion', _('Servicio de Consulta a Padrón Constancia de Inscripción (ex A5)')),
+            ('ws_sr_padron_a5', _('Servicio de Consulta de Padrón Alcance 5')),
+        ]
 
     @api.model
     def _l10n_ar_get_afip_ws_url(self, afip_ws, environment_type):
@@ -21,6 +24,9 @@ class L10nArAfipwsConnection(models.Model):
         ws_data = {
             'ws_sr_constancia_inscripcion': {
                 'production': 'https://aws.afip.gov.ar/sr-padron/webservices/personaServiceA5?wsdl',
-                'testing': 'https://awshomo.afip.gov.ar/sr-padron/webservices/personaServiceA5?wsdl',
-        }}
+                'testing': 'https://awshomo.afip.gov.ar/sr-padron/webservices/personaServiceA5?wsdl'},
+            'ws_sr_padron_a5': {
+                'production': 'https://aws.afip.gov.ar/sr-padron/webservices/personaServiceA5?wsdl',
+                'testing': 'https://awshomo.afip.gov.ar/sr-padron/webservices/personaServiceA5?wsdl'}
+        }
         return ws_data.get(afip_ws, {}).get(environment_type)
