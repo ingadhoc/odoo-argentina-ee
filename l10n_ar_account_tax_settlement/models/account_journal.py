@@ -1185,6 +1185,7 @@ class AccountJournal(models.Model):
             content += '%016.2f' % amount_tot
             # Codigo de Impuesto             [ 4]
             # Codigo de Regimen              [ 3]
+            codcond = '01'
             if line.tax_line_id.tax_group_id == self.env.ref('l10n_ar_ux.tax_group_retencion_ganancias'):
                 content += '0217'
                 regimen = pay_group.regimen_ganancias_id
@@ -1196,9 +1197,13 @@ class AccountJournal(models.Model):
                 content += '0767'
                 # por ahora el unico implementado es para factura M
                 content += '%03d' % int(line.tax_line_id.codigo_regimen) if line.tax_line_id.codigo_regimen else '499'
+                if line.tax_line_id.codigo_regimen == '602':
+                    codcond = '13' if line.tax_line_id.amount == 3 else '14'
             elif line.tax_line_id.tax_group_id == self.env.ref('l10n_ar.tax_group_percepcion_iva'):
                 content += '0767'
                 content +=  '%03d' % int(line.tax_line_id.codigo_regimen) # (ver account tax) DUDA cómo le aplico el código de régimen a las facturas viejas
+                if line.tax_line_id.codigo_regimen == '602':
+                    codcond = '13' if line.tax_line_id.amount == 3 else '14'
             else:
                 raise ValidationError(_('Grupos de impuestos %s no implementados para SICORE') % line.tax_line_id.tax_group_id.name)
 
@@ -1212,7 +1217,7 @@ class AccountJournal(models.Model):
             content += fields.Date.from_string(issue_date).strftime('%d/%m/%Y')
 
             # Codigo de Condicion            [ 2]
-            content += '01'  # TODO: ???? ver tabla de condición sicore
+            content += codcond  # TODO: ???? ver tabla de condición sicore
 
             # Retención Pract. a Suj. ..     [ 1]
             content += '0'  # TODO: ????
