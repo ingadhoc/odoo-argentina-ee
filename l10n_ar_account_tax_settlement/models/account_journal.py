@@ -814,7 +814,7 @@ class AccountJournal(models.Model):
             }]
 
     def iibb_aplicado_sircar_files_values(self, move_lines):
-        """ Especificacion en /doc/sircar
+        """ Especificacion en /doc/sircar, solicitado en ticket 62526
         """
         self.ensure_one()
         ret = ''
@@ -982,6 +982,15 @@ class AccountJournal(models.Model):
                     'No hay etiqueta de jurisdicción configurada!'))
 
             content.append(line.tax_line_id.jurisdiction_code)
+
+            # 12 Tipo de Operación: 904 - Córdoba (1-Efectuada, 2-Anulada, 3-Omitida, 4-Informativa) / 914 - Misiones (1-Efectuada, 2-Anulada)
+            if internal_type == 'credit_note':
+                content.append('2')
+                # Número de Constancia original (sólo para las Anulaciones –ver códigos por jur-)
+                # Acá estimo que va el nro de factura original a la cual se le hace la nc
+                content.append('%014d' % int(re.sub('[^0-9]', '', line.move_id.reversed_entry_id.l10n_latam_document_number or '')))
+            else:
+                content.append('1')
 
             # Tipo registro 2. Provincia Cordoba
             if line.tax_line_id.jurisdiction_code == '904':
