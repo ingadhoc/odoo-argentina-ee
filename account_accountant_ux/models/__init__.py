@@ -4,3 +4,5 @@
 ##############################################################################
 from . import account_followup_report
 from . import res_company
+from . import bank_rec_widget
+from . import account_move_line
