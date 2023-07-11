@@ -1175,6 +1175,7 @@ class AccountJournal(models.Model):
             elif move.is_invoice():
                 # Codigo del Comprobante         [ 2]
                 tipodoc = int(move.l10n_latam_document_type_id.code)
+                es_nc = False
 
                 if tipodoc in [1, 6, 19, 51, 81, 82, 118, 201, 206]:
                     # Factura
@@ -1185,6 +1186,7 @@ class AccountJournal(models.Model):
                 elif tipodoc in [3, 8, 21, 53, 43, 44, 110, 112, 113, 114, 119, 203, 208]:
                     # Nota de Crédito
                     content += '03'
+                    es_nc = True
                 elif tipodoc in [2, 7, 20, 52, 45, 46, 115, 116, 120, 202, 207]:
                     # Nota de Débito
                     content += '04'
@@ -1200,7 +1202,10 @@ class AccountJournal(models.Model):
                 content += '%05d' % int(re.sub('[^0-9]', '', move.l10n_latam_document_number)[:5])
                 content += '%011d' % int(re.sub('[^0-9]', '', move.l10n_latam_document_number)[5:])
                 issue_date = move.invoice_date
-                base_amount = line.tax_base_amount
+                # si la percepción es sobre una nota de crédito informamos el importe de la percepción
+                # aclaración: no tenemos ningún respaldo documental respecto a esto, solo lo hicimos para
+                # solucionar la inconsistencia del ticket 61671
+                base_amount = line.tax_base_amount if es_nc==False else line.balance
                 codop = '2'
                 #Importe del comprobante
                 amount_tot = abs(move.amount_total_signed)
