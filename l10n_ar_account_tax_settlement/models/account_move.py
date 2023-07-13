@@ -10,4 +10,4 @@ class AccountMove(models.Model):
         for amount in self.amount_by_group:
             if amount[0] == 'Percepción IIBB Misiones' and self.reversed_entry_id and self.amount_total != self.reversed_entry_id.amount_total:
                 raise ValidationError("Si está haciendo una factura rectificativa con percepciones de misiones, la misma debe hacerse sobre el importe total de la factura original")
-        super().action_post()
+        return super().action_post()
