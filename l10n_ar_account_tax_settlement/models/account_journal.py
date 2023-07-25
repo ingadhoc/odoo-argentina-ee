@@ -829,7 +829,7 @@ class AccountJournal(models.Model):
             }]
 
     def iibb_aplicado_sircar_files_values(self, move_lines):
-        """ Especificacion en /doc/sircar
+        """ Especificacion en /doc/sircar, solicitado en ticket 62526
         """
         self.ensure_one()
         ret = ''
@@ -906,7 +906,7 @@ class AccountJournal(models.Model):
             content.append(line.tax_line_id.jurisdiction_code)
 
             # Tipo registro 2. Provincia Cordoba
-            if line.tax_line_id.jurisdiction_code == '904':
+            if line.tax_line_id.jurisdiction_code in ['904', '914']:
 
                 # 12 Tipo de Operación (1-Efectuada, 2-Anulada, 3-Omitida)
                 content.append('2' if internal_type == 'credit_note' else '1')
@@ -999,7 +999,7 @@ class AccountJournal(models.Model):
             content.append(line.tax_line_id.jurisdiction_code)
 
             # Tipo registro 2. Provincia Cordoba
-            if line.tax_line_id.jurisdiction_code == '904':
+            if line.tax_line_id.jurisdiction_code in ['904', '914']:
 
                 # 12 Tipo de Operación (1-Efectuada, 2-Anulada, 3-Omitida, 4-Informativa)
                 content.append('2' if internal_type == 'credit_note' else '1')
