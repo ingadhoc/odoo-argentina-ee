@@ -33,10 +33,6 @@ class InflationAdjustment(models.TransientModel):
         domain=[('deprecated', '=', False)],
         required=True,
     )
-    analytic_account_id = fields.Many2one(
-        'account.analytic.account',
-        'Analytic Account',
-    )
     start_index = fields.Float(
         compute='_compute_index',
         )
@@ -197,7 +193,6 @@ class InflationAdjustment(models.TransientModel):
                     FormatAmount(line.get('balance')), initial_factor * 100.0),
                 'date_maturity': before_date_from,
                 'debit' if adjustment > 0 else 'credit': abs(adjustment),
-                'analytic_account_id': self.analytic_account_id.id,
             })
             adjustment_total[
                 'debit' if adjustment > 0 else 'credit'] += abs(adjustment)
@@ -228,7 +223,6 @@ class InflationAdjustment(models.TransientModel):
                         period.get('factor') * 100.0),
                     'date_maturity': period.get('date_from'),
                     'debit' if adjustment > 0 else 'credit': abs(adjustment),
-                    'analytic_account_id': self.analytic_account_id.id,
                 })
                 adjustment_total[
                     'debit' if adjustment > 0 else 'credit'] += abs(adjustment)
@@ -248,7 +242,6 @@ class InflationAdjustment(models.TransientModel):
                 self.date_from, self.date_to),
             'debit' if adj_diff < 0 else 'credit': abs(adj_diff),
             'date_maturity': self.date_to,
-            'analytic_account_id': self.analytic_account_id.id,
         })
 
         # Generate account.move
@@ -258,4 +251,4 @@ class InflationAdjustment(models.TransientModel):
             'ref': _('Ajuste por inflación %s') % (date_to.year),
             'line_ids': [(0, 0, line_data) for line_data in lines],
         })
-        return move.get_access_action()
+        return {}
