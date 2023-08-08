@@ -1423,6 +1423,9 @@ class AccountJournal(models.Model):
 
                     # Comprobante de origen
                     origin_invoice = line.move_id.reversed_entry_id
+                    
+                    if not origin_invoice:
+                        raise ValidationError("No puede generarse la descarga si en el archivo hay percepciones en notas de crédito y dichas notas de cŕedito no tienen indicado cuál es el comprobante original que se está revirtiendo (ejemplo: una factura). Revisar %s (id: %s)." % (line.move_id.name, line.move_id.id))
 
                     # CUIT del partner del comprobante de origen
                     partner_vat_origin_invoice = origin_invoice.partner_id.ensure_vat()
