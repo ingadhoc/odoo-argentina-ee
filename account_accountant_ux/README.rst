@@ -17,6 +17,7 @@ Accounting Reports UX
 #. Mueve el menu "Caja y bancos" a nuevo menú de Accounting
 #. This module add to set the company in the wizard to set the account lock date.
 #. Add an option to force company currency on follow ups
+#. Mejorar que para asientos migrados desde 13 que están vinculados a un pago y linea de extracto a la vez, el botón "pagos" te lleve efectivamente al pago (odoo te lleva a la linea de extracto pero ya existe un botón para esto)
 
 Installation
 ============
