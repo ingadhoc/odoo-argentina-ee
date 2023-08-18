@@ -744,8 +744,9 @@ class AccountJournal(models.Model):
                     internal_type == 'credit_note' and 'C' or
                     internal_type == 'debit_note' and 'D' or 'R')
                 content += line.l10n_latam_document_type_id.l10n_ar_letter
+            document_without_prefix = re.sub(r'^\D*', '', move.l10n_latam_document_number)
             document_parts = move._l10n_ar_get_document_number_parts(
-                move.l10n_latam_document_number, move.l10n_latam_document_type_id.code)
+                document_without_prefix, move.l10n_latam_document_type_id.code)
             # si el punto de venta es de 5 digitos no encontramos doc
             # que diga como proceder, tomamos los ultimos 4 digitos
             pto_venta = "{:0>4d}".format(document_parts['point_of_sale'])[-4:]
@@ -1045,8 +1046,9 @@ class AccountJournal(models.Model):
                 content += '{:>04s}'.format(pos)
                 content += '{:>016s}'.format(number)
             else:
+                document_without_prefix = re.sub(r'^\D*', '', move.l10n_latam_document_number)
                 document_parts = move._l10n_ar_get_document_number_parts(
-                    move.l10n_latam_document_number, move.l10n_latam_document_type_id.code)
+                    document_without_prefix, move.l10n_latam_document_type_id.code)
                 pos = document_parts['point_of_sale']
                 number = document_parts['invoice_number']
                 # si el punto de venta es de 5 digitos no encontramos doc
