@@ -151,8 +151,7 @@ class AccountJournal(models.Model):
 
     def _get_tax_settlement_entry_lines_vals(self, domain=None):
         # TODO agregar la parte dinamica
-        grouped_move_lines = self.env['account.move.line'].read_group(
-            domain, ['account_id', 'balance', 'amount_currency'], ['account_id'])
+        grouped_move_lines = self.env['account.move.line'].read_group(domain, ['account_id', 'balance', 'amount_currency:sum'], ['account_id'])
 
         new_move_lines = []
         balance = 0.0
