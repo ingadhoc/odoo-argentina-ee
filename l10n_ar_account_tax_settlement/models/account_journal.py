@@ -259,23 +259,29 @@ class AccountJournal(models.Model):
             internal_type = line.l10n_latam_document_type_id.internal_type
             move = line.move_id
 
-            if internal_type in ('invoice', 'credit_note'):
+            if internal_type in ('invoice'):
                 # factura
                 content += '01' + line.l10n_latam_document_type_id.l10n_ar_letter
 
             elif internal_type == 'debit_note':
                 # ND
                 content += '02' + line.l10n_latam_document_type_id.l10n_ar_letter
+            elif internal_type == 'credit_note':
+                content += '10' + line.l10n_latam_document_type_id.l10n_ar_letter
             else:
                 # orden de pago (sin letra)
                 # 09 sería otro comprobante y 10 reinitegro de perc/ret
+                # aclaración: si cargo una nota de crédito con código 10 me aparece un mensaje como este:
+                # "Error: Línea 25: Debe ingresar un tipo de comprobante válido. 
+                # La carga de Reintegro de Retenc./Perc solo se puede efectuar desde el formulario en forma manual. La línea fue descartada."
                 content += '03 '
 
             # 6 - numero comprobante Texto(16)
             if internal_type in ('invoice', 'credit_note', 'debit_note'):
                 # TODO el aplicativo deberia empezar a aceptar 5 digitos
                 pos, number = get_pos_and_number(move.l10n_latam_document_number)
-                content += '{:>04s}'.format(pos)
+                # versión 4.0 de siprib release 0 no acepta 5 dígitos aún
+                content += '{:>03s}'.format(pos)[-4:]
                 content += '{:>08s}'.format(number)
                 content += '    '
             else:
@@ -285,10 +291,11 @@ class AccountJournal(models.Model):
             content += fields.Date.from_string(move.date).strftime('%d/%m/%Y')
 
             # 8 - monto comprobante
-            content += format_amount(-line.balance, 11, 2)
+            content += format_amount(abs(line.move_id.amount_total_signed), 12, 2) if line.move_id.is_invoice() else format_amount(abs(-line.balance), 12, 2)
 
             # 9 - tipo de documento
             # nosotros solo permitimos CUIT por ahora
+            # Revisar
             content += '3'
 
             # 10 - numero de documento
@@ -350,29 +357,29 @@ class AccountJournal(models.Model):
 
             # 16 - Importe Otros Gravámenes
             # TODO implementar
-            content += format_amount(0.0, 9, 2)
+            content += format_amount(0.0, 10, 2)
 
             # 17 - Importe IVA (solo si factura)
             if line.move_id.is_invoice():
                 amounts = line.move_id._l10n_ar_get_amounts(company_currency=True)
                 vat_amount = amounts['vat_amount']
-                base_amount = amounts['vat_untaxed_base_amount']
+                base_amount = amounts['vat_taxable_amount']
             else:
                 vat_amount = 0.0
                 base_amount = line.payment_id and line.payment_id.withholdable_base_amount or 0.0
-            content += format_amount(vat_amount, 9, 2)
+            content += format_amount(vat_amount, 10, 2)
 
             # 18 - Base Imponible para el cálculo
             # tal vez la base deberiamos calcularlo asi, en pagos no porque
             # los asientos estan separados
             # content += format_amount(-get_line_tax_base(line), 12, 2, ',')
-            content += format_amount(base_amount, 11, 2)
+            content += format_amount(base_amount, 12, 2)
 
             # 19 - Alícuota / alicuota
             content += format_amount(alicuot, 2, 2)
 
             # 20 - Impuesto Determinado
-            content += format_amount(-line.balance, 11, 2)
+            content += format_amount(abs(-line.balance), 12, 2)
 
             # 21 - Derecho Registro e Inspección
             # TODO implementar
@@ -382,7 +389,7 @@ class AccountJournal(models.Model):
             # 22 - Monto Retenido
             # TODO por ahora es igual a impuesto determinado pero, podria ser
             # distinto en algún caso?
-            content += format_amount(-line.balance, 11, 2)
+            content += format_amount(abs(-line.balance), 12, 2)
 
             # 23 - Artículo/Inciso para el cálculo
             content += articulo_inciso_calculo
