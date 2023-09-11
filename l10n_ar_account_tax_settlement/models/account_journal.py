@@ -1045,8 +1045,14 @@ class AccountJournal(models.Model):
                 content += '{:>04s}'.format(pos)
                 content += '{:>016s}'.format(number)
             else:
+                # Esto es un parche para que se puedan obtener el número de documento de aquellas líneas creadas a partir de un diario que no usa documentos y tiene número de comprobante similar a este: 'OCOM/2023/0182'
+                if move.l10n_latam_document_number.count('/') > 1:
+                    formatted_document_number = move.l10n_latam_document_number.split('/')
+                    document_number = formatted_document_number[1] + '-' + formatted_document_number[2]
+                else:
+                    document_number = move.l10n_latam_document_number
                 document_parts = move._l10n_ar_get_document_number_parts(
-                    move.l10n_latam_document_number, move.l10n_latam_document_type_id.code)
+                    document_number, move.l10n_latam_document_type_id.code)
                 pos = document_parts['point_of_sale']
                 number = document_parts['invoice_number']
                 # si el punto de venta es de 5 digitos no encontramos doc
