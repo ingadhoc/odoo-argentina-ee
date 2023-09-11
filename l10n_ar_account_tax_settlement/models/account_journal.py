@@ -1291,6 +1291,11 @@ class AccountJournal(models.Model):
                 content += payment.partner_id.name.replace(',','')[:100] + ','
 
                 # Domicilio
+                if not payment.partner_id.street:
+                    raise ValidationError(_(
+                    'No hay dirección configurada en el partner '
+                    '"%s" (id: %s)') % (
+                        line.partner_id.name, line.partner_id.id))                
                 content += payment.partner_id.street.replace(',','')[:200] + ','
 
                 # CUIT
@@ -1330,10 +1335,7 @@ class AccountJournal(models.Model):
                 content += line.move_id.partner_id.ensure_vat() + ','
 
                 # Importe de la operación, consultar si l10n_latam_price_net es correcto
-                tax_group_id = line.tax_line_id.tax_group_id.id
-                for x in line.move_id.amount_by_group:
-                    if x[-1] == tax_group_id:
-                        content += str(x[2]) + ','
+                content += str(line.tax_base_amount) + ','
 
                 # Alícuota
                 alicuot_line = line.tax_line_id.get_partner_alicuot(
