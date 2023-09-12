@@ -1,5 +1,7 @@
-from odoo import models, api
-from odoo.tools.misc import formatLang
+from odoo import models, api, Command
+# from odoo.tools.misc import formatLang
+from odoo.exceptions import UserError
+
 
 class BankRecWidget(models.Model):
     _inherit = "bank.rec.widget"
@@ -29,3 +31,35 @@ class BankRecWidget(models.Model):
         # }
 
         return {'balance_amount': None}
+
+    def _lines_widget_recompute_exchange_diff(self):
+        self.ensure_one()
+        self._ensure_loaded_lines()
+
+        line_ids_commands = []
+
+        # Clean the existing lines.
+        for exchange_diff in self.line_ids.filtered(lambda x: x.flag == 'exchange_diff'):
+            line_ids_commands.append(Command.unlink(exchange_diff.id))
+
+        new_amls = self.line_ids.filtered(lambda x: x.flag == 'new_aml')
+        if self.company_id.reconcile_on_company_currency:
+
+            accounts_currency_ids = []
+            for new_aml in new_amls:
+                if new_aml.account_id.currency_id not in accounts_currency_ids:
+                    accounts_currency_ids.append(new_aml.account_id.currency_id)
+            if len(accounts_currency_ids) > 1:
+                raise UserError(
+                    'No puede conciliar en el mismo registro apuntes de cuentas con moneda secundaria y apuntes sin '
+                    'cuando tiene configurada la compañía con "Reconcile On Company Currency"')
+            if not accounts_currency_ids or not accounts_currency_ids[0]:
+                line_ids_commands = []
+
+                # Clean the existing lines.
+                for exchange_diff in self.line_ids.filtered(lambda x: x.flag == 'exchange_diff'):
+                    line_ids_commands.append(Command.unlink(exchange_diff.id))
+
+                    self.line_ids = line_ids_commands
+                return
+        super()._lines_widget_recompute_exchange_diff()
