@@ -255,4 +255,4 @@ class InflationAdjustment(models.TransientModel):
             'ref': _('Ajuste por inflación %s') % (date_to.year),
             'line_ids': [(0, 0, line_data) for line_data in lines],
         })
-        return {}
+        return move._get_access_action()
