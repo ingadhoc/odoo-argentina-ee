@@ -1051,6 +1051,9 @@ class AccountJournal(models.Model):
             move = line.move_id
             internal_type = line.l10n_latam_document_type_id.internal_type
 
+            if not line.partner_id:
+                raise ValidationError(_(
+                    'La percepción %s (id: %d) del comprobante "%s" (id: %d) no tiene partner asociado.') % (line.name, line.id,line.move_id.name, line.move_id.id))
             line.partner_id.ensure_vat()
 
             content = line.tax_line_id.jurisdiction_code or '000'
