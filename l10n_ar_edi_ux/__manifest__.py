@@ -1,6 +1,6 @@
 {
     'name': 'Argentinian Electronic Invoicing UX',
-    'version': "16.0.1.3.0",
+    'version': "16.0.1.4.0",
     'category': 'Localization/Argentina',
     'sequence': 14,
     'author': 'ADHOC SA',
@@ -16,7 +16,6 @@
         'python': ['zeep'],
     },
     'data': [
-        'wizards/res_config_settings_view.xml',
         'wizards/res_partner_update_from_padron_wizard_view.xml',
         'wizards/account_check_action_wizard_view.xml',
         'views/res_partner_view.xml',
@@ -33,5 +32,4 @@
     'installable': True,
     'auto_install': True,
     'application': False,
-    'post_init_hook': 'post_init_hook',
 }
