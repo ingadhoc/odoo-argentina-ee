@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="l10n_ar_boarding_permission_tree" model="ir.ui.view">
+        <field name="name">l10n_ar.boarding_permission.tree</field>
+        <field name="model">l10n_ar.boarding_permission</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="number"/>
+                <field name="dst_country"/>
+                <field name="company_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="l10n_ar_boarding_permission_form" model="ir.ui.view">
+        <field name="name">l10n_ar.boarding_permission.form</field>
+        <field name="model">l10n_ar.boarding_permission</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="number"/>
+                    <field name="dst_country"/>
+                    <field name="company_id"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_l10n_ar_boarding_permission">
+        <field name="name">Permisos de embarque</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">l10n_ar.boarding_permission</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem name="Permisos de embarque" action="action_l10n_ar_boarding_permission" id="menu_action_l10n_ar_boarding_permission" parent="l10n_ar.menu_afip_config"/>
+</odoo>
