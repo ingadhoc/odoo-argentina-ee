@@ -11,6 +11,8 @@
                 <div>
                     <field name="l10n_ar_afip_asoc_period_start" class="oe_inline"/> to <field name="l10n_ar_afip_asoc_period_end" class="oe_inline"/>
                 </div>
+                <field name='l10n_ar_boarding_permission_ids' widget="many2many_tags" invisible="l10n_ar_afip_ws != 'wsfex'" options="{'no_quick_create': True}"/>
+                <button name="check_valid_boarding_permission" string="Validar permisos de embarque" type="object" icon="fa-arrow-right" class="oe_link" colspan="2"/>
             </field>
         </field>
     </record>

@@ -14,6 +14,7 @@ class AccountMove(models.Model):
         string='Associated Perdio End',
         help='Set this field if it is you are reporting debit/credit note and have not related invoice.'
         ' IMPORTANT: This is only applies on "Electronic Invoice - Web Service"')
+    l10n_ar_boarding_permission_ids = fields.Many2many('l10n_ar.boarding_permission', string="Permiso de Embarque", check_company=True, ondelete='restrict', help="Solo se envía esta información si la factura es de exportación y el 'Concepto AFIP' es 'Productos / Exportación definitiva de bienes'")
 
     def _found_related_invoice(self):
         """
@@ -86,3 +87,45 @@ class AccountMove(models.Model):
             raise UserError(msg)
 
         return super(AccountMove, self - purchase_ar_edi_invoices)._post(soft=soft)
+
+    def _get_permissions(self):
+        """ Get 'permiso de embarque' for foreign invoices. """
+        self.ensure_one()
+        res = []
+        invalid_permissions = self.check_valid_boarding_permission()
+        if invalid_permissions:
+            invalid_permissions_str = '\n'.join(invalid_permissions)
+            raise UserError(_('Invalid boarding permissions:\n %s') % invalid_permissions_str)
+        for permiso in self.l10n_ar_boarding_permission_ids:
+            res.append({'Id_permiso': permiso.number, 'Dst_merc': permiso.dst_country.l10n_ar_afip_code})
+        return res
+
+    @api.model
+    def wsfex_get_cae_request(self, last_id, client):
+        """ Set permiso de embarque to foreign invoice. """
+        res = super(AccountMove, self).wsfex_get_cae_request(last_id, client)
+        if int(self.l10n_latam_document_type_id.code) == 19 and int(self.l10n_ar_afip_concept) == 1:
+            ArrayOfPermisions = client.get_type('ns0:ArrayOfPermiso')
+            permisos = self._get_permissions()
+            permiso_existente = "S" if permisos else "N"
+            res.update({'Permisos': ArrayOfPermisions(permisos) if permisos else None})
+            res.update({'Permiso_existente': permiso_existente})
+        return res
+
+    def check_valid_boarding_permission(self):
+        """ This method is used to verify that the Permisos de embarque entered on the export invoice are valid. Receives the authentication credentials, cuit of the represented user, código de despacho and destination country and verifies their existence in the base de datos aduanera. """
+        client, auth = self.company_id._l10n_ar_get_connection(self.journal_id.l10n_ar_afip_ws)._get_client()
+        valid_permissions = []
+        invalid_permissions = []
+        for perm in self.l10n_ar_boarding_permission_ids:
+            response = client.service['FEXCheck_Permiso'](auth, ID_Permiso=perm.number, Dst_merc=int(perm.dst_country.l10n_ar_afip_code))
+            permission_status = response['FEXResultGet']['Status']
+            if permission_status == 'OK':
+                valid_permissions.append(perm.display_name)
+            else:
+                invalid_permissions.append(perm.display_name)
+        valid_permissions_str = ', '.join(valid_permissions)
+        invalid_permissions_str = ', '.join(invalid_permissions)
+        msg = _('Valid boarding permissions: %s') % valid_permissions_str + _('. Invalid boarding permissions: %s') % invalid_permissions_str
+        self.message_post(body=msg)
+        return invalid_permissions
