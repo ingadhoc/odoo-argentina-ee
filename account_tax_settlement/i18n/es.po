@@ -9,10 +9,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 13:46+0000\n"
+"POT-Creation-Date: 2023-11-08 18:27+0000\n"
 "PO-Revision-Date: 2023-01-13 13:46+0000\n"
 "Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2023\n"
-"Language-Team: Spanish (https://www.transifex.com/adhoc/teams/46451/es/)\n"
+"Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -63,19 +63,6 @@ msgstr "Cuenta"
 #: model:ir.model,name:account_tax_settlement.model_account_report
 msgid "Accounting Report"
 msgstr "Informe financiero"
-
-#. module: account_tax_settlement
-#: model:ir.model.fields,field_description:account_tax_settlement.field_account_journal__algolia_search
-#: model:ir.model.fields,field_description:account_tax_settlement.field_account_move__algolia_search
-#: model:ir.model.fields,field_description:account_tax_settlement.field_account_move_line__algolia_search
-#: model:ir.model.fields,field_description:account_tax_settlement.field_account_payment_group__algolia_search
-#: model:ir.model.fields,field_description:account_tax_settlement.field_account_report__algolia_search
-#: model:ir.model.fields,field_description:account_tax_settlement.field_account_tax_settlement_wizard__algolia_search
-#: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard__algolia_search
-#: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard_line__algolia_search
-#: model:ir.model.fields,field_description:account_tax_settlement.field_get_dates_wizard__algolia_search
-msgid "Algolia Search"
-msgstr ""
 
 #. module: account_tax_settlement
 #: model:ir.model.fields,field_description:account_tax_settlement.field_account_report__allow_settlement
@@ -178,6 +165,11 @@ msgstr "Archivos"
 #: model:ir.model.fields,field_description:account_tax_settlement.field_get_dates_wizard__from_date
 msgid "From Date"
 msgstr "Desde Fecha"
+
+#. module: account_tax_settlement
+#: model:ir.model,name:account_tax_settlement.model_account_generic_tax_report_handler
+msgid "Generic Tax Report Custom Handler"
+msgstr "Gestor personalizado de los reportes generales de impuestos"
 
 #. module: account_tax_settlement
 #: model:ir.model.fields,field_description:account_tax_settlement.field_account_tax_settlement_wizard__id
