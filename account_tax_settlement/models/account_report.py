@@ -8,7 +8,7 @@ class AccountReport(models.AbstractModel):
     _inherit = 'account.report'
 
     allow_settlement = fields.Boolean(
-        help='This optin will enable a new button on this report to settle all the lines that are of engine "domain".')
+        help='This option will enable a new button on this report to settle all the lines that are of engine "domain".')
     settlement_title = fields.Char(translate=True)
     settlement_allow_unbalanced = fields.Boolean(
         help='If you enble this option, then an account will be required when creating the settlement entry and '

@@ -6,3 +6,6 @@ class AccountTax(models.Model):
 
     codigo_regimen = fields.Char(string='Codigo de regimen IVA', size=3)
     porcentaje_exclusion = fields.Float(string='Porcentaje de exclusión')
+    codigo_impuesto = fields.Selection([('01', 'Retención Ganancias'),
+                                         ('02', 'Retención IVA'),
+                                         ], string='Codigo de impuesto')

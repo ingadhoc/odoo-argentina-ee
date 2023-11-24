@@ -106,13 +106,13 @@ class AccountMoveLine(models.Model):
         return {
             'name': _('Register Payment'),
             'view_mode': 'form',
-            'res_model': 'account.payment.group',
+            'res_model': 'account.payment',
             'target': 'current',
             'type': 'ir.actions.act_window',
             'context': {
                 'default_partner_type': 'supplier',
-                'default_partner_id': open_move_line_ids.mapped('partner_id').id,
                 'default_to_pay_move_line_ids': open_move_line_ids.ids,
+                'default_payment_type': 'outbound',
                 # We set this because if became from other view and in the context has 'create=False'
                 # you can't crate payment lines (for ej: subscription)
                 'create': True,
@@ -121,6 +121,7 @@ class AccountMoveLine(models.Model):
                 # por defecto, en pago de retenciones, no hacemos double
                 # validation
                 'force_simple': True,
+                'default_partner_id': open_move_line_ids.mapped('partner_id').id,
             },
         }
 

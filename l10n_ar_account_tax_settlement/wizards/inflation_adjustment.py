@@ -23,6 +23,7 @@ class InflationAdjustment(models.TransientModel):
         'account.journal',
         domain=[('type', '=', 'general')],
         required=True,
+        check_company=True
     )
     company_id = fields.Many2one(
         'res.company',
@@ -32,6 +33,7 @@ class InflationAdjustment(models.TransientModel):
         'account.account',
         domain=[('deprecated', '=', False)],
         required=True,
+        check_company=True
     )
     start_index = fields.Float(
         compute='_compute_index',

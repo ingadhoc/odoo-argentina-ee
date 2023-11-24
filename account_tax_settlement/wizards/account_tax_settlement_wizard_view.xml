@@ -9,16 +9,16 @@
                 <field name="report_id" invisible="1"/>
                 <field name="report_settlement_allow_unbalanced" invisible="1"/>
                 <field name="move_line_ids" invisible="1"/>
-                <p attrs="{'invisible': [('report_id', '=', False)]}">
+                <p invisible="not report_id">
                     Se va a crear un asiento de liquidación con la información del reporte. Desea continuar?
                 </p>
-                <p attrs="{'invisible': [('report_id', '!=', False)]}">
+                <p invisible="report_id">
                     Se va a crear un asiento de liquidación para los apuntes seleccionados. Desea continuar?
                 </p>
                 <group>
                     <field name="date"/>
-                    <field name="settlement_journal_id" attrs="{'invisible': [('report_id', '=', False)], 'required': [('report_id', '!=', False)]}" domain="[('company_id', '=', company_id), ('type', '=', 'general')]"/>
-                    <field name="account_id" attrs="{'invisible': [('report_settlement_allow_unbalanced', '=', False)], 'required': [('report_settlement_allow_unbalanced', '!=', False)]}" domain="[('company_id', '=', company_id), ('deprecated', '=', False)]"/>
+                    <field name="settlement_journal_id" invisible="not report_id" required="report_id"/>
+                    <field name="account_id" invisible="not report_settlement_allow_unbalanced" required="report_settlement_allow_unbalanced"/>
                 </group>
                 <footer>
                     <button name="confirm" string="Confirm" type="object" class="oe_highlight"/>

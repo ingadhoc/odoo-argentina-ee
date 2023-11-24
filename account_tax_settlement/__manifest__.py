@@ -14,7 +14,7 @@
         'account_reports',
         # dependencia porque llevamos a pagos y tmb porque usamos el boton
         # en apuntes contables para abrir documento relacionado
-        'account_payment_group',
+        'account_payment_pro'
     ],
     'data': [
         'wizards/account_tax_settlement_wizard_view.xml',

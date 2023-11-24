@@ -7,12 +7,12 @@
         <field name="inherit_id" ref="account.view_account_journal_form"/>
         <field name="arch" type="xml">
             <field name="type" position="after">
-                <field name="tax_settlement" attrs="{'invisible': [('type', '!=','general')]}"/>
+                <field name="tax_settlement" invisible="type != 'general'"/>
                 <!-- <field name="settlement_file_template" attrs="{'invisible': [('tax_settlement', '=', False)]}"/> -->
-                <field name="settlement_tax" attrs="{'invisible': [('tax_settlement', '=', False)]}"/>
-                <field name="settlement_partner_id" attrs="{'invisible': [('tax_settlement', '=', False)], 'required': [('tax_settlement', '!=', False)]}"/>
-                <field name="settlement_account_id" attrs="{'required': [('type', '=','general'), ('tax_settlement', '!=', False)], 'invisible': ['|', ('type', '!=','general'), ('tax_settlement', '=', False)]}" groups="account.group_account_readonly"/>
-                <field name="settlement_account_tag_ids" attrs="{'invisible': [('tax_settlement', '=', False)]}" widget="many2many_tags"/>
+                <field name="settlement_tax" invisible="not tax_settlement"/>
+                <field name="settlement_partner_id" invisible="not tax_settlement" required="tax_settlement"/>
+                <field name="settlement_account_id" invisible="type != 'general' or not tax_settlement" required="type == 'general' and tax_settlement" groups="account.group_account_readonly"/>
+                <field name="settlement_account_tag_ids" invisible="not tax_settlement" widget="many2many_tags"/>
             </field>
         </field>
     </record>

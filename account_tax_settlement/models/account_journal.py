@@ -95,13 +95,14 @@ class AccountJournal(models.Model):
             'name': _('Register Payment'),
             'view_type': 'form',
             'view_mode': 'form',
-            'res_model': 'account.payment.group',
+            'res_model': 'account.payment',
             'view_id': False,
             'target': 'current',
             'type': 'ir.actions.act_window',
             'context': {
                 'default_partner_id': partner.id,
                 'default_partner_type': 'supplier',
+                'default_payment_type': 'outbound'
             },
         }
 

@@ -57,9 +57,9 @@
             </field>
             <tree>
                 <field name="tax_state"/>
-                <button name="button_create_tax_settlement_entry" icon="fa-arrow-right" help="Make a move to settle current tax line" attrs="{'invisible': [('tax_state', '!=', 'to_settle')]}" type="object" string="Settle" />
-                <button name="action_open_tax_settlement_entry" icon="fa-external-link" help="Open Settlement Entry" attrs="{'invisible': [('tax_state', 'not in', ['to_pay', 'paid'])]}" type="object" string="Open" />
-                <button name="action_pay_tax_settlement" icon="fa-dollar" string="Pay" attrs="{'invisible': [('tax_state', '!=', 'to_pay')]}" type="object"/>
+                <button name="button_create_tax_settlement_entry" icon="fa-arrow-right" help="Make a move to settle current tax line" invisible="tax_state != 'to_settle'" type="object" string="Settle" />
+                <button name="action_open_tax_settlement_entry" icon="fa-external-link" help="Open Settlement Entry" invisible="tax_state not in ['to_pay', 'paid']" type="object" string="Open" />
+                <button name="action_pay_tax_settlement" icon="fa-dollar" string="Pay" invisible="tax_state != 'to_pay'" type="object"/>
             </tree>
         </field>
     </record>

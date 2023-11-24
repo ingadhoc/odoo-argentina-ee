@@ -8,6 +8,7 @@
                  <xpath expr="//field[@name='tax_group_id']" position="after">
                     <field name="codigo_regimen"/>
                     <field name="porcentaje_exclusion"/>
+                    <field name="codigo_impuesto"/>
                 </xpath>
             </field>
         </record>

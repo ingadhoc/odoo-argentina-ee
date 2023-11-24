@@ -7,8 +7,8 @@
         <field name="arch" type="xml">
             <field name="filter_date_range" position="before">
                 <field name="allow_settlement"/>
-                <field name="settlement_title" attrs="{'invisible': [('allow_settlement', '=', False)], 'required': [('allow_settlement', '!=', False)]}"/>
-                <field name="settlement_allow_unbalanced" attrs="{'invisible': [('allow_settlement', '=', False)]}"/>
+                <field name="settlement_title" invisible="not allow_settlement" required="allow_settlement"/>
+                <field name="settlement_allow_unbalanced" invisible="not allow_settlement"/>
             </field>
         </field>
     </record>
