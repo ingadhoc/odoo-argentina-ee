@@ -73,21 +73,29 @@ class AccountJournal(models.Model):
 
     @api.constrains('settlement_tax')
     def check_withholding_autmatic_installed(self):
-        account_withholding_automatic = self.env['ir.module.module'].search([
-            ('name', '=', 'account_withholding_automatic'),
+        l10n_ar_withholding_ux = self.env['ir.module.module'].search([
+            ('name', '=', 'l10n_ar_withholding_ux'),
             ('state', '=', 'installed'),
         ])
-        if not account_withholding_automatic and any(self.filtered(
+        if not l10n_ar_withholding_ux and any(self.filtered(
                 lambda x: x.settlement_tax in ['iibb_aplicado_api',
                                                'sicore_aplicado'])):
             raise ValidationError(_(
                 'No puede utilizar exportación a "SICORE Aplicado"'
                 ' o "Perc/Ret IIBB aplicadas API"'
                 ' si no tiene instalado el módulo de retenciones'
-                ' automáticas (account_withholding_automatic)'))
+                ' automáticas (l10n_ar_withholding_ux)'))
+
+    def check_l10n_ar_account_withholding_installed(self):
+        l10n_ar_account_withholding_installed = self.env['ir.module.module'].search([
+            ('name', '=', 'l10n_ar_account_withholding'),
+            ('state', '=', 'installed'),
+        ])
+        if not l10n_ar_account_withholding_installed:
+            raise ValidationError(_(
+                'No se encuentra instalado el módulo "l10n_ar_account_withholding"'))
 
     def iibb_aplicado_dgr_mendoza_files_values(self, move_lines):
-
         self.ensure_one()
         ret = ''
         for line in move_lines:
@@ -97,6 +105,7 @@ class AccountJournal(models.Model):
             payment = line.payment_id
             move = line.move_id
             tax = line.tax_line_id
+            self.check_l10n_ar_account_withholding_installed()
 
             alicuot_line = tax.get_partner_alicuot(partner, line.date)
             if not alicuot_line:
@@ -110,7 +119,6 @@ class AccountJournal(models.Model):
             # Example "30-58710878-6"
             partner.ensure_vat()
             content = partner.l10n_ar_formatted_vat
-
             # Campo 2: Denominación char(80). Apellido y Nombre o Razón Social. Formato: 80 posiciones, se completa con
             # blancos a la derecha.
             # Example "ELECTRICIDAD MAZA SRL                                                           "
@@ -123,7 +131,7 @@ class AccountJournal(models.Model):
             # Campo 4: Comprobante char(12)- Número de Comprobante de Retención/Percepción según Res.40/2012.
             # Formato: 999999999999 (rellenar con ceros (0) a la izquierda) Ejemplo: 000000001521
             # Example "000000027860"
-            content += (payment.withholding_number or '').rjust(12, '0')[:12]  # we are forcing 12 first numbers always.
+            content += (line.withholding_id.name or '').rjust(12, '0')[:12]  # we are forcing 12 first numbers always.
 
             # Campo 5: Fecha Ret./Perc. char(8)- Fecha de efectuada la retención / percepción (ddmmaaaa)
             # Example "16052020"
@@ -132,7 +140,7 @@ class AccountJournal(models.Model):
             # Campo 6. Base Imponible char(15). Formato: 999999999999.99 (doce enteros, punto decimal y dos decimales,
             # dejando espacios en blanco a izquierda para completar las 15 posiciones). Ejemplo: "         345.21"
             # Example "000000027229.33"
-            content += '%15.2f' % payment.withholdable_base_amount
+            content += '%15.2f' % line.withholding_id.withholdable_base_amount
 
             # Campo 7: Alícuota char(5). Alícuota para la retención y/o percepción. Formato: 99.99 (dos enteros,
             # punto decimal y dos decimales. Ejemplo: " 3.00"
@@ -154,7 +162,6 @@ class AccountJournal(models.Model):
         cuit = move_line.company_id.vat
         periodo = fields.Date.from_string(move_line.date).strftime('%Y') or ""  # 'pppp' AÑO '2020'
         cuota = fields.Date.from_string(move_line.date).strftime('%m') or ""  # 'cc'
-
         return [{
             'txt_filename': '%s%s%s%s.txt' % (tipo_agente, cuit, periodo, cuota),
             'txt_content': ret,
@@ -203,6 +210,7 @@ class AccountJournal(models.Model):
         self.ensure_one()
         ret = ''
         perc = ''
+        self.check_l10n_ar_account_withholding_installed()
 
         for line in move_lines:
             partner = line.partner_id
@@ -227,7 +235,7 @@ class AccountJournal(models.Model):
                     or '000'
                 articulo_inciso_retiene = \
                     alicuot_line.api_codigo_articulo_percepcion
-            elif tax.type_tax_use in ['customer', 'supplier'] and \
+            elif tax.l10n_ar_withholding_payment_type in ['customer', 'supplier'] and \
                     tax.withholding_type == 'partner_tax':
                 content = '1'
                 alicuot = alicuot_line.alicuota_retencion
@@ -257,16 +265,18 @@ class AccountJournal(models.Model):
             # 4 - tipo de comprobante y
             # 5 - letra de comprobante
             internal_type = line.l10n_latam_document_type_id.internal_type
-            move = line.move_id
+            # No se si esto es correcto en 17: si no tiene internal type entonces es pago
+            if internal_type:
+                move = line.move_id
 
-            if internal_type in ('invoice'):
+            if internal_type and internal_type in ('invoice'):
                 # factura
                 content += '01' + line.l10n_latam_document_type_id.l10n_ar_letter
 
-            elif internal_type == 'debit_note':
+            elif internal_type and internal_type == 'debit_note':
                 # ND
                 content += '02' + line.l10n_latam_document_type_id.l10n_ar_letter
-            elif internal_type == 'credit_note':
+            elif internal_type and internal_type == 'credit_note':
                 content += '10' + line.l10n_latam_document_type_id.l10n_ar_letter
             else:
                 # orden de pago (sin letra)
@@ -277,7 +287,7 @@ class AccountJournal(models.Model):
                 content += '03 '
 
             # 6 - numero comprobante Texto(16)
-            if internal_type in ('invoice', 'credit_note', 'debit_note'):
+            if internal_type and internal_type in ('invoice', 'credit_note', 'debit_note'):
                 # TODO el aplicativo deberia empezar a aceptar 5 digitos
                 pos, number = get_pos_and_number(move.l10n_latam_document_number)
                 # versión 4.0 de siprib release 0 no acepta 5 dígitos aún
@@ -366,7 +376,7 @@ class AccountJournal(models.Model):
                 base_amount = amounts['vat_taxable_amount']
             else:
                 vat_amount = 0.0
-                base_amount = line.payment_id and line.payment_id.withholdable_base_amount or 0.0
+                base_amount = line.payment_id and line.withholding_id.withholdable_base_amount or 0.0
             content += format_amount(vat_amount, 10, 2)
 
             # 18 - Base Imponible para el cálculo
@@ -416,7 +426,7 @@ class AccountJournal(models.Model):
 
             if tax.type_tax_use in ['sale', 'purchase']:
                 perc += content
-            elif tax.type_tax_use in ['customer', 'supplier']:
+            elif tax.l10n_ar_withholding_payment_type in ['customer', 'supplier']:
                 ret += content
 
         # return [
@@ -450,6 +460,7 @@ class AccountJournal(models.Model):
         credito = ''
 
         company_currency = self.company_id.currency_id
+        self.check_l10n_ar_account_withholding_installed()
         for line in move_lines.sorted('date'):
 
             # pay_group = payment.payment_group_id
@@ -478,7 +489,7 @@ class AccountJournal(models.Model):
                 es_percepcion = True
                 content = '2'
                 alicuot = alicuot_line.alicuota_percepcion
-            elif tax.type_tax_use in ['customer', 'supplier']:
+            elif tax.l10n_ar_withholding_payment_type in ['customer', 'supplier']:
                     # tax.withholding_type == 'partner_tax':
                 content = '1'
                 alicuot = alicuot_line.alicuota_retencion
@@ -596,13 +607,12 @@ class AccountJournal(models.Model):
             content += fields.Date.from_string(move.date).strftime('%d/%m/%Y')
 
             # obtenemos montos de los comprobantes
-            payment_group = line.payment_id.payment_group_id
-            if payment_group:
+            if payment:
                 # solo en comprobantes A, M segun especificacion
                 vat_amount = 0.0
-                total_amount = float_round(payment_group.payments_amount, precision_digits=2)
+                total_amount = float_round(payment.amount_total_in_currency_signed, precision_digits=2)
                 # es lo mismo que payment_group.matched_amount_untaxed
-                taxable_amount = float_round(payment.withholdable_base_amount, precision_digits=2)
+                taxable_amount = float_round(line.withholding_id.withholdable_base_amount, precision_digits=2)
 
                 # lo sacamos por diferencia
                 other_taxes_amount = company_currency.round(
@@ -635,7 +645,7 @@ class AccountJournal(models.Model):
             content += format_amount(total_amount, 16, 2, ',')
 
             # 9 - Nro de certificado propio
-            content += (payment.withholding_number or '').rjust(16, ' ')
+            content += (line.withholding_id.name or '').rjust(16, ' ')
 
             # 10 - Tipo de documento del Retenido
             # vat
@@ -842,6 +852,7 @@ class AccountJournal(models.Model):
                 'facturas lo cual es requerido para generar el TXT'))
 
         line_nbr = 1
+        self.check_l10n_ar_account_withholding_installed()
         for line in move_lines.filtered('payment_id'):
             alicuot_line = line.tax_line_id.get_partner_alicuot(
                 line.partner_id, line.date)
@@ -869,7 +880,7 @@ class AccountJournal(models.Model):
 
             # 4 Número del comprobante
             content.append('%012d' % int(
-                re.sub('[^0-9]', '', line.payment_id.withholding_number or '')))
+                re.sub('[^0-9]', '', line.payment_id.name or '')))
 
             # 5 Cuit del contribuyene
             content.append(line.partner_id.ensure_vat())
@@ -880,7 +891,7 @@ class AccountJournal(models.Model):
 
             # 7 Monto sujeto a percepción
             content.append(format_amount(
-                payment.withholdable_base_amount, 12, 2, '.'))
+                line.withholding_id.withholdable_base_amount, 12, 2, '.'))
 
             # 8 alicuota de la retencion
             content.append(format_amount(
@@ -915,7 +926,7 @@ class AccountJournal(models.Model):
                 content.append(fields.Date.from_string(line.date).strftime('%d/%m/%Y'))
 
                 # 14 Número de Constancia - Numeric(14)
-                content.append('%014s' % int(re.sub('[^0-9]', '', payment.withholding_number or '0')[:14]))
+                content.append('%014s' % int(re.sub('[^0-9]', '', line.withholding_id.name or '0')[:14]))
 
                 # 15 Número de Constancia original (sólo para las Anulaciones –ver códigos por jur-)  - Numeric(14)
                 original_invoice = line.move_id._found_related_invoice() or line.move_id
@@ -1053,7 +1064,7 @@ class AccountJournal(models.Model):
 
             if not line.partner_id:
                 raise ValidationError(_(
-                    'La percepción %s (id: %d) del comprobante "%s" (id: %d) no tiene partner asociado.') % (line.name, line.id,line.move_id.name, line.move_id.id))
+                    'La percepción %s (id: %d) del comprobante "%s" (id: %d) no tiene partner asociado.') % (line.withholding_id.name, line.id,line.move_id.name, line.move_id.id))
             line.partner_id.ensure_vat()
 
             content = line.tax_line_id.jurisdiction_code or '000'
@@ -1066,7 +1077,7 @@ class AccountJournal(models.Model):
             # del payment group
             if payment:
                 # el numero de la retencion
-                pos, number = get_pos_and_number(payment.withholding_number)
+                pos, number = get_pos_and_number(line.withholding_id.name)
                 content += '{:>04s}'.format(pos)
                 content += '{:>016s}'.format(number)
             else:
@@ -1152,7 +1163,6 @@ class AccountJournal(models.Model):
                     'seteada') % (partner.name, partner.id))
 
             payment = line.payment_id
-            pay_group = payment.payment_group_id
             move = line.move_id
 
             #si tengo payment es una retención, sino es una percepción y tengo que sacar la información de la factura (del move)
@@ -1163,15 +1173,15 @@ class AccountJournal(models.Model):
 
                 # Fecha Emision Comprobante      [10] (dd/mm/yyyy)
                 content += fields.Date.from_string(
-                    pay_group.payment_date).strftime('%d/%m/%Y')
+                    line.date).strftime('%d/%m/%Y')
                 # Numero Comprobante            [16]
                 content += '%016d' % int(re.sub('[^0-9]', '', move.l10n_latam_document_number))
                 #Importe del comprobante
                 codop = '1'
                 issue_date = payment.date
-                amount_tot = abs(payment.payment_group_id.payments_amount)
+                amount_tot = abs(payment.l10n_ar_amount_total)
                 # withholdable_base_amount es para ret de gcias, withholding_base_amount es para ret de iva
-                base_amount = payment.withholdable_base_amount or payment.withholding_base_amount
+                base_amount = line.withholding_id.withholdable_base_amount or line.withholding_id.withholdable_base_amount
 
             elif move.is_invoice():
                 # Codigo del Comprobante         [ 2]
@@ -1216,26 +1226,31 @@ class AccountJournal(models.Model):
             # Codigo de Impuesto             [ 4]
             # Codigo de Regimen              [ 3]
             codcond = '01'
-            if line.tax_line_id.tax_group_id == self.env.ref('l10n_ar_ux.tax_group_retencion_ganancias'):
-                content += '0217'
-                regimen = pay_group.regimen_ganancias_id
-                # necesitamos lo de filter porque hay dos regimenes que le
-                # agregamos caracteres
-                content += regimen and '%03d' % int(''.join(filter(
+
+            if line.tax_line_id.l10n_ar_withholding_payment_type:
+                # 01 --> retención ganancias
+                if line.tax_line_id.codigo_impuesto == '01':
+                    content += '0217'
+                    regimen = payment.regimen_ganancias_id
+                    # necesitamos lo de filter porque hay dos regimenes que le
+                    # agregamos caracteres
+                    content += regimen and '%03d' % int(''.join(filter(
                     str.isdigit, str(regimen.codigo_de_regimen)))) or '000'
-            elif line.tax_line_id.tax_group_id == self.env.ref('l10n_ar_ux.tax_group_retencion_iva'):
-                content += '0767'
-                # por ahora el unico implementado es para factura M
-                content += '%03d' % int(line.tax_line_id.codigo_regimen) if line.tax_line_id.codigo_regimen else '499'
-                if line.tax_line_id.codigo_regimen == '602':
-                    codcond = '13' if line.tax_line_id.amount == 3 else '14'
-            elif line.tax_line_id.tax_group_id == self.env.ref('l10n_ar.tax_group_percepcion_iva'):
+                # 02 --> retención iva
+                elif line.tax_line_id.codigo_impuesto == '02':
+                    content += '0767'
+                    # por ahora el unico implementado es para factura M
+                    content += '%03d' % int(line.tax_line_id.codigo_regimen) if line.tax_line_id.codigo_regimen else '499'
+                    if line.tax_line_id.codigo_regimen == '602':
+                        codcond = '13' if line.tax_line_id.amount == 3 else '14'
+                else:
+                    raise ValidationError(_('Código de impuestos %s no implementado para SICORE') % line.tax_line_id.codigo_impuesto)
+            else:
+                # Percepción de IVA
                 content += '0767'
                 content +=  '%03d' % int(line.tax_line_id.codigo_regimen) # (ver account tax) DUDA cómo le aplico el código de régimen a las facturas viejas
                 if line.tax_line_id.codigo_regimen == '602':
                     codcond = '13' if line.tax_line_id.amount == 3 else '14'
-            else:
-                raise ValidationError(_('Grupos de impuestos %s no implementados para SICORE') % line.tax_line_id.tax_group_id.name)
 
             # Codigo de Operacion            [ 1]
             content += codop  # TODO: ???? DUDA: SERÍA PARA VER SI ES RETENCION O PERCEPCION
@@ -1289,13 +1304,20 @@ class AccountJournal(models.Model):
         for line in move_lines.sorted(key=lambda r: (r.date, r.id)):
             if line.payment_id:
                 date = line.payment_id.date
+                # cuit (req): 11
                 content += line.partner_id.ensure_vat()
+                # razon_soc (req): 80
                 content += line.partner_id.name.ljust(80)[:80]
-                content += '%010d' % int(line.name)
+                # nro_certificado: 10
+                content += '%010d' % int(line.withholding_id.name)
+                # fecha_ret: 10 (formato "dd/mm/aaaa")
                 content += fields.Date.from_string(date).strftime('%d/%m/%Y')
-                content += '%012.2f' % line.payment_id.withholdable_base_amount
-                content += "{:0>16.6f}".format(line.payment_id.tax_withholding_id._get_rule(line.payment_id.payment_group_id).percentage * 100)
-                content += '%012.2f' % line.payment_id.computed_withholding_amount
+                # base_imp: 09.2
+                content += '%012.2f' % line.withholding_id.withholdable_base_amount
+                # alicuota: 09.6 . En principio por ahora lo estamos haciendo el cálculo de retención "basado en regla".
+                content += "{:0>16.6f}".format(line.withholding_id.tax_id._get_rule(line.payment_id).percentage * 100)
+                # importe (req): 09.2
+                content += '%012.2f' % abs(line.amount_currency)
                 content += '\n'
 
         return [{
@@ -1308,6 +1330,7 @@ class AccountJournal(models.Model):
         """
         self.ensure_one()
         content = ''
+        self.check_l10n_ar_account_withholding_installed()
         for line in move_lines.sorted(key=lambda r: (r.date, r.id)):
             payment = line.payment_id
             if payment:
@@ -1317,7 +1340,7 @@ class AccountJournal(models.Model):
                 # Tipo de comprobante
                 #    Aquí vemos si se está pagando al menos una nota de crédito
                 #    si es así interpretamos que es corresponde a un CAR
-                matched_move_code_prefix = payment.payment_group_id.matched_move_line_ids.move_id.l10n_latam_document_type_id.mapped('doc_code_prefix')
+                matched_move_code_prefix = payment.to_pay_move_line_ids.move_id.l10n_latam_document_type_id.mapped('doc_code_prefix')
                 is_car = False
                 if any(prefix[:3]=='NC-' for prefix in matched_move_code_prefix):
                     is_car = True
@@ -1326,7 +1349,7 @@ class AccountJournal(models.Model):
                     content += 'CR' + ','
 
                 # Punto de Venta + Nro de Comprobante
-                content += payment.withholding_number.replace('-','')[:20] + ','
+                content += line.withholding_id.name.replace('-','')[:20] + ','
 
                 # Razón Social
                 content += payment.partner_id.name.replace(',','')[:100] + ','
@@ -1344,7 +1367,7 @@ class AccountJournal(models.Model):
                 content += payment.partner_id.l10n_ar_formatted_vat + ','
 
                 # Monto de operación
-                content += '%.2f' % (payment.withholdable_base_amount) + ','
+                content += '%.2f' % (line.withholding_id.withholdable_base_amount) + ','
 
                 # Alícuota
                 alicuot_line = line.tax_line_id.get_partner_alicuot(
@@ -1366,38 +1389,40 @@ class AccountJournal(models.Model):
                     # Comprobante que dio origen a la nota de crédito
 
                     # pago -> grupo de pagos --> nc --> factura --> grupo de pagos --> pago (con retenc misiones)
-                    origin_invoice = payment.payment_group_id.matched_move_line_ids.move_id.reversed_entry_id
-                    tax_withholding_id = payment.tax_withholding_id
-                    for payment_group in origin_invoice.payment_group_ids:
+                    origin_invoice = payment.to_pay_move_line_ids.move_id.reversed_entry_id
+                    tax_withholding_id = line.withholding_id.tax_id
+                    for pay in origin_invoice.invoice_payments_widget.get('content'):
+                        pay_id = pay['account_payment_id']
+                        retenciones_pago_fact_original = self.env['account.payment'].browse(pay_id).l10n_ar_withholding_line_ids
                         cant_ret = 0
-                        for pay_cr in payment_group.payment_ids:
-                            if pay_cr.tax_withholding_id == tax_withholding_id:
-                                origin_payment_cr = pay_cr
+                        for withholding in retenciones_pago_fact_original:
+                            if withholding.tax_id == line.withholding_id.tax_id:
+                                origin_withholding_cr = withholding
                                 cant_ret += 1
-                        if cant_ret != 1 or origin_payment_cr.amount != payment.amount:
-                            raise ValidationError("Solo se admitirá un comprobante de anulación de retención referido a un solo comprobante de retención y la anulación debe ser por un importe igual al importe total de la retención original. Revisar recibo/s %s. El recibo que anula la retención es %s (id: %s)" % (origin_invoice.payment_group_ids.mapped('name'), payment.payment_group_id.name, payment.payment_group_id.id))
+                        if cant_ret != 1 or origin_withholding_cr.amount != line.withholding_id.amount:
+                            raise ValidationError("Solo se admitirá un comprobante de anulación de retención referido a un solo comprobante de retención y la anulación debe ser por un importe igual al importe total de la retención original. Revisar pago/s %s. El pago que anula la retención es %s (id: %s)" % (retenciones_pago_fact_original.payment_id.mapped('name'), line.payment_id.name, line.payment_id.id))
 
-                        payment_date = payment.date
-                        origin_payment_cr_date = origin_payment_cr.date
-                        if (payment_date.year - origin_payment_cr_date.year) * 12 + (payment_date.month - origin_payment_cr_date.month) > 2:
-                            raise ValidationError("Solo se admitirá un comprobante de anulación de retención para un comprobante de origen dentro de los dos períodos anteriores. Revisar recibo/s %s. El recibo que anula la retención es %s (id: %s)".format(origin_invoice.payment_group_ids.mapped('name'), payment.payment_group_id.name, payment.payment_group_id.id))
+                        payment_date = line.date
+                        origin_line_cr_date = origin_withholding_cr.payment_id.date
+                        if (payment_date.year - origin_line_cr_date.year) * 12 + (payment_date.month - origin_line_cr_date.month) > 2:
+                            raise ValidationError("Solo se admitirá un comprobante de anulación de retención para un comprobante de origen dentro de los dos períodos anteriores. Revisar pago/s %s. El pago que anula la retención es %s (id: %s)".format(retenciones_pago_fact_original.payment_id.mapped('name'), line.payment_id.name, line.payment_id.id))
 
-                        if payment_date < origin_payment_cr_date:
-                            raise ValidationError("La fecha del comprobante de anulación de retención no puede ser anterior al de la retención que está anulando. Revisar recibo/s %s. El recibo que anula la retención es %s (id: %s)".format(origin_invoice.payment_group_ids.mapped('name'), payment.payment_group_id.name, payment.payment_group_id.id))
+                        if payment_date < origin_line_cr_date:
+                            raise ValidationError("La fecha del comprobante de anulación de retención no puede ser anterior al de la retención que está anulando. Revisar pago/s %s. El pago que anula la retención es %s (id: %s)".format(retenciones_pago_fact_original.payment_id.mapped('name'), line.payment_id.name, line.payment_id.id))
 
-                        payment_partner_vat = payment.partner_id.ensure_vat()
-                        origin_payment_partner_vat = origin_payment_cr.partner_id.ensure_vat()
+                        payment_partner_vat = line.partner_id.ensure_vat()
+                        origin_payment_partner_vat = origin_withholding_cr.payment_id.partner_id.ensure_vat()
                         if payment_partner_vat != origin_payment_partner_vat:
-                            raise ValidationError("Deben coincidir los CUIT emisores del comprobante de anulación de retención y del comprobante de retención original.  Revisar recibo/s %s. El recibo que anula la retención es %s (id: %s)".format(origin_invoice.payment_group_ids.mapped('name'), payment.payment_group_id.name, payment.payment_group_id.id))
+                            raise ValidationError("Deben coincidir los CUIT emisores del comprobante de anulación de retención y del comprobante de retención original.  Revisar pago/s %s. El pago que anula la retención es %s (id: %s)".format(retenciones_pago_fact_original.payment_id.mapped('name'), line.payment_id.name, line.payment_id.id))
 
                     # Nro de comprobante que dio origen a la nota de crédito
-                    content += origin_payment_cr.withholding_number.replace('-','')[:20] + ','
+                    content += origin_withholding_cr.name.replace('-','')[:20] + ','
 
                     # Fecha del comprobante que dio origen a la nota de crédito
-                    content += origin_payment_cr.date.strftime('%d-%m-%Y') + ','
+                    content += origin_withholding_cr.payment_id.date.strftime('%d-%m-%Y') + ','
 
                     # CUIT del comprobante que dio origen a la nota de crédito
-                    partner_vat = origin_payment_cr.partner_id.ensure_vat()
+                    partner_vat = origin_withholding_cr.payment_id.partner_id.ensure_vat()
                     content += partner_vat
                 else:
                     content += ',,,'
@@ -1486,12 +1511,12 @@ class AccountJournal(models.Model):
             payment = line.payment_id
             if payment:
                 # regimen (long 3)
-                codigo_regimen = payment.tax_withholding_id.codigo_regimen
+                codigo_regimen = line.withholding_id.tax_id.codigo_regimen
                 if not codigo_regimen:
                     raise ValidationError(_('No hay código de régimen en la configuración del impuesto "%s"') % (
-                        payment.tax_withholding_id.name))
+                        line.withholding_id.tax_id.name))
                 if len(codigo_regimen) < 3:
-                    raise ValidationError(_('El código de régimen tiene que tener 3 dígitos en la configuración del impuesto "%s"') % (payment.tax_withholding_id.name))
+                    raise ValidationError(_('El código de régimen tiene que tener 3 dígitos en la configuración del impuesto "%s"') % (line.withholding_id.tax_id.name))
                 content += codigo_regimen[:3]
 
                 # cuit agente (long 11)
@@ -1501,7 +1526,7 @@ class AccountJournal(models.Model):
                 content += fields.Date.from_string(payment.date).strftime('%d/%m/%Y')
 
                 # número comprobante (long 16)
-                content += re.sub('[^0-9\.]', '', payment.withholding_number).ljust(16, '0')
+                content += re.sub('[^0-9\.]', '', line.withholding_id.name).ljust(16, '0')
 
                 # Aclaración importante: estamos agregando ceros entre el número de comprobante y el importe de retención
                 # esto contradice la especificación que dice que debe haber espacios pero en la tarea 31418 nos indicaron

@@ -11,6 +11,7 @@ class AccountJournal(models.Model):
         return res
 
     def _fill_tax_settlement_dashboard_data(self, dashboard_data):
+        """ En diarios de liquidación en vista kanban agregamos al lado del botoncitos 'Líneas a liquidar' la cantidad de líneas de liquidar y el importe y al lado del botoncito 'Saldo a pagar' agregamos el importe """
         tax_settlement_journals = self.filtered(lambda journal: journal.tax_settlement != False)
         if not tax_settlement_journals:
             return
@@ -33,10 +34,12 @@ class AccountJournal(models.Model):
             tax_settlement = self._context.get('tax_settlement', False)
             debt_balance = self._context.get('debt_balance', False)
             if tax_settlement:
+                # Ingresa aquí al entrar en vista Kanban en diario de liquidacion en el botoncito "Líneas a liquidar"
                 action = self.env["ir.actions.actions"]._for_xml_id('account_tax_settlement.action_account_tax_move_line')
                 action['domain'] = self._get_tax_settlement_lines_domain_by_tags()
                 return action
             elif debt_balance and self.settlement_partner_id:
+                # Ingresa aquí al entrar en vista Kanban en diario de liquidacion en el botoncito 'Saldo a pagar'
                 action = self.settlement_partner_id.open_partner_ledger()
                 ctx = safe_eval(action.get('context'))
                 ctx.update({
