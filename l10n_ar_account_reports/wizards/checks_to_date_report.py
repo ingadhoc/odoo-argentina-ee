@@ -59,7 +59,7 @@ class AccountCheckToDateReportWizard(models.TransientModel):
                     ) t
                     LEFT JOIN
                     (
-                        SELECT ap.id as check_id, afr_full.name as conciliation_name, aml_2.date as operation_date, aml.id as aml_1, aml_2.id as aml_2
+                        SELECT ap.id as check_id, aml_2.date as operation_date, aml.id as aml_1, aml_2.id as aml_2
                         FROM account_payment ap
                         JOIN account_payment_method AS apm ON apm.id = ap.payment_method_id
                         JOIN account_move_line as aml ON ap.move_id = aml.move_id
