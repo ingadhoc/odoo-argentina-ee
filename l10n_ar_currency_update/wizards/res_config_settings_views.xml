@@ -6,8 +6,13 @@
         <field name="model">res.config.settings</field>
         <field name="inherit_id" ref="currency_rate_live.res_config_settings_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//div[@id='update_currency_live']/../div[2]" position="after">
-                <div attrs="{'invisible': ['|', ('module_currency_rate_live', '=', False), ('currency_provider', '!=', 'afip')]}" groups="base.group_no_one">
+
+            <setting id="update_exchange_rates" position="attributes">
+                <attribute name="company_dependent">1</attribute>
+            </setting>
+
+            <xpath expr="//button[@name='update_currency_rates_manually']/.." position="after">
+                <div invisible="not module_currency_rate_live or currency_provider != 'afip'" groups="base.group_no_one">
                     <div class="row">
                         <label for="rate_perc" class="col-md-3 o_light_label"/>
                         <field name="rate_perc"/>
@@ -19,17 +24,14 @@
                 </div>
             </xpath>
 
-            <label for="module_currency_rate_live" position="after">
-                <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." groups="base.group_multi_company"/>
-            </label>
-
             <button name="update_currency_rates_manually" position="attributes">
-                <attribute name="attrs">{'invisible': [('currency_interval_unit', '!=', 'manually')]}</attribute>
+                <attribute name="invisible">currency_interval_unit != 'manually'</attribute>
             </button>
 
+            <!-- Do not let the user to unistall the module -->
             <field name="module_currency_rate_live" position="attributes">
-                <attribute name="invisible">1</attribute>
-            </field>
+                    <attribute name="readonly">1</attribute>
+             </field>
 
         </field>
     </record>
