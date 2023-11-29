@@ -8,16 +8,6 @@ _logger = logging.getLogger(__name__)
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
-    def update_partner_data_from_afip(self):
-        """ Funcion que llama al wizard para actualizar data de partners desde afip sin abrir wizard.
-        Podríamos mejorar  pasando un argumento para sobreescribir o no valores que esten o no definidos
-        Podriamos mejorarlo moviento lógica del wizard a esta funcion y que el wizard use este método. """
-        for rec in self:
-            wiz = rec.env['res.partner.update.from.padron.wizard'].with_context(
-                active_ids=rec.ids, active_model=rec._name).create({})
-            wiz.change_partner()
-            wiz.update_selection()
-
     def button_update_partner_data_from_afip(self):
         self.ensure_one()
         wiz = self.env['res.partner.update.from.padron.wizard'].with_context(
