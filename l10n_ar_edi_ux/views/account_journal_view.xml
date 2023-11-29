@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="l10n_ar.view_account_journal_form"/>
         <field name="arch" type="xml">
             <button name="l10n_ar_check_afip_pos_number" position="after">
-                    <button name="l10n_ar_check_afip_doc_types" string="Get Document Types" help="Get valid document types for this webservice" type="object" attrs="{'invisible':[('l10n_ar_afip_ws', '=', False)]}"/>
+                    <button name="l10n_ar_check_afip_doc_types" string="Get Document Types" help="Get valid document types for this webservice" type="object" invisible="not l10n_ar_afip_ws"/>
             </button>
         </field>
     </record>
