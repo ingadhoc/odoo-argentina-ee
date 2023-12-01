@@ -6,7 +6,7 @@ class AccountMovetLine(models.Model):
     _inherit = 'account.move.line'
 
     filter_amount = fields.Float(compute="compute_filter_amout", search='_search_filter_amount')
-    
+
     def compute_filter_amout(self):
         self.filter_amount = False
 
