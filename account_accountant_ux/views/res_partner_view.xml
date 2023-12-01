@@ -18,7 +18,7 @@
                     icon="fa-list"
                     name="%(account.action_account_moves_ledger_partner)d"
                     string="Partner Ledger"
-                    context="{'search_default_partner_id': active_id}"
+                    context="{'search_default_partner_id': id}"
                     >
                 </button>
             </button>

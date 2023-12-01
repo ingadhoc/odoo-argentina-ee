@@ -19,7 +19,7 @@
 ##############################################################################
 {
     'name': 'Accounting Accountant UX',
-    'version': "16.0.2.1.0",
+    'version': "17.0.1.0.0",
     'category': 'Accounting',
     'sequence': 14,
     'summary': '',
@@ -31,7 +31,7 @@
     'depends': [
         'account_reports',
         'account_followup',
-        'account_payment_group',
+        'account_ux',
     ],
     'data': [
         'views/res_partner_view.xml',
@@ -43,7 +43,7 @@
     ],
     'demo': [
     ],
-    'installable': False,
+    'installable': True,
     'auto_install': True,
     'application': False,
 }
