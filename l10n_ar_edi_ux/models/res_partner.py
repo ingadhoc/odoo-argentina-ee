@@ -79,6 +79,43 @@ class ResPartner(models.Model):
 
         actividades = [str(act["idActividad"])
                        for act in data_rg.get("actividad", []) + data_mt_actividades]
+
+        def check_activity(data_rg):
+            res = []
+            new_activity = {}
+            afip_activities = data_rg.get('actividad')
+            activity_codes = self.actividades_padron.sudo().search([]).mapped('code')
+            for act in afip_activities:
+                if str(act.get('idActividad')) not in activity_codes:
+                    new_activity.update({
+                        'code': act.get('idActividad'),
+                        'name': act.get('descripcionActividad')
+                    })
+                    activity = self.env['afip.activity'].create(new_activity)
+                    res.append(activity)
+                else:
+                    res.append(act)
+            return res
+        check_activity(data_rg)
+
+        def check_taxes(data_mt, data_rg):
+            res = []
+            new_tax = {}
+            afip_taxes = data_mt.get("impuesto", []) + data_rg.get("impuesto", [])
+            tax_codes = self.impuestos_padron.sudo().search([]).mapped('code')
+            for imp in afip_taxes:
+                if str(imp.get('idImpuesto')) not in tax_codes:
+                    new_tax.update({
+                        'code': imp.get('idImpuesto'),
+                        'name': imp.get('descripcionImpuesto')
+                    })
+                    tax = self.env['afip.tax'].create(new_tax)
+                    res.append(tax)
+                else:
+                    res.append(imp)
+            return res
+        check_taxes(data_mt, data_rg)
+
         cat_mt = data_mt.get("categoriaMonotributo", {})
         monotributo = "S" if cat_mt else "N"
         map_pronvincias = {
