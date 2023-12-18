@@ -1,4 +1,4 @@
-from odoo import models, _
+from odoo import models, fields, _, api
 from odoo.exceptions import UserError
 from odoo.tools import format_date
 import datetime
@@ -6,6 +6,11 @@ import datetime
 
 class AccountJournal(models.Model):
     _inherit = "account.journal"
+
+    check_add_debit_button = fields.Boolean(
+        string="Agregar botón de débito",
+        help="Si marca esta opción podrá debitar los cheques con un botón desde los mismo.")
+    check_debit_journal_id = fields.Many2one('account.journal', compute='_compute_check_debit_journal', store=True, readonly=False, domain="[('company_id', '=', company_id), ('type', '=', 'general')]", help="Debe seleccionar un diario de tipo 'Varios' donde se realizará el asiento del débito")
 
     def l10n_ar_check_afip_doc_types(self):
         """ This method shows the valid document types for each Webservice. """
@@ -62,3 +67,9 @@ class AccountJournal(models.Model):
                 line += " hasta: " + date_to
             msg += line + "\n"
         return msg
+
+    @api.depends('check_add_debit_button')
+    def _compute_check_debit_journal(self):
+        """ En caso de que el campo 'Agregar botón de débito' (check_debit_journal_id) sea 'False' entonces debemos asegurarnos que el campo check_debit_journal_id esté vacío para evitar inconvenientes en caso de necesitar debitar un cheque. """
+        for journal in self.filtered(lambda x: not x.check_add_debit_button):
+            journal.check_debit_journal_id = False
