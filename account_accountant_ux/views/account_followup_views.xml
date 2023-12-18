@@ -7,7 +7,7 @@
         <field name="arch" type="xml">
             <field name="amount_residual_currency" position="after">
                 <field name="amount_residual" string="Residual Amount (cc)" help="Amount residual on company currency" widget="monetary" options="{'currency_field': 'company_currency_id'}"/>
-                <field name="company_currency_id" invisible="1"/>
+                <field name="company_currency_id" column_invisible="True"/>
             </field>
         </field>
     </record>

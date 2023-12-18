@@ -1,6 +1,6 @@
 {
     'name': 'Argentinian Electronic Invoicing UX',
-    'version': "17.0.1.1.0",
+    'version': "17.0.1.2.0",
     'category': 'Localization/Argentina',
     'sequence': 14,
     'author': 'ADHOC SA',
@@ -10,16 +10,19 @@
     'depends': [
         'l10n_ar_ux',
         'l10n_ar_edi',
+        'account_accountant',
     ],
     'external_dependencies': {
         'python': ['zeep'],
     },
     'data': [
         'wizards/res_partner_update_from_padron_wizard_view.xml',
+        'wizards/account_check_action_wizard_view.xml',
         'views/res_partner_view.xml',
         'views/account_move_view.xml',
         'views/account_journal_view.xml',
         'views/l10n_ar_boarding_permission_view.xml',
+        'views/account_payment_view.xml',
         'security/ir.model.access.csv',
     ],
     'demo': [
