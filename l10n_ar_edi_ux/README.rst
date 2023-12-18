@@ -19,6 +19,7 @@ Argentinian Electronic Invoicing UX
 * Implement electronic validation of documents created as purchase documents (for eg. liquido producto). There is an open PR to include this in Odoo standard
 * Disable l10n_ar_ux view that add Argentinian Localization accounting settings and use the one added by l10n_ar_edi
 * Logic to connecto to AFIP Padron using connection approach in enterprise module l10n_ar_edi
+* Debit checks from payments. This functionality is included here because we use methods from enterprise (account_accountant).
 
 About Padron:
 
