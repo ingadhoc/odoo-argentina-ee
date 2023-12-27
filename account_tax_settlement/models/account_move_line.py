@@ -133,6 +133,6 @@ class AccountMoveLine(models.Model):
         """
         if not journal:
             journal = self.get_tax_settlement_journal()
-        res = self.env['download_files_wizard'].action_get_files(
+        res = self.env['res.download_files_wizard'].action_get_files(
             journal.get_tax_settlement_files_values(self))
         return res

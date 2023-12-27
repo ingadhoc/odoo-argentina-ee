@@ -507,13 +507,13 @@ msgid "Wizard"
 msgstr "Asistente"
 
 #. module: account_tax_settlement
-#: model:ir.model,name:account_tax_settlement.model_download_files_wizard
-#: model:ir.model,name:account_tax_settlement.model_download_files_wizard_line
+#: model:ir.model,name:account_tax_settlement.model_res_download_files_wizard
+#: model:ir.model,name:account_tax_settlement.model_res_download_files_wizard_line
 msgid "Wizard genérico para descargar archivos"
 msgstr ""
 
 #. module: account_tax_settlement
-#: model:ir.model,name:account_tax_settlement.model_get_dates_wizard
+#: model:ir.model,name:account_tax_settlement.model_res_get_dates_wizard
 msgid "Wizard genérico para obtener fecha desde y hasta"
 msgstr ""
 
