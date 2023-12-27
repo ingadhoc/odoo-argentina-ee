@@ -8,11 +8,11 @@ from odoo import api, fields, models
 
 
 class DownloadFilesWizard(models.TransientModel):
-    _name = 'download_files_wizard'
+    _name = 'res.download_files_wizard'
     _description = 'Wizard genérico para descargar archivos'
 
     line_ids = fields.One2many(
-        'download_files_wizard_line',
+        'res.download_files_wizard_line',
         'wizard_id',
         'Files',
         readonly=True,
@@ -22,7 +22,7 @@ class DownloadFilesWizard(models.TransientModel):
     def action_get_files(self, files_values):
         # transformamos a binary y agregamos formato para campos o2m
 
-        wizard = self.env['download_files_wizard'].create({
+        wizard = self.env['res.download_files_wizard'].create({
             'line_ids': [(0, False, {
                 'txt_filename': x['txt_filename'],
                 'txt_binary': base64.b64encode(
@@ -41,11 +41,11 @@ class DownloadFilesWizard(models.TransientModel):
 
 
 class DownloadFileWizardLine(models.TransientModel):
-    _name = 'download_files_wizard_line'
+    _name = 'res.download_files_wizard_line'
     _description = 'Wizard genérico para descargar archivos'
 
     wizard_id = fields.Many2one(
-        'download_files_wizard',
+        'res.download_files_wizard',
     )
     txt_filename = fields.Char(
     )
