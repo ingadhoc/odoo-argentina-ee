@@ -8,7 +8,7 @@ from dateutil.relativedelta import relativedelta
 
 
 class get_dates_wizard(models.TransientModel):
-    _name = 'get_dates_wizard'
+    _name = 'res.get_dates_wizard'
     _description = 'Wizard genérico para obtener fecha desde y hasta'
 
     @api.model
@@ -32,7 +32,7 @@ class get_dates_wizard(models.TransientModel):
 
     @api.model
     def default_get(self, fct_fields):
-        res = super(get_dates_wizard, self).default_get(fct_fields)
+        res = super().default_get(fct_fields)
         context = self._context
         to_string = fields.Date.to_string
         today = datetime.date.today()

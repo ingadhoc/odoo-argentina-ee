@@ -4,7 +4,7 @@
     <!-- dummy search view para que no de error al disparar acción desde reportes -->
     <record id="view_download_files_wizard_search" model="ir.ui.view">
          <field name="name">download_files_wizard.search</field>
-         <field name="model">download_files_wizard</field>
+         <field name="model">res.download_files_wizard</field>
          <field name="arch" type="xml">
             <search string="Download File">
             </search>
@@ -13,7 +13,7 @@
 
     <record id="download_files_wizard" model="ir.ui.view">
         <field name="name">download_files_wizard</field>
-        <field name="model">download_files_wizard</field>
+        <field name="model">res.download_files_wizard</field>
         <field name="type">form</field>
         <field name="arch" type="xml">
             <form string="Download Files">
