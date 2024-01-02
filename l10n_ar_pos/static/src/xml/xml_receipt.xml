@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <!-- TODO: revisar si esto es necesario. -->
+    <t t-name="XmlReceipt">
+        <receipt align='center' width='40' value-thousands-separator='' >
+            <!-- Header -->
+            <t t-if='receipt.header_xml'>
+                <t t-raw='receipt.header_xml' />
+            </t>
+            <t t-if='!receipt.header_xml and receipt.header'>
+                <div><t t-esc='receipt.header' /></div>
+            </t>
+            <!-- Company Logo -->
+            <!--<t t-if='receipt.company.logo'>
+                <img t-att-src='receipt.company.logo' />
+                <br/>
+            </t>-->
+            <!-- Company Name -->
+            <t t-if='receipt.company.name'>
+                <h1><t t-esc='receipt.company.name' /></h1><br/>
+            </t>
+            <div class="afip-info" font="b">
+                <div>
+                    CUIT: <t t-esc="order.vat"/>
+                    <t t-esc="order.l10n_ar_afip_responsibility_type_id"/>
+                </div>
+                <div>
+                    IIBB: <t t-esc="order.l10n_ar_gross_income_number"/>
+                </div>
+                <div>
+                    Inicio de actividades: <t t-esc="order.l10n_ar_afip_start_date"/>
+                </div>
+                <div>
+                    Dirección:<t t-esc="order.street"/>
+                </div>
+                <div>
+                    <t t-if='order.phone'>
+                        <div>
+                        Teléfono:<t t-esc="order.phone"/>
+                        </div>
+                    </t>
+                </div>
+            </div>
+
+            <t t-if="order.invoice_number and widget.pos.config.receipt_invoice_number">
+                <hr />
+                <div>
+                FACTURA <t t-esc="order.invoice_letter"/> - ORIGINAL
+                    <t t-if="order.invoice_letter == 'A'">
+                        - COD <t t-esc="order.l10n_latam_document_type_id"/>
+                    </t>
+                    <br />
+                N° DE FACTURA: <t t-esc="order.invoice_number"/><br />
+                FECHA: <t t-esc="receipt.date.localestring"/>
+                </div>
+                <hr />
+            </t>
+
+            <t t-set="client" t-value="order.get_client()"/>
+            <t t-if="client">
+                CLIENTE: <t t-esc="client['name']"/>
+                <t t-if="client['l10n_latam_identification_type_id']">
+                    <t t-esc="client['l10n_latam_identification_type_id'][1]"/>:
+                </t>
+                <t t-if="client['vat']">
+                    <t t-esc="client['vat']"/><br />
+                </t>
+                <t t-if="client['l10n_ar_afip_responsibility_type_id']">
+                    <t t-esc="client['l10n_ar_afip_responsibility_type_id'][1]"/><br />
+                </t>
+                <t t-if="client['street']">
+                    DIRECCION: <t t-esc="client['street']"/>
+                    <t t-if="client['city']">
+                        , <t t-esc="client['city']"/>
+                    </t>
+                    <t t-if="client['state_id']">
+                        , <t t-esc="client['state_id'][1]"/>
+                    </t>
+                    <t t-if="client['country_id']">
+                        , <t t-esc="client['country_id'][1]"/>
+                    </t>
+                    <br />
+                </t>
+                <t t-if="client['email']">
+                    Email: <t t-esc="client['email']"/><br />
+                </t>
+                <t t-if="client['phone'] or client['mobile']">
+                    Tel: <t t-esc="client['phone'] || client['mobile']"/><br />
+                </t>
+                <t t-if="client['website']">
+                    Website: <t t-esc="client['website']"/><br />
+                </t>
+                <hr />
+                <br/>
+            </t>
+
+
+            <!-- Orderlines -->
+
+            <div class='orderlines' line-ratio='0.6'>
+                <t t-foreach='receipt.orderlines' t-as='line'>
+                    <t t-set='simple' t-value='line.discount === 0 and line.unit_name === "Unit(s)" and line.quantity === 1' />
+                    <t t-if='simple'>
+                        <line>
+                            <left><t t-esc='line.product_name_wrapped[0]' /></left>
+                            <right><value t-att-value-decimals='pos.currency.decimals'><t t-esc='line.price_display' /></value></right>
+                        </line>
+                        <t t-call="XmlReceiptWrappedProductNameLines"/>
+                    </t>
+                    <t t-if='!simple'>
+                        <line><left><t t-esc='line.product_name_wrapped[0]' /></left></line>
+                        <t t-call="XmlReceiptWrappedProductNameLines"/>
+                        <t t-if='line.discount !== 0'>
+                            <line indent='1'><left>Discount: <t t-esc='line.discount' />%</left></line>
+                        </t>
+
+                        <!-- si es factura A el precio en las lineas va SIN IVA -->
+                        <t t-if="order.invoice_letter == 'A'"> <!-- ok -->
+                            <t t-set="line_price" t-value="line.price or 0.1" />
+                            <t t-set="line_price_display" t-value="line.price_without_tax or 0.2"/>
+                        </t>
+                        <!-- si no es factura B el precio en las lineas va CON IVA -->
+                        <t t-if="order.invoice_letter != 'A'">
+                            <t t-set="line_price" t-value="line.price_with_tax / line.quantity or 0.3"/>
+                            <t t-set="line_price_display" t-value="line.price_with_tax or 0.4"/>
+                        </t>
+
+                        <line indent='1'>
+                            <left>
+                                <value t-att-value-decimals='pos.dp["Product Unit of Measure"]' value-autoint='on'>
+                                    <t t-esc='line.quantity' />
+                                </value>
+                                <t t-if='line.unit_name !== "Unit(s)"'>
+                                    <t t-esc='line.unit_name' />
+                                </t>
+                                x
+                                <value t-att-value-decimals='pos.dp["Product Price"]'>
+                                    <t t-esc='line_price' />
+                                </value>
+                            </left>
+                            <right>
+                                <value t-att-value-decimals='pos.currency.decimals'><t t-esc='line_price_display' /></value>
+                            </right>
+                        </line>
+
+                    </t>
+                </t>
+            </div>
+
+            <!-- Subtotal -->
+
+            <!-- si es factura A discrimino el IVA -->
+            <t t-if="order.invoice_letter == 'A'">
+                <t t-set='taxincluded' t-value='Math.abs(receipt.subtotal - receipt.total_with_tax) &lt;= 0.000001' />
+                <t t-if='!taxincluded'>
+                    <line><right>--------</right></line>
+                    <line><left>Subtotal</left><right><value t-att-value-decimals='pos.currency.decimals'><t t-esc="receipt.subtotal" /></value></right></line>
+                    <t t-foreach='receipt.tax_details' t-as='tax'>
+                        <line>
+                            <left><t t-esc='tax.name' /></left>
+                            <right><value t-att-value-decimals='pos.currency.decimals'><t t-esc='tax.amount' /></value></right>
+                        </line>
+                    </t>
+                </t>
+            </t>
+            <!-- Total -->
+
+            <line><right>--------</right></line>
+            <line class='total' size='double-height'>
+                <left><pre>        TOTAL</pre></left>
+                <right><value t-att-value-decimals='pos.currency.decimals'><t t-esc='receipt.total_with_tax' /></value></right>
+            </line>
+            <br/><br/>
+
+            <!-- Payment Lines -->
+
+            <t t-foreach='paymentlines' t-as='line'>
+                <line>
+                    <left><t t-esc='line.name' /></left>
+                    <right><value t-att-value-decimals='pos.currency.decimals'><t t-esc='line.get_amount()'/></value></right>
+                </line>
+            </t>
+            <br/>
+
+            <t t-if='receipt.change'>
+                <line size='double-height'>
+                    <left><pre>        CHANGE</pre></left>
+                    <right><value t-att-value-decimals='pos.currency.decimals'><t t-esc='receipt.change' /></value></right>
+                </line>
+                <br/>
+            </t>
+
+            <!-- Extra Payment Info -->
+
+            <t t-if='receipt.total_discount'>
+                <line>
+                    <left>Discounts</left>
+                    <right><value t-att-value-decimals='pos.currency.decimals'><t t-esc='receipt.total_discount'/></value></right>
+                </line>
+            </t>
+
+            <!-- si es factura A discriminar impuestos -->
+            <t t-if="order.invoice_letter == 'A'">
+                <t t-if='taxincluded'>
+                    <t t-foreach='receipt.tax_details' t-as='tax'>
+                        <line>
+                            <left><t t-esc='tax.name' /></left>
+                            <right><value t-att-value-decimals='pos.currency.decimals'><t t-esc='tax.amount' /></value></right>
+                        </line>
+                    </t>
+                    <line>
+                        <left>Total Taxes</left>
+                        <right><value t-att-value-decimals='pos.currency.decimals'><t t-esc='receipt.total_tax'/></value></right>
+                    </line>
+                </t>
+            </t>
+
+            <div class='before-footer' />
+
+            <t t-if="order.l10n_ar_afip_auth_code and widget.pos.config.receipt_invoice_number">
+                <br />
+                <div style="overflow: hidden;">
+                    <img t-attf-src="data:image/*;base64,{{order.afip_barcode_img}}"/>
+                </div>
+                <div style='text-align:center' font="b">
+                    <t t-esc="order.afip_barcode"/><br />
+                </div>
+                <div font="b">
+                CAE: <t t-esc="order.l10n_ar_afip_auth_code"/> Vto. CAE: <t t-esc="order.l10n_ar_afip_auth_code_due"/><br />
+                </div>
+            </t>
+
+            <!-- Footer -->
+            <t t-if='receipt.footer_xml'>
+                <t t-raw='receipt.footer_xml' />
+            </t>
+
+            <t t-if='!receipt.footer_xml and receipt.footer'>
+                <br/>
+                <t t-esc='receipt.footer' />
+                <br/>
+                <br/>
+            </t>
+
+            <div class='after-footer' />
+
+            <t t-if='receipt.cashier'>
+                <div class='cashier'>
+                    <hr />
+                    <div>Served by <t t-esc='receipt.cashier' /></div>
+                </div>
+            </t>
+
+        </receipt>
+    </t>
+
+</templates>

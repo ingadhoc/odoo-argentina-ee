@@ -1,0 +1,33 @@
+<odoo>
+    <data>
+<!-- Esta es la vista en donde se habilitan las opciones de auto_invoice"
+        Dentro del apartado de Configuración del Punto de Venta -->
+
+       <record model="ir.ui.view" id="pos_config_duplicate_receipt">
+            <field name="name">pos.config.duplicate.receipt</field>
+            <field name="model">pos.config</field>
+            <field name="inherit_id" ref="point_of_sale.pos_config_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@id='company']" position="after">
+                    <div class="col-12 col-lg-6 o_setting_box">
+                        <div class="o_setting_right_pane">
+                            <div class="row">
+                                <label string="Auto Factura" for="pos_auto_invoice" class="col-lg-4 o_light_label"/>
+                                <field name="pos_auto_invoice"/>
+                            </div>
+                            <div class="row">
+                                <label string="Mostrar N° de Factura" for="receipt_invoice_number" class="col-lg-4 o_light_label"/>
+                                <field name="receipt_invoice_number"/>
+                            </div>
+                            <div class="row">
+                                <label string="Mostrar Cuit del Cliente" for="receipt_customer_vat" class="col-lg-4 o_light_label"/>
+                                <field name="receipt_customer_vat"/>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
