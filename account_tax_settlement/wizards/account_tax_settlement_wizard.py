@@ -59,7 +59,7 @@ class AccountTaxSettlementWizard(models.TransientModel):
             res.update({'move_line_ids': active_ids})
             return res
 
-        company_ids = self._context.get('context', {}).get('company_ids')
+        company_ids = self._context.get('allowed_company_ids')
 
         if not company_ids or len(company_ids) != 1:
             raise ValidationError(_(
