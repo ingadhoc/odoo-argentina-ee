@@ -1,7 +1,8 @@
-from odoo import fields, models, api, _
+import ast
+
+from odoo import fields, models, _
 from odoo.exceptions import ValidationError
 from odoo.osv import expression
-
 
 class AccountFinancialReport(models.Model):
     _inherit = "account.financial.html.report"
@@ -117,3 +118,25 @@ class AccountFinancialReportLine(models.Model):
         help='Si se eligió "Nuevo Apunte Contable", para la nueva línea, '
         'Se va a buscar una cuenta con esta etiqueta de cuenta',
     )
+
+    # MAQ 04/01/2024: Reagrego este metodo eliminado en el
+    # commit https://github.com/odoo/enterprise/pull/6620/files#diff-4507134a8f28a882a48d003e8d8d43b75036a10322780fb7134baa2abfeefeff
+    # porque lo usabamos. Otra posibilidad es utilizar el metodo action_view_journal_entries
+    # Pero requeriria una refatorizacion del nuestro codigo porque no es exactamente igual
+    def report_move_lines_action(self):
+        domain = ast.literal_eval(self.domain)
+        if 'date_from' in self.env.context.get('context', {}):
+            if self.env.context['context'].get('date_from'):
+                domain = expression.AND([domain, [('date', '>=', self.env.context['context']['date_from'])]])
+            if self.env.context['context'].get('date_to'):
+                domain = expression.AND([domain, [('date', '<=', self.env.context['context']['date_to'])]])
+            if self.env.context['context'].get('state', 'all') == 'posted':
+                domain = expression.AND([domain, [('move_id.state', '=', 'posted')]])
+            if self.env.context['context'].get('company_ids'):
+                domain = expression.AND([domain, [('company_id', 'in', self.env.context['context']['company_ids'])]])
+        return {'type': 'ir.actions.act_window',
+                'name': 'Journal Items (%s)' % self.name,
+                'res_model': 'account.move.line',
+                'view_mode': 'tree,form',
+                'domain': domain,
+                }
