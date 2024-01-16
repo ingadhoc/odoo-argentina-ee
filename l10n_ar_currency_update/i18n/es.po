@@ -3,30 +3,21 @@
 # 	* l10n_ar_currency_update
 # 
 # Translators:
-# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2023
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 16.0+e\n"
+"Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-17 23:12+0000\n"
-"PO-Revision-Date: 2023-04-10 20:05+0000\n"
-"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2023\n"
+"POT-Creation-Date: 2024-01-16 15:02+0000\n"
+"PO-Revision-Date: 2023-12-27 12:39+0000\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Language: es\n"
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
-
-#. module: l10n_ar_currency_update
-#: model_terms:ir.ui.view,arch_db:l10n_ar_currency_update.res_config_settings_view_form
-msgid ""
-"<span class=\"fa fa-lg fa-building-o\" title=\"Values set here are company-"
-"specific.\" groups=\"base.group_multi_company\"/>"
-msgstr ""
-"<span class=\"fa fa-lg fa-building-o\" title=\"Los valores establecidos aquí"
-" son específicos de la empresa.\" groups=\"base.group_multi_company\"/>"
 
 #. module: l10n_ar_currency_update
 #: model:ir.model.fields,field_description:l10n_ar_currency_update.field_res_company__l10n_ar_last_currency_sync_date
@@ -56,7 +47,7 @@ msgstr "Compañías"
 #. module: l10n_ar_currency_update
 #: model:ir.model,name:l10n_ar_currency_update.model_res_config_settings
 msgid "Config Settings"
-msgstr "Opciones de configuración"
+msgstr "Ajustes de configuración"
 
 #. module: l10n_ar_currency_update
 #: model:ir.model,name:l10n_ar_currency_update.model_res_currency
@@ -65,7 +56,6 @@ msgstr "Moneda"
 
 #. module: l10n_ar_currency_update
 #: model:ir.actions.server,name:l10n_ar_currency_update.ir_cron_re_check_afip_currency_rate_ir_actions_server
-#: model:ir.cron,cron_name:l10n_ar_currency_update.ir_cron_re_check_afip_currency_rate
 msgid "Currency: Re Check Afip Currency Rate"
 msgstr "Moneda: Re chequear la tasa de moneda AFIP"
 
