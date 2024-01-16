@@ -9,10 +9,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 13:50+0000\n"
+"POT-Creation-Date: 2023-12-27 12:35+0000\n"
 "PO-Revision-Date: 2023-01-13 13:50+0000\n"
 "Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2023\n"
-"Language-Team: Spanish (https://www.transifex.com/adhoc/teams/46451/es/)\n"
+"Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -42,9 +42,26 @@ msgid "-> Impuestos"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/account_move.py:0
+#, python-format
+msgid ". Invalid boarding permissions: %s"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_l10n_ar_afipws_connection
 msgid "AFIP Webservice Connection"
 msgstr "Conexión Webservice de AFIP"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_account_check_action_wizard
+msgid "Account Check Action Wizard"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_journal__check_add_debit_button
+msgid "Agregar botón de débito"
+msgstr ""
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
@@ -56,22 +73,10 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_journal__algolia_search
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__algolia_search
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_payment_group_invoice_wizard__algolia_search
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_afipws_connection__algolia_search
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_config_settings__algolia_search
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner__algolia_search
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__algolia_search
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__algolia_search
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__algolia_search
-msgid "Algolia Search"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
 msgid "Are you sure to execute the automatic update of your partners ?"
 msgstr ""
+"Estas seguro que quiere ejecutar la actualización automática del contacto ?"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_payment_group_invoice_wizard__l10n_ar_afip_asoc_period_start
@@ -117,6 +122,11 @@ msgid "Automatic Update from Padron"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_l10n_ar_boarding_permission
+msgid "Boarding Permission"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_config_settings__arba_cit
 msgid "CIT ARBA"
 msgstr ""
@@ -127,9 +137,22 @@ msgid "Campo"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.account_check_action_wizard_form_view
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
 msgid "Cancel"
 msgstr "Cancelar"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.actions.act_window,name:l10n_ar_edi_ux.action_debit_check_wizard
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.account_check_action_wizard_form_view
+msgid "Check Action"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_journal__check_debit_journal_id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_payment__check_debit_journal_id
+msgid "Check Debit Journal"
+msgstr ""
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_config_settings__arba_cit
@@ -147,9 +170,19 @@ msgid "Commercial Entity"
 msgstr "Entidad Comercial"
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_res_config_settings
 msgid "Config Settings"
 msgstr "Opciones de configuración"
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.account_check_action_wizard_form_view
+msgid "Confirm"
+msgstr "Confirmar"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_res_partner
@@ -162,6 +195,8 @@ msgid "Converts retreived text fields to Title Case."
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_check_action_wizard__create_uid
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__create_uid
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__create_uid
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__create_uid
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__create_uid
@@ -169,6 +204,8 @@ msgid "Created by"
 msgstr "Creado por"
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_check_action_wizard__create_date
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__create_date
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__create_date
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__create_date
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__create_date
@@ -176,6 +213,26 @@ msgid "Created on"
 msgstr "Creado el"
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_check_action_wizard__date
+msgid "Date"
+msgstr "Fecha"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_journal__check_debit_journal_id
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_payment__check_debit_journal_id
+msgid ""
+"Debe seleccionar un diario de tipo 'Varios' donde se realizará el asiento "
+"del débito"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_account_payment_form_inherited
+msgid "Debit check"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_check_action_wizard__display_name
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__display_name
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__display_name
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__display_name
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__display_name
@@ -197,7 +254,7 @@ msgstr "Campo"
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__field_ids
 msgid "Fields"
-msgstr ""
+msgstr "Campos"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__field_to_update_ids
@@ -220,11 +277,22 @@ msgid "Get valid document types for this webservice"
 msgstr "Obtener tipos de documento válidos para este servicio web"
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_check_action_wizard__id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__id
 msgid "ID"
 msgstr "ID (identificación)"
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/account_move.py:0
+#, python-format
+msgid ""
+"Invalid boarding permissions:\n"
+" %s"
+msgstr ""
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_account_journal
@@ -237,6 +305,8 @@ msgid "Journal Entry"
 msgstr "Asiento contable"
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_check_action_wizard____last_update
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission____last_update
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field____last_update
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info____last_update
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard____last_update
@@ -244,6 +314,8 @@ msgid "Last Modified on"
 msgstr "Última modificación el"
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_check_action_wizard__write_uid
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__write_uid
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__write_uid
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__write_uid
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__write_uid
@@ -251,6 +323,8 @@ msgid "Last Updated by"
 msgstr "Última actualización por"
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_check_action_wizard__write_date
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__write_date
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__write_date
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__write_date
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__write_date
@@ -323,6 +397,39 @@ msgid "Partners"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_account_payment
+msgid "Payments"
+msgstr "Pagos"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__dst_country
+msgid "País Origen"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__dst_country
+msgid "País donde se aplica permiso de embarque"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_boarding_permission_ids
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__l10n_ar_boarding_permission_ids
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_payment__l10n_ar_boarding_permission_ids
+msgid "Permiso de Embarque"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__number
+msgid "Permiso de embarque"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.actions.act_window,name:l10n_ar_edi_ux.action_l10n_ar_boarding_permission
+#: model:ir.ui.menu,name:l10n_ar_edi_ux.menu_action_l10n_ar_boarding_permission
+msgid "Permisos de embarque"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/res_partner.py:0
 #, python-format
@@ -350,7 +457,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/l10n_ar_afipws_connection.py:0
 #, python-format
-msgid "Servicio de Consulta de Padrón Alcance 5"
+msgid "Servicio de Consulta a Padrón Constancia de Inscripción (ex A5)"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -367,8 +474,23 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_journal__check_add_debit_button
+msgid ""
+"Si marca esta opción podrá debitar los cheques con un botón desde los mismo."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
 msgid "Skip these partner"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_boarding_permission_ids
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_move__l10n_ar_boarding_permission_ids
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_payment__l10n_ar_boarding_permission_ids
+msgid ""
+"Solo se envía esta información si la factura es de exportación y el "
+"'Concepto AFIP' es 'Productos / Exportación definitiva de bienes'"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -459,6 +581,18 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/account_move.py:0
 #, python-format
+msgid "Valid boarding permissions: %s"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_move_form
+msgid "Validar permisos de embarque"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/account_move.py:0
+#, python-format
 msgid "We could not validate the vendor bill in AFIP"
 msgstr ""
 
@@ -474,6 +608,7 @@ msgid "account.payment.group.invoice.wizard"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.account_check_action_wizard_form_view
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
 msgid "or"
 msgstr "o"
