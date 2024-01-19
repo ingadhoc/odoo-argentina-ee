@@ -14,7 +14,7 @@ class AccountJournal(models.Model):
         journals = self.filtered(lambda journal: journal.type in ['bank', 'cash'])
         for journal in journals:
             if journal.default_account_id:
-                amount_field = 'aml.balance' if (not self.currency_id or self.currency_id == self.company_id.currency_id) else 'aml.amount_currency'
+                amount_field = 'aml.balance' if (not journal.currency_id or journal.currency_id == journal.company_id.currency_id) else 'aml.amount_currency'
                 query = """SELECT sum(%s) FROM account_move_line aml
                             LEFT JOIN account_move move ON aml.move_id = move.id
                             WHERE aml.account_id = %%s
