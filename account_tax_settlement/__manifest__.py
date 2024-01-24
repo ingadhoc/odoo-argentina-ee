@@ -1,6 +1,6 @@
 {
     'name': 'Tax Settlement',
-    'version': "16.0.1.1.0",
+    'version': "16.0.1.2.0",
     'category': 'Accounting',
     'sequence': 14,
     'summary': '',
@@ -18,7 +18,6 @@
     ],
     'data': [
         'wizards/account_tax_settlement_wizard_view.xml',
-        'wizards/get_dates_wizard_view.xml',
         'wizards/download_files_wizard.xml',
         'views/account_move_line_view.xml',
         'views/account_move_view.xml',
