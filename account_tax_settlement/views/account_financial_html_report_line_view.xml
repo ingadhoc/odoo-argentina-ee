@@ -10,7 +10,6 @@
                 <group string="Tax Settlement" groups="base.group_no_one">
                     <field name="action_id" domain="[('binding_model_id.model', '=', 'account.financial.html.report.line')]"/>
                     <field name="settlement_type"/>
-                    <field name="settement_account_tag_id" attrs="{'invisible': [('settlement_type', 'not in', ['new_line', 'new_line_negative'])], 'required': [('settlement_type', 'in', ['new_line', 'new_line_negative'])]}"/>
                 </group>
             </group>
         </field>

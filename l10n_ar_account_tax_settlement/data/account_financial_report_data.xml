@@ -89,10 +89,10 @@
         <field name="action_id" ref="action_recast_journal_entry"/>
     </record>
 
-    <record id="account_reports.account_financial_report_net_profit0" model="account.financial.html.report.line">
+    <!-- <record id="account_reports.account_financial_report_net_profit0" model="account.financial.html.report.line">
         <field name="settlement_type">new_line</field>
         <field name="settement_account_tag_id" ref="l10n_ar_ux.tag_unaffected_earnings"/>
-    </record>
+    </record> -->
 
     <record id="account_reports.account_financial_report_totalincome0" model="account.financial.html.report.line">
         <field name="settlement_type">revert</field>

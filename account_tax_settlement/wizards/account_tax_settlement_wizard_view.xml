@@ -21,6 +21,7 @@
                 <group>
                     <field name="date"/>
                     <field name="settlement_journal_id" attrs="{'invisible': [('select_journal', '=', False)], 'required': [('select_journal', '=', True)]}" domain="[('company_id', '=', company_id), ('type', '=', 'general')]"/>
+                    <field name="account_id" domain="[('company_id', '=', company_id), ('deprecated', '=', False)]" attrs="{'invisible': [('select_journal', '=', False)]}"/>
                 </group>
                 <footer>
                     <button name="confirm" string="Confirm" type="object" class="oe_highlight"/>
