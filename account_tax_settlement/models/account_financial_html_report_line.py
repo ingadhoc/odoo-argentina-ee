@@ -51,40 +51,18 @@ class AccountFinancialReport(models.Model):
 
         lines_vals = journal._get_tax_settlement_entry_lines_vals(domain)
 
-        # agregamos otrs lineas ẗipo "new line"
-        new_lines = self.line_ids.search([
-            ('id', 'child_of', self.line_ids.ids),
-            ('settlement_type', 'in', ['new_line', 'new_line_negative'])])
+        balance = sum([x['debit'] - x['credit'] for x in lines_vals])
+        if not journal.company_id.currency_id.is_zero(balance):
+            account_id = self._context.get('counterpart_account_id')
+            if not account_id:
+                raise ValidationError('El asiento de liquidación no está balanceado. Debe configurar una cuenta de contrapartida en el asistente para poder realizar el mismo.')
 
-        # pasamos por contexto lo que viene adentro del contetxo como contexto
-        # porque asi lo interpreta _get_balance (en vez aparentemente
-        # report_move_lines_action busca dentro del contexto)
-        new_lines = new_lines.with_context(
-            new_lines._context.get('context'))
-        for new_line in new_lines:
-            account = self.env['account.account'].search([
-                ('company_id', '=', journal.company_id.id),
-                ('tag_ids', '=', new_line.settement_account_tag_id.id)],
-                limit=1)
-            if not account:
-                raise ValidationError(_(
-                    'No account found with tag "%s" (id: %s) for company "%s".'
-                    ' Check report and accounts configuration.') % (
-                    new_line.settement_account_tag_id.name,
-                    new_line.settement_account_tag_id.id,
-                    journal.company_id.name))
-            balance = sum(
-                [x['balance'] for x in new_line._get_balance(
-                    {}, {}, self, field_names=['balance'])])
-            if journal.company_id.currency_id.is_zero(balance):
-                continue
-            balance = new_line.settlement_type == 'new_line' \
-                and balance or balance * -1.0
             lines_vals.append({
-                'name': self.name,
+                # 'name': self.settlement_title,
+                'name': 'Contrapartida',
                 'debit': balance < 0.0 and -balance,
                 'credit': balance >= 0.0 and balance,
-                'account_id': account.id,
+                'account_id': account_id,
             })
 
         vals = journal._get_tax_settlement_entry_vals(lines_vals)
@@ -101,8 +79,8 @@ class AccountFinancialReportLine(models.Model):
 
     settlement_type = fields.Selection([
         ('new_line', 'New Journal Item'),
-        ('new_line_negative', 'New Journal Item (negative)'),
-        ('revert', 'Revert Journal Item'),
+        ('new_line_negative', 'DEPRECIADO'),
+        ('revert', 'DEPRECIADO'),
     ], help="If you choose:\n"
         "* New Journal Item: a new journal item with selected account will be "
         "created\n"

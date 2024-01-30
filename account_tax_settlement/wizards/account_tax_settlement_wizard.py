@@ -37,6 +37,11 @@ class AccountTaxSettlementWizard(models.TransientModel):
     company_id = fields.Many2one(
         'res.company',
     )
+    account_id = fields.Many2one(
+        'account.account',
+        string='Cuenta contrapartida',
+        help='Cuenta contrapartida para asientos no balanceados. Luego puede revisar el asiento y modificarla de ser necesario.'
+    )
     message = fields.Text(
     )
 
@@ -83,7 +88,7 @@ class AccountTaxSettlementWizard(models.TransientModel):
         self.ensure_one()
         self = self.with_context(entry_date=self.date)
         if self.report_id:
-            move = self.report_id.create_tax_settlement_entry(
+            move = self.report_id.with_context(counterpart_account_id=self.account_id.id).create_tax_settlement_entry(
                 self.settlement_journal_id)
         else:
             move = self.move_line_ids.create_tax_settlement_entry()
