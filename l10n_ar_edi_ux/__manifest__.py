@@ -1,6 +1,12 @@
 {
     'name': 'Argentinian Electronic Invoicing UX',
+<<<<<<< HEAD
     'version': "17.0.1.2.0",
+||||||| parent of 7bbe97e (temp)
+    'version': "16.0.1.4.0",
+=======
+    'version': "16.0.1.5.0",
+>>>>>>> 7bbe97e (temp)
     'category': 'Localization/Argentina',
     'sequence': 14,
     'author': 'ADHOC SA',
@@ -16,6 +22,7 @@
         'python': ['zeep'],
     },
     'data': [
+        'wizards/res_config_settings_view.xml',
         'wizards/res_partner_update_from_padron_wizard_view.xml',
         'wizards/account_check_action_wizard_view.xml',
         'views/res_partner_view.xml',
