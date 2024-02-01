@@ -41,10 +41,14 @@ class AccountCheckActionWizard(models.TransientModel):
         payment.message_post(body=f'El cheque nro "{payment.check_number}" ha sido debitado.')
 
     def _get_outstanding_account(self, payment):
-        """ Obtenemos la cuenta outstanding para hacer el débito de cheques y hacemos las validaciones correspondientes. """
+        """ Obtenemos la cuenta para hacer el débito de cheques y hacemos las validaciones correspondientes. Siempre necesitamos que se encuentre establecido un método de pago manual en el diario para poder hacer el débito, no vamos a buscar la cuenta outstanding en configuración en caso de que no esté establecido el método de pago manual. Primero buscamos método de pago con code manual y nombre 'Manual' y si no lo encuentra buscamos el primer método de pago manual que se creó. """
         journal = payment.journal_id
-        journal_manual_payment_method = journal.outbound_payment_method_line_ids.filtered(lambda x: x.code=='manual')
-        outstanding_account = (journal_manual_payment_method.payment_account_id or journal.company_id.account_journal_payment_credit_account_id)
-        if not outstanding_account:
-            raise UserError("No es posible crear un nuevo débito de cheque sin una cuenta outstanding de pagos establecida ya sea en la compañía o en el método de pagos 'manual' en el diario %s." % (payment.journal_id.display_name))
-        return outstanding_account
+        journal_manual_payment_method = journal.outbound_payment_method_line_ids.filtered(lambda x: x.code == 'manual')
+        if not journal_manual_payment_method:
+            raise UserError("No es posible crear un nuevo débito de cheque sin un método de pagos 'manual' en el diario %s." % (payment.journal_id.display_name))
+        # si hay mas de un método de pago con code code manual tratamos de buscar uno con name Manual, si no lo hay usamos el primero
+        if len(journal_manual_payment_method) > 1:
+            if journal_manual_payment_method.filtered(lambda x: x.name == 'Manual'):
+                journal_manual_payment_method = journal_manual_payment_method.filtered(lambda x: x.name == 'Manual')
+            journal_manual_payment_method = journal_manual_payment_method.sorted()[0]
+        return journal_manual_payment_method.payment_account_id
