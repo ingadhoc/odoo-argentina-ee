@@ -19,7 +19,7 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='l10n_latam_manual_checks']" position="after">
                 <field name="check_add_debit_button" attrs="{'invisible': [('l10n_latam_manual_checks', '=', False)]}"/>
-                <field name="check_debit_journal_id" attrs="{'invisible': [('check_add_debit_button', '=', False)], 'required':[('check_add_debit_button','=',True)]}"/>
+                <field name="check_debit_journal_id" attrs="{'invisible': [('l10n_latam_manual_checks', '=', False), ('check_add_debit_button', '=', False)], 'required':[('check_add_debit_button','=',True)]}"/>
             </xpath>
         </field>
     </record>
