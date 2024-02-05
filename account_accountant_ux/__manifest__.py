@@ -19,7 +19,13 @@
 ##############################################################################
 {
     'name': 'Accounting Accountant UX',
+<<<<<<< HEAD
     'version': "17.0.1.0.0",
+||||||| parent of 42fc3c0 (temp)
+    'version': "16.0.2.1.0",
+=======
+    'version': "16.0.2.2.0",
+>>>>>>> 42fc3c0 (temp)
     'category': 'Accounting',
     'sequence': 14,
     'summary': '',
@@ -40,6 +46,7 @@
         'wizards/account_change_lock_date_views.xml',
         'wizards/res_config_settings_views.xml',
         'data/account_accountant_data.xml',
+        'views/account_journal_dashboard_view.xml',
     ],
     'demo': [
     ],

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account_journal_dashboard_kanban_view" model="ir.ui.view">
+        <field name="name">account.journal.dashboard.kanban</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account.account_journal_dashboard_kanban_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@id='dashboard_bank_cash_right'][1]/div[1]" position="before">
+                <div class="row" t-if="dashboard.account_balance_general">
+                    <a type="object" name="action_open_bank_balance_in_gl" class="col overflow-hidden text-start"><span title="Balance in Odoo">Balance in GL</span></a>
+                    <div class="col-auto text-end">
+                        <span class="o_kanban_monetary"><t t-esc="dashboard.account_balance_general"/></span>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
