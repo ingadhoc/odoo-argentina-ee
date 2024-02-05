@@ -44,7 +44,8 @@ class AccountFollowupReport(models.AbstractModel):
                 invoice_date = {
                     'name': format_date(self.env, aml.move_id.invoice_date or aml.date, lang_code=lang_code),
                     'class': 'date',
-                    'style': 'white-space:nowrap;text-align:center;'
+                    'style': 'white-space:nowrap;text-align:center;',
+                    'template': 'account_followup.cell_template_followup_report',
                 }
                 date_due = format_date(self.env, aml.date_maturity or aml.move_id.invoice_date or aml.date, lang_code=lang_code)
                 total += not aml.blocked and amount or 0
@@ -52,16 +53,25 @@ class AccountFollowupReport(models.AbstractModel):
                 is_payment = aml.payment_id
                 if is_overdue or is_payment:
                     total_issued += not aml.blocked and amount or 0
-                date_due = {'name': date_due, 'class': 'date', 'style': 'white-space:nowrap;text-align:center;'}
+                date_due = {
+                    'name': date_due, 'class': 'date',
+                    'style': 'white-space:nowrap;text-align:center;',
+                    'template': 'account_followup.cell_template_followup_report',
+                }
                 if is_overdue:
                     date_due['style'] += 'color: red;'
                 if is_payment:
                     date_due = ''
                 move_line_name = {
                     'name': self._followup_report_format_aml_name(aml.name, aml.move_id.ref),
-                    'style': 'text-align:right; white-space:normal;'
+                    'style': 'text-align:right; white-space:normal;',
+                    'template': 'account_followup.cell_template_followup_report',
                 }
-                amount = formatLang(self.env, amount, currency_obj=currency)
+                amount = {
+                    'name': formatLang(self.env, amount, currency_obj=currency),
+                    'style': 'text-align:right; white-space:normal;',
+                    'template': 'account_followup.cell_template_followup_report',
+                }
                 line_num += 1
                 invoice_origin = aml.move_id.invoice_origin or ''
                 if len(invoice_origin) > 43:
@@ -69,6 +79,7 @@ class AccountFollowupReport(models.AbstractModel):
                 invoice_origin = {
                     'name': invoice_origin,
                     'style': 'text-align:center; white-space:normal;',
+                    'template': 'account_followup.cell_template_followup_report',
                 }
                 columns = [
                     invoice_date,
@@ -84,11 +95,22 @@ class AccountFollowupReport(models.AbstractModel):
                     'move_id': aml.move_id.id,
                     'type': is_payment and 'payment' or 'unreconciled_aml',
                     'unfoldable': False,
-                    'columns': [isinstance(v, dict) and v or {'name': v} for v in columns],
-                    'template': 'account_followup.cell_template_followup_report',
+                    'columns': [isinstance(v, dict) and v or {'name': v, 'template': 'account_followup.cell_template_followup_report'} for v in columns],
                 })
             total_due = formatLang(self.env, total, currency_obj=currency)
             line_num += 1
+
+            cols = \
+                [{
+                    'name': v,
+                    'template': 'account_followup.cell_template_followup_report',
+                } for v in [''] * 3] + \
+                [{
+                    'name': v,
+                    'style': 'text-align:right; white-space:normal;',
+                    'template': 'account_followup.cell_template_followup_report',
+                } for v in [total >= 0 and _('Total Due') or '', total_due]]
+
             lines.append({
                 'id': line_num,
                 'name': '',
@@ -96,20 +118,30 @@ class AccountFollowupReport(models.AbstractModel):
                 'style': 'border-top-style: double',
                 'unfoldable': False,
                 'level': 3,
-                'columns': [{'name': v} for v in [''] * 3 + [total >= 0 and _('Total Due') or '', total_due]],
-                'template': 'account_followup.cell_template_followup_report',
+                'columns': cols,
             })
             if total_issued > 0:
                 total_issued = formatLang(self.env, total_issued, currency_obj=currency)
                 line_num += 1
+
+                cols = \
+                    [{
+                        'name': v,
+                        'template': 'account_followup.cell_template_followup_report',
+                    } for v in [''] * 3] + \
+                    [{
+                        'name': v,
+                        'style': 'text-align:right; white-space:normal;',
+                        'template': 'account_followup.cell_template_followup_report',
+                    } for v in [_('Total Overdue'), total_issued]]
+
                 lines.append({
                     'id': line_num,
                     'name': '',
                     'class': 'total',
                     'unfoldable': False,
                     'level': 3,
-                    'columns': [{'name': v} for v in [''] * 3 + [_('Total Overdue'), total_issued]],
-                    'template': 'account_followup.cell_template_followup_report',
+                    'columns': cols,
                 })
             # Add an empty line after the total to make a space between two currencies
             line_num += 1
@@ -120,8 +152,7 @@ class AccountFollowupReport(models.AbstractModel):
                 'style': 'border-bottom-style: none',
                 'unfoldable': False,
                 'level': 0,
-                'columns': [{} for col in columns],
-                'template': 'account_followup.cell_template_followup_report',
+                'columns': [{'template': 'account_followup.cell_template_followup_report'} for col in columns],
             })
         # Remove the last empty line
         if lines:
