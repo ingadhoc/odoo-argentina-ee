@@ -84,14 +84,15 @@ class ResPartner(models.Model):
             res = []
             new_activity = {}
             afip_activities = data_rg.get('actividad')
-            activity_codes = self.actividades_padron.sudo().search([]).mapped('code')
+            actividades = self.env['afip.activity'].sudo()
+            activity_codes = actividades.search([]).mapped('code')
             for act in afip_activities:
                 if str(act.get('idActividad')) not in activity_codes:
                     new_activity.update({
                         'code': act.get('idActividad'),
                         'name': act.get('descripcionActividad')
                     })
-                    activity = self.env['afip.activity'].create(new_activity)
+                    activity = actividades.create(new_activity)
                     res.append(activity)
                 else:
                     res.append(act)
@@ -102,14 +103,15 @@ class ResPartner(models.Model):
             res = []
             new_tax = {}
             afip_taxes = data_mt.get("impuesto", []) + data_rg.get("impuesto", [])
-            tax_codes = self.impuestos_padron.sudo().search([]).mapped('code')
+            taxes = self.env['afip.tax'].sudo()
+            tax_codes = taxes.search([]).mapped('code')
             for imp in afip_taxes:
                 if str(imp.get('idImpuesto')) not in tax_codes:
                     new_tax.update({
                         'code': imp.get('idImpuesto'),
                         'name': imp.get('descripcionImpuesto')
                     })
-                    tax = self.env['afip.tax'].create(new_tax)
+                    tax = taxes.create(new_tax)
                     res.append(tax)
                 else:
                     res.append(imp)
