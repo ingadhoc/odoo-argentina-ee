@@ -90,10 +90,10 @@ class ResPartner(models.Model):
         actividades = [str(act["idActividad"])
                        for act in data_rg.get("actividad", []) + data_mt_actividades]
 
-        def check_activity(data_rg):
+        def check_activity(data_rg, data_mt):
             res = []
             new_activity = {}
-            afip_activities = data_rg.get('actividad')
+            afip_activities = data_rg.get("actividad", []) + ([data_mt.get("actividadMonotributista")] if data_mt else [])
             actividades = self.env['afip.activity'].sudo()
             activity_codes = actividades.search([]).mapped('code')
             for act in afip_activities:
@@ -107,7 +107,7 @@ class ResPartner(models.Model):
                 else:
                     res.append(act)
             return res
-        check_activity(data_rg)
+        check_activity(data_rg, data_mt)
 
         def check_taxes(data_mt, data_rg):
             res = []
