@@ -3,15 +3,15 @@
 # 	* account_accountant_ux
 # 
 # Translators:
-# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2023
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-27 12:33+0000\n"
+"POT-Creation-Date: 2024-02-15 19:08+0000\n"
 "PO-Revision-Date: 2023-01-13 13:45+0000\n"
-"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2023\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -31,12 +31,12 @@ msgstr ""
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.account_journal_dashboard_kanban_view
 msgid "<span title=\"Balance in Odoo\">Balance in GL</span>"
-msgstr ""
+msgstr "Balance en Libro Mayor"
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.customer_statements_form_view
 msgid "Amount residual on company currency"
-msgstr ""
+msgstr "Monto residual en moneda de la compañía"
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_bank_rec_widget
@@ -50,6 +50,9 @@ msgid ""
 "By default Odoo Follow up will open the debt per currency.\n"
 "                        If you set this option all the debt will be grouped on one section and using the company currency."
 msgstr ""
+"De forma predeterminada, el informe de seguimiento de Odoo abrirá la deuda "
+"por moneda. Si configura esta opción, toda la deuda se agrupará en una "
+"sección y utilizará la moneda de la compañía."
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_change_lock_date
@@ -74,7 +77,7 @@ msgstr "Opciones de configuración"
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_move_line__filter_amount
 msgid "Filter Amount"
-msgstr ""
+msgstr "Monto de Filtro"
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_followup_report
@@ -117,6 +120,8 @@ msgstr ""
 #, python-format
 msgid "Only Billing Administrators are allowed to change lock dates!"
 msgstr ""
+"Solo usuarios con permisos de Administrador de Facturación tienen permitido "
+"modificar fechas de bloqueo!"
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_partner_form
@@ -131,31 +136,31 @@ msgstr "Libro Mayor (informe)"
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.customer_statements_form_view
 msgid "Residual Amount (cc)"
-msgstr ""
+msgstr "Monto Residual (cc)"
 
 #. module: account_accountant_ux
 #. odoo-python
 #: code:addons/account_accountant_ux/models/account_followup_report.py:0
 #, python-format
 msgid "Total Due"
-msgstr ""
+msgstr "Total Adeudado"
 
 #. module: account_accountant_ux
 #. odoo-python
 #: code:addons/account_accountant_ux/models/account_followup_report.py:0
 #, python-format
 msgid "Total Overdue"
-msgstr ""
+msgstr "Total Vencido"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_company__use_company_currency_on_followup
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_config_settings__use_company_currency_on_followup
 msgid "Use Company Currency On Followup"
-msgstr ""
+msgstr "Usar moneda de la compañía en Informes de Seguimiento"
 
 #. module: account_accountant_ux
 #. odoo-python
 #: code:addons/account_accountant_ux/wizards/account_change_lock_date.py:0
 #, python-format
 msgid "You cannot set a lock date in the future."
-msgstr ""
+msgstr "No es posible determinar una fecha de bloqueo futura."
