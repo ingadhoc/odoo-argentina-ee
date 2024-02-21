@@ -141,6 +141,11 @@ msgid "Use company currency on Followup"
 msgstr ""
 
 #. module: account_accountant_ux
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_partner_view_buttons
+msgid "Payment Matching"
+msgstr ""
+
+#. module: account_accountant_ux
 #. odoo-python
 #: code:addons/account_accountant_ux/wizards/account_change_lock_date.py:0
 #, python-format
