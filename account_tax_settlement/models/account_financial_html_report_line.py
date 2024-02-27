@@ -66,8 +66,7 @@ class AccountFinancialReport(models.Model):
             })
 
         vals = journal._get_tax_settlement_entry_vals(lines_vals)
-        move = self.env['account.move'].with_context(
-            allow_no_partner=True).create(vals)
+        move = self.env['account.move'].create(vals)
 
         if self._context.get('tax_settlement_link', True):
             move_lines.write({'tax_settlement_move_id': move.id})
