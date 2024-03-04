@@ -58,7 +58,7 @@ class InflationAdjustmentIndex(models.Model):
     def check_xml_id(self):
         """ always create the xml_id when create a new record of this model.
         """
-        if self.env.context.get('install_mode', False):
+        if self.env.context.get('install_mode', False) and not self.env.context.get('import_file'):
             return
 
         model_data = self.env['ir.model.data']
