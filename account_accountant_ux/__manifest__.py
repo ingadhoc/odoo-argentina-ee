@@ -19,7 +19,13 @@
 ##############################################################################
 {
     'name': 'Accounting Accountant UX',
+<<<<<<< HEAD
     'version': "17.0.1.0.0",
+||||||| parent of d7e2368 (temp)
+    'version': "16.0.2.2.0",
+=======
+    'version': "16.0.2.3.0",
+>>>>>>> d7e2368 (temp)
     'category': 'Accounting',
     'sequence': 14,
     'summary': '',
