@@ -94,6 +94,6 @@ class AccountReport(models.AbstractModel):
             })
 
         vals = journal._get_tax_settlement_entry_vals(lines_vals)
-        move = self.env['account.move'].with_context(allow_no_partner=True).create(vals)
+        move = self.env['account.move'].create(vals)
 
         return move
