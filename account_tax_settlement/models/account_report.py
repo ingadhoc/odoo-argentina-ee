@@ -4,7 +4,7 @@ from odoo.exceptions import ValidationError
 from odoo.osv import expression
 
 
-class AccountReport(models.AbstractModel):
+class AccountReport(models.Model):
     _inherit = 'account.report'
 
     allow_settlement = fields.Boolean(
