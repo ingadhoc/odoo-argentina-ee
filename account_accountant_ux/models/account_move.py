@@ -1,4 +1,4 @@
-from odoo import models
+from odoo import models, api
 from odoo.addons.account.models.account_move import AccountMove as AccountMoveOriginal
 
 
@@ -15,3 +15,7 @@ class AccountMove(models.Model):
             return AccountMoveOriginal.action_open_business_doc(self)
         else:
             return super().action_open_business_doc()
+
+    @api.depends('company_id')
+    def _validate_taxes_country(self):
+        return super()._validate_taxes_country()
