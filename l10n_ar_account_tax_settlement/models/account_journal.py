@@ -1354,14 +1354,6 @@ class AccountJournal(models.Model):
                 # Razón Social
                 content += payment.partner_id.name.replace(',','')[:100] + ','
 
-                # Domicilio
-                if not payment.partner_id.street:
-                    raise ValidationError(_(
-                    'No hay dirección configurada en el partner '
-                    '"%s" (id: %s)') % (
-                        line.partner_id.name, line.partner_id.id))
-                content += payment.partner_id.street.replace(',','')[:200] + ','
-
                 # CUIT
                 payment.partner_id.ensure_vat()
                 content += payment.partner_id.l10n_ar_formatted_vat + ','
