@@ -71,30 +71,6 @@ class AccountJournal(models.Model):
     #     return super(
     #         AccountJournal, self).action_create_tax_settlement_entry()
 
-    @api.constrains('settlement_tax')
-    def check_withholding_autmatic_installed(self):
-        l10n_ar_withholding_ux = self.env['ir.module.module'].search([
-            ('name', '=', 'l10n_ar_withholding_ux'),
-            ('state', '=', 'installed'),
-        ])
-        if not l10n_ar_withholding_ux and any(self.filtered(
-                lambda x: x.settlement_tax in ['iibb_aplicado_api',
-                                               'sicore_aplicado'])):
-            raise ValidationError(_(
-                'No puede utilizar exportación a "SICORE Aplicado"'
-                ' o "Perc/Ret IIBB aplicadas API"'
-                ' si no tiene instalado el módulo de retenciones'
-                ' automáticas (l10n_ar_withholding_ux)'))
-
-    def check_l10n_ar_account_withholding_installed(self):
-        l10n_ar_account_withholding_installed = self.env['ir.module.module'].search([
-            ('name', '=', 'l10n_ar_account_withholding'),
-            ('state', '=', 'installed'),
-        ])
-        if not l10n_ar_account_withholding_installed:
-            raise ValidationError(_(
-                'No se encuentra instalado el módulo "l10n_ar_account_withholding"'))
-
     def iibb_aplicado_dgr_mendoza_files_values(self, move_lines):
         self.ensure_one()
         ret = ''
@@ -105,7 +81,6 @@ class AccountJournal(models.Model):
             payment = line.payment_id
             move = line.move_id
             tax = line.tax_line_id
-            self.check_l10n_ar_account_withholding_installed()
 
             alicuot_line = tax.get_partner_alicuot(partner, line.date)
             if not alicuot_line:
@@ -210,7 +185,6 @@ class AccountJournal(models.Model):
         self.ensure_one()
         ret = ''
         perc = ''
-        self.check_l10n_ar_account_withholding_installed()
 
         for line in move_lines:
             partner = line.partner_id
@@ -460,7 +434,6 @@ class AccountJournal(models.Model):
         credito = ''
 
         company_currency = self.company_id.currency_id
-        self.check_l10n_ar_account_withholding_installed()
         for line in move_lines.sorted('date'):
 
             # pay_group = payment.payment_group_id
@@ -852,7 +825,6 @@ class AccountJournal(models.Model):
                 'facturas lo cual es requerido para generar el TXT'))
 
         line_nbr = 1
-        self.check_l10n_ar_account_withholding_installed()
         for line in move_lines.filtered('payment_id'):
             alicuot_line = line.tax_line_id.get_partner_alicuot(
                 line.partner_id, line.date)
@@ -1330,7 +1302,6 @@ class AccountJournal(models.Model):
         """
         self.ensure_one()
         content = ''
-        self.check_l10n_ar_account_withholding_installed()
         for line in move_lines.sorted(key=lambda r: (r.date, r.id)):
             payment = line.payment_id
             if payment:

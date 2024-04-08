@@ -29,6 +29,7 @@
         'account_tax_settlement',
         'l10n_ar_account_reports',
         'l10n_ar_ux',
+        'l10n_ar_account_withholding',
     ],
     'data': [
         'data/inflation_adjustment_index.xml',
@@ -44,4 +45,5 @@
     'installable': True,
     'auto_install': True,
     'application': False,
+    'post_init_hook': 'l10n_ar_account_tax_settlement_post_init_hook',
 }
