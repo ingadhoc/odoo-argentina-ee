@@ -2,7 +2,7 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from odoo import models, api, Command
+from odoo import models, api
 import logging
 _logger = logging.getLogger(__name__)
 from odoo.addons.account.models.chart_template import template
@@ -34,10 +34,6 @@ class AccountChartTemplate(models.AbstractModel):
                         'ri_iva_saldo_a_pagar',
                         self.env.ref('l10n_ar_ux.tax_tag_a_cuenta_iva'))]
 
-            l10n_ar_withholding_ux = self.env['ir.module.module'].search([
-                ('name', '=', 'l10n_ar_withholding_ux'),
-                ('state', '=', 'installed')])
-
             if template_code in ('ar_ri', 'ar_ex'):
                 journals_data += [
                     ('Liquidación de Ganancias', 'GAN', 'yes', False,
@@ -49,7 +45,7 @@ class AccountChartTemplate(models.AbstractModel):
                     # only if account_withholding_automatic installed we
                     # set sicore_aplicado for txt
                     ('Liquidación SICORE Aplicado', 'SICORE', 'allow_per_line',
-                        l10n_ar_withholding_ux and 'sicore_aplicado' or False,
+                        'sicore_aplicado' or False,
                         self.env.ref('l10n_ar.partner_afip'),
                         'ri_retencion_sicore_a_pagar',
                         self.env.ref('l10n_ar_ux.tag_ret_perc_sicore_aplicada')),
@@ -79,3 +75,49 @@ class AccountChartTemplate(models.AbstractModel):
                     'settlement_account_tag_ids': tag and [(4, tag.id, False)],
                 }
             return res
+
+    @template('ar_ri', 'account.tax')
+    def _get_ar_ri_withholding_account_tax(self):
+        """ En caso de que se creen nuevas compañías argentinas responsable inscripto con su plan de cuentas correspondiente entonces a los impuestos creados de retenciones de ganancias e iva les agregamos el código de impuesto. """
+        taxes_creados = super()._get_ar_ri_withholding_account_tax()
+        company = self.env.company
+        # verificamos que la compañía sea argentina y responsable inscripto
+        if company.country_id.code in self._get_country_code() and company.l10n_ar_afip_responsibility_type_id.code == '1':
+            if taxes_creados:
+                taxes_creados.get('ri_tax_withholding_ganancias_applied')['codigo_impuesto'] = '01'
+                taxes_creados.get('ri_tax_withholding_vat_applied')['codigo_impuesto'] = '02'
+        return taxes_creados
+
+    def _add_wh_taxes(self, company):
+        """ Agregamos etiquetas en repartition lines de impuestos de percepciones de iva, ganancias e ingresos brutos.  """
+        if company.country_id.code in self._get_country_code() and company.l10n_ar_afip_responsibility_type_id.code == '1':
+            # Listado de impuesto-etiquetas a agregar, el primer elemento de cada tupla es el id del impuesto, los restantes son las etiquetas
+            imp_etiq_list = [('ri_tax_percepcion_iva_aplicada', 'tag_ret_perc_sicore_aplicada'),
+                             ('ri_tax_percepcion_ganancias_aplicada', 'tag_ret_perc_sicore_aplicada'),
+                             ('ri_tax_percepcion_iibb_caba_sufrida', 'tax_tag_a_cuenta_iibb', 'tag_tax_jurisdiccion_901'),
+                             ('ri_tax_percepcion_iibb_ba_sufrida', 'tax_tag_a_cuenta_iibb', 'tag_tax_jurisdiccion_902'),
+                             ('ri_tax_percepcion_iibb_co_sufrida', 'tax_tag_a_cuenta_iibb', 'tag_tax_jurisdiccion_904'),
+                             ('ri_tax_percepcion_iibb_sf_sufrida', 'tax_tag_a_cuenta_iibb', 'tag_tax_jurisdiccion_921')
+                             ]
+            for imp_etiq in imp_etiq_list:
+                xml_id_percep_iva_aplic = "account.%s_%s" % (company.id, imp_etiq[0])
+                # Identificamos el impuesto al que se le va a agregar la/s etiqueta/s
+                impuesto = self.env.ref(xml_id_percep_iva_aplic)
+                # Identificamos en el impuesto cuál es el dentro de sus invoice_repartition_line_ids y refund_repartition_line_ids aquellas líneas
+                # que tienen repartition_type = 'tax' así le agregamos la etiqueta correspondiente
+
+                for repartition in ['invoice_repartition_line_ids', 'refund_repartition_line_ids']:
+                    repartition_line = next((el for el in impuesto[repartition] if el['repartition_type'] == 'tax'), None)
+                    # Agregamos la/s etiqueta/s, tiene que ser en una lista donde agreguemos los ids de las etiquetas
+                    tag_ids = []
+                    for etiq in imp_etiq[1:]:
+                        tag_ids.append(self.env.ref('l10n_ar_ux.%s' % (etiq)).id)
+                    repartition_line.tag_ids = tag_ids
+
+    def _load(self, template_code, company, install_demo):
+        """ Luego de que creen los impuestos del archivo account.tax-ar_ri.csv de l10n_ar al instalar el plan de cuentas en la nueva compañìa argentina agregamos en este método las etiquetas que correspondan en los repartition lines. """
+        # Llamamos a super para que se creen los impuestos
+        res = super()._load(template_code, company, install_demo)
+        company = self.env.company
+        self._add_wh_taxes(company)
+        return res

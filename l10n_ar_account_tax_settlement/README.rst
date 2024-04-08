@@ -18,6 +18,8 @@ Este módulo imlementa:
 
 * archivos para declaración de distintos impuestos (principalmente percepciones y retenciones)
 * Funcionalidad y datos para auste por inflación (The index are extracted from https://www.facpce.org.ar/indices-facpce/)
+* Al momento de instalar el módulo se agregan los códigos de impuestos correspondientes para retenciones de ganancias aplicadas y retenciones de iva aplicadas. También se agregan al momento de instalar el módulo las etiquetas de en las repartition lines de impuestos para percepciones. Lo descripto en este punto sucede en compañías argentinas responsable inscripto con plan de cuentas ri establecido.
+* Se agregan códigos de impuestos a impuestos de retenciones de ganancias aplicadas y retenciones de iva aplicadas. Y también se agregan las etiquetas de en las repartition lines de impuestos para percepciones. Lo descripto en este punto se agrega en compañías responsable inscripto argentinas nuevas al momento de instalar plan de cuentas responsable inscripto.
 
 Archivos para declaración de impuestos
 ======================================
