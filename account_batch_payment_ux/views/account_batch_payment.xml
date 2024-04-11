@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_batch_payment_form_inherit" model="ir.ui.view">
+        <field name="name">account.batch.payment.form.inherit</field>
+        <field name="model">account.batch.payment</field>
+        <field name="inherit_id" ref="account_batch_payment.view_batch_payment_form"/>
+        <field name="arch" type="xml">
+            <button name="print_batch_payment" position="after">
+                <button name="action_draft" class="btn btn-secondary" confirm="Payments will be returned to draft and marked as unsent and unreconciled." data-hotkey="w" string="Reset To Draft" type='object' invisible="state != 'sent'"/>
+            </button>
+        </field>
+    </record>
+
+</odoo>
