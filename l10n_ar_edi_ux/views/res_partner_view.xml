@@ -12,4 +12,17 @@
         </field>
     </record>
 
+    <record id="res_partner_view_search" model="ir.ui.view">
+        <field name="name">res.partner.search.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='l10n_ar_afip_responsibility_type_id_filter']" position="after">
+                <group>
+                    <filter string="Falló actualización AFIP" name="failed_to_update" domain="[('failed_to_update', '=', True), ('country_code', '=', 'AR')]"/>
+                </group>
+            </xpath>
+            <separator/>
+        </field>
+    </record>
 </odoo>

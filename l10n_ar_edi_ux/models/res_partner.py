@@ -8,6 +8,11 @@ _logger = logging.getLogger(__name__)
 class ResPartner(models.Model):
     _inherit = 'res.partner'
 
+
+    failed_to_update = fields.Boolean(
+        string="Falló actualización AFIP",
+        tracking=True)
+
     def button_update_partner_data_from_afip(self):
         self.ensure_one()
         wiz = self.env['res.partner.update.from.padron.wizard'].with_context(
