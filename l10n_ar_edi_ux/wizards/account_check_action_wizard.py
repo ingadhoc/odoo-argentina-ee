@@ -25,11 +25,11 @@ class AccountCheckActionWizard(models.TransientModel):
         move_line_ids = liquidity_lines.ids
         # Obtenemos la cuenta outstanding del método de pago pentientes "manual" del diario del pago o bien la "Cuenta de pagos pentientes" de la compañía.
         outstanding_account = self._get_outstanding_account(payment)
-        # Obtenemos fecha, importe, pasamos cuenta outstanding y el diario es de tipo varios que está vinculado al diario del pago del cheque (ver campo Check Debit Journal en el diario) para que nos permita hacer la conciliación. Lo utilizamos como un diario "puente".
+        # Obtenemos fecha, importe, pasamos cuenta outstanding y el diario asignado es el mismo que se está editando.
         new_mv_line_dicts = {'label': f'Débito cheque nro {payment.check_number}',
                             'amount': abs(sum(liquidity_lines.mapped('balance'))),
                             'account_id': outstanding_account.id,
-                            'journal_id': payment.journal_id.check_debit_journal_id.id,
+                            'journal_id': payment.journal_id.id,
                             'date': self.date,
                             'move_line_ids': move_line_ids
                             }
