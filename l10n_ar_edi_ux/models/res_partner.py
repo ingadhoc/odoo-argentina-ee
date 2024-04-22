@@ -35,6 +35,12 @@ class ResPartner(models.Model):
         self.ensure_one()
         return True
 
+    def _clean_dict(self, dictionary, type_replace=''):
+        #Limpiamos los diccionarios para quitarle los valores None
+        if dictionary and type(dictionary) == dict:
+            for val in dictionary:
+                dictionary[val] = type_replace if not dictionary[val] else dictionary[val]
+
     def get_data_from_padron_afip(self):
         self.ensure_one()
         vat = self.ensure_vat()
@@ -71,29 +77,38 @@ class ResPartner(models.Model):
         data = serialize_object(res.datosGenerales, dict)
         if not data:
             raise UserError(error_msg % (self.name, vat, res))
+        self._clean_dict(data, type_replace=[])
 
-        denominacion = data.get("razonSocial", "") or ", ".join([data.get("apellido", ""), data.get("nombre", "")])
+        denominacion = data.get("razonSocial", "") or ", ".join([str(data.get("apellido", "")), str(data.get("nombre", ""))])
         if not denominacion or denominacion == ', ':
             raise UserError(error_msg % (self.name, vat, 'La afip no devolvió nombre'))
 
+        self._clean_dict(data.get("domicilioFiscal"), type_replace={})
         domicilio = data.get("domicilioFiscal", {})
-        data_mt = serialize_object(res.datosMonotributo, dict) or {}
-        data_rg = serialize_object(res.datosRegimenGeneral, dict) or {}
+        data_mt = zeep.helpers.serialize_object(res.datosMonotributo, dict) or {}
+        data_rg = zeep.helpers.serialize_object(res.datosRegimenGeneral, dict) or {}
+
+        self._clean_dict(data_mt.get("impuesto"), type_replace=[])
+
         impuestos = [imp["idImpuesto"]
                      for imp in data_mt.get("impuesto", []) + data_rg.get("impuesto", [])
                      if data.get('estadoClave') == 'ACTIVO']
 
+        self._clean_dict(data_mt.get("actividadMonotributista"), type_replace=[])
         data_mt_actividades = data_mt.get("actividadMonotributista", []) or []
         if isinstance(data_mt_actividades, (dict,)):
             data_mt_actividades = [data_mt_actividades]
 
+        self._clean_dict(data_rg.get("actividad"), type_replace=[])
         actividades = [str(act["idActividad"])
                        for act in data_rg.get("actividad", []) + data_mt_actividades]
 
         def check_activity(data_rg, data_mt):
             res = []
             new_activity = {}
-            afip_activities = data_rg.get("actividad", []) + ([data_mt.get("actividadMonotributista")] if data_mt else [])
+            afip_activities = data_rg.get("actividad", []) + ([data_mt.get("actividadMonotributista", [])] if data_mt else [])
+            #Lo limpiamos si vienen elementos None dentro
+            afip_activities = list(filter(None, afip_activities))
             actividades = self.env['afip.activity'].sudo()
             activity_codes = actividades.search([]).mapped('code')
             for act in afip_activities:
@@ -128,6 +143,7 @@ class ResPartner(models.Model):
             return res
         check_taxes(data_mt, data_rg)
 
+        self._clean_dict(data_rg.get("categoriaMonotributo"), type_replace={})
         cat_mt = data_mt.get("categoriaMonotributo", {})
         monotributo = "S" if cat_mt else "N"
         map_pronvincias = {
