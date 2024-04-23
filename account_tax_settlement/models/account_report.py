@@ -29,7 +29,7 @@ class AccountReport(models.Model):
         self.ensure_one()
 
         companies = self.env['account.journal'].browse(
-            [journal['id'] for journal in options.get('journals', []) if not journal['id'] in ('divider', 'group')]
+            [journal['id'] for journal in options.get('journals', []) if journal['id'] != 'divider' and journal['model'] != 'account.journal.group']
             ).mapped('company_id')
         if len(companies) != 1:
             raise ValidationError(_('La liquidación se debe realizar filtrando por 1 y solo 1 compañía en el reporte'))
