@@ -21,6 +21,18 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-12 col-lg-6 o_setting_box">
+                    <div class="o_setting_left_pane">
+                        <field name="use_search_filter_amount"/>
+                    </div>
+                    <div class="o_setting_right_pane">
+                        <label name="Filter by same amount" for="use_search_filter_amount"/>
+                        <div class="text-muted"> 
+                        If you select this option, the bank reconciliation wizard will search for movement lines with the same amount 
+                        as the selected statement line by default.
+                        </div>
+                    </div>
+                </div>
             </div>
         </field>
     </record>

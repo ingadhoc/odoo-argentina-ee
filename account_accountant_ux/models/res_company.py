@@ -9,3 +9,7 @@ class ResCompany(models.Model):
     _inherit = "res.company"
 
     use_company_currency_on_followup = fields.Boolean()
+    use_search_filter_amount = fields.Boolean(
+        string="Filter by same amount",
+        default=True
+        )
