@@ -13,8 +13,16 @@
                     <field name="use_company_currency_on_followup"/>
                 </setting>
             </block>
+            
+            <block name="main_currency_setting_container" position="after">
+                <block title="Bank Reconciliation" name="accounting_bank_reconciliation">
+                    <setting id="use_search_filter_amount" string="Filter by same amount" help="If you select this option, the bank reconciliation wizard will search for movement lines with the same amount 
+                            as the selected statement line by default.">
+                        <field name="use_search_filter_amount"/>
+                    </setting>
+                </block>
+            </block>
         </field>
     </record>
-
 
 </odoo>
