@@ -2,4 +2,10 @@
     <record id="account_payment_group.menu_finance_bank_and_cash" model="ir.ui.menu">
         <field name="parent_id" ref="account_accountant.menu_accounting"/>
     </record>
+    <data noupdate="1">
+        <record id="default_search_filter_amount" model="ir.config_parameter" forcecreate="0">
+            <field name="key">account_accountant_ux.use_search_filter_amount</field>
+            <field name="value">True</field>
+        </record>
+    </data>
 </odoo>
