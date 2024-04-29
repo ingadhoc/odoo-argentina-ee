@@ -12,7 +12,10 @@ class BankRecWidget(models.Model):
             super()._compute_amls_widget()
             amls_widget = wizard.amls_widget
             amls_widget['context']['default_st_line_id'] = wizard.st_line_id.id
-            amls_widget['context']['search_default_same_amount'] = True
+
+            if bool(self.env['ir.config_parameter'].sudo().get_param('account_accountant_ux.use_search_filter_amount')):
+                amls_widget['context']['search_default_same_amount'] = True
+
             wizard.amls_widget = amls_widget
 
     def collect_global_info_data(self, journal_id):
