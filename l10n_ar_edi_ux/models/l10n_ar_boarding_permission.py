@@ -9,6 +9,10 @@ class L10nArBoardingPermission(models.Model):
     dst_country = fields.Many2one('res.country', string="País de destino", help="País de destino de la mercadería", required=True)
     company_id = fields.Many2one('res.company', required=True, default=lambda self: self.env.company)
 
+    _sql_constraints = [
+        ('permiso_embarque_unique', 'UNIQUE(number, dst_country, company_id)', 'Error! El permiso de embarque ya existe.'),
+    ]
+
     def name_get(self):
         result = []
         for rec in self:
