@@ -15,7 +15,8 @@ class AccountMovetLine(models.Model):
         if self.env.context.get('default_st_line_id'):
             statement_line = self.env['account.bank.statement.line'].browse(self.env.context.get('default_st_line_id'))
 
-            if statement_line.company_id.currency_id == statement_line.journal_id.currency_id:
+            primary_currency = statement_line.company_id.currency_id == statement_line.currency_id
+            if primary_currency:
                 amount = statement_line['amount']
                 amount_currency = statement_line['amount_currency']
             else:
@@ -34,7 +35,9 @@ class AccountMovetLine(models.Model):
             else:
                 amount = ((100 - value)/100) * amount
                 amount_currency = ((100 - value)/100) * amount_currency
-                res.append('|')
-                res.append(('amount_residual', operator,  amount))
-                res.append(('amount_residual_currency', operator,  amount_currency))
+                
+                if primary_currency:
+                    res.append(('amount_residual', operator,  amount))
+                else:
+                    res.append(('amount_residual', operator,  amount_currency))
         return res
