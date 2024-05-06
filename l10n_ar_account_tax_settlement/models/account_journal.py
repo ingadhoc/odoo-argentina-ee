@@ -523,7 +523,10 @@ class AccountJournal(models.Model):
 
                 # 6 - Tipo de comprobante origen de la retención
                 # por ahora solo tenemos facturas implementadas
-                content += '01'
+                if line.move_id.l10n_latam_document_type_id.id == 111:
+                    content += '10'
+                else:
+                    content += '01'
 
                 # 7 - Letra del Comprobante
                 if payment:
