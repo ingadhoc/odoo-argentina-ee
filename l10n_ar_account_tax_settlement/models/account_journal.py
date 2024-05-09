@@ -1493,7 +1493,7 @@ class AccountJournal(models.Model):
                 content += fields.Date.from_string(payment.date).strftime('%d/%m/%Y')
 
                 # número comprobante (long 16)
-                content += re.sub('[^0-9\.]', '', payment.withholding_number).ljust(16, '0')
+                content += re.sub(r'[^0-9\.]', '', payment.withholding_number).ljust(16, '0')
 
                 # Aclaración importante: estamos agregando ceros entre el número de comprobante y el importe de retención
                 # esto contradice la especificación que dice que debe haber espacios pero en la tarea 31418 nos indicaron
