@@ -93,6 +93,9 @@ class ResCompany(models.Model):
             except Exception as e:
                 self.env.company = env_company
                 _logger.log(25, "Could not get rate for currency %s. This is what we get:\n%s", currency.name, e)
+            else:
+                for company in self.filtered(lambda x: x.currency_provider == 'afip'):
+                    company.l10n_ar_last_currency_sync_date = fields.Date.context_today(self.with_context(tz='America/Argentina/Buenos_Aires'))
         return res or False
 
     def _generate_currency_rates(self, parsed_data):
@@ -126,5 +129,3 @@ class ResCompany(models.Model):
                 super(ResCompany, company)._generate_currency_rates(new_parsed_data)
             else:
                 super(ResCompany, company)._generate_currency_rates(parsed_data)
-            if company.currency_provider == 'afip':
-                company.l10n_ar_last_currency_sync_date = fields.Date.context_today(self.with_context(tz='America/Argentina/Buenos_Aires'))
