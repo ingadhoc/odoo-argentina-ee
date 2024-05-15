@@ -525,7 +525,7 @@ class AccountJournal(models.Model):
 
                 #Identificamos si el comprobante de origen es una Factura de credito MiPyMEs sino lo 
                 # tratamos como una factura normal
-                content += '10' if or_inv.l10n_latam_document_type.code in [201, 206, 211] else '01'
+                content += '10' if or_inv.l10n_latam_document_type_id.code in ['201', '206', '211'] else '01'
                 
                 # 7 - Letra del Comprobante
                 if payment:
