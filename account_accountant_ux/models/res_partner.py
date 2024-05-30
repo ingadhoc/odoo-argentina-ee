@@ -3,9 +3,11 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 import ast
 from odoo import models
+from odoo.exceptions import UserError
 
 
 class ResPartner(models.Model):
+    _name = 'res.partner'
     _inherit = 'res.partner'
 
     def action_open_reconcile(self):
@@ -30,3 +32,17 @@ class ResPartner(models.Model):
             'ignore_session': 'both',
         }
         return action
+
+    def open_mass_partner_ledger(self):
+        selected_partner_ids = self.env.context.get('active_ids')
+        if len(selected_partner_ids) < 1000:
+
+            action = self.env["ir.actions.actions"]._for_xml_id("account_reports.action_account_report_partner_ledger")
+            action['params'] = {
+
+                'options': {'partner_ids': selected_partner_ids},
+                'ignore_session': 'both',
+            }
+            return action
+        else:
+            raise UserError('Se deben seleccionar menos de 1000 contactos')
