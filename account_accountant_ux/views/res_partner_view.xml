@@ -24,5 +24,29 @@
             </button>
         </field>
     </record>
+    <record model="ir.actions.server" id="action_partner_ledger">
+            <field name="name">Partner Ledger Report</field>
+            <field name="model_id" ref="model_res_partner"/>
+            <field name="binding_model_id" ref="model_res_partner" />
+            <field name="binding_view_types">tree</field>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.open_mass_partner_ledger()
+            </field>
+    </record>
+
+    <record id="res_partner_view_search" model="ir.ui.view">
+        <field name="name">res.partner.search.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='inactive']" position="before">
+                <filter name="debt_to_charge" string="Deuda a cobrar" domain="['|', ('credit','>',0), ('credit', '&lt;', 0)]"/>
+                <filter name="debt_to_pay" string="Deuda a pagar" domain="[('debit','>',0)]"/>
+                <separator/>
+            </xpath>
+        </field>
+    </record>
 
 </odoo>
