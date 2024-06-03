@@ -233,7 +233,7 @@ class InflationAdjustment(models.TransientModel):
 
         if not lines:
             raise UserError(_(
-                "No hemos encontrado ningún asiento contable asociado al"
+                "No hemos encontrado ningún asiento contable para ajustar asociado al"
                 " periodo seleccionado."
             ))
 
