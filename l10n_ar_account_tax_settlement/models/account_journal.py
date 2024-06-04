@@ -464,7 +464,7 @@ class AccountJournal(models.Model):
                     'El partner "%s" (id %s) no tiene número de identificación '
                     'seteada') % (partner.name, partner.id))
 
-            alicuot_line = tax.get_partner_alicuot(partner, line.date)
+            alicuot_line = tax.get_partner_alicuot(partner, line.move_id._found_related_invoice().date or line.date)
             if not alicuot_line:
                 raise ValidationError(_(
                     'No hay alicuota configurada en el partner '
@@ -573,7 +573,7 @@ class AccountJournal(models.Model):
 
             # 4 - Tipo de comprobante origen de la retención
             if internal_type == 'invoice':
-                content += '01'
+                content += '10' if line.move_id.l10n_latam_document_type_id.code in ['201', '206', '211'] else '01'
             elif internal_type == 'debit_note':
                 if es_percepcion:
                     content += '09'
