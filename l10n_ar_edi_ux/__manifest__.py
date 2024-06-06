@@ -11,9 +11,6 @@
         'l10n_ar_ux',
         'l10n_ar_edi',
     ],
-    'external_dependencies': {
-        'python': ['zeep'],
-    },
     'data': [
         'wizards/res_config_settings_view.xml',
         'wizards/res_partner_update_from_padron_wizard_view.xml',
