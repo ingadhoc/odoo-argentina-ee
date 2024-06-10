@@ -120,13 +120,13 @@ class InflationAdjustment(models.TransientModel):
 
         indexes = self.env['inflation.adjustment.index'].search([])
 
-        while cur_date < end:
+        while cur_date <= end:
             date_to = cur_date + relativedelta(months=1, days=-1)
             if date_to > end:
                 date_to = end
 
             index = indexes.filtered(
-                lambda x: x.date >= cur_date and x.date < date_to)
+                lambda x: x.date >= cur_date and x.date <= date_to)
             if not index:
                 raise UserError(_(
                     'El asiento de ajuste por inflación no puede ser generado'
@@ -235,7 +235,7 @@ class InflationAdjustment(models.TransientModel):
 
         if not lines:
             raise UserError(_(
-                "No hemos encontrado ningún asiento contable asociado al"
+                "No hemos encontrado ningún asiento contable para ajustar asociado al"
                 " periodo seleccionado."
             ))
 
