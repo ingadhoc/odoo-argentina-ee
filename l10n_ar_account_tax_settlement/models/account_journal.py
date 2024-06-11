@@ -269,10 +269,10 @@ class AccountJournal(models.Model):
                 content += '{:>08s}'.format(number)
                 content += '    '
             else:
-                content += '%016s' % (move.l10n_latam_document_number or '')
+                content += '%016s' % (line.withholding_id.name or '')
 
             # 7 - fecha comprobante
-            content += fields.Date.from_string(move.date).strftime('%d/%m/%Y')
+            content += fields.Date.from_string(line.date).strftime('%d/%m/%Y')
 
             # 8 - monto comprobante
             content += format_amount(abs(line.move_id.amount_total_signed), 12, 2) if line.move_id.is_invoice() else format_amount(abs(-line.balance), 12, 2)
@@ -1150,10 +1150,10 @@ class AccountJournal(models.Model):
                     line.date).strftime('%d/%m/%Y')
                 # Numero Comprobante            [16]
                 content += '%016d' % int(re.sub('[^0-9]', '', move.l10n_latam_document_number))
-                #Importe del comprobante
+                # Importe del comprobante
                 codop = '1'
                 issue_date = payment.date
-                amount_tot = abs(payment.l10n_ar_amount_total)
+                amount_tot = abs(payment.payment_total)
                 # withholdable_base_amount es para ret de gcias, withholding_base_amount es para ret de iva
                 base_amount = line.withholding_id.withholdable_base_amount or line.withholding_id.withholdable_base_amount
 
