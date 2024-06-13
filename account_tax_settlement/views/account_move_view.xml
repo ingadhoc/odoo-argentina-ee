@@ -10,6 +10,11 @@
                 <button name="%(account.action_account_moves_all_a)d" class="oe_stat_button" icon="fa-bars" type="action" context="{'search_default_tax_settlement_move_id': id}" string="View settled entries" invisible="not settled_line_ids"/>
                 <button name="download_tax_settlement_file" class="oe_stat_button" icon="fa-download" type="object" string="Download Tax Settlement File" invisible="not settled_line_ids"/>
             </div>
+
+        <xpath expr="//page[@id='aml_tab']//field[@name='account_type']" position="attributes">
+            <attribute name="column_invisible"/>
+            <attribute name="optional">hide</attribute>
+        </xpath>
         </field>
     </record>
 
