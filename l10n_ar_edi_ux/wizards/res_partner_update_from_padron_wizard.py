@@ -1,3 +1,5 @@
+import re
+
 from odoo import models, api, fields, _
 from ast import literal_eval
 from odoo.exceptions import UserError
@@ -117,6 +119,8 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
         required=True,
     )
 
+    wizard_error = fields.Html()
+
     @api.onchange('partner_id')
     def change_partner(self):
         self.ensure_one()
@@ -169,8 +173,19 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
     def automatic_process_cb(self):
         for partner in self.partner_ids:
             self.partner_id = partner.id
-            self.change_partner()
-            self._update()
+            try:
+                self.change_partner()
+                self._update()
+            except (UserError) as exp:
+                #Procesamos el error que nos devuelve afip
+                patron = re.compile(r"'error': \['(.*?)'\]")
+                resultado = patron.search(str(exp))
+                if resultado:
+                    error = resultado.group(1)
+                else:
+                    error = str(exp)
+                partner.message_post(body=error)
+                continue
         self.write({'state': 'finished'})
         return {
             'type': 'ir.actions.act_window',
@@ -209,16 +224,30 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
             values.update({
                 'partner_id': partner.id,
                 'state': 'selection',
+                'wizard_error': False,
             })
         else:
             values.update({
                 'state': 'finished',
+                'wizard_error': False,
+                'partner_id': False,
             })
 
         self.write(values)
         # because field is not changed, view is distroyed and reopen, on change
         # is not called an we call it manually
-        self.change_partner()
+        try:
+            self.change_partner()
+        except (UserError) as exp:
+            #Procesamos el error que nos devuelve afip
+            patron = re.compile(r"'error': \['(.*?)'\]")
+            resultado = patron.search(str(exp))
+            if resultado:
+                error = resultado.group(1)
+            else:
+                error = str(exp)
+            partner.message_post(body=error)
+            self.wizard_error = '<div class= "alert alert-warning" role="alert" style="margin-bottom:0px;" >' + error + '</div>'
         return {
             'type': 'ir.actions.act_window',
             'res_model': self._name,
