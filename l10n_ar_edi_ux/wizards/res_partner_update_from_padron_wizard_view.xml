@@ -48,6 +48,7 @@
                 </header>
                 <sheet>
                     <h2 invisible="state != 'finished'">There are no more partners to update for this request...</h2>
+                    <field name="wizard_error" readonly="1" invisible="not wizard_error"/>
                     <p class="oe_grey" invisible="state != 'option'">
                         Only Partners with cuit are going to be updated.<br/>
                         Select the list of fields you want to update.
