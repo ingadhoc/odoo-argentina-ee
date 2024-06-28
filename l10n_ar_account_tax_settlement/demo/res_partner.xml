@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="res.partner.arba_alicuot" id="res_partner_adhoc_buenos_aires_alicuot">
+        <field name="company_id" eval="ref('l10n_ar.company_ri')"></field>
+        <field name="tag_id" eval="ref('l10n_ar_ux.tag_tax_jurisdiccion_902')"></field>
+        <field name="partner_id" eval="ref('l10n_ar.res_partner_adhoc')"></field>
+        <field name="alicuota_retencion" eval="3"/>
+        <field name="alicuota_percepcion" eval="1"/>
+        <field name="withholding_amount_type">untaxed_amount</field>
+    </record>
+    <record model="res.partner.arba_alicuot" id="res_partner_adhoc_cba_alicuot">
+        <field name="company_id" eval="ref('l10n_ar.company_ri')"></field>
+        <field name="tag_id" eval="ref('l10n_ar_ux.tag_tax_jurisdiccion_904')"></field>
+        <field name="partner_id" eval="ref('l10n_ar.res_partner_adhoc')"></field>
+        <field name="alicuota_retencion" eval="3"/>
+        <field name="alicuota_percepcion" eval="4"/>
+        <field name="withholding_amount_type">untaxed_amount</field>
+    </record>
+    <record model="res.partner.arba_alicuot" id="res_partner_gritti_cba_alicuot">
+        <field name="company_id" eval="ref('l10n_ar.company_ri')"></field>
+        <field name="tag_id" eval="ref('l10n_ar_ux.tag_tax_jurisdiccion_904')"></field>
+        <field name="partner_id" eval="ref('l10n_ar.res_partner_gritti_agrimensura')"></field>
+        <field name="alicuota_retencion" eval="3"/>
+        <field name="alicuota_percepcion" eval="4"/>
+        <field name="withholding_amount_type">untaxed_amount</field>
+    </record>
+    <record model="res.partner.arba_alicuot" id="res_partner_cerrocastor_buenos_aires_alicuot">
+        <field name="company_id" eval="ref('l10n_ar.company_ri')"></field>
+        <field name="tag_id" eval="ref('l10n_ar_ux.tag_tax_jurisdiccion_902')"></field>
+        <field name="partner_id" eval="ref('l10n_ar.res_partner_cerrocastor')"></field>
+        <field name="alicuota_retencion" eval="3"/>
+        <field name="alicuota_percepcion" eval="4"/>
+        <field name="withholding_amount_type">untaxed_amount</field>
+    </record>
+    <record model="res.partner" id="l10n_ar.res_partner_adhoc">
+        <field name="l10n_ar_gross_income_type" eval="'multilateral'"/>
+        <field name="l10n_ar_gross_income_number" eval="123456"/>
+        <field name='gross_income_jurisdiction_ids' eval="[(6, 0, [ref('base.state_ar_b'), ref('base.state_ar_x')])]"/>
+        <field name='imp_ganancias_padron' eval="'AC'"/>
+    </record>
+    <record model="res.company" id="l10n_ar.company_ri">
+        <field name='regimenes_ganancias_ids' eval="[(6, 0, [ref('l10n_ar_account_withholding.regimen_1'), ref('l10n_ar_account_withholding.regimen_2'), ref('l10n_ar_account_withholding.regimen_9')])]"/>
+    </record>
+</odoo>
+

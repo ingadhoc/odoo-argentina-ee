@@ -39,6 +39,7 @@
         'security/ir.model.access.csv',
     ],
     'demo': [
+        'demo/res_partner.xml',
     ],
     'test': [
     ],
