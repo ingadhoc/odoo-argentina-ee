@@ -30,4 +30,5 @@
     'installable': True,
     'auto_install': True,
     'application': False,
+    'post_load': 'monkey_patches',
 }
