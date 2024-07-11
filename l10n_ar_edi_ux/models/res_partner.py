@@ -30,10 +30,11 @@ class ResPartner(models.Model):
         vat = self.ensure_vat()
 
         # if there is certificate for current company use that one, if not use the company with first certificate found
-        company = self.env.company if self.env.company.sudo().l10n_ar_afip_ws_crt else self.env['res.company'].sudo().search(
-            [('l10n_ar_afip_ws_crt', '!=', False)], limit=1)
+        today = fields.Date.context_today(self.with_context(tz='America/Argentina/Buenos_Aires'))
+        company = self.env.company if self.env.company.sudo().l10n_ar_afip_ws_crt and self.env.company.sudo().l10n_ar_crt_exp_date > today else self.env['res.company'].sudo().search(
+            [('l10n_ar_afip_ws_crt', '!=', False), ('l10n_ar_crt_exp_date', '>', today)], limit=1)
         if not company:
-            raise UserError(_('Please configure an AFIP Certificate in order to continue'))
+            raise UserError(_('Please configure an active AFIP Certificate in order to continue'))
         client, auth = company._l10n_ar_get_connection('ws_sr_constancia_inscripcion')._get_client()
 
         error_msg = _(
