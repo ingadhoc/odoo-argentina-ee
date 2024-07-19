@@ -53,6 +53,7 @@ Especificación de archivos:
 * MISIONES: https://www.atm.misiones.gob.ar/index.php/guia-de-tramites/instructivos/category/53-agentes
             Correo DGR: mesadeayuda@tsgroup.com.ar
 
+* SIRE: https://www.afip.gob.ar/sire/documentos/SIRE-especificacion-para-emision-por-lote.pdf apartado 5. F2005 CERTIFICADOS DE RETENCIÓN IMPOSITIVA
 
 Installation
 ============
