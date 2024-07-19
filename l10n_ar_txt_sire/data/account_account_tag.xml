@@ -1,0 +1,7 @@
+<odoo>
+    <record id="sire_account_tag" model="account.account.tag">
+        <field name="name">Sire</field>
+        <field name="applicability">taxes</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+</odoo>
