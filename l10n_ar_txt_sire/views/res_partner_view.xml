@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form" model="ir.ui.view">
+        <field name="name">res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="l10n_ar_ux.view_partner_property_form"/>
+        <field name="arch" type="xml">
+            <field name="impuestos_padron" position="after">
+                <field name="sire_aplica_cdi"/>
+                <field name="sire_aplica_acrecentamiento"/>
+                <field name="sire_codigo_alicuota"/>
+                <field name="sire_born_country_id" invisible="company_type != 'person'" required="company_type == 'person'"/>
+                <field name="sire_birthdate" invisible="company_type != 'person'" required="company_type == 'person'"/>
+            </field>
+        </field>
+    </record>
+</odoo>
