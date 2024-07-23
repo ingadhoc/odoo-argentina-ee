@@ -21,7 +21,6 @@
         <record id="action_account_check_to_date_report" model="ir.actions.act_window">
             <field name="name">Cheques a fecha</field>
             <field name="res_model">account.check.to_date.report.wizard</field>
-            <field name="binding_model_id" ref="account.model_account_payment"/>
             <field name="target">new</field>
             <field name="view_mode">form</field>
         </record>
