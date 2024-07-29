@@ -72,7 +72,7 @@ class AccountMoveLine(models.Model):
 
     @api.depends(
         'tax_repartition_line_id',
-        'tax_settlement_move_id.line_ids.reconciled',
+        'tax_settlement_move_id.line_ids.full_reconcile_id',
     )
     def _compute_tax_state(self):
         for rec in self:
