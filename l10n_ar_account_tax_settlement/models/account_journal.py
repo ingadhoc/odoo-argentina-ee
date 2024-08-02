@@ -525,6 +525,7 @@ class AccountJournal(models.Model):
 
                 #Identificamos si el comprobante de origen es una Factura de credito MiPyMEs sino lo 
                 # tratamos como una factura normal
+                # NOTA: Esto solo aplica para el calculo de Percepciones
                 content += '10' if or_inv.l10n_latam_document_type_id.code in ['201', '206', '211'] else '01'
                 
                 # 7 - Letra del Comprobante
@@ -714,6 +715,12 @@ class AccountJournal(models.Model):
 
             # 21 - Monto Total Retenido/Percibido
             content += format_amount((-line.balance if not ret_perc_applied else ret_perc_applied), 16, 2, ',')
+
+            # # 22 - Aceptacion
+            content += ' '
+
+            # 24 - Fecha Aceptación "Expresa"
+            content += '          '
 
             content += '\r\n'
 
