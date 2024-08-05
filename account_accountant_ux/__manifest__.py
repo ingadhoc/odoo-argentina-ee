@@ -19,7 +19,13 @@
 ##############################################################################
 {
     'name': 'Accounting Accountant UX',
+<<<<<<< HEAD
     'version': "17.0.1.3.0",
+||||||| parent of 2010e21 (temp)
+    'version': "16.0.2.4.0",
+=======
+    'version': "16.0.2.5.0",
+>>>>>>> 2010e21 (temp)
     'category': 'Accounting',
     'sequence': 14,
     'summary': '',
