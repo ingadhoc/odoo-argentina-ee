@@ -3,15 +3,18 @@
 # 	* account_accountant_ux
 # 
 # Translators:
-# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2023
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024
+# Gonzalo, 2024
+# Juan Carreras <jc@adhoc.com.ar>, 2024
+# MarianaLuz Torres, 2024
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-28 17:57+0000\n"
+"POT-Creation-Date: 2024-08-02 19:34+0000\n"
 "PO-Revision-Date: 2023-12-06 14:26+0000\n"
-"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2023\n"
+"Last-Translator: MarianaLuz Torres, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,15 +23,27 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #. module: account_accountant_ux
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_partner_form
+msgid ""
+"<span class=\"o_stat_text\">Payment </span>\n"
+"                        <span class=\"o_stat_text\">Matching</span>"
+msgstr ""
+
+#. module: account_accountant_ux
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.account_journal_dashboard_kanban_view
+msgid "<span title=\"Balance in Odoo\">Balance in GL</span>"
+msgstr ""
+
+#. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.customer_statements_form_view
 msgid "Amount residual on company currency"
-msgstr ""
+msgstr "Importe residual en la moneda de la compañía"
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_bank_rec_widget
 msgid "Bank reconciliation widget for a single statement line"
 msgstr ""
-"Widget de conciliación bancaria para una sola línea del estado de cuenta"
+"Widget de conciliación bancaria para una sola línea del extracto de cuenta"
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_config_settings_view_form
@@ -56,11 +71,31 @@ msgstr "Compañía"
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_res_config_settings
 msgid "Config Settings"
-msgstr "Opciones de configuración"
+msgstr "Ajustes de configuración"
+
+#. module: account_accountant_ux
+#: model:ir.model,name:account_accountant_ux.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: account_accountant_ux
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_partner_view_search
+msgid "Deuda a cobrar"
+msgstr ""
+
+#. module: account_accountant_ux
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_partner_view_search
+msgid "Deuda a pagar"
+msgstr ""
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_move_line__filter_amount
 msgid "Filter Amount"
+msgstr ""
+
+#. module: account_accountant_ux
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_move_line_payment_tree
+msgid "Follow Up"
 msgstr ""
 
 #. module: account_accountant_ux
@@ -72,6 +107,11 @@ msgstr "Informe de seguimiento"
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_account_move_line_search_bank_rec_widget
 msgid "Igual Monto"
 msgstr ""
+
+#. module: account_accountant_ux
+#: model:ir.model,name:account_accountant_ux.model_account_journal
+msgid "Journal"
+msgstr "Diario"
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_move
@@ -101,26 +141,26 @@ msgid "Only Billing Administrators are allowed to change lock dates!"
 msgstr ""
 
 #. module: account_accountant_ux
-#: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_partner_form
-msgid "Partner Ledger"
-msgstr "Libro Mayor"
+#: model:ir.model,name:account_accountant_ux.model_account_partner_ledger_report_handler
+msgid "Partner Ledger Custom Handler"
+msgstr "Gestor personalizado del libro mayor del contacto"
 
 #. module: account_accountant_ux
-#: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_partner_form
+#: model:ir.actions.server,name:account_accountant_ux.action_partner_ledger
 msgid "Partner Ledger Report"
-msgstr "Libro Mayor (informe)"
+msgstr ""
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.customer_statements_form_view
 msgid "Residual Amount (cc)"
-msgstr ""
+msgstr "Importe residual (cc)"
 
 #. module: account_accountant_ux
 #. odoo-python
 #: code:addons/account_accountant_ux/models/account_followup_report.py:0
 #, python-format
 msgid "Total Due"
-msgstr ""
+msgstr "Total Adeudado"
 
 #. module: account_accountant_ux
 #. odoo-python
@@ -141,13 +181,8 @@ msgid "Use company currency on Followup"
 msgstr ""
 
 #. module: account_accountant_ux
-#: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_partner_view_buttons
-msgid "Payment Matching"
-msgstr ""
-
-#. module: account_accountant_ux
 #. odoo-python
 #: code:addons/account_accountant_ux/wizards/account_change_lock_date.py:0
 #, python-format
 msgid "You cannot set a lock date in the future."
-msgstr ""
+msgstr "No puedes elegir una fecha futura como fecha de bloqueo"
