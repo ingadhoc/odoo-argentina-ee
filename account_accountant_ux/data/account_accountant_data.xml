@@ -3,9 +3,6 @@
         <field name="parent_id" ref="account_accountant.menu_accounting"/>
     </record>
     <data noupdate="1">
-        <record id="default_search_filter_amount" model="ir.config_parameter" forcecreate="0">
-            <field name="key">account_accountant_ux.use_search_filter_amount</field>
-            <field name="value">True</field>
-        </record>
+        <function model="ir.config_parameter" name="set_param" eval="('account_accountant_ux.use_search_filter_amount', 'True')"/>
     </data>
 </odoo>
