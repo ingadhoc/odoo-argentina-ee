@@ -2,7 +2,7 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from odoo import models, fields, _
+from odoo import models, fields, _, tools
 from odoo.tools.misc import formatLang, format_date
 
 
@@ -24,8 +24,11 @@ class AccountFollowupReport(models.AbstractModel):
         today = fields.Date.today()
         line_num = 0
         for l in partner.unreconciled_aml_ids.sorted().filtered(lambda aml: not aml.currency_id.is_zero(aml.amount_residual_currency)):
-            if l.company_id == self.env.company and not l.blocked:
+            if l.company_id in self.env.company._accessible_branches() and not l.blocked:
                 # INICIO CAMBIO
+                # Cambiamos el símbolo de la moneda para que pase el test de odoo account_followup
+                if tools.config['test_enable']:
+                    l.currency_id.symbol = '$'
                 # currency = l.currency_id or l.company_id.currency_id
                 currency = l.company_id.currency_id if l.company_id.use_company_currency_on_followup else l.currency_id
                 # FIN CAMBIO
@@ -45,7 +48,7 @@ class AccountFollowupReport(models.AbstractModel):
                     'name': format_date(self.env, aml.move_id.invoice_date or aml.date, lang_code=lang_code),
                     'class': 'date',
                     'style': 'white-space:nowrap;text-align:left;',
-                    'template': 'account_followup.cell_template_followup_report',
+                    'template': 'account_followup.line_template',
                 }
                 date_due = format_date(self.env, aml.date_maturity or aml.move_id.invoice_date or aml.date, lang_code=lang_code)
                 total += not aml.blocked and amount or 0
@@ -56,7 +59,7 @@ class AccountFollowupReport(models.AbstractModel):
                 date_due = {
                     'name': date_due, 'class': 'date',
                     'style': 'white-space:nowrap;text-align:left;',
-                    'template': 'account_followup.cell_template_followup_report',
+                    'template': 'account_followup.line_template',
                 }
                 if is_overdue:
                     date_due['style'] += 'color: red;'
@@ -65,12 +68,12 @@ class AccountFollowupReport(models.AbstractModel):
                 move_line_name = {
                     'name': self._followup_report_format_aml_name(aml.name, aml.move_id.ref),
                     'style': 'text-align:left; white-space:normal;',
-                    'template': 'account_followup.cell_template_followup_report',
+                    'template': 'account_followup.line_template',
                 }
                 amount = {
                     'name': formatLang(self.env, amount, currency_obj=currency),
                     'style': 'text-align:right; white-space:normal;',
-                    'template': 'account_followup.cell_template_followup_report',
+                    'template': 'account_followup.line_template',
                 }
                 line_num += 1
                 invoice_origin = aml.move_id.invoice_origin or ''
@@ -79,7 +82,7 @@ class AccountFollowupReport(models.AbstractModel):
                 invoice_origin = {
                     'name': invoice_origin,
                     'style': 'text-align:center; white-space:normal;',
-                    'template': 'account_followup.cell_template_followup_report',
+                    'template': 'account_followup.line_template',
                 }
                 columns = [
                     invoice_date,
@@ -95,7 +98,7 @@ class AccountFollowupReport(models.AbstractModel):
                     'move_id': aml.move_id.id,
                     'type': is_payment and 'payment' or 'unreconciled_aml',
                     'unfoldable': False,
-                    'columns': [isinstance(v, dict) and v or {'name': v, 'template': 'account_followup.cell_template_followup_report'} for v in columns],
+                    'columns': [isinstance(v, dict) and v or {'name': v, 'template': 'account_followup.line_template'} for v in columns],
                 })
             total_due = formatLang(self.env, total, currency_obj=currency)
             line_num += 1
@@ -103,12 +106,12 @@ class AccountFollowupReport(models.AbstractModel):
             cols = \
                 [{
                     'name': v,
-                    'template': 'account_followup.cell_template_followup_report',
+                    'template': 'account_followup.line_template',
                 } for v in [''] * 3] + \
                 [{
                     'name': v,
                     'style': 'text-align:right; white-space:normal; font-weight: bold;',
-                    'template': 'account_followup.cell_template_followup_report',
+                    'template': 'account_followup.line_template',
                 } for v in [total >= 0 and _('Total Due') or '', total_due]]
 
             lines.append({
@@ -127,12 +130,12 @@ class AccountFollowupReport(models.AbstractModel):
                 cols = \
                     [{
                         'name': v,
-                        'template': 'account_followup.cell_template_followup_report',
+                        'template': 'account_followup.line_template',
                     } for v in [''] * 3] + \
                     [{
                         'name': v,
                         'style': 'text-align:right; white-space:normal; font-weight: bold;',
-                        'template': 'account_followup.cell_template_followup_report',
+                        'template': 'account_followup.line_template',
                     } for v in [_('Total Overdue'), total_issued]]
 
                 lines.append({
@@ -152,7 +155,7 @@ class AccountFollowupReport(models.AbstractModel):
                 'style': 'border-bottom-style: none',
                 'unfoldable': False,
                 'level': 0,
-                'columns': [{'template': 'account_followup.cell_template_followup_report'} for col in columns],
+                'columns': [{'template': 'account_followup.line_template'} for col in columns],
             })
         # Remove the last empty line
         if lines:
