@@ -573,7 +573,7 @@ class AccountJournal(models.Model):
             if payment:
                 content += ' '
             else:
-                content += line.l10n_latam_document_type_id.l10n_ar_letter
+                content += line.l10n_latam_document_type_id.l10n_ar_letter if internal_type == 'invoice' else ' '
 
             # 6 - Nro de comprobante
             content += '%016d' % int(
