@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_payment_form" model="ir.ui.view">
+        <field name="name">account.payment.form</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account_withholding_automatic.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <group name="withholding_data" position="inside">
+                 <field name="alicuota_mendoza" attrs="{'invisible': [('alicuota_mendoza', '=', 0)]}"/>
+            </group>
+        </field>
+    </record>
+</odoo>
