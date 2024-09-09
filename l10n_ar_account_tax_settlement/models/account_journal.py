@@ -836,7 +836,7 @@ class AccountJournal(models.Model):
         line_nbr = 1
         for line in move_lines.filtered('payment_id'):
             alicuot_line = line.tax_line_id.get_partner_alicuot(
-                line.partner_id, line.date)
+                line.partner_id, line.date, line)
             if not alicuot_line:
                 raise ValidationError(_(
                     'No hay alicuota configurada en el partner '
