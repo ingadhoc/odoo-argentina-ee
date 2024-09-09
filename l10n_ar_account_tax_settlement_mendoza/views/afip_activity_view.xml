@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_afip_activity_form" model="ir.ui.view">
+        <field name="name">afip.activity.form</field>
+        <field name="model">afip.activity</field>
+        <field name="inherit_id" ref="l10n_ar_ux.view_afip_activity_form"/>
+        <field name="arch" type="xml">
+            <field name="active" position="after">
+                <field name='alicuota_general' optional="hide"/>
+                <field name='posee_tasa_cero' optional="hide"/>
+                <field name='no_posee_certificado_tasa_cero' optional="hide"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_afip_activity_tree" model="ir.ui.view">
+        <field name="name">afip.activity.tree</field>
+        <field name="model">afip.activity</field>
+        <field name="inherit_id" ref="l10n_ar_ux.view_afip_activity_tree"/>
+        <field name="arch" type="xml">
+            <field name="code" position="after">
+                <field name='alicuota_general'/>
+                <field name='posee_tasa_cero'/>
+                <field name='no_posee_certificado_tasa_cero'/>
+            </field>
+        </field>
+    </record>
+
+</odoo>
