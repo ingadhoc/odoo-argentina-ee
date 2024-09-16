@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates id="template" inherit_id="point_of_sale.template">
+
+    <!-- TODO: t-extend is deprecated? -->
+    <t t-extend="ClientDetailsEdit">
+        <t t-jquery=".client-details-right" t-operation="append">
+            <div class='client-detail'>
+                <span class='label'>AFIP Resp.</span>
+                <select class='detail client-address-afip-resp' name='l10n_ar_afip_responsibility_type_id'>
+                    <t t-foreach='widget.pos.responsibility_type' t-as='responsibility'>
+                        <option t-att-value='responsibility.id' t-att-selected="partner.l10n_ar_afip_responsibility_type_id ? ((responsibility.id === partner.l10n_ar_afip_responsibility_type_id[0]) ? true : undefined) : undefined">
+                            <t t-esc='responsibility.name'/>
+                        </option>
+                    </t>
+                </select>
+            </div>
+            <div class='client-detail'>
+                <span class='label'>Document type</span>
+                <select class='detail client-address-doc-type needsclick' name='l10n_latam_identification_type_id'>
+                    <option value=''>None</option>
+                    <t t-foreach='widget.pos.category_id' t-as='category'>
+                        <option t-att-value='category.id' t-att-selected="partner.l10n_latam_identification_type_id ? ((category.id === partner.l10n_latam_identification_type_id[0]) ? true : undefined) : undefined">
+                            <t t-esc='category.name'/>
+                        </option>
+                    </t>
+                </select>
+            </div>
+	    </t>
+    </t>
+
+    <t t-extend="ClientDetails">
+        <t t-jquery='.client-details-right' t-operation='append'>
+            <div class='client-detail'>
+                <span class='label'>AFIP Resp.</span>
+                <t t-if='partner.l10n_ar_afip_responsibility_type_id'>
+                    <span class='detail l10n_ar_afip_responsibility_type_id'><t t-esc='partner.l10n_ar_afip_responsibility_type_id[1]'/></span>
+                </t>
+                <t t-if='!partner.l10n_ar_afip_responsibility_type_id'>
+                    <span class='detail l10n_ar_afip_responsibility_type_id empty'>N/A</span>
+                </t>
+            </div>
+            <div class='client-detail'>
+                <span class='label'>Document type</span>
+                <t t-if='partner.l10n_latam_identification_type_id'>
+                    <span class='detail client-id'><t t-esc='partner.l10n_latam_identification_type_id[1]'/></span>
+                </t>
+                <t t-if='!partner.l10n_latam_identification_type_id'>
+                    <span class='detail l10n_latam_identification_type_id empty'>N/A</span>
+                </t>
+            </div>
+        </t>
+    </t>
+
+    <t t-extend="ClientListScreenWidget">
+        <t t-jquery='.client-list thead tr' t-operation='append'>
+            <th>AFIP Responsibility</th>
+            <th>Document Type</th>
+            <th>Document Number</th>
+        </t>
+    </t>
+
+    <t t-extend="ClientLine">
+        <t t-jquery=".client-line" t-operation='append'>
+            <td><t t-esc='partner.l10n_ar_afip_responsibility_type_id[1] or ""' /></td>
+            <td><t t-esc='partner.l10n_latam_identification_type_id[1] or ""' /></td>
+            <td><t t-if="partner.vat"><t t-esc='partner.vat' /></t></td>
+        </t>
+    </t>
+
+    <t t-extend="OrderReceipt">
+        <t t-jquery="t[t-if*='receipt.company.phone']" t-operation="before">
+            <div style="margin-top:3px;">
+                <t t-if="order.company_registry">
+                    <t t-esc="order.company_registry"/>
+                </t>
+            </div>
+        </t>
+        <t t-jquery="t[t-if*='receipt.company.contact_address']" t-operation="replace">
+            <t t-if="receipt.company.contact_address">
+                <h2>
+                    <t t-esc="receipt.company.contact_address"/>
+                </h2>
+            </t>
+        </t>
+        <t t-jquery="t[t-if*='receipt.company.vat']" t-operation="replace">
+            <div class="afip-info">
+                <t t-if="order.invoice_number">
+                    <div>CUIT: <t t-esc="order.vat"/></div>
+                    <div>Ing. Brutos: <t t-esc="order.l10n_ar_gross_income_number"/></div>
+                    <div>Inicio de actividades: <t t-esc="order.l10n_ar_afip_start_date"/></div>
+                    <div><t t-esc="order.l10n_ar_afip_responsibility_type_id"/></div>
+                    <div>Dirección: <t t-esc="order.street"/></div>
+                </t>
+            </div>
+        </t>
+        <t t-jquery="t[t-if*='receipt.cashier']" t-operation="replace">
+            <t t-if="order.invoice_number and widget.pos.config.receipt_invoice_number">
+                <div class="afip-invoice-info" >
+                    <hr />
+                    <strong>
+                    FACTURA <t t-esc="order.invoice_letter"/> - ORIGINAL
+                        <t t-if="order.invoice_letter == 'A'">
+                            - COD <t t-esc="order.l10n_latam_document_type_id"/>
+                        </t>
+                        <br />
+                    N° DE FACTURA: <t t-esc="order.invoice_number"/><br />
+                    FECHA: <t t-esc="receipt.date.localestring"/></strong>
+                    <br />
+                    <hr />
+                </div>
+            </t>
+            <t t-set="client" t-value="order.get_client()"/>
+            <t t-if="client and widget.pos.config.receipt_customer_vat">
+                <div class="afip-client-info" >
+                    <t t-set="client" t-value="order.get_client()"/>
+                    CLIENTE: <t t-esc="client['name']"/><br />
+                    <t t-if="client['l10n_latam_identification_type_id']">
+                    <t t-esc="client['l10n_latam_identification_type_id'][1]"/>:
+                    </t>
+                    <t t-if="client['vat']">
+                    <t t-esc="client['vat']"/><br />
+                    </t>
+                    <t t-if="client['l10n_ar_afip_responsibility_type_id']">
+                    <t t-esc="client['l10n_ar_afip_responsibility_type_id'][1]"/><br />
+                    </t>
+                    <t t-if="client['street']">
+                        CALLE: <t t-esc="client['street']"/>
+                        <t t-if="client['city']">
+                            , <t t-esc="client['city']"/>
+                        </t>
+                        <t t-if="client['state_id']">
+                            , <t t-esc="client['state_id'][1]"/>
+                        </t>
+                        <t t-if="client['country_id']">
+                            , <t t-esc="client['country_id'][1]"/>
+                        </t>
+                        <br />
+                    </t>
+                    <t t-if="client['email']">
+                        Email: <t t-esc="client['email']"/><br />
+                    </t>
+                    <t t-if="client['phone'] or client['mobile']">
+                        Tel: <t t-esc="client['phone'] || client['mobile']"/><br />
+                    </t>
+                    <t t-if="client['website']">
+                        Website: <t t-esc="client['website']"/><br />
+                    </t>
+                    <!--
+                    REF. INTERNA: <t t-esc="order.name"/>
+                    -->
+                </div>
+            </t>
+            <t t-if='receipt.cashier'>
+                <div class='cashier'>
+                    <hr />
+                    <div>Servido por <t t-esc='receipt.cashier' /></div>
+                </div>
+            </t>
+            <hr />
+                <strong>
+                <div>DESCRIPCIÓN</div>
+                <div>CANT. x PRECIO UNIT.
+                	&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                	&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                	&#160;&#160;&#160;&#160;&#160;&#160;&#160;
+                	IMPORTE</div>
+                </strong>
+            <hr />
+        </t>
+        <t t-jquery=".before-footer" t-operation="after">
+            <t t-if="order.l10n_ar_afip_auth_code and widget.pos.config.receipt_invoice_number">
+                <div class="afip-cae-info"  style="text-align: center; font-size: 75%;">
+                    <!-- </div> -->
+                    <div style="overflow: hidden;">
+                        <img t-attf-src="/report/barcode/?type={{'QR'}}&amp;value={{order.l10n_ar_afip_qr_code}}&amp;width={{400}}&amp;height={{400}}" style="width: 180px; height:180px;" />
+                    </div>
+                    <strong>CAE:</strong> <t t-esc="order.l10n_ar_afip_auth_code"/>
+                    <div style="margin-top:3px;">
+                        <strong>Vto. CAE:</strong> <t t-esc="order.l10n_ar_afip_auth_code_due"/>
+                    </div>
+                </div>
+            </t>
+        </t>
+        <t t-jquery=".orderlines" t-operation="replace">
+            <div class='orderlines'>
+                <t t-foreach='receipt.orderlines' t-as='line'>
+                    <t t-set='simple' t-value='(line.discount === 0 and line.unit_name === "Units" and line.quantity === 1 and !discount_to_show and !(line.display_discount_policy == "without_discount" &amp;&amp; line.price != line.price_lst))' />
+                    <t t-if='simple'>
+                        <div><t t-esc='line.product_name_wrapped[0]' /><span t-esc='widget.format_currency_no_symbol(line.price_display)' class="price_display pos-receipt-right-align"/></div><t t-call="OrderReceiptWrappedProductNameLines"/></t>
+                    <t t-if='!simple'>
+                        <div t-esc='line.product_name_wrapped[0]'/><t t-call="OrderReceiptWrappedProductNameLines"/><t t-if="line.display_discount_policy == 'without_discount' &amp;&amp; line.price != line.price_lst"><div class="pos-receipt-left-padding"><t t-esc="widget.format_currency_no_symbol(line.price_lst)" />-><t t-esc="widget.format_currency_no_symbol(line.price)" /></div>
+                        </t>
+                        <t t-elif='line.discount !== 0'>
+                            <div class="pos-receipt-left-padding">
+                                <t t-if="pos.config.iface_tax_included === 'total'">
+                                    <t t-esc="widget.format_currency_no_symbol(line.price_with_tax_before_discount)"/>
+                                </t>
+                                <t t-else="">
+                                    <t t-esc="widget.format_currency_no_symbol(line.price)"/>
+                                </t>
+                            </div>
+                        </t>
+                        <t t-if='line.discount !== 0'>
+                            <div class="pos-receipt-left-padding">
+                                Discount: <t t-esc='line.discount' />%
+                            </div>
+                        </t>
+                        <div class="pos-receipt-left-padding">
+                            <t t-esc="Math.round(line.quantity * Math.pow(10, pos.dp['Product Unit of Measure'])) / Math.pow(10, pos.dp['Product Unit of Measure'])"/>
+                            <t t-if='line.unit_name !== "Units"' t-esc='line.unit_name'/>
+                            x
+                            <t t-if="order.invoice_letter == 'A'">
+                                <!-- Precio unitario sin iva -->
+                                <t t-esc='widget.format_currency_no_symbol(line.price_without_tax / line.quantity)' />
+                            </t>
+                            <t t-if="order.invoice_letter !== 'A'">
+                                <!-- Como no tengo Precio unitario con iva, hago el subtotal dividido la cant. de productos -->
+                                <t t-esc='widget.format_currency_no_symbol(line.price_with_tax / line.quantity)'/>
+                            </t>
+                            <span class="price_display pos-receipt-right-align">
+                                <t t-if="order.invoice_letter == 'A'">
+                                    <!-- subtotal de producto sin iva -->
+                                    <t t-esc='widget.format_currency_no_symbol(line.price_without_tax)'/>
+                                </t>
+                                <t t-if="order.invoice_letter !== 'A'">
+                                    <!-- subtotal de producto con iva -->
+                                    <t t-esc='widget.format_currency_no_symbol(line.price_with_tax)'/>
+                                </t>
+                            </span>
+                        </div>
+                    </t>
+                </t>
+                <t t-set='imp_inclu' t-value='Math.abs(receipt.subtotal - receipt.total_with_tax) &lt;= 0.000001' />
+                <t t-if="!imp_inclu &amp;&amp; order.invoice_letter == 'A'">
+                        <div class="pos-receipt-right-align">--------</div>
+                    <br/>
+                    <div><strong>Subtotal</strong><span t-esc='widget.format_currency(receipt.subtotal)' class="pos-receipt-right-align"/></div>
+                    <t t-foreach='receipt.tax_details' t-as='tax'>
+                        <div>
+                            <strong><t t-esc='tax.name' /></strong>
+                            <span t-esc='widget.format_currency_no_symbol(tax.amount)' class="pos-receipt-right-align"/>
+                        </div>
+                    </t>
+                </t>
+                <t t-if="imp_inclu &amp;&amp; order.invoice_letter == 'A'">
+                        <div class="pos-receipt-right-align">--------</div>
+                    <br/>
+                    <div><strong>Subtotal</strong><span t-esc='widget.format_currency(receipt.total_without_tax)' class="pos-receipt-right-align"/></div>
+                    <t t-foreach='receipt.tax_details' t-as='tax'>
+                        <div>
+                            <strong><t t-esc='tax.name' /></strong>
+                            <span t-esc='widget.format_currency_no_symbol(tax.amount)' class="pos-receipt-right-align"/>
+                        </div>
+                    </t>
+                </t>
+            </div>
+        </t>
+        <t t-jquery="t[t-if*='taxincluded']" t-operation="replace">
+        </t>
+    </t>
+
+</templates>
