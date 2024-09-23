@@ -180,5 +180,6 @@ class AccountChartTemplate(models.AbstractModel):
         # Llamamos a super para que se creen los impuestos
         res = super()._load(template_code, company, install_demo)
         company = company or self.env.company
-        self._add_wh_taxes(company)
+        if not company.parent_id:
+            self._add_wh_taxes(company)
         return res
