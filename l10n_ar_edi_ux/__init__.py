@@ -4,4 +4,5 @@
 ##############################################################################
 from . import models
 from . import wizards
+from . import tests
 from .monkey_patches import *
