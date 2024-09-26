@@ -3,17 +3,18 @@
 # 	* l10n_ar_edi_ux
 # 
 # Translators:
-# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024
 # Joaquin Arroyo, 2024
 # Katherine Zaoral <katherine.zaoral@gmail.com>, 2024
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024
+# feg, 2024
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-29 13:27+0000\n"
+"POT-Creation-Date: 2024-09-26 11:52+0000\n"
 "PO-Revision-Date: 2023-12-11 12:04+0000\n"
-"Last-Translator: Katherine Zaoral <katherine.zaoral@gmail.com>, 2024\n"
+"Last-Translator: feg, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,13 +28,14 @@ msgstr ""
 #, python-format
 msgid "\"Get Document Types\" is not implemented for webservice %s"
 msgstr ""
+"\"Obtener tipos de documentos\" no está implementado para el servicio web%s"
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/account_move.py:0
 #, python-format
 msgid ". Invalid boarding permissions: %s"
-msgstr ""
+msgstr ". Permiso de embarque inválidos: %s"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_l10n_ar_afipws_connection
@@ -43,7 +45,7 @@ msgstr "Conexión Webservice de AFIP"
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_account_check_action_wizard
 msgid "Account Check Action Wizard"
-msgstr ""
+msgstr "Asistente de acción de verificación de cuenta"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_journal__check_add_debit_button
@@ -56,14 +58,14 @@ msgstr ""
 msgid "Are you sure to execute the automatic update of your partners ?"
 msgstr ""
 "¿Estás seguro que quieres ejecutar la actualización automática de tus "
-"contactos? "
+"contactos?"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_asoc_period_end
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_asoc_period_end
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_payment__l10n_ar_afip_asoc_period_end
 msgid "Associated Perdio End"
-msgstr ""
+msgstr "Fin del período asociado"
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_move_form
@@ -75,7 +77,7 @@ msgstr "Periodo Asociado"
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_asoc_period_start
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_payment__l10n_ar_afip_asoc_period_start
 msgid "Associated Period Start"
-msgstr ""
+msgstr "Inicio del período asociado"
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
@@ -85,16 +87,18 @@ msgid ""
 "Authorized Document Clases on AFIP:\n"
 "%s"
 msgstr ""
+"Tipos de documentos autorizados en AFIP:\n"
+"%s"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.actions.act_window,name:l10n_ar_edi_ux.action_partner_update
 msgid "Automatic Update from Padron"
-msgstr ""
+msgstr "Actualización automática desde Padrón"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_l10n_ar_boarding_permission
 msgid "Boarding Permission"
-msgstr ""
+msgstr "Permiso de embarque"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_config_settings__arba_cit
@@ -116,7 +120,7 @@ msgstr "Cancelar"
 #: model:ir.actions.act_window,name:l10n_ar_edi_ux.action_debit_check_wizard
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.account_check_action_wizard_form_view
 msgid "Check Action"
-msgstr ""
+msgstr "Comprobar acción"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_config_settings__arba_cit
@@ -131,7 +135,7 @@ msgstr "Cerrar"
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__company_id
 msgid "Company"
-msgstr ""
+msgstr "Empresa"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_res_config_settings
@@ -141,7 +145,7 @@ msgstr "Ajustes de configuración"
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.account_check_action_wizard_form_view
 msgid "Confirm"
-msgstr ""
+msgstr "Confirmar"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_res_partner
@@ -151,7 +155,7 @@ msgstr "Contacto"
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__title_case
 msgid "Converts retreived text fields to Title Case."
-msgstr ""
+msgstr "Convierte campos de texto recuperados a mayúsculas y minúsculas."
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_check_action_wizard__create_uid
@@ -179,7 +183,7 @@ msgstr "Fecha"
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_account_payment_form_inherited
 msgid "Debit check"
-msgstr ""
+msgstr "Cheque de débito"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_check_action_wizard__display_name
@@ -208,7 +212,7 @@ msgstr "Campos"
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__field_to_update_ids
 msgid "Fields To Update"
-msgstr ""
+msgstr "Campos para actualizar"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_partner_update_from_padron_wizard__state__finished
@@ -242,6 +246,8 @@ msgid ""
 "Invalid boarding permissions:\n"
 " %s"
 msgstr ""
+"Permiso de embarque inválidos:\n"
+" %s"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_account_journal
@@ -274,7 +280,7 @@ msgstr "Última actualización en"
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__new_value
 msgid "New Value"
-msgstr ""
+msgstr "Nuevo valor"
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
@@ -302,7 +308,7 @@ msgstr ""
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__old_value
 msgid "Old Value"
-msgstr ""
+msgstr "Valor anterior"
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
@@ -310,16 +316,18 @@ msgid ""
 "Only Partners with cuit are going to be updated.<br/>\n"
 "                        Select the list of fields you want to update."
 msgstr ""
+"Sólo se actualizarán los socios con cuit.<br/>\n"
+" Seleccione la lista de campos que desea actualizar."
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__field_to_update_ids
 msgid "Only this fields are going to be retrived and updated"
-msgstr ""
+msgstr "Sólo estos campos serán recuperados y actualizados."
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_partner_update_from_padron_wizard__state__option
 msgid "Option"
-msgstr ""
+msgstr "Opción"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__partner_id
@@ -369,12 +377,12 @@ msgstr ""
 #: code:addons/l10n_ar_edi_ux/models/res_partner.py:0
 #, python-format
 msgid "Please configure an AFIP Certificate in order to continue"
-msgstr ""
+msgstr "Por favor configura un Certificado AFIP para continuar"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_partner_update_from_padron_wizard__state__selection
 msgid "Selection"
-msgstr ""
+msgstr "Selección"
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
@@ -395,6 +403,9 @@ msgid ""
 "related invoice. IMPORTANT: This is only applies on \"Electronic Invoice - "
 "Web Service\""
 msgstr ""
+"Establezca este campo si está informando una nota de débito/crédito y no "
+"tiene una factura relacionada. IMPORTANTE: Esto sólo aplica en \"Factura "
+"Electrónica - Web Service\""
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_journal__check_add_debit_button
@@ -410,7 +421,7 @@ msgstr ""
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
 msgid "Skip these partner"
-msgstr ""
+msgstr "Saltar este contacto"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_boarding_permission_ids
@@ -437,6 +448,16 @@ msgid ""
 "\n"
 "\n"
 msgstr ""
+"Algunas facturas de proveedores fueron validadas en AFIP pero como tenemos un error con una factura de proveedores se detuvo la validación del lote\n"
+"\n"
+"* Estas facturas de proveedor fueron validadas:\n"
+"* %s\n"
+"\n"
+"* Estas facturas de  no proveedor fueron validadas:\n"
+"%s\n"
+"\n"
+"\n"
+"\n"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__state
@@ -451,7 +472,7 @@ msgstr "Campo"
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
 msgid "There are no more partners to update for this request..."
-msgstr ""
+msgstr "No hay más contactos para actualizar para esta solicitud..."
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
@@ -463,21 +484,25 @@ msgid ""
 "\n"
 "Please make the required corrections and try again"
 msgstr ""
+"Esto es lo que obtuvimos:\n"
+"%s\n"
+"\n"
+"Por favor haz las correciones necesarias e intentalo nuevamente"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__title_case
 msgid "Title Case"
-msgstr ""
+msgstr "Nombre Propio"
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
 msgid "Update Automatically"
-msgstr ""
+msgstr "Actualizar automáticamente"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__update_constancia
 msgid "Update Constancia"
-msgstr ""
+msgstr "Acttualizar Constancia"
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_partner_form
@@ -487,30 +512,30 @@ msgstr "Actualizar desde AFIP"
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
 msgid "Update From Padron AFIP"
-msgstr ""
+msgstr "Actualizar desde el padrón de AFIP"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.actions.act_window,name:l10n_ar_edi_ux.action_base_partner_update_from_padron
 #: model:ir.ui.menu,name:l10n_ar_edi_ux.menu_base_partner_update_from_padron
 msgid "Update Partners From Padron AFIP"
-msgstr ""
+msgstr "Actualizar contactos desde el padrón de AFIP"
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
 msgid "Update Selection"
-msgstr ""
+msgstr "Actualizar selección"
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
 msgid "Update with Manual Check"
-msgstr ""
+msgstr "Actualización con verificación manual"
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/account_move.py:0
 #, python-format
 msgid "Valid boarding permissions: %s"
-msgstr ""
+msgstr "Permiso de embarque válidos: %s"
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_move_form
@@ -522,13 +547,18 @@ msgstr ""
 #: code:addons/l10n_ar_edi_ux/models/account_move.py:0
 #, python-format
 msgid "We could not validate the vendor bill in AFIP"
-msgstr ""
+msgstr "No pudimos validar la factura del proveedor en AFIP"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__wizard_id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__wizard_id
 msgid "Wizard"
 msgstr "Asistente"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__wizard_error
+msgid "Wizard Error"
+msgstr "Error de asistente"
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.account_check_action_wizard_form_view
@@ -554,4 +584,4 @@ msgstr ""
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_move_form
 msgid "to"
-msgstr ""
+msgstr "a"
