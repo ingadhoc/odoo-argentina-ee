@@ -25,7 +25,7 @@
     'demo': [
         'demo/res_partner_demo.xml',
     ],
-    'installable': True,
+    'installable': False,
     'auto_install': True,
     'application': False,
     'post_load': 'monkey_patches',

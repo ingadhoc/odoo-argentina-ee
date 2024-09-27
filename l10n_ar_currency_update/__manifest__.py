@@ -35,7 +35,7 @@
         'data/res_company_data.xml',
         'wizards/res_config_settings_views.xml',
     ],
-    'installable': True,
+    'installable': False,
     'auto_install': True,
     'application': False,
 }
