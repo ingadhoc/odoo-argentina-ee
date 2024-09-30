@@ -251,7 +251,7 @@ class InflationAdjustment(models.TransientModel):
         })
 
         # Generate account.move
-        move = self.env['account.move'].create({
+        move = self.env['account.move'].with_context(skip_invoice_sync=True).create({
             'journal_id': self.journal_id.id,
             'date': self.date_to,
             'ref': _('Ajuste por inflación %s') % (date_to.year),
