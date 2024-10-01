@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-15 19:10+0000\n"
+"POT-Creation-Date: 2024-09-04 16:20+0000\n"
 "PO-Revision-Date: 2023-01-13 13:50+0000\n"
 "Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
@@ -45,6 +45,7 @@ msgstr ""
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_journal__check_add_debit_button
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_payment__check_add_debit_button
 msgid "Agregar botón de débito"
 msgstr ""
 
@@ -125,12 +126,6 @@ msgid "Check Action"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_journal__check_debit_journal_id
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_payment__check_debit_journal_id
-msgid "Check Debit Journal"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_config_settings__arba_cit
 msgid "Clave de Identificación Tributaria de ARBA"
 msgstr ""
@@ -153,7 +148,7 @@ msgstr "Compañía"
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_res_config_settings
 msgid "Config Settings"
-msgstr "Opciones de configuración"
+msgstr "Ajustes de configuración"
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.account_check_action_wizard_form_view
@@ -194,14 +189,6 @@ msgid "Date"
 msgstr "Fecha"
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_journal__check_debit_journal_id
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_payment__check_debit_journal_id
-msgid ""
-"Debe seleccionar un diario de tipo 'Varios' donde se realizará el asiento "
-"del débito"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_account_payment_form_inherited
 msgid "Debit check"
 msgstr ""
@@ -214,6 +201,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__display_name
 msgid "Display Name"
 msgstr "Nombre mostrado"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.constraint,message:l10n_ar_edi_ux.constraint_l10n_ar_boarding_permission_permiso_embarque_unique
+msgid "Error! El permiso de embarque ya existe."
+msgstr ""
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__label
@@ -372,12 +364,12 @@ msgstr "Pagos"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__dst_country
-msgid "País Origen"
+msgid "País de destino"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__dst_country
-msgid "País donde se aplica permiso de embarque"
+msgid "País de destino de la mercadería"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -432,6 +424,7 @@ msgstr ""
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_journal__check_add_debit_button
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_payment__check_add_debit_button
 msgid ""
 "Si marca esta opción podrá debitar los cheques con un botón desde los "
 "mismos. Para realizar el asiento de débito se buscará un método de pago "
@@ -562,6 +555,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__wizard_id
 msgid "Wizard"
 msgstr "Asistente"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__wizard_error
+msgid "Wizard Error"
+msgstr ""
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_account_payment_group_invoice_wizard

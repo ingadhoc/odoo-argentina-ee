@@ -3,15 +3,15 @@
 # 	* account_tax_settlement
 # 
 # Translators:
-# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2023
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-27 12:34+0000\n"
+"POT-Creation-Date: 2024-09-04 16:18+0000\n"
 "PO-Revision-Date: 2023-01-13 13:46+0000\n"
-"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2023\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -62,7 +62,7 @@ msgstr "Cuenta"
 #. module: account_tax_settlement
 #: model:ir.model,name:account_tax_settlement.model_account_report
 msgid "Accounting Report"
-msgstr "Informe financiero"
+msgstr "Informe contable"
 
 #. module: account_tax_settlement
 #: model:ir.model.fields,field_description:account_tax_settlement.field_account_report__allow_settlement
@@ -76,7 +76,6 @@ msgstr ""
 
 #. module: account_tax_settlement
 #: model_terms:ir.ui.view,arch_db:account_tax_settlement.view_account_tax_settlement_wizard_form
-#: model_terms:ir.ui.view,arch_db:account_tax_settlement.view_get_dates_wizard_form
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -92,23 +91,20 @@ msgstr "Compañía"
 
 #. module: account_tax_settlement
 #: model_terms:ir.ui.view,arch_db:account_tax_settlement.view_account_tax_settlement_wizard_form
-#: model_terms:ir.ui.view,arch_db:account_tax_settlement.view_get_dates_wizard_form
 msgid "Confirm"
 msgstr "Confirmar"
 
 #. module: account_tax_settlement
 #: model:ir.model.fields,field_description:account_tax_settlement.field_account_tax_settlement_wizard__create_uid
-#: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard__create_uid
-#: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard_line__create_uid
-#: model:ir.model.fields,field_description:account_tax_settlement.field_get_dates_wizard__create_uid
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard__create_uid
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard_line__create_uid
 msgid "Created by"
 msgstr "Creado por"
 
 #. module: account_tax_settlement
 #: model:ir.model.fields,field_description:account_tax_settlement.field_account_tax_settlement_wizard__create_date
-#: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard__create_date
-#: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard_line__create_date
-#: model:ir.model.fields,field_description:account_tax_settlement.field_get_dates_wizard__create_date
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard__create_date
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard_line__create_date
 msgid "Created on"
 msgstr "Creado en"
 
@@ -119,9 +115,8 @@ msgstr ""
 
 #. module: account_tax_settlement
 #: model:ir.model.fields,field_description:account_tax_settlement.field_account_tax_settlement_wizard__display_name
-#: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard__display_name
-#: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard_line__display_name
-#: model:ir.model.fields,field_description:account_tax_settlement.field_get_dates_wizard__display_name
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard__display_name
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard_line__display_name
 msgid "Display Name"
 msgstr "Nombre a mostrar"
 
@@ -157,25 +152,19 @@ msgid "Etiquetas para liquidación"
 msgstr ""
 
 #. module: account_tax_settlement
-#: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard__line_ids
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard__line_ids
 msgid "Files"
 msgstr "Archivos"
 
 #. module: account_tax_settlement
-#: model:ir.model.fields,field_description:account_tax_settlement.field_get_dates_wizard__from_date
-msgid "From Date"
-msgstr "Desde Fecha"
-
-#. module: account_tax_settlement
 #: model:ir.model,name:account_tax_settlement.model_account_generic_tax_report_handler
 msgid "Generic Tax Report Custom Handler"
-msgstr "Gestor personalizado de los reportes generales de impuestos"
+msgstr "Gestor personalizado de los informes genéricos de impuestos"
 
 #. module: account_tax_settlement
 #: model:ir.model.fields,field_description:account_tax_settlement.field_account_tax_settlement_wizard__id
-#: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard__id
-#: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard_line__id
-#: model:ir.model.fields,field_description:account_tax_settlement.field_get_dates_wizard__id
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard__id
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard_line__id
 msgid "ID"
 msgstr "ID (identificación)"
 
@@ -233,25 +222,22 @@ msgstr ""
 
 #. module: account_tax_settlement
 #: model:ir.model.fields,field_description:account_tax_settlement.field_account_tax_settlement_wizard____last_update
-#: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard____last_update
-#: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard_line____last_update
-#: model:ir.model.fields,field_description:account_tax_settlement.field_get_dates_wizard____last_update
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard____last_update
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard_line____last_update
 msgid "Last Modified on"
 msgstr "Última modificación en"
 
 #. module: account_tax_settlement
 #: model:ir.model.fields,field_description:account_tax_settlement.field_account_tax_settlement_wizard__write_uid
-#: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard__write_uid
-#: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard_line__write_uid
-#: model:ir.model.fields,field_description:account_tax_settlement.field_get_dates_wizard__write_uid
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard__write_uid
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard_line__write_uid
 msgid "Last Updated by"
 msgstr "Última modificación por"
 
 #. module: account_tax_settlement
 #: model:ir.model.fields,field_description:account_tax_settlement.field_account_tax_settlement_wizard__write_date
-#: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard__write_date
-#: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard_line__write_date
-#: model:ir.model.fields,field_description:account_tax_settlement.field_get_dates_wizard__write_date
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard__write_date
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard_line__write_date
 msgid "Last Updated on"
 msgstr "Última actualización en"
 
@@ -358,14 +344,6 @@ msgid "Select Journal"
 msgstr ""
 
 #. module: account_tax_settlement
-#. odoo-python
-#: code:addons/account_tax_settlement/wizards/get_dates_wizard.py:0
-#: model_terms:ir.ui.view,arch_db:account_tax_settlement.view_get_dates_wizard_form
-#, python-format
-msgid "Set Dates"
-msgstr "Establecer Fechas"
-
-#. module: account_tax_settlement
 #: model_terms:ir.ui.view,arch_db:account_tax_settlement.view_account_move_line_tree
 msgid "Settle"
 msgstr "Liquidar"
@@ -454,11 +432,6 @@ msgid ""
 msgstr ""
 
 #. module: account_tax_settlement
-#: model:ir.model.fields,field_description:account_tax_settlement.field_get_dates_wizard__to_date
-msgid "To Date"
-msgstr "A Fecha"
-
-#. module: account_tax_settlement
 #: model:ir.model.fields.selection,name:account_tax_settlement.selection__account_move_line__tax_state__to_pay
 msgid "To Pay"
 msgstr ""
@@ -469,12 +442,12 @@ msgid "To Settle"
 msgstr ""
 
 #. module: account_tax_settlement
-#: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard_line__txt_binary
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard_line__txt_binary
 msgid "Txt Binary"
 msgstr ""
 
 #. module: account_tax_settlement
-#: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard_line__txt_filename
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard_line__txt_filename
 msgid "Txt Filename"
 msgstr ""
 
@@ -494,7 +467,7 @@ msgid "View settled entries"
 msgstr "Ver apuntes liquidados"
 
 #. module: account_tax_settlement
-#: model:ir.model.fields,field_description:account_tax_settlement.field_download_files_wizard_line__wizard_id
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard_line__wizard_id
 msgid "Wizard"
 msgstr "Asistente"
 
@@ -502,11 +475,6 @@ msgstr "Asistente"
 #: model:ir.model,name:account_tax_settlement.model_res_download_files_wizard
 #: model:ir.model,name:account_tax_settlement.model_res_download_files_wizard_line
 msgid "Wizard genérico para descargar archivos"
-msgstr ""
-
-#. module: account_tax_settlement
-#: model:ir.model,name:account_tax_settlement.model_res_get_dates_wizard
-msgid "Wizard genérico para obtener fecha desde y hasta"
 msgstr ""
 
 #. module: account_tax_settlement
@@ -545,6 +513,5 @@ msgstr ""
 
 #. module: account_tax_settlement
 #: model_terms:ir.ui.view,arch_db:account_tax_settlement.view_account_tax_settlement_wizard_form
-#: model_terms:ir.ui.view,arch_db:account_tax_settlement.view_get_dates_wizard_form
 msgid "or"
 msgstr "o"
