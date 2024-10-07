@@ -434,6 +434,51 @@ class AccountJournal(models.Model):
                 'txt_content': perc + ret,
             }]
 
+    @api.model
+    def _type_of_receipt(self, or_inv, es_percepcion):
+        code = '09'
+        """
+        No implementado 15-05-2024
+        03- Orden de Pago (Retenciones)
+        04- Boleta de Depósito (Retenciones)
+        05- Liquidación de pago (Retenciones)
+        06- Certificado de obra (Retenciones)
+        08- Cont de Loc de Servic. (Retenciones)
+        12- Orden de Pago de Comp. Electrónica MiPyMEs (Retenciones)
+        """
+        
+        #Identificamos si el comprobante de origen es una Facturas
+        #(Es el mismo codigo para percepciones y retenciones)
+        if or_inv.l10n_latam_document_type_id.code in ['1', '6', '11']:
+            code = '01'
+
+        #Identificamos si el comprobante de origen es una Factura de credito MiPyMEs
+        #(Es el mismo codigo para percepciones y retenciones)
+        elif or_inv.l10n_latam_document_type_id.code in ['201', '206', '211']:
+            code = '10'
+
+        #Identificamos si el comprobante de Otro comprobante electronico MiPyMEs
+        #(Es el mismo codigo para percepciones y retenciones)
+        elif or_inv.l10n_latam_document_type_id.code in ['203', '208', '213']:
+            code = '13'
+
+        elif not es_percepcion:
+        #Retenciones
+            
+            #Identificamos si el comprobante de origen es una Nota de debito
+            if or_inv.l10n_latam_document_type_id.code in ['2', '7', '12', '52']:
+                code = '02'
+            
+            #Identificamos si el comprobante de origen es un Recibo
+            if or_inv.l10n_latam_document_type_id.code in ['4', '9', '15', '54']:
+                code = '07'
+
+            #Identificamos si el comprobante de origen es un Nota de debito electronica MiPyMEs
+            if or_inv.l10n_latam_document_type_id.code in ['202', '207', '212']:
+                code = '11'
+
+        return code
+
     def iibb_aplicado_agip_files_values(self, move_lines):
         """ Ver readme del modulo para descripcion del formato. Tambien
         archivos de ejemplo en /doc
@@ -483,6 +528,8 @@ class AccountJournal(models.Model):
                 content = '1'
                 alicuot = alicuot_line.alicuota_retencion
 
+            or_inv = line.move_id._found_related_invoice()
+            
             # notas de credito
             if internal_type == 'credit_note':
                 # 2 - Nro. Nota de crédito
@@ -510,7 +557,6 @@ class AccountJournal(models.Model):
 
                 # segun interpretamos de los daots que nos pasaron 6, 7, 8 y 11
                 # son del comprobante original
-                or_inv = line.move_id._found_related_invoice()
                 if not or_inv:
                     raise ValidationError(_(
                         'No pudimos encontrar el comprobante original para %s '
@@ -522,12 +568,8 @@ class AccountJournal(models.Model):
                         line.move_id.display_name))
 
                 # 6 - Tipo de comprobante origen de la retención
+                content += self._type_of_receipt(or_inv, es_percepcion)
 
-                #Identificamos si el comprobante de origen es una Factura de credito MiPyMEs sino lo 
-                # tratamos como una factura normal
-                # NOTA: Esto solo aplica para el calculo de Percepciones
-                content += '10' if or_inv.l10n_latam_document_type_id.code in ['201', '206', '211'] else '01'
-                
                 # 7 - Letra del Comprobante
                 if payment:
                     content += ' '
@@ -558,6 +600,7 @@ class AccountJournal(models.Model):
                 content += format_amount((line.balance if not ret_perc_applied else ret_perc_applied), 16, 2, ',')
 
                 # 13 - Alícuota
+                #Como siempre usamos codigo de normal 29, puede ser 0
                 content += format_amount(alicuot, 5, 2, ',')
 
                 content += '\r\n'
@@ -703,6 +746,7 @@ class AccountJournal(models.Model):
             content += format_amount(taxable_amount, 16, 2, ',')
 
             # 19 - Alícuota
+            # Puede ser 00,00 ya que nosotros siempre usamos 29 como Código de Norma
             content += format_amount(alicuot, 5, 2, ',')
 
             # 20 - Retención/Percepción Practicada
@@ -716,10 +760,10 @@ class AccountJournal(models.Model):
             # 21 - Monto Total Retenido/Percibido
             content += format_amount((-line.balance if not ret_perc_applied else ret_perc_applied), 16, 2, ',')
 
-            # # 22 - Aceptacion
+            # 22 - Aceptacion
             content += ' '
 
-            # 24 - Fecha Aceptación "Expresa"
+            # 23 - Fecha Aceptación "Expresa"
             content += '          '
 
             content += '\r\n'
