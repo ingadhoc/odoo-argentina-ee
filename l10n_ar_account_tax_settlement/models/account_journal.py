@@ -243,7 +243,7 @@ class AccountJournal(models.Model):
             if internal_type:
                 move = line.move_id
 
-            if internal_type and internal_type in ('invoice'):
+            if internal_type and internal_type == 'invoice':
                 # factura
                 content += '01' + line.l10n_latam_document_type_id.l10n_ar_letter
 
