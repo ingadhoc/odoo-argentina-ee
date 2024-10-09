@@ -259,14 +259,14 @@ class AccountJournal(models.Model):
             internal_type = line.l10n_latam_document_type_id.internal_type
             move = line.move_id
 
-            if internal_type in ('invoice'):
+            if internal_type and internal_type == 'invoice':
                 # factura
                 content += '01' + line.l10n_latam_document_type_id.l10n_ar_letter
 
-            elif internal_type == 'debit_note':
+            elif internal_type and internal_type == 'debit_note':
                 # ND
                 content += '02' + line.l10n_latam_document_type_id.l10n_ar_letter
-            elif internal_type == 'credit_note':
+            elif internal_type and internal_type == 'credit_note':
                 content += '10' + line.l10n_latam_document_type_id.l10n_ar_letter
             else:
                 # orden de pago (sin letra)
@@ -277,7 +277,7 @@ class AccountJournal(models.Model):
                 content += '03 '
 
             # 6 - numero comprobante Texto(16)
-            if internal_type in ('invoice', 'credit_note', 'debit_note'):
+            if internal_type and internal_type in ('invoice', 'credit_note', 'debit_note'):
                 # TODO el aplicativo deberia empezar a aceptar 5 digitos
                 pos, number = get_pos_and_number(move.l10n_latam_document_number)
                 # versión 4.0 de siprib release 0 no acepta 5 dígitos aún
