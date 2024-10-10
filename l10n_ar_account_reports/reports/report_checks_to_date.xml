@@ -27,13 +27,13 @@
                         <tr t-foreach="docs._get_checks_handed(docs.journal_id.id, docs.to_date)" t-as="tcheck">
                             <t t-set="total_issue" t-value="tcheck.amount + total_issue"/>
                             <td>
-                                <span t-out="tcheck.check_number"/>
+                                <span t-out="tcheck.name"/>
                             </td>
                             <td>
-                                <span t-field="tcheck.date"/>
+                                <span t-field="tcheck.payment_id.date"/>
                             </td>
                             <td>
-                                <span t-field="tcheck.l10n_latam_check_payment_date"/>
+                                <span t-field="tcheck.payment_date"/>
                             </td>
                             <td>
                                 <span t-out="tcheck.partner_id.name" />
@@ -71,16 +71,16 @@
                         <tr t-foreach="docs._get_checks_on_hand(docs.journal_id.id, docs.to_date)" t-as="tcheck">
                             <t t-set="total" t-value="tcheck.amount + total"/>
                             <td>
-                                <span t-out="tcheck.check_number"/>
+                                <span t-out="tcheck.name"/>
                             </td>
                             <td>
-                                <span t-field="tcheck.date"/>
+                                <span t-field="tcheck.payment_id.date"/>
                             </td>
                             <td>
-                                <span t-field="tcheck.l10n_latam_check_payment_date"/>
+                                <span t-field="tcheck.payment_date"/>
                             </td>
                             <td>
-                                <span t-out="tcheck.l10n_latam_check_issuer_vat" />
+                                <span t-out="tcheck.issuer_vat" />
                             </td>
                             <td>
                                 <span t-out="tcheck.amount"/>
