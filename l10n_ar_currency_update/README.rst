@@ -14,7 +14,7 @@
 Argentinian Currency Rate Update
 ================================
 
-This will add AFIP Web Service as your currency provider (official argentinian provider).
+This will add AFIP Web Service as your currency provider (official argentinian provider). It is neccesary to have afip certificate updated.
 
 By default the automatic rate updates are inactive, you can active them by company
 by going to *Accounting / Configuration / Settings* menu and there found and set

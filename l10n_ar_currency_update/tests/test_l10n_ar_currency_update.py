@@ -10,10 +10,10 @@ from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
 class TestL10nArCurrencyUpdate(AccountTestInvoicingCommon):
-
     @classmethod
-    def setUpClass(cls, chart_template_ref="ar_ri"):
-        super().setUpClass(chart_template_ref=chart_template_ref)
+    @AccountTestInvoicingCommon.setup_chart_template('ar_ri')
+    def setUpClass(cls):
+        super().setUpClass()
         cls.ARS = cls.env.ref('base.ARS')
         cls.USD = cls.env.ref('base.USD')
         cls.EUR = cls.env.ref('base.EUR')
