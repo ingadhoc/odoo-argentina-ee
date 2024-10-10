@@ -10,94 +10,98 @@
                 Diario: <span t-esc="docs.env['account.journal'].browse(docs.journal_id.id).name"/>
             </t>
             <div class="page">
-                <br/>
-                <h5>Cheques propios</h5>
-                <table class="table table-sm o_main_table table-bordered">
-                    <thead>
-                        <tr>
-                            <th class="text-left">Número</th>
-                            <th class="text-left">Fecha contable</th>
-                            <th class="text-left">Fecha de pago</th>
-                            <th class="text-left">Empresa</th>
-                            <th class="text-left">Importe</th>
-                        </tr>
-                    </thead>
-                    <tbody class="sale_tbody" style="font-size: 15px">
-                        <t t-set="total_issue" t-value="0"/>
-                        <tr t-foreach="docs._get_checks_handed(docs.journal_id.id, docs.to_date)" t-as="tcheck">
-                            <t t-set="total_issue" t-value="tcheck.amount + total_issue"/>
-                            <td>
-                                <span t-out="tcheck.check_number"/>
+                <t t-if="docs._get_checks_handed(docs.journal_id.id, docs.to_date)">
+                    <br/>
+                    <h5>Cheques propios</h5>
+                    <table class="table table-sm o_main_table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-left">Número</th>
+                                <th class="text-left">Fecha contable</th>
+                                <th class="text-left">Fecha de pago</th>
+                                <th class="text-left">Empresa</th>
+                                <th class="text-left">Importe</th>
+                            </tr>
+                        </thead>
+                        <tbody class="sale_tbody" style="font-size: 15px">
+                            <t t-set="total_issue" t-value="0"/>
+                            <tr t-foreach="docs._get_checks_handed(docs.journal_id.id, docs.to_date)" t-as="tcheck">
+                                <t t-set="total_issue" t-value="tcheck.amount + total_issue"/>
+                                <td>
+                                    <span t-out="tcheck.name"/>
+                                </td>
+                                <td>
+                                    <span t-field="tcheck.payment_id.date"/>
+                                </td>
+                                <td>
+                                    <span t-field="tcheck.payment_date"/>
+                                </td>
+                                <td>
+                                    <span t-out="tcheck.partner_id.name" />
+                                </td>
+                                <td>
+                                    <span t-out="tcheck.amount"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <div>
+                            <td colspan="1">
+                                <strong>
+                                <span>Total</span>
+                                </strong>
                             </td>
-                            <td>
-                                <span t-field="tcheck.date"/>
+                            <td class="text-end" colspan="6">
+                                <span t-esc="total_issue" style="font-size: 15px"/>
                             </td>
+                        </div>
+                    </table>
+                    <br/>
+                </t>
+                <t t-if="docs._get_checks_on_hand(docs.journal_id.id, docs.to_date)">
+                    <h5>Cheques de terceros</h5>
+                    <table class="table table-sm o_main_table table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-left">Número</th>
+                                <th class="text-left">Fecha contable</th>
+                                <th class="text-left">Fecha de pago</th>
+                                <th class="text-left">Cuit</th>
+                                <th class="text-left">Importe</th>
+                            </tr>
+                        </thead>
+                        <tbody class="sale_tbody" style="font-size: 14px">
+                            <t t-set="total" t-value="0"/>
+                            <tr t-foreach="docs._get_checks_on_hand(docs.journal_id.id, docs.to_date)" t-as="tcheck">
+                                <t t-set="total" t-value="tcheck.amount + total"/>
+                                <td>
+                                    <span t-out="tcheck.name"/>
+                                </td>
+                                <td>
+                                    <span t-field="tcheck.payment_id.date"/>
+                                </td>
+                                <td>
+                                    <span t-field="tcheck.payment_date"/>
+                                </td>
+                                <td>
+                                    <span t-out="tcheck.issuer_vat" />
+                                </td>
+                                <td>
+                                    <span t-out="tcheck.amount"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <div>
                             <td>
-                                <span t-field="tcheck.l10n_latam_check_payment_date"/>
+                                <strong>
+                                <span>Total</span>
+                                </strong>
                             </td>
-                            <td>
-                                <span t-out="tcheck.partner_id.name" />
+                            <td class="text-end" colspan="6">
+                                <span t-esc="total" style="font-size: 15px"/>
                             </td>
-                            <td>
-                                <span t-out="tcheck.amount"/>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <div>
-                        <td colspan="1">
-                            <strong>
-                            <span>Total</span>
-                            </strong>
-                        </td>
-                        <td class="text-end" colspan="6">
-                            <span t-esc="total_issue" style="font-size: 15px"/>
-                        </td>
-                    </div>
-                </table>
-                <br/>
-                <h5>Cheques de terceros</h5>
-                <table class="table table-sm o_main_table table-bordered">
-                    <thead>
-                        <tr>
-                            <th class="text-left">Número</th>
-                            <th class="text-left">Fecha contable</th>
-                            <th class="text-left">Fecha de pago</th>
-                            <th class="text-left">Cuit</th>
-                            <th class="text-left">Importe</th>
-                        </tr>
-                    </thead>
-                    <tbody class="sale_tbody" style="font-size: 14px">
-                        <t t-set="total" t-value="0"/>
-                        <tr t-foreach="docs._get_checks_on_hand(docs.journal_id.id, docs.to_date)" t-as="tcheck">
-                            <t t-set="total" t-value="tcheck.amount + total"/>
-                            <td>
-                                <span t-out="tcheck.check_number"/>
-                            </td>
-                            <td>
-                                <span t-field="tcheck.date"/>
-                            </td>
-                            <td>
-                                <span t-field="tcheck.l10n_latam_check_payment_date"/>
-                            </td>
-                            <td>
-                                <span t-out="tcheck.l10n_latam_check_issuer_vat" />
-                            </td>
-                            <td>
-                                <span t-out="tcheck.amount"/>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <div>
-                        <td>
-                            <strong>
-                            <span>Total</span>
-                            </strong>
-                        </td>
-                        <td class="text-end" colspan="6">
-                            <span t-esc="total" style="font-size: 15px"/>
-                        </td>
-                    </div>
-                </table>
+                        </div>
+                    </table>
+                </t>
             </div>
         </t>
     </t>
