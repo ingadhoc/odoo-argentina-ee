@@ -14,7 +14,7 @@
 Argentinian Currency Rate Update
 ================================
 
-This will add AFIP Web Service as your currency provider (official argentinian provider).
+This will add AFIP Web Service as your currency provider (official argentinian provider). It is neccesary to have set on the company afip valid certificate.
 
 By default the automatic rate updates are inactive, you can active them by company
 by going to *Accounting / Configuration / Settings* menu and there found and set
@@ -49,7 +49,7 @@ To configure this module, you need to:
 Usage
 =====
 
-Este modulo permite la actualización automática del tipo de cambio de las monedas que esten activadas, tomando la información desde la pagina de AFIP, la cual coincide con la del banco nación, tipo de cambio DIVISA.
+Este modulo permite la actualización automática del tipo de cambio de las monedas que esten activadas, tomando la información desde la pagina de AFIP, la cual coincide con la del banco nación, tipo de cambio DIVISA de venta.
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
    :alt: Try me on Runbot
