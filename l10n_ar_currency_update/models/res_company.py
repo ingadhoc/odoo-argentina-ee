@@ -72,8 +72,8 @@ class ResCompany(models.Model):
         rate_date = today
 
         for currency in available_currencies:
-            company = self.env.company if self.env.company.sudo().l10n_ar_afip_ws_crt else self.env['res.company'].search(
-                [('l10n_ar_afip_ws_crt', '!=', False), ('l10n_ar_crt_exp_date', '>', today)], limit=1)
+            company = self.env.company if self.env.company.sudo().l10n_ar_afip_ws_crt_id else self.env['res.company'].search(
+                [('l10n_ar_afip_ws_crt_id', '!=', False), ('l10n_ar_afip_ws_crt_id.date_end', '>', today)], limit=1)
             if not company:
                 _logger.log(25, "No pudimos encontrar compañía con certificados de AFIP validos")
                 return False
