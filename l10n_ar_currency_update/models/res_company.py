@@ -2,7 +2,7 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from odoo import fields, models, api, _
+from odoo import fields, models, api
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import logging
@@ -16,7 +16,6 @@ class ResCompany(models.Model):
 
     currency_provider = fields.Selection(
         selection_add=[('afip', 'AFIP Web Service (Argentina)')],
-        default='afip',
     )
     rate_perc = fields.Float(
         digits=(16, 4),
@@ -25,16 +24,6 @@ class ResCompany(models.Model):
         digits=(16, 4),
     )
     l10n_ar_last_currency_sync_date = fields.Date(string="AFIP Last Sync Date", readonly=True)
-
-    @api.model_create_multi
-    def create(self, values):
-        """ Overwrite to include new currency provider """
-        for index in range(len(values)):
-            if values[index].get('country_id') and 'currency_provider' not in values[index]:
-                country = self.env['res.country'].browse(values[index]['country_id'])
-                if country.code.upper() == 'AR':
-                    values[index]['currency_provider'] = 'afip'
-        return super().create(values)
 
     @api.model
     def _compute_currency_provider(self):
@@ -72,8 +61,12 @@ class ResCompany(models.Model):
         rate_date = today
 
         for currency in available_currencies:
-            company = self.env.company if self.env.company.sudo().l10n_ar_afip_ws_crt else self.env['res.company'].search(
-                [('l10n_ar_afip_ws_crt', '!=', False), ('l10n_ar_crt_exp_date', '>', today)], limit=1)
+            valid_certificate = self.env['certificate.certificate'].search(
+                [('active', '=', True), ('date_end', '>=', today), ("country_code", "=", "AR")])
+            if self.env.company.l10n_ar_afip_ws_crt_id in valid_certificate:
+                company = self.env.company
+            else:
+                company = valid_certificate[:1].company_id if valid_certificate else False
             if not company:
                 _logger.log(25, "No pudimos encontrar compañía con certificados de AFIP validos")
                 return False
@@ -99,33 +92,23 @@ class ResCompany(models.Model):
         return res or False
 
     def _generate_currency_rates(self, parsed_data):
-        """ Apply surcharge for on afip rates """
+        """ Apply surcharge for on afip rates
+             Si tenemos definido una tasa de recargo o una percepcion definido en la compañia AR
+             necesitamos volver a calcular la información de la tasa AFIP mas esos montos extras
+        """
         currency_rate = self.env['res.currency.rate']
         currency_object = self.env['res.currency']
-        for company in self:
-            if company.currency_provider == 'afip':
-                new_parsed_data = parsed_data.copy()
+        for company in self.filtered(lambda x: x.currency_provider == 'afip' and (x.rate_surcharge or x.rate_perc)):
+            for currency, (rate, date_rate) in parsed_data.items():
+                already_existing_rate = currency_rate.search([
+                    ('currency_id', '=', currency_object.search([('name', '=', currency)]).id),
+                    ('name', '=', date_rate),
+                    ('company_id', '=', company.id)])
+                if not already_existing_rate and rate and rate != 1.0:
+                    rate = 1.0 / rate
+                    rate = rate * (1.0 + (company.rate_perc or 0.0))
+                    rate += (company.rate_surcharge or 0.0)
+                    rate = 1.0 / rate
+                    parsed_data[currency] = (rate, date_rate)
 
-                # condicion 1: si ya existe la tasa para el dia de una moneda en especifco usamos dicha tasa pre
-                # existente y no usamos las que nos dio AFIP
-                for currency, (rate, date_rate) in new_parsed_data.items():
-                    currency_object = currency_object.search([('name', '=', currency)])
-                    already_existing_rate = currency_rate.search([
-                        ('currency_id', '=', currency_object.id),
-                        ('name', '=', date_rate),
-                        ('company_id', '=', company.id)])
-                    if already_existing_rate:
-                        new_parsed_data[currency] = (already_existing_rate.rate, date_rate)
-                    elif company.rate_surcharge or company.rate_perc:
-                        # condicion 2: Si tenemos definido una tasa de recargo o una percepcion definido en la compañia
-                        # necesitamos volver a calcula la información de la tasa AFIP mas esos montos extras
-                        if rate and rate != 1.0:
-                            rate = 1.0 / rate
-                            rate = rate * (1.0 + (company.rate_perc or 0.0))
-                            rate += (company.rate_surcharge or 0.0)
-                            rate = 1.0 / rate
-                        new_parsed_data[currency] = (rate, date_rate)
-
-                super(ResCompany, company)._generate_currency_rates(new_parsed_data)
-            else:
-                super(ResCompany, company)._generate_currency_rates(parsed_data)
+        super()._generate_currency_rates(parsed_data)
