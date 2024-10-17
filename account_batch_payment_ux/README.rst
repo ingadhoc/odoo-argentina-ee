@@ -10,9 +10,9 @@
    :target: https://www.gnu.org/licenses/agpl
    :alt: License: AGPL-3
 
-=====================
-Accounting Reports UX
-=====================
+===========================
+Accounting Batch Payment UX
+===========================
 This module adds validations on batch payment operations: 
 
 #. Restrict unlink payments linked to the batch payment if the batch is not on draft state.
