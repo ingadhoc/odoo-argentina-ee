@@ -20,7 +20,8 @@ def l10n_ar_account_tax_settlement_post_init_hook(env):
         if impuesto_ret_iva_aplic:
             impuesto_ret_iva_aplic.codigo_impuesto = '02'
         # Agregamos impuestos etiquetas de impuestos
-        env['account.chart.template']._load(company.chart_template, company)
+        if not company.parent_id:
+            env['account.chart.template']._add_wh_taxes(company)
 
     # Dejamos registro en los logs de las compañías en las cuales se estableció el código de impuesto
     if companies:
