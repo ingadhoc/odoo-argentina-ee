@@ -34,7 +34,7 @@ class AccountCheckActionWizard(models.TransientModel):
                             'move_line_ids': move_line_ids
                             }
         # Aquí hacemos el asiento del débito.
-        wizard = self.env['account.reconcile.wizard'].with_context(active_model='account.move.line').new({})
+        wizard = self.env['account.reconcile.wizard'].with_context(active_model='account.move.line', active_ids=move_line_ids).new({})
         for index, value in new_mv_line_dicts.items():
             wizard[index] = value
         wizard.reconcile()
