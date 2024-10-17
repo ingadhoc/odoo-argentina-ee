@@ -25,7 +25,7 @@ class AccountBatchPayment(models.Model):
             for entry in matched_entries:
                 error_msg += f"{entry.name} \n"
             action_error = {
-                'view_mode': 'tree',
+                'view_mode': 'list',
                 'name': _('Matched Entries'),
                 'res_model': 'account.bank.statement.line',
                 'type': 'ir.actions.act_window',
