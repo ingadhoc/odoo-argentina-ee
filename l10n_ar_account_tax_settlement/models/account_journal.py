@@ -1,5 +1,5 @@
 from odoo import models, fields, api, _
-from odoo.exceptions import ValidationError, RedirectWarning
+from odoo.exceptions import ValidationError, RedirectWarning, UserError
 from odoo.tools.float_utils import float_round
 # from odoo.tools.misc import formatLang
 # from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
@@ -1545,9 +1545,13 @@ class AccountJournal(models.Model):
         content = ''
         for line in move_lines.sorted(key=lambda r: (r.date, r.id)):
             payment = line.payment_id
+            # VALIDACIONES
+
+            # Validamos que el impuesto SIRE tenga código de régimen establecido
             if not payment.tax_withholding_id.codigo_regimen:
                 raise RedirectWarning(
-                    message=_("El impuesto '%s' no tiene código de régimen establecido. Editar campo 'Codigo de regimen IVA' en solapa 'Opciones avanzadas' en la vista formulario", payment.tax_withholding_id.name),
+                    message=_("El impuesto '%s' no tiene código de régimen establecido. Es obligatorio para generar el archivo txt Sire. Editar "
+                              "campo 'Codigo de regimen IVA' en solapa 'Opciones avanzadas' en la vista formulario", payment.tax_withholding_id.name),
                     action={
                         'type': 'ir.actions.act_window',
                         'res_model': 'account.tax',
@@ -1558,55 +1562,46 @@ class AccountJournal(models.Model):
                     },
                     button_text=_('Editar impuesto'),
                 )
-            fecha_impuesto = fields.Date.from_string(line.date).strftime('%d/%m/%Y')
-            # 1 Versión (integer long 4, 1-4, obligatorio) --> 0100
-            content += '0100'
-            # 2 Código de trazabilidad (string long 36, 5-40, no obligatorio)
-            content += ' '*36
-            # 3 Impuesto (integer long 3, 41-43, obligatorio)
-            content += '216'
-            # 4 Régimen (integer long 3, 44-46, obligatorio)
-            content += payment.tax_withholding_id.codigo_regimen
-            # 5 Fecha retención (date long 10, 47-56, obligatorio)
-            content += fecha_impuesto
-            # 6 Condición (integer 2, 57-58, no obligatorio)
-            content += ' '*2
-            # 7 Imposibilidad de retención (boolean long 1, 59-59, obligatorio)
-            content += '0'
-            # 8 No retención motivo (string 30, 60-89, no obligatorio)
-            content += ' '*30
-            # 9 Importe retención (decimal 14, 90-103, obligatorio)
-            content += '%014.2f' % abs(line.balance)
-            # 10 Importe de la base de cálculo/cantidad (decimal 14, 104-117, obligatorio)
-            content += '%014.2f' % abs(payment.withholding_base_amount)
-            # 11 Régimen de exclusión (boolean 1, 118-118, obligatorio)
-            content += '0'
-            # 12 Porcentaje de exclusión (decimal 6, 119-124, no obligatorio)
-            content += '%06.2f' % payment.tax_withholding_id.porcentaje_exclusion if payment.tax_withholding_id.porcentaje_exclusion != '0.0' else '000.00'
-            # 13 Fecha publicación o finalización de la vigencia (date 10, 125-134, no obligatorio)
-            content += ' '*10
-            # 14 Tipo comprobante (integer 2, 135-136, obligatorio)
-            # por el momento lo dejamos fijo '06' que es el tipo de comprobante para retenciones
-            # pero en un futuro para percepciones puede tomar otros valrores (tomar como referencia lo desarrollado para sicore)
-            content += '06'
-            # 15 Fecha comprobante (date 10, 137-146, obligatorio)
-            content += fecha_impuesto
-            # 16 Nro comprobante (string 16, 147-162, no obligatorio)
-            content += re.sub('[^0-9]', '', payment.name).ljust(16)
-            # 17 COE (string 12, 163-174, no obligatorio)
-            content += ' '*12
-            # 18 COE ORIGINAL (string 12, 175-186, no obligatorio)
-            content += ' '*12
-            # 19 CAE (string 14, 187-200, no obligatorio)
-            content += ' '*14
-            # 20 Importe comprobante (decimal 14, 201-214, obligatorio)
-            content += '%14.2f' % payment.payment_group_id.payments_amount
-            # 21 Motivo emisión de nota de crédito/ajuste (string 30, 215-244, no obligatorio)
-            content += ' '*30
-            # 22 Retenido clave (integer 11, 245-255, obligatorio)
-            # Si es cliente del exterior establecemos cuit del país del exterior, sino establecemos l10n_ar_vat
-            if line.partner_id.l10n_ar_afip_responsibility_type_id.id == self.env.ref('l10n_ar.res_EXT').id:
-                pais = line.partner_id.country_id
+
+            # Validamos que el partner sea Cliente / Proveedor del Exterior
+            if line.partner_id.l10n_ar_afip_responsibility_type_id.id != self.env.ref('l10n_ar.res_EXT').id:
+                raise UserError(_("Solo puede generar el archivo de retenciones SIRE para contactos con responsabilidad"
+                                  "AFIP: 'Cliente / Proveedor del Exterior'. Contacto: %s (id: %s)"
+                                  % (line.partner_id.name, line.partner_id.id)))
+
+            # Validamos que el contacto tenga país establecido
+            if not line.partner_id.country_id:
+                raise RedirectWarning(
+                    message=_("El contacto '%s' debe tener país establecido", payment.partner_id.name),
+                    action={
+                        'type': 'ir.actions.act_window',
+                        'res_model': 'res.partner',
+                        'views': [(False, 'form')],
+                        'res_id': payment.partner_id.id,
+                        'name': _('Tax'),
+                        'view_mode': 'form',
+                    },
+                    button_text=_('Editar contacto.'),
+                )
+
+            # Validamos que el país del contacto tenga el cuit correspondiente
+            pais = line.partner_id.country_id
+            es_persona = line.partner_id.company_type == 'person'
+            if es_persona:
+                if not pais.l10n_ar_natural_vat:
+                    raise RedirectWarning(
+                        message=_("El país '%s' no tiene IVA Persona Física establecido.", pais.name),
+                        action={
+                            'type': 'ir.actions.act_window',
+                            'res_model': 'res.country',
+                            'views': [(False, 'form')],
+                            'res_id': pais.id,
+                            'name': _('País'),
+                            'view_mode': 'form',
+                        },
+                        button_text=_('Editar País'),
+                    )
+            if not es_persona:
                 if not pais.l10n_ar_legal_entity_vat:
                     raise RedirectWarning(
                         message=_("El país '%s' no tiene cuit persona jurídica establecido.", pais.name),
@@ -1620,17 +1615,117 @@ class AccountJournal(models.Model):
                         },
                         button_text=_('Editar País'),
                     )
-                content += pais.l10n_ar_legal_entity_vat
-            else:
-                content += line.partner_id.l10n_ar_vat
-            # 23 Certificado original nro (string 25, 256-280, no obligatorio)
-            content += ' '*25
-            # 24 Certificado original fecha reten (date 10, 281-290, no obligatorio)
-            content += ' '*10
-            # 25 Certificado original importe (decimal 14, 291-304, no obligatorio)
-            content += ' '*14
-            # 26 Motivo de la anulación (integer 1, 305-305, no obligatorio)
-            content += ' '*1
+
+            # Validamos que el cuit del agente sea de 11 dígitos
+            partner_vat = payment.partner_id.vat
+            if len(partner_vat) != 11:
+                raise RedirectWarning(
+                    message=_("El cuit '%s' del agente debe ser de 11 dígitos de longitud", payment.partner_id.name),
+                    action={
+                        'type': 'ir.actions.act_window',
+                        'res_model': 'res.partner',
+                        'views': [(False, 'form')],
+                        'res_id': payment.partner_id.id,
+                        'name': _('Tax'),
+                        'view_mode': 'form',
+                    },
+                    button_text=_('Editar contacto.'),
+                )
+
+            # Validamos que el contacto tenga país y fecha de nacimiento si es persona física
+            if es_persona and (not line.partner_id.born_country_id or not line.partner_id.birthdate):
+                raise RedirectWarning(
+                    message=_("El contacto por ser un individuo '%s'"
+                              " debe tener país y fecha de nacimiento establecido.", line.partner_id.name),
+                    action={
+                        'type': 'ir.actions.act_window',
+                        'res_model': 'res.partner',
+                        'views': [(False, 'form')],
+                        'res_id': line.partner_id.id,
+                        'name': _('Contacto'),
+                        'view_mode': 'form',
+                    },
+                    button_text=_('Editar Contacto'),
+                )
+
+            fecha_impuesto = fields.Date.from_string(line.date).strftime('%d/%m/%Y')
+            # 1 Formulario (integer long 4, 1-4, obligatorio) --> '2003' comentado por agi en tarea 40050, en nota del 23/10/2024 a las 10:00hs
+            # Además en la sección "3.2. F2003 - Validaciones", pàgina 5 del pdf de la especificación se indica que debe ser fijo "2003"
+            content += '2003'
+            # 2 Versión (integer long 4, 5-8, obligatorio) --> '0100' comentado por agi en tarea 40050, en nota del 23/10/2024 a las 10:00hs
+            # Además en la sección "3.2. F2003 - Validaciones", pàgina 5 del pdf de la especificación se indica que debe ser fijo "0100"
+            content += '0100'
+            # 3 Código de trazabilidad (string long 10, 9-18, no obligatorio) --> texto libre o en blanco -->
+            # comentado por agi en tarea 40050, en nota del 23/10/2024 a las 10:00hs
+            content += ' ' * 10
+            # 4 Cuit agente (integer, long 11, 19-29, obligatorio)
+            content += partner_vat
+            # 5 Impuesto (integer long 3, 30-32, no obligatorio) -->
+            # sección "3.2. F2003 - Validaciones", pàgina 5 del pdf de la especificación se indica que debe ser fijo "218"
+            content += '218'
+            # 6 Régimen (integer long 3, 33-35, obligatorio)
+            content += payment.tax_withholding_id.codigo_regimen
+            # 7 Cuit ordenante (integer 11, 36-46, obligatorio)
+            content += partner_vat
+            # 8 Fecha retención (date long 10, 59-68, obligatorio)
+            content += fecha_impuesto
+            # 9 Tipo comprobante (integer 2, 57-58, obligatorio)
+            # por el momento lo dejamos fijo '06' que es el tipo de comprobante para retenciones
+            # pero en un futuro para percepciones puede tomar otros valrores (tomar como referencia lo desarrollado para sicore) --> ver espeficiación vieja tarea 40906
+            content += '06'
+            # 10 Fecha comprobante (date 10, 59-68, obligatorio)
+            content += fecha_impuesto
+            # 11 Nro comprobante (string 16, 69-84, obligatorio)
+            # Número de Orden de Pago sin guiones ni tipo de identificación (ej: 000100008220) (prefijo sin - + número de documento) (no es obligatorio) --> ver espeficiación vieja tarea 40906
+            content += re.sub('[^0-9]', '', payment.name).ljust(16)
+            # 12 Importe comprobante (decimal 14, 85-98, obligatorio)
+            content += '%14.2f' % payment.payment_group_id.payments_amount
+            # 13 Filler (filler 14, 99-112, obligatorio)
+            content += ' ' * 14
+            # 14 Certificado original nro (string 25, 113-137, no obligatorio)
+            content += ' ' * 25
+            # 15 Certificado original fecha reten (date 10, 138-147, no obligatorio)
+            content += ' ' * 10
+            # 16 Certificado original importe (decimal 14, 148-161, no obligatorio)
+            content += ' ' * 14
+            # 17 Motivo emisión nota de créditon(string 30, 162-191, no obligatorio)
+            content += ' ' * 30
+            # 18 No retención (boolean 1, 192-192) --> ver especificación vieja tarea 40906
+            content += '0'
+            # 19 No retención motivo (string 30, 193-222, no obligatorio)
+            content += '0' * 30
+            # 20 Aplica CDI (boolean 1, 223-223, obligatorio) --> especificación 40906, mt 11/12/24
+            content += '1' if payment.sire_aplica_cdi else '0'
+            # 21 Código de alícuota (integer, 4, 224-227, obligatorio)
+            content += payment.sire_codigo_alicuota.zfill(4)
+            # 22 Aplica acrecentamiento (boolean, 1, 228-228)
+            content += '1' if payment.sire_aplica_acrecentamiento else '0'
+            # 23 Retenido clave nif (string 50, 229-278, obligatorio)
+            # Cuit del pais del sujeto retenido s/ especificación tarea 40906, mt 11/12/24
+            content += pais.l10n_ar_natural_vat if es_persona else pais.l10n_ar_legal_entity_vat
+            content += ' ' * 39
+            # 24 Retenido Apellido Nombre Denominacion (string, 60, 279-338, obligatorio)
+            content += line.partner_id.name[:60].ljust(60)
+            # 25 Retenido domicilio actual en exterior (string, 60, 339-398, obligatorio)
+            # domicilio completo --> comentado por agi en tarea 40050, en nota del 23/10/2024 a las 10:00hs
+            domicilio = ''
+            if payment.partner_id.street:
+                domicilio += payment.partner_id.street
+            if payment.partner_id.street2:
+                domicilio += ' ' + payment.partner_id.street2
+            if payment.partner_id.city:
+                domicilio += ' ' + payment.partner_id.city
+            if payment.partner_id.state_id:
+                domicilio += ' ' + payment.partner_id.state_id.name
+            content += domicilio[:60].ljust(60) if domicilio else ' ' * 60
+            # 26 Retenido domicilio actual en exterior pais (integer, 3, 399-401, obligatorio)
+            content += line.partner_id.country_id.l10n_ar_afip_code or ' ' * 3
+            # 27 Retenido tipo de persona (string, 1, 402-402, obligatorio)
+            content += 'F' if es_persona else 'J'
+            # 28 Retenido nacimiento constitucion pais (integer, 3, 403-405, no obligatorio)
+            content += line.partner_id.born_country_id.l10n_ar_afip_code if es_persona else ' ' * 3
+            # 29 Retenido nacimiento constitucion fecha (date 10, 406-415, no obligatorio)
+            content += line.partner_id.birthdate.strftime('%d/%m/%Y') if es_persona else ' ' * 10
             content += '\r\n'
         return [{
             'txt_filename': ('Retenciones') + '_sire.txt',
