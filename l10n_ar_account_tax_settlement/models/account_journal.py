@@ -1,5 +1,5 @@
 from odoo import models, fields, api, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, RedirectWarning
 from odoo.tools.float_utils import float_round
 # from odoo.tools.misc import formatLang
 # from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
@@ -62,6 +62,7 @@ class AccountJournal(models.Model):
         ('iibb_aplicado_sircar', 'TXT Perc/Ret IIBB aplicadas SIRCAR'),
         ('iibb_aplicado_dgr_mendoza', 'TXT  Perc/Ret IIBB aplicado DGR Mendonza'),
         ('retenciones_iva', 'TXT Retenciones/Percepciones Sufridas IVA'),
+        ('sire', 'TXT Retenciones SIRE'),
         # ('other', 'Other')
     ])
 
@@ -1535,5 +1536,102 @@ class AccountJournal(models.Model):
 
         return [{
             'txt_filename': ('Retenciones' if payment else 'Percepciones') + '_iva.txt',
+            'txt_content': content,
+        }]
+
+    def sire_files_values(self, move_lines):
+        """ Retenciones de sire. Implementado según especificación de tarea 40906 """
+        self.ensure_one()
+        content = ''
+        for line in move_lines.sorted(key=lambda r: (r.date, r.id)):
+            payment = line.payment_id
+            if not payment.tax_withholding_id.codigo_regimen:
+                raise RedirectWarning(
+                    message=_("El impuesto '%s' no tiene código de régimen establecido y es obligatorio para generar el archivo txt sire. Editar campo 'Codigo de regimen IVA' en solapa 'Opciones avanzadas' en la vista formulario", payment.tax_withholding_id.name),
+                    action={
+                        'type': 'ir.actions.act_window',
+                        'res_model': 'account.tax',
+                        'views': [(False, 'form')],
+                        'res_id': payment.tax_withholding_id.id,
+                        'name': _('Tax'),
+                        'view_mode': 'form',
+                    },
+                    button_text=_('Editar impuesto'),
+                )
+            fecha_impuesto = fields.Date.from_string(line.date).strftime('%d/%m/%Y')
+            # 1 Formulario (integer long 4, 1-4, obligatorio)
+            # 2 Versión (integer long 4, 5-8, obligatorio) --> 0100
+            content += '0100'
+            # 3 Código de trazabilidad (string long 10, 9-18, no obligatorio)
+            content += ' ' * 10
+            # 4 Cuit agente (integer, long 11, 19-29, obligatorio)
+            content += payment.partner_id.ensure_vat()
+            # 5 Impuesto (integer long 3, 30-32, no obligatorio)
+            content += '216'
+            # 6 Régimen (integer long 3, 33-35, obligatorio)
+            content += payment.tax_withholding_id.codigo_regimen
+            # 7 Cuit ordenante (integer 11, 36-46, obligatorio)
+            content += payment.partner_id.ensure_vat()
+            # 8 Fecha retención (date long 10, 59-68, obligatorio)
+            content += fecha_impuesto
+            # 9 Tipo comprobante (integer 2, 57-58, obligatorio)
+            # por el momento lo dejamos fijo '06' que es el tipo de comprobante para retenciones
+            # pero en un futuro para percepciones puede tomar otros valrores (tomar como referencia lo desarrollado para sicore)
+            content += '06'
+            # 10 Fecha comprobante (date 10, 59-68, obligatorio)
+            content += fecha_impuesto
+            # 11 Nro comprobante (string 16, 69-84, obligatorio)
+            content += re.sub('[^0-9]', '', payment.name).ljust(16)
+            # 12 Importe comprobante (decimal 14, 85-98, obligatorio)
+            content += '%14.2f' % payment.payment_group_id.payments_amount
+            # 13 Filler (filler 14, 99-112, obligatorio)
+            content += ' ' * 14
+            # 14 Certificado original nro (string 25, 113-137, no obligatorio)
+            content += ' ' * 25
+            # 15 Certificado original fecha reten (date 10, 138-147, no obligatorio)
+            content += ' ' * 10
+            # 16 Certificado original importe (decimal 14, 148-161, no obligatorio)
+            content += ' ' * 14
+            # 17 Motivo emisión nota de créditon(string 30, 162-191, no obligatorio)
+            content += ' ' * 30
+            # 18 No retención (boolean 1, 192-192)
+            content += '0'
+            # 19 No retención motivo (string 30, 193-222, no obligatorio)
+            content += '0'*30
+            # 20 Aplica CDI (boolean 1, 223-223, obligatorio)
+            content += '0'
+            # 21 Código de alícuota (integer, 4, 224-227, obligatorio)
+            content += ' ' * 4
+            # 22 Aplica acrecentamiento (boolean, 1, 228-228)
+            content += '0' * 4
+            # 23 Retenido clave nif (string 50, 229-278, obligatorio)
+            if line.partner_id.l10n_ar_afip_responsibility_type_id.id == self.env.ref('l10n_ar.res_EXT').id:
+                pais = line.partner_id.country_id
+                if not pais.l10n_ar_legal_entity_vat:
+                    raise RedirectWarning(
+                        message=_("El país '%s' no tiene cuit persona jurídica establecido.", pais.name),
+                        action={
+                            'type': 'ir.actions.act_window',
+                            'res_model': 'res.country',
+                            'views': [(False, 'form')],
+                            'res_id': pais.id,
+                            'name': _('País'),
+                            'view_mode': 'form',
+                        },
+                        button_text=_('Editar País'),
+                    )
+                content += pais.l10n_ar_legal_entity_vat
+            else:
+                content += line.partner_id.l10n_ar_vat
+            content += ' ' * 39
+            # 24 Retenido Apellido Nombre Denominacion (string, 60, 279-338, obligatorio)
+            # 25 Retenido domicilio actual en exterior (string, 60, 339-398, obligatorio)
+            # 26 Retenido domicilio actual en exterior pais (integer, 3, 399-401, obligatorio)
+            # 27 Retenido tipo de persona (string, 1, 402-402, obligatorio)
+            # 28 Retenido nacimiento constitucion pais (integer, 3, 403-405, no obligatorio)
+            # 29 Retenido nacimiento constitucion fecha (date 10, 406-415, no obligatorio)
+            content += '\r\n'
+        return [{
+            'txt_filename': ('Retenciones') + '_sire.txt',
             'txt_content': content,
         }]
