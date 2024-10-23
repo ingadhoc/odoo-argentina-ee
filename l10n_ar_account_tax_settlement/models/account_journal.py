@@ -1,5 +1,5 @@
 from odoo import models, fields, api, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, RedirectWarning
 from odoo.tools.float_utils import float_round
 # from odoo.tools.misc import formatLang
 # from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
@@ -853,8 +853,9 @@ class AccountJournal(models.Model):
         line_nbr = 1
         for line in move_lines.filtered('payment_id'):
             alicuot_line = line.tax_line_id.get_partner_alicuot(
-                line.partner_id, line.date)
-            if not alicuot_line:
+                line.partner_id, line.date) if not line.tax_line_id.withholding_type == 'code' else line.payment_id.alicuota_mendoza * 100
+
+            if not type(alicuot_line, float) and not alicuot_line:
                 raise ValidationError(_(
                     'No hay alicuota configurada en el partner '
                     '"%s" (id: %s)') % (
@@ -893,18 +894,31 @@ class AccountJournal(models.Model):
 
             # 8 alicuota de la retencion
             content.append(format_amount(
-                alicuot_line.alicuota_retencion, 6, 2, '.'))
+                alicuot_line.alicuota_retencion if not type(alicuot_line, float) else alicuot_line, 6, 2, '.'))
 
             # 9 Monto retenido
             content.append(format_amount(-line.balance, 12, 2, '.'))
 
             # 10 Tipo de Régimen de Percepción
             # (código correspondiente según tabla definida por la jurisdicción)
-            if not alicuot_line.regimen_retencion:
+            if not type(alicuot_line, float) and not alicuot_line.regimen_retencion:
                 raise ValidationError(_(
                     'No hay regimen de retencion configurado para la alícuota'
                     ' del partner %s') % line.partner_id.name)
-            content.append(alicuot_line.regimen_retencion)
+            elif not line.tax_line_id.codigo_regimen:
+                raise RedirectWarning(
+                    message=_("El impuesto '%s' not tiene código de regimen en solapa 'Opciones avanzadas' campo 'Codigo de regimen'.", line.tax_line_id.name),
+                    action={
+                        'type': 'ir.actions.act_window',
+                        'res_model': 'account.tax',
+                        'views': [(False, 'form')],
+                        'res_id': line.tax_line_id.id,
+                        'name': _('Tax'),
+                        'view_mode': 'form',
+                    },
+                    button_text=_('Editar Impuesto'),
+                )
+            content.append(alicuot_line.regimen_retencion if not type(alicuot_line, float) else line.tax_line_id.codigo_regimen)
 
             # 11 Jurisdicción: código en Convenio Multilateral de la
             # jurisdicción a la cual está presentando la DDJJ
