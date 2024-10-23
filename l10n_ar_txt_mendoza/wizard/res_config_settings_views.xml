@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record model="ir.ui.view" id="res_config_settings_view_form">
+        <field name="name">res.config.settings.view.form.inherit.l10n_ar_afip_ws</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="l10n_ar.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <div id="argentina_localization" position="inside">
+                <div class="col-xs-12 col-md-6 o_setting_box">
+                    <div class="o_setting_left_pane"/>
+                    <div class="o_setting_right_pane">
+                        <label for="riesgo_fiscal_csv_file" string="Riesgo Fiscal"/>
+                        <span class="fa fa-lg fa-building-o" title="Values set here are company-specific." groups="base.group_multi_company"/>
+                        <div class="text-muted">
+                            Agregar archivo csv de Riesgo Fiscal:
+                        </div>
+                        <div class="content-group">
+                            <div class="row">
+                                <field name="riesgo_fiscal_csv_file"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="riesgo_fiscal_csv_file_last_update" string="Última Modificación"/>
+                            <field name="riesgo_fiscal_csv_file_last_update" class="o_inline"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </field>
+    </record>
+
+</odoo>
