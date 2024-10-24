@@ -25,7 +25,7 @@ class AccountBatchPayment(models.Model):
             for entry in matched_entries:
                 error_msg += f"{entry.name} \n"
             action_error = {
-                'view_mode': 'tree',
+                'view_mode': 'list',
                 'name': _('Matched Entries'),
                 'res_model': 'account.bank.statement.line',
                 'type': 'ir.actions.act_window',
@@ -36,6 +36,6 @@ class AccountBatchPayment(models.Model):
                 ]
             }
             raise RedirectWarning(error_msg, action_error, _('Show matched entries'))   
-
-        self.payment_ids.is_move_sent = False
+        if self.payment_ids.move_id:
+            self.payment_ids.move_id.is_move_sent = False
         self.write({'state': 'draft'})
