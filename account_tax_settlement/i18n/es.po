@@ -3,17 +3,17 @@
 # 	* account_tax_settlement
 # 
 # Translators:
-# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024
 # MarianaLuz Torres, 2024
 # feg, 2024
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-26 11:50+0000\n"
+"POT-Creation-Date: 2024-10-24 20:36+0000\n"
 "PO-Revision-Date: 2024-03-15 18:35+0000\n"
-"Last-Translator: feg, 2024\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -67,6 +67,18 @@ msgstr "Cuenta"
 #: model:ir.model,name:account_tax_settlement.model_account_report
 msgid "Accounting Report"
 msgstr "Informe contable"
+
+#. module: account_tax_settlement
+#: model:ir.model.fields,field_description:account_tax_settlement.field_account_generic_tax_report_handler__algolia_search
+#: model:ir.model.fields,field_description:account_tax_settlement.field_account_journal__algolia_search
+#: model:ir.model.fields,field_description:account_tax_settlement.field_account_move__algolia_search
+#: model:ir.model.fields,field_description:account_tax_settlement.field_account_move_line__algolia_search
+#: model:ir.model.fields,field_description:account_tax_settlement.field_account_report__algolia_search
+#: model:ir.model.fields,field_description:account_tax_settlement.field_account_tax_settlement_wizard__algolia_search
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard__algolia_search
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard_line__algolia_search
+msgid "Algolia Search"
+msgstr "Busqueda Avanzada"
 
 #. module: account_tax_settlement
 #: model:ir.model.fields,field_description:account_tax_settlement.field_account_report__allow_settlement
