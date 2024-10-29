@@ -7,13 +7,6 @@
         <field name="model">res.config.settings</field>
         <field name="inherit_id" ref="account.res_config_settings_view_form"/>
         <field name="arch" type="xml">
-            <block name="main_currency_setting_container" position="inside">
-                <setting id="company_currency_on_follow_up" string="Use company currency on Followup" company_dependent="1" help="By default Odoo Follow up will open the debt per currency.
-                If you set this option all the debt will be grouped on one section and using the company currency.">
-                    <field name="use_company_currency_on_followup"/>
-                </setting>
-            </block>
-            
             <block name="main_currency_setting_container" position="after">
                 <block title="Bank Reconciliation" name="accounting_bank_reconciliation">
                     <setting id="use_search_filter_amount" string="Filter by same amount" help="If you select this option, the bank reconciliation wizard will search for movement lines with the same amount 

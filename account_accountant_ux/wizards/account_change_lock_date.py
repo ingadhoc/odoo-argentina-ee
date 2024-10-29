@@ -14,16 +14,18 @@ class AccountChangeLockDate(models.TransientModel):
         'Company',
         default=lambda self: self.env.company,
         required=True,
+        readonly = False
     )
 
     @api.onchange('company_id')
     def onchange_company_id(self):
-        self.period_lock_date = self.company_id.period_lock_date
+        self.sale_lock_date = self.company_id.sale_lock_date
+        self.purchase_lock_date = self.company_id.purchase_lock_date
         self.fiscalyear_lock_date = self.company_id.fiscalyear_lock_date
         self.tax_lock_date = self.company_id.tax_lock_date
 
     def change_lock_date(self):
-        if self.user_has_groups('account.group_account_manager'):
+        if self.env.user.has_group('account.group_account_manager'):
             if any(
                     lock_date > fields.Date.context_today(self)
                     for lock_date in (

@@ -1,6 +1,6 @@
 <odoo>
-    <record id="account_ux.menu_finance_bank_and_cash" model="ir.ui.menu">
-        <field name="parent_id" ref="account_accountant.menu_accounting"/>
+    <record id="account_internal_transfer.menu_finance_bank_and_cash" model="ir.ui.menu">
+        <field name="parent_id" ref="accountant.menu_accounting"/>
     </record>
     <data noupdate="1">
         <function model="ir.config_parameter" name="set_param" eval="('account_accountant_ux.use_search_filter_amount', 'True')"/>

@@ -11,7 +11,7 @@
    :alt: License: AGPL-3
 
 =====================
-Accounting Reports UX
+Account Accountant UX
 =====================
 
 #. Mueve el menu "Caja y bancos" a nuevo menú de Accounting

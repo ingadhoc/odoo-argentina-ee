@@ -5,9 +5,11 @@
         <field name="model">account.change.lock.date</field>
         <field name="inherit_id" ref="account_accountant.view_account_change_lock_date"/>
         <field name="arch" type="xml">
-            <field name="period_lock_date" position="before">
-                <field name="company_id" options="{'no_create': True, 'no_open': True}"/>
-            </field>
+            <xpath expr="//field[@name='company_id']" position="attributes">
+                <attribute name="invisible">0</attribute>
+                <attribute name="options">{'no_create': True, 'no_open': True}</attribute>
+            </xpath>
+
         </field>
     </record>
 </odoo>

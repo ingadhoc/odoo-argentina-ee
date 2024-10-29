@@ -19,7 +19,7 @@
 ##############################################################################
 {
     'name': 'Accounting Accountant UX',
-    'version': "17.0.1.5.0",
+    'version': "18.0.1.0.0",
     'category': 'Accounting',
     'sequence': 14,
     'summary': '',
@@ -30,12 +30,10 @@
     ],
     'depends': [
         'account_reports',
-        'account_followup',
-        'account_ux',
+        'account_internal_transfer',
     ],
     'data': [
         'views/res_partner_view.xml',
-        'views/account_followup_views.xml',
         'views/account_move_line.xml',
         'wizards/account_change_lock_date_views.xml',
         'wizards/res_config_settings_views.xml',
@@ -44,7 +42,7 @@
     ],
     'demo': [
     ],
-    'installable': False,
+    'installable': True,
     'auto_install': True,
     'application': False,
 }

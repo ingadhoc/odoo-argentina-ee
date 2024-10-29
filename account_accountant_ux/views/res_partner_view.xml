@@ -4,7 +4,7 @@
     <record id="view_partner_form" model="ir.ui.view">
         <field name="name">res.partner.form</field>
         <field name="model">res.partner</field>
-        <field name="inherit_id" ref="account_reports.partner_view_buttons"/>
+        <field name="inherit_id" ref="account.partner_view_buttons"/>
         <field name="arch" type="xml">
             <div name="button_box" position="inside">
                 <button class="oe_stat_button" type="object" groups="account.group_account_invoice"
@@ -15,18 +15,13 @@
                     </div>
                 </button>
             </div>
-            <xpath expr="//page[@name='accounting']//group" position="after">
-                <group>
-                    <field name="last_time_entries_checked" readonly="0" groups="base.group_no_one"/>
-                </group>
-            </xpath>
         </field>
     </record>
     <record model="ir.actions.server" id="action_partner_ledger">
             <field name="name">Partner Ledger Report</field>
             <field name="model_id" ref="model_res_partner"/>
             <field name="binding_model_id" ref="model_res_partner" />
-            <field name="binding_view_types">tree</field>
+            <field name="binding_view_types">list</field>
             <field name="state">code</field>
             <field name="code">
                 if records:
