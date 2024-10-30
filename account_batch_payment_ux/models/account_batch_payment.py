@@ -39,3 +39,12 @@ class AccountBatchPayment(models.Model):
 
         self.payment_ids.is_move_sent = False
         self.write({'state': 'draft'})
+
+    # Agregamos este código porque Odoo hizo un cambio de los depends de este método que hace que falle
+    # https://github.com/odoo/enterprise/pull/70264
+    # No falla en runbot de odoo porque el módulo de sepa direct debit tiene un método similar a este
+    # Ticket a odoo con la explicación: https://www.odoo.com/es_ES/my/tasks/4296137
+    # Una vez que lo solucionen en Odoo, deberíamos hacer un revert de este código
+    @api.constrains('batch_type', 'journal_id', 'payment_ids')
+    def _check_payments_constrains(self):
+        super(AccountBatchPayment, self)._check_payments_constrains()
