@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="account.view_account_journal_form"/>
         <field name="arch" type="xml">
             <xpath expr="//page[@name='advanced_settings']/group">
-                <group string="Journal Book Report">
+                <group>
                     <field name="book_group_id"/>
                 </group>
             </xpath>

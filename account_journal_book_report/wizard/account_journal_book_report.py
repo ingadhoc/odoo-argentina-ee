@@ -13,7 +13,6 @@ class AccountJournalBookReport(models.TransientModel):
 
     company_id = fields.Many2one(
         'res.company',
-        string='Company',
         required=True,
         default=lambda self: self.env.company)
 
@@ -22,7 +21,6 @@ class AccountJournalBookReport(models.TransientModel):
         relation = 'account_journal_book_journal_rel',
         column1 = 'acc_journal_entries_id',
         column2 = 'journal_id',
-        string='Journals',
         required=True,
         default=lambda self: self.env['account.journal'].search([('company_id', '=', self.company_id.id)]),
         domain="[('company_id', '=', company_id)]",
@@ -47,9 +45,8 @@ class AccountJournalBookReport(models.TransientModel):
 
     @api.onchange('company_id')
     def _onchange_company_id(self):
-        dates = self.company_id.compute_fiscalyear_dates(
-            fields.Date.from_string(fields.Date.today()))
-        if dates:
+        if dates := self.company_id.compute_fiscalyear_dates(
+            fields.Date.from_string(fields.Date.today())):
             self.date_from = dates['date_from']
             self.date_to = dates['date_to']
 
@@ -74,8 +71,9 @@ class AccountJournalBookReport(models.TransientModel):
             last_entry_number=self.last_entry_number,
         ).report_action(self)
 
-
     def _retrive_moves_ids(self):
+        """ Este método se llama desde el archivo account_journal_book_report.ods y sirve para obtener los asientos
+        contables que estarán en el reporte de libro diario. """
         date_from = fields.Date.from_string(self.date_from)
         date_to = fields.Date.from_string(self.date_to)
         domain = [('company_id', '=', self.company_id.id)]
@@ -98,7 +96,8 @@ class AccountJournalBookReport(models.TransientModel):
         result['company_id'] = data['form']['company_id'][0] or False
         return result
 
-    def check_report(self):
+    def action_check_report(self):
+        """ Este método se llama desde el botón 'Imprimir' del wizard 'Libro Diario' """
         self.ensure_one()
         data = {}
         data['ids'] = self.env.context.get('active_ids', [])

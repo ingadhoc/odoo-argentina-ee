@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+    <record id="account_journal_book_report" model="ir.actions.report">
+        <field name="name">Account Journal Book Report</field>
+        <field name="model">account.journal.book.report</field>
+        <field name="report_name">account_journal_book_report</field>
+        <field name="report_type">aeroo</field>
+        <field name="in_format">oo-ods</field>
+        <field name="out_format" ref="report_aeroo.report_mimetypes_xls_odt"/>
+        <field name="report_file">account_journal_book_report/wizard/account_journal_book_report.ods</field>
+        <field name="tml_source">file</field>
+    </record>
+
     <record id="account_journal_book_report_view" model="ir.ui.view">
         <field name="name">Print journal by entries</field>
         <field name="model">account.journal.book.report</field>
@@ -13,12 +24,11 @@
                 </group>
                 <group>
                     <field name="target_move" widget="radio"/>
-                    <field name="journal_ids" invisible="1" required="0"/>
                     <field name="date_to"/>
                 </group>
             </group>
             <footer>
-                <button name="check_report" string="Print" type="object" default_focus="1" class="oe_highlight" data-hotkey="q"/>
+                <button name="action_check_report" string="Print" type="object" default_focus="1" class="oe_highlight" data-hotkey="q"/>
                 <button string="Cancel" class="btn btn-secondary" special="cancel" data-hotkey="z" />
             </footer>
         </form>
