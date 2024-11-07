@@ -18,6 +18,9 @@
         <field name="model">account.move.line</field>
         <field name="inherit_id" ref="account.view_move_line_payment_tree"/>
         <field name="arch" type="xml">
+            <header>
+                <button name="action_reconcile" type="object" string="Reconcile" groups="account.group_account_user"/>
+            </header>
             <groupby name="partner_id">
                 <button type="object" name="open_action_followup" icon="fa-list" title="Follow Up"/>
             </groupby>
