@@ -61,12 +61,12 @@
                     <group invisible="state in ('option', 'finished')">
                         <field name="partner_id" required="state == 'selection'"/>
                         <field name="field_ids" nolabel="1" colspan="2">
-                            <tree create="false">
+                            <list create="false">
                                 <field name="label"/>
                                 <field name="field" groups="base.group_no_one"/>
                                 <field name="old_value"/>
                                 <field name="new_value"/>
-                            </tree>
+                            </list>
                         </field>
                     </group>
                 </sheet>

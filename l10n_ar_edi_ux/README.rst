@@ -16,7 +16,7 @@ Argentinian Electronic Invoicing UX
 
 * Add l10n_ar_afip_asoc_period_start / l10n_ar_afip_asoc_period_end fields and functionality on invoices
 * Improve auto detecion of linked document when posting to afip an NC/ND by checking linked invoices on a sale order (for eg. a credit note created from a sale order will report as related invoice the invoice created from the same sale order)
-* Logic to connecto to AFIP Padron using connection approach in enterprise module l10n_ar_edi
+* Logic to connect to AFIP Padron using connection approach in enterprise module l10n_ar_edi
 * Add button on electronic journals to get valid document types for the selected webservice. When is given the response and the Webservice used, returns a more legible message to be shown to the users.
 * Allow to set boarding permission (Permisos de embarque) in argentinian electronic exportation invoices.
 
