@@ -26,7 +26,7 @@ class BankRecWidget(models.Model):
     #     }
 
 
-    def _lines_recompute_exchange_diff(self):
+    def _lines_recompute_exchange_diff(self,lines):
         self.ensure_one()
         self._ensure_loaded_lines()
 
@@ -56,4 +56,4 @@ class BankRecWidget(models.Model):
 
                     self.line_ids = line_ids_commands
                 return
-        super()._lines_recompute_exchange_diff()
+        super()._lines_recompute_exchange_diff(lines)
