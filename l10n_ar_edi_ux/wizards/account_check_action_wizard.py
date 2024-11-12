@@ -30,8 +30,8 @@ class AccountCheckActionWizard(models.TransientModel):
                             'amount': abs(sum(liquidity_lines.mapped('balance'))),
                             'account_id': outstanding_account.id,
                             'journal_id': payment.journal_id.id,
-                            'date': self.date,
-                            'move_line_ids': move_line_ids
+                            'move_line_ids': move_line_ids,
+                            'date': self.date
                             }
         # Aquí hacemos el asiento del débito.
         wizard = self.env['account.reconcile.wizard'].with_context(active_model='account.move.line', active_ids=move_line_ids).new({})
