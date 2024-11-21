@@ -18,8 +18,8 @@
 #
 ##############################################################################
 {
-    'name': 'Accounting Accountant UX',
-    'version': "18.0.1.3.0",
+    'name': 'Accountant UX',
+    'version': "18.0.1.0.0",
     'category': 'Accounting',
     'sequence': 14,
     'summary': '',
@@ -29,17 +29,10 @@
     'images': [
     ],
     'depends': [
-        'account_reports',
-        'account_internal_transfer',
-        'account_ux',
+        'accountant',
     ],
     'data': [
-        'views/res_partner_view.xml',
-        'views/account_move_line.xml',
-        'wizards/account_change_lock_date_views.xml',
-        'wizards/res_config_settings_views.xml',
-        'data/account_accountant_data.xml',
-        'views/account_journal_dashboard_view.xml',
+        'data/accountant_data.xml',
     ],
     'demo': [
     ],

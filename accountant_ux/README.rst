@@ -10,18 +10,11 @@
    :target: https://www.gnu.org/licenses/agpl
    :alt: License: AGPL-3
 
-=====================
-Account Accountant UX
-=====================
+=============
+Accountant UX
+=============
 
-#. Agrega el parámetro "Compañía" en el wizard de Fechas Bloqueadas.
-#. Agrega una opción en las configuraciones de contabilidad para forzar moneda de la compañía en los informes de seguimiento.
-#. Agrega filtros de "Igual Monto", "Monto Aproximado" y "Monto Menor" en el asistente de conciliación.
-#. Determina por defecto el filtro "Igual Monto" en el asistente de conciliación.
-#. Para asientos contables, el botón "Pagos" te lleva efectivamente al pago, mejorando la compatibilidad con asientos migrados de versiones anteriores.
-#. Ajustar conciliación bancaria para compatibilidad con la opción de reconciliar en la moneda de la compañía.
-#. restaurar comportamiento de 16 donde el boton 'libro mayor' de partners llevaba al informe (Ahora lleva a tree sin este cambio).
-#. desde el informe partner ledger, al ir a los journal items, vamos a la vista de apuntes que usamos para los menus "customer/supplier ledger" para unificar comportamiento (nativamente odoo manda a una _tree_grouped_partner)
+#. Mueve el menu "Caja y bancos" a nuevo menú de Accounting
 
 Installation
 ============
