@@ -1347,8 +1347,8 @@ class AccountJournal(models.Model):
                 if not alicuot_line:
                     raise ValidationError(
                     'No hay alicuota configurada en el partner '
-                    '"%s" (id: %s)') % (
-                        line.partner_id.name, line.partner_id.id)
+                    '"%s" (id: %s)' % (
+                        line.partner_id.name, line.partner_id.id))
 
                 content += str(line.tax_line_id.get_partner_alicuot(
                 line.partner_id, line.date).alicuota_retencion) + ','
