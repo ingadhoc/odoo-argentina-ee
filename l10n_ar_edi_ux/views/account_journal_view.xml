@@ -10,16 +10,4 @@
             </button>
         </field>
     </record>
-
-    <!-- Se agregan los campos necesarios en la vista form de diario para determinar si el diario está configurado para debitar o no cheques propios. -->
-    <record id="view_account_journal_tree" model="ir.ui.view">
-        <field name="name">account.journal.tree</field>
-        <field name="model">account.journal</field>
-        <field name="inherit_id" ref="l10n_latam_check.view_account_journal_tree"/>
-        <field name="arch" type="xml">
-            <xpath expr="//field[@name='l10n_latam_manual_checks']" position="after">
-                <field name="check_add_debit_button" invisible="not l10n_latam_manual_checks"/>
-            </xpath>
-        </field>
-    </record>
 </odoo>

@@ -48,12 +48,6 @@ msgid "Account Check Action Wizard"
 msgstr "Asistente de acción de verificación de cuenta"
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_journal__check_add_debit_button
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_payment__check_add_debit_button
-msgid "Agregar botón de débito"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_check_action_wizard__algolia_search
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_journal__algolia_search
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__algolia_search
@@ -423,17 +417,6 @@ msgstr ""
 "Electrónica - Web Service\""
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_journal__check_add_debit_button
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_payment__check_add_debit_button
-msgid ""
-"Si marca esta opción podrá debitar los cheques con un botón desde los "
-"mismos. Para realizar el asiento de débito se buscará un método de pago "
-"saliente del tipo Manual con nombre Manual, si no se encuentra uno se "
-"utilizará el primero que sea del tipo Manual (sin importar el nombre). Se "
-"utilizará luego la cuenta configurada en dicho método de ese método de pago."
-msgstr ""
-
-#. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
 msgid "Skip these partner"
 msgstr "Saltar este contacto"
@@ -574,12 +557,6 @@ msgstr "Asistente"
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__wizard_error
 msgid "Wizard Error"
 msgstr "Error de asistente"
-
-#. module: l10n_ar_edi_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.account_check_action_wizard_form_view
-#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
-msgid "or"
-msgstr "o"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_res_partner_update_from_padron_field
