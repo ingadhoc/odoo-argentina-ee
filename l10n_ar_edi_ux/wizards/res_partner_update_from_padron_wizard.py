@@ -129,6 +129,7 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
         field_label = dict([(item.real_name, item.name) for item in self.field_to_update_ids])
         fields_names = self.field_to_update_ids.mapped('real_name')
         if partner:
+            _logger.info("El partner que podria fallar es el siguiente '%s' y su nombre es '%s'" % (partner.id, partner.name))
             partner_vals = partner.get_data_from_padron_afip()
             lines = []
             # partner_vals.pop('constancia')
