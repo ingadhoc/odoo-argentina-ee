@@ -4,15 +4,14 @@
 # 
 # Translators:
 # Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024
-# Rocio Vega, 2024
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 17.0+e\n"
+"Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-26 22:16+0000\n"
-"PO-Revision-Date: 2023-12-27 12:39+0000\n"
-"Last-Translator: Rocio Vega, 2024\n"
+"POT-Creation-Date: 2024-12-06 01:55+0000\n"
+"PO-Revision-Date: 2024-12-05 18:36+0000\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,7 +32,6 @@ msgstr "Web service AFIP (Argentina)"
 #. module: l10n_ar_currency_update
 #. odoo-python
 #: code:addons/l10n_ar_currency_update/models/res_currency.py:0
-#, python-format
 msgid ""
 "Cambiar el nombre de la moneda puede repercutir tanto en el servicio de la "
 "sincronización automática de tasa de cambio como en el servicio de la "
@@ -80,6 +78,5 @@ msgstr "Proveedor de servicio"
 #. module: l10n_ar_currency_update
 #. odoo-python
 #: code:addons/l10n_ar_currency_update/models/res_currency.py:0
-#, python-format
 msgid "Warning"
 msgstr "Advertencia"
