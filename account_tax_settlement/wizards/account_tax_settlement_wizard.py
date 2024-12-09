@@ -61,7 +61,7 @@ class AccountTaxSettlementWizard(models.TransientModel):
         self.ensure_one()
         self = self.with_context(entry_date=self.date)
         if self.report_id:
-            move = self.report_id._report_create_settlement_entry(
+            move = self.report_id.with_context(skip_invoice_sync=True)._report_create_settlement_entry(
                 self.settlement_journal_id, options=self._context.get('account_report_generation_options'),
                 account=self.account_id)
         else:
