@@ -3,6 +3,7 @@
 # directory
 ##############################################################################
 from odoo import fields, models, api, _
+from odoo.exceptions import UserError
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
 import logging
@@ -85,10 +86,13 @@ class ResCompany(models.Model):
 
                 # Do not pass company since we need to find the one that has certificate
                 afip_date, rate = currency._l10n_ar_get_afip_ws_currency_rate()
-
-                if datetime.strptime(afip_date, "%Y%m%d").date() + relativedelta(days=1) == rate_date:
+                afip_date = datetime.strptime(afip_date, "%Y%m%d").date() + relativedelta(days=1)
+                if afip_date == rate_date:
                     res.update({currency.name: (1.0 / rate, rate_date)})
                     _logger.log(25, "Currency %s %s %s", currency.name, rate_date, rate)
+                else:
+                    raise UserError("Returned Afip rate is not today's rate (%s, %s vs %s, %s)"
+                                    % (afip_date.strftime("%A"), afip_date, rate_date.strftime("%A"), rate_date))
                 self.env.company = env_company
             except Exception as e:
                 self.env.company = env_company
