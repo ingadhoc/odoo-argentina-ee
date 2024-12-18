@@ -891,14 +891,14 @@ class AccountJournal(models.Model):
 
             # 11 Jurisdicción: código en Convenio Multilateral de la
             # jurisdicción a la cual está presentando la DDJJ
-            if not line.tax_line_id.jurisdiction_code:
+            if not line.tax_line_id.l10n_ar_state_id.jurisdiction_code:
                 raise ValidationError(_(
-                    'No hay etiqueta de jurisdicción configurada!'))
+                    'No hay jurisdicción configurada en el impuesto!'))
 
-            content.append(line.tax_line_id.jurisdiction_code)
+            content.append(line.tax_line_id.l10n_ar_state_id.jurisdiction_code)
 
             # Tipo registro 2. Provincia Cordoba
-            if line.tax_line_id.jurisdiction_code in ['904', '914']:
+            if line.tax_line_id.l10n_ar_state_id.jurisdiction_code in ['904', '914']:
 
                 # 12 Tipo de Operación (1-Efectuada, 2-Anulada, 3-Omitida)
                 content.append('2' if internal_type == 'credit_note' else '1')
@@ -986,12 +986,12 @@ class AccountJournal(models.Model):
             # jurisdicción a la cual está presentando la DDJJ
             if not line.tax_line_id.jurisdiction_code:
                 raise ValidationError(_(
-                    'No hay etiqueta de jurisdicción configurada!'))
+                    'No hay jurisdicción configurada en el impuesto!'))
 
-            content.append(line.tax_line_id.jurisdiction_code)
+            content.append(line.tax_line_id.l10n_ar_state_id.jurisdiction_code)
 
             # Tipo registro 2. Provincia Cordoba
-            if line.tax_line_id.jurisdiction_code in ['904', '914']:
+            if line.tax_line_id.l10n_ar_state_id.jurisdiction_code in ['904', '914']:
 
                 # 12 Tipo de Operación (1-Efectuada, 2-Anulada, 3-Omitida, 4-Informativa)
                 content.append('2' if internal_type == 'credit_note' else '1')
@@ -1048,7 +1048,7 @@ class AccountJournal(models.Model):
                     'La percepción %s (id: %d) del comprobante "%s" (id: %d) no tiene partner asociado.') % (line.withholding_id.name, line.id,line.move_id.name, line.move_id.id))
             line.partner_id.ensure_vat()
 
-            content = line.tax_line_id.jurisdiction_code or '000'
+            content = line.tax_line_id.l10n_ar_state_id.jurisdiction_code or '000'
             content += line.partner_id.l10n_ar_formatted_vat
             content += fields.Date.from_string(
                 line.date).strftime('%d/%m/%Y')
