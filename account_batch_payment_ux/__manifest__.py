@@ -19,7 +19,7 @@
 ##############################################################################
 {
     'name': 'Account Batch Payment UX',
-    'version': "17.0.0.1.0",
+    'version': "17.0.0.2.0",
     'category': 'Accounting',
     'sequence': 14,
     'summary': '',
@@ -33,6 +33,7 @@
     ],
     'data': [
         'views/account_batch_payment.xml',
+        'views/account_payment_views.xml'
     ],
     'demo': [
     ],
