@@ -695,6 +695,7 @@
         <field name="date" eval="time.strftime('2024-07-01')"/>
         <field name="value">6607.7479</field>
     </record>
+
     <record id="index_08_2024" model="inflation.adjustment.index">
         <field name="date" eval="time.strftime('2024-08-01')"/>
         <field name="value">6883.4412</field>
@@ -703,6 +704,16 @@
     <record id="index_09_2024" model="inflation.adjustment.index">
         <field name="date" eval="time.strftime('2024-09-01')"/>
         <field name="value">7122.2421</field>
+    </record>
+
+    <record id="index_10_2024" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2024-10-01')"/>
+        <field name="value">7313.9542</field>
+    </record>
+
+    <record id="index_11_2024" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2024-11-01')"/>
+        <field name="value">7491.4314</field>
     </record>
 
 </odoo>
