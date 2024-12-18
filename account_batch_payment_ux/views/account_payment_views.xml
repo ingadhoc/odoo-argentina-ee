@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="account_batch_payment.view_account_payment_tree_popup_inherit_account_batch_payment" model="ir.ui.view">
+        <field name="priority">20</field>
+    </record>
+</odoo>
