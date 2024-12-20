@@ -13,6 +13,7 @@ class AccountMoveLine(models.Model):
         help='Move where this tax has been settled',
         auto_join=True,
         copy=False,
+        index='btree_not_null'
     )
 
     def get_tax_settlement_journal(self):
