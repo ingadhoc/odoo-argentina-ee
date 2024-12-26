@@ -1,11 +1,9 @@
 from odoo import fields, models, api, _
 from odoo.exceptions import ValidationError
+from odoo.tools.misc import formatLang
+from odoo.tools.safe_eval import safe_eval
 import logging
 _logger = logging.getLogger(__name__)
-# from odoo.tools.misc import formatLang
-# from datetime import datetime
-# from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
-# import re
 
 
 class AccountJournal(models.Model):
@@ -68,9 +66,9 @@ class AccountJournal(models.Model):
         string="Cuenta de contrapartida",
         readonly=False,
         copy=False,
+        check_company=True,
         domain="""[
-            ('deprecated', '=', False), ('company_id', '=', company_id),
-            ('account_type', 'in', ('asset_receivable', 'liability_payable'))]""")
+            ('deprecated', '=', False), ('account_type', 'in', ('asset_receivable', 'liability_payable'))]""")
 
     @api.constrains('tax_settlement', 'type')
     def check_tax_settlement(self):
@@ -117,10 +115,9 @@ class AccountJournal(models.Model):
         Devuelve un browse del move creado
         """
         self.ensure_one()
-        draft_lines = move_lines.filtered(lambda x: x.move_id.state == 'draft')
-        if draft_lines:
+        if draft_lines:= move_lines.filtered(lambda x: x.move_id.state == 'draft'):
             raise ValidationError(_(
-                'A seleccionado apuntes contables de asientos en borrador. '
+                'Ha seleccionado apuntes contables de asientos en borrador. '
                 'Solo puede liquidar apuntes de asientos publicados. Apuntes: %s') % draft_lines.ids)
         if not self.tax_settlement:
             raise ValidationError(_(
@@ -175,8 +172,7 @@ class AccountJournal(models.Model):
             }
             # if we find an account with secondary currency, we consider that
             #  the new aml must have currency and amount currency
-            currency = group['account_id'][0] and self.env['account.account'].browse(group['account_id'][0]).currency_id
-            if currency:
+            if currency:= group['account_id'][0] and self.env['account.account'].browse(group['account_id'][0]).currency_id:
                 if new_vals_line['debit'] > 0.0:
                     amount_currency = group['amount_currency'] < 0.0 and\
                         -group['amount_currency'] or group['amount_currency']
@@ -192,12 +188,10 @@ class AccountJournal(models.Model):
         # agregamos la info para que se creen lineas para cada cuenta
         # etiquetada (estas lineas se llevan en cero)
         domain = [('company_id', '='), ('deprecated', '=', False)]
-        account_tags = self.settlement_account_tag_ids.filtered(
-            lambda x: x.applicability == 'accounts')
-        if account_tags:
+        if account_tags:= self.settlement_account_tag_ids.filtered(lambda x: x.applicability == 'accounts'):
             domain.append(('tag_ids', 'in', account_tags.ids))
             for account in self.env['account.account'].search([
-                    ('company_id', '=', self.company_id.id),
+                    *self.env['account.account']._check_company_domain(self.company_id.id),
                     ('deprecated', '=', False),
                     ('tag_ids', 'in', account_tags.ids)]):
                 new_move_lines.append({
@@ -274,16 +268,14 @@ class AccountJournal(models.Model):
         """
         self.ensure_one()
         domain = [
-            ('company_id', '=', self.company_id.id),
+            *self._check_company_domain(self.company_id.id),
             ('tax_repartition_line_id.tag_ids', 'in', self.settlement_account_tag_ids.ids),
         ]
 
-        from_date = self._context.get('from_date')
-        if from_date:
+        if from_date:= self._context.get('from_date'):
             domain.append(('date', '>=', from_date))
 
-        to_date = self._context.get('to_date')
-        if to_date:
+        if to_date:= self._context.get('to_date'):
             domain.append(('date', '<=', to_date))
 
         return domain
@@ -300,10 +292,9 @@ class AccountJournal(models.Model):
         [{'txt_filename': 'Nombre', 'txt_content': 'Contenido'}
         """
         self.ensure_one()
-        draft_lines = move_lines.filtered(lambda x: x.move_id.state == 'draft')
-        if draft_lines:
+        if draft_lines:= move_lines.filtered(lambda x: x.move_id.state == 'draft'):
             raise ValidationError(_(
-                'A seleccionado apuntes contables de asientos en borrador. '
+                'Ha seleccionado apuntes contables de asientos en borrador. '
                 'Solo puede generar el txt de apuntes de asientos publicados. Apuntes: %s') % draft_lines.ids)
         _logger.info(
             "Getting tax settlement tax values for '%s'" % (self.name))
@@ -312,3 +303,51 @@ class AccountJournal(models.Model):
             return getattr(
                 self, '%s_files_values' % self.settlement_tax)(move_lines)
         return []
+
+###################################
+# account.journal.dashboard methods
+###################################
+
+    def _get_journal_dashboard_data_batched(self):
+        res = super(AccountJournal, self)._get_journal_dashboard_data_batched()
+        self._fill_tax_settlement_dashboard_data(res)
+        return res
+
+    def _fill_tax_settlement_dashboard_data(self, dashboard_data):
+        """ En diarios de liquidación en vista kanban agregamos al lado del botoncitos 'Líneas a liquidar' la cantidad de líneas de liquidar y el importe y al lado del botoncito 'Saldo a pagar' agregamos el importe """
+        tax_settlement_journals = self.filtered(lambda journal: journal.tax_settlement != False)
+        if not tax_settlement_journals:
+            return
+        # TODO hacer por sql para mejorar performance
+        for journal in tax_settlement_journals:
+            currency = journal.currency_id or journal.company_id.currency_id
+            unsettled_lines = journal._get_tax_settlement_move_lines_by_tags()
+            dashboard_data[journal.id].update({
+                'unsettled_count': len(unsettled_lines),
+                'unsettled_amount': formatLang(self.env, -sum(unsettled_lines.mapped('balance')), currency_obj=currency),
+                'debit_amount': formatLang(self.env, journal.settlement_partner_id.debit, currency_obj=currency),
+            })
+
+    def open_action(self):
+        """
+        Modificamos funcion para que si es liquidacion de impuestos devuelva accion correspondiente
+        Y si es deuda del partner muestre el partner ledger
+        """
+        if self.type == 'general' and self.tax_settlement:
+            tax_settlement = self._context.get('tax_settlement', False)
+            debt_balance = self._context.get('debt_balance', False)
+            if tax_settlement:
+                # Ingresa aquí al entrar en vista Kanban en diario de liquidacion en el botoncito "Líneas a liquidar"
+                action = self.env["ir.actions.actions"]._for_xml_id('account_tax_settlement.action_account_tax_move_line')
+                action['domain'] = self._get_tax_settlement_lines_domain_by_tags()
+                return action
+            elif debt_balance and self.settlement_partner_id:
+                # Ingresa aquí al entrar en vista Kanban en diario de liquidacion en el botoncito 'Saldo a pagar'
+                action = self.settlement_partner_id.open_partner_ledger()
+                ctx = safe_eval(action.get('context'))
+                ctx.update({
+                    'default_partner_id': self.settlement_partner_id.id,
+                })
+                action['context'] = ctx
+                return action
+        return super(AccountJournal, self).open_action()
