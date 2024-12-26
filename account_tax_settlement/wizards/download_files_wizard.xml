@@ -18,11 +18,11 @@
         <field name="arch" type="xml">
             <form string="Download Files">
                 <field name="line_ids">
-                    <tree>
+                    <list>
                         <!-- en v11 no funciona mas el boton de download, por ahora hacemos que tenga que abrir el pop up. TODO mejorar (una alternativa seria widget "many2many_binary" pero requiere m2m a attachments aparentemente -->
                         <field name="txt_filename" invisible="0"/>
                         <!-- <field name="txt_binary" filename="txt_filename" readonly="1"/> -->
-                    </tree>
+                    </list>
                     <form>
                         <center>
                             <i class="fa fa-5x fa-download" title="Download" style="padding: 0.25em;" aria-hidden="true"></i>

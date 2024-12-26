@@ -15,6 +15,14 @@ class AccountMoveLine(models.Model):
         copy=False,
         index='btree_not_null'
     )
+    tax_state = fields.Selection([
+        ('to_settle', 'To Settle'),
+        ('to_pay', 'To Pay'),
+        ('paid', 'Paid'),
+    ],
+        compute='_compute_tax_state',
+        store=True,
+    )
 
     def get_tax_settlement_journal(self):
         """
@@ -42,8 +50,8 @@ class AccountMoveLine(models.Model):
         """
         self.ensure_one()
         return self.env['account.journal'].search([
-            ('settlement_account_tag_ids', 'in', self.tax_repartition_line_id.tag_ids.ids),
-            ('company_id', '=', self.company_id.id)], limit=1)
+            *self._check_company_domain(self.company_id.id),
+            ('settlement_account_tag_ids', 'in', self.tax_repartition_line_id.tag_ids.ids),], limit=1)
 
     def button_create_tax_settlement_entry(self):
         """
@@ -61,15 +69,6 @@ class AccountMoveLine(models.Model):
         move = journal.create_tax_settlement_entry(self)
         return move
 
-    tax_state = fields.Selection([
-        ('to_settle', 'To Settle'),
-        ('to_pay', 'To Pay'),
-        ('paid', 'Paid'),
-    ],
-        'Tax State',
-        compute='_compute_tax_state',
-        store=True,
-    )
 
     @api.depends(
         'tax_repartition_line_id',
