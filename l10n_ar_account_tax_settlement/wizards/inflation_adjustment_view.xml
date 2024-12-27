@@ -62,6 +62,6 @@
         <field name="target">new</field>
     </record>
 
-    <menuitem id="inflation_adjustment_menu" parent="account.menu_finance_entries_actions" action="inflation_adjustment_action" sequence="100"/>
+    <menuitem id="inflation_adjustment_menu" parent="account.menu_finance_entries" action="inflation_adjustment_action" sequence="100"/>
 
 </odoo>
