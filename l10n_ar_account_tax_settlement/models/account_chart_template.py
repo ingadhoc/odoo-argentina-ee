@@ -36,8 +36,6 @@ class AccountChartTemplate(models.AbstractModel):
                         self.env.ref('l10n_ar.partner_afip'),
                         'base_impuesto_ganancias_a_pagar',
                         self.env.ref('l10n_ar_ux.tax_tag_a_cuenta_ganancias')),
-                    # only if account_withholding_automatic installed we
-                    # set sicore_aplicado for txt
                     ('Liquidación SICORE Aplicado', 'SICORE', 'allow_per_line',
                         'sicore_aplicado' or False,
                         self.env.ref('l10n_ar.partner_afip'),
