@@ -4,16 +4,14 @@
 # 
 # Translators:
 # Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024
-# MarianaLuz Torres, 2024
-# feg, 2024
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 17.0+e\n"
+"Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-09-26 11:50+0000\n"
-"PO-Revision-Date: 2024-03-15 18:35+0000\n"
-"Last-Translator: feg, 2024\n"
+"POT-Creation-Date: 2024-12-28 13:54+0000\n"
+"PO-Revision-Date: 2024-12-28 10:17+0000\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -27,8 +25,6 @@ msgid ""
 "<i class=\"fa fa-5x fa-download\" title=\"Download\" style=\"padding: "
 "0.25em;\" aria-hidden=\"true\"/>"
 msgstr ""
-"<i class=\"fa fa-5x fa-download\" title=\"Download\" style=\"padding: "
-"0.25em;\" aria-hidden=\"true\"/>"
 
 #. module: account_tax_settlement
 #: model_terms:ir.ui.view,arch_db:account_tax_settlement.account_journal_dashboard_kanban_view_inherited
@@ -38,24 +34,6 @@ msgstr "<span>Nuevo Pago</span>"
 #. module: account_tax_settlement
 #: model_terms:ir.ui.view,arch_db:account_tax_settlement.account_journal_dashboard_kanban_view_inherited
 msgid "<span>Saldo a pagar</span>"
-msgstr ""
-
-#. module: account_tax_settlement
-#. odoo-python
-#: code:addons/account_tax_settlement/models/account_journal.py:0
-#, python-format
-msgid ""
-"A seleccionado apuntes contables de asientos en borrador. Solo puede generar"
-" el txt de apuntes de asientos publicados. Apuntes: %s"
-msgstr ""
-
-#. module: account_tax_settlement
-#. odoo-python
-#: code:addons/account_tax_settlement/models/account_journal.py:0
-#, python-format
-msgid ""
-"A seleccionado apuntes contables de asientos en borrador. Solo puede "
-"liquidar apuntes de asientos publicados. Apuntes: %s"
 msgstr ""
 
 #. module: account_tax_settlement
@@ -143,7 +121,6 @@ msgstr "Descargar Archivo de Liquidación"
 #. module: account_tax_settlement
 #. odoo-python
 #: code:addons/account_tax_settlement/models/account_journal.py:0
-#, python-format
 msgid ""
 "Esta intentando crear un asiento automático desbalanceado. Es posible que "
 "haya un error en el informe o esté faltando configurar la cuenta de "
@@ -164,6 +141,22 @@ msgstr "Archivos"
 #: model:ir.model,name:account_tax_settlement.model_account_generic_tax_report_handler
 msgid "Generic Tax Report Custom Handler"
 msgstr "Gestor personalizado de los informes genéricos de impuestos"
+
+#. module: account_tax_settlement
+#. odoo-python
+#: code:addons/account_tax_settlement/models/account_journal.py:0
+msgid ""
+"Ha seleccionado apuntes contables de asientos en borrador. Solo puede "
+"generar el txt de apuntes de asientos publicados. Apuntes: %s"
+msgstr ""
+
+#. module: account_tax_settlement
+#. odoo-python
+#: code:addons/account_tax_settlement/models/account_journal.py:0
+msgid ""
+"Ha seleccionado apuntes contables de asientos en borrador. Solo puede "
+"liquidar apuntes de asientos publicados. Apuntes: %s"
+msgstr ""
 
 #. module: account_tax_settlement
 #: model:ir.model.fields,field_description:account_tax_settlement.field_account_tax_settlement_wizard__id
@@ -199,7 +192,6 @@ msgstr "Diario"
 #. odoo-python
 #: code:addons/account_tax_settlement/models/account_move_line.py:0
 #: code:addons/account_tax_settlement/wizards/account_tax_settlement_wizard.py:0
-#, python-format
 msgid "Journal Entries"
 msgstr "Asiento contable"
 
@@ -221,7 +213,6 @@ msgstr "Apunte contable"
 #. module: account_tax_settlement
 #. odoo-python
 #: code:addons/account_tax_settlement/models/account_report.py:0
-#, python-format
 msgid ""
 "La liquidación se debe realizar filtrando por 1 y solo 1 compañía en el "
 "reporte"
@@ -269,7 +260,6 @@ msgstr "Asiento donde este impuesto ha sido liquidado"
 #. module: account_tax_settlement
 #. odoo-python
 #: code:addons/account_tax_settlement/models/account_move_line.py:0
-#, python-format
 msgid "No encontramos diario de liquidación para los apuntes contables: %s"
 msgstr ""
 
@@ -302,7 +292,6 @@ msgstr "Pagar"
 #. odoo-python
 #: code:addons/account_tax_settlement/models/account_journal.py:0
 #: code:addons/account_tax_settlement/models/account_move_line.py:0
-#, python-format
 msgid "Register Payment"
 msgstr "Registrar Pago"
 
@@ -346,7 +335,6 @@ msgstr "Liquidar"
 #. module: account_tax_settlement
 #: model:ir.model.fields,field_description:account_tax_settlement.field_account_bank_statement_line__settled_line_ids
 #: model:ir.model.fields,field_description:account_tax_settlement.field_account_move__settled_line_ids
-#: model:ir.model.fields,field_description:account_tax_settlement.field_account_payment__settled_line_ids
 msgid "Settled Lines"
 msgstr "Líneas Liquidadas"
 
@@ -364,7 +352,6 @@ msgstr "Título de liquidación"
 #. module: account_tax_settlement
 #. odoo-python
 #: code:addons/account_tax_settlement/models/account_journal.py:0
-#, python-format
 msgid "Settlement only allowed on journals with Tax Settlement enable"
 msgstr ""
 "La liquidación solo se permite en diarios con la liquidación de impuestos "
@@ -380,14 +367,12 @@ msgstr ""
 #. module: account_tax_settlement
 #. odoo-python
 #: code:addons/account_tax_settlement/models/account_journal.py:0
-#, python-format
 msgid "Si usa \"Impuesto de liquidación\" debe setear un \"Partner de liquidación\""
 msgstr ""
 
 #. module: account_tax_settlement
 #. odoo-python
 #: code:addons/account_tax_settlement/models/account_move_line.py:0
-#, python-format
 msgid ""
 "Solo debe seleccionar líneas que se liquiden con un mismo diario, las líneas"
 " seleccionadas (ids %s) se liquidan con diarios %s"
@@ -396,7 +381,6 @@ msgstr ""
 #. module: account_tax_settlement
 #. odoo-python
 #: code:addons/account_tax_settlement/models/account_journal.py:0
-#, python-format
 msgid ""
 "Solo se puede usar \"Impuesto de liquidación\" en diarios del tipo "
 "\"Miscelánea\""
@@ -494,7 +478,6 @@ msgstr "Si, permitir por linea"
 #. module: account_tax_settlement
 #. odoo-python
 #: code:addons/account_tax_settlement/models/account_journal.py:0
-#, python-format
 msgid ""
 "You can not settle lines that has already been settled!\n"
 "* Lines ids: %s"
@@ -505,7 +488,6 @@ msgstr ""
 #. module: account_tax_settlement
 #. odoo-python
 #: code:addons/account_tax_settlement/models/account_journal.py:0
-#, python-format
 msgid ""
 "You can only create payment if journal has settlement partner configured!"
 msgstr ""
