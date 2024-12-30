@@ -101,8 +101,9 @@ class ResPartner(models.Model):
         vat = self.ensure_vat()
 
         # if there is certificate for current company use that one, if not use the company with first certificate found
-        company = self.env.company if self.env.company.sudo().l10n_ar_afip_ws_crt else self.env['res.company'].sudo().search(
-            [('l10n_ar_afip_ws_crt', '!=', False)], limit=1)
+        today = fields.Date.context_today(self.with_context(tz='America/Argentina/Buenos_Aires'))
+        company = self.env.company if self.env.company.sudo().l10n_ar_afip_ws_crt and self.env.company.sudo().l10n_ar_crt_exp_date > today else self.env['res.company'].search(
+            [('l10n_ar_afip_ws_crt', '!=', False), ('l10n_ar_crt_exp_date', '>', today)], limit=1)
         if not company:
             raise UserError(_('Please configure an AFIP Certificate in order to continue'))
         client, auth = company._l10n_ar_get_connection('ws_sr_constancia_inscripcion')._get_client()
@@ -128,7 +129,7 @@ class ResPartner(models.Model):
 
         if errors:
             raise UserError(error_msg % (self.name, vat, errors))
-        
+
         # Serializamos una sola vez
         res = serialize_object(res, dict)
         res = self._clean_response_obj(res)
@@ -164,7 +165,7 @@ class ResPartner(models.Model):
             actividades = self.env['afip.activity'].sudo()
             activity_codes = actividades.search([]).mapped('code')
             for act in afip_activities:
-                if str(act.get('idActividad')) not in activity_codes:
+                if act and str(act.get('idActividad')) not in activity_codes:
                     new_activity.update({
                         'code': act.get('idActividad'),
                         'name': act.get('descripcionActividad')
@@ -183,7 +184,7 @@ class ResPartner(models.Model):
             taxes = self.env['afip.tax'].sudo()
             tax_codes = taxes.search([]).mapped('code')
             for imp in afip_taxes:
-                if str(imp.get('idImpuesto')) not in tax_codes:
+                if imp and str(imp.get('idImpuesto')) not in tax_codes:
                     new_tax.update({
                         'code': imp.get('idImpuesto'),
                         'name': imp.get('descripcionImpuesto')
