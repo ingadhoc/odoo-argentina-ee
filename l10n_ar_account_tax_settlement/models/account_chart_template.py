@@ -14,7 +14,7 @@ class AccountChartTemplate(models.AbstractModel):
     def _get_latam_withholding_account_journal(self, template_code=False, company=False):
         """ Creamos diarios de tipo 'varios' para liquidación de impuestos cuando se instala el plan de cuentas de la compañía. Los diarios a crear dependen de la condición fiscal de la compañía """
         company = company or self.env.company
-        if company.country_id.code in ["AR"]:
+        if company.chart_template in ('ar_base', 'ar_ri', 'ar_ex'):
             journals_data = [
                 ('Liquidación de IIBB', 'IIBB', 'allow_per_line', 'iibb_sufrido',
                     self.env.ref('l10n_ar.par_iibb_pagar'),
@@ -53,6 +53,7 @@ class AccountChartTemplate(models.AbstractModel):
                 if not account:
                     _logger.info("Skip creation of journal %s because we didn't found default account")
                     continue
+                account_id = "account.%s_%s" % (company.id, account)
                 res[code] = {
                     'type': 'general',
                     'name': name,
@@ -60,7 +61,7 @@ class AccountChartTemplate(models.AbstractModel):
                     'tax_settlement': type,
                     'settlement_tax': tax,
                     'settlement_partner_id': partner and partner.id or False,
-                    'settlement_account_id': account,
+                    'settlement_account_id': account if self.env.ref(account_id, raise_if_not_found=False) else None,
                     'company_id': company.id,
                     # al final hicimos otro dashboard
                     'show_on_dashboard': False,
