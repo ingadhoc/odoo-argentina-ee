@@ -7,7 +7,7 @@ def l10n_ar_account_tax_settlement_post_init_hook(env):
 
     # Verificamos que la compañía sea argentina. Agregamos ('parent_id', '=', False) en el dominio de la búsqueda porque las branches de una compañía
     # usan los mismos impuestos que la compañía padre. Algo similar a esto se aplicó en este pr https://github.com/ingadhoc/odoo-argentina-ee/pull/446
-    ar_companies = env['res.company'].search([]).filtered(lambda x: x.country_code == 'AR')
+    ar_companies = env['res.company'].search([('chart_template', 'in', ('ar_base', 'ar_ri', 'ar_ex'))])
     for company in ar_companies:
         ChartTemplate = env['account.chart.template'].with_company(company)
         if journals_to_create := env['account.chart.template']._get_latam_withholding_account_journal(template_code=company.chart_template, company=company):
