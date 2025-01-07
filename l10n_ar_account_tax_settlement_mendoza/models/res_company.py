@@ -13,7 +13,6 @@ class ResCompany(models.Model):
         readonly=True,
     )
 
-    @api.model
     def write(self, vals):
         if 'riesgo_fiscal_csv_file' in vals:
             vals['riesgo_fiscal_csv_file_last_update'] = fields.Datetime.now()
