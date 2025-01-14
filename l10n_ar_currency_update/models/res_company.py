@@ -62,9 +62,9 @@ class ResCompany(models.Model):
         rate_date = today
 
         for currency in available_currencies:
-            valid_certificate = self.env['certificate.certificate'].search(
+            valid_certificate = self.env['certificate.certificate'].sudo().search(
                 [('active', '=', True), ('date_end', '>=', today), ("country_code", "=", "AR")])
-            if self.env.company.l10n_ar_afip_ws_crt_id in valid_certificate:
+            if self.env.company.sudo().l10n_ar_afip_ws_crt_id in valid_certificate:
                 company = self.env.company
             else:
                 company = valid_certificate[:1].company_id if valid_certificate else False
