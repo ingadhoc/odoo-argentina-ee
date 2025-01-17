@@ -102,12 +102,23 @@ class ResPartner(models.Model):
 
         # if there is certificate for current company use that one, if not use the company with first certificate found
         today = fields.Date.context_today(self.with_context(tz='America/Argentina/Buenos_Aires'))
+<<<<<<< HEAD
         valid_certificate = self.env['certificate.certificate'].sudo().search(
             [('active', '=', True), ('date_end', '>=', today), ("country_code", "=", "AR")])
         if self.env.company.sudo().l10n_ar_afip_ws_crt_id in valid_certificate:
             company = self.env.company
         else:
             company = valid_certificate[:1].company_id if valid_certificate else False
+||||||| parent of 162dee2 (temp)
+        company = self.env.company \
+            if self.env.company.sudo().l10n_ar_afip_ws_crt and self.env.company.sudo().l10n_ar_crt_exp_date > today \
+            else self.env['res.company'].sudo().search(
+                [('l10n_ar_afip_ws_crt', '!=', False), ('l10n_ar_crt_exp_date', '>', today)], limit=1)
+=======
+        valid_crt_company = self.env['res.company'].sudo().search([('l10n_ar_afip_ws_crt', '!=', False)])\
+            .filtered(lambda x: x._l10n_ar_get_afip_crt_expire_date() > today)
+        company = self.env.company if self.env.company in  valid_crt_company else valid_crt_company[:1]
+>>>>>>> 162dee2 (temp)
         if not company:
             raise UserError(_('Please configure an AFIP Certificate in order to continue'))
         client, auth = company._l10n_ar_get_connection('ws_sr_constancia_inscripcion')._get_client()
