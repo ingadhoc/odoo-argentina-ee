@@ -52,14 +52,23 @@ class ResCompany(models.Model):
         """ If afip provider and set interval unit daily then check the
         currency multiple times at day (in case the default odoo cron couldn't
         update the currency with AFIP) """
+        today = fields.Date.context_today(self.with_context(tz='America/Argentina/Buenos_Aires'))
         records = self.search([
             ('currency_provider', '=', 'afip'),
-            ('currency_interval_unit', '!=', False),
-            ('currency_interval_unit', '!=', 'manually'),
-            '|', ('l10n_ar_last_currency_sync_date', '<', fields.Date.context_today(self.with_context(tz='America/Argentina/Buenos_Aires'))),
+            ('currency_interval_unit', 'not in', [False, 'manually']),
+            '|', ('l10n_ar_last_currency_sync_date', '<', today),
             ('l10n_ar_last_currency_sync_date', '=', False),
         ])
-        records.update_currency_rates()
+        records.filtered(
+            lambda record:
+                record.currency_interval_unit == 'daily' or
+                record.l10n_ar_last_currency_sync_date == False or
+                record.currency_interval_unit == 'weekly' and\
+                    (today - record.l10n_ar_last_currency_sync_date).days >= 7 or
+                record.currency_interval_unit == 'monthly' and\
+                    relativedelta(today, record.l10n_ar_last_currency_sync_date)\
+                        .months >= 1
+        ).update_currency_rates()
 
     def _parse_afip_data(self, available_currencies):
         """ This method is used to update the currency rates using AFIP provider. Rates are given against AR """
