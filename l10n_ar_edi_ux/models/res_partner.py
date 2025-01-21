@@ -103,7 +103,7 @@ class ResPartner(models.Model):
         # if there is certificate for current company use that one, if not use the company with first certificate found
         today = fields.Date.context_today(self.with_context(tz='America/Argentina/Buenos_Aires'))
         valid_certificate = self.env['certificate.certificate'].sudo().search(
-            [('active', '=', True), ('date_end', '>=', today), ("country_code", "=", "AR")])
+            [('active', '=', True), ('date_end', '>=', today)]).filtered(lambda c: c.country_code == 'AR')
         if self.env.company.sudo().l10n_ar_afip_ws_crt_id in valid_certificate:
             company = self.env.company
         else:
