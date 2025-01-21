@@ -169,7 +169,7 @@ class ResPartner(models.Model):
             actividades = self.env['afip.activity'].sudo()
             activity_codes = actividades.search([]).mapped('code')
             for act in afip_activities:
-                if str(act.get('idActividad')) not in activity_codes:
+                if act!={} and str(act.get('idActividad')) not in activity_codes:
                     new_activity.update({
                         'code': act.get('idActividad'),
                         'name': act.get('descripcionActividad')
@@ -188,7 +188,7 @@ class ResPartner(models.Model):
             taxes = self.env['afip.tax'].sudo()
             tax_codes = taxes.search([]).mapped('code')
             for imp in afip_taxes:
-                if str(imp.get('idImpuesto')) not in tax_codes:
+                if act!={} and str(imp.get('idImpuesto')) not in tax_codes:
                     new_tax.update({
                         'code': imp.get('idImpuesto'),
                         'name': imp.get('descripcionImpuesto')
