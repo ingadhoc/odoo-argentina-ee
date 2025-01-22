@@ -1,5 +1,3 @@
-<odoo>
-    <data noupdate="1">
+<odoo noupdate="1">
         <function model="ir.config_parameter" name="set_param" eval="('account_accountant_ux.use_search_filter_amount', 'True')"/>
-    </data>
 </odoo>
