@@ -74,8 +74,6 @@ class AccountJournalBookReport(models.TransientModel):
     def _retrive_moves_ids(self):
         """ Este método se llama desde el archivo account_journal_book_report.ods y sirve para obtener los asientos
         contables que estarán en el reporte de libro diario. """
-        date_from = fields.Date.from_string(self.date_from)
-        date_to = fields.Date.from_string(self.date_to)
         domain = [('company_id', '=', self.company_id.id)]
         if self.target_move == 'posted':
             domain.append(('state', '=', 'posted'))

@@ -26,7 +26,6 @@ class AccountCheckToDateReportWizard(models.TransientModel):
 
     def action_confirm(self):
         self.ensure_one()
-        force_domain = self.journal_id and [('journal_id', '=', self.journal_id.id)] or []
         return self.env.ref('l10n_ar_account_reports.checks_to_date_report').report_action(self)
 
     @api.model
