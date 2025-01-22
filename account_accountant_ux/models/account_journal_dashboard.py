@@ -21,7 +21,7 @@ class AccountJournal(models.Model):
                             AND move.date <= %%s AND move.state = 'posted';""" % (amount_field,)
                 self.env.cr.execute(query, (journal.default_account_id.id, fields.Date.context_today(self),))
                 query_results = self.env.cr.dictfetchall()
-                if query_results and query_results[0].get('sum') != None:
+                if query_results and query_results[0].get('sum') is not None:
                     account_sum = query_results[0].get('sum')
                     currency = journal.currency_id or journal.company_id.currency_id
                     dashboard_data[journal.id].update({
