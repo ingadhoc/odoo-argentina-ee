@@ -96,7 +96,7 @@ class ResPartner(models.Model):
                     cleaned[key] = type_replace if value is None else value
             return cleaned
 
-    def get_data_from_padron_afip(self):
+    def get_data_from_padron_afip(self): # noqa: C901
         self.ensure_one()
         vat = self.ensure_vat()
 
