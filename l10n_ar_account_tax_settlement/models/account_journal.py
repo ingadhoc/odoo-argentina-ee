@@ -429,7 +429,7 @@ class AccountJournal(models.Model):
                 'txt_content': perc + ret,
             }]
 
-    def iibb_aplicado_agip_files_values(self, move_lines):
+    def iibb_aplicado_agip_files_values(self, move_lines): # noqa: C901
         """ Ver readme del modulo para descripcion del formato. Tambien
         archivos de ejemplo en /doc
         """
