@@ -3,9 +3,10 @@
 # directory
 ##############################################################################
 from odoo import models
+from odoo.addons.account.models.chart_template import template
 import logging
 _logger = logging.getLogger(__name__)
-from odoo.addons.account.models.chart_template import template
+
 
 class AccountChartTemplate(models.AbstractModel):
     _inherit = 'account.chart.template'
