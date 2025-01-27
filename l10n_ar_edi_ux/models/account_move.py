@@ -69,7 +69,8 @@ class AccountMove(models.Model):
             # in Odoo for consistency, this way if an error ocurrs later in another invoice we will have the ones
             # correctly validated in AFIP in Odoo (CAE, Result, xml response/request).
             if not self.env.context.get('l10n_ar_invoice_skip_commit'):
-                self._cr.commit()
+               # TODO ver de utilizar savepoints: https://github.com/OCA/odoo-community.org/blob/master/website/Contribution/CONTRIBUTING.rst#never-commit-the-transaction
+                self._cr.commit()  # pragma pylint: disable=invalid-commit
 
         if error_vendor_bill:
             msg = _('We could not validate the vendor bill in AFIP') + (' "%s" %s. ' % (
