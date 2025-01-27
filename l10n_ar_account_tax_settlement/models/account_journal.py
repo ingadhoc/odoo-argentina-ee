@@ -624,9 +624,8 @@ class AccountJournal(models.Model):
             # 10 - Tipo de documento del Retenido
             # vat
             if partner.l10n_latam_identification_type_id.name not in ['CUIT', 'CUIL', 'CDI']:
-                raise ValidationError(_(
-                    'EL el partner "%s" (id %s), el tipo de identificación '
-                    'debe ser una de siguientes: CUIT, CUIL, CDI.' % (partner.id, partner.name)))
+                raise ValidationError(_('EL el partner "%s" (id %s), el tipo de identificación'
+                                        'debe ser una de siguientes: CUIT, CUIL, CDI.') % (partner.id, partner.name))
             doc_type_mapping = {'CUIT': '3', 'CUIL': '2', 'CDI': '1'}
             content += doc_type_mapping[partner.l10n_latam_identification_type_id.name]
 
