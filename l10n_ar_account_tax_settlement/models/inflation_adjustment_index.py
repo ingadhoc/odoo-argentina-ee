@@ -43,8 +43,8 @@ class InflationAdjustmentIndex(models.Model):
                 rec_date = fields.Date.from_string(rec.date)
                 raise ValidationError(_(
                     "Ya existe un indice para el periodo %s %s. Solo"
-                    " puedes tener un indice de inflación por mes" % (
-                        rec_date.strftime("%B"), rec_date.year)))
+                    " puedes tener un indice de inflación por mes") %
+                    (rec_date.strftime("%B"), rec_date.year))
 
     @api.constrains('date')
     def check_day(self):

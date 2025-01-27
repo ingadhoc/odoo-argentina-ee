@@ -128,11 +128,7 @@ class InflationAdjustment(models.TransientModel):
             index = indexes.filtered(
                 lambda x: x.date >= cur_date and x.date < date_to)
             if not index:
-                raise UserError(_(
-                    'El asiento de ajuste por inflación no puede ser generado'
-                    ' ya que hace falta el indice de ajuste para el periodo'
-                    ' %s %s' % (
-                        cur_date.strftime("%B"), cur_date.year)))
+                raise UserError(_('El asiento de ajuste por inflación no puede ser generado ya que hace falta el indice de ajuste para el periodo %s %s') % (cur_date.strftime('%B'), cur_date.year))
 
             res.append({
                 'date_from': cur_date,
