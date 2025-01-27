@@ -1337,7 +1337,6 @@ class AccountJournal(models.Model):
 
                     # pago -> grupo de pagos --> nc --> factura --> grupo de pagos --> pago (con retenc misiones)
                     origin_invoice = payment.to_pay_move_line_ids.move_id.reversed_entry_id
-                    tax_withholding_id = line.withholding_id.tax_id
                     for pay in origin_invoice.invoice_payments_widget.get('content'):
                         pay_id = pay['account_payment_id']
                         retenciones_pago_fact_original = self.env['account.payment'].browse(pay_id).l10n_ar_withholding_line_ids

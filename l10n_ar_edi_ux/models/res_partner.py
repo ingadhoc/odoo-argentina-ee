@@ -38,7 +38,6 @@ class ResPartner(models.Model):
         :param type_replace: Valor que se usará como reemplazo global si el diccionario está vacío o es `None`.
         :return: Diccionario modificado con los valores `None` reemplazados según el tipo especificado.
         """
-        res = {}
         replace_values = {
             'datosGenerales': {},
             'caracterizacion': [],
