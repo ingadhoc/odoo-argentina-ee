@@ -70,7 +70,7 @@ class AccountCheckToDateReportWizard(models.TransientModel):
                     ON t.check_id = t2.check_id
                 WHERE t2.operation_date >= '%s' OR t2.operation_date IS NULL
                 ;
-                """ % (to_date, to_date)
+                """, (to_date, to_date)
         self.env.cr.execute(query)
         res = self.env.cr.fetchall()
         check_ids = [x[0] for x in res]
