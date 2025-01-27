@@ -25,7 +25,7 @@ class ResPartner(models.Model):
         self.ensure_one()
         return True
 
-    def _clean_response_obj(self, xml_tag, default_replace={}):
+    def _clean_response_obj(self, xml_tag, default_replace=None):
         """
         Este método procesa el response que nos devuelve afip para reemplazar los valores `None` por un valor predeterminado
         basado en el tipo de dato especificado. Si el response en sí es `None` o está vacío,
@@ -74,6 +74,9 @@ class ResPartner(models.Model):
             'servidor': '',
         }
 
+        if default_replace is None:
+            default_replace = {}
+            
         # Si el diccionario es None o vacío, lo reemplazamos por el valor dado en type_replace
         if not xml_tag:
             return default_replace
