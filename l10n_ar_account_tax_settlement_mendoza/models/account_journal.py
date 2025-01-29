@@ -13,7 +13,7 @@ class AccountJournal(models.Model):
         missing_codigo_regimen = mendoza_lines.filtered(lambda x: not x.payment_id.tax_withholding_id.codigo_regimen)
         if mendoza_lines and missing_codigo_regimen:
             raise RedirectWarning(
-                message=_("El impuesto '%s' not tiene código de regimen en solapa 'Opciones avanzadas' campo 'Codigo de regimen'.", missing_codigo_regimen.payment_id.tax_withholding_id.name),
+                message=_("El impuesto '%s' not tiene código de regimen en solapa 'Opciones avanzadas' campo 'Codigo de regimen IVA'.", missing_codigo_regimen.payment_id.tax_withholding_id.name),
                 action={
                     'type': 'ir.actions.act_window',
                     'res_model': 'account.tax',
