@@ -2,35 +2,35 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from odoo import models, fields, api
+from odoo import api, fields, models
 
 
 class AccountCheckToDateReportWizard(models.TransientModel):
-    _name = 'account.check.to_date.report.wizard'
-    _description = 'account.check.to_date.report.wizard'
+    _name = "account.check.to_date.report.wizard"
+    _description = "account.check.to_date.report.wizard"
 
     journal_id = fields.Many2one(
-        'account.journal',
-        string='Diario',
+        "account.journal",
+        string="Diario",
         domain=[
-            '|',
-            ('outbound_payment_method_line_ids.code', '=', 'own_checks'),
-            ('inbound_payment_method_line_ids.code', '=', 'in_third_party_checks'),
-            ],
+            "|",
+            ("outbound_payment_method_line_ids.code", "=", "own_checks"),
+            ("inbound_payment_method_line_ids.code", "=", "in_third_party_checks"),
+        ],
     )
     to_date = fields.Date(
-        'Hasta Fecha',
+        "Hasta Fecha",
         required=True,
         default=fields.Date.today,
     )
 
     def action_confirm(self):
         self.ensure_one()
-        return self.env.ref('l10n_ar_account_reports.checks_to_date_report').report_action(self)
+        return self.env.ref("l10n_ar_account_reports.checks_to_date_report").report_action(self)
 
     @api.model
     def _get_checks_handed(self, journal_id, to_date):
-        '''
+        """
         hacemos una query que:
         * toma todos los pagos correspondientes a un cheque
         * dentro de esos pagos filtramos por los que no tengan matched_debit_ids
@@ -42,9 +42,10 @@ class AccountCheckToDateReportWizard(models.TransientModel):
         self.env['account.full.reconcile'].search([]).reconciled_line_ids.move_id.payment_ids.filtered(lambda x: x.payment_method_id.code == 'own_checks').ids -> nos da los id de los pagos correspondientes a un cheque que fueron conciliados
         -> esto nos da en la fecha en la cual fueron debitados:
         self.env['account.full.reconcile'].search([]).reconciled_line_ids.filtered(lambda x: x.move_id.payment_ids.payment_method_id.code == 'own_checks').full_reconcile_id.reconciled_line_ids.filtered(lambda x: x.statement_line_id).mapped(lambda x: x.date)
-        '''
+        """
         to_date = str(to_date)
-        query = """
+        query = (
+            """
                 SELECT DISTINCT ON (t.check_id) t.check_id AS cheque FROM
                     (
                         SELECT c.id as check_id, ap_move.date as operation_date, apm.code as operation_code
@@ -70,13 +71,17 @@ class AccountCheckToDateReportWizard(models.TransientModel):
                     ON t.check_id = t2.check_id
                 WHERE t2.operation_date >= '%s' OR t2.operation_date IS NULL
                 ;
-                """, (to_date, to_date)
+                """,
+            (to_date, to_date),
+        )
         self.env.cr.execute(query)
         res = self.env.cr.fetchall()
         check_ids = [x[0] for x in res]
-        checks = self.env['l10n_latam.check'].search([('id', 'in', check_ids)])
+        checks = self.env["l10n_latam.check"].search([("id", "in", check_ids)])
         if journal_id:
-            checks = self.env['l10n_latam.check'].search([('id', 'in', check_ids), ('original_journal_id','=',journal_id)])
+            checks = self.env["l10n_latam.check"].search(
+                [("id", "in", check_ids), ("original_journal_id", "=", journal_id)]
+            )
         return checks
 
     @api.model
@@ -105,7 +110,8 @@ class AccountCheckToDateReportWizard(models.TransientModel):
         # De la última operación de cada cheque filtramos los cheques cuya última operacioń no es manual (es decir, no
         # fue depositado) y los cheques cuya última operación es manual pero la fecha de depósito es posterior a la
         # "Hasta Fecha" del wizard de cheques a fecha.
-        self.env.cr.execute("""
+        self.env.cr.execute(
+            """
             CREATE TEMPORARY TABLE t2 AS
             SELECT
                 t.check_id,
@@ -120,14 +126,16 @@ class AccountCheckToDateReportWizard(models.TransientModel):
                 account_move AS ap_move ON ap.move_id = ap_move.id
             WHERE
                 (apm.code != 'manual' OR (apm.code = 'manual' AND ap_move.date >= '%s'));
-        """, (to_date))
+        """,
+            (to_date),
+        )
 
         # De los cheques filtrados en t2 volvemos a filtrar aquellos que tengan método de pago de cheques de terceros
         # que tengan diario actual (es decir que no hayan sido endosados) y la fecha contable de la primera operación
         # del cheque sea anterior a la "Hasta Fecha" del wizard de cheques a fecha.
         # Además sumamos aquellos cheques de terceros no endosados ni depositados cuya fecha contable de la primera
         # operación del cheque sea anterior a la "Hasta Fecha" del wizard de cheques a fecha.
-        query = ("""
+        query = """
             SELECT c.id AS check_id, ap_move.date AS operation_date, apm.code AS operation_code
             FROM t2
             LEFT JOIN l10n_latam_check c ON c.id = t2.check_id
@@ -145,11 +153,13 @@ class AccountCheckToDateReportWizard(models.TransientModel):
             LEFT JOIN account_journal AS journal ON ap_move.journal_id = journal.id
             LEFT JOIN l10n_latam_check_account_payment_rel rel ON rel.check_id = c.id
             WHERE apm.code = 'new_third_party_checks' AND c.current_journal_id IS NOT NULL AND rel.check_id IS NULL AND ap_move.date <= '%s';
-        """)
+        """
         self.env.cr.execute(query, (to_date, to_date))
         res = self.env.cr.fetchall()
         check_ids = [x[0] for x in res]
-        checks = self.env['l10n_latam.check'].search([('id', 'in', check_ids)])
+        checks = self.env["l10n_latam.check"].search([("id", "in", check_ids)])
         if journal_id:
-            checks = self.env['l10n_latam.check'].search([('id', 'in', check_ids), ('original_journal_id','=',journal_id)])
+            checks = self.env["l10n_latam.check"].search(
+                [("id", "in", check_ids), ("original_journal_id", "=", journal_id)]
+            )
         return checks

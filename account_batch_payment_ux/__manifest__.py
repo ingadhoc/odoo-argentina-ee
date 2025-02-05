@@ -18,26 +18,21 @@
 #
 ##############################################################################
 {
-    'name': 'Account Batch Payment UX',
-    'version': "18.0.1.1.0",
-    'category': 'Accounting',
-    'sequence': 14,
-    'summary': '',
-    'author': 'ADHOC SA',
-    'website': 'www.adhoc.com.ar',
-    'license': 'AGPL-3',
-    'images': [
+    "name": "Account Batch Payment UX",
+    "version": "18.0.1.1.0",
+    "category": "Accounting",
+    "sequence": 14,
+    "summary": "",
+    "author": "ADHOC SA",
+    "website": "www.adhoc.com.ar",
+    "license": "AGPL-3",
+    "images": [],
+    "depends": [
+        "account_batch_payment",
     ],
-    'depends': [
-        'account_batch_payment',
-    ],
-    'data': [
-        'views/account_batch_payment.xml',
-        'views/account_payment_views.xml'
-    ],
-    'demo': [
-    ],
-    'installable': True,
-    'auto_install': True,
-    'application': False,
+    "data": ["views/account_batch_payment.xml", "views/account_payment_views.xml"],
+    "demo": [],
+    "installable": True,
+    "auto_install": True,
+    "application": False,
 }

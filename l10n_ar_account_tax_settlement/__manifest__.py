@@ -18,33 +18,30 @@
 #
 ##############################################################################
 {
-    'name': 'Tax Settlements For Argentina',
-    'version': "18.0.1.0.0",
-    'category': 'Accounting',
-    'author': 'ADHOC SA',
-    'website': 'www.adhoc.com.ar',
-    'license': 'LGPL-3',
-    'images': [
-    ],
-    'depends': [
-        'account_tax_settlement',
+    "name": "Tax Settlements For Argentina",
+    "version": "18.0.1.0.0",
+    "category": "Accounting",
+    "author": "ADHOC SA",
+    "website": "www.adhoc.com.ar",
+    "license": "LGPL-3",
+    "images": [],
+    "depends": [
+        "account_tax_settlement",
         #'l10n_ar_account_reports',
-        'l10n_ar_ux',
-        'l10n_ar_tax',
+        "l10n_ar_ux",
+        "l10n_ar_tax",
     ],
-    'data': [
-        'data/inflation_adjustment_index.xml',
-        'views/inflation_adjustmen_index_view.xml',
-        'views/account_tax_view.xml',
-        'wizards/inflation_adjustment_view.xml',
-        'security/ir.model.access.csv',
+    "data": [
+        "data/inflation_adjustment_index.xml",
+        "views/inflation_adjustmen_index_view.xml",
+        "views/account_tax_view.xml",
+        "wizards/inflation_adjustment_view.xml",
+        "security/ir.model.access.csv",
     ],
-    'demo': [
-    ],
-    'test': [
-    ],
-    'installable': True,
-    'auto_install': True,
-    'application': False,
-    'post_init_hook': 'l10n_ar_account_tax_settlement_post_init_hook',
+    "demo": [],
+    "test": [],
+    "installable": True,
+    "auto_install": True,
+    "application": False,
+    "post_init_hook": "l10n_ar_account_tax_settlement_post_init_hook",
 }

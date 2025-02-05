@@ -9,14 +9,13 @@ from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 
 
 class TestL10nArCurrencyUpdate(AccountTestInvoicingCommon):
-
     @classmethod
-    @AccountTestInvoicingCommon.setup_chart_template('ar_ri')
+    @AccountTestInvoicingCommon.setup_chart_template("ar_ri")
     def setUpClass(cls):
         super().setUpClass()
-        cls.ARS = cls.env.ref('base.ARS')
-        cls.USD = cls.env.ref('base.USD')
-        cls.EUR = cls.env.ref('base.EUR')
+        cls.ARS = cls.env.ref("base.ARS")
+        cls.USD = cls.env.ref("base.USD")
+        cls.EUR = cls.env.ref("base.EUR")
 
         # Activamos monedas por las dudas
         cls.USD.active = True
@@ -24,7 +23,7 @@ class TestL10nArCurrencyUpdate(AccountTestInvoicingCommon):
         cls.utils_path = "odoo.addons.l10n_ar_currency_update.models.res_company.ResCompany"
 
     def test_ARS(self):
-        """ When the base currency is ARS """
+        """When the base currency is ARS"""
         msg_error = "Should not be any rate for this currency and company to continue with the test"
         self.assertEqual(self.env.company.currency_id, self.ARS)
         self.assertEqual(self.ARS.rate, 1.0, msg_error)
@@ -33,9 +32,9 @@ class TestL10nArCurrencyUpdate(AccountTestInvoicingCommon):
 
         test_date = datetime.date(2024, 9, 24)
         mocked_res = {
-            'ARS': (1.0, test_date),
-            'EUR': (0.0009435361546070796, test_date),
-            'USD': (0.0010481301358376655, test_date),
+            "ARS": (1.0, test_date),
+            "EUR": (0.0009435361546070796, test_date),
+            "USD": (0.0010481301358376655, test_date),
         }
 
         with patch(f"{self.utils_path}._parse_afip_data", return_value=mocked_res):

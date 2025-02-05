@@ -1,7 +1,7 @@
-from odoo import models, fields
+from odoo import fields, models
 
 
 class AccountTax(models.Model):
-    _inherit = 'account.tax'
+    _inherit = "account.tax"
 
-    porcentaje_exclusion = fields.Float(string='Porcentaje de exclusión')
+    porcentaje_exclusion = fields.Float(string="Porcentaje de exclusión")

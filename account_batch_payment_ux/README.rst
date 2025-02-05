@@ -13,7 +13,7 @@
 ===========================
 Accounting Batch Payment UX
 ===========================
-This module adds validations on batch payment operations: 
+This module adds validations on batch payment operations:
 
 #. Restrict unlink payments linked to the batch payment if the batch is not on draft state.
 #. Restrict delete an account batch payment if it's not on draft state.

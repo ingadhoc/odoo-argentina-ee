@@ -18,24 +18,24 @@
 #
 ##############################################################################
 {
-    'name': 'Argentinian Currency Rate Update',
-    'version': "18.0.1.0.0",
-    'category': 'Localization/Argentina',
-    'sequence': 14,
-    'author': 'ADHOC SA,Odoo Community Association (OCA)',
-    'website': 'www.adhoc.com.ar',
-    'license': 'AGPL-3',
-    'summary': '',
-    'depends': [
-        'currency_rate_live',
-        'l10n_ar_edi',
+    "name": "Argentinian Currency Rate Update",
+    "version": "18.0.1.0.0",
+    "category": "Localization/Argentina",
+    "sequence": 14,
+    "author": "ADHOC SA,Odoo Community Association (OCA)",
+    "website": "www.adhoc.com.ar",
+    "license": "AGPL-3",
+    "summary": "",
+    "depends": [
+        "currency_rate_live",
+        "l10n_ar_edi",
     ],
-    'data': [
-        'data/ir_cron_data.xml',
-        'data/res_company_data.xml',
-        'wizards/res_config_settings_views.xml',
+    "data": [
+        "data/ir_cron_data.xml",
+        "data/res_company_data.xml",
+        "wizards/res_config_settings_views.xml",
     ],
-    'installable': True,
-    'auto_install': True,
-    'application': False,
+    "installable": True,
+    "auto_install": True,
+    "application": False,
 }
