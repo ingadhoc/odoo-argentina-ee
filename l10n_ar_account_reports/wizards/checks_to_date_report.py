@@ -120,7 +120,7 @@ class AccountCheckToDateReportWizard(models.TransientModel):
                 account_move AS ap_move ON ap.move_id = ap_move.id
             WHERE
                 (apm.code != 'manual' OR (apm.code = 'manual' AND ap_move.date >= '%s'));
-        """ % (to_date))
+        """, (to_date))
 
         # De los cheques filtrados en t2 volvemos a filtrar aquellos que tengan método de pago de cheques de terceros
         # que tengan diario actual (es decir que no hayan sido endosados) y la fecha contable de la primera operación
@@ -145,8 +145,8 @@ class AccountCheckToDateReportWizard(models.TransientModel):
             LEFT JOIN account_journal AS journal ON ap_move.journal_id = journal.id
             LEFT JOIN l10n_latam_check_account_payment_rel rel ON rel.check_id = c.id
             WHERE apm.code = 'new_third_party_checks' AND c.current_journal_id IS NOT NULL AND rel.check_id IS NULL AND ap_move.date <= '%s';
-        """ % (to_date, to_date))
-        self.env.cr.execute(query)
+        """)
+        self.env.cr.execute(query, (to_date, to_date))
         res = self.env.cr.fetchall()
         check_ids = [x[0] for x in res]
         checks = self.env['l10n_latam.check'].search([('id', 'in', check_ids)])
