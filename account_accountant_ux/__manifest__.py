@@ -18,32 +18,30 @@
 #
 ##############################################################################
 {
-    'name': 'Accounting Accountant UX',
-    'version': "18.0.1.4.0",
-    'category': 'Accounting',
-    'sequence': 14,
-    'summary': '',
-    'author': 'ADHOC SA',
-    'website': 'www.adhoc.com.ar',
-    'license': 'AGPL-3',
-    'images': [
+    "name": "Accounting Accountant UX",
+    "version": "18.0.1.4.0",
+    "category": "Accounting",
+    "sequence": 14,
+    "summary": "",
+    "author": "ADHOC SA",
+    "website": "www.adhoc.com.ar",
+    "license": "AGPL-3",
+    "images": [],
+    "depends": [
+        "account_reports",
+        "account_internal_transfer",
+        "account_ux",
     ],
-    'depends': [
-        'account_reports',
-        'account_internal_transfer',
-        'account_ux',
+    "data": [
+        "views/res_partner_view.xml",
+        "views/account_move_line.xml",
+        "wizards/account_change_lock_date_views.xml",
+        "wizards/res_config_settings_views.xml",
+        "data/account_accountant_data.xml",
+        "views/account_journal_dashboard_view.xml",
     ],
-    'data': [
-        'views/res_partner_view.xml',
-        'views/account_move_line.xml',
-        'wizards/account_change_lock_date_views.xml',
-        'wizards/res_config_settings_views.xml',
-        'data/account_accountant_data.xml',
-        'views/account_journal_dashboard_view.xml',
-    ],
-    'demo': [
-    ],
-    'installable': True,
-    'auto_install': True,
-    'application': False,
+    "demo": [],
+    "installable": True,
+    "auto_install": True,
+    "application": False,
 }

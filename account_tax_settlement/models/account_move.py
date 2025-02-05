@@ -1,15 +1,15 @@
-from odoo import fields, models, api
+from odoo import fields, models
 
 
 class AccountMove(models.Model):
-    _inherit = 'account.move'
+    _inherit = "account.move"
 
     settled_line_ids = fields.One2many(
-        'account.move.line',
-        'tax_settlement_move_id',
-        'Settled Lines',
+        "account.move.line",
+        "tax_settlement_move_id",
+        "Settled Lines",
         # atencion, si sacamos el readonly por alguna razon, volver a agregarlo
-        # en la vista porque si no da error al querer guardar cambios (probar 
+        # en la vista porque si no da error al querer guardar cambios (probar
         # con usuario no admin pondiendo apuntes de liquidacion en cero)
         readonly=True,
         auto_join=True,

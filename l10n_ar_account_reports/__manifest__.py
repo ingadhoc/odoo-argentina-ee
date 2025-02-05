@@ -18,31 +18,28 @@
 #
 ##############################################################################
 {
-    'name': 'Accounting Reports Customized for Argentina',
-    'version': "18.0.1.0.0",
-    'category': 'Accounting',
-    'sequence': 14,
-    'summary': '',
-    'author': 'ADHOC SA',
-    'website': 'www.adhoc.com.ar',
-    'license': 'AGPL-3',
-    'images': [
+    "name": "Accounting Reports Customized for Argentina",
+    "version": "18.0.1.0.0",
+    "category": "Accounting",
+    "sequence": 14,
+    "summary": "",
+    "author": "ADHOC SA",
+    "website": "www.adhoc.com.ar",
+    "license": "AGPL-3",
+    "images": [],
+    "depends": [
+        "account_reports",
+        "l10n_ar",
+        "l10n_latam_check",
     ],
-    'depends': [
-        'account_reports',
-        'l10n_ar',
-        'l10n_latam_check',
+    "data": [
+        "wizards/checks_to_date_view.xml",
+        "reports/report_checks_to_date.xml",
+        "security/ir.model.access.csv",
     ],
-    'data': [
-        'wizards/checks_to_date_view.xml',
-        'reports/report_checks_to_date.xml',
-        'security/ir.model.access.csv',
-    ],
-    'demo': [
-    ],
-    'test': [
-    ],
-    'installable': True,
-    'auto_install': True,
-    'application': False,
+    "demo": [],
+    "test": [],
+    "installable": True,
+    "auto_install": True,
+    "application": False,
 }
