@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-01 00:29+0000\n"
+"POT-Creation-Date: 2025-02-07 01:59+0000\n"
 "PO-Revision-Date: 2024-12-28 10:21+0000\n"
 "Last-Translator: Mariana Torres <mt@adhoc.com.ar>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
@@ -144,7 +144,7 @@ msgstr "Nombre mostrado"
 #. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 msgid ""
-"EL el partner \"%s\" (id %s), el tipo de identificación debe ser una de "
+"EL el partner \"%s\" (id %s), el tipo de identificacióndebe ser una de "
 "siguientes: CUIT, CUIL, CDI."
 msgstr ""
 
