@@ -81,6 +81,13 @@ class AccountChartTemplate(models.AbstractModel):
                     _logger.info("Skip creation of journal %s because we didn't found default account")
                     continue
                 account_id = "account.%s_%s" % (company.id, account)
+                existing_journal = (
+                    self.env["account.journal"]
+                    .with_context(active_test=False)
+                    .search([("company_id", "=", company.id), ("code", "=", code)], limit=1)
+                )
+                if existing_journal:
+                    continue
                 res[code] = {
                     "type": "general",
                     "name": name,

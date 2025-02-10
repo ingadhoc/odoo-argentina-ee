@@ -28,7 +28,7 @@
     "depends": [
         "account_tax_settlement",
         "l10n_ar",
-        #'l10n_ar_account_reports',
+        "l10n_ar_account_reports",
         "l10n_ar_ux",
         "l10n_ar_tax",
         "account_payment_pro_receiptbook",
