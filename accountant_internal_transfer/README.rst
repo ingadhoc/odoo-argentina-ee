@@ -10,9 +10,9 @@
    :target: https://www.gnu.org/licenses/agpl
    :alt: License: AGPL-3
 
-=============
-Accountant UX
-=============
+============================
+Accountant Internal Transfer
+============================
 
 #. Mueve el menu "Caja y bancos" a nuevo menú de Accounting
 
