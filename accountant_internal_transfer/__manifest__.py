@@ -29,6 +29,7 @@
     "images": [],
     "depends": [
         "accountant",
+        "account_internal_transfer",
     ],
     "data": [
         "data/accountant_data.xml",
