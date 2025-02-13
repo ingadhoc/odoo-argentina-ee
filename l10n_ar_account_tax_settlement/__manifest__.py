@@ -27,9 +27,11 @@
     "images": [],
     "depends": [
         "account_tax_settlement",
+        "l10n_ar",
         #'l10n_ar_account_reports',
         "l10n_ar_ux",
         "l10n_ar_tax",
+        "account_payment_pro_receiptbook",
     ],
     "data": [
         "data/inflation_adjustment_index.xml",
@@ -41,7 +43,7 @@
     "demo": [],
     "test": [],
     "installable": True,
-    "auto_install": True,
+    "auto_install": ["l10n_ar"],
     "application": False,
     "post_init_hook": "l10n_ar_account_tax_settlement_post_init_hook",
 }
