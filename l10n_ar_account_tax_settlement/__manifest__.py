@@ -19,7 +19,7 @@
 ##############################################################################
 {
     'name': 'Tax Settlements For Argentina',
-    'version': "17.0.1.5.0",
+    'version': "17.0.1.6.0",
     'category': 'Accounting',
     'website': 'www.adhoc.com.ar',
     'license': 'LGPL-3',
@@ -27,9 +27,11 @@
     ],
     'depends': [
         'account_tax_settlement',
+        'l10n_ar',
         'l10n_ar_account_reports',
         'l10n_ar_ux',
         'l10n_ar_account_withholding',
+        'account_payment_pro_receiptbook',
     ],
     'data': [
         'data/inflation_adjustment_index.xml',
@@ -44,7 +46,7 @@
     'test': [
     ],
     'installable': True,
-    'auto_install': True,
+    'auto_install': ["l10n_ar"],
     'application': False,
     'post_init_hook': 'l10n_ar_account_tax_settlement_post_init_hook',
 }

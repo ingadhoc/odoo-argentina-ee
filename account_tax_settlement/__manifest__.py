@@ -1,6 +1,6 @@
 {
     'name': 'Tax Settlement',
-    'version': "17.0.1.2.0",
+    'version': "17.0.1.3.0",
     'category': 'Accounting',
     'sequence': 14,
     'summary': '',
@@ -12,11 +12,6 @@
     'depends': [
         # por ahora agregamos esta dep para permitir vincular a reportes
         'account_reports',
-        # dependencia porque llevamos a pagos y tmb porque usamos el boton
-        # en apuntes contables para abrir documento relacionado y tamnien precisamos
-        # para la liquidacion de impuesto el uso de talonarios por la nomenclatura de los
-        # pagos
-        'account_payment_pro_receiptbook'
     ],
     'data': [
         'wizards/account_tax_settlement_wizard_view.xml',
@@ -34,6 +29,6 @@
     'test': [
     ],
     'installable': True,
-    'auto_install': True,
+    'auto_install': False,
     'application': False,
 }
