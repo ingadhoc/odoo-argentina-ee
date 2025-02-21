@@ -1,0 +1,1 @@
+from . import l10n_ar_account_tax_settlement_unit_test
