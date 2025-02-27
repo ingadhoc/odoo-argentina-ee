@@ -135,9 +135,8 @@ class InflationAdjustment(models.TransientModel):
 
     def get_move_line_domain(self):
         self.ensure_one()
-        no_monetaria_tag = self.env.ref("l10n_ar_ux.no_monetaria_tag")
         res = [
-            ("account_id.tag_ids", "in", no_monetaria_tag.id),
+            ("account_id.is_monetary", "=", False),
             ("company_id", "=", self.company_id.id),
             ("move_id.state", "=", "posted"),
         ]
