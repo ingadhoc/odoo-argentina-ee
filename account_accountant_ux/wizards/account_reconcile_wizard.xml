@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_account_reconcile_wizard" model="ir.ui.view">
+        <field name="name">account.reconcile.wizard.form</field>
+        <field name="model">account.reconcile.wizard</field>
+        <field name="inherit_id" ref="account_accountant.view_account_reconcile_wizard"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='force_partials']" position="after">
+                <field name="multiple_partners" invisible="1"/>
+                <div class="alert alert-danger" role="alert" invisible="not multiple_partners">
+                    <p>It is possible that if more than two distinct partners are selected, cross-partner reconciliations may occur. Please review them carefully.
+                    </p>
+                </div>
+            </xpath>
+            <xpath expr="//button[@name='reconcile']" position="attributes">
+                <attribute name="invisible" add="multiple_partners" separator=" and "/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

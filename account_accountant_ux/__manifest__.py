@@ -19,7 +19,7 @@
 ##############################################################################
 {
     "name": "Accounting Accountant UX",
-    "version": "18.0.1.4.0",
+    "version": "18.0.1.5.0",
     "category": "Accounting",
     "sequence": 14,
     "summary": "",
@@ -37,6 +37,7 @@
         "views/account_move_line.xml",
         "wizards/account_change_lock_date_views.xml",
         "wizards/res_config_settings_views.xml",
+        "wizards/account_reconcile_wizard.xml",
         "data/account_accountant_data.xml",
         "views/account_journal_dashboard_view.xml",
     ],
