@@ -116,7 +116,7 @@ class ResPartner(models.Model):
         errors = []
         values = {}
         try:
-            res = client.service.getPersona(
+            res = client.service.getPersona_v2(
                 sign=auth.get('Sign'), token=auth.get('Token'), cuitRepresentada=auth.get('Cuit'), idPersona=vat)
 
             if res.errorConstancia:
