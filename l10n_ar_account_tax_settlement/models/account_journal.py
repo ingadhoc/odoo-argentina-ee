@@ -1162,7 +1162,7 @@ class AccountJournal(models.Model):
                 issue_date = payment.date
                 amount_tot = abs(payment.payment_total)
                 # withholdable_base_amount es para ret de gcias, withholding_base_amount es para ret de iva
-                base_amount = line.withholding_id.withholdable_base_amount or line.withholding_id.withholdable_base_amount
+                base_amount = line.withholding_id.withholdable_base_amount or line.withholding_id.base_amount
 
             elif move.is_invoice():
                 # Codigo del Comprobante         [ 2]
