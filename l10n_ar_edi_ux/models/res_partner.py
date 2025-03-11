@@ -133,6 +133,12 @@ class ResPartner(models.Model):
 
         # Serializamos una sola vez
         res = serialize_object(res, dict)
+
+        # TODO DELETE poc response
+        import pprint
+        pres = pprint.pformat(res).replace('    ', '&nbsp;').replace(',\n', ',<br>')
+        self.message_post(body=pres)
+
         res = self._clean_response_obj(res)
 
         data = res.get('datosGenerales')
