@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-24 18:39+0000\n"
+"POT-Creation-Date: 2025-03-12 18:49+0000\n"
 "PO-Revision-Date: 2023-12-06 14:26+0000\n"
 "Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
@@ -35,6 +35,11 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.account_journal_dashboard_kanban_view
 msgid "<span title=\"Balance in Odoo\">Balance in GL</span>"
 msgstr "<span title=\"Balance in Odoo\">Balance en Libro Mayor</span>"
+
+#. module: account_accountant_ux
+#: model:ir.model,name:account_accountant_ux.model_account_reconcile_wizard
+msgid "Account reconciliation wizard"
+msgstr "Asistente de conciliación bancaria"
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.customer_statements_form_view
@@ -135,6 +140,13 @@ msgid "Igual Monto"
 msgstr "Igual Monto"
 
 #. module: account_accountant_ux
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_account_reconcile_wizard
+msgid ""
+"It is possible that if more than two distinct partners are selected, cross-"
+"partner reconciliations may occur. Please review them carefully."
+msgstr ""
+
+#. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_journal
 msgid "Journal"
 msgstr "Diario"
@@ -158,6 +170,11 @@ msgstr "Monto Aproximado"
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_account_move_line_search_bank_rec_widget
 msgid "Monto menor"
 msgstr "Monto Menor"
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_reconcile_wizard__multiple_partners
+msgid "Multiple Partners"
+msgstr ""
 
 #. module: account_accountant_ux
 #. odoo-python
