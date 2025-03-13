@@ -19,7 +19,7 @@
 ##############################################################################
 {
     "name": "Accounting Reports Customized for Argentina",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.2.0",
     "category": "Accounting",
     "sequence": 14,
     "summary": "",
@@ -27,14 +27,11 @@
     "website": "www.adhoc.com.ar",
     "license": "AGPL-3",
     "images": [],
-    "depends": [
-        "account_reports",
-        "l10n_ar",
-        "l10n_latam_check",
-    ],
+    "depends": ["account_reports", "l10n_ar", "l10n_latam_check", "l10n_ar_reports"],
     "data": [
         "wizards/checks_to_date_view.xml",
         "reports/report_checks_to_date.xml",
+        "reports/account_ar_vat_line_views.xml",
         "security/ir.model.access.csv",
     ],
     "demo": [],
@@ -42,4 +39,6 @@
     "installable": True,
     "auto_install": True,
     "application": False,
+    "post_load": "monkey_patches",
+    "uninstall_hook": "uninstall_hook",
 }
