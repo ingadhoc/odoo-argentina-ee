@@ -1,0 +1,47 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ar_edi_payment_pro
+# 
+# Translators:
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-14 13:37+0000\n"
+"PO-Revision-Date: 2025-03-14 13:37+0000\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025\n"
+"Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: es\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#. module: l10n_ar_edi_payment_pro
+#: model:ir.model.fields,field_description:l10n_ar_edi_payment_pro.field_account_payment_invoice_wizard__l10n_ar_afip_asoc_period_start
+msgid "Associate Period From"
+msgstr ""
+
+#. module: l10n_ar_edi_payment_pro
+#: model:ir.model.fields,field_description:l10n_ar_edi_payment_pro.field_account_payment_invoice_wizard__l10n_ar_afip_asoc_period_end
+msgid "Associate Period To"
+msgstr ""
+
+#. module: l10n_ar_edi_payment_pro
+#: model:ir.model.fields,field_description:l10n_ar_edi_payment_pro.field_account_payment_invoice_wizard__commercial_partner_id
+msgid "Commercial Entity"
+msgstr ""
+
+#. module: l10n_ar_edi_payment_pro
+#: model:ir.model.fields,field_description:l10n_ar_edi_payment_pro.field_account_payment_invoice_wizard__origin_invoice_id
+msgid "Origin Invoice"
+msgstr ""
+
+#. module: l10n_ar_edi_payment_pro
+#: model:ir.model,name:l10n_ar_edi_payment_pro.model_account_payment_invoice_wizard
+msgid "account.payment.invoice.wizard"
+msgstr ""
+"account.payment.invoice.wizard\n"
+" "
