@@ -1374,7 +1374,8 @@ class AccountJournal(models.Model):
                         )
                         cant_ret = 0
                         for withholding in retenciones_pago_fact_original:
-                            if withholding.tax_id == line.withholding_id.tax_id:
+                            line_withholding_tax = line.withholding_id._get_withholding_tax()
+                            if withholding.tax_id == line_withholding_tax:
                                 origin_withholding_cr = withholding
                                 cant_ret += 1
                         if cant_ret != 1 or origin_withholding_cr.amount != line.withholding_id.amount:
@@ -1513,16 +1514,17 @@ class AccountJournal(models.Model):
             payment = line.payment_id
             if payment:
                 # regimen (long 3)
-                codigo_regimen = line.withholding_id.tax_id.l10n_ar_code
+                line_withholding_tax = line.withholding_id._get_withholding_tax()
+                codigo_regimen = line_withholding_tax.l10n_ar_code
                 if not codigo_regimen:
                     raise ValidationError(
                         _('No hay código de régimen en la configuración del impuesto "%s"')
-                        % (line.withholding_id.tax_id.name)
+                        % (line_withholding_tax.name)
                     )
                 if len(codigo_regimen) < 3:
                     raise ValidationError(
                         _('El código de régimen tiene que tener 3 dígitos en la configuración del impuesto "%s"')
-                        % (line.withholding_id.tax_id.name)
+                        % (line_withholding_tax.name)
                     )
                 content += codigo_regimen[:3]
 
