@@ -39,4 +39,5 @@ class AccountBatchPayment(models.Model):
             raise RedirectWarning(error_msg, action_error, _("Show matched entries"))
         if self.payment_ids.move_id:
             self.payment_ids.move_id.is_move_sent = False
+        self.payment_ids.unmark_as_sent()
         self.write({"state": "draft"})
