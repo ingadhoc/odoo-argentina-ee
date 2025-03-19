@@ -54,6 +54,7 @@ class AccountReport(models.Model):
             "account_report_generation_options": options,
             "default_report_id": self.id,
             "entry_ref": entry_ref,
+            "skip_invoice_sync": True,
             "default_company_id": companies.id,
         }
         view_id = self.env.ref("account_tax_settlement.view_account_tax_settlement_wizard_form").id
