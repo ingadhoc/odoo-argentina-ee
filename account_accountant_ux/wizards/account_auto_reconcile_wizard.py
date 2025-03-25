@@ -36,7 +36,7 @@ class AccountAutoReconcileWizard(models.TransientModel):
         """
         self.ensure_one()
         if self.search_mode == 'all_from_partner':
-            reconciled_amls = self._auto_reconcile_zero_balance()
+            reconciled_amls = self._auto_reconcile_all_from_partner()
             if reconciled_amls:
                 return {
                     'name': _("Automatically Reconciled Entries"),
