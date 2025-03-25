@@ -24,7 +24,7 @@ Accounting Reports UX
 #. Agrega advertencia para posibles conciliaciones cruzadas entre partners.
 #. restaurar comportamiento de 16 donde el boton 'libro mayor' de partners llevaba al informe (Ahora lleva a tree sin este cambio).
 #. desde el informe partner ledger, al ir a los journal items, vamos a la vista de apuntes que usamos para los menus "customer/supplier ledger" para unificar comportamiento (nativamente odoo manda a una _tree_grouped_partner)
-#. Agrega una estrategia de autoconziliacion que Permite renconsiliar todas las lineas de un partner en un solo consiliacion parcial o total
+#. Agrega una estrategia de autoconciliacion que Permite reconciliar todas las lineas de un partner en un solo consiliacion parcial o total
 
 Installation
 ============
