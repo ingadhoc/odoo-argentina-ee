@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-12 18:49+0000\n"
+"POT-Creation-Date: 2025-03-27 23:53+0000\n"
 "PO-Revision-Date: 2023-12-06 14:26+0000\n"
 "Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
@@ -37,14 +37,31 @@ msgid "<span title=\"Balance in Odoo\">Balance in GL</span>"
 msgstr "<span title=\"Balance in Odoo\">Balance en Libro Mayor</span>"
 
 #. module: account_accountant_ux
+#: model:ir.model,name:account_accountant_ux.model_account_auto_reconcile_wizard
+msgid "Account automatic reconciliation wizard"
+msgstr "Asistente de conciliación bancaria automática"
+
+#. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_reconcile_wizard
 msgid "Account reconciliation wizard"
 msgstr "Asistente de conciliación bancaria"
 
 #. module: account_accountant_ux
+#: model:ir.model.fields.selection,name:account_accountant_ux.selection__account_auto_reconcile_wizard__search_mode__all_from_partner
+msgid "All balances from one partner"
+msgstr ""
+
+#. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.customer_statements_form_view
 msgid "Amount residual on company currency"
 msgstr "Importe residual en la moneda de la compañía"
+
+#. module: account_accountant_ux
+#. odoo-python
+#: code:addons/account_accountant_ux/wizards/account_auto_reconcile_wizard.py:0
+#, python-format
+msgid "Automatically Reconciled Entries"
+msgstr ""
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_config_settings_view_form
@@ -196,9 +213,10 @@ msgid "Partner Ledger Report"
 msgstr "Libro Mayor de Empresa"
 
 #. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_auto_reconcile_wizard__search_mode
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_move_line_payment_tree
 msgid "Reconcile"
-msgstr ""
+msgstr "Conciliar"
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.customer_statements_form_view
