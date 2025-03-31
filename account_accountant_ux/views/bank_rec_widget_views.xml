@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+        <record id="account_accountant.view_bank_statement_line_tree_bank_rec_widget" model="ir.ui.view">
+            <field name="priority" eval="15"/>
+
+        </record>
+</odoo>
