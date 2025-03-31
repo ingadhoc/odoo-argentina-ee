@@ -35,6 +35,7 @@
     "data": [
         "views/res_partner_view.xml",
         "views/account_move_line.xml",
+        "views/bank_rec_widget_views.xml",
         "wizards/account_change_lock_date_views.xml",
         "wizards/res_config_settings_views.xml",
         "wizards/account_reconcile_wizard.xml",
