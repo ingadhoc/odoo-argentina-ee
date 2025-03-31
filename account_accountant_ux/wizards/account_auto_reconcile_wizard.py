@@ -1,4 +1,4 @@
-from odoo import _, fields, models
+from odoo import _, api, fields, models
 
 
 class AccountAutoReconcileWizard(models.TransientModel):
@@ -8,6 +8,25 @@ class AccountAutoReconcileWizard(models.TransientModel):
         selection_add=[("all_from_partner", "All balances from one partner")],
         ondelete={"all_from_partner": "set default"},
     )
+    company_id = fields.Many2one(
+        comodel_name="res.company",
+        required=True,
+        compute="_compute_company_id",
+        default=lambda self: self.env.company,
+        store=True,
+    )
+
+    @api.depends("line_ids")
+    def _compute_company_id(self):
+        # Este Hack es para que podamos conciliar desde el boton del menu reconciliar
+        # en un entorno multicompañia aunque estemos parados en otra compañia
+        # Solo modificamos el valor por defecto si es una sola
+        for rec in self:
+            company = rec.line_ids.mapped("company_id")
+            if len(company) == 1:
+                rec.company_id = company
+            else:
+                rec.company_id = self.env.company
 
     def _auto_reconcile_all_from_partner(self):
         """Auto-reconcile with all-to-partner strategy:
