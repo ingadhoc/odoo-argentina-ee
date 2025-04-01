@@ -758,8 +758,17 @@ class AccountJournal(models.Model):
                     internal_type == 'credit_note' and 'C' or
                     internal_type == 'debit_note' and 'D' or 'R')
                 content += line.l10n_latam_document_type_id.l10n_ar_letter
+            # TODO el if-else de abajo es TEMPORAL, hubo un bug que hizo que algunos moves de pagos tengan el tipo
+            # de documento incluido en l10n_latam_document_number lo cual hace que se obtenga un piedrazo acá.
+            # Ejemplo: l10n_latam_document_number debe ser '0001-00000001' en lugar de 'OP-X 0001-00000001'
+            # lo dejamos por un tiempo para que los usuarios puedan descargar los txt de aquellos pagos
+            # que quedaron rotos (ejemplo: con l10n_latam_document_number = 'OP-X 0001-00000001')
+            if not move.l10n_latam_document_type_id:
+                document_number = move.l10n_latam_document_number.split(" ", 1)[-1]
+            else:
+                document_number = move.l10n_latam_document_number
             document_parts = move._l10n_ar_get_document_number_parts(
-                move.l10n_latam_document_number, move.l10n_latam_document_type_id.code)
+                document_number, move.l10n_latam_document_type_id.code)
             # si el punto de venta es de 5 digitos no encontramos doc
             # que diga como proceder, tomamos los ultimos 4 digitos
             pto_venta = "{:0>4d}".format(document_parts['point_of_sale'])[-4:]
@@ -1062,8 +1071,17 @@ class AccountJournal(models.Model):
                 content += '{:>04s}'.format(pos)
                 content += '{:>016s}'.format(number)
             else:
+                # TODO el if-else de abajo es TEMPORAL, hubo un bug que hizo que algunos moves de pagos tengan el tipo
+                # de documento incluido en l10n_latam_document_number lo cual hace que se obtenga un piedrazo acá.
+                # Ejemplo: l10n_latam_document_number debe ser '0001-00000001' en lugar de 'OP-X 0001-00000001'
+                # lo dejamos por un tiempo para que los usuarios puedan descargar los txt de aquellos pagos
+                # que quedaron rotos (ejemplo: con l10n_latam_document_number = 'OP-X 0001-00000001')
+                if not move.l10n_latam_document_type_id:
+                    document_number = move.l10n_latam_document_number.split(" ", 1)[-1]
+                else:
+                    document_number = move.l10n_latam_document_number
                 document_parts = move._l10n_ar_get_document_number_parts(
-                    move.l10n_latam_document_number, move.l10n_latam_document_type_id.code)
+                    document_number, move.l10n_latam_document_type_id.code)
                 pos = document_parts['point_of_sale']
                 number = document_parts['invoice_number']
                 # si el punto de venta es de 5 digitos no encontramos doc
