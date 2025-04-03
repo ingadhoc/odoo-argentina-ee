@@ -269,7 +269,8 @@ class ResPartner(models.Model):
             _logger.info("We couldn't infer the AFIP responsability from padron, you must set it manually.")
 
         # Si somos un consorcio entonces no colocamos responsbilidad afip y dejamos mensajito en el contecto avisando
-        if '681098' in actividades or [item for item in ["Fideicomiso", "Consorcio", "Cons.", "Cons "] if item in denominacion]:
+        if '681098' in actividades or \
+           any(word in denominacion.lower() for word in ["fideicomiso", "consorcio", "cons.", "cons "]):
             values.pop('l10n_ar_afip_responsibility_type_id', None)
             self.message_post(body=_(
                 'Posiblemente este cliente sea un consorcio/fideicomiso. Por favor debe consultar directamente con el'
