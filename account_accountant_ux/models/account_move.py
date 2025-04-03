@@ -11,7 +11,7 @@ class AccountMove(models.Model):
         Como ya existe un boton que permite ir a la statement_line preferimos que el boton que tiene string "pago" te
         lleve efectivamente al pago
         TODO depreciar en 17/18 ya que los datos migrados no deberian importar tanto"""
-        if self.statement_line_id and self.payment_id:
+        if self.statement_line_id and self.payment_ids:
             return AccountMoveOriginal.action_open_business_doc(self)
         else:
             return super().action_open_business_doc()
