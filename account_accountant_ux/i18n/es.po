@@ -3,16 +3,16 @@
 # 	* account_accountant_ux
 # 
 # Translators:
-# Gonzalo, 2025
 # Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025
+# Gonzalo, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-02 11:56+0000\n"
+"POT-Creation-Date: 2025-04-04 17:04+0000\n"
 "PO-Revision-Date: 2024-11-07 14:34+0000\n"
-"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025\n"
+"Last-Translator: Gonzalo, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -47,13 +47,13 @@ msgstr "Asistente de conciliación bancaria"
 #. module: account_accountant_ux
 #: model:ir.model.fields.selection,name:account_accountant_ux.selection__account_auto_reconcile_wizard__search_mode__all_from_partner
 msgid "All balances from one partner"
-msgstr ""
+msgstr "Balances parciales por contacto"
 
 #. module: account_accountant_ux
 #. odoo-python
 #: code:addons/account_accountant_ux/wizards/account_auto_reconcile_wizard.py:0
 msgid "Automatically Reconciled Entries"
-msgstr ""
+msgstr "Entradas Conciliadas Automáticamente"
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_config_settings_view_form
@@ -72,6 +72,7 @@ msgid "Change Lock Date"
 msgstr "Cambiar fecha de bloqueo"
 
 #. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_auto_reconcile_wizard__company_id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_change_lock_date__company_id
 msgid "Company"
 msgstr "Compañía"
@@ -128,6 +129,9 @@ msgid ""
 "It is possible that if more than two distinct partners are selected, cross-"
 "partner reconciliations may occur. Please review them carefully."
 msgstr ""
+"Es posible que si se seleccionan más de dos contactos distintos, puedan "
+"ocurrir conciliaciones cruzadas entre los mismos. Revísalas cuidadosamente y"
+" utilice los asistentes de conciliación."
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_journal
@@ -157,7 +161,7 @@ msgstr "Monto Menor"
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_reconcile_wizard__multiple_partners
 msgid "Multiple Partners"
-msgstr ""
+msgstr "Múltiples Contactos"
 
 #. module: account_accountant_ux
 #. odoo-python
