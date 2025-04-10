@@ -774,7 +774,7 @@ class AccountJournal(models.Model):
                     internal_type == 'invoice' and 'F' or
                     internal_type == 'credit_note' and 'C' or
                     internal_type == 'debit_note' and 'D' or 'R')
-                content += line.l10n_latam_document_type_id.l10n_ar_letter
+                content += line.l10n_latam_document_type_id.l10n_ar_letter or ' '
             document_parts = move._l10n_ar_get_document_number_parts(
                 move.l10n_latam_document_number, move.l10n_latam_document_type_id.code)
             # si el punto de venta es de 5 digitos no encontramos doc
