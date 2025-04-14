@@ -262,25 +262,12 @@ class ResPartner(models.Model):
                 "zip": domicilio.get("codPostal", ""),
                 "actividades_padron": self.actividades_padron.search([("code", "in", actividades)]).ids,
                 "impuestos_padron": self.impuestos_padron.search([("code", "in", impuestos)]).ids,
-                "imp_iva_padron": imp_iva,
-                "monotributo_padron": monotributo,
                 "actividad_monotributo_padron": cat_mt.get("descripcionCategoria") if cat_mt else "",
                 "empleador_padron": True if 301 in impuestos else False,
                 "integrante_soc_padron": "",
                 "last_update_padron": fields.Date.today(),
             }
         )
-
-        ganancias_inscripto = [10, 11]
-        ganancias_exento = [12]
-        if set(ganancias_inscripto) & set(impuestos):
-            values["imp_ganancias_padron"] = "AC"
-        elif set(ganancias_exento) & set(impuestos):
-            values["imp_ganancias_padron"] = "EX"
-        elif monotributo == "S":
-            values["imp_ganancias_padron"] = "NC"
-        else:
-            _logger.info("We couldn't get impuesto a las ganancias from padron, you must set it manually")
 
         if provincia:
             # depending on the database, caba can have one of this codes
