@@ -3,13 +3,17 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 import ast
 
-from odoo import models
+from odoo import api, fields, models
 from odoo.exceptions import UserError
+from odoo.osv import expression
 
 
 class ResPartner(models.Model):
     _name = "res.partner"
     _inherit = "res.partner"
+
+    credit = fields.Monetary(search="_credit_search")  # pylint: disable=C8109
+    debit = fields.Monetary(search="_debit_search")  # pylint: disable=C8109
 
     def action_open_reconcile(self):
         action_values = self.env["ir.actions.act_window"]._for_xml_id(
@@ -47,3 +51,39 @@ class ResPartner(models.Model):
             return action
         else:
             raise UserError("Se deben seleccionar menos de 1000 contactos")
+
+    @api.model
+    def _credit_search(self, operator, operand):
+        if len(self.env.companies) > 1:
+            domain = []
+            for company in self.env.companies:
+                cond = self.with_company(company)._asset_difference_search(
+                    account_type="asset_receivable", operator=operator, operand=operand
+                )
+                if cond:
+                    domain = expression.OR([domain, cond])
+
+            if not domain:
+                return [("id", "=", 0)]
+
+            return domain
+        else:
+            return super()._credit_search(operator, operand)
+
+    @api.model
+    def _debit_search(self, operator, operand):
+        if len(self.env.companies) > 1:
+            domain = []
+            for company in self.env.companies:
+                cond = self.with_company(company)._asset_difference_search(
+                    account_type="liability_payable", operator=operator, operand=operand
+                )
+                if cond:
+                    domain = expression.OR([domain, cond])
+
+            if not domain:
+                return [("id", "=", 0)]
+
+            return domain
+        else:
+            return super()._debit_search(operator, operand)
