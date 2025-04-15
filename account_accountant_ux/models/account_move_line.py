@@ -23,10 +23,16 @@ class AccountMovetLine(models.Model):
                 amount_currency = statement_line["amount"]
 
             if value != 0 and operator == "=":
-                base_amount = ((100 - value) / 100) * amount
-                top_amount = ((100 + value) / 100) * amount
-                res.append(("amount_residual", ">", base_amount))
-                res.append(("amount_residual", "<", top_amount))
+                if primary_currency:
+                    base_amount = ((100 - value) / 100) * amount
+                    top_amount = ((100 + value) / 100) * amount
+                    res.append(("amount_residual", ">", base_amount))
+                    res.append(("amount_residual", "<", top_amount))
+                else:
+                    base_amount = ((100 - value) / 100) * amount_currency
+                    top_amount = ((100 + value) / 100) * amount_currency
+                    res.append(("amount_residual_currency", ">", base_amount))
+                    res.append(("amount_residual_currency", "<", top_amount))
             else:
                 amount = ((100 - value) / 100) * amount
                 amount_currency = ((100 - value) / 100) * amount_currency
@@ -34,5 +40,5 @@ class AccountMovetLine(models.Model):
                 if primary_currency:
                     res.append(("amount_residual", operator, amount))
                 else:
-                    res.append(("amount_residual", operator, amount_currency))
+                    res.append(("amount_residual_currency", operator, amount_currency))
         return res
