@@ -32,11 +32,12 @@ class AccountJournal(models.Model):
 
     def _format_afip_doc_types(self, ws, response):
         """ Given the response and the Webservice used, returns a more legible message to be shown to the users. """
+        events = False
         if ws == 'wsfe':
             if response['Errors']:
                 raise UserError(response['Errors'])
             elif response['Events']:
-                raise UserError(response['Events'])
+                events = str(response['Events'])
             result_key = 'ResultGet'
             voucher_key = 'CbteTipo'
             id_key = 'Id'
@@ -49,8 +50,7 @@ class AccountJournal(models.Model):
             if response[error_key]['ErrMsg'] != 'OK':
                 raise UserError(response[error_key]['ErrMsg'])
             elif response[events_key]['EventMsg'] != 'Ok':
-                raise UserError(response[events_key]['EventMsg'])
-
+                events = str(response[events_key]['EventMsg'])
             result_key = 'FEXResultGet' if ws == 'wsfex' else 'BFEResultGet'
             voucher_key = 'ClsFEXResponse_Cbte_Tipo' if ws == 'wsfex' else 'ClsBFEResponse_Tipo_Cbte'
             id_key = 'Cbte_Id'
@@ -66,4 +66,6 @@ class AccountJournal(models.Model):
                 date_to = format_date(self.env, datetime.datetime.strptime(document[date_to_key], '%Y%m%d'), date_format='dd/MM/Y')
                 line += " hasta: " + date_to
             msg += line + "\n"
+        if events:
+            msg += "\n\nAdicional AFIP devuelve este evento: " + events
         return msg
