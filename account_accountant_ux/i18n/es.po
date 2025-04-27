@@ -3,15 +3,15 @@
 # 	* account_accountant_ux
 # 
 # Translators:
-# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 16.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-23 15:47+0000\n"
+"POT-Creation-Date: 2025-04-16 14:28+0000\n"
 "PO-Revision-Date: 2023-01-13 13:45+0000\n"
-"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -179,6 +179,30 @@ msgstr "Total Adeudado"
 #, python-format
 msgid "Total Overdue"
 msgstr "Total Vencido"
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_res_partner__debit
+#: model:ir.model.fields,field_description:account_accountant_ux.field_res_users__debit
+msgid "Total Payable"
+msgstr "Total por pagar"
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_res_partner__credit
+#: model:ir.model.fields,field_description:account_accountant_ux.field_res_users__credit
+msgid "Total Receivable"
+msgstr "Total por cobrar"
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,help:account_accountant_ux.field_res_partner__credit
+#: model:ir.model.fields,help:account_accountant_ux.field_res_users__credit
+msgid "Total amount this customer owes you."
+msgstr "Importe total que el cliente le debe."
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,help:account_accountant_ux.field_res_partner__debit
+#: model:ir.model.fields,help:account_accountant_ux.field_res_users__debit
+msgid "Total amount you have to pay to this vendor."
+msgstr "Importe total a pagar a este proveedor."
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_company__use_company_currency_on_followup
