@@ -3,6 +3,7 @@
 # directory
 ##############################################################################
 from odoo import api, fields, models
+from odoo.tools.sql import SQL
 
 
 class AccountCheckToDateReportWizard(models.TransientModel):
@@ -25,6 +26,11 @@ class AccountCheckToDateReportWizard(models.TransientModel):
     )
 
     def action_confirm(self):
+        """
+        NOTA: Este reporte NO funciona con el usuario SOPORTE Adhoc en v18 a menos que tengas la compañia principal
+        activada.
+        TODO: Ver la forma de que funcione.
+        """
         self.ensure_one()
         return self.env.ref("l10n_ar_account_reports.checks_to_date_report").report_action(self)
 
@@ -43,8 +49,7 @@ class AccountCheckToDateReportWizard(models.TransientModel):
         -> esto nos da en la fecha en la cual fueron debitados:
         self.env['account.full.reconcile'].search([]).reconciled_line_ids.filtered(lambda x: x.move_id.payment_ids.payment_method_id.code == 'own_checks').full_reconcile_id.reconciled_line_ids.filtered(lambda x: x.statement_line_id).mapped(lambda x: x.date)
         """
-        to_date = str(to_date)
-        query = (
+        query = SQL(
             """
                 SELECT DISTINCT ON (t.check_id) t.check_id AS cheque FROM
                     (
@@ -55,7 +60,7 @@ class AccountCheckToDateReportWizard(models.TransientModel):
                         LEFT JOIN account_move AS ap_move ON ap.move_id = ap_move.id
                         LEFT JOIN account_journal AS journal ON ap_move.journal_id = journal.id
                         WHERE
-                        c.issue_state = 'handed' AND apm.code = 'own_checks' AND ap_move.date <= '%s' order by c.id, ap_move.date desc
+                        c.issue_state = 'handed' AND apm.code = 'own_checks' AND ap_move.date <= %(to_date)s order by c.id, ap_move.date desc
                     ) t
                     LEFT JOIN
                     (
@@ -69,10 +74,10 @@ class AccountCheckToDateReportWizard(models.TransientModel):
                         WHERE apm.code = 'own_checks' AND aml.id <> aml_2.id
                     ) t2
                     ON t.check_id = t2.check_id
-                WHERE t2.operation_date >= '%s' OR t2.operation_date IS NULL
+                WHERE t2.operation_date >= %(to_date)s OR t2.operation_date IS NULL
                 ;
-                """,
-            (to_date, to_date),
+            """,
+            to_date=to_date,
         )
         self.env.cr.execute(query)
         res = self.env.cr.fetchall()
@@ -86,7 +91,6 @@ class AccountCheckToDateReportWizard(models.TransientModel):
 
     @api.model
     def _get_checks_on_hand(self, journal_id, to_date):
-        to_date = str(to_date)
         self.env.cr.execute("DROP TABLE IF EXISTS t;")
         # Buscamos la última operation (payment) de cada cheque
         self.env.cr.execute("""
@@ -125,9 +129,9 @@ class AccountCheckToDateReportWizard(models.TransientModel):
             LEFT JOIN
                 account_move AS ap_move ON ap.move_id = ap_move.id
             WHERE
-                (apm.code != 'manual' OR (apm.code = 'manual' AND ap_move.date >= '%s'));
-        """,
-            (to_date),
+                (apm.code != 'manual' OR (apm.code = 'manual' AND ap_move.date >= %s));
+            """,
+            (to_date,),
         )
 
         # De los cheques filtrados en t2 volvemos a filtrar aquellos que tengan método de pago de cheques de terceros
@@ -143,7 +147,7 @@ class AccountCheckToDateReportWizard(models.TransientModel):
             LEFT JOIN account_payment_method AS apm ON apm.id = ap.payment_method_id
             LEFT JOIN account_move AS ap_move ON ap.move_id = ap_move.id
             LEFT JOIN account_journal AS journal ON ap_move.journal_id = journal.id
-            WHERE apm.code = 'new_third_party_checks' AND c.current_journal_id IS NOT NULL AND ap_move.date <= '%s'
+            WHERE apm.code = 'new_third_party_checks' AND c.current_journal_id IS NOT NULL AND ap_move.date <= %s
             UNION ALL
             SELECT c.id AS check_id, ap_move.date AS operation_date, apm.code AS operation_code
             FROM l10n_latam_check c
@@ -152,7 +156,7 @@ class AccountCheckToDateReportWizard(models.TransientModel):
             LEFT JOIN account_move AS ap_move ON ap.move_id = ap_move.id
             LEFT JOIN account_journal AS journal ON ap_move.journal_id = journal.id
             LEFT JOIN l10n_latam_check_account_payment_rel rel ON rel.check_id = c.id
-            WHERE apm.code = 'new_third_party_checks' AND c.current_journal_id IS NOT NULL AND rel.check_id IS NULL AND ap_move.date <= '%s';
+            WHERE apm.code = 'new_third_party_checks' AND c.current_journal_id IS NOT NULL AND rel.check_id IS NULL AND ap_move.date <= %s;
         """
         self.env.cr.execute(query, (to_date, to_date))
         res = self.env.cr.fetchall()
