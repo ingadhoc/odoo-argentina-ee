@@ -41,24 +41,6 @@ def get_pos_and_number(full_number):
         return re.sub("[^0-9]", "", args[0]), re.sub("[^0-9]", "", "".join(args[1:]))
 
 
-def get_and_verify_tax_alicuot(tax):
-    """Este método devuelve RedirectWarning si la alícuota del impuesto es cero, sino devuelve la alícuota"""
-    if not tax.amount:
-        raise RedirectWarning(
-            message=_("The tax '%s' does not have amount set.", tax.name),
-            action={
-                "type": "ir.actions.act_window",
-                "res_model": "account.tax",
-                "views": [(False, "form")],
-                "res_id": tax.id,
-                "name": _("Tax"),
-                "view_mode": "form",
-            },
-            button_text=_("Edit Tax"),
-        )
-    return tax.amount
-
-
 class AccountJournal(models.Model):
     _inherit = "account.journal"
 
@@ -105,7 +87,7 @@ class AccountJournal(models.Model):
             payment = line.payment_id
             move = line.move_id
 
-            alicuot = get_and_verify_tax_alicuot(line.tax_line_id)
+            tax = line._get_settlement_tax()
             if not payment:
                 continue
 
@@ -139,7 +121,7 @@ class AccountJournal(models.Model):
             # Campo 7: Alícuota char(5). Alícuota para la retención y/o percepción. Formato: 99.99 (dos enteros,
             # punto decimal y dos decimales. Ejemplo: " 3.00"
             # Example "03.00"
-            content += "%5.2f" % alicuot
+            content += "%5.2f" % tax.amount
 
             # Campo 8: Importe Ret./Perc. char(15). Importe retenido y/o percibido. Formato: 999999999999.99 (doce enteros,
             # punto decimal y dos decimales, dejando espacios en blanco a izquierda para completar las 15 posiciones).
@@ -210,9 +192,7 @@ class AccountJournal(models.Model):
         for line in move_lines:
             partner = line.partner_id
 
-            tax = line.tax_line_id
-
-            alicuot = get_and_verify_tax_alicuot(tax)
+            tax = line._get_settlement_tax()
 
             # 1 - tipo de operacion
             if tax.type_tax_use in ["sale", "purchase"]:
@@ -379,7 +359,7 @@ class AccountJournal(models.Model):
             content += format_amount(base_amount, 12, 2)
 
             # 19 - Alícuota / alicuota
-            content += format_amount(alicuot, 2, 2)
+            content += format_amount(tax.alicuot, 2, 2)
 
             # 20 - Impuesto Determinado
             content += format_amount(abs(-line.balance), 12, 2)
@@ -452,7 +432,7 @@ class AccountJournal(models.Model):
             # pay_group = payment.payment_group_id
             move = line.move_id
             payment = line.payment_id
-            tax = line.tax_line_id
+            tax = line._get_settlement_tax()
             partner = line.partner_id
             internal_type = line.l10n_latam_document_type_id.internal_type
 
@@ -461,7 +441,7 @@ class AccountJournal(models.Model):
                     _('El partner "%s" (id %s) no tiene número de identificación ' "establecido")
                     % (partner.name, partner.id)
                 )
-            alicuot = get_and_verify_tax_alicuot(tax)
+            alicuot = tax.amount
 
             ret_perc_applied = False
             es_percepcion = False
@@ -858,7 +838,8 @@ class AccountJournal(models.Model):
 
         line_nbr = 1
         for line in move_lines.filtered("payment_id"):
-            alicuot = get_and_verify_tax_alicuot(line.tax_line_id)
+            tax = line._get_settlement_tax()
+            alicuot = tax.amount
 
             payment = line.payment_id
             internal_type = line.l10n_latam_document_type_id.internal_type
@@ -896,22 +877,25 @@ class AccountJournal(models.Model):
 
             # 10 Tipo de Régimen de Percepción
             # (código correspondiente según tabla definida por la jurisdicción)
-            if not line.tax_line_id.l10n_ar_code:
+            if not tax.l10n_ar_code:
                 raise ValidationError(
-                    _("No hay regimen de retencion configurado para la alícuota" " del partner %s")
-                    % line.partner_id.name
+                    _(
+                        "No hay regimen de retencion configurado para el impuesto '%(tax_name)s' del partner '%(partner_name)s'",
+                        tax_name=tax.name,
+                        partner_name=line.partner_id.name,
+                    )
                 )
-            content.append(line.tax_line_id.l10n_ar_code)
+            content.append(tax.l10n_ar_code)
 
             # 11 Jurisdicción: código en Convenio Multilateral de la
             # jurisdicción a la cual está presentando la DDJJ
-            if not line.tax_line_id.l10n_ar_state_id.jurisdiction_code:
+            if not tax.l10n_ar_state_id.jurisdiction_code:
                 raise ValidationError(_("No hay jurisdicción configurada en el impuesto!"))
 
-            content.append(line.tax_line_id.l10n_ar_state_id.jurisdiction_code)
+            content.append(tax.l10n_ar_state_id.jurisdiction_code)
 
             # Tipo registro 2. Provincia Cordoba
-            if line.tax_line_id.l10n_ar_state_id.jurisdiction_code in ["904", "914"]:
+            if tax.l10n_ar_state_id.jurisdiction_code in ["904", "914"]:
                 # 12 Tipo de Operación (1-Efectuada, 2-Anulada, 3-Omitida)
                 content.append("2" if internal_type == "credit_note" else "1")
 
@@ -934,7 +918,8 @@ class AccountJournal(models.Model):
 
         line_nbr = 1
         for line in move_lines.filtered(lambda x: x.move_id.is_invoice()):
-            alicuot = get_and_verify_tax_alicuot(line.tax_line_id)
+            tax = line._get_settlement_tax()
+            alicuot = tax.amount
 
             # 1 Número de Renglón (único por archivo)
             content = []
@@ -981,21 +966,21 @@ class AccountJournal(models.Model):
 
             # 10 Tipo de Régimen de Percepción
             # (código correspondiente según tabla definida por la jurisdicción)
-            if not line.tax_line_id.l10n_ar_code:
+            if not tax.l10n_ar_code:
                 raise ValidationError(
-                    _("No hay regimen de percepcion configurado para el impuesto %s") % line.tax_line_id.name
+                    _("No hay régimen de percepción configurado para el impuesto: '%(tax_name)s'", tax_name=tax.name)
                 )
-            content.append(line.tax_line_id.l10n_ar_code)
+            content.append(tax.l10n_ar_code)
 
             # 11 Jurisdicción: código en Convenio Multilateral de la
             # jurisdicción a la cual está presentando la DDJJ
-            if not line.tax_line_id.jurisdiction_code:
+            if not tax.jurisdiction_code:
                 raise ValidationError(_("No hay jurisdicción configurada en el impuesto!"))
 
-            content.append(line.tax_line_id.l10n_ar_state_id.jurisdiction_code)
+            content.append(tax.l10n_ar_state_id.jurisdiction_code)
 
             # Tipo registro 2. Provincia Cordoba
-            if line.tax_line_id.l10n_ar_state_id.jurisdiction_code in ["904", "914"]:
+            if tax.l10n_ar_state_id.jurisdiction_code in ["904", "914"]:
                 # 12 Tipo de Operación (1-Efectuada, 2-Anulada, 3-Omitida, 4-Informativa)
                 content.append("2" if internal_type == "credit_note" else "1")
 
@@ -1057,7 +1042,8 @@ class AccountJournal(models.Model):
                 )
             line.partner_id.ensure_vat()
 
-            content = line.tax_line_id.l10n_ar_state_id.jurisdiction_code or "000"
+            tax = line._get_settlement_tax()
+            content = tax.l10n_ar_state_id.jurisdiction_code or "000"
             content += line.partner_id.l10n_ar_formatted_vat
             content += fields.Date.from_string(line.date).strftime("%d/%m/%Y")
 
@@ -1237,11 +1223,12 @@ class AccountJournal(models.Model):
             # Codigo de Regimen              [ 3]
             codcond = "01"
 
-            if line.tax_line_id.l10n_ar_withholding_payment_type:
+            tax = line._get_settlement_tax()
+            if tax.l10n_ar_withholding_payment_type:
                 # 01 --> retención ganancias
-                if line.tax_line_id.l10n_ar_tax_type in ["earnings", "earnings_scale"]:
+                if tax.l10n_ar_tax_type in ["earnings", "earnings_scale"]:
                     content += "0217"
-                    regimen = line.tax_line_id.l10n_ar_code
+                    regimen = tax.l10n_ar_code
                     # necesitamos lo de filter porque hay dos regimenes que le
                     # agregamos caracteres
                     content += regimen and "%03d" % int("".join(filter(str.isdigit, str(regimen)))) or "000"
@@ -1249,17 +1236,17 @@ class AccountJournal(models.Model):
                 else:
                     content += "0767"
                     # por ahora el unico implementado es para factura M
-                    content += "%03d" % int(line.tax_line_id.l10n_ar_code) if line.tax_line_id.l10n_ar_code else "499"
-                    if line.tax_line_id.l10n_ar_code == "602":
-                        codcond = "13" if line.tax_line_id.amount == 3 else "14"
+                    content += "%03d" % int(tax.l10n_ar_code) if tax.l10n_ar_code else "499"
+                    if tax.l10n_ar_code == "602":
+                        codcond = "13" if tax.amount == 3 else "14"
             else:
                 # Percepción de IVA
                 content += "0767"
                 content += "%03d" % int(
-                    line.tax_line_id.l10n_ar_code
+                    tax.l10n_ar_code
                 )  # (ver account tax) DUDA cómo le aplico el código de régimen a las facturas viejas
-                if line.tax_line_id.l10n_ar_code == "602":
-                    codcond = "13" if line.tax_line_id.amount == 3 else "14"
+                if tax.l10n_ar_code == "602":
+                    codcond = "13" if tax.amount == 3 else "14"
 
             # Codigo de Operacion            [ 1]
             content += codop  # TODO: ???? DUDA: SERÍA PARA VER SI ES RETENCION O PERCEPCION
@@ -1280,7 +1267,7 @@ class AccountJournal(models.Model):
             content += "%014.2f" % abs(line.balance)
 
             # Porcentaje de Exclusion        [ 6]
-            content += "%06.2f" % line.tax_line_id.porcentaje_exclusion or "000.00"
+            content += "%06.2f" % tax.porcentaje_exclusion or "000.00"
 
             # Fecha Emision Boletin          [10] (dd/mm/yyyy)
             content += fields.Date.from_string(issue_date).strftime("%d/%m/%Y")
@@ -1342,6 +1329,8 @@ class AccountJournal(models.Model):
         content = ""
         for line in move_lines.sorted(key=lambda r: (r.date, r.id)):
             payment = line.payment_id
+            tax = line._get_settlement_tax()
+            alicuot = tax.amount
             if payment:
                 # Fecha
                 content += fields.Date.from_string(payment.date).strftime("%d-%m-%Y") + ","
@@ -1373,9 +1362,7 @@ class AccountJournal(models.Model):
                 content += "%.2f" % (line.withholding_id.base_amount) + ","
 
                 # Alícuota
-                alicuot = get_and_verify_tax_alicuot(line.tax_line_id)
-
-                content += str(line.tax_line_id.amount) + ","
+                content += str(alicuot) + ","
 
                 if is_car:
                     # Tipo de comprobante original
@@ -1462,7 +1449,6 @@ class AccountJournal(models.Model):
                 content += str(line.tax_base_amount) + ","
 
                 # Alícuota
-                alicuot = get_and_verify_tax_alicuot(line.tax_line_id)
                 content += str(alicuot)
 
                 if line.move_id.l10n_latam_document_type_id.doc_code_prefix[:3] == "NC-":
@@ -1562,16 +1548,17 @@ class AccountJournal(models.Model):
                 content += "%016.2f" % payment.amount
                 content += "\r\n"
             elif line.move_id.is_invoice():
+                tax = line._get_settlement_tax()
                 # regimen (long 3)
-                codigo_regimen = line.tax_line_id.l10n_ar_code
+                codigo_regimen = tax.l10n_ar_code
                 if not codigo_regimen:
                     raise ValidationError(
-                        _('No hay código de régimen en la configuración del impuesto "%s"') % (line.tax_line_id.name)
+                        _('No hay código de régimen en la configuración del impuesto "%s"') % (tax.name)
                     )
                 if len(codigo_regimen) < 3:
                     raise ValidationError(
                         _('El código de régimen tiene que tener 3 dígitos en la configuración del impuesto "%s"')
-                        % (line.tax_line_id.name)
+                        % (tax.name)
                     )
                 content += codigo_regimen[:3]
 
