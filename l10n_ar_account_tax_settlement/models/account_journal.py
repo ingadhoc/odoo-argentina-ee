@@ -359,7 +359,7 @@ class AccountJournal(models.Model):
             content += format_amount(base_amount, 12, 2)
 
             # 19 - Alícuota / alicuota
-            content += format_amount(tax.alicuot, 2, 2)
+            content += format_amount(tax.amount, 2, 2)
 
             # 20 - Impuesto Determinado
             content += format_amount(abs(-line.balance), 12, 2)
@@ -432,7 +432,9 @@ class AccountJournal(models.Model):
             # pay_group = payment.payment_group_id
             move = line.move_id
             payment = line.payment_id
-            tax = line._get_settlement_tax()
+            # implementamos esto que teniamos en agip para obtener alicuota de rectificativa
+            date = line.move_id._found_related_invoice().date or line.date
+            tax = line._get_settlement_tax(date=date)
             partner = line.partner_id
             internal_type = line.l10n_latam_document_type_id.internal_type
 
@@ -974,7 +976,7 @@ class AccountJournal(models.Model):
 
             # 11 Jurisdicción: código en Convenio Multilateral de la
             # jurisdicción a la cual está presentando la DDJJ
-            if not tax.jurisdiction_code:
+            if not tax.l10n_ar_state_id.jurisdiction_code:
                 raise ValidationError(_("No hay jurisdicción configurada en el impuesto!"))
 
             content.append(tax.l10n_ar_state_id.jurisdiction_code)
