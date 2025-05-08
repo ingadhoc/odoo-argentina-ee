@@ -46,20 +46,6 @@ class AccountMoveLine(models.Model):
                 )
                 % (self.ids, settlement_journal.ids)
             )
-        invalid_journals = self.filtered(lambda line: not line.journal_id.l10n_latam_use_documents)
-        if invalid_journals:
-            raise ValidationError(
-                _(
-                    "Sólo debe seleccionar líneas que utilicen diarios que "
-                    "usen documentos. Los diarios (%s, ids %s) de las líneas "
-                    "seleccionadas (ids %s) no usan documentos."
-                )
-                % (
-                    invalid_journals.mapped("journal_id").mapped("name"),
-                    invalid_journals.mapped("journal_id").ids,
-                    invalid_journals.ids,
-                )
-            )
         return settlement_journal
 
     def _get_tax_settlement_journal(self):
