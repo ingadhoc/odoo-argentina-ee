@@ -33,7 +33,7 @@ class AccountMoveLine(models.Model):
                 'Solo debe seleccionar líneas que se liquiden con un mismo '
                 'diario, las líneas seleccionadas (ids %s) se liquidan con '
                 'diarios %s') % (self.ids, settlement_journal.ids))
-        invalid_journals = self.filtered(lambda line: not line.journal_id.l10n_latam_use_documents)
+        invalid_journals = self.filtered(lambda line: not line.journal_id.l10n_latam_use_documents and line.journal_id.type in ['sale', 'purchase'])
         if invalid_journals:
             raise ValidationError(_(
                 'Sólo debe seleccionar líneas que utilicen diarios que '
