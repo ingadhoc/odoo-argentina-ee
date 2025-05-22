@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="afip_import_wizard_view_form" model="ir.ui.view">
-        <field name="name">afip.import.wizard.view.form</field>
+    <record id="view_afip_import_wizard_form" model="ir.ui.view">
+        <field name="name">afip.import.wizard.form</field>
         <field name="model">afip.import.wizard</field>
         <field name="arch" type="xml">
-            <form string="AFIP Import">
-                <div class="alert alert-info" role="alert">
-                    The accounts in the SODA file will be mapped to the accounts listed below. If you change any of
-                    them, your choice will be the default one for future imports. The Suspense Account (499000) will
-                    be used for accounts that are not mapped or whose mapping is not found.
-                </div>
-                <field name="soda_account_mapping_ids" nolabel="1" options="{'unlink': false}">
-                    <list editable="bottom">
-                        <field name="display_name" string="SODA Account" readonly="1"/>
-                        <field name="account_id" required="0"/>
-                        <field name="company_id" column_invisible="True"/>
-                        <button name="action_unlink" title="Delete" icon="fa-trash" type="object" invisible="parent.soda_files"/>
+            <form string="Importador de Facturas AFIP">
+                <field name="line_ids" nolabel="1" readonly="1">
+                    <list >
+                        <!-- <field name="document_type_id"/> -->
+                        <field name="invoice_number"/>
+                        <field name="partner_name" />
+                        <field name="partner_vat" />
+                        <field name="date_invoice" />
+                        <field name="currency" />
+                        <field name="amount_total" />
                     </list>
                 </field>
                 <footer>
-                    <button string="Save" type="object"
-                        name="action_save_and_import" class="btn-primary"
-                        data-hotkey="q"/>
-                    <button string="Cancel" class="btn-secondary"
-                        special="cancel" data-hotkey="x"/>
+                    <button name="action_confirm" type="object" string="Crear Facturas" class="btn-primary"/>
+                    <button string="Cancelar" special="cancel" class="btn-secondary"/>
                 </footer>
             </form>
         </field>

@@ -12,6 +12,8 @@
         "l10n_ar",
     ],
     "data": [
+        'security/ir.model.access.csv',
+        "wizards/afip_import_wizard.xml"
     ],
     "installable": True,
     "auto_install": True,
