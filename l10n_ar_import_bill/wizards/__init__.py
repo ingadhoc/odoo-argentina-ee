@@ -3,3 +3,4 @@
 # directory
 ##############################################################################
 from . import afip_import_wizard
+from . import afip_import_wizard_line
