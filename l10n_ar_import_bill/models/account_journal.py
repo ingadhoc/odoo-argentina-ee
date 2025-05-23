@@ -37,7 +37,7 @@ class AccountJournal(models.Model):
 
             data_list = df.to_dict(orient='records')
 
-            pre_data = []
+            line_vals = []
 
             for row in data_list:
                 sequence_number = int(row['Número Desde'])
@@ -48,36 +48,32 @@ class AccountJournal(models.Model):
                 partner_name = row["Denominación Vendedor"]
                 currency = row["Moneda"]
                 amount_total = float(row["Total"])
-                document_type_id = self.get_invoice_type(row["Tipo"]).id
+                document_type = row["Tipo"]
+                valor_neto_gravado = row["Neto Gravado"]
+                valor_no_gravado = row["No Gravado"]
+                valor_exento = row["Exento"]
+                valor_IVA = row["IVA"]
 
-                dict_data = {
+                dict_data = (0, 0, {
                     "invoice_number": invoice_number,
                     "date_invoice": date_invoice,
                     "partner_vat": partner_vat,
                     "partner_name": partner_name,
                     "currency": currency,
                     "amount_total": amount_total,
-                    "document_type_id": document_type_id,
-                    "raw_data": row,  # guardamos todo por si hace falta mostrarlo
-                }
+                    "document_type": document_type,
+                    "neto_gravado": valor_neto_gravado,
+                    "no_gravado": valor_no_gravado,
+                    "exento": valor_exento,
+                    "iva": valor_IVA  # guardamos todo por si hace falta mostrarlo
+                })
 
-                pre_data.append(dict_data)
+                line_vals.append(dict_data)
 
             wizard = self.env["afip.import.wizard"].create({
                 "journal_id": self.id,
                 "company_id": self.company_id.id,
             })
-            line_vals = []
-            for data in pre_data:
-                line_vals.append((0, 0, {
-                    "invoice_number": data["invoice_number"],
-                    "partner_name": data["partner_name"],
-                    "partner_vat": data["partner_vat"],
-                    "date_invoice": data["date_invoice"],
-                    "currency": data["currency"],
-                    "amount_total": data["amount_total"],
-                    "document_type_id": data["document_type_id"],
-                }))
             wizard.write({"line_ids": line_vals})
 
             return {
@@ -88,21 +84,3 @@ class AccountJournal(models.Model):
                 "views": [[self.env.ref("l10n_ar_import_bill.view_afip_import_wizard_form").id, "form"]],
                 "res_id": wizard.id,
             }
-
-    def get_invoice_type(self, invoice_type):
-
-        """
-        Busca el tipo de factura en la tabla de tipos de documento
-        :param invoice_type: Tipo de factura (A, B, C, etc)
-        :return: id del tipo de documento
-        """
-        # Extract the number before the hyphen
-        invoice_type_code = invoice_type.split(" - ")[0].strip()
-
-        # Search for the document type in the model l10n_latam.document.type
-        document_type = self.env['l10n_latam.document.type'].search([('code', '=', invoice_type_code)], limit=1)
-
-        if not document_type:
-            raise UserError(_("No document type found for code: %s") % invoice_type_code)
-
-        return document_type

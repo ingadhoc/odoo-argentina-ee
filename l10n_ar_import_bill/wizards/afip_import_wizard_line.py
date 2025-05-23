@@ -12,8 +12,12 @@ class AfipImportWizardLine(models.TransientModel):
     date_invoice = fields.Date("Fecha de Factura")
     currency = fields.Char("Moneda")
     amount_total = fields.Float("Total")
-    document_type_id = fields.Many2one("l10n_ar.document.type", string="Tipo de Documento")
+    document_type = fields.Char(string="Tipo de Documento")
     exists = fields.Boolean("Ya Existe", compute="_compute_exists", store=True)
+    neto_gravado = fields.Float("Impuesto Neto Gravado")
+    no_gravado = fields.Float("No Gravado")
+    exento = fields.Float("Exento")
+    iva = fields.Float("IVA")
 
     def _compute_exists(self):
         for line in self:
