@@ -45,4 +45,5 @@
     "installable": True,
     "auto_install": True,
     "application": False,
+    "post_init_hook": "_post_init_hook_configure_ar_account_tags",
 }
