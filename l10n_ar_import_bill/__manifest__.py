@@ -9,7 +9,7 @@
     "summary": "",
     "depends": [
         "account_accountant",
-        "l10n_ar",
+        "l10n_ar_edi",
     ],
     "data": [
         'security/ir.model.access.csv',

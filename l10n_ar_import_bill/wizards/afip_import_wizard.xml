@@ -6,7 +6,7 @@
         <field name="arch" type="xml">
             <form string="Importador de Facturas AFIP">
                 <field name="line_ids" nolabel="1" readonly="1">
-                    <list >
+                    <list>
                         <field name="document_type"/>
                         <field name="invoice_number"/>
                         <field name="partner_name" />
