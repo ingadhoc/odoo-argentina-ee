@@ -44,20 +44,24 @@ class AccountJournal(models.Model):
                 sequence_prefix = int(row['Punto de Venta'])
                 invoice_number = f"{sequence_prefix:05d}-{sequence_number:08d}"
                 date_invoice = pd.to_datetime(row["Fecha"], dayfirst=True).date()
-                partner_vat = str(int(row["Nro. Doc. Vendedor"]))
-                partner_name = row["Denominación Vendedor"]
+                partner_vat = str(int(row["Nro. Doc. Emisor"]))
+                partner_identification_type = row["Tipo Doc. Emisor"]
+                partner_name = row["Denominación Emisor"]
                 currency = row["Moneda"]
-                amount_total = float(row["Total"])
+                amount_total = float(row["Imp. Total"])
                 document_type = row["Tipo"]
-                valor_neto_gravado = row["Neto Gravado"]
-                valor_no_gravado = row["No Gravado"]
-                valor_exento = row["Exento"]
+                valor_neto_gravado = row["Imp. Neto Gravado"]
+                valor_no_gravado = row["Imp. Neto No Gravado"]
+                valor_exento = row["Imp. Op. Exentas"]
+                otros_tributos = row["Otros Tributos"]
                 valor_IVA = row["IVA"]
+                cae = row["Cód. Autorización"]
 
                 dict_data = (0, 0, {
                     "invoice_number": invoice_number,
                     "date_invoice": date_invoice,
                     "partner_vat": partner_vat,
+                    "partner_identification_type": partner_identification_type,
                     "partner_name": partner_name,
                     "currency": currency,
                     "amount_total": amount_total,
@@ -65,7 +69,9 @@ class AccountJournal(models.Model):
                     "neto_gravado": valor_neto_gravado,
                     "no_gravado": valor_no_gravado,
                     "exento": valor_exento,
-                    "iva": valor_IVA  # guardamos todo por si hace falta mostrarlo
+                    "otros_tributos": otros_tributos,
+                    "iva": valor_IVA,
+                    "cae": cae,
                 })
 
                 line_vals.append(dict_data)
