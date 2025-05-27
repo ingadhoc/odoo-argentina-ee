@@ -251,7 +251,7 @@ class AccountJournal(models.Model):
             content += fields.Date.from_string(line.date).strftime("%d/%m/%Y")
 
             # 3 - Código de artículo Inciso por el que retiene
-            content += articulo_inciso_retiene
+            content += articulo_inciso_retiene.zfill(3)
 
             # 4 - tipo de comprobante y
             # 5 - letra de comprobante
@@ -395,7 +395,7 @@ class AccountJournal(models.Model):
             content += format_amount(abs(-line.balance), 12, 2)
 
             # 23 - Artículo/Inciso para el cálculo
-            content += articulo_inciso_calculo
+            content += articulo_inciso_calculo.zfill(3)
 
             # 24 - Tipo de Exención
             # TODO implementar. Por ahora no implementamos excenciones ya que
