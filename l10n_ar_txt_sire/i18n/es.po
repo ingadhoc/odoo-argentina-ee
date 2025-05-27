@@ -1,0 +1,212 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ar_txt_sire
+# 
+# Translators:
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-26 13:23+0000\n"
+"PO-Revision-Date: 2025-05-26 13:23+0000\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025\n"
+"Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: es\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#. module: l10n_ar_txt_sire
+#: model:ir.model.fields,field_description:l10n_ar_txt_sire.field_res_partner__sire_aplica_cdi
+#: model:ir.model.fields,field_description:l10n_ar_txt_sire.field_res_users__sire_aplica_cdi
+msgid "Aplica CDI"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#: model:ir.model.fields,field_description:l10n_ar_txt_sire.field_res_partner__sire_aplica_acrecentamiento
+#: model:ir.model.fields,field_description:l10n_ar_txt_sire.field_res_users__sire_aplica_acrecentamiento
+msgid "Aplica acrecentamiento"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#: model:ir.model.fields,help:l10n_ar_txt_sire.field_account_payment__sire_aplica_acrecentamiento
+#: model:ir.model.fields,help:l10n_ar_txt_sire.field_account_payment__sire_aplica_cdi
+#: model:ir.model.fields,help:l10n_ar_txt_sire.field_res_partner__sire_aplica_acrecentamiento
+#: model:ir.model.fields,help:l10n_ar_txt_sire.field_res_partner__sire_aplica_cdi
+#: model:ir.model.fields,help:l10n_ar_txt_sire.field_res_users__sire_aplica_acrecentamiento
+#: model:ir.model.fields,help:l10n_ar_txt_sire.field_res_users__sire_aplica_cdi
+msgid "Campo para archivo txt Ganancias SIRE. Marcar si aplica CDI"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#: model:ir.model,name:l10n_ar_txt_sire.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: l10n_ar_txt_sire
+#. odoo-python
+#: code:addons/l10n_ar_txt_sire/models/account_journal.py:0
+#: code:addons/l10n_ar_txt_sire/models/account_journal.py:0
+#: code:addons/l10n_ar_txt_sire/models/account_journal.py:0
+#, python-format
+msgid "Editar País"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#. odoo-python
+#: code:addons/l10n_ar_txt_sire/models/account_journal.py:0
+#: code:addons/l10n_ar_txt_sire/models/account_journal.py:0
+#, python-format
+msgid "Editar contacto"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#. odoo-python
+#: code:addons/l10n_ar_txt_sire/models/account_journal.py:0
+#: code:addons/l10n_ar_txt_sire/models/account_journal.py:0
+#, python-format
+msgid "Editar impuesto"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#. odoo-python
+#: code:addons/l10n_ar_txt_sire/models/account_journal.py:0
+#, python-format
+msgid "El contacto '%s' debe tener país establecido"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#. odoo-python
+#: code:addons/l10n_ar_txt_sire/models/account_journal.py:0
+#, python-format
+msgid ""
+"El impuesto '%s' no tiene código de régimen establecido. Editar campo "
+"'Codigo de regimen IVA' en solapa 'Opciones avanzadas'en la vista formulario"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#. odoo-python
+#: code:addons/l10n_ar_txt_sire/models/account_journal.py:0
+#, python-format
+msgid ""
+"El impuesto '%s' no tiene código de régimen establecido. Es obligatorio para"
+" generar el archivo txt Sire. Editar campo 'Codigo de regimen IVA' en solapa"
+" 'Opciones avanzadas' en la vista formulario"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#. odoo-python
+#: code:addons/l10n_ar_txt_sire/models/account_journal.py:0
+#, python-format
+msgid ""
+"El pago %s (id: %s) debe tener código de alícuota menor a 83 ya que no "
+"aplica CDI"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#. odoo-python
+#: code:addons/l10n_ar_txt_sire/models/account_journal.py:0
+#, python-format
+msgid "El país '%s' no tiene IVA Persona Física establecido."
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#. odoo-python
+#: code:addons/l10n_ar_txt_sire/models/account_journal.py:0
+#: code:addons/l10n_ar_txt_sire/models/account_journal.py:0
+#, python-format
+msgid "El país '%s' no tiene cuit persona jurídica establecido."
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#: model:ir.model.fields,field_description:l10n_ar_txt_sire.field_account_payment__es_sire
+msgid "Es Sire"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#: model:ir.model.fields,field_description:l10n_ar_txt_sire.field_res_partner__sire_birthdate
+#: model:ir.model.fields,field_description:l10n_ar_txt_sire.field_res_users__sire_birthdate
+msgid "Fecha de Nacimiento"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#: model:ir.model.fields,field_description:l10n_ar_txt_sire.field_account_journal__settlement_tax
+msgid "Impuesto de liquidación"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#: model:ir.model,name:l10n_ar_txt_sire.model_account_journal
+msgid "Journal"
+msgstr "Diario"
+
+#. module: l10n_ar_txt_sire
+#: model:ir.model,name:l10n_ar_txt_sire.model_account_payment
+msgid "Payments"
+msgstr "Pagos"
+
+#. module: l10n_ar_txt_sire
+#. odoo-python
+#: code:addons/l10n_ar_txt_sire/models/account_journal.py:0
+#, python-format
+msgid "País"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#: model:ir.model.fields,field_description:l10n_ar_txt_sire.field_res_partner__sire_born_country_id
+#: model:ir.model.fields,field_description:l10n_ar_txt_sire.field_res_users__sire_born_country_id
+msgid "País de Nacimiento"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#: model:ir.model.fields,help:l10n_ar_txt_sire.field_account_journal__settlement_tax
+msgid ""
+"Si elije un impuesto se puede agregar alguna funcionalidad, como por ej. "
+"descargar archivos txt"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#: model:ir.model.fields,field_description:l10n_ar_txt_sire.field_account_payment__sire_aplica_acrecentamiento
+msgid "Sire Aplica Acrecentamiento"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#: model:ir.model.fields,field_description:l10n_ar_txt_sire.field_account_payment__sire_aplica_cdi
+msgid "Sire Aplica Cdi"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#: model:ir.model.fields,field_description:l10n_ar_txt_sire.field_account_payment__sire_codigo_alicuota
+#: model:ir.model.fields,field_description:l10n_ar_txt_sire.field_res_partner__sire_codigo_alicuota
+#: model:ir.model.fields,field_description:l10n_ar_txt_sire.field_res_users__sire_codigo_alicuota
+msgid "Sire Codigo Alicuota"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#. odoo-python
+#: code:addons/l10n_ar_txt_sire/models/account_journal.py:0
+#, python-format
+msgid ""
+"Solo puede generar el archivo de retenciones SIRE para contactos con "
+"responsabilidad AFIP: 'Cliente / Proveedor del Exterior'. Contacto: %s (id: "
+"%s)"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#: model:ir.model.fields.selection,name:l10n_ar_txt_sire.selection__account_journal__settlement_tax__certificado_retencion_impositiva
+msgid "TXT Certificado Retención Impositiva"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#: model:ir.model.fields.selection,name:l10n_ar_txt_sire.selection__account_journal__settlement_tax__sire
+msgid "TXT Retenciones SIRE"
+msgstr ""
+
+#. module: l10n_ar_txt_sire
+#. odoo-python
+#: code:addons/l10n_ar_txt_sire/models/account_journal.py:0
+#, python-format
+msgid "Tax"
+msgstr "Impuesto"
