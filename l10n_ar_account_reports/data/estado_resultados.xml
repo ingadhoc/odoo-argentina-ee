@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account_financial_report_l10n_ar_estado_resultados" model="account.report">
+        <field name="name">Estado de Resultados</field>
+        <field name="root_report_id" ref="account_reports.profit_and_loss"/>
+        <field name="filter_analytic_groupby" eval="True"/>
+        <field name="filter_unfold_all" eval="True"/>
+        <field name="filter_journals" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="filter_multi_company">selector</field>
+        <field name="column_ids">
+            <record id="account_financial_report_l10n_ar_estado_resultados_column" model="account.report.column">
+                <field name="name">Balance</field>
+                <field name="expression_label">balance</field>
+            </record>
+        </field>
+        <field name="line_ids">
+            <!-- Ventas netas de bienes y servicios -->
+            <record id="account_financial_report_l10n_ar_estado_resultados_line_sales" model="account.report.line">
+                <field name="name">Ventas netas de bienes y servicios</field>
+                <field name="code">sales</field>
+                <field name="hierarchy_level">1</field>
+                <field name="expression_ids">
+                    <record id="account_financial_report_l10n_ar_estado_resultados_line_sales_balance" model="account.report.expression">
+                        <field name="label">balance</field>
+                        <field name="engine">domain</field>
+                        <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_eerr_ventas'))]"/>
+                        <field name="subformula">sum</field>
+                    </record>
+                </field>
+            </record>
+
+            <!-- Costo de venta de bienes y servicios -->
+            <record id="account_financial_report_l10n_ar_estado_resultados_line_cogs" model="account.report.line">
+                <field name="name">Costo de venta de bienes y servicios</field>
+                <field name="code">cogs</field>
+                <field name="hierarchy_level">1</field>
+                <field name="expression_ids">
+                    <record id="account_financial_report_l10n_ar_estado_resultados_line_cogs_balance" model="account.report.expression">
+                        <field name="label">balance</field>
+                        <field name="engine">domain</field>
+                        <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_eerr_costo_ventas'))]"/>
+                        <field name="subformula">sum</field>
+                    </record>
+                </field>
+            </record>
+
+            <!-- Ganancia (Pérdida) bruta -->
+            <record id="account_financial_report_l10n_ar_estado_resultados_line_gross_inc" model="account.report.line">
+                <field name="name">Ganancia (Pérdida) bruta</field>
+                <field name="code">gross_inc</field>
+                <field name="hierarchy_level">0</field>
+                <field name="expression_ids">
+                    <record id="account_financial_report_l10n_ar_estado_resultados_line_gross_inc_balance" model="account.report.expression">
+                        <field name="label">balance</field>
+                        <field name="engine">aggregation</field>
+                        <field name="formula">sales.balance + cogs.balance</field>
+                    </record>
+                </field>
+            </record>
+
+            <!-- Gastos de comercialización -->
+            <record id="account_financial_report_l10n_ar_estado_resultados_line_com_exp" model="account.report.line">
+                <field name="name">Gastos de comercialización</field>
+                <field name="code">com_exp</field>
+                <field name="hierarchy_level">1</field>
+                <field name="expression_ids">
+                    <record id="account_financial_report_l10n_ar_estado_resultados_line_com_exp_balance" model="account.report.expression">
+                        <field name="label">balance</field>
+                        <field name="engine">domain</field>
+                        <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_eerr_gastos_comercializacion'))]"/>
+                        <field name="subformula">sum</field>
+                    </record>
+                </field>
+            </record>
+
+            <!-- Gastos de administración -->
+            <record id="account_financial_report_l10n_ar_estado_resultados_line_adm_exp" model="account.report.line">
+                <field name="name">Gastos de administración</field>
+                <field name="code">adm_exp</field>
+                <field name="hierarchy_level">1</field>
+                <field name="expression_ids">
+                    <record id="account_financial_report_l10n_ar_estado_resultados_line_adm_exp_balance" model="account.report.expression">
+                        <field name="label">balance</field>
+                        <field name="engine">domain</field>
+                        <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_eerr_gastos_administracion'))]"/>
+                        <field name="subformula">sum</field>
+                    </record>
+                </field>
+            </record>
+
+            <!-- Otros gastos -->
+            <record id="account_financial_report_l10n_ar_estado_resultados_line_other_exp" model="account.report.line">
+                <field name="name">Otros gastos</field>
+                <field name="code">other_exp</field>
+                <field name="hierarchy_level">1</field>
+                <field name="expression_ids">
+                    <record id="account_financial_report_l10n_ar_estado_resultados_line_other_exp_balance" model="account.report.expression">
+                        <field name="label">balance</field>
+                        <field name="engine">domain</field>
+                        <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_eerr_otros_gastos'))]"/>
+                        <field name="subformula">sum</field>
+                    </record>
+                </field>
+            </record>
+
+            <!-- Resultados financieros y por tenencia (incluye RECPAM) -->
+            <record id="account_financial_report_l10n_ar_estado_resultados_line_fin_exp" model="account.report.line">
+                <field name="name">Resultados financieros y por tenencia (incluye RECPAM)</field>
+                <field name="code">fin_exp</field>
+                <field name="hierarchy_level">1</field>
+                <field name="expression_ids">
+                    <record id="account_financial_report_l10n_ar_estado_resultados_line_fin_exp_balance" model="account.report.expression">
+                        <field name="label">balance</field>
+                        <field name="engine">domain</field>
+                        <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_eerr_rxt_resultados_financieros'))]"/>
+                        <field name="subformula">sum</field>
+                    </record>
+                </field>
+            </record>
+
+            <!-- Otros ingresos y egresos -->
+            <record id="account_financial_report_l10n_ar_estado_resultados_line_other_inc_exp" model="account.report.line">
+                <field name="name">Otros ingresos y egresos</field>
+                <field name="code">other_inc_exp</field>
+                <field name="hierarchy_level">1</field>
+                <field name="expression_ids">
+                    <record id="account_financial_report_l10n_ar_estado_resultados_line_other_inc_exp_balance" model="account.report.expression">
+                        <field name="label">balance</field>
+                        <field name="engine">domain</field>
+                        <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_eerr_otros_ingresos_egresos'))]"/>
+                        <field name="subformula">sum</field>
+                    </record>
+                </field>
+            </record>
+
+            <!-- Resultado antes del impuesto a las ganancias -->
+            <record id="account_financial_report_l10n_ar_estado_resultados_line_inc_before_tax" model="account.report.line">
+                <field name="name">Resultado antes del impuesto a las ganancias</field>
+                <field name="code">inc_before_tax</field>
+                <field name="hierarchy_level">0</field>
+                <field name="expression_ids">
+                    <record id="account_financial_report_l10n_ar_estado_resultados_line_inc_before_tax_balance" model="account.report.expression">
+                        <field name="label">balance</field>
+                        <field name="engine">aggregation</field>
+                        <field name="formula">gross_inc.balance + com_exp.balance + adm_exp.balance + other_exp.balance + fin_exp.balance + other_inc_exp.balance</field>
+                    </record>
+                </field>
+            </record>
+
+            <!-- Impuesto a las ganancias -->
+            <record id="account_financial_report_l10n_ar_estado_resultados_line_tax_inc" model="account.report.line">
+                <field name="name">Impuesto a las ganancias</field>
+                <field name="code">tax_inc</field>
+                <field name="hierarchy_level">1</field>
+                <field name="expression_ids">
+                    <record id="account_financial_report_l10n_ar_estado_resultados_line_tax_inc_balance" model="account.report.expression">
+                        <field name="label">balance</field>
+                        <field name="engine">domain</field>
+                        <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_eerr_impuesto_ganancias'))]"/>
+                        <field name="subformula">sum</field>
+                    </record>
+                </field>
+            </record>
+
+            <!-- Resultado Final del ejercicio -->
+            <record id="account_financial_report_l10n_ar_estado_resultados_line_net_inc" model="account.report.line">
+                <field name="name">Resultado Final del ejercicio</field>
+                <field name="code">net_inc</field>
+                <field name="hierarchy_level">0</field>
+                <field name="expression_ids">
+                    <record id="account_financial_report_l10n_ar_estado_resultados_line_net_inc_balance" model="account.report.expression">
+                        <field name="label">balance</field>
+                        <field name="engine">aggregation</field>
+                        <field name="formula">inc_before_tax.balance + tax_inc.balance</field>
+                    </record>
+                </field>
+            </record>
+        </field>
+    </record>
+</odoo>
