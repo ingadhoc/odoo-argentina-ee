@@ -1,0 +1,12 @@
+Línea de reporte,Code,Engine,Formula,Hierarchy Level
+Ventas netas de bienes y servicios,sales,domain (Tag),"[('account_id.tag_ids','ilike','AR EERR: Ventas')]",1
+Costo de venta de bienes y servicios,cogs,domain (Tag),"[('account_id.tag_ids','ilike','AR EERR: Costo de Ventas')]",1
+Ganancia (Pérdida) bruta,gross_inc,aggregate,= sales.balance + cogs.balance,0
+Gastos de comercialización,com_exp,domain (Tag),"[('account_id.tag_ids','ilike','AR EERR: Gastos de Comercialización')]",1
+Gastos de administración,adm_exp,domain (Tag),"[('account_id.tag_ids','ilike','AR EERR: Gastos de Administración')]",1
+Otros gastos,other_exp,domain (Tag),"[('account_id.tag_ids','ilike','AR EERR: Otros Gastos')]",1
+Resultados financieros y por tenencia (incluye RECPAM),fin_exp,domain (Tag),"[('account_id.tag_ids','ilike','AR EERR: RxT y Resultados Financieros')]",1
+Otros ingresos y egresos,other_inc_exp,domain (Tag),"[('account_id.tag_ids','ilike','AR EERR: Otros ingresos y egresos')]",1
+Resultado antes del impuesto a las ganancias,inc_before_tax,aggregate,= gross_inc + com_exp + adm_exp + other_exp + fin_exp + other_inc_exp,0
+Impuesto a las ganancias,tax_inc,domain (Tag),"[('account_id.tag_ids','ilike','AR EERR: Impuesto a las ganancias')]",1
+Resultado Final del ejercicio,net_inc,aggregate,= e_before_tax + tax_inc,0

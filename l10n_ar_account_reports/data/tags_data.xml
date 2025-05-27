@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ar_eerr_ventas" model="account.account.tag">
+        <field name="name">AR EERR: Ventas</field>
+        <field name="applicability">accounts</field>
+    </record>
+    <record id="ar_eerr_costo_ventas" model="account.account.tag">
+        <field name="name">AR EERR: Costo de Ventas</field>
+        <field name="applicability">accounts</field>
+    </record>
+    <record id="ar_eerr_gastos_comercializacion" model="account.account.tag">
+        <field name="name">AR EERR: Gastos de Comercialización</field>
+        <field name="applicability">accounts</field>
+    </record>
+    <record id="ar_eerr_gastos_administracion" model="account.account.tag">
+        <field name="name">AR EERR: Gastos de Administración</field>
+        <field name="applicability">accounts</field>
+    </record>
+    <record id="ar_eerr_otros_gastos" model="account.account.tag">
+        <field name="name">AR EERR: Otros Gastos</field>
+        <field name="applicability">accounts</field>
+    </record>
+    <record id="ar_eerr_rxt_resultados_financieros" model="account.account.tag">
+        <field name="name">AR EERR: RxT y Resultados Financieros</field>
+        <field name="applicability">accounts</field>
+    </record>
+    <record id="ar_eerr_otros_ingresos_egresos" model="account.account.tag">
+        <field name="name">AR EERR: Otros ingresos y egresos</field>
+        <field name="applicability">accounts</field>
+    </record>
+    <record id="ar_eerr_impuesto_ganancias" model="account.account.tag">
+        <field name="name">AR EERR: Impuesto a las ganancias</field>
+        <field name="applicability">accounts</field>
+    </record>
+</odoo>
