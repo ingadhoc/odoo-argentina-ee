@@ -13,6 +13,7 @@ class AfipImportWizardLine(models.TransientModel):
     partner_identification_type = fields.Char("Tipo de Identificación")
     date_invoice = fields.Date("Fecha de Factura")
     currency = fields.Char("Moneda")
+    currency_rate = fields.Float("Valor de cambio")
     amount_total = fields.Float("Total")
     document_type = fields.Char(string="Tipo de Documento")
     move_type = fields.Char(string="Tipo de Factura")

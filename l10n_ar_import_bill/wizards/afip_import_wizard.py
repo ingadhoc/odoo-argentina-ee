@@ -35,6 +35,7 @@ class AfipImportWizard(models.TransientModel):
                 "invoice_date": line.date_invoice,
                 "l10n_latam_document_number": line.invoice_number,
                 "currency_id": currency.id,  # asumiendo pesos
+                "invoice_currency_rate": line.currency_rate,  # asumiendo pesos
                 "journal_id": self.journal_id.id,
                 "company_id": self.company_id.id,
             }

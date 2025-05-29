@@ -48,6 +48,7 @@ class AccountJournal(models.Model):
                 partner_identification_type = row["Tipo Doc. Emisor"]
                 partner_name = row["Denominación Emisor"]
                 currency = row["Moneda"]
+                currency_rate = row["Tipo Cambio"]
                 amount_total = float(row["Imp. Total"])
                 document_type = row["Tipo"]
                 valor_neto_gravado = row["Imp. Neto Gravado"]
@@ -64,6 +65,7 @@ class AccountJournal(models.Model):
                     "partner_identification_type": partner_identification_type,
                     "partner_name": partner_name,
                     "currency": currency,
+                    "currency_rate": currency_rate,
                     "amount_total": amount_total,
                     "document_type": document_type,
                     "neto_gravado": valor_neto_gravado,
