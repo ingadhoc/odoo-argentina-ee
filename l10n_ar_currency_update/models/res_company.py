@@ -81,6 +81,20 @@ class ResCompany(models.Model):
         available_currencies = available_currencies.filtered('l10n_ar_afip_code') - currency_ars
         rate_date = today
 
+        valid_certificate = (
+            self.env["certificate.certificate"]
+            .search([("active", "=", True), ("date_end", ">=", today)])
+            .filtered(lambda c: c.country_code == "AR")
+        )
+        if self.l10n_ar_afip_ws_crt_id in valid_certificate:
+            company = self
+        else:
+            company = valid_certificate[:1].company_id if valid_certificate else False
+        if not company:
+            _logger.log(25, "No pudimos encontrar compañía con certificados de AFIP validos")
+            return False
+        env_company = self.env.company
+        self.env.company = company
         for currency in available_currencies:
             valid_crt_company = self.env['res.company'].sudo().search([('l10n_ar_afip_ws_crt', '!=', False)])\
                 .filtered(lambda x: x._l10n_ar_get_afip_crt_expire_date() > today)
@@ -97,7 +111,7 @@ class ResCompany(models.Model):
                 # Do not pass company since we need to find the one that has certificate
                 afip_date, rate = currency._l10n_ar_get_afip_ws_currency_rate()
                 afip_date = datetime.strptime(afip_date, "%Y%m%d").date() + relativedelta(days=1)
-                if afip_date == rate_date:
+                if afip_date == rate_date or self.env.context.get("l10n_ar_force_create_rate"):
                     res.update({currency.name: (1.0 / rate, rate_date)})
                     _logger.log(25, "Currency %s %s %s", currency.name, rate_date, rate)
                 else:
