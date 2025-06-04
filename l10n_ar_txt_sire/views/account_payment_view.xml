@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_payment_form" model="ir.ui.view">
+        <field name="name">account.payment.form.inherited</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='group2']" position="after">
+                <field name="es_sire" invisible="1"/>
+                <group attrs="{'invisible': [('es_sire', '!=', True)]}">
+                    <field name="sire_aplica_cdi"/>
+                    <field name="sire_aplica_acrecentamiento"/>
+                    <field name="sire_codigo_alicuota" attrs="{'required': [('es_sire', '=', True)]}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>
