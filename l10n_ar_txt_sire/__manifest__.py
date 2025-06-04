@@ -1,6 +1,6 @@
 {
     'name': 'Txt SIRE',
-    'version': "16.0.1.0.0",
+    'version': "16.0.1.1.0",
     'category': 'Accounting',
     'website': 'www.adhoc.com.ar',
     'license': 'LGPL-3',
