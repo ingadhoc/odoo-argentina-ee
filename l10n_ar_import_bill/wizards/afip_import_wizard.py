@@ -1,26 +1,23 @@
-from markupsafe import Markup
-from odoo import Command, _, api, fields, models
-from odoo.exceptions import ValidationError
+import math
+
+from odoo import Command, fields, models
+
+# from odoo.exceptions import ValidationError
 
 
 class AfipImportWizard(models.TransientModel):
-    _name = 'afip.import.wizard'
-    _description = 'Import AFIP bills from xlsx'
+    _name = "afip.import.wizard"
+    _description = "Import AFIP bills from xlsx"
 
     _description = "Importador de Facturas de Proveedor desde Excel AFIP"
 
-    line_ids = fields.One2many(
-        "afip.import.wizard.line",
-        "wizard_id",
-        string="Líneas de Facturas"
-    )
-    company_id = fields.Many2one('res.company', required=True)
-    journal_id = fields.Many2one('account.journal', required=True)
+    line_ids = fields.One2many("afip.import.wizard.line", "wizard_id", string="Líneas de Facturas")
+    company_id = fields.Many2one("res.company", required=True)
+    journal_id = fields.Many2one("account.journal", required=True)
 
     def action_confirm(self):
-        moves = self.env['account.move']
+        moves = self.env["account.move"]
         for line in self.line_ids.filtered(lambda l: not l.exists):
-
             partner = line._get_partner_by_vat()
 
             document_type = line._get_document_type()
@@ -38,7 +35,32 @@ class AfipImportWizard(models.TransientModel):
                 "invoice_currency_rate": line.currency_rate,  # asumiendo pesos
                 "journal_id": self.journal_id.id,
                 "company_id": self.company_id.id,
+                "line_ids": [
+                    Command.create(
+                        {
+                            "name": line.invoice_number,
+                            "quantity": 1.0,
+                            "price_unit": line.amount_total,
+                            "tax_ids": [],
+                            "debit": round(line.amount_total, 2),
+                            "credit": 0.0,
+                            "partner_id": partner.id,
+                        }
+                    )
+                ],
             }
+            if not math.isnan(line.iva) and line.iva > 0:
+                calculated_tax = round(line.iva * 100 / line.neto_gravado, 1)
+                tax = self.env["account.tax"].search(
+                    [
+                        ("company_id", "=", self.company_id.id),
+                        ("amount", "=", calculated_tax),
+                        ("type_tax_use", "=", "purchase"),
+                    ],
+                    limit=1,
+                )
+                if calculated_tax != 21:
+                    print(f"Calculated tax: {calculated_tax} for line: {line.invoice_number}")
 
             # IF DEL AUTORIZATION CODE IS NOT EMPTY, ADD IT TO THE MOVE
 
