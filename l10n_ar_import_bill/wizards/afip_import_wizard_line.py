@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -19,19 +19,24 @@ class AfipImportWizardLine(models.TransientModel):
     move_type = fields.Char(string="Tipo de Factura")
     exists = fields.Boolean("Ya Existe", compute="_compute_exists", store=True)
     neto_gravado = fields.Float("Impuesto Neto Gravado")
-    no_gravado = fields.Float("No Gravado")
-    otros_tributos = fields.Float("Otros Tributos")
-    exento = fields.Float("Exento")
+    no_gravado = fields.Float()
+    otros_tributos = fields.Float()
+    exento = fields.Float()
     iva = fields.Float("IVA")
     cae = fields.Char("CAE")
 
+    @api.depends("invoice_number", "partner_vat")
     def _compute_exists(self):
         for line in self:
-            existing_invoice = line.env["account.move"].search([
-                    ("move_type", "=", "in_invoice"),
+            existing_invoice = line.env["account.move"].search(
+                [
+                    ("move_type", "in", ["in_refund", "in_invoice"]),
                     ("display_name", "ilike", line.invoice_number),
-                    ("partner_id.vat", "=", line.partner_vat)
-                ], limit=1)
+                    ("partner_id.vat", "=", line.partner_vat),
+                ],
+                limit=1,
+            )
+
             line.exists = bool(existing_invoice)
 
     def _get_partner_by_vat(self):
@@ -42,19 +47,21 @@ class AfipImportWizardLine(models.TransientModel):
         """
         self.ensure_one()
 
-        partner = self.env['res.partner'].search([('vat', '=', self.partner_vat)], limit=1)
+        partner = self.env["res.partner"].search([("vat", "=", self.partner_vat)], limit=1)
 
         if not partner:
-            identification_type = self.env['l10n_latam.identification.type'].search([
-                ('name', 'ilike', self.partner_identification_type)
-            ], limit=1)
+            identification_type = self.env["l10n_latam.identification.type"].search(
+                [("name", "ilike", self.partner_identification_type)], limit=1
+            )
 
-            partner = self.env['res.partner'].create({
-                'name': self.partner_name,
-                'vat': self.partner_vat,
-                'l10n_latam_identification_type_id': identification_type.id,
-                'company_type': 'company',
-            })
+            partner = self.env["res.partner"].create(
+                {
+                    "name": self.partner_name,
+                    "vat": self.partner_vat,
+                    "l10n_latam_identification_type_id": identification_type.id,
+                    "company_type": "company",
+                }
+            )
             # Si el tipo de identificación es CUIT (código AFIP 80), actualizamos los datos desde AFIP
             if partner.l10n_latam_identification_type_id.l10n_ar_afip_code == 80:
                 partner.button_update_partner_data_from_afip()
@@ -62,7 +69,6 @@ class AfipImportWizardLine(models.TransientModel):
         return partner
 
     def _get_document_type(self):
-
         """
         Busca el tipo de factura en la tabla de tipos de documento
         :param invoice_type: Tipo de factura (A, B, C, etc)
@@ -73,7 +79,7 @@ class AfipImportWizardLine(models.TransientModel):
         invoice_type_code = self.document_type.split(" - ")[0].strip()
 
         # Search for the document type in the model l10n_latam.document.type
-        document_type = self.env['l10n_latam.document.type'].search([('code', '=', invoice_type_code)], limit=1)
+        document_type = self.env["l10n_latam.document.type"].search([("code", "=", invoice_type_code)], limit=1)
 
         if not document_type:
             raise UserError(_("No document type found for code: %s") % invoice_type_code)
@@ -88,9 +94,9 @@ class AfipImportWizardLine(models.TransientModel):
         """
         # Extract the number before the hyphen
         if self.currency == "$":
-            currency_id = self.env['res.currency'].search([('name', '=', 'ARS')], limit=1)
+            currency_id = self.env["res.currency"].search([("name", "=", "ARS")], limit=1)
         else:
-            currency_id = self.env['res.currency'].search([('name', '=', self.currency)], limit=1)
+            currency_id = self.env["res.currency"].search([("name", "=", self.currency)], limit=1)
 
         if not currency_id:
             raise UserError(_("No currency found for code: %s") % currency_id)
@@ -105,7 +111,7 @@ class AfipImportWizardLine(models.TransientModel):
         move_type = False
         document_type = self._get_document_type()
         if document_type.internal_type in ["invoice", "debit_note"]:
-            move_type = 'in_invoice'
+            move_type = "in_invoice"
         elif document_type.internal_type == "credit_note":
-            move_type = 'in_refund'
+            move_type = "in_refund"
         return move_type
