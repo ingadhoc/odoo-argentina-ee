@@ -11,10 +11,7 @@
         "account_accountant",
         "l10n_ar_edi",
     ],
-    "data": [
-        'security/ir.model.access.csv',
-        "wizards/afip_import_wizard.xml"
-    ],
+    "data": ["security/ir.model.access.csv", "wizards/afip_import_wizard.xml"],
     "installable": True,
     "auto_install": True,
     "application": False,

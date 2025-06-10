@@ -6,14 +6,14 @@
         <field name="arch" type="xml">
             <form string="Importador de Facturas AFIP">
                 <field name="line_ids" nolabel="1" readonly="1">
-                    <list>
+                    <list decoration-danger="exists == True">
                         <field name="document_type"/>
                         <field name="invoice_number"/>
-                        <field name="partner_name" />
-                        <field name="partner_vat" />
-                        <field name="date_invoice" />
-                        <field name="currency" />
-                        <field name="amount_total" />
+                        <field name="partner_name"/>
+                        <field name="partner_vat"/>
+                        <field name="date_invoice"/>
+                        <field name="currency"/>
+                        <field name="amount_total"/>
                     </list>
                 </field>
                 <footer>

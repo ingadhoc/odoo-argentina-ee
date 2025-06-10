@@ -1,21 +1,22 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-from io import BytesIO
-import pandas as pd
-from odoo import _, fields, models
-from odoo.exceptions import UserError
 import base64
+from io import BytesIO
+
+import pandas as pd
+from odoo import _, models
+from odoo.exceptions import UserError
 
 
 class AccountJournal(models.Model):
-    _inherit = 'account.journal'
+    _inherit = "account.journal"
 
     def create_document_from_attachment(self, attachment_ids=None):
         # OVERRIDE
-        journal = self or self.browse(self.env.context.get('default_journal_id'))
+        journal = self or self.browse(self.env.context.get("default_journal_id"))
 
-        if journal.type == 'purchase' and journal.company_id.country_code == 'AR':
-            attachments = self.env['ir.attachment'].browse(attachment_ids or [])
+        if journal.type == "purchase" and journal.company_id.country_code == "AR":
+            attachments = self.env["ir.attachment"].browse(attachment_ids or [])
 
             if not attachments:
                 raise UserError(_("No attachment was provided"))
@@ -23,25 +24,24 @@ class AccountJournal(models.Model):
         return super().create_document_from_attachment(attachment_ids)
 
     def import_bills_from_xls(self, attachments):
-
         # company = self.company_id
 
         for attachment in attachments:
             # if 'xlsx' in attachment.datas_fname:
             file_content = base64.b64decode(attachment.datas)
-            df = pd.read_excel(BytesIO(file_content), engine='openpyxl')  # use openpyxl for .xlsx
+            df = pd.read_excel(BytesIO(file_content), engine="openpyxl")  # use openpyxl for .xlsx
 
             # El archivo tiene un header en la primera fila, lo eliminamos
             df.columns = df.iloc[0]
             df = df[1:].reset_index(drop=True)
 
-            data_list = df.to_dict(orient='records')
+            data_list = df.to_dict(orient="records")
 
             line_vals = []
 
             for row in data_list:
-                sequence_number = int(row['Número Desde'])
-                sequence_prefix = int(row['Punto de Venta'])
+                sequence_number = int(row["Número Desde"])
+                sequence_prefix = int(row["Punto de Venta"])
                 invoice_number = f"{sequence_prefix:05d}-{sequence_number:08d}"
                 date_invoice = pd.to_datetime(row["Fecha"], dayfirst=True).date()
                 partner_vat = str(int(row["Nro. Doc. Emisor"]))
@@ -58,30 +58,36 @@ class AccountJournal(models.Model):
                 valor_IVA = row["IVA"]
                 cae = row["Cód. Autorización"]
 
-                dict_data = (0, 0, {
-                    "invoice_number": invoice_number,
-                    "date_invoice": date_invoice,
-                    "partner_vat": partner_vat,
-                    "partner_identification_type": partner_identification_type,
-                    "partner_name": partner_name,
-                    "currency": currency,
-                    "currency_rate": currency_rate,
-                    "amount_total": amount_total,
-                    "document_type": document_type,
-                    "neto_gravado": valor_neto_gravado,
-                    "no_gravado": valor_no_gravado,
-                    "exento": valor_exento,
-                    "otros_tributos": otros_tributos,
-                    "iva": valor_IVA,
-                    "cae": cae,
-                })
+                dict_data = (
+                    0,
+                    0,
+                    {
+                        "invoice_number": invoice_number,
+                        "date_invoice": date_invoice,
+                        "partner_vat": partner_vat,
+                        "partner_identification_type": partner_identification_type,
+                        "partner_name": partner_name,
+                        "currency": currency,
+                        "currency_rate": currency_rate,
+                        "amount_total": amount_total,
+                        "document_type": document_type,
+                        "neto_gravado": valor_neto_gravado,
+                        "no_gravado": valor_no_gravado,
+                        "exento": valor_exento,
+                        "otros_tributos": otros_tributos,
+                        "iva": valor_IVA,
+                        "cae": cae,
+                    },
+                )
 
                 line_vals.append(dict_data)
 
-            wizard = self.env["afip.import.wizard"].create({
-                "journal_id": self.id,
-                "company_id": self.company_id.id,
-            })
+            wizard = self.env["afip.import.wizard"].create(
+                {
+                    "journal_id": self.id,
+                    "company_id": self.company_id.id,
+                }
+            )
             wizard.write({"line_ids": line_vals})
 
             return {
