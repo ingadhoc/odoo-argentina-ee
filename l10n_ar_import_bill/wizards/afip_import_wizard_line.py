@@ -115,3 +115,20 @@ class AfipImportWizardLine(models.TransientModel):
         elif document_type.internal_type == "credit_note":
             move_type = "in_refund"
         return move_type
+
+    # Definimos la funcion que crea las lineas de factura
+    # con el precio unitario y los impuestos correspondientes
+
+    def _create_line(self, price_unit, tax_ids):
+        partner = self._get_partner_by_vat()
+        return (
+            0,
+            0,
+            {
+                "name": "Creado por importación de facturas",
+                "quantity": 1.0,
+                "price_unit": price_unit,
+                "tax_ids": [(6, 0, tax_ids)],
+                "partner_id": partner.id,
+            },
+        )
