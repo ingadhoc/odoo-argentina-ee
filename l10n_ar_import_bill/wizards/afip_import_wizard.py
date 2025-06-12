@@ -17,9 +17,10 @@ class AfipImportWizard(models.TransientModel):
 
     def action_confirm(self):
         new_moves = self.env["account.move"]
-        iva_no_corresponde = self.env.ref(f"account.{self.company_id.id}_ri_tax_vat_no_corresponde_compras")
-        iva_no_gravado = self.env.ref(f"account.{self.company_id.id}_ri_tax_vat_no_gravado_compras")
-        iva_tax_ids = {iva_no_corresponde.id, iva_no_gravado.id}
+        tax_iva_no_corresponde = self.env.ref(f"account.{self.company_id.id}_ri_tax_vat_no_corresponde_compras")
+        tax_iva_no_gravado = self.env.ref(f"account.{self.company_id.id}_ri_tax_vat_no_gravado_compras")
+        tax_otros_tributos = self.env.ref(f"account.{self.company_id.id}_base_tax_otros_tributos")
+        iva_tax_ids = {tax_iva_no_corresponde.id, tax_iva_no_gravado.id}
 
         for line in self.line_ids.filtered(lambda l: not l.exists):
             partner = line._get_partner_by_vat()
@@ -28,6 +29,8 @@ class AfipImportWizard(models.TransientModel):
 
             currency = line._get_currency()
             move_type = line._get_move_type()
+
+            tax_zero_id = tax_iva_no_corresponde.id if document_type.l10n_ar_letter == "C" else tax_iva_no_gravado.id
 
             move_vals = {
                 "move_type": move_type,
@@ -42,19 +45,7 @@ class AfipImportWizard(models.TransientModel):
                 "line_ids": [],
             }
 
-            def create_line(price_unit, tax_ids):
-                return (
-                    0,
-                    0,
-                    {
-                        "name": "Creado por importación de facturas",
-                        "quantity": 1.0,
-                        "price_unit": price_unit,
-                        "tax_ids": [(6, 0, tax_ids)],
-                        "partner_id": partner.id,
-                    },
-                )
-
+            # Agregamos la linea de IVA.
             if not math.isnan(line.iva) and line.iva > 0:
                 calculated_tax = round(line.iva * 100 / line.neto_gravado, 1)
                 tax = self.env["account.tax"].search(
@@ -65,24 +56,34 @@ class AfipImportWizard(models.TransientModel):
                     ],
                     limit=1,
                 )
-
+                # Si encuentra un IVA correspondiente al porcentaje lo agrega a la factura.
                 if tax:
                     iva_tax_ids.add(tax.id)
-                    move_vals["line_ids"].append(create_line(line.neto_gravado, [tax.id]))
+                    move_vals["line_ids"].append(line._create_line(line.neto_gravado, [tax.id]))
 
-            tax_zero_id = iva_no_corresponde.id if document_type.l10n_ar_letter == "C" else iva_no_gravado.id
+            # Si no encuentra IVA ni importe "No Gravado" agrega la linea como "IVA No Corresponde" o "IVA No Gravado" dependiendo del tipo de documento.
+            elif math.isnan(line.no_gravado) or line.no_gravado <= 0:
+                move_vals["line_ids"].append(
+                    line._create_line(line.amount_total - int(line.otros_tributos), [tax_zero_id])
+                )
 
-            if math.isnan(line.no_gravado) or line.no_gravado <= 0:
-                move_vals["line_ids"].append(create_line(line.amount_total, [tax_zero_id]))
             if line.no_gravado > 0:
-                move_vals["line_ids"].append(create_line(line.no_gravado, [tax_zero_id]))
+                move_vals["line_ids"].append(line._create_line(line.no_gravado, [tax_zero_id]))
 
-            # IF DEL AUTORIZATION CODE IS NOT EMPTY, ADD IT TO THE MOVE
+            if line.otros_tributos > 0:
+                move_vals["line_ids"].append(line._create_line(line.otros_tributos, [tax_otros_tributos.id]))
 
             move = self.env["account.move"].create(move_vals)
             new_moves += move
 
-        new_moves.filtered(lambda m: any(tax.id in iva_tax_ids for tax in m.line_ids.mapped("tax_ids"))).action_post()
+        # Filtramos para postear las facturas que tienen lineas de IVA
+        # y no tienen el impuesto de otros tributos, ya que este impuesto
+        # requiere manipulacion del usuario
+        moves_to_post = new_moves.filtered(
+            lambda m: any(tax.id in iva_tax_ids for tax in m.line_ids.mapped("tax_ids"))
+            and not any(tax.id == tax_otros_tributos.id for tax in m.line_ids.mapped("tax_ids"))
+        )
+        moves_to_post.action_post()
 
         return {
             "type": "ir.actions.act_window",
