@@ -6,8 +6,11 @@ class AccountMoveLine(models.Model):
     _inherit = "account.move.line"
 
     def _get_settlement_tax(self, date=None):
+        # is_backward_tax lo usamos para partner aliquot
         if not self.tax_line_id.is_backward_tax:
-            return self.tax_line_id
+            # si tiene vinculada retencion y la misma tiene regime_tax_id es una retencion de ganancias migrada
+            # devolvemos ese impuesto, si no, devolvemos el impuesto de la linea
+            return self.withholding_id.regime_tax_id or self.tax_line_id
         is_perception = self.move_id.is_invoice()
         partner_field = (
             self.partner_id.l10n_ar_partner_perception_ids if is_perception else self.partner_id.l10n_ar_partner_tax_ids
