@@ -7,12 +7,9 @@
     "website": "www.adhoc.com.ar",
     "license": "AGPL-3",
     "summary": "",
-    "depends": [
-        "account_accountant",
-        "l10n_ar_edi",
-    ],
+    "depends": ["account_accountant", "l10n_ar_edi", "account_invoice_tax"],
     "data": ["security/ir.model.access.csv", "wizards/afip_import_wizard.xml"],
     "installable": True,
-    "auto_install": True,
+    "auto_install": False,
     "application": False,
 }

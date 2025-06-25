@@ -5,8 +5,11 @@
         <field name="model">afip.import.wizard</field>
         <field name="arch" type="xml">
             <form string="Importador de Facturas AFIP">
+                <div class="alert alert-info" role="status">
+                   <i class="fa fa-info-circle" title="Info"/> <span>Invoices highlighted in yellow will not be created because they already exist.</span>
+                </div>
                 <field name="line_ids" nolabel="1" readonly="1">
-                    <list decoration-danger="exists == True">
+                    <list decoration-warning="exists == True">
                         <field name="document_type"/>
                         <field name="invoice_number"/>
                         <field name="partner_name"/>
