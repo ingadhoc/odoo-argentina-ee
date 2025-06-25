@@ -33,6 +33,7 @@ class AfipImportWizardLine(models.TransientModel):
                     ("move_type", "in", ["in_refund", "in_invoice"]),
                     ("display_name", "ilike", line.invoice_number),
                     ("partner_id.vat", "=", line.partner_vat),
+                    ("company_id", "=", line.wizard_id.company_id.id),
                 ],
                 limit=1,
             )
@@ -79,7 +80,9 @@ class AfipImportWizardLine(models.TransientModel):
         invoice_type_code = self.document_type.split(" - ")[0].strip()
 
         # Search for the document type in the model l10n_latam.document.type
-        document_type = self.env["l10n_latam.document.type"].search([("code", "=", invoice_type_code)], limit=1)
+        document_type = self.env["l10n_latam.document.type"].search(
+            [("code", "=", invoice_type_code), ("country_id.code", "=", "AR")], limit=1
+        )
 
         if not document_type:
             raise UserError(_("No document type found for code: %s") % invoice_type_code)

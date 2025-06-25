@@ -15,7 +15,11 @@ class AccountJournal(models.Model):
         # OVERRIDE
         journal = self or self.browse(self.env.context.get("default_journal_id"))
 
-        if journal.type == "purchase" and journal.company_id.country_code == "AR":
+        if (
+            journal.type == "purchase"
+            and journal.company_id.country_code == "AR"
+            and journal.company_id.chart_template == "ar_ri"
+        ):
             attachments = self.env["ir.attachment"].browse(attachment_ids or [])
 
             if not attachments:
@@ -24,10 +28,7 @@ class AccountJournal(models.Model):
         return super().create_document_from_attachment(attachment_ids)
 
     def import_bills_from_xls(self, attachments):
-        # company = self.company_id
-
         for attachment in attachments:
-            # if 'xlsx' in attachment.datas_fname:
             file_content = base64.b64decode(attachment.datas)
             df = pd.read_excel(BytesIO(file_content), engine="openpyxl")  # use openpyxl for .xlsx
 

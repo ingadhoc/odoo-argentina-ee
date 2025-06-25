@@ -1,8 +1,7 @@
 import math
 
 from odoo import fields, models
-
-# from odoo.exceptions import ValidationError
+from odoo.fields import Command
 
 
 class AfipImportWizard(models.TransientModel):
@@ -16,11 +15,24 @@ class AfipImportWizard(models.TransientModel):
     journal_id = fields.Many2one("account.journal", required=True)
 
     def action_confirm(self):
+        if all(line.exists for line in self.line_ids):
+            return {
+                "type": "ir.actions.client",
+                "tag": "display_notification",
+                "params": {
+                    "title": "Import completed",
+                    "message": "No invoices were created: all required invoices already exist.",
+                    "type": "warning",
+                    "sticky": False,
+                },
+            }
+
         new_moves = self.env["account.move"]
         tax_iva_no_corresponde = self.env.ref(f"account.{self.company_id.id}_ri_tax_vat_no_corresponde_compras")
         tax_iva_no_gravado = self.env.ref(f"account.{self.company_id.id}_ri_tax_vat_no_gravado_compras")
         tax_otros_tributos = self.env.ref(f"account.{self.company_id.id}_base_tax_otros_tributos")
-        iva_tax_ids = {tax_iva_no_corresponde.id, tax_iva_no_gravado.id}
+        tax_iva_exento = self.env.ref(f"account.{self.company_id.id}_ri_tax_vat_exento_compras")
+        iva_tax_ids = {tax_iva_no_corresponde.id, tax_iva_no_gravado.id, tax_iva_exento.id}
 
         for line in self.line_ids.filtered(lambda l: not l.exists):
             partner = line._get_partner_by_vat()
@@ -30,7 +42,7 @@ class AfipImportWizard(models.TransientModel):
             currency = line._get_currency()
             move_type = line._get_move_type()
 
-            tax_zero_id = tax_iva_no_corresponde.id if document_type.l10n_ar_letter == "C" else tax_iva_no_gravado.id
+            tax_zero_id = tax_iva_no_corresponde if document_type.l10n_ar_letter in ["C", "B"] else tax_iva_no_gravado
 
             move_vals = {
                 "move_type": move_type,
@@ -38,17 +50,18 @@ class AfipImportWizard(models.TransientModel):
                 "partner_id": partner.id,
                 "invoice_date": line.date_invoice,
                 "l10n_latam_document_number": line.invoice_number,
-                "currency_id": currency.id,  # asumiendo pesos
-                "invoice_currency_rate": line.currency_rate,  # asumiendo pesos
+                "currency_id": currency.id,
                 "journal_id": self.journal_id.id,
                 "company_id": self.company_id.id,
+                "l10n_ar_afip_auth_code": line.cae,
                 "line_ids": [],
             }
 
-            # Agregamos la linea de IVA.
+            # Agregamos la linea con IVA y otros tributos (si existen).
+            taxes_in_line_ids = []
             if not math.isnan(line.iva) and line.iva > 0:
                 calculated_tax = round(line.iva * 100 / line.neto_gravado, 1)
-                tax = self.env["account.tax"].search(
+                iva_tax = self.env["account.tax"].search(
                     [
                         ("company_id", "=", self.company_id.id),
                         ("amount", "=", calculated_tax),
@@ -57,23 +70,57 @@ class AfipImportWizard(models.TransientModel):
                     limit=1,
                 )
                 # Si encuentra un IVA correspondiente al porcentaje lo agrega a la factura.
-                if tax:
-                    iva_tax_ids.add(tax.id)
-                    move_vals["line_ids"].append(line._create_line(line.neto_gravado, [tax.id]))
+                if iva_tax:
+                    iva_tax_ids.add(iva_tax.id)
+                    taxes_in_line_ids.append(iva_tax.id)
+
+                # Si encuentra otros tributos, los agrega a la factura.
+                if line.otros_tributos > 0:
+                    taxes_in_line_ids.append(tax_otros_tributos.id)
+
+                if taxes_in_line_ids:
+                    move_vals["line_ids"].append(line._create_line(line.neto_gravado, taxes_in_line_ids))
 
             # Si no encuentra IVA ni importe "No Gravado" agrega la linea como "IVA No Corresponde" o "IVA No Gravado" dependiendo del tipo de documento.
-            elif math.isnan(line.no_gravado) or line.no_gravado <= 0:
+            elif math.isnan(line.no_gravado) or line.no_gravado <= 0 and line.exento <= 0 or math.isnan(line.exento):
                 move_vals["line_ids"].append(
-                    line._create_line(line.amount_total - int(line.otros_tributos), [tax_zero_id])
+                    line._create_line(line.amount_total - int(line.otros_tributos), [tax_zero_id.id])
                 )
 
-            if line.no_gravado > 0:
-                move_vals["line_ids"].append(line._create_line(line.no_gravado, [tax_zero_id]))
+            if line.exento > 0:
+                move_vals["line_ids"].append(line._create_line(line.exento, [tax_iva_exento.id]))
 
-            if line.otros_tributos > 0:
-                move_vals["line_ids"].append(line._create_line(line.otros_tributos, [tax_otros_tributos.id]))
+            if line.no_gravado > 0:
+                move_vals["line_ids"].append(line._create_line(line.no_gravado, [tax_zero_id.id]))
 
             move = self.env["account.move"].create(move_vals)
+
+            # Agregamos el rate despues de crear la factura, para que Odoo no lo recalcule
+            if line.currency_rate and line.currency_rate != 1:
+                wizard = self.env["account.move.change.rate"].create(
+                    {
+                        "move_id": move.id,
+                        "currency_rate": line.currency_rate,
+                    }
+                )
+                wizard.confirm()
+
+            # Si tiene otros tributos, modificamos el valor por defecto con el wizard
+            if line.otros_tributos > 0:
+                invoice_taxes = (
+                    self.env["account.invoice.tax"]
+                    .with_context(active_model="account.move", active_ids=[move.id])
+                    .create(
+                        {
+                            "move_id": move.id,
+                            "tax_line_ids": [
+                                Command.create({"tax_id": tax_otros_tributos.id, "amount": line.otros_tributos})
+                            ],
+                        }
+                    )
+                )
+                invoice_taxes.action_update_tax()
+
             new_moves += move
 
         # Filtramos para postear las facturas que tienen lineas de IVA
