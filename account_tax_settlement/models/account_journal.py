@@ -198,9 +198,12 @@ class AccountJournal(models.Model):
         domain = [("company_id", "="), ("deprecated", "=", False)]
         if account_tags := self.settlement_account_tag_ids.filtered(lambda x: x.applicability == "accounts"):
             domain.append(("tag_ids", "in", account_tags.ids))
+            company_id = self.company_id.id
+            if self.company_id.child_ids:
+                company_id = self.env.companies.ids
             for account in self.env["account.account"].search(
                 [
-                    *self.env["account.account"]._check_company_domain(self.company_id.id),
+                    *self.env["account.account"]._check_company_domain(company_id),
                     ("deprecated", "=", False),
                     ("tag_ids", "in", account_tags.ids),
                 ]
@@ -286,8 +289,11 @@ class AccountJournal(models.Model):
         (liquidados o no)
         """
         self.ensure_one()
+        company_id = self.company_id.id
+        if self.company_id.child_ids:
+            company_id = self.env.companies.ids
         domain = [
-            *self._check_company_domain(self.company_id.id),
+            *self._check_company_domain(company_id),
             ("tax_repartition_line_id.tag_ids", "in", self.settlement_account_tag_ids.ids),
         ]
 
