@@ -3,11 +3,10 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-def post_init_hook(cr, registry):
+def post_init_hook(env):
     """ Loaded after installing the module. Configuramos impuesto de Retención IIBB Mendoza Aplicada para que tengan código python.
     Se crea registro de coincidencia de importación para importar archivo de actividades de mendoza para que se actualice en base a los códigos
     existentes. """
-    env = api.Environment(cr, SUPERUSER_ID, {})
     ar_companies = env['res.company'].search([]).filtered(lambda x: x.country_code == 'AR')
     for company in ar_companies:
         ret_mendoza_aplicada_ext_id = 'l10n_ar_account_withholding.%s_ri_tax_retencion_iibb_za_aplicada' % (company.id)
@@ -20,9 +19,10 @@ def post_init_hook(cr, registry):
     afip_activity_model_id = env['ir.model'].search([('name', '=', 'afip.activity')]).id
 
     # Se crea registro de coincidencia de importación para importar archivo de actividades de mendoza para que se actualice en base a los códigos existentes.
-    coincidencia_de_importacion = env['base_import.match'].create({'model_id': afip_activity_model_id})
-    afip_activity_code_field_id = env['ir.model.fields'].search([('name', '=', 'code'), ('model_id', '=', 'afip.activity')]).id
-    env['base_import.match.field'].create({'field_id': afip_activity_code_field_id,
-                                           'match_id': coincidencia_de_importacion.id,
-                                           'model_id': afip_activity_model_id})
-    _logger.info('Se crea registro de coincidencia de importación para importar archivo de actividades de mendoza para que se actualice en base a los códigos existentes.')
+    # TODO: las líneas de abajo las comentamos por el momento porque aún no está migrado base_import_match
+    #coincidencia_de_importacion = env['base_import.match'].create({'model_id': afip_activity_model_id})
+    #afip_activity_code_field_id = env['ir.model.fields'].search([('name', '=', 'code'), ('model_id', '=', 'afip.activity')]).id
+    #env['base_import.match.field'].create({'field_id': afip_activity_code_field_id,
+    #                                       'match_id': coincidencia_de_importacion.id,
+    #                                       'model_id': afip_activity_model_id})
+    #_logger.info('Se crea registro de coincidencia de importación para importar archivo de actividades de mendoza para que se actualice en base a los códigos existentes.')
