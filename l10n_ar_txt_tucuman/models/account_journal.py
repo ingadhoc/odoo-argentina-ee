@@ -108,15 +108,9 @@ class AccountJournal(models.Model):
             # 7, NUMERO, longitud: 8
             content_datos += str(document_number_parts["invoice_number"]).zfill(8)
             # 8, BASE_CALCULO, longitud: 15,2
-            content_datos += "%015.2f" % (
-                line.tax_base_amount if is_perception else line.payment_id.withholding_base_amount
-            )
+            content_datos += "%015.2f" % (line.tax_base_amount if is_perception else line.withholding_id.base_amount)
             # 9, PORCENTAJE/ALICUOTA, longitud: 6,3
-            partner_alicuot = line.tax_line_id.get_partner_alicuot(line.partner_id, line.date)
-            if is_perception:
-                content_datos += "%06.3f" % partner_alicuot.alicuota_percepcion
-            else:
-                content_datos += "%06.3f" % partner_alicuot.alicuota_retencion
+            content_datos += "%06.3f" % line.tax_line_id.amount
             # 10, MONTO_RET/PER, longitud: 15,2
             content_datos += "%015.2f" % abs(line.balance)
             content_datos += "\r\n"
