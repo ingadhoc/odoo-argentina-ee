@@ -49,7 +49,8 @@ class AccountJournal(models.Model):
             # fijo "218"
             content += "218"
             # 6 Régimen (integer long 3, 33-35, obligatorio)
-            content += payment.withholding_id.tax_id.l10n_ar_code.zfill(3)
+            tax = line._get_settlement_tax()
+            content += tax.l10n_ar_code.zfill(3)
             # 7 Cuit ordenante (integer 11, 36-46, obligatorio)
             content += company_vat
             # 8 Fecha retención (date long 10, 59-68, obligatorio)
@@ -84,11 +85,11 @@ class AccountJournal(models.Model):
             # 19 No retención motivo (string 30, 193-222, no obligatorio)
             content += "0" * 30
             # 20 Aplica CDI (boolean 1, 223-223, obligatorio) --> especificación 40906, mt 11/12/24
-            content += "1" if payment.withholding_id.sire_aplica_cdi else "0"
+            content += "1" if payment.sire_aplica_cdi else "0"
             # 21 Código de alícuota (integer, 4, 224-227, obligatorio)
-            content += payment.withholding_id.sire_codigo_alicuota.zfill(4)
+            content += payment.sire_codigo_alicuota.zfill(4)
             # 22 Aplica acrecentamiento (boolean, 1, 228-228)
-            content += "1" if payment.withholding_id.sire_aplica_acrecentamiento else "0"
+            content += "1" if payment.sire_aplica_acrecentamiento else "0"
             # 23 Retenido clave nif (string 50, 229-278, obligatorio)
             # Cuit del pais del sujeto retenido s/ especificación tarea 40906, mt 11/12/24
             content += pais.l10n_ar_natural_vat if es_persona else pais.l10n_ar_legal_entity_vat
@@ -133,16 +134,16 @@ class AccountJournal(models.Model):
         corregir para poder generar el archivo."""
         # Validamos que el impuesto SIRE tenga código de régimen establecido
         for line in move_lines.sorted(key=lambda r: (r.date, r.id)):
-            payment = line.payment_id
-            if not payment.withholding_id.tax_id.l10n_ar_code:
+            tax = line._get_settlement_tax()
+            if not tax.l10n_ar_code:
                 raise RedirectWarning(
                     message=_(
-                        "El impuesto '%s' no tiene código de régimen establecido. Es obligatorio para generar el"
-                        " archivo txt Sire. Editar campo 'Codigo de regimen IVA' en solapa 'Opciones avanzadas'"
-                        " en la vista formulario",
-                        payment.withholding_id.tax_id.name,
+                        "El impuesto '%(tax_name)s' (id: %(tax_id)s) no tiene código de régimen establecido. Es obligatorio para generar el"
+                        " archivo txt Sire. Editar campo 'Codigo AFIP' (l10n_ar_code) en la vista formulario del impuesto.",
+                        tax_id=tax.id,
+                        tax_name=tax.name,
                     ),
-                    action=payment.withholding_id.tax_id.get_formview_action(),
+                    action=tax.get_formview_action(),
                     button_text=_("Editar impuesto"),
                 )
 
@@ -165,7 +166,7 @@ class AccountJournal(models.Model):
             # Validamos que el contacto tenga país establecido
             if not line.partner_id.country_id:
                 raise RedirectWarning(
-                    message=_("El contacto '%s' debe tener país establecido", payment.partner_id.name),
+                    message=_("El contacto '%s' debe tener país establecido", line.payment_id.partner_id.name),
                     action=line.partner_id.get_formview_action(),
                     button_text=_("Editar contacto"),
                 )
@@ -187,13 +188,13 @@ class AccountJournal(models.Model):
                 )
 
             # Validamos que el código de alícuota se encuentre entre 1 y 83 si no aplica CDI
-            if not payment.withholding_id.sire_aplica_cdi and int(payment.withholding_id.sire_codigo_alicuota) > 83:
+            if not line.payment_id.sire_aplica_cdi and int(line.payment_id.sire_codigo_alicuota) > 83:
                 raise UserError(
                     _(
                         "El pago %(payment_name)s (id: %(payment_id)s) debe tener código de alícuota"
                         " menor a 83 ya que no aplica CDI",
-                        payment_name=payment.name,
-                        payment_id=payment.id,
+                        payment_name=line.payment_id.name,
+                        payment_id=line.payment_id.id,
                     )
                 )
 
@@ -206,19 +207,19 @@ class AccountJournal(models.Model):
         content = ""
         for line in move_lines.sorted(key=lambda r: (r.date, r.id)):
             payment = line.payment_id
-            if not payment.withholding_id.tax_id.l10n_ar_code:
+            if not payment.tax_id.tax_id.l10n_ar_code:
                 raise RedirectWarning(
                     message=_(
                         "El impuesto '%s' no tiene código de régimen establecido."
                         " Editar campo 'Codigo de regimen IVA' en solapa 'Opciones avanzadas'"
                         "en la vista formulario",
-                        payment.withholding_id.tax_id.name,
+                        payment.tax_id.tax_id.name,
                     ),
                     action={
                         "type": "ir.actions.act_window",
                         "res_model": "account.tax",
                         "views": [(False, "form")],
-                        "res_id": payment.withholding_id.tax_id.id,
+                        "res_id": payment.tax_id.tax_id.id,
                         "name": _("Tax"),
                         "view_mode": "form",
                     },
@@ -232,7 +233,8 @@ class AccountJournal(models.Model):
             # 3 Impuesto (integer long 3, 41-43, obligatorio)
             content += "216"
             # 4 Régimen (integer long 3, 44-46, obligatorio)
-            content += payment.withholding_id.tax_id.l10n_ar_code
+            tax = line._get_settlement_tax()
+            content += tax.l10n_ar_code
             # 5 Fecha retención (date long 10, 47-56, obligatorio)
             content += fecha_impuesto
             # 6 Condición (integer 2, 57-58, no obligatorio)
@@ -244,15 +246,11 @@ class AccountJournal(models.Model):
             # 9 Importe retención (decimal 14, 90-103, obligatorio)
             content += "%014.2f" % abs(line.balance)
             # 10 Importe de la base de cálculo/cantidad (decimal 14, 104-117, obligatorio)
-            content += "%014.2f" % abs(payment.withholding_id.base_amount)
+            content += "%014.2f" % abs(line.withholding_id.base_amount)
             # 11 Régimen de exclusión (boolean 1, 118-118, obligatorio)
             content += "0"
             # 12 Porcentaje de exclusión (decimal 6, 119-124, no obligatorio)
-            content += (
-                "%06.2f" % payment.withholding_id.tax_id.porcentaje_exclusion
-                if payment.withholding_id.tax_id.porcentaje_exclusion != "0.0"
-                else "000.00"
-            )
+            content += "%06.2f" % tax.porcentaje_exclusion if tax.porcentaje_exclusion != "0.0" else "000.00"
             # 13 Fecha publicación o finalización de la vigencia (date 10, 125-134, no obligatorio)
             content += " " * 10
             # 14 Tipo comprobante (integer 2, 135-136, obligatorio)

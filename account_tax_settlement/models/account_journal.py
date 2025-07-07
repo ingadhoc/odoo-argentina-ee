@@ -32,7 +32,7 @@ class AccountJournal(models.Model):
     settlement_tax = fields.Selection(
         [],
         string="Impuesto de liquidación",
-        help="Si elije un impuesto se puede agregar alguna funcionalidad, como" " por ej. descargar archivos txt",
+        help="Si elije un impuesto se puede agregar alguna funcionalidad, como por ej. descargar archivos txt",
     )
     settlement_partner_id = fields.Many2one(
         "res.partner",
@@ -79,17 +79,15 @@ class AccountJournal(models.Model):
             if rec.tax_settlement:
                 if rec.type != "general":
                     raise ValidationError(
-                        _('Solo se puede usar "Impuesto de liquidación" en ' 'diarios del tipo "Miscelánea"')
+                        _('Solo se puede usar "Impuesto de liquidación" en diarios del tipo "Miscelánea"')
                     )
                 if not rec.settlement_partner_id:
-                    raise ValidationError(
-                        _('Si usa "Impuesto de liquidación" debe setear un ' '"Partner de liquidación"')
-                    )
+                    raise ValidationError(_('Si usa "Impuesto de liquidación" debe setear un "Partner de liquidación"'))
 
     def action_create_payment(self):
         partner = self.settlement_partner_id
         if not partner:
-            raise ValidationError(_("You can only create payment if journal has settlement partner" " configured!"))
+            raise ValidationError(_("You can only create payment if journal has settlement partner configured!"))
         return {
             "name": _("Register Payment"),
             "view_type": "form",
@@ -125,11 +123,11 @@ class AccountJournal(models.Model):
                 % draft_lines.ids
             )
         if not self.tax_settlement:
-            raise ValidationError(_("Settlement only allowed on journals with Tax Settlement " "enable"))
+            raise ValidationError(_("Settlement only allowed on journals with Tax Settlement enable"))
 
         if move_lines.filtered("tax_settlement_move_id"):
             raise ValidationError(
-                _("You can not settle lines that has already been settled!\n" "* Lines ids: %s")
+                _("You can not settle lines that has already been settled!\n* Lines ids: %s")
                 % (move_lines.filtered("tax_settlement_move_id").ids)
             )
         # if not self.tax_id:
