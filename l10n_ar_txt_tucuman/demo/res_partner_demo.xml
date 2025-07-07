@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Demo Partners for Tucuman TXT with complete address information -->
+
+    <record id="partner_tucuman_demo_1" model="res.partner">
+        <field name="name">Demo Tucuman Comercial San Miguel SRL</field>
+        <field name="ref">DEMO-TUC-001</field>
+        <field name='l10n_latam_identification_type_id' ref="l10n_ar.it_cuit"/>
+        <field name='vat'>30709876542</field>
+        <field name="is_company">1</field>
+        <field name="street">Av. 9 de Julio 1234</field>
+        <field name="city">San Miguel de Tucumán</field>
+        <field name="state_id" ref="base.state_ar_t"/>
+        <field name="zip">4000</field>
+        <field name="country_id" ref="base.ar"/>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
+    <record id="partner_tucuman_demo_2" model="res.partner">
+        <field name="name">Demo Tucuman Industrias del Norte SA</field>
+        <field name="ref">DEMO-TUC-002</field>
+        <field name='l10n_latam_identification_type_id' ref="l10n_ar.it_cuit"/>
+        <field name='vat'>33587439218</field>
+        <field name="is_company">1</field>
+        <field name="street">Calle Maipú 567</field>
+        <field name="city">Tafí Viejo</field>
+        <field name="state_id" ref="base.state_ar_t"/>
+        <field name="zip">4103</field>
+        <field name="country_id" ref="base.ar"/>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
+    <record id="partner_tucuman_demo_3" model="res.partner">
+        <field name="name">Demo Tucuman Servicios Tucumanos SAS</field>
+        <field name="ref">DEMO-TUC-003</field>
+        <field name='l10n_latam_identification_type_id' ref="l10n_ar.it_cuit"/>
+        <field name='vat'>30123456781</field>
+        <field name="is_company">1</field>
+        <field name="street">Av. Belgrano 890</field>
+        <field name="city">Yerba Buena</field>
+        <field name="state_id" ref="base.state_ar_t"/>
+        <field name="zip">4107</field>
+        <field name="country_id" ref="base.ar"/>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
+</odoo>
