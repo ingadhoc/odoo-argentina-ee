@@ -6,9 +6,20 @@
         <field name="arch" type="xml">
             <form string="Importador de Facturas AFIP">
                 <div class="alert alert-info" role="status">
-                   <i class="fa fa-info-circle" title="Info"/> <span>Invoices highlighted in yellow will not be created because they already exist.</span>
+                   <i class="fa fa-info-circle" title="Info" invisible="total_bills_exists == 0"/> <span invisible="total_bills_exists == 0">Invoices highlighted in yellow will not be created because they already exist. </span>
                 </div>
+
+                <group>
+                    <group>
+                    <field name="total_bills_to_create"  class="oe_inline"/>
+                    </group>
+                    <group>
+                    <field name="total_bills_exists"  class="oe_inline"/>
+                    </group>
+                </group>
+
                 <field name="line_ids" nolabel="1" readonly="1">
+
                     <list decoration-warning="exists == True">
                         <field name="document_type"/>
                         <field name="invoice_number"/>
@@ -18,10 +29,16 @@
                         <field name="currency"/>
                         <field name="amount_total"/>
                     </list>
+
                 </field>
+
                 <footer>
+
                     <button name="action_confirm" type="object" string="Crear Facturas" class="btn-primary"/>
                     <button string="Cancelar" special="cancel" class="btn-secondary"/>
+
+
+
                 </footer>
             </form>
         </field>

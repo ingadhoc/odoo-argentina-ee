@@ -8,7 +8,11 @@
     "license": "AGPL-3",
     "summary": "",
     "depends": ["account_accountant", "l10n_ar_edi", "account_invoice_tax"],
-    "data": ["security/ir.model.access.csv", "wizards/afip_import_wizard.xml"],
+    "data": [
+        "security/ir.model.access.csv",
+        "wizards/afip_import_wizard.xml",
+        "views/account_move.xml",
+    ],
     "installable": True,
     "auto_install": False,
     "application": False,
