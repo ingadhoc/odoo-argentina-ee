@@ -1,7 +1,6 @@
 import math
 
 from odoo import fields, models
-from odoo.fields import Command
 
 
 class AfipImportWizard(models.TransientModel):
@@ -13,6 +12,20 @@ class AfipImportWizard(models.TransientModel):
     line_ids = fields.One2many("afip.import.wizard.line", "wizard_id", string="Líneas de Facturas")
     company_id = fields.Many2one("res.company", required=True)
     journal_id = fields.Many2one("account.journal", required=True)
+    total_bills_to_create = fields.Integer(
+        compute="_compute_bills_to_create",
+        string="Total de Facturas a Crear",
+    )
+    total_bills_exists = fields.Integer(
+        compute="_compute_bills_exists",
+        string="Total de Facturas Existentes",
+    )
+
+    def _compute_bills_to_create(self):
+        self.total_bills_to_create = len(self.line_ids.filtered(lambda l: not l.exists))
+
+    def _compute_bills_exists(self):
+        self.total_bills_exists = len(self.line_ids.filtered(lambda l: l.exists))
 
     def action_confirm(self):
         if all(line.exists for line in self.line_ids):
@@ -113,12 +126,15 @@ class AfipImportWizard(models.TransientModel):
                     .create(
                         {
                             "move_id": move.id,
-                            "tax_line_ids": [
-                                Command.create({"tax_id": tax_otros_tributos.id, "amount": line.otros_tributos})
-                            ],
                         }
                     )
                 )
+                # Filtrar tax_line_ids para obtener solo el que corresponde a tax_otros_tributos
+                otros_tributos_tax_line = invoice_taxes.tax_line_ids.filtered(
+                    lambda l: l.tax_id.id == tax_otros_tributos.id
+                )
+                otros_tributos_tax_line.amount = line.otros_tributos
+
                 invoice_taxes.action_update_tax()
 
             new_moves += move
@@ -139,4 +155,8 @@ class AfipImportWizard(models.TransientModel):
             "name": "Facturas de Proveedor Importadas",
             "domain": [("id", "in", new_moves.ids)],
             "target": "current",
+            "views": [
+                [self.env.ref("l10n_ar_import_bill.view_account_move_list_bill_import").id, "list"],
+                [False, "form"],
+            ],
         }
