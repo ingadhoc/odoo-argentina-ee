@@ -1278,7 +1278,7 @@ class AccountJournal(models.Model):
             content += "%02d" % int(partner.l10n_latam_identification_type_id.l10n_ar_afip_code)
 
             # Numero Documento Retenido      [20]
-            content += partner.vat.ljust(20)
+            content += partner.l10n_ar_vat.ljust(20)
 
             # Numero Certificado Original    [14]
             content += "%014d" % 0  # TODO: ????
