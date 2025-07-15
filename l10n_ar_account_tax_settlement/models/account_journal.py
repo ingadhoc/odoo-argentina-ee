@@ -292,7 +292,7 @@ class AccountJournal(models.Model):
             gross_income_type = partner.l10n_ar_gross_income_type
             if not gross_income_type:
                 raise ValidationError(
-                    _("Debe setear el tipo de inscripción de IIBB del partner " '"%s" (id: %s)')
+                    _('Debe setear el tipo de inscripción de IIBB del partner "%s" (id: %s)')
                     % (partner.name, partner.id)
                 )
             if gross_income_type in ["multilateral", "local"]:
@@ -320,7 +320,7 @@ class AccountJournal(models.Model):
                 content += "4"
             else:
                 raise ValidationError(
-                    _('La responsabilidad frente a IVA "%s" no está soportada ' "para ret/perc Santa Fe") % res_iva.name
+                    _('La responsabilidad frente a IVA "%s" no está soportada para ret/perc Santa Fe') % res_iva.name
                 )
 
             # 14 - Marca inscripción Otros Gravámenes
@@ -440,7 +440,7 @@ class AccountJournal(models.Model):
 
             if not partner.vat:
                 raise ValidationError(
-                    _('El partner "%s" (id %s) no tiene número de identificación ' "establecido")
+                    _('El partner "%s" (id %s) no tiene número de identificación establecido')
                     % (partner.name, partner.id)
                 )
             alicuot = tax.amount
@@ -626,7 +626,7 @@ class AccountJournal(models.Model):
             # 4: No inscripto 5: Reg.Simplificado
             if not partner.l10n_ar_gross_income_type:
                 raise ValidationError(
-                    _("Debe setear el tipo de inscripción de IIBB del partner " '"%s" (id: %s)')
+                    _('Debe setear el tipo de inscripción de IIBB del partner "%s" (id: %s)')
                     % (partner.name, partner.id)
                 )
 
@@ -656,7 +656,7 @@ class AccountJournal(models.Model):
                 content += "4"
             else:
                 raise ValidationError(
-                    _('La responsabilidad frente a IVA "%s" no está soportada ' "para ret/perc AGIP") % res_iva.name
+                    _('La responsabilidad frente a IVA "%s" no está soportada para ret/perc AGIP') % res_iva.name
                 )
 
             # 15 - Razón Social del Retenido
@@ -1151,12 +1151,12 @@ class AccountJournal(models.Model):
             partner = line.partner_id
             if not partner.l10n_latam_identification_type_id.l10n_ar_afip_code:
                 raise ValidationError(
-                    _('EL tipo de identificación "%s" no tiene código de afip' "configurado")
+                    _('EL tipo de identificación "%s" no tiene código de afip configurado')
                     % (partner.l10n_latam_identification_type_id.name)
                 )
             if not partner.vat:
                 raise ValidationError(
-                    _('El partner "%s" (id %s) no tiene número de identificación ' "establecido")
+                    _('El partner "%s" (id %s) no tiene número de identificación establecido')
                     % (partner.name, partner.id)
                 )
 
@@ -1278,7 +1278,8 @@ class AccountJournal(models.Model):
             content += "%02d" % int(partner.l10n_latam_identification_type_id.l10n_ar_afip_code)
 
             # Numero Documento Retenido      [20]
-            content += partner.vat.ljust(20)
+            vat = re.sub(r"\D", "", partner.vat)
+            content += vat.ljust(20)
 
             # Numero Certificado Original    [14]
             content += "%014d" % 0  # TODO: ????
