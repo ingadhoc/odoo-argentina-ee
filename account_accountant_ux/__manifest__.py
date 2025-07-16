@@ -42,8 +42,43 @@
         "data/account_accountant_data.xml",
         "views/account_journal_dashboard_view.xml",
     ],
+<<<<<<< HEAD
     "demo": [],
     "installable": True,
     "auto_install": True,
     "application": False,
+||||||| parent of 2154957 (temp)
+    'data': [
+        'views/res_partner_view.xml',
+        'views/account_followup_views.xml',
+        'views/account_move_line.xml',
+        'wizards/account_change_lock_date_views.xml',
+        'wizards/res_config_settings_views.xml',
+        'wizards/account_reconcile_wizard.xml',
+        'data/account_accountant_data.xml',
+        'views/account_journal_dashboard_view.xml',
+    ],
+    'demo': [
+    ],
+    'installable': True,
+    'auto_install': True,
+    'application': False,
+=======
+    'data': [
+        'views/res_partner_view.xml',
+        'views/account_followup_views.xml',
+        'views/account_move_line.xml',
+        'wizards/account_change_lock_date_views.xml',
+        'wizards/res_config_settings_views.xml',
+        'wizards/account_reconcile_wizard.xml',
+        'data/account_accountant_data.xml',
+        'views/account_journal_dashboard_view.xml',
+    ],
+    'demo': [
+    ],
+    'installable': True,
+    'auto_install': True,
+    'application': False,
+    'post_load': 'monkey_patches',
+>>>>>>> 2154957 (temp)
 }
