@@ -1,6 +1,7 @@
 import math
 
 from odoo import fields, models
+from odoo.exceptions import UserError
 
 
 class AfipImportWizard(models.TransientModel):
@@ -41,10 +42,13 @@ class AfipImportWizard(models.TransientModel):
             }
 
         new_moves = self.env["account.move"]
-        tax_iva_no_corresponde = self.env.ref(f"account.{self.company_id.id}_ri_tax_vat_no_corresponde_compras")
-        tax_iva_no_gravado = self.env.ref(f"account.{self.company_id.id}_ri_tax_vat_no_gravado_compras")
-        tax_otros_tributos = self.env.ref(f"account.{self.company_id.id}_base_tax_otros_tributos")
-        tax_iva_exento = self.env.ref(f"account.{self.company_id.id}_ri_tax_vat_exento_compras")
+        try:
+            tax_iva_no_corresponde = self.env.ref(f"account.{self.company_id.id}_ri_tax_va_no_corresponde_compras")
+            tax_iva_no_gravado = self.env.ref(f"account.{self.company_id.id}_ri_tax_vat_no_gravado_compras")
+            tax_otros_tributos = self.env.ref(f"account.{self.company_id.id}_base_tax_otros_tributos")
+            tax_iva_exento = self.env.ref(f"account.{self.company_id.id}_ri_tax_vat_exento_compras")
+        except ValueError:
+            raise UserError("Please update the account chart templates in your company.")
         iva_tax_ids = {tax_iva_no_corresponde.id, tax_iva_no_gravado.id, tax_iva_exento.id}
 
         for line in self.line_ids.filtered(lambda l: not l.exists):
