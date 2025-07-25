@@ -36,6 +36,7 @@
         "data/tags_data.xml",
         "data/estado_resultados.xml",
         "data/balance_sheet.xml",
+        "views/menu_reports.xml",
         "wizards/checks_to_date_view.xml",
         "reports/report_checks_to_date.xml",
         "security/ir.model.access.csv",
