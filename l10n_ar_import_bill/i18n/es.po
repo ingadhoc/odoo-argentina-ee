@@ -1,0 +1,259 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ar_import_bill
+# 
+# Translators:
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-23 20:07+0000\n"
+"PO-Revision-Date: 2025-07-23 20:07+0000\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025\n"
+"Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: es\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
+msgid ""
+"<i class=\"fa fa-info-circle\" title=\"Info\"/> <span "
+"invisible=\"total_bills_exists == 0\">Invoices highlighted in yellow will "
+"not be created because they already exist. </span>"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_account_move_list_bill_import
+msgid "Bill Date"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__cae
+msgid "CAE"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
+msgid "Cancelar"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__company_id
+msgid "Company"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
+msgid "Crear Facturas"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__create_uid
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__create_date
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__display_name
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_account_move_list_bill_import
+msgid "Due Date"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__exento
+msgid "Exento"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_account_move_list_bill_import
+msgid "Facturas de Proveedor Importadas"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__date_invoice
+msgid "Fecha de Factura"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__id
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva
+msgid "IVA"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
+msgid "Importador de Facturas AFIP"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model,name:l10n_ar_import_bill.model_afip_import_wizard
+msgid "Importador de Facturas de Proveedor desde Excel AFIP"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__neto_gravado
+msgid "Impuesto Neto Gravado"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model,name:l10n_ar_import_bill.model_account_journal
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__journal_id
+msgid "Journal"
+msgstr "Diario"
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__write_uid
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__write_date
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model,name:l10n_ar_import_bill.model_afip_import_wizard_line
+msgid "Línea de Factura Importada desde Excel"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__line_ids
+msgid "Líneas de Facturas"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__currency
+msgid "Moneda"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__no_gravado
+msgid "No Gravado"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/models/account_journal.py:0
+msgid "No attachment was provided"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard_line.py:0
+msgid "No currency found for code: %s"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard_line.py:0
+msgid "No document type found for code: %s"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_account_move_list_bill_import
+msgid "Number"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__invoice_number
+msgid "Número de Factura"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__otros_tributos
+msgid "Otros Tributos"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__partner_name
+msgid "Proveedor"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_account_move_list_bill_import
+msgid "Status"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_account_move_list_bill_import
+msgid "Tax Excluded"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__document_type
+msgid "Tipo de Documento"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__move_type
+msgid "Tipo de Factura"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__partner_identification_type
+msgid "Tipo de Identificación"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__amount_total
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_account_move_list_bill_import
+msgid "Total"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__total_bills_exists
+msgid "Total de Facturas Existentes"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__total_bills_to_create
+msgid "Total de Facturas a Crear"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__partner_vat
+msgid "VAT del Proveedor"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__currency_rate
+msgid "Valor de cambio"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_account_move_list_bill_import
+msgid "Vendor"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__wizard_id
+msgid "Wizard"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__exists
+msgid "Ya Existe"
+msgstr ""
