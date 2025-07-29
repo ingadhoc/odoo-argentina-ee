@@ -14,16 +14,16 @@
         <field name="name">Test Padron 2: Funciona Ejemplo Monotributo</field>
         <field name="ref">Test Padron 2: Funciona Ejemplo Monotributo</field>
         <field name='l10n_latam_identification_type_id' ref="l10n_ar.it_cuit"/>
-        <field name='vat'>20200083394</field>
+        <field name='vat'>20002307554</field>
         <field name="is_company">1</field>
         <field name="type">other</field>
     </record>
 
     <record id="res_partner_padron_3" model="res.partner">
-        <field name="name">Test Padron 3: Funciona Ejemplo Responsable Inscripto 2</field>
-        <field name="ref">Test Padron 3: Funciona Ejemplo Responsable Inscripto 2</field>
+        <field name="name">Test Padron 3: Funciona Ejemplo IVA Exento</field>
+        <field name="ref">Test Padron 3: Funciona Ejemplo IVA Exento</field>
         <field name='l10n_latam_identification_type_id' ref="l10n_ar.it_cuit"/>
-        <field name='vat'>20221062583</field>
+        <field name='vat'>20203032723</field>
         <field name="is_company">1</field>
         <field name="type">other</field>
     </record>
@@ -38,10 +38,10 @@
     </record>
 
     <record id="res_partner_padron_5" model="res.partner">
-        <field name="name">Test Padron 5: La cuit ingresada se encuentra inactiva. Acceda con su clave activa</field>
-        <field name="ref">Test Padron 5: La cuit ingresada se encuentra inactiva. Acceda con su clave activa</field>
+        <field name="name">Test Padron 5: La CUIT del contribuyente fue limitada. CUIT/CUIL/CDI inactivada.</field>
+        <field name="ref">Test Padron 5: La CUIT del contribuyente fue limitada. CUIT/CUIL/CDI inactivada.</field>
         <field name='l10n_latam_identification_type_id' ref="l10n_ar.it_cuit"/>
-        <field name='vat'>20002307554</field>
+        <field name='vat'>20200083394</field>
         <field name="is_company">1</field>
         <field name="type">other</field>
     </record>
