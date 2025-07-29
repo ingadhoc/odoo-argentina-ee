@@ -42,13 +42,24 @@ class AfipImportWizard(models.TransientModel):
             }
 
         new_moves = self.env["account.move"]
-        try:
-            tax_iva_no_corresponde = self.env.ref(f"account.{self.company_id.id}_ri_tax_va_no_corresponde_compras")
-            tax_iva_no_gravado = self.env.ref(f"account.{self.company_id.id}_ri_tax_vat_no_gravado_compras")
-            tax_otros_tributos = self.env.ref(f"account.{self.company_id.id}_base_tax_otros_tributos")
-            tax_iva_exento = self.env.ref(f"account.{self.company_id.id}_ri_tax_vat_exento_compras")
-        except ValueError:
-            raise UserError("Please update the account chart templates in your company.")
+        base_domain = [
+            ("price_include", "=", False),
+            ("company_id", "=", self.company_id.id),
+            ("type_tax_use", "=", "purchase"),
+        ]
+        tax_iva_no_corresponde = self.env["account.tax"].search(
+            base_domain + [("tax_group_id.l10n_ar_vat_afip_code", "=", "0")], limit=1
+        )
+        tax_iva_no_gravado = self.env["account.tax"].search(
+            base_domain + [("tax_group_id.l10n_ar_vat_afip_code", "=", "1")], limit=1
+        )
+        tax_otros_tributos = self.env["account.tax"].search(
+            base_domain + [("tax_group_id.l10n_ar_tribute_afip_code", "=", "99")], limit=1
+        )
+        tax_iva_exento = self.env["account.tax"].search(
+            base_domain + [("tax_group_id.l10n_ar_vat_afip_code", "=", "2")], limit=1
+        )
+
         iva_tax_ids = {tax_iva_no_corresponde.id, tax_iva_no_gravado.id, tax_iva_exento.id}
 
         for line in self.line_ids.filtered(lambda l: not l.exists):
@@ -79,10 +90,10 @@ class AfipImportWizard(models.TransientModel):
             if not math.isnan(line.iva) and line.iva > 0:
                 calculated_tax = round(line.iva * 100 / line.neto_gravado, 1)
                 iva_tax = self.env["account.tax"].search(
-                    [
-                        ("company_id", "=", self.company_id.id),
+                    base_domain
+                    + [
                         ("amount", "=", calculated_tax),
-                        ("type_tax_use", "=", "purchase"),
+                        ("tax_group_id.l10n_ar_vat_afip_code", "!=", False),
                     ],
                     limit=1,
                 )
@@ -93,6 +104,11 @@ class AfipImportWizard(models.TransientModel):
 
                 # Si encuentra otros tributos, los agrega a la factura.
                 if line.otros_tributos > 0:
+                    if not tax_otros_tributos:
+                        raise UserError(
+                            "No se encontró un impuesto de Otros Tributos. "
+                            "Debe crear un impuesto de compras con el grupo 'Otros Tributos'."
+                        )
                     taxes_in_line_ids.append(tax_otros_tributos.id)
 
                 if taxes_in_line_ids:
@@ -100,14 +116,36 @@ class AfipImportWizard(models.TransientModel):
 
             # Si no encuentra IVA ni importe "No Gravado" agrega la linea como "IVA No Corresponde" o "IVA No Gravado" dependiendo del tipo de documento.
             elif math.isnan(line.no_gravado) or line.no_gravado <= 0 and line.exento <= 0 or math.isnan(line.exento):
+                if not tax_zero_id and document_type.l10n_ar_letter in ["C", "B"]:
+                    raise UserError(
+                        "No se encontró un impuesto de IVA No Corresponde. "
+                        "Debe crear un impuesto de compras con el grupo 'IVA No Corresponde'."
+                    )
+                elif not tax_zero_id:
+                    raise UserError(
+                        "No se encontró un impuesto de IVA No Gravado. "
+                        "Debe crear un impuesto de compras con el grupo 'IVA No Gravado'."
+                    )
+
                 move_vals["line_ids"].append(
                     line._create_line(line.amount_total - int(line.otros_tributos), [tax_zero_id.id])
                 )
 
             if line.exento > 0:
+                if not tax_iva_exento:
+                    raise UserError(
+                        "No se encontró un impuesto de IVA Exento. "
+                        "Debe crear un impuesto de compras con el grupo 'IVA Exento'."
+                    )
                 move_vals["line_ids"].append(line._create_line(line.exento, [tax_iva_exento.id]))
 
             if line.no_gravado > 0:
+                if not tax_zero_id:
+                    raise UserError(
+                        "No se encontró un impuesto de IVA No Gravado. "
+                        "Debe crear un impuesto de compras con el grupo 'IVA No Gravado'."
+                    )
+
                 move_vals["line_ids"].append(line._create_line(line.no_gravado, [tax_zero_id.id]))
 
             move = self.env["account.move"].create(move_vals)
