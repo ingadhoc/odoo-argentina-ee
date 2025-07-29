@@ -28,7 +28,9 @@ About Padron:
     * Desde un partner cualquiera, si el mismo tiene configurado CUIT, entonces puede hacer click en el botón "Actualizar desde AFIP"
     * Hacerlo masivamente desde ""
 
-#. Si estas en un ambiente de testing pueden utilizar estos CUITs de prueba para el padrón 'ws_sr_constancia_inscripcion' https://gist.github.com/zaoral/245ea456c53aef5c8d2f12a099d30909
+#. Si estas en un ambiente de testing pueden utilizar estos CUITs de prueba para el padrón 'ws_sr_constancia_inscripcion'
+   Estos CUITs están indicados en la documentación interna de Localización Argentina, sección "Padrón Datos Contacto".
+   Link a la documentación: https://www.adhoc.inc/odoo/action-7014/139/knowledge/2109
 
 Installation
 ============
