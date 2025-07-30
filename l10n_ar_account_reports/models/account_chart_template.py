@@ -81,10 +81,12 @@ class AccountChartTemplate(models.AbstractModel):
         name = account.name.lower() if account.name else ""
 
         # Special cases based on specific CSV codes
-        if code in ["999997", "999000000001"] or "ganancia por diferencia" in name or "descuento de efectivo" in name:
+        if code and code.startswith("999") and account.account_type == "income_other":
             return tags["resultados_financieros"].id
-        elif code in ["999998", "999000000002"] or "pérdida por diferencia" in name:
+        elif code and code.startswith("999") and account.account_type == "expense":
             return tags["otros_ingresos_egresos"].id
+        elif code and code.startswith("5.6.1") and account.account_type == "expense" and "r.e.c.p.a.m." in name:
+            return tags["resultados_financieros"].id
 
         # Sales (Ventas) (4.1.1.xx.xxx)
         if account.account_type == "income" or (code and code.startswith("4.1.1")):
@@ -97,26 +99,33 @@ class AccountChartTemplate(models.AbstractModel):
         # Classification by code for expenses
         elif account.account_type in ["expense", "expense_depreciation"]:
             # Sales expenses (Gastos de comercialización) (5.2.1.xx.xxx)
-            if code and code.startswith("5.2"):
+            if code and code.startswith("5.1.1"):
+                return tags["costo_ventas"].id
+            # Sales expenses (Gastos de comercialización) (5.2.1.xx.xxx)
+            elif code and code.startswith("5.2"):
                 return tags["gastos_comercializacion"].id
             # Administrative expenses (Gastos de administración) (5.3.1.xx.xxx)
             elif code and code.startswith("5.3"):
                 return tags["gastos_administracion"].id
             # Financial results (Resultados financieros) (5.6.1.xx.xxx except 5.6.1.01.060)
-            elif code and code.startswith("5.6") and not code.startswith("5.6.1.01.060"):
+            elif (
+                code
+                and code.startswith("5.6")
+                and not any(keyword in name for keyword in ["gastos bancarios", "bank charges"])
+            ):
                 return tags["resultados_financieros"].id
             # Various taxes (Impuestos varios) (5.4.x.xx.xxx)
-            elif code and code.startswith("5.4"):
-                return tags["otros_gastos"].id
+            # elif code and code.startswith("5.4"):
+            #     return tags["otros_gastos"].id
+            # Income tax (Impuesto a las ganancias) (5.5.x.xx.xxx)
+            elif code and code.startswith("5.5"):
+                return tags["impuesto_ganancias"].id
             # Depreciation (Depreciaciones) (5.7.1.xx.xxx)
-            elif code and code.startswith("5.7"):
-                return tags["otros_gastos"].id
-            # Bank expenses (Gastos bancarios) (5.6.1.01.060)
-            elif code and code == "5.6.1.01.060":
-                return tags["otros_gastos"].id
-            # Production expenses (Gastos de producción) (5.1.2.xx.xxx)
-            elif code and code.startswith("5.1.2"):
-                return tags["otros_gastos"].id
+            # elif code and code.startswith("5.7"):
+            #     return tags["otros_gastos"].id
+            # # Production expenses (Gastos de producción) (5.1.2.xx.xxx)
+            # elif code and code.startswith("5.1.2"):
+            #     return tags["otros_gastos"].id
             # Other expenses by default
             else:
                 return tags["otros_gastos"].id
@@ -124,68 +133,67 @@ class AccountChartTemplate(models.AbstractModel):
         # Other income/expenses
         elif account.account_type == "income_other":
             # Exchange differences (Diferencias de cambio)
-            if code and code == "4.2.1.01.020":
-                return tags["resultados_financieros"].id
-            # Other income (Otros ingresos)
-            else:
-                return tags["otros_ingresos_egresos"].id
-
-        # Income tax (Impuesto a las ganancias) (5.5.x.xx.xxx)
-        if code and (code.startswith("5.5") or ("impuesto" in name and "ganancias" in name)):
-            return tags["impuesto_ganancias"].id
+            if code and code.startswith("4.2.1"):
+                if any(keyword in name for keyword in ["diferencias de cambio", "exchange differences"]):
+                    return tags["resultados_financieros"].id
+                else:
+                    return tags["otros_ingresos_egresos"].id
 
         return None
 
     def _get_tag_for_asset_account(self, account, tags):
         """Determine tag for asset accounts"""
         code = account.code
-
-        # Special cases based on the CSV
-        if code and (
-            code.startswith("1.1.1.02.003")
-            or code.startswith("1.1.1.02.004")
-            or code.startswith("1.1.1.02.007")
-            or code.startswith("1.1.1.02.008")
-        ):
-            return tags["otros_creditos"].id
-
-        if code and code == "1.1.6.01.050":  # Supplier Advances (Anticipo a Proveedores)
-            return tags["otros_creditos"].id
+        name = account.name.lower() if account.name else ""
 
         # Cash and Banks (Caja y Bancos) (1.1.1.xx.xxx)
-        if account.account_type == "asset_cash" or (code and code.startswith("1.1.1")):
+        if account.account_type == "asset_cash":
             return tags["caja_bancos"].id
 
         # Temporary investments (Inversiones temporarias) (1.1.2.xx.xxx)
-        elif code and code.startswith("1.1.2"):
+        if code and code.startswith("1.1.2"):
             return tags["inversiones_temporarias"].id
 
-        # Trade receivables (Créditos por ventas) (1.1.3.xx.xxx)
-        elif account.account_type == "asset_receivable" or (code and code.startswith("1.1.3")):
-            return tags["creditos_ventas"].id
+        # Account current (Activos corrientes)
+        if account.account_type == "asset_current":
+            # Cuentas pendientes y transitorias
+            if code and code.startswith("1.1.1"):
+                if any(keyword in name for keyword in ["pendientes", "pending", "outstanding"]):
+                    return tags["otros_creditos"].id
+                else:
+                    return tags["caja_bancos"].id
 
-        # Other credits (Otros créditos) (1.1.4.xx.xxx, 1.1.5.xx.xxx)
-        elif code and (code.startswith("1.1.4") or code.startswith("1.1.5")):
-            return tags["otros_creditos"].id
+            # Credit sales (Ventas a crédito) (1.1.3.xx.xxx)
+            if code and code.startswith("1.1.3"):
+                return tags["creditos_ventas"].id
 
-        # Inventory (Bienes de cambio) (1.1.6.xx.xxx)
-        elif code and code.startswith("1.1.6"):
-            return tags["bienes_cambio"].id
+            # Other credits (Otros créditos) (1.1.4.xx.xxx, 1.1.5.xx.xxx)
+            elif code and (code.startswith("1.1.4") or code.startswith("1.1.5")):
+                return tags["otros_creditos"].id
+
+            # Inventory (Bienes de cambio) (1.1.6.xx.xxx)
+            elif code and code.startswith("1.1.6") and any(keyword in name for keyword in ["anticipo", "advances"]):
+                return tags["otros_creditos"].id
+            elif code and code.startswith("1.1.6"):
+                return tags["bienes_cambio"].id
+
+            return None
 
         # Non-current assets
         elif code and code.startswith("1.2"):
-            # The CSV has an error, accounts 1.2.1.* should be Fixed Assets (Bienes de Uso)
-            if code.startswith("1.2.1"):
-                return tags["bienes_uso"].id
-            # The CSV has an error, accounts 1.2.2.* should be Intangible Assets (Activos Intangibles)
-            elif code.startswith("1.2.2"):
-                return tags["activos_intangibles"].id
+            return tags["bienes_cambio"].id
 
-        # Classification by account type for uncovered cases
-        if account.account_type == "asset_current":
-            return tags["otros_activos"].id
+        # Asset receivable accounts (Por cobrar)
+        if account.account_type == "asset_receivable":
+            if code and code.startswith("1.1.3"):
+                return tags["creditos_ventas"].id
+            else:
+                return tags["otros_creditos"].id
         elif account.account_type == "asset_non_current":
             return tags["otros_activos_nc"].id
+
+        elif account.account_type == "asset_fixed":
+            return tags["bienes_cambio"].id
 
         return None
 
@@ -194,62 +202,54 @@ class AccountChartTemplate(models.AbstractModel):
         code = account.code
         name = account.name.lower() if account.name else ""
 
-        # Special case for account 9.9.9.99.999
-        if code == "9.9.9.99.999":
-            return tags["cargas_fiscales"].id
-
-        # Customer advances (Anticipos de clientes)
-        if code and code == "2.1.1.01.040" or ("anticipo" in name and "cliente" in name):
-            return tags["anticipos_clientes"].id
-
-        # Loans (Préstamos)
-        if code and code == "2.1.2.01.040":
+        # Equity (Patrimonio Neto) (3.x.x.xx.xxx)
+        if any(keyword in name for keyword in ["loan", "prestamo"]):
             return tags["prestamos"].id
 
-        # Equity (Patrimonio Neto) (3.x.x.xx.xxx)
-        if account.account_type == "equity" or (code and code.startswith("3")):
+        if code and code.startswith("3."):
             return tags["patrimonio_neto"].id
+        # Pasivos no circulantes
+        if account.account_type in ["liability_current", "liability_payable"]:
+            if code and code.startswith("2.1.1") and any(keyword in name for keyword in ["anticipos", "advances"]):
+                return tags["anticipos_clientes"].id
+            elif code and code.startswith("2.1.1"):
+                return tags["deudas_comerciales"].id
+            elif code and code.startswith("2.1.2"):
+                return tags["otras_deudas"].id
+            elif code and code.startswith("2.1.3"):
+                return tags["cargas_fiscales"].id
+            elif code and code.startswith("2.1.4"):
+                return tags["remun_cargas_sociales"].id
+            elif code and code.startswith("2.2.2"):
+                return tags["previsiones"].id
+            elif code and code.startswith("9.9.9"):
+                return tags["cargas_fiscales"].id
 
-        # Trade payables (Deudas Comerciales) (2.1.1.xx.xxx)
-        elif account.account_type == "liability_payable" or (code and code.startswith("2.1.1")):
-            return tags["deudas_comerciales"].id
-
-        # Salaries and social charges (Remuneraciones y cargas sociales) (2.1.4.xx.xxx)
-        elif code and code.startswith("2.1.4"):
-            return tags["remun_cargas_sociales"].id
-
-        # Tax liabilities (Cargas fiscales) (2.1.3.xx.xxx)
-        elif code and code.startswith("2.1.3"):
-            return tags["cargas_fiscales"].id
-
-        # Other debts (Otras deudas) (2.1.2.xx.xxx, 2.1.5.xx.xxx)
-        elif code and (code.startswith("2.1.2") or code.startswith("2.1.5")):
-            return tags["otras_deudas"].id
-
-        # Non-current debts (Deudas no corrientes) (2.2.1.xx.xxx)
-        elif code and code.startswith("2.2.1"):
-            return tags["deudas_nc"].id
-
-        # Provisions (Previsiones) (2.2.2.xx.xxx)
-        elif code and code.startswith("2.2.2"):
-            return tags["previsiones"].id
-
-        # Classification by account type for uncovered cases
-        if account.account_type == "liability_current":
-            return tags["otras_deudas"].id
         elif account.account_type == "liability_non_current":
-            return tags["deudas_nc"].id
+            if code and code.startswith("2.1.5"):
+                return tags["otras_deudas"].id
+            else:
+                return tags["deudas_nc"].id
 
         return None
 
     def _l10n_ar_account_reports_setup_account_tags(self, ar_companies):
         """Set up account tags for Argentine chart templates"""
         tags = self._get_ar_account_tags()
+        tag_ids = list(tags.values())
+        tag_ids_list = [tag.id for tag in tag_ids]  # Lista de IDs de todas las etiquetas
 
         for company in ar_companies:
             # En Odoo 18, las cuentas usan company_ids (many2many) en lugar de company_id
             accounts = self.env["account.account"].search([("company_ids", "in", company.id)])
 
+            # Primero limpiar todas las etiquetas específicas de reportes argentinos
+            for account in accounts:
+                # Quitar todas las etiquetas argentinas existentes
+                for tag_id in tag_ids_list:
+                    account.write({"tag_ids": [(3, tag_id)]})
+
+            # Luego asignar las etiquetas correctas
             for account in accounts:
                 tag_id = None
 
@@ -264,7 +264,13 @@ class AccountChartTemplate(models.AbstractModel):
                     tag_id = self._get_tag_for_income_account(account, tags)
 
                 # Asset accounts
-                elif account.account_type in ["asset_cash", "asset_receivable", "asset_current", "asset_non_current"]:
+                elif account.account_type in [
+                    "asset_cash",
+                    "asset_receivable",
+                    "asset_current",
+                    "asset_non_current",
+                    "asset_fixed",
+                ]:
                     tag_id = self._get_tag_for_asset_account(account, tags)
 
                 # Liability and equity accounts
@@ -273,6 +279,7 @@ class AccountChartTemplate(models.AbstractModel):
                     "liability_current",
                     "liability_non_current",
                     "equity",
+                    "equity_unaffected",
                 ]:
                     tag_id = self._get_tag_for_liability_equity_account(account, tags)
 
