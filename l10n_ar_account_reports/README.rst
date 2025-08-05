@@ -15,7 +15,6 @@ Accounting Reports with Accounting Documents
 ============================================
 
 Agrega el CUIT de cada partner en el reporte "Libro Mayor de Empresas" (Partner Ledeger)
-Este módulo también permite obtener un reporte de cheques a fecha, tanto propios como de terceros.
 
 Installation
 ============
