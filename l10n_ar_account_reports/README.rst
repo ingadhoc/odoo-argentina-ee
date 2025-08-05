@@ -14,6 +14,7 @@
 Accounting Reports with Accounting Documents
 ============================================
 
+<<<<<<< 802c97bdef05a989ed2f90a29c45366dd77d927d
 Customizes Odoo standard accounting reports to meet specific Argentine requirements, adding necessary fiscal information for balance presentation and generating additional reports for check control.
 
 Functional description
@@ -39,6 +40,13 @@ This report is fundamental for cash flow control and bank reconciliation, allowi
 - Adds a new "Cheques a fecha" menu under Accounting → Reporting → Legal Statements
 - Includes a wizard with fields to select limit date and journal (optional)
 - Generates a PDF report with detailed listing of pending checks
+||||||| b2ba4cfcc8e9d34b5977c4b88f001995a7e2d083
+Agrega el CUIT de cada partner en el reporte "Libro Mayor de Empresas" (Partner Ledeger)
+Este módulo también permite obtener un reporte de cheques a fecha, tanto propios como de terceros.
+=======
+Agrega el CUIT de cada partner en el reporte "Libro Mayor de Empresas" (Partner Ledeger)
+Agrega reportes de estado de resultado y balance
+>>>>>>> b0c67ff5908160b7c8fe0be33af0217abde5aea9
 
 Installation
 ============
