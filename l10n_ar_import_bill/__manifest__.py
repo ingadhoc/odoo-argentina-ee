@@ -1,6 +1,6 @@
 {
-    "name": "Argentinian Importing Bills from AFIP",
-    "version": "18.0.1.0.0",
+    "name": "Argentinian Importing Bills from ARCA",
+    "version": "18.0.1.1.0",
     "category": "Localization/Argentina",
     "sequence": 8,
     "author": "ADHOC SA",

@@ -4,7 +4,7 @@
         <field name="name">afip.import.wizard.form</field>
         <field name="model">afip.import.wizard</field>
         <field name="arch" type="xml">
-            <form string="Importador de Facturas AFIP">
+            <form string="Importador de Facturas ARCA">
                 <div class="alert alert-info" role="status" invisible="total_bills_exists == 0">
                    <i class="fa fa-info-circle" title="Info"/> <span invisible="total_bills_exists == 0">Invoices highlighted in yellow will not be created because they already exist. </span>
                 </div>
