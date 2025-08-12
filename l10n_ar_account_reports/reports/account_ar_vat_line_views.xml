@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_ar_vat_line_search_inherited" model="ir.ui.view">
+        <field name="name">account.ar.vat.line.search.inherited</field>
+        <field name="model">account.ar.vat.line</field>
+        <field name="inherit_id" ref="l10n_ar_reports.view_account_ar_vat_line_search"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@expand='0']" position="inside">
+                <filter name="groupby_account_id" string="Account" context="{'group_by': 'account_id'}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
