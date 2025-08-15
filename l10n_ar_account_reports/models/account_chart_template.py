@@ -27,6 +27,13 @@ class AccountChartTemplate(models.AbstractModel):
 
         return res
 
+    def _post_load_data(self, template_code, company, template_data):
+        super()._post_load_data(template_code, company, template_data)
+        if template_code in [
+            "ar_ri",
+        ]:
+            self._l10n_ar_account_reports_setup_account_tags([company])
+
     def _get_ar_account_tags(self):
         """Get all account tags defined in l10n_ar_account_reports
 
@@ -70,7 +77,6 @@ class AccountChartTemplate(models.AbstractModel):
             "previsiones": self.env.ref("l10n_ar_account_reports.ar_esp_previsiones"),
             "deudas_nc": self.env.ref("l10n_ar_account_reports.ar_esp_deudas_no_corrientes"),
             "previsiones_nc": self.env.ref("l10n_ar_account_reports.ar_esp_previsiones_no_corrientes"),
-            # 'part_terceros': self.env.ref("l10n_ar_account_reports.ar_esp_part_terceros_en_soc"),
             "patrimonio_neto": self.env.ref("l10n_ar_account_reports.ar_esp_patrimonio_neto"),
         }
         return tags
@@ -114,26 +120,15 @@ class AccountChartTemplate(models.AbstractModel):
                 and not any(keyword in name for keyword in ["gastos bancarios", "bank charges"])
             ):
                 return tags["resultados_financieros"].id
-            # Various taxes (Impuestos varios) (5.4.x.xx.xxx)
-            # elif code and code.startswith("5.4"):
-            #     return tags["otros_gastos"].id
-            # Income tax (Impuesto a las ganancias) (5.5.x.xx.xxx)
             elif code and code.startswith("5.5"):
                 return tags["impuesto_ganancias"].id
-            # Depreciation (Depreciaciones) (5.7.1.xx.xxx)
-            # elif code and code.startswith("5.7"):
-            #     return tags["otros_gastos"].id
-            # # Production expenses (Gastos de producción) (5.1.2.xx.xxx)
-            # elif code and code.startswith("5.1.2"):
-            #     return tags["otros_gastos"].id
-            # Other expenses by default
             else:
                 return tags["otros_gastos"].id
 
         # Other income/expenses
         elif account.account_type == "income_other":
             # Exchange differences (Diferencias de cambio)
-            if code and code.startswith("4.2.1"):
+            if code and (code.startswith("4.2.1") or code.startswith("4.3.1")):
                 if any(keyword in name for keyword in ["diferencias de cambio", "exchange differences"]):
                     return tags["resultados_financieros"].id
                 else:
@@ -148,6 +143,8 @@ class AccountChartTemplate(models.AbstractModel):
 
         # Cash and Banks (Caja y Bancos) (1.1.1.xx.xxx)
         if account.account_type == "asset_cash":
+            if code and code.startswith("6."):
+                return None
             return tags["caja_bancos"].id
 
         # Temporary investments (Inversiones temporarias) (1.1.2.xx.xxx)
@@ -181,7 +178,7 @@ class AccountChartTemplate(models.AbstractModel):
 
         # Non-current assets
         elif code and code.startswith("1.2"):
-            return tags["bienes_cambio"].id
+            return tags["bienes_uso"].id
 
         # Asset receivable accounts (Por cobrar)
         if account.account_type == "asset_receivable":
@@ -193,7 +190,7 @@ class AccountChartTemplate(models.AbstractModel):
             return tags["otros_activos_nc"].id
 
         elif account.account_type == "asset_fixed":
-            return tags["bienes_cambio"].id
+            return tags["bienes_uso"].id
 
         return None
 
@@ -210,6 +207,8 @@ class AccountChartTemplate(models.AbstractModel):
             return tags["patrimonio_neto"].id
         # Pasivos no circulantes
         if account.account_type in ["liability_current", "liability_payable"]:
+            if code and code.startswith("1.1.1"):
+                return tags["otros_creditos"].id
             if code and code.startswith("2.1.1") and any(keyword in name for keyword in ["anticipos", "advances"]):
                 return tags["anticipos_clientes"].id
             elif code and code.startswith("2.1.1"):

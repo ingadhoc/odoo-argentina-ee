@@ -25,7 +25,7 @@
                         <field name="label">balance</field>
                         <field name="engine">domain</field>
                         <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_eerr_ventas'))]"/>
-                        <field name="subformula">sum</field>
+                        <field name="subformula">-sum</field>
                     </record>
                 </field>
             </record>
@@ -40,7 +40,7 @@
                         <field name="label">balance</field>
                         <field name="engine">domain</field>
                         <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_eerr_costo_ventas'))]"/>
-                        <field name="subformula">sum</field>
+                        <field name="subformula">-sum</field>
                     </record>
                 </field>
             </record>
@@ -69,7 +69,7 @@
                         <field name="label">balance</field>
                         <field name="engine">domain</field>
                         <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_eerr_gastos_comercializacion'))]"/>
-                        <field name="subformula">sum</field>
+                        <field name="subformula">-sum</field>
                     </record>
                 </field>
             </record>
@@ -84,7 +84,7 @@
                         <field name="label">balance</field>
                         <field name="engine">domain</field>
                         <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_eerr_gastos_administracion'))]"/>
-                        <field name="subformula">sum</field>
+                        <field name="subformula">-sum</field>
                     </record>
                 </field>
             </record>
@@ -99,7 +99,7 @@
                         <field name="label">balance</field>
                         <field name="engine">domain</field>
                         <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_eerr_otros_gastos'))]"/>
-                        <field name="subformula">sum</field>
+                        <field name="subformula">-sum</field>
                     </record>
                 </field>
             </record>
@@ -114,7 +114,7 @@
                         <field name="label">balance</field>
                         <field name="engine">domain</field>
                         <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_eerr_rxt_resultados_financieros'))]"/>
-                        <field name="subformula">sum</field>
+                        <field name="subformula">-sum</field>
                     </record>
                 </field>
             </record>
@@ -129,7 +129,7 @@
                         <field name="label">balance</field>
                         <field name="engine">domain</field>
                         <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_eerr_otros_ingresos_egresos'))]"/>
-                        <field name="subformula">sum</field>
+                        <field name="subformula">-sum</field>
                     </record>
                 </field>
             </record>
@@ -158,7 +158,7 @@
                         <field name="label">balance</field>
                         <field name="engine">domain</field>
                         <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_eerr_impuesto_ganancias'))]"/>
-                        <field name="subformula">sum</field>
+                        <field name="subformula">-sum</field>
                     </record>
                 </field>
             </record>
