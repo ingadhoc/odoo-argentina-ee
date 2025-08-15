@@ -24,7 +24,9 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_bank_cash" model="account.report.line">
                         <field name="name">Caja y Bancos</field>
                         <field name="code">bank_cash</field>
-                        <field name="hierarchy_level">2</field>
+                        <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_bank_cash_balance" model="account.report.expression">
                                 <field name="label">balance</field>
@@ -39,7 +41,9 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_temp_investments" model="account.report.line">
                         <field name="name">Inversiones temporarias</field>
                         <field name="code">temp_investments</field>
-                        <field name="hierarchy_level">2</field>
+                        <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_temp_investments_balance" model="account.report.expression">
                                 <field name="label">balance</field>
@@ -54,7 +58,9 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_sales_rec" model="account.report.line">
                         <field name="name">Créditos por ventas</field>
                         <field name="code">sales_rec</field>
-                        <field name="hierarchy_level">2</field>
+                        <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_sales_rec_balance" model="account.report.expression">
                                 <field name="label">balance</field>
@@ -69,7 +75,9 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_other_rec" model="account.report.line">
                         <field name="name">Otros créditos</field>
                         <field name="code">other_rec</field>
-                        <field name="hierarchy_level">2</field>
+                        <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_other_rec_balance" model="account.report.expression">
                                 <field name="label">balance</field>
@@ -84,7 +92,9 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_inventory" model="account.report.line">
                         <field name="name">Bienes de cambio</field>
                         <field name="code">inventory</field>
-                        <field name="hierarchy_level">2</field>
+                        <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_inventory_balance" model="account.report.expression">
                                 <field name="label">balance</field>
@@ -99,7 +109,9 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_other_current_assets" model="account.report.line">
                         <field name="name">Otros activos</field>
                         <field name="code">other_current_assets</field>
-                        <field name="hierarchy_level">2</field>
+                        <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_other_current_assets_balance" model="account.report.expression">
                                 <field name="label">balance</field>
@@ -128,7 +140,9 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_sales_rec_noncurrent" model="account.report.line">
                         <field name="name">Créditos por ventas (No corriente)</field>
                         <field name="code">sales_rec_noncurrent</field>
-                        <field name="hierarchy_level">2</field>
+                        <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_sales_rec_noncurrent_balance" model="account.report.expression">
                                 <field name="label">balance</field>
@@ -143,7 +157,9 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_other_rec_noncurrent" model="account.report.line">
                         <field name="name">Otros créditos (No corriente)</field>
                         <field name="code">other_rec_noncurrent</field>
-                        <field name="hierarchy_level">2</field>
+                        <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_other_rec_noncurrent_balance" model="account.report.expression">
                                 <field name="label">balance</field>
@@ -158,7 +174,9 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_inventory_noncurrent" model="account.report.line">
                         <field name="name">Bienes de cambio (No corriente)</field>
                         <field name="code">inventory_noncurrent</field>
-                        <field name="hierarchy_level">2</field>
+                        <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_inventory_noncurrent_balance" model="account.report.expression">
                                 <field name="label">balance</field>
@@ -173,7 +191,9 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_fixed_assets" model="account.report.line">
                         <field name="name">Bienes de uso</field>
                         <field name="code">fixed_assets</field>
-                        <field name="hierarchy_level">2</field>
+                        <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_fixed_assets_balance" model="account.report.expression">
                                 <field name="label">balance</field>
@@ -188,7 +208,9 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_long_term_investments" model="account.report.line">
                         <field name="name">Participaciones permanentes en sociedades</field>
                         <field name="code">long_term_investments</field>
-                        <field name="hierarchy_level">2</field>
+                        <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_long_term_investments_balance" model="account.report.expression">
                                 <field name="label">balance</field>
@@ -203,7 +225,9 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_other_long_term_investments" model="account.report.line">
                         <field name="name">Otras inversiones</field>
                         <field name="code">other_long_term_investments</field>
-                        <field name="hierarchy_level">2</field>
+                        <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_other_long_term_investments_balance" model="account.report.expression">
                                 <field name="label">balance</field>
@@ -218,7 +242,9 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_intangible_assets" model="account.report.line">
                         <field name="name">Activos intangibles</field>
                         <field name="code">intangible_assets</field>
-                        <field name="hierarchy_level">2</field>
+                        <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_intangible_assets_balance" model="account.report.expression">
                                 <field name="label">balance</field>
@@ -233,7 +259,9 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_other_noncurrent_assets" model="account.report.line">
                         <field name="name">Otros activos (No corriente)</field>
                         <field name="code">other_noncurrent_assets</field>
-                        <field name="hierarchy_level">2</field>
+                        <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_other_noncurrent_assets_balance" model="account.report.expression">
                                 <field name="label">balance</field>
@@ -248,7 +276,7 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_subtotal_noncurrent_assets" model="account.report.line">
                         <field name="name">Subtotal del activo no corriente</field>
                         <field name="code">subtotal_noncurrent_assets</field>
-                        <field name="hierarchy_level">2</field>
+                        <field name="hierarchy_level">1</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_subtotal_noncurrent_assets_balance" model="account.report.expression">
                                 <field name="label">balance</field>
@@ -262,7 +290,9 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_goodwill" model="account.report.line">
                         <field name="name">Llave de negocio</field>
                         <field name="code">goodwill</field>
-                        <field name="hierarchy_level">2</field>
+                        <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_goodwill_balance" model="account.report.expression">
                                 <field name="label">balance</field>
@@ -313,12 +343,14 @@
                         <field name="name">Deudas Comerciales</field>
                         <field name="code">accounts_payable</field>
                         <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_accounts_payable_balance" model="account.report.expression">
                                 <field name="label">balance</field>
                                 <field name="engine">domain</field>
                                 <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_esp_deudas_comerciales'))]"/>
-                                <field name="subformula">sum</field>
+                                <field name="subformula">-sum</field>
                             </record>
                         </field>
                     </record>
@@ -328,12 +360,14 @@
                         <field name="name">Préstamos</field>
                         <field name="code">loans_payable</field>
                         <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_loans_payable_balance" model="account.report.expression">
                                 <field name="label">balance</field>
                                 <field name="engine">domain</field>
                                 <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_esp_prestamos'))]"/>
-                                <field name="subformula">sum</field>
+                                <field name="subformula">-sum</field>
                             </record>
                         </field>
                     </record>
@@ -343,12 +377,14 @@
                         <field name="name">Remuneraciones y cargas sociales</field>
                         <field name="code">payroll_liabilities</field>
                         <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_payroll_liabilities_balance" model="account.report.expression">
                                 <field name="label">balance</field>
                                 <field name="engine">domain</field>
                                 <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_esp_remun_y_cargas_sociales'))]"/>
-                                <field name="subformula">sum</field>
+                                <field name="subformula">-sum</field>
                             </record>
                         </field>
                     </record>
@@ -358,12 +394,14 @@
                         <field name="name">Cargas fiscales</field>
                         <field name="code">tax_liabilities</field>
                         <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_tax_liabilities_balance" model="account.report.expression">
                                 <field name="label">balance</field>
                                 <field name="engine">domain</field>
                                 <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_esp_cargas_fiscales'))]"/>
-                                <field name="subformula">sum</field>
+                                <field name="subformula">-sum</field>
                             </record>
                         </field>
                     </record>
@@ -373,12 +411,14 @@
                         <field name="name">Anticipos de clientes</field>
                         <field name="code">advances_from_customers</field>
                         <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_advances_from_customers_balance" model="account.report.expression">
                                 <field name="label">balance</field>
                                 <field name="engine">domain</field>
                                 <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_esp_anticipos_de_clientes'))]"/>
-                                <field name="subformula">sum</field>
+                                <field name="subformula">-sum</field>
                             </record>
                         </field>
                     </record>
@@ -388,12 +428,14 @@
                         <field name="name">Dividendos a pagar</field>
                         <field name="code">dividends_payable</field>
                         <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_dividends_payable_balance" model="account.report.expression">
                                 <field name="label">balance</field>
                                 <field name="engine">domain</field>
                                 <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_esp_dividendos_a_pagar'))]"/>
-                                <field name="subformula">sum</field>
+                                <field name="subformula">-sum</field>
                             </record>
                         </field>
                     </record>
@@ -403,12 +445,14 @@
                         <field name="name">Otras</field>
                         <field name="code">other_liabilities</field>
                         <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_other_liabilities_balance" model="account.report.expression">
                                 <field name="label">balance</field>
                                 <field name="engine">domain</field>
                                 <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_esp_otras_deudas'))]"/>
-                                <field name="subformula">sum</field>
+                                <field name="subformula">-sum</field>
                             </record>
                         </field>
                     </record>
@@ -417,7 +461,7 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_total_debts" model="account.report.line">
                         <field name="name">Total deudas</field>
                         <field name="code">total_debts</field>
-                        <field name="hierarchy_level">2</field>
+                        <field name="hierarchy_level">1</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_total_debts_balance" model="account.report.expression">
                                 <field name="label">balance</field>
@@ -431,13 +475,15 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_provisions" model="account.report.line">
                         <field name="name">Previsiones</field>
                         <field name="code">provisions</field>
-                        <field name="hierarchy_level">2</field>
+                        <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_provisions_balance" model="account.report.expression">
                                 <field name="label">balance</field>
                                 <field name="engine">domain</field>
                                 <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_esp_previsiones'))]"/>
-                                <field name="subformula">sum</field>
+                                <field name="subformula">-sum</field>
                             </record>
                         </field>
                     </record>
@@ -460,13 +506,15 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_long_term_liabilities" model="account.report.line">
                         <field name="name">Deudas no corrientes</field>
                         <field name="code">long_term_liabilities</field>
-                        <field name="hierarchy_level">2</field>
+                        <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_long_term_liabilities_balance" model="account.report.expression">
                                 <field name="label">balance</field>
                                 <field name="engine">domain</field>
                                 <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_esp_deudas_no_corrientes'))]"/>
-                                <field name="subformula">sum</field>
+                                <field name="subformula">-sum</field>
                             </record>
                         </field>
                     </record>
@@ -475,13 +523,15 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_long_term_provisions" model="account.report.line">
                         <field name="name">Previsiones no corrientes</field>
                         <field name="code">long_term_provisions</field>
-                        <field name="hierarchy_level">2</field>
+                        <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
                         <field name="expression_ids">
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_long_term_provisions_balance" model="account.report.expression">
                                 <field name="label">balance</field>
                                 <field name="engine">domain</field>
                                 <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_esp_previsiones_no_corrientes'))]"/>
-                                <field name="subformula">sum</field>
+                                <field name="subformula">-sum</field>
                             </record>
                         </field>
                     </record>
@@ -509,7 +559,7 @@
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_total_liabilities_combined_balance" model="account.report.expression">
                                 <field name="label">balance</field>
                                 <field name="engine">aggregation</field>
-                                <field name="formula">total_debts.balance + total_current_liabilities.balance + total_noncurrent_liabilities.balance</field>
+                                <field name="formula">total_current_liabilities.balance + total_noncurrent_liabilities.balance</field>
                             </record>
                         </field>
                     </record>
@@ -521,12 +571,14 @@
                 <field name="name">Participación de terceros en sociedades controladas</field>
                 <field name="code">minority_interest</field>
                 <field name="hierarchy_level">0</field>
+                <field name="user_groupby">account_id</field>
+                <field name="foldable">True</field>
                 <field name="expression_ids">
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_minority_interest_balance" model="account.report.expression">
                         <field name="label">balance</field>
                         <field name="engine">domain</field>
                         <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_esp_part_terceros_en_soc'))]"/>
-                        <field name="subformula">sum</field>
+                        <field name="subformula">-sum</field>
                     </record>
                 </field>
             </record>
@@ -537,11 +589,23 @@
                 <field name="code">equity</field>
                 <field name="hierarchy_level">0</field>
                 <field name="expression_ids">
+                    <record id="account_financial_report_l10n_ar_estado_patrimonial_line_equity_patrimonio" model="account.report.expression">
+                        <field name="label">patrimonio</field>
+                        <field name="engine">domain</field>
+                        <field name="formula" eval="[('account_id.tag_ids','=', ref('l10n_ar_account_reports.ar_esp_patrimonio_neto'))]"/>
+                        <field name="subformula">-sum</field>
+                    </record>
+                    <record id="account_financial_report_l10n_ar_estado_patrimonial_line_equity_ingresos_no_asignados" model="account.report.expression">
+                        <field name="label">ingresos_no_asignados</field>
+                        <field name="engine">aggregation</field>
+                        <field name="formula">net_inc.balance</field>
+                        <field name="subformula">cross_report</field>
+                    </record>
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_equity_balance" model="account.report.expression">
                         <field name="label">balance</field>
-                        <field name="engine">domain</field>
-                        <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_esp_patrimonio_neto'))]"/>
-                        <field name="subformula">sum</field>
+                        <field name="engine">aggregation</field>
+                        <field name="formula">equity.patrimonio + equity.ingresos_no_asignados</field>
+                        <field name="subformula"></field>
                     </record>
                 </field>
             </record>
