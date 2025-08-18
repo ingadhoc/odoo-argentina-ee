@@ -19,7 +19,7 @@
 ##############################################################################
 {
     "name": "Accounting Reports Customized for Argentina",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.1.0",
     "category": "Accounting",
     "sequence": 14,
     "summary": "",
@@ -35,6 +35,7 @@
     "data": [
         "wizards/checks_to_date_view.xml",
         "reports/report_checks_to_date.xml",
+        "reports/iva_simple_report.xml",
         "security/ir.model.access.csv",
     ],
     "demo": [],
