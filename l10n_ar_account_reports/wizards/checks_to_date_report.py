@@ -121,15 +121,14 @@ class AccountCheckToDateReportWizard(models.TransientModel):
             SELECT DISTINCT ON (t4.check_id) t4.check_id as cheque
             FROM
                 (
-                    SELECT ap.l10n_latam_check_id as check_id
+                    SELECT ap.id as check_id
                     FROM account_payment ap
                     LEFT JOIN account_payment_method AS apm ON apm.id = ap.payment_method_id
                     LEFT JOIN account_move AS ap_move ON ap.move_id = ap_move.id
                     LEFT JOIN account_journal AS journal ON ap_move.journal_id = journal.id
                     WHERE
                     apm.code = 'out_third_party_checks' AND ap_move.date > '%s'
-                    AND
-                    ap.l10n_latam_check_current_journal_id IS NULL
+                    AND ap.l10n_latam_check_current_journal_id IS NULL
                 ) t3
                 JOIN
                 (
@@ -140,6 +139,7 @@ class AccountCheckToDateReportWizard(models.TransientModel):
                     LEFT JOIN account_journal AS journal ON ap_move.journal_id = journal.id
                     WHERE
                     apm.code = 'new_third_party_checks' AND ap_move.date <= '%s'
+                    AND ap.l10n_latam_check_id = (SELECT l10n_latam_check_id FROM account_payment WHERE id = ap.id)
                 ) t4
                 ON t3.check_id = t4.check_id
             WHERE t4.journal IS NULL
