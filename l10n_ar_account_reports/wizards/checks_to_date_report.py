@@ -147,7 +147,21 @@ class AccountCheckToDateReportWizard(models.TransientModel):
             LEFT JOIN account_payment_method AS apm ON apm.id = ap.payment_method_id
             LEFT JOIN account_move AS ap_move ON ap.move_id = ap_move.id
             LEFT JOIN account_journal AS journal ON ap_move.journal_id = journal.id
-            WHERE apm.code = 'new_third_party_checks' AND c.current_journal_id IS NOT NULL AND ap_move.date <= %s
+            WHERE apm.code = 'new_third_party_checks'
+            AND (
+                c.current_journal_id IS NOT NULL
+                OR EXISTS (
+                    SELECT 1 FROM l10n_latam_check_account_payment_rel rel2
+                    LEFT JOIN account_payment ap2 ON ap2.id = rel2.payment_id
+                    LEFT JOIN account_move am2 ON am2.id = ap2.move_id
+                    WHERE rel2.check_id = c.id
+                    AND am2.date > %s
+                    AND ap2.payment_method_id IN (
+                        SELECT id FROM account_payment_method WHERE code IN ('out_third_party_checks', 'manual')
+                    )
+                )
+            )
+            AND ap_move.date <= %s
             UNION ALL
             SELECT c.id AS check_id, ap_move.date AS operation_date, apm.code AS operation_code
             FROM l10n_latam_check c
@@ -158,7 +172,7 @@ class AccountCheckToDateReportWizard(models.TransientModel):
             LEFT JOIN l10n_latam_check_account_payment_rel rel ON rel.check_id = c.id
             WHERE apm.code = 'new_third_party_checks' AND c.current_journal_id IS NOT NULL AND rel.check_id IS NULL AND ap_move.date <= %s;
         """
-        self.env.cr.execute(query, (to_date, to_date))
+        self.env.cr.execute(query, (to_date, to_date, to_date))
         res = self.env.cr.fetchall()
         check_ids = [x[0] for x in res]
         checks = self.env["l10n_latam.check"].search([("id", "in", check_ids)])
