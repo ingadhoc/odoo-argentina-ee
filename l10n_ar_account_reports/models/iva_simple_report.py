@@ -45,9 +45,9 @@ class ReporteIvaSimpleCustomHandler(models.AbstractModel):
         stream = io.BytesIO()
         with zipfile.ZipFile(stream, "w", compression=zipfile.ZIP_DEFLATED) as zf:
             # Add the main report file as CSV
-            content_debito = self._format_report_content(report_debito_data)
+            content_debito = self._format_debit_report_content(report_debito_data)
             zf.writestr("IVA_Debito_y_Restitucion_Debito.csv", content_debito)
-            content_credito = self._format_report_content(report_credito_data)
+            content_credito = self._format_credit_report_content(report_credito_data)
             zf.writestr("IVA_Credito_y_Restitucion_Credito.csv", content_credito)
 
         file_content = stream.getvalue()
@@ -77,7 +77,7 @@ class ReporteIvaSimpleCustomHandler(models.AbstractModel):
 
         # Aliquot codes mapping
         aliquot_codes_list = [
-            (0, ["0", "1", "2", "3"]),
+            (0, ["3"]),  # Dejamos por defecto 3 pero también pueden ser 0, 1 o 2.
             (10.5, ["4"]),
             (21, ["5"]),
             (27, ["6"]),
@@ -100,7 +100,7 @@ class ReporteIvaSimpleCustomHandler(models.AbstractModel):
         lines_data = []
 
         for move_type in ["out_invoice", "out_refund"]:
-            domain_move = domain_base + [("move_type", "=", move_type)]
+            domain_move = domain_base + [("move_type", "=", move_type), ("move_id.state", "=", "posted")]
 
             for activity in activities:
                 if activity == company.l10n_ar_afip_activity_id:
@@ -188,112 +188,17 @@ class ReporteIvaSimpleCustomHandler(models.AbstractModel):
 
         return lines_data
 
-    def _generate_iva_credito_restitucion_data(self, company, options):
-        # Get tag for "venta bienes de uso"
-        tag_compra_bienes_de_uso = self.env.ref("l10n_ar_ux.tag_compra_bienes_de_uso", raise_if_not_found=False)
-        if not tag_compra_bienes_de_uso:
-            # Fallback if tag doesn't exist
-            tag_compra_bienes_de_uso = self.env["account.account.tag"]
-
-        # Activities: company activity + activities used in accounts
-        activities = company.l10n_ar_afip_activity_id + self.env["account.account"].search(
-            [("l10n_ar_afip_activity_id", "!=", False)]
-        ).mapped("l10n_ar_afip_activity_id")
-
-        # Aliquot codes mapping
-        aliquot_codes_list = [
-            (0, ["0", "1", "2", "3"]),
-            (10.5, ["4"]),
-            (21, ["5"]),
-            (27, ["6"]),
-            (5, ["8"]),
-            (2.5, ["9"]),
-        ]
-        # Base domain for account move lines
-        domain_base = [
-            ("company_id", "=", company.id),
-            ("display_type", "=", "product"),
-        ]
-
-        # Add date filters
-        if options.get("date", {}).get("date_from"):
-            domain_base.append(("date", ">=", options["date"]["date_from"]))
-        if options.get("date", {}).get("date_to"):
-            domain_base.append(("date", "<=", options["date"]["date_to"]))
-
-        lines_data = []
-
-        for move_type in ["in_invoice", "in_refund"]:
-            domain_move = domain_base + [("move_type", "=", move_type)]
-
-            for activity in activities:
-                if activity == company.l10n_ar_afip_activity_id:
-                    # Company main activity: include accounts with this activity or no activity set
-                    domain_activity = domain_move + [
-                        ("account_id.l10n_ar_afip_activity_id", "in", [activity.id, False])
-                    ]
-                else:
-                    domain_activity = domain_move + [("account_id.l10n_ar_afip_activity_id", "=", activity.id)]
-
-                if move_type == "in_invoice":
-                    # TIPOS en crédito fiscal
-                    # 1. Compra de Bienes (excepto Bienes de Uso)
-                    # 2. Locaciones
-                    # 3. Prestaciones de Servicios
-                    tipos_de_operacion = ["1", "2", "3"]
-                else:
-                    # Refund - restitución crédito fiscal
-                    # 4. Inversiones de Bienes de Uso
-                    tipos_de_operacion = ["4"]
-
-                for tipo_de_operacion in tipos_de_operacion:
-                    # Operation type discrimination (only for crédito fiscal)
-                    if move_type == "in_invoice":
-                        if tipo_de_operacion in ["1", "2", "3"]:
-                            # Exclude "Bienes de Uso"
-                            domain_op = domain_activity + [
-                                ("account_id.tag_ids", "not in", [tag_compra_bienes_de_uso.id])
-                            ]
-                        else:
-                            # Only "Bienes de Uso"
-                            domain_op = domain_activity + [("account_id.tag_ids", "in", [tag_compra_bienes_de_uso.id])]
-                    else:
-                        domain_op = list(domain_activity)
-
-                        for aliquot, aliquot_codes in aliquot_codes_list:
-                            domain_final = domain_op + [
-                                ("tax_ids.tax_group_id.l10n_ar_vat_afip_code", "in", aliquot_codes)
-                            ]
-
-                            lines = self.env["account.move.line"].search(domain_final)
-                            if not lines:
-                                continue
-
-                            monto_neto_gravado = sum(lines.mapped("balance"))
-                            impuesto = float_round(monto_neto_gravado * aliquot / 100, precision_digits=2)
-
-                            lines_data.append(
-                                {
-                                    "activity_code": activity.code,
-                                    "tipo_operacion": tipo_de_operacion,
-                                    "aliquot_codes": aliquot_codes,
-                                    "aliquot_rate": aliquot,
-                                    "monto_neto_gravado": monto_neto_gravado,
-                                    "impuesto": impuesto,
-                                    "move_type": move_type,
-                                }
-                            )
-
-    def _format_report_content(self, lines_data):
+    def _format_debit_report_content(self, lines_data, is_restitucion=False):
         """Format the report data into a CSV file content"""
         output = io.StringIO()
         writer = csv.writer(output, delimiter=";", quoting=csv.QUOTE_NONNUMERIC)
+        if is_restitucion:
+            pass
 
-        # CSV Headers
         headers = [
             "Código Actividad",
             "Tipo Operación",
-            "Códigos Alícuota",
+            "Código Alícuota",
             "Alícuota (%)",
             "Monto Neto Gravado",
             "Impuesto",
@@ -316,6 +221,120 @@ class ReporteIvaSimpleCustomHandler(models.AbstractModel):
                 ]
                 if lines_data[0].get("move_type"):
                     row.insert(2, line["tipo_sujeto"])
+                writer.writerow(row)
+
+        csv_content = output.getvalue()
+        output.close()
+
+        return csv_content.encode("utf-8")
+
+    def _generate_iva_credito_restitucion_data(self, company, options):
+        # Get tag for "venta bienes de uso"
+        tag_compra_bienes_de_uso = self.env.ref("l10n_ar_ux.tag_compra_bienes_de_uso", raise_if_not_found=False)
+        tag_compra_bienes = self.env.ref("l10n_ar_ux.tag_compra_bienes", raise_if_not_found=False)
+        tag_compra_servicios = self.env.ref("l10n_ar_ux.tag_prestaciones_de_ss", raise_if_not_found=False)
+        tag_compra_locaciones = self.env.ref("l10n_ar_ux.tag_locaciones", raise_if_not_found=False)
+
+        # if not tag_compra_bienes_de_uso:
+        #     # Fallback if tag doesn't exist
+        #     tag_compra_bienes_de_uso = self.env["account.account.tag"]
+
+        # Conceptos en crédito fiscal
+        # 1. Compra de Bienes (excepto Bienes de Uso)
+        # 2. Locaciones
+        # 3. Prestaciones de Servicios
+        # 4. Inversiones de Bienes de Uso
+        conceptos = {
+            "1": tag_compra_bienes.id,
+            "2": tag_compra_locaciones.id,
+            "3": tag_compra_servicios.id,
+            "4": tag_compra_bienes_de_uso.id,
+        }
+
+        # Aliquot codes mapping
+        aliquot_codes_list = [
+            (0, [""]),
+            (10.5, ["4"]),
+            (21, ["5"]),
+            (27, ["6"]),
+            (5, ["8"]),
+            (2.5, ["9"]),
+        ]
+        # Base domain for account move lines
+        domain_base = [
+            ("company_id", "=", company.id),
+            ("display_type", "=", "product"),
+        ]
+
+        # Add date filters
+        if options.get("date", {}).get("date_from"):
+            domain_base.append(("date", ">=", options["date"]["date_from"]))
+        if options.get("date", {}).get("date_to"):
+            domain_base.append(("date", "<=", options["date"]["date_to"]))
+
+        lines_data = []
+
+        for move_type in ["in_invoice", "in_refund"]:
+            domain_move = domain_base + [("move_type", "=", move_type), ("move_id.state", "=", "posted")]
+
+            for concepto, tag in conceptos.items():
+                if tag == company.l10n_ar_iva_simple_default_tag.id:
+                    # Default tag: include accounts with this tag or no tag set
+                    domain_concepto = domain_move + [
+                        "|",
+                        ("account_id.tag_ids", "in", [tag]),
+                        ("account_id.tag_ids", "=", False),
+                    ]
+                else:
+                    domain_concepto = domain_move + [("account_id.tag_ids", "in", tag)]
+
+                for aliquot, aliquot_codes in aliquot_codes_list:
+                    domain_final = domain_concepto + [
+                        ("tax_ids.tax_group_id.l10n_ar_vat_afip_code", "in", aliquot_codes)
+                    ]
+                    lines = self.env["account.move.line"].search(domain_final)
+                    if not lines:
+                        continue
+
+                    monto_neto_gravado = sum(lines.mapped("balance"))
+                    credito_fiscal_facturado = float_round(monto_neto_gravado * aliquot / 100, precision_digits=2)
+
+                    lines_data.append(
+                        {
+                            "concepto": concepto,
+                            "aliquot_codes": aliquot_codes,
+                            "monto_neto_gravado": monto_neto_gravado,
+                            "credito_fiscal_facturado": credito_fiscal_facturado,
+                            "credito_fiscal_computable": credito_fiscal_facturado,
+                        }
+                    )
+        return lines_data
+
+    def _format_credit_report_content(self, lines_data, is_restitucion=False):
+        """Format the report data into a CSV file content"""
+        output = io.StringIO()
+        writer = csv.writer(output, delimiter=";", quoting=csv.QUOTE_NONNUMERIC)
+        headers = [
+            "Concepto",
+            "Código Alícuota",
+            "Monto Neto Gravado",
+            "Crédito Fiscal Facturado",
+        ]
+
+        if not is_restitucion:
+            headers.append("Crédito Fiscal Computable")
+            writer.writerow(headers)
+
+            # Write data rows
+            for line in lines_data:
+                row = [
+                    line["concepto"],
+                    ",".join(line["aliquot_codes"]),
+                    f"{line['monto_neto_gravado']:.2f}".replace(".", ","),
+                    f"{line['credito_fiscal_facturado']:.2f}".replace(".", ","),
+                ]
+                if not is_restitucion:
+                    row.append(f"{line['credito_fiscal_computable']:.2f}".replace(".", ","))
                 writer.writerow(row)
 
         csv_content = output.getvalue()
