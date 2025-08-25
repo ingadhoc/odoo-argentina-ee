@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-11 15:06+0000\n"
+"POT-Creation-Date: 2025-08-25 04:11+0000\n"
 "PO-Revision-Date: 2023-12-11 12:04+0000\n"
 "Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
@@ -345,6 +345,16 @@ msgstr ""
 #, python-format
 msgid "Please configure an AFIP Certificate in order to continue"
 msgstr "Por favor configura un Certificado AFIP para continuar"
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/res_partner.py:0
+#, python-format
+msgid ""
+"Posiblemente este cliente sea un consorcio/fideicomiso. Por favor debe "
+"consultar directamente con el cliente sus datos y agregar manualmente la "
+"responsabilidad de AFIP en el Odoo"
+msgstr ""
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_partner_update_from_padron_wizard__state__selection

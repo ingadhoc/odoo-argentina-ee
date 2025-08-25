@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-02-02 12:59+0000\n"
+"POT-Creation-Date: 2025-08-25 03:56+0000\n"
 "PO-Revision-Date: 2024-03-15 18:38+0000\n"
 "Last-Translator: Camila Vives, 2024\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
@@ -64,6 +64,15 @@ msgstr ""
 #: code:addons/l10n_ar_account_tax_settlement/wizards/inflation_adjustment.py:0
 #, python-format
 msgid "Ajuste por inflación cuentas al inicio (%s * %.2f%%)"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_account_chart_template__algolia_search
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_account_journal__algolia_search
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_account_tax__algolia_search
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__algolia_search
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment_index__algolia_search
+msgid "Algolia Search"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
