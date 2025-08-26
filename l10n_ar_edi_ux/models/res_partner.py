@@ -133,7 +133,7 @@ class ResPartner(models.Model):
         errors = []
         values = {}
         try:
-            res = client.service.getPersona(
+            res = client.service.getPersona_v2(
                 sign=auth.get("Sign"), token=auth.get("Token"), cuitRepresentada=auth.get("Cuit"), idPersona=vat
             )
 
@@ -169,7 +169,7 @@ class ResPartner(models.Model):
         impuestos = [
             imp["idImpuesto"]
             for imp in data_mt.get("impuesto", []) + data_rg.get("impuesto", [])
-            if data.get("estadoClave") == "ACTIVO"
+            if data.get("estadoClave") == "ACTIVO" and imp.get("estadoImpuesto") == "AC"
         ]
 
         data_mt_actividades = data_mt.get("actividadMonotributista", []) or []
