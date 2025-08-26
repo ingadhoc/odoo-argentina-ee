@@ -8,12 +8,12 @@ from odoo.exceptions import UserError
 from odoo.tools.float_utils import float_round
 
 ALIQUOT_CODES_LIST = [
-    (0, ["0", "1", "2", "3"]),
-    (10.5, ["4"]),
-    (21, ["5"]),
-    (27, ["6"]),
-    (5, ["8"]),
-    (2.5, ["9"]),
+    (0, "3"),
+    (10.5, "4"),
+    (21, "5"),
+    (27, "6"),
+    (5, "8"),
+    (2.5, "9"),
 ]
 
 
@@ -135,14 +135,33 @@ class ReporteIvaSimpleCustomHandler(models.AbstractModel):
                 # TIPOS en débito fiscal
                 # 1. VENTA de cosas muebles, Obras, Locaciones y/o Prestaciones de Servicios
                 # 2. Venta de Bienes de Uso
-                tipos_de_operacion = ["1", "2"]
+                tipos_de_operacion = ["1", "2", "3"]
             else:
                 # refund - restitución débito fiscal
                 # 1 - Venta de Cosas Muebles, Obras, Locaciones, Bienes de Uso y/o Prestaciones de Servicios
-                tipos_de_operacion = ["1"]
+                tipos_de_operacion = ["1", "3"]
 
             for tipo_de_operacion in tipos_de_operacion:
                 # Operation type discrimination (only for débito fiscal)
+                if tipo_de_operacion == "3":
+                    domain_final = domain_activity + [
+                        ("tax_ids.tax_group_id.l10n_ar_vat_afip_code", "in", ["0", "1", "2"])
+                    ]
+                    lines = self.env["account.move.line"].search(domain_final)
+                    if lines:
+                        lines_data.append(
+                            {
+                                "activity_code": activity.code,
+                                "tipo_operacion": "3",
+                                "tipo_sujeto": "",
+                                "aliquot_code": "",
+                                "monto_neto_gravado": "",
+                                "debito_fiscal_facturado": "",
+                                "debito_fiscal_operacion_dacion_en_pago": "",
+                                "monto_neto_exento_o_no_gravado": abs(sum(lines.mapped("balance"))),
+                            }
+                        )
+                    break
                 if move_type == "out_invoice":
                     if tipo_de_operacion == "1":
                         # Exclude "Bienes de Uso"
@@ -181,7 +200,7 @@ class ReporteIvaSimpleCustomHandler(models.AbstractModel):
 
                     for aliquot, aliquot_code in ALIQUOT_CODES_LIST:
                         domain_final = domain_subject + [
-                            ("tax_ids.tax_group_id.l10n_ar_vat_afip_code", "in", aliquot_code)
+                            ("tax_ids.tax_group_id.l10n_ar_vat_afip_code", "=", aliquot_code)
                         ]
                         lines = self.env["account.move.line"].search(domain_final)
                         if not lines:
@@ -196,7 +215,7 @@ class ReporteIvaSimpleCustomHandler(models.AbstractModel):
                                 "activity_code": activity.code,
                                 "tipo_operacion": tipo_de_operacion,
                                 "tipo_sujeto": tipo_de_sujeto,
-                                "aliquot_code": aliquot_code[0] if len(aliquot_code) == 1 else "3",
+                                "aliquot_code": aliquot_code,
                                 "monto_neto_gravado": abs(monto_neto_gravado),
                                 "debito_fiscal_facturado": abs(impuesto),
                                 "debito_fiscal_operacion_dacion_en_pago": abs(impuesto),
@@ -213,15 +232,15 @@ class ReporteIvaSimpleCustomHandler(models.AbstractModel):
         headers = [
             "Actividad",
             "Tipo de Operación",
+            "Tipo de sujeto comprador",
             "Código de Alícuota",
             "Monto Neto Gravado",
             "Débito Fiscal Facturado" if not is_restitucion else "Debito Fiscal a Restituir",
-            "Débito Fiscal Operación Dación en Pago" if not is_restitucion else "",
+            "Débito Fiscal Operación Dación en Pago" if not is_restitucion else "Monto Neto Exento o No Gravado",
+            "Monto Neto Exento o No Gravado" if not is_restitucion else "",
         ]
 
         if lines_data:
-            if lines_data[0].get("tipo_sujeto"):
-                headers.insert(2, "Tipo de sujeto comprador")
             writer.writerow(headers)
 
             # Write data rows
@@ -229,14 +248,25 @@ class ReporteIvaSimpleCustomHandler(models.AbstractModel):
                 row = [
                     line["activity_code"],
                     line["tipo_operacion"],
+                    line["tipo_sujeto"],
                     line["aliquot_code"],
-                    f"{line['monto_neto_gravado']:.2f}".replace(".", ","),
-                    f"{line['debito_fiscal_facturado']:.2f}".replace(".", ","),
+                    f"{line['monto_neto_gravado']:.2f}".replace(".", ",")
+                    if not line.get("monto_neto_exento_o_no_gravado")
+                    else "",
+                    f"{line['debito_fiscal_facturado']:.2f}".replace(".", ",")
+                    if not line.get("monto_neto_exento_o_no_gravado")
+                    else "",
+                    f"{line['monto_neto_exento_o_no_gravado']:.2f}".replace(".", ",")
+                    if line.get("monto_neto_exento_o_no_gravado")
+                    else "",
                 ]
-                if lines_data[0].get("tipo_sujeto"):
-                    row.insert(2, line["tipo_sujeto"])
                 if not is_restitucion:
-                    row.insert(6, f"{line['debito_fiscal_operacion_dacion_en_pago']:.2f}".replace(".", ","))
+                    row.insert(
+                        6,
+                        f"{line['debito_fiscal_operacion_dacion_en_pago']:.2f}".replace(".", ",")
+                        if not line.get("monto_neto_exento_o_no_gravado")
+                        else "",
+                    )
                 writer.writerow(row)
 
         csv_content = output.getvalue()
@@ -247,7 +277,7 @@ class ReporteIvaSimpleCustomHandler(models.AbstractModel):
     def _generate_iva_credito_data(self, company, options, is_restitucion=False):
         def _append_lines_data(domain, concepto=False, company_iva_default_tag=False):
             for aliquot, aliquot_code in ALIQUOT_CODES_LIST:
-                domain_final = domain + [("tax_ids.tax_group_id.l10n_ar_vat_afip_code", "in", aliquot_code)]
+                domain_final = domain + [("tax_ids.tax_group_id.l10n_ar_vat_afip_code", "=", aliquot_code)]
                 if not company_iva_default_tag:
                     domain_final.append(("account_id.tag_ids", "=", False))
                 lines = self.env["account.move.line"].search(domain_final)
@@ -320,7 +350,7 @@ class ReporteIvaSimpleCustomHandler(models.AbstractModel):
         for line in lines_data:
             row = [
                 line["concepto"],
-                ",".join(line["aliquot_code"]) if len(line["aliquot_code"]) == 1 else "3",
+                ",".join(line["aliquot_code"]),
                 f"{line['monto_neto_gravado']:.2f}".replace(".", ","),
                 f"{line['credito_fiscal_facturado']:.2f}".replace(".", ","),
             ]
