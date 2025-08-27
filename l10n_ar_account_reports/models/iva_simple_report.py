@@ -327,7 +327,7 @@ class ReporteIvaSimpleCustomHandler(models.AbstractModel):
                     ("account_id.tag_ids", "=", False),
                 ]
             else:
-                domain_concepto = domain_move + [("account_id.tag_ids", "in", tag)]
+                domain_concepto = domain_move + [("account_id.tag_ids", "in", [tag])]
 
             _append_lines_data(domain=domain_concepto, concepto=concepto, company_iva_default_tag=True)
         return lines_data
@@ -350,7 +350,7 @@ class ReporteIvaSimpleCustomHandler(models.AbstractModel):
         for line in lines_data:
             row = [
                 line["concepto"],
-                ",".join(line["aliquot_code"]),
+                line["aliquot_code"],
                 f"{line['monto_neto_gravado']:.2f}".replace(".", ","),
                 f"{line['credito_fiscal_facturado']:.2f}".replace(".", ","),
             ]
