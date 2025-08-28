@@ -102,11 +102,7 @@ class ReporteIvaSimpleCustomHandler(models.AbstractModel):
         """Generate the IVA Débito y Restitución data"""
 
         # Get tag for "venta bienes de uso"
-        tag_venta_bienes_de_uso = self.env.ref("l10n_ar_ux.tag_venta_bienes_de_uso")
-
-        if not tag_venta_bienes_de_uso:
-            # Fallback if tag doesn't exist
-            tag_venta_bienes_de_uso = self.env["account.account.tag"]
+        tag_venta_bienes_de_uso = self.env.ref("l10n_ar_ux.tag_venta_bienes_de_uso") or self.env["account.account.tag"]
 
         # Responsibility type codes
         codes_ri = ["1"]
@@ -117,7 +113,7 @@ class ReporteIvaSimpleCustomHandler(models.AbstractModel):
             raise UserError("Debe establecer la actividad principal en la compañía para poder descargar el archivo.")
 
         activities = company.l10n_ar_afip_activity_id + self.env["account.account"].search(
-            [("l10n_ar_afip_activity_id", "!=", False)]
+            [("l10n_ar_afip_activity_id", "not in", [False, company.l10n_ar_afip_activity_id.id])]
         ).mapped("l10n_ar_afip_activity_id")
 
         lines_data = []
@@ -228,46 +224,42 @@ class ReporteIvaSimpleCustomHandler(models.AbstractModel):
     def _format_debit_report_content(self, lines_data, is_restitucion=False):
         """Format the report data into a CSV file content"""
         output = io.StringIO()
-        writer = csv.writer(output, delimiter=";", quoting=csv.QUOTE_NONNUMERIC)
         headers = [
             "Actividad",
-            "Tipo de Operación",
+            "Tipo de Operacion",
             "Tipo de sujeto comprador",
-            "Código de Alícuota",
+            "Código de Alicuota",
             "Monto Neto Gravado",
             "Débito Fiscal Facturado" if not is_restitucion else "Debito Fiscal a Restituir",
-            "Débito Fiscal Operación Dación en Pago" if not is_restitucion else "Monto Neto Exento o No Gravado",
-            "Monto Neto Exento o No Gravado" if not is_restitucion else "",
+            "Débito Fiscal Operación Dacion en Pago" if not is_restitucion else "Monto Neto Exento o No Gravado",
+            "Monto Neto Exento o No Gravado" if not is_restitucion else None,
         ]
+        csv.writer(output, delimiter=";", quoting=csv.QUOTE_STRINGS).writerow(headers)
 
-        if lines_data:
-            writer.writerow(headers)
-
-            # Write data rows
-            for line in lines_data:
-                row = [
-                    line["activity_code"],
-                    line["tipo_operacion"],
-                    line["tipo_sujeto"],
-                    line["aliquot_code"],
-                    f"{line['monto_neto_gravado']:.2f}".replace(".", ",")
+        for line in lines_data:
+            row = [
+                line["activity_code"],
+                line["tipo_operacion"],
+                line["tipo_sujeto"],
+                line["aliquot_code"],
+                f"{line['monto_neto_gravado']:.2f}".replace(".", ",")
+                if not line.get("monto_neto_exento_o_no_gravado")
+                else "",
+                f"{line['debito_fiscal_facturado']:.2f}".replace(".", ",")
+                if not line.get("monto_neto_exento_o_no_gravado")
+                else "",
+                f"{line['monto_neto_exento_o_no_gravado']:.2f}".replace(".", ",")
+                if line.get("monto_neto_exento_o_no_gravado")
+                else "",
+            ]
+            if not is_restitucion:
+                row.insert(
+                    6,
+                    f"{line['debito_fiscal_operacion_dacion_en_pago']:.2f}".replace(".", ",")
                     if not line.get("monto_neto_exento_o_no_gravado")
                     else "",
-                    f"{line['debito_fiscal_facturado']:.2f}".replace(".", ",")
-                    if not line.get("monto_neto_exento_o_no_gravado")
-                    else "",
-                    f"{line['monto_neto_exento_o_no_gravado']:.2f}".replace(".", ",")
-                    if line.get("monto_neto_exento_o_no_gravado")
-                    else "",
-                ]
-                if not is_restitucion:
-                    row.insert(
-                        6,
-                        f"{line['debito_fiscal_operacion_dacion_en_pago']:.2f}".replace(".", ",")
-                        if not line.get("monto_neto_exento_o_no_gravado")
-                        else "",
-                    )
-                writer.writerow(row)
+                )
+            csv.writer(output, delimiter=";", quoting=csv.QUOTE_NONE).writerow(row)
 
         csv_content = output.getvalue()
         output.close()
@@ -336,17 +328,15 @@ class ReporteIvaSimpleCustomHandler(models.AbstractModel):
     def _format_credit_report_content(self, lines_data, is_restitucion=False):
         """Format the report data into a CSV file content"""
         output = io.StringIO()
-        writer = csv.writer(output, delimiter=";", quoting=csv.QUOTE_NONNUMERIC)
         headers = [
             "Concepto",
-            "Código de Alícuota",
+            "Codigo de Alicuota",
             "Monto Neto Gravado",
-            "Crédito Fiscal Facturado",
+            "Credito Fiscal Facturado",
+            "Credito Fiscal Computable" if not is_restitucion else None,
         ]
-        if not is_restitucion:
-            headers.append("Crédito Fiscal Computable")
-        writer.writerow(headers)
-        # Write data rows
+        csv.writer(output, delimiter=";", quoting=csv.QUOTE_STRINGS).writerow(headers)
+
         for line in lines_data:
             row = [
                 line["concepto"],
@@ -356,24 +346,9 @@ class ReporteIvaSimpleCustomHandler(models.AbstractModel):
             ]
             if not is_restitucion:
                 row.append(f"{line['credito_fiscal_computable']:.2f}".replace(".", ","))
-            writer.writerow(row)
+            csv.writer(output, delimiter=";", quoting=csv.QUOTE_NONE).writerow(row)
 
         csv_content = output.getvalue()
         output.close()
 
         return csv_content.encode("utf-8")
-
-    def _dynamic_lines_generator(self, report, options, all_column_groups_expression_totals, warnings=None):
-        """Generate dynamic lines for the report view"""
-        lines = []
-
-        # Por ahora devolvemos lineas sin contenido
-        line = {
-            "id": report._get_generic_line_id(None, None, markup="placeholder"),
-            "name": _("Reporte IVA Simple"),
-            "level": 1,
-            "columns": [{"name": ""} for _ in options["columns"]],
-        }
-        lines.append((0, line))
-
-        return lines
