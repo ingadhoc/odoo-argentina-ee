@@ -3,16 +3,16 @@
 # 	* account_tax_settlement
 # 
 # Translators:
-# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024
 # Rocio Vega, 2025
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-03 06:40+0000\n"
+"POT-Creation-Date: 2025-08-28 19:28+0000\n"
 "PO-Revision-Date: 2024-12-28 10:17+0000\n"
-"Last-Translator: Rocio Vega, 2025\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -132,6 +132,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_tax_settlement.field_account_journal__settlement_account_tag_ids
 msgid "Etiquetas para liquidación"
 msgstr ""
+
+#. module: account_tax_settlement
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard_line__txt_filename
+msgid "Filename"
+msgstr "Nombre de archivo TXT"
 
 #. module: account_tax_settlement
 #: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard__line_ids
@@ -429,11 +434,6 @@ msgstr "A liquidar"
 #: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard_line__txt_binary
 msgid "Txt Binary"
 msgstr "Txt Binario"
-
-#. module: account_tax_settlement
-#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard_line__txt_filename
-msgid "Txt Filename"
-msgstr "Nombre de archivo TXT"
 
 #. module: account_tax_settlement
 #: model_terms:ir.ui.view,arch_db:account_tax_settlement.view_account_move_line_filter
