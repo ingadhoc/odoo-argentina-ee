@@ -1,7 +1,6 @@
-from odoo import models, api, Command
+from odoo import _, models, api, Command
 # from odoo.tools.misc import formatLang
 from odoo.exceptions import UserError
-
 
 class BankRecWidget(models.Model):
     _inherit = "bank.rec.widget"
@@ -56,4 +55,18 @@ class BankRecWidget(models.Model):
 
                     self.line_ids = line_ids_commands
                 return
+<<<<<<< d89eba0357a9b379002e061286bf9e2b7b1c9b14
         super()._lines_recompute_exchange_diff()
+||||||| 5027c49c8d670f114fb1df4ea500e6adf738ab80
+        super()._lines_widget_recompute_exchange_diff()
+=======
+        super()._lines_widget_recompute_exchange_diff()
+
+    def button_validate(self, async_action=False):
+        if self.form_account_id and self.form_account_id.analytic_distribution_required and not self.analytic_distribution:
+            raise UserError(
+                'No puede validar la conciliación porque la cuenta transitoria "%s" requiere una cuenta analítica'
+                ' y no se ha configurado ninguna. Elimine la linea manualmente para volver a seleccionar la cuenta con su analitica' % self.form_account_id.name
+            )
+        super().button_validate(async_action=async_action)
+>>>>>>> eae9a090af19c43ec3d547fd6dae875944b1f82c
