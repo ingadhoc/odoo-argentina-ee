@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-25 04:09+0000\n"
+"POT-Creation-Date: 2025-09-01 03:50+0000\n"
 "PO-Revision-Date: 2023-12-06 14:26+0000\n"
 "Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
@@ -47,6 +47,22 @@ msgid "Account reconciliation wizard"
 msgstr "Asistente de conciliación bancaria"
 
 #. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_auto_reconcile_wizard__algolia_search
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_change_lock_date__algolia_search
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_followup_report__algolia_search
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_journal__algolia_search
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_move__algolia_search
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_move_line__algolia_search
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_partner_ledger_report_handler__algolia_search
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_reconcile_wizard__algolia_search
+#: model:ir.model.fields,field_description:account_accountant_ux.field_bank_rec_widget__algolia_search
+#: model:ir.model.fields,field_description:account_accountant_ux.field_res_company__algolia_search
+#: model:ir.model.fields,field_description:account_accountant_ux.field_res_config_settings__algolia_search
+#: model:ir.model.fields,field_description:account_accountant_ux.field_res_partner__algolia_search
+msgid "Algolia Search"
+msgstr "Busqueda Avanzada"
+
+#. module: account_accountant_ux
 #: model:ir.model.fields.selection,name:account_accountant_ux.selection__account_auto_reconcile_wizard__search_mode__all_from_partner
 msgid "All balances from one partner"
 msgstr ""
@@ -71,8 +87,7 @@ msgstr "Conciliación Bancaria"
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_bank_rec_widget
 msgid "Bank reconciliation widget for a single statement line"
-msgstr ""
-"Widget de conciliación bancaria para una sola línea del extracto bancario"
+msgstr "Widget de conciliación bancaria para una sola línea del extracto"
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_config_settings_view_form

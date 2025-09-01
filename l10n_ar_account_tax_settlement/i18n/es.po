@@ -3,16 +3,16 @@
 # 	* l10n_ar_account_tax_settlement
 # 
 # Translators:
-# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024
 # Camila Vives, 2024
+# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-08-25 03:56+0000\n"
+"POT-Creation-Date: 2025-09-01 03:56+0000\n"
 "PO-Revision-Date: 2024-03-15 18:38+0000\n"
-"Last-Translator: Camila Vives, 2024\n"
+"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -69,10 +69,18 @@ msgstr ""
 #. module: l10n_ar_account_tax_settlement
 #: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_account_chart_template__algolia_search
 #: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_account_journal__algolia_search
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_account_move__algolia_search
 #: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_account_tax__algolia_search
 #: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__algolia_search
 #: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment_index__algolia_search
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_l10n_ar_tax_report_handler__algolia_search
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_res_download_files_wizard_line__algolia_search
 msgid "Algolia Search"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model,name:l10n_ar_account_tax_settlement.model_l10n_ar_tax_report_handler
+msgid "Argentinian Report Custom Handler"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
@@ -115,6 +123,13 @@ msgstr "Compañía"
 #: model_terms:ir.ui.view,arch_db:l10n_ar_account_tax_settlement.inflation_adjustment_form
 msgid "Confirm"
 msgstr "Confirmar"
+
+#. module: l10n_ar_account_tax_settlement
+#. odoo-python
+#: code:addons/l10n_ar_account_tax_settlement/models/l10n_ar_vat_book.py:0
+#, python-format
+msgid "Corregir comprobantes"
+msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
 #: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__create_uid
@@ -165,6 +180,11 @@ msgstr ""
 msgid ""
 "Debe setear la información de \"artículo/inciso\" en las alícutoas de "
 "contacto %s"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.actions.server,name:l10n_ar_account_tax_settlement.action_download_vat_differences_csv
+msgid "Descargar Diferencias IVA (CSV)"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
@@ -236,14 +256,43 @@ msgid "End Index"
 msgstr "Índice final"
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
+#: code:addons/l10n_ar_account_tax_settlement/models/account_move.py:0
+#, python-format
+msgid "Error"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#. odoo-python
+#: code:addons/l10n_ar_account_tax_settlement/models/account_move.py:0
+#, python-format
+msgid "Error al generar el CSV: %s"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
 #: model_terms:ir.actions.act_window,help:l10n_ar_account_tax_settlement.inflation_adjustment_index_action
 msgid "Estos son necesarios para generar el asitento de ajuste por inflación."
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#. odoo-python
+#: code:addons/l10n_ar_account_tax_settlement/models/l10n_ar_vat_book.py:0
+#, python-format
+msgid ""
+"Existen comprobantes con diferencias mayores a 0.5 centavos en el cálculo de"
+" IVA. Para más información, visite la siguiente documentación: "
+"https://www.adhoc.inc/knowledge/article/9963"
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
 #: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment_index__xml_id
 msgid "External ID"
 msgstr "ID Externo"
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_res_download_files_wizard_line__txt_filename
+msgid "Filename"
+msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
 #: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__open_cloure_entry
@@ -292,10 +341,22 @@ msgid "Inflation adjustment"
 msgstr "Ajuste por Inflación"
 
 #. module: l10n_ar_account_tax_settlement
+#. odoo-python
+#: code:addons/l10n_ar_account_tax_settlement/models/account_move.py:0
+#, python-format
+msgid "Información"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
 #: model:ir.model,name:l10n_ar_account_tax_settlement.model_account_journal
 #: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment__journal_id
 msgid "Journal"
 msgstr "Diario"
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model,name:l10n_ar_account_tax_settlement.model_account_move
+msgid "Journal Entry"
+msgstr "Asiento contable"
 
 #. module: l10n_ar_account_tax_settlement
 #. odoo-python
@@ -406,6 +467,13 @@ msgid ""
 "No pudimos encontrar el comprobante original para %s (id %s). Verifique que "
 "en la nota de crédito \"%s\", el campo origen es el número de la factura "
 "original"
+msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#. odoo-python
+#: code:addons/l10n_ar_account_tax_settlement/models/account_move.py:0
+#, python-format
+msgid "No se encontraron diferencias de IVA para las facturas seleccionadas."
 msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
@@ -554,6 +622,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_inflation_adjustment_index__value
 msgid "Value"
 msgstr "Valor"
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model,name:l10n_ar_account_tax_settlement.model_res_download_files_wizard_line
+msgid "Wizard genérico para descargar archivos"
+msgstr ""
 
 #. module: l10n_ar_account_tax_settlement
 #. odoo-python
