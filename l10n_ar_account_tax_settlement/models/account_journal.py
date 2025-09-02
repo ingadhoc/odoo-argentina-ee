@@ -1341,11 +1341,9 @@ class AccountJournal(models.Model):
                 # Tipo de comprobante
                 #    Aquí vemos si se está pagando al menos una nota de crédito
                 #    si es así interpretamos que es corresponde a un CAR
-                matched_move_code_prefix = payment.to_pay_move_line_ids.move_id.l10n_latam_document_type_id.mapped(
-                    "doc_code_prefix"
-                )
+                matched_move_types = payment.reconciled_bill_ids.mapped("move_type")
                 is_car = False
-                if any(prefix[:3] == "NC-" for prefix in matched_move_code_prefix):
+                if "in_refund" in matched_move_types:
                     is_car = True
                     content += "CAR" + ","
                 else:
@@ -1362,7 +1360,7 @@ class AccountJournal(models.Model):
                 content += payment.partner_id.l10n_ar_formatted_vat + ","
 
                 # Monto de operación
-                content += "%.2f" % (line.withholding_id.base_amount) + ","
+                content += "%.2f" % (abs(line.withholding_id.base_amount)) + ","
 
                 # Alícuota
                 content += str(alicuot) + ","
@@ -1372,14 +1370,19 @@ class AccountJournal(models.Model):
                     content += "CR" + ","
 
                     # Comprobante que dio origen a la nota de crédito
-
                     # pago -> grupo de pagos --> nc --> factura --> grupo de pagos --> pago (con retenc misiones)
-                    origin_invoice = payment.to_pay_move_line_ids.move_id.reversed_entry_id
-                    for pay in origin_invoice.invoice_payments_widget.get("content"):
-                        pay_id = pay["account_payment_id"]
-                        retenciones_pago_fact_original = (
-                            self.env["account.payment"].browse(pay_id).l10n_ar_withholding_line_ids
+                    origin_invoice = payment.reconciled_bill_ids.reversed_entry_id
+                    for pay in (
+                        self.env["account.payment"]
+                        .search(
+                            [
+                                ("partner_id", "=", origin_invoice.partner_id.id),
+                                ("date", ">=", origin_invoice.invoice_date),
+                            ]
                         )
+                        .filtered(lambda x: origin_invoice in x.reconciled_bill_ids)
+                    ):
+                        retenciones_pago_fact_original = pay.l10n_ar_withholding_line_ids
                         cant_ret = 0
                         for withholding in retenciones_pago_fact_original:
                             line_withholding_tax = line.withholding_id._get_withholding_tax()
