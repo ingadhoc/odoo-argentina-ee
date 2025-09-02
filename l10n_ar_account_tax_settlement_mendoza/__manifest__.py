@@ -1,6 +1,6 @@
 {
     "name": "Tax settlement Mendoza",
-    "version": "17.0.1.0.0",
+    "version": "18.0.1.0.0",
     "category": "Accounting",
     "author": "ADHOC SA",
     "license": "LGPL-3",
@@ -15,7 +15,7 @@
         "views/account_payment_view.xml",
         "wizard/res_config_settings_views.xml",
     ],
-    "installable": False,
+    "installable": True,
     "auto_install": False,
     "application": False,
     "post_init_hook": "post_init_hook",
