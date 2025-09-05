@@ -15,7 +15,7 @@
     </record>
 
     <record id="view_afip_activity_tree" model="ir.ui.view">
-        <field name="name">afip.activity.tree</field>
+        <field name="name">afip.activity.list</field>
         <field name="model">afip.activity</field>
         <field name="inherit_id" ref="l10n_ar_ux.view_afip_activity_tree"/>
         <field name="arch" type="xml">
