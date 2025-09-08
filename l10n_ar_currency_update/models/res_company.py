@@ -63,6 +63,40 @@ class ResCompany(models.Model):
             and relativedelta(today, record.l10n_ar_last_currency_sync_date).months >= 1
         ).update_currency_rates()
 
+    def _find_company_with_ws_connection(self, today, arca_ws):
+        """Find a company with a valid ARCA certificate and that have a valid connection to the given webservice.
+
+        This way all the AR companies can sync the rate if at least one have a valid certificate and webservice
+        connection.
+
+        Args:
+            today (date): The current date.
+            arca_ws (str): The web service to use
+        Returns:
+            res.company or False: A company with a valid certificate (and webservice if given)
+            or False if none found.
+        """
+        def get_connection(company, arca_ws):
+            connection = False
+            try:
+                connection = company._l10n_ar_get_connection(arca_ws)
+            except UserError:
+                pass
+            return connection
+
+        company = self.env.company
+        connection = get_connection(company, arca_ws)
+        if not connection:
+            companies_w_valid_cert = self.env['res.company'].search(
+                [('l10n_ar_afip_ws_crt', '!=', False), ('l10n_ar_crt_exp_date', '>', today)])
+
+            for other_company in companies_w_valid_cert - company:
+                connection = get_connection(other_company, arca_ws)
+                if connection:
+                    return connection.company_id
+
+        return False
+
     def _parse_afip_data(self, available_currencies):
         """This method is used to update the currency rates using AFIP provider. Rates are given against AR"""
         res = {}
@@ -73,22 +107,15 @@ class ResCompany(models.Model):
             res[currency_ars.name] = (1.0, today)
         available_currencies = available_currencies.filtered("l10n_ar_afip_code") - currency_ars
         rate_date = today
+        ws_company = self._find_company_with_ws_connection(today, "wsfe")
+        if not ws_company:
+            _logger.log(25, "No pudimos encontrar compañía con certificado/conexion a AFIP validos")
+            return False
+
+        env_company = self.env.company
+        self.env.company = ws_company
 
         for currency in available_currencies:
-            valid_certificate = (
-                self.env["certificate.certificate"]
-                .search([("active", "=", True), ("date_end", ">=", today)])
-                .filtered(lambda c: c.country_code == "AR")
-            )
-            if self.env.company.l10n_ar_afip_ws_crt_id in valid_certificate:
-                company = self.env.company
-            else:
-                company = valid_certificate[:1].company_id if valid_certificate else False
-            if not company:
-                _logger.log(25, "No pudimos encontrar compañía con certificados de AFIP validos")
-                return False
-            env_company = self.env.company
-            self.env.company = company
             try:
                 # Obtain the currencies to be updated
                 _logger.log(25, "Connecting to AFIP to update the currency rates for %s", currency.name)
@@ -104,15 +131,14 @@ class ResCompany(models.Model):
                         "Returned Afip rate is not today's rate (%s, %s vs %s, %s)"
                         % (afip_date.strftime("%A"), afip_date, rate_date.strftime("%A"), rate_date)
                     )
-                self.env.company = env_company
             except Exception as e:
-                self.env.company = env_company
                 _logger.log(25, "Could not get rate for currency %s. This is what we get:\n%s", currency.name, e)
-            else:
-                for company in self.filtered(lambda x: x.currency_provider == "afip"):
-                    company.l10n_ar_last_currency_sync_date = fields.Date.context_today(
-                        self.with_context(tz="America/Argentina/Buenos_Aires")
-                    )
+
+            self.env.company = env_company
+            if res:
+                self.l10n_ar_last_currency_sync_date = fields.Date.context_today(
+                    self.with_context(tz="America/Argentina/Buenos_Aires"))
+
         return res or False
 
     def _generate_currency_rates(self, parsed_data):
