@@ -28,7 +28,7 @@ Especificación de archivos:
 
 * SICORE: Algunoas links de neteres:
 
- * Detalle con captura de lo que solicita y lo que tenemos implementado: http://www.planillasutiles.com.ar/2014/09/hoja-de-calculos-para-importar-las.html
+ * Detalle con captura de lo que solicita y lo que tenemos implementado: http://www.planillasutiles.com.ar/2014/09/hoja-de-calculos-para-importar-las.html . En /data/relaciones-codigos-sicore.xlsx dejamos archivo relaciones-codigos-sicore.xlsx con combinaciones entre código de impuesto, código régimen y código condición.
 
 * SIFERE: https://drive.google.com/open?id=0B3trzV0e2WzvcG5kOVI5cTdjQm1lSWtpcFhzVFlWSlctQ0Nv y mas data aca http://www.ca.gov.ar/faqs/preguntas-generales/sifere/sifere-faq/como-armar-los-archivos-en-formato-txt-para-cargar-los-conceptos-de-retenciones-percepciones-comunes-y-aduaneras-y-recaudaciones-bancarias-en-el-aplicativo-sifere. Mas de sifere tmb acá https://drive.google.com/open?id=0B3trzV0e2WzvUjB1MnhXT0VteFE
 
