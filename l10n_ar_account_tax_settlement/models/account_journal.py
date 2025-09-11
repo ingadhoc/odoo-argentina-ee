@@ -1250,6 +1250,10 @@ class AccountJournal(models.Model):
                 content +=  '%03d' % int(line.tax_line_id.codigo_regimen) # (ver account tax) DUDA cómo le aplico el código de régimen a las facturas viejas
                 if line.tax_line_id.codigo_regimen == '602':
                     codcond = '13' if line.tax_line_id.amount == 3 else '14'
+                # Si el código de régimen es 493 entonces el código de condición debe ser '00'.
+                # Más información en archivo l10n_ar_account_tax_settlement/data/relaciones-codigos-sicore.xlsx
+                elif line.tax_line_id.codigo_regimen == '493':
+                    codcond = '00'
 
             # Codigo de Operacion            [ 1]
             content += codop  # TODO: ???? DUDA: SERÍA PARA VER SI ES RETENCION O PERCEPCION
