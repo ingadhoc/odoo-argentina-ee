@@ -41,9 +41,7 @@ class AccountJournal(models.Model):
             line_vals = []
 
             for row in data_list:
-                sequence_number = int(row["Número Desde"])
-                sequence_prefix = int(row["Punto de Venta"])
-                invoice_number = f"{sequence_prefix:05d}-{sequence_number:08d}"
+                invoice_number = row["Número"]
                 date_invoice = pd.to_datetime(row["Fecha"], dayfirst=True).date()
                 partner_vat = str(int(row["Nro. Doc. Emisor"]))
                 partner_identification_type = row["Tipo Doc. Emisor"]
@@ -52,12 +50,21 @@ class AccountJournal(models.Model):
                 currency_rate = row["Tipo Cambio"]
                 amount_total = float(row["Imp. Total"])
                 document_type = row["Tipo"]
-                valor_neto_gravado = row["Imp. Neto Gravado"]
-                valor_no_gravado = row["Imp. Neto No Gravado"]
-                valor_exento = row["Imp. Op. Exentas"]
+                valor_no_gravado = row["Neto No Gravado"]
+                valor_exento = row["Op. Exentas"]
                 otros_tributos = row["Otros Tributos"]
-                valor_IVA = row["IVA"]
                 cae = row["Cód. Autorización"]
+                neto_grav_iva_0 = row["Neto Grav. IVA 0%"]
+                iva_2_5 = row["IVA 2,5%"]
+                neto_grav_iva_2_5 = row["Neto Grav. IVA 2,5%"]
+                iva_5 = row["IVA 5%"]
+                neto_grav_iva_5 = row["Neto Grav. IVA 5%"]
+                iva_10_5 = row["IVA 10,5%"]
+                neto_grav_iva_10_5 = row["Neto Grav. IVA 10,5%"]
+                iva_21 = row["IVA 21%"]
+                neto_grav_iva_21 = row["Neto Grav. IVA 21%"]
+                iva_27 = row["IVA 27%"]
+                neto_grav_iva_27 = row["Neto Grav. IVA 27%"]
 
                 dict_data = (
                     0,
@@ -72,11 +79,20 @@ class AccountJournal(models.Model):
                         "currency_rate": currency_rate,
                         "amount_total": amount_total,
                         "document_type": document_type,
-                        "neto_gravado": valor_neto_gravado,
                         "no_gravado": valor_no_gravado,
                         "exento": valor_exento,
                         "otros_tributos": otros_tributos,
-                        "iva": valor_IVA,
+                        "neto_grav_iva_0": neto_grav_iva_0,
+                        "iva_2_5": iva_2_5,
+                        "neto_grav_iva_2_5": neto_grav_iva_2_5,
+                        "iva_5": iva_5,
+                        "neto_grav_iva_5": neto_grav_iva_5,
+                        "iva_10_5": iva_10_5,
+                        "neto_grav_iva_10_5": neto_grav_iva_10_5,
+                        "iva_21": iva_21,
+                        "neto_grav_iva_21": neto_grav_iva_21,
+                        "iva_27": iva_27,
+                        "neto_grav_iva_27": neto_grav_iva_27,
                         "cae": cae,
                     },
                 )
