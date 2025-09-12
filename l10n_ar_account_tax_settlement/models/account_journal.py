@@ -1241,6 +1241,10 @@ class AccountJournal(models.Model):
                     content += "%03d" % int(tax.l10n_ar_code) if tax.l10n_ar_code else "499"
                     if tax.l10n_ar_code == "602":
                         codcond = "13" if tax.amount == 3 else "14"
+                    # Si el código de régimen es 214 entonces el código de condición debe ser '00'.
+                    # Más información en archivo l10n_ar_account_tax_settlement/data/relaciones-codigos-sicore.csv
+                    if line.l10n_ar_code == "214":
+                        codcond = "00"
             else:
                 # Percepción de IVA
                 content += "0767"
