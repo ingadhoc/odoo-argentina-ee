@@ -1053,6 +1053,10 @@ class AccountJournal(models.Model):
             # digitos y ademas sacamos estos datos del pago y no del nro de doc
             # del payment group
             if payment:
+                if float_round(line.balance, precision_digits=2) == 0.0:
+                    # si el monto de la retencion es 0.0 no lo incluimos en el txt
+                    continue
+
                 # el numero de la retencion
                 pos, number = get_pos_and_number(line.withholding_id.name)
                 content += f"{pos:>04s}"
