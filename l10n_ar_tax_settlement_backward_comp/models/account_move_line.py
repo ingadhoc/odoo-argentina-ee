@@ -1,5 +1,4 @@
-from odoo import _, fields, models
-from odoo.exceptions import RedirectWarning
+from odoo import models
 
 
 class AccountMoveLine(models.Model):
@@ -23,23 +22,4 @@ class AccountMoveLine(models.Model):
             and (x.to_date >= date if x.to_date else not x.from_date)
         ):
             return partner_tax.tax_id
-        tax_type_str = "sale perception" if is_perception else "purchase withholding"
-        raise RedirectWarning(
-            message=_(
-                "The partner '%(partner_name)s' does not have '%(state_name)s %(tax_type_str)s' tax set for date %(line_date)s. [Journal entry: %(journal_entry_name)s]",
-                partner_name=self.partner_id.name,
-                tax_type_str=tax_type_str,
-                journal_entry_name=self.move_id.name,
-                state_name=self.tax_line_id.l10n_ar_state_id.name,
-                line_date=fields.Date.to_string(date),
-            ),
-            action={
-                "type": "ir.actions.act_window",
-                "res_model": "res.partner",
-                "views": [(False, "form")],
-                "res_id": self.partner_id.id,
-                "name": _("Partner"),
-                "view_mode": "form",
-            },
-            button_text=_("Edit Partner"),
-        )
+        return self.tax_line_id
