@@ -10,6 +10,7 @@
     "depends": [
         "l10n_ar_ux",
         "l10n_ar_edi",
+        "l10n_ar_currency_update",
         "account_accountant",
     ],
     "data": [
