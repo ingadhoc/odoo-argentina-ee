@@ -1,6 +1,6 @@
 {
     "name": "Tax Settlement",
-    "version": "18.0.1.0.0",
+    "version": "18.0.1.1.0",
     "category": "Accounting",
     "sequence": 14,
     "summary": "",
@@ -15,6 +15,7 @@
     "data": [
         "wizards/account_tax_settlement_wizard_view.xml",
         "wizards/download_files_wizard.xml",
+        "wizards/arba_warning_template.xml",
         "views/account_move_line_view.xml",
         "views/account_move_view.xml",
         "views/account_journal_view.xml",

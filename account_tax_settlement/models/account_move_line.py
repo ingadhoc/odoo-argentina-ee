@@ -34,9 +34,7 @@ class AccountMoveLine(models.Model):
         for rec in self:
             settlement_journal |= rec._get_tax_settlement_journal()
         if not settlement_journal:
-            raise ValidationError(
-                _("No encontramos diario de liquidación para los apuntes " "contables: %s") % self.ids
-            )
+            raise ValidationError(_("No encontramos diario de liquidación para los apuntes contables: %s") % self.ids)
         elif len(settlement_journal) != 1:
             raise ValidationError(
                 _(
@@ -147,5 +145,7 @@ class AccountMoveLine(models.Model):
         """
         if not journal:
             journal = self.get_tax_settlement_journal()
-        res = self.env["res.download_files_wizard"].action_get_files(journal.get_tax_settlement_files_values(self))
+        res = self.env["res.download_files_wizard"].action_get_files(
+            journal.get_tax_settlement_files_values(self), journal.settlement_tax
+        )
         return res
