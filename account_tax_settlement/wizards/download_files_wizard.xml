@@ -17,6 +17,8 @@
         <field name="type">form</field>
         <field name="arch" type="xml">
             <form string="Download Files">
+                <field name="arba_warning_html" nolabel="1"/>
+
                 <field name="line_ids">
                     <list>
                         <!-- en v11 no funciona mas el boton de download, por ahora hacemos que tenga que abrir el pop up. TODO mejorar (una alternativa seria widget "many2many_binary" pero requiere m2m a attachments aparentemente -->

@@ -20,9 +20,24 @@ class DownloadFilesWizard(models.TransientModel):
         readonly=True,
     )
 
+    show_arba_warning = fields.Boolean(string="Show ARBA Warning", default=False)
+
+    arba_warning_html = fields.Html(string="ARBA Warning", compute="_compute_arba_warning_html")
+
+    @api.depends("show_arba_warning")
+    def _compute_arba_warning_html(self):
+        for wizard in self:
+            if wizard.show_arba_warning:
+                wizard.arba_warning_html = self.env["ir.qweb"]._render(
+                    "account_tax_settlement.arba_warning_template", {}
+                )
+            else:
+                wizard.arba_warning_html = False
+
     @api.model
-    def action_get_files(self, files_values):
+    def action_get_files(self, files_values, settlement_tax=None):
         # transformamos a binary y agregamos formato para campos o2m
+        has_arba = settlement_tax and (settlement_tax == "iibb_aplicado" or settlement_tax == "iibb_aplicado_act_7")
 
         wizard = self.env["res.download_files_wizard"].create(
             {
@@ -38,6 +53,7 @@ class DownloadFilesWizard(models.TransientModel):
                     for x in files_values
                     if x["txt_content"]
                 ],
+                "show_arba_warning": has_arba,
             }
         )
 
