@@ -43,9 +43,6 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
             partners = self.get_partners()
             if not partners:
                 raise UserError(_("No se encontró ningún partner con CUIT para actualizar"))
-            elif len(partners) == 1:
-                res["state"] = "selection"
-                res["partner_id"] = partners[0].id
         return res
 
     @api.model
