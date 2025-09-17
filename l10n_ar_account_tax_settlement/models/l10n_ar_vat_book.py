@@ -3,6 +3,7 @@ from collections import namedtuple
 
 from odoo import _, models
 from odoo.exceptions import RedirectWarning
+from odoo.http import request
 from odoo.tools.float_utils import float_round
 
 
@@ -47,20 +48,26 @@ class ArgentinianReportCustomHandler(models.AbstractModel):
 
     def _vat_book_get_REGINFO_CV_ALICUOTAS(self, options, tax_type, invoices):
         invoices_domain = []
-        if error := self._check_invoices(invoices):
-            invoices_domain = [('id', 'in', [inv.invoice_id for inv in error])]
-            raise RedirectWarning(
-                _('Existen comprobantes con diferencias mayores a 0.5 centavos en el cálculo de IVA.'
-                ' Para más información, visite la siguiente documentación: https://www.adhoc.inc/knowledge/article/9963'),
-                {
-                    'type': 'ir.actions.act_window',
-                    'name': 'Invoices with differences',
-                    'res_model': 'account.move',
-                    'view_mode': 'list',
-                    'views': [(False, 'list'), (False, 'form')],
-                    'domain': invoices_domain,
-                },
-                _('Corregir comprobantes'),
-            )
+        error = self._check_invoices(invoices)
 
-        return super()._vat_book_get_REGINFO_CV_ALICUOTAS(options, tax_type, invoices)
+        # Download the file only id: 1) if there not error, 2) We a are saas support user with active dev mode
+        if not error or (self.env.user.has_group("saas_client.group_saas_support") and request.session.debug):
+            return super()._vat_book_get_REGINFO_CV_ALICUOTAS(options, tax_type, invoices)
+
+        invoices_domain = [("id", "in", [inv.invoice_id for inv in error])]
+        raise RedirectWarning(
+            _(
+                "Existen comprobantes con diferencias mayores a 0.5 centavos en el cálculo de IVA."
+                " ARCA no permitirá importar el archivo TXT hasta que se corrijan estos errores."
+                " Para más información, visite la siguiente documentación: https://www.adhoc.inc/knowledge/article/10682"
+            ),
+            {
+                "type": "ir.actions.act_window",
+                "name": "Facturas con diferencias",
+                "res_model": "account.move",
+                "view_mode": "list",
+                "views": [(False, "list"), (False, "form")],
+                "domain": invoices_domain,
+            },
+            _("Corregir comprobantes"),
+        )
