@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-16 17:54+0000\n"
+"POT-Creation-Date: 2025-09-19 20:08+0000\n"
 "PO-Revision-Date: 2024-12-28 10:17+0000\n"
 "Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
@@ -35,6 +35,11 @@ msgstr "<span>Nuevo Pago</span>"
 #. module: account_tax_settlement
 #: model_terms:ir.ui.view,arch_db:account_tax_settlement.account_journal_dashboard_kanban_view_inherited
 msgid "<span>Saldo a pagar</span>"
+msgstr ""
+
+#. module: account_tax_settlement
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard__arba_warning_html
+msgid "ARBA Warning"
 msgstr ""
 
 #. module: account_tax_settlement
@@ -362,6 +367,11 @@ msgid "Settlement only allowed on journals with Tax Settlement enable"
 msgstr ""
 "La liquidación solo se permite en diarios con la liquidación de impuestos "
 "habilitada"
+
+#. module: account_tax_settlement
+#: model:ir.model.fields,field_description:account_tax_settlement.field_res_download_files_wizard__show_arba_warning
+msgid "Show ARBA Warning"
+msgstr ""
 
 #. module: account_tax_settlement
 #: model:ir.model.fields,help:account_tax_settlement.field_account_journal__settlement_tax
