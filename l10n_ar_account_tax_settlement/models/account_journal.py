@@ -752,7 +752,7 @@ class AccountJournal(models.Model):
                     and "D"
                     or "R"
                 )
-                content += line.l10n_latam_document_type_id.l10n_ar_letter
+                content += line.l10n_latam_document_type_id.l10n_ar_letter or ""
             # TODO el if-else de abajo es TEMPORAL, hubo un bug que hizo que algunos moves de pagos tengan el tipo
             # de documento incluido en l10n_latam_document_number lo cual hace que se obtenga un piedrazo acá.
             # Ejemplo: l10n_latam_document_number debe ser '0001-00000001' en lugar de 'OP-X 0001-00000001'
