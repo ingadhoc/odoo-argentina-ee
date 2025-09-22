@@ -48,6 +48,17 @@ class AccountMove(models.Model):
             return original_entry and original_entry[0] or res
         return res
 
+    def _check_vat_condition(self):
+        """Return the AFIP code of the VAT condition of the partner"""
+        self.ensure_one()
+        vat_condition = self.partner_id.l10n_ar_afip_responsibility_type_id.code
+        if not vat_condition:
+            raise UserError(
+                _(
+                    f"The partner {self.partner_id.name} does not have an AFIP Responsibility configured. Please set the AFIP Responsibility Type in the partner's configuration to validate the invoice."
+                )
+            )
+
     @api.model
     def wsfe_get_cae_request(self, client=None):
         res = super().wsfe_get_cae_request(client=client)
@@ -63,6 +74,12 @@ class AccountMove(models.Model):
                     }
                 )
         return res
+
+    def _l10n_ar_do_afip_ws_request_cae(self, client, auth, transport):
+        """Check if the partner has CondicionIVAReceptorId configured."""
+        for inv in self.filtered(lambda x: x.journal_id.l10n_ar_afip_ws and not x.l10n_ar_afip_auth_code):
+            inv._check_vat_condition()
+            super(AccountMove, inv)._l10n_ar_do_afip_ws_request_cae(client, auth, transport)
 
     def _post(self, soft=True):
         """Be able to validate electronic vendor bills that are type AFIP POS"""
