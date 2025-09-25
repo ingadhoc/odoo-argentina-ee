@@ -13,7 +13,7 @@
         "wizards/afip_import_wizard.xml",
         "views/account_move.xml",
     ],
-    "installable": True,
+    'installable': False,
     "auto_install": False,
     "application": False,
 }

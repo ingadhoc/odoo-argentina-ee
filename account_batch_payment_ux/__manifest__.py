@@ -32,7 +32,7 @@
     ],
     "data": ["views/account_batch_payment.xml", "views/account_payment_views.xml"],
     "demo": [],
-    "installable": True,
+    'installable': False,
     "auto_install": True,
     "application": False,
 }
