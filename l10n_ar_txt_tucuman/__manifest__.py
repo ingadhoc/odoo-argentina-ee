@@ -15,7 +15,7 @@
         "demo/res_partner_demo.xml",
         "demo/account_journal_demo.xml",
     ],
-    'installable': False,
+    "installable": False,
     "auto_install": False,
     "application": False,
 }

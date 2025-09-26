@@ -18,7 +18,7 @@
     "data": [
         "wizards/account_payment_invoice_wizard_view.xml",
     ],
-    'installable': False,
+    "installable": False,
     "auto_install": True,
     "application": False,
     "demo": [],

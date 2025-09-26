@@ -43,7 +43,7 @@
         "views/account_journal_dashboard_view.xml",
     ],
     "demo": [],
-    'installable': False,
+    "installable": False,
     "auto_install": True,
     "application": False,
 }

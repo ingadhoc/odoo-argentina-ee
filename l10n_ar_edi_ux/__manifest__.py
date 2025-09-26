@@ -23,7 +23,7 @@
     "demo": [
         "demo/res_partner_demo.xml",
     ],
-    'installable': False,
+    "installable": False,
     "auto_install": True,
     "application": False,
     "post_init_hook": "post_init_hook",

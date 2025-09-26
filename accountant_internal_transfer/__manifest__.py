@@ -35,7 +35,7 @@
         "data/accountant_data.xml",
     ],
     "demo": [],
-    'installable': False,
+    "installable": False,
     "auto_install": True,
     "application": False,
 }
