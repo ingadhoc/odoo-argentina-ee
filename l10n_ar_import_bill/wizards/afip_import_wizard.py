@@ -177,7 +177,7 @@ class AfipImportWizard(models.TransientModel):
                 invoice_taxes.action_update_tax()
 
             # Confirm the invoice only if the total matches line.amount_total
-            if abs(move.amount_total - line.amount_total) <= 0.10:
+            if abs(move.amount_total - line.amount_total) <= 0.10 and line.amount_total > 0:
                 move.action_post()
 
             new_moves += move

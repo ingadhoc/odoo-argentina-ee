@@ -36,68 +36,103 @@ class AccountJournal(models.Model):
             df.columns = df.iloc[0]
             df = df[1:].reset_index(drop=True)
 
-            data_list = df.to_dict(orient="records")
+            # Optimización: Convertir todas las fechas de una vez usando vectorización de pandas
+            df["Fecha"] = pd.to_datetime(df["Fecha"], dayfirst=True).dt.date
 
-            line_vals = []
+            # Optimización: Convertir VAT a string de una vez
+            df["Nro. Doc. Emisor"] = df["Nro. Doc. Emisor"].astype(int).astype(str)
 
-            for row in data_list:
-                invoice_number = row["Número"]
-                date_invoice = pd.to_datetime(row["Fecha"], dayfirst=True).date()
-                partner_vat = str(int(row["Nro. Doc. Emisor"]))
-                partner_identification_type = row["Tipo Doc. Emisor"]
-                partner_name = row["Denominación Emisor"]
-                currency = row["Moneda"]
-                currency_rate = row["Tipo Cambio"]
-                amount_total = float(row["Imp. Total"])
-                document_type = row["Tipo"]
-                valor_no_gravado = row["Neto No Gravado"]
-                valor_exento = row["Op. Exentas"]
-                otros_tributos = row["Otros Tributos"]
-                cae = row["Cód. Autorización"]
-                neto_grav_iva_0 = row["Neto Grav. IVA 0%"]
-                iva_2_5 = row["IVA 2,5%"]
-                neto_grav_iva_2_5 = row["Neto Grav. IVA 2,5%"]
-                iva_5 = row["IVA 5%"]
-                neto_grav_iva_5 = row["Neto Grav. IVA 5%"]
-                iva_10_5 = row["IVA 10,5%"]
-                neto_grav_iva_10_5 = row["Neto Grav. IVA 10,5%"]
-                iva_21 = row["IVA 21%"]
-                neto_grav_iva_21 = row["Neto Grav. IVA 21%"]
-                iva_27 = row["IVA 27%"]
-                neto_grav_iva_27 = row["Neto Grav. IVA 27%"]
+            # Optimización: Generar número de factura usando vectorización
+            df["Punto de Venta"] = df["Punto de Venta"].astype(int)
+            df["Número Desde"] = df["Número Desde"].astype(int)
+            df["invoice_number"] = (
+                df["Punto de Venta"].astype(str).str.zfill(5) + "-" + df["Número Desde"].astype(str).str.zfill(8)
+            )
 
-                dict_data = (
-                    0,
-                    0,
-                    {
-                        "invoice_number": invoice_number,
-                        "date_invoice": date_invoice,
-                        "partner_vat": partner_vat,
-                        "partner_identification_type": partner_identification_type,
-                        "partner_name": partner_name,
-                        "currency": currency,
-                        "currency_rate": currency_rate,
-                        "amount_total": amount_total,
-                        "document_type": document_type,
-                        "no_gravado": valor_no_gravado,
-                        "exento": valor_exento,
-                        "otros_tributos": otros_tributos,
-                        "neto_grav_iva_0": neto_grav_iva_0,
-                        "iva_2_5": iva_2_5,
-                        "neto_grav_iva_2_5": neto_grav_iva_2_5,
-                        "iva_5": iva_5,
-                        "neto_grav_iva_5": neto_grav_iva_5,
-                        "iva_10_5": iva_10_5,
-                        "neto_grav_iva_10_5": neto_grav_iva_10_5,
-                        "iva_21": iva_21,
-                        "neto_grav_iva_21": neto_grav_iva_21,
-                        "iva_27": iva_27,
-                        "neto_grav_iva_27": neto_grav_iva_27,
-                        "cae": cae,
-                    },
-                )
+            # Optimización: Convertir columnas numéricas de una vez
+            numeric_columns = [
+                "Imp. Total",
+                "Tipo Cambio",
+                "Neto No Gravado",
+                "Op. Exentas",
+                "Otros Tributos",
+                "Neto Grav. IVA 0%",
+                "IVA 2,5%",
+                "Neto Grav. IVA 2,5%",
+                "IVA 5%",
+                "Neto Grav. IVA 5%",
+                "IVA 10,5%",
+                "Neto Grav. IVA 10,5%",
+                "IVA 21%",
+                "Neto Grav. IVA 21%",
+                "IVA 27%",
+                "Neto Grav. IVA 27%",
+            ]
 
-                line_vals.append(dict_data)
+            existing_numeric_cols = [col for col in numeric_columns if col in df.columns]
+            for col in existing_numeric_cols:
+                df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0.0)
+
+            # Optimización: Renombrar columnas directamente en el DataFrame
+            df = df.rename(
+                columns={
+                    "Fecha": "date_invoice",
+                    "Nro. Doc. Emisor": "partner_vat",
+                    "Tipo Doc. Emisor": "partner_identification_type",
+                    "Denominación Emisor": "partner_name",
+                    "Moneda": "currency",
+                    "Tipo Cambio": "currency_rate",
+                    "Imp. Total": "amount_total",
+                    "Tipo": "document_type",
+                    "Neto No Gravado": "no_gravado",
+                    "Op. Exentas": "exento",
+                    "Otros Tributos": "otros_tributos",
+                    "Cód. Autorización": "cae",
+                    "Neto Grav. IVA 0%": "neto_grav_iva_0",
+                    "IVA 2,5%": "iva_2_5",
+                    "Neto Grav. IVA 2,5%": "neto_grav_iva_2_5",
+                    "IVA 5%": "iva_5",
+                    "Neto Grav. IVA 5%": "neto_grav_iva_5",
+                    "IVA 10,5%": "iva_10_5",
+                    "Neto Grav. IVA 10,5%": "neto_grav_iva_10_5",
+                    "IVA 21%": "iva_21",
+                    "Neto Grav. IVA 21%": "neto_grav_iva_21",
+                    "IVA 27%": "iva_27",
+                    "Neto Grav. IVA 27%": "neto_grav_iva_27",
+                }
+            )
+
+            # Optimización: Convertir directamente a lista de tuplas solo con campos válidos
+            valid_fields = [
+                "invoice_number",
+                "date_invoice",
+                "partner_vat",
+                "partner_identification_type",
+                "partner_name",
+                "currency",
+                "currency_rate",
+                "amount_total",
+                "document_type",
+                "no_gravado",
+                "exento",
+                "otros_tributos",
+                "cae",
+                "neto_grav_iva_0",
+                "iva_2_5",
+                "neto_grav_iva_2_5",
+                "iva_5",
+                "neto_grav_iva_5",
+                "iva_10_5",
+                "neto_grav_iva_10_5",
+                "iva_21",
+                "neto_grav_iva_21",
+                "iva_27",
+                "neto_grav_iva_27",
+            ]
+
+            # Filtrar solo las columnas que existen en el modelo
+            filtered_df = df[valid_fields]
+            line_vals = [(0, 0, row) for row in filtered_df.to_dict(orient="records")]
 
             wizard = self.env["afip.import.wizard"].create(
                 {
