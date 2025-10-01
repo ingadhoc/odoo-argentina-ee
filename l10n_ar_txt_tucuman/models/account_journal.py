@@ -1,4 +1,5 @@
 from odoo import _, fields, models
+from odoo.addons.l10n_ar_account_tax_settlement.models.account_journal import remove_accents_and_dieresis
 from odoo.exceptions import UserError
 
 
@@ -110,7 +111,8 @@ class AccountJournal(models.Model):
             # 8, BASE_CALCULO, longitud: 15,2
             content_datos += "%015.2f" % (line.tax_base_amount if is_perception else line.withholding_id.base_amount)
             # 9, PORCENTAJE/ALICUOTA, longitud: 6,3
-            content_datos += "%06.3f" % line.tax_line_id.amount
+            tax = line._get_settlement_tax()
+            content_datos += "%06.3f" % tax.amount
             # 10, MONTO_RET/PER, longitud: 15,2
             content_datos += "%015.2f" % abs(line.balance)
             content_datos += "\r\n"
@@ -140,7 +142,7 @@ class AccountJournal(models.Model):
             # 9, C. POSTAL, longitud: 8
             content_retper += "%8s" % line.partner_id.zip
             content_retper += "\r\n"
-        return content_retper
+        return remove_accents_and_dieresis(content_retper)
 
     def _iibb_tucuman_ncfact_txt_file(self, lines):
         """Devuelve contenido del archivo NCFACT.TXT Tucuman."""
