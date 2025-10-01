@@ -42,12 +42,14 @@ def get_pos_and_number(full_number):
     else:
         return re.sub("[^0-9]", "", args[0]), re.sub("[^0-9]", "", "".join(args[1:]))
 
+
 def remove_accents_and_dieresis(input_str):
     """Suboptimal-but-better-than-nothing way to replace accented or dieresis-containing
     latin letters by an ASCII equivalent."""
     input_str = ustr(input_str)
     nkfd_form = unicodedata.normalize("NFKD", input_str)
     return "".join([c for c in nkfd_form if not unicodedata.combining(c)])
+
 
 class AccountJournal(models.Model):
     _inherit = "account.journal"
