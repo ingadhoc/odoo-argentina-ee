@@ -1,6 +1,7 @@
 import re
 
 from odoo import _, fields, models
+from odoo.addons.l10n_ar_account_tax_settlement.models.account_journal import remove_accents_and_dieresis
 from odoo.exceptions import RedirectWarning, UserError
 
 
@@ -93,7 +94,7 @@ class AccountJournal(models.Model):
             content += pais.l10n_ar_natural_vat if es_persona else pais.l10n_ar_legal_entity_vat
             content += " " * 39
             # 24 Retenido Apellido Nombre Denominacion (string, 60, 279-338, obligatorio)
-            content += self._clean_dieresis_from_string(field_to_clean=line.partner_id.name)
+            content += line.partner_id.name[:60].ljust(60)
             # 25 Retenido domicilio actual en exterior (string, 60, 339-398, obligatorio)
             # domicilio completo --> task 40050 agi 2024.10.23 10:00hs
             domicilio = " ".join(
@@ -106,7 +107,7 @@ class AccountJournal(models.Model):
                 ]
                 if item
             )
-            content += self._clean_dieresis_from_string(field_to_clean=domicilio) if domicilio else " " * 60
+            content += domicilio[:60].ljust(60) if domicilio else " " * 60
             # 26 Retenido domicilio actual en exterior pais (integer, 3, 399-401, obligatorio)
             content += line.partner_id.country_id.l10n_ar_afip_code or " " * 3
             # 27 Retenido tipo de persona (string, 1, 402-402, obligatorio)
@@ -124,10 +125,7 @@ class AccountJournal(models.Model):
                 else " " * 10
             )
             content += "\r\n"
-        return [{"txt_filename": "Retenciones_sire.txt", "txt_content": content}]
-
-    def _clean_dieresis_from_string(self, field_to_clean):
-        return (field_to_clean.replace("ü", "u").replace("ö", "o").replace("ä", "a").replace("ë", "e"))[:60].ljust(60)
+        return [{"txt_filename": "Retenciones_sire.txt", "txt_content": remove_accents_and_dieresis(content)}]
 
     def _sire_validations(self, move_lines):
         """Validaciones para el archivo TXT Retenciones SIRE. Si no hay errores este método no
