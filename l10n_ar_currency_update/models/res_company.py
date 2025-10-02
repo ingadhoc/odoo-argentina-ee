@@ -16,7 +16,7 @@ class ResCompany(models.Model):
     _inherit = "res.company"
 
     currency_provider = fields.Selection(
-        selection_add=[("afip", "AFIP Web Service (Argentina)")],
+        selection_add=[("afip", "ARCA Web Service (Argentina)")],
     )
     rate_perc = fields.Float(
         digits=(16, 4),
@@ -24,7 +24,7 @@ class ResCompany(models.Model):
     rate_surcharge = fields.Float(
         digits=(16, 4),
     )
-    l10n_ar_last_currency_sync_date = fields.Date(string="AFIP Last Sync Date", readonly=True)
+    l10n_ar_last_currency_sync_date = fields.Date(string="ARCA Last Sync Date", readonly=True)
 
     @api.model
     def _compute_currency_provider(self):
@@ -35,16 +35,15 @@ class ResCompany(models.Model):
             ar_companies.currency_provider = "afip"
             _logger.log(
                 25,
-                "Currency Provider configured as AFIP for next companies: %s",
+                "Currency Provider configured as ARCA for next companies: %s",
                 ", ".join(ar_companies.mapped("name")),
             )
 
     @api.model
     def re_check_afip_currency_rate(self):
-        """If afip provider and set interval unit daily then check the
+        """If ARCA provider and set interval unit daily then check the
         currency multiple times at day (in case the default odoo cron couldn't
-        update the currency with AFIP). Also check for weekly and monthly
-        interval units."""
+        update the currency with ARCA)"""
         today = fields.Date.context_today(self.with_context(tz="America/Argentina/Buenos_Aires"))
         # Daily
         self._filter_recheck_afip_currency_rate_companies(
@@ -66,7 +65,7 @@ class ResCompany(models.Model):
     def _filter_recheck_afip_currency_rate_companies(
         self, currency_interval_unit, l10n_ar_last_currency_sync_date, l10n_ar_force_create_rate=False
     ):
-        """Filters companies that use the 'afip' currency provider and require a currency rate update,
+        """Filters companies that use the 'arca' currency provider and require a currency rate update,
         based on the provided interval unit and last sync date. If applicable, triggers the rate update."""
         self.search(
             [
@@ -79,13 +78,14 @@ class ResCompany(models.Model):
         ).with_context(l10n_ar_force_create_rate=l10n_ar_force_create_rate).update_currency_rates()
 
     def update_currency_rates(self):
-        """When the first cron 'Currency: rate update' runs, we only need to update the rates for Argentine companies that have a daily update interval. If the interval is weekly or monthly, the rates will be updated in the second cron 'Currency: Re Check Afip Currency Rate'."""
+        """When the first cron 'Currency: rate update' runs, we only need to update the rates for Argentine companies that have a daily update interval.
+        If the interval is weekly or monthly, the rates will be updated in the second cron 'Currency: Re Check Afip Currency Rate'."""
         if not self.env.context.get("l10n_ar_force_create_rate"):
             self = self.filtered(lambda c: c.currency_interval_unit == "daily")
         super(ResCompany, self).update_currency_rates()
 
     def _parse_afip_data(self, available_currencies):
-        """This method is used to update the currency rates using AFIP provider. Rates are given against AR"""
+        """This method is used to update the currency rates using ARCA provider. Rates are given against AR"""
         res = {}
         currency_ars = self.env.ref("base.ARS")
         today = fields.Date.context_today(self.with_context(tz="America/Argentina/Buenos_Aires"))
@@ -104,29 +104,30 @@ class ResCompany(models.Model):
         else:
             company = valid_certificate[:1].company_id if valid_certificate else False
         if not company:
-            _logger.log(25, "No pudimos encontrar compañía con certificados de AFIP validos")
+            _logger.log(25, "No pudimos encontrar compañía con certificados de ARCA validos")
             return False
-        env_company = self.env.company
-        self.env.company = company
+
+        # Create a new environment with the company context
+        # Cambiamos el env de esta manera como vimos en este PR:
+        # https://github.com/odoo/enterprise/commit/4fdcf86392f#diff-05c14fb3f27dcc12f22adcfaef217ec6f80ef5ad0b0f37a4bd7b501fdc55461dR499
+        self.env = self.env(context=dict(self.env.context, allowed_company_ids=company.ids))
         for currency in available_currencies:
             try:
                 # Obtain the currencies to be updated
-                _logger.log(25, "Connecting to AFIP to update the currency rates for %s", currency.name)
+                _logger.log(25, "Connecting to ARCA to update the currency rates for %s", currency.name)
 
                 # Do not pass company since we need to find the one that has certificate
-                afip_date, rate = currency._l10n_ar_get_afip_ws_currency_rate()
+                afip_date, rate = currency.with_company(company)._l10n_ar_get_afip_ws_currency_rate()
                 afip_date = datetime.strptime(afip_date, "%Y%m%d").date() + relativedelta(days=1)
                 if afip_date == rate_date or self.env.context.get("l10n_ar_force_create_rate"):
                     res.update({currency.name: (1.0 / rate, rate_date)})
                     _logger.log(25, "Currency %s %s %s", currency.name, rate_date, rate)
                 else:
                     raise UserError(
-                        "Returned Afip rate is not today's rate (%s, %s vs %s, %s)"
+                        "Returned ARCA rate is not today's rate (%s, %s vs %s, %s)"
                         % (afip_date.strftime("%A"), afip_date, rate_date.strftime("%A"), rate_date)
                     )
-                self.env.company = env_company
             except Exception as e:
-                self.env.company = env_company
                 _logger.log(25, "Could not get rate for currency %s. This is what we get:\n%s", currency.name, e)
             else:
                 for company in self.filtered(lambda x: x.currency_provider == "afip"):
@@ -136,9 +137,9 @@ class ResCompany(models.Model):
         return res or False
 
     def _generate_currency_rates(self, parsed_data):
-        """Apply surcharge for on afip rates
+        """Apply surcharge for on ARCA rates
         Si tenemos definido una tasa de recargo o una percepcion definido en la compañia AR
-        necesitamos volver a calcular la información de la tasa AFIP mas esos montos extras
+        necesitamos volver a calcular la información de la tasa ARCA mas esos montos extras
         """
         currency_rate = self.env["res.currency.rate"]
         currency_object = self.env["res.currency"]

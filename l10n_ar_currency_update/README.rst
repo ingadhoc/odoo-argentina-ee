@@ -14,21 +14,24 @@
 Argentinian Currency Rate Update
 ================================
 
-This will add AFIP Web Service as your currency provider (official argentinian provider). It is neccesary to have set on the company afip valid certificate.
+This module integrates ARCA Web Service as the official Argentinian currency provider for automatic exchange rate updates.
+This is needed to have a valid ARCA certificate must be configured in the company settings
 
-By default the automatic rate updates are inactive, you can active them by company
-by going to *Accounting / Configuration / Settings* menu and there found and set
-the *Interval* and *Next Run* date in the *Automatic Currecy Rates* section
-(dont forget to click Save button)
+**Setup:**
+By default, automatic rate updates are disabled. To enable them:
 
-When actived the currency rates of your companies will be updated automatically.
-We recommend to use daily interval since AFIP update the rates daily.
+#. Go to *Accounting / Configuration / Settings*
+#. Locate the *Automatic Currency Rates* section
+#. Configure the *Interval* (recommended: daily) and *Next Run* date
+#. Click *Save*
 
-The scheduled action that will be run to update the currency rates will be run
-after 21 hours (GMT-3), this is required since the rates are published by
-AFIP after 9 pm.
+**Operation:**
+* Currency rates are automatically updated for all active currencies in your companies
+* Updates occur after 21:00 GMT-3, when ARCA publishes new rates
+* Rates are sourced from the official ARCA exchange service
 
-The currency rates can be checked here: https://www.afip.gob.ar/aduana/cotizacionesMaria/
+**Rate Verification:**
+Current exchange rates can be verified at: https://www.afip.gob.ar/aduana/cotizacionesMaria/
 
 Installation
 ============
