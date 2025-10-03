@@ -14,32 +14,60 @@
 Accounting Reports with Accounting Documents
 ============================================
 
-Agrega el CUIT de cada partner en el reporte "Libro Mayor de Empresas" (Partner Ledeger)
-Este módulo también permite obtener un reporte de cheques a fecha, tanto propios como de terceros.
+Customizes Odoo standard accounting reports to meet specific Argentine requirements, adding necessary fiscal information for balance presentation and generating additional reports for check control.
+
+Functional description
+======================
+
+This module adds two main functionalities:
+
+**1. Partner Ledger Report Enhancement**
+
+Modifies the native Partner Ledger (Libro Mayor de Empresas) report to include Argentine fiscal information alongside each partner's name. The standard Odoo report only shows "Partner Name", while with this module it displays "Partner Name (CUIT: 1234567890)".
+
+This functionality is essential for fiscal compliance in Argentina, as the report serves as the official detail of Debtors and Creditors at year-end, required for Annual Balance presentation to accounting and tax authorities.
+
+**2. Checks to Date Report**
+
+Adds a new functionality that allows generating reports of pending checks up to a specific date, differentiating between:
+- Own checks (issued by the company) that have not yet been debited
+- Third-party checks (received) that are in portfolio
+
+This report is fundamental for cash flow control and bank reconciliation, allowing to know the real status of checks at the end of accounting periods.
+
+**Interface changes:**
+- Adds a new "Cheques a fecha" menu under Accounting → Reporting → Legal Statements
+- Includes a wizard with fields to select limit date and journal (optional)
+- Generates a PDF report with detailed listing of pending checks
 
 Installation
 ============
 
 To install this module, you need to:
 
-#. Do this ...
+#. Install the module from Apps menu
+#. The module will auto-install if l10n_ar and account_reports are installed
 
 Configuration
 =============
 
-To configure this module, you need to:
+This module doesn't require specific configuration. It automatically:
 
-#. Go to ...
+#. Enhances the Partner Ledger report with CUIT information
+#. Adds the "Cheques a fecha" menu under Accounting → Reporting → Legal Statements
 
 Usage
 =====
 
-Descripción funcional:
-Al tener el dato del cuit al lado de cada partner, este reporte sirve como detalle de Deudores y de Proveedores al cierre del ejercicio, a los fines de ser presentado a su contador para la presentacion del Balance Anual
+**Partner Ledger Report:**
+#. Go to Accounting → Reporting → Partner Ledger
+#. Generate the report normally - partner names will automatically include CUIT information
 
-To use this module, you need to:
-
-#. Go to ...
+**Checks to Date Report:**
+#. Go to Accounting → Reporting → Legal Statements → Cheques a fecha
+#. Select the date up to which you want to see pending checks
+#. Optionally filter by journal
+#. Click "Confirmar" to generate the PDF report
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
    :alt: Try me on Runbot
@@ -54,13 +82,15 @@ Images
 * |company| |icon|
 
 Contributors
-------------
+============
+
+* ADHOC SA
 
 Maintainer
-----------
+==========
 
 |company_logo|
 
-This module is maintained by the |company|.
+This module is maintained by ADHOC SA.
 
 To contribute to this module, please visit https://www.adhoc.com.ar.
