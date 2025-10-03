@@ -581,6 +581,24 @@ class AccountJournal(models.Model):
                 # solo en comprobantes A, M segun especificacion
                 vat_amount = 0.0
                 total_amount = float_round(payment.move_id.amount_total_in_currency_signed, precision_digits=2)
+                if payment.is_backward_withholding_payment:
+                    # Buscamos los payments sin retención que vienen migrados de la versión anterior y le sumamos
+                    # el amount total de los mismos (move_id.amount_total_in_currency_signed) al total_amount de la
+                    # retención. Esto lo hacemos porque en la migración de 16 a 18 se migran los pagos y las retenciones
+                    # por separado a diferencia de 16 que estaba todo en el mismo asiento.
+                    related_payments = self.env["account.payment"].search(
+                        [
+                            ("name", "=", payment.name),
+                            ("company_id", "=", payment.company_id.id),
+                            ("partner_id", "=", payment.partner_id.id),
+                            ("id", "!=", payment.id),
+                            ("state", "in", ["paid", "in_process"]),
+                        ]
+                    )
+                    if related_payments:
+                        total_amount += float_round(
+                            sum(related_payments.mapped("move_id.amount_total_in_currency_signed")), precision_digits=2
+                        )
                 # es lo mismo que payment_group.matched_amount_untaxed
                 taxable_amount = float_round(line.withholding_id.base_amount, precision_digits=2)
 
