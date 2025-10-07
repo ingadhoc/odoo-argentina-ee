@@ -7,10 +7,10 @@
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 18.0+e\n"
+"Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-03 06:41+0000\n"
-"PO-Revision-Date: 2025-01-31 21:28+0000\n"
+"POT-Creation-Date: 2025-10-06 19:36+0000\n"
+"PO-Revision-Date: 2025-10-06 18:45+0000\n"
 "Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
@@ -91,6 +91,7 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_check_to_date_report_wizard__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partner_ledger_report_handler__display_name
 msgid "Display Name"
 msgstr "Nombre a Mostrar"
 
@@ -116,6 +117,7 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_check_to_date_report_wizard__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partner_ledger_report_handler__id
 msgid "ID"
 msgstr "ID (identificación)"
 
@@ -147,7 +149,7 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_partner_ledger_report_handler
 msgid "Partner Ledger Custom Handler"
-msgstr "Gestor personalizado del libro mayor de la empresa"
+msgstr "Gestor personalizado del libro mayor del contacto"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_check_to_date_report_wizard
