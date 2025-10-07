@@ -61,6 +61,32 @@ class ResCompany(models.Model):
         ])
         records.update_currency_rates()
 
+    def _find_company_with_ws_connection(self, today, arca_ws=None):
+        """Find a company with a valid ARCA certificate and that have a valid connection to the given webservice.
+
+        Args:
+            today (date): The current date.
+            arca_ws (str, optional): The web service to use. Defaults to None.
+        Returns:
+            res.company or False: A company with a valid certificate (and webserive if given)
+            or False if none found.
+        """
+        company = False
+        companies = self.env['res.company'].search(
+            [('l10n_ar_afip_ws_crt', '!=', False), ('l10n_ar_crt_exp_date', '>', today)])
+
+        if arca_ws:
+            company_with_ws_connections = (
+                self.env["l10n_ar.afipws.connection"].search([("l10n_ar_afip_ws", "=", arca_ws)]).mapped("company_id")
+            )
+            companies = companies & company_with_ws_connections
+
+        if self.env.company in companies:
+            company = self.env.company
+        elif companies:
+            company = companies[0]
+        return company
+
     def _parse_afip_data(self, available_currencies):
         """ This method is used to update the currency rates using AFIP provider. Rates are given against AR """
         res = {}
@@ -72,12 +98,17 @@ class ResCompany(models.Model):
         available_currencies = available_currencies.filtered('l10n_ar_afip_code') - currency_ars
         rate_date = today
 
-        for currency in available_currencies:
+        find_method = getattr(self, '_find_company_with_ws_connection', None)
+        if find_method and callable(find_method):
+            company = find_method(today, "wsfe")
+        else:
             company = self.env.company if self.env.company.sudo().l10n_ar_afip_ws_crt else self.env['res.company'].search(
                 [('l10n_ar_afip_ws_crt', '!=', False), ('l10n_ar_crt_exp_date', '>', today)], limit=1)
-            if not company:
-                _logger.log(25, "No pudimos encontrar compañía con certificados de AFIP validos")
-                return False
+        if not company:
+            _logger.log(25, "No pudimos encontrar compañía con certificados de AFIP validos")
+            return False
+
+        for currency in available_currencies:
             env_company = self.env.company
             self.env.company = company
             try:
