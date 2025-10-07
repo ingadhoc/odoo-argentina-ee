@@ -20,6 +20,8 @@
                 <field name="name">Ventas netas de bienes y servicios</field>
                 <field name="code">sales</field>
                 <field name="hierarchy_level">1</field>
+                <field name="user_groupby">account_id</field>
+                <field name="foldable">True</field>
                 <field name="expression_ids">
                     <record id="account_financial_report_l10n_ar_estado_resultados_line_sales_balance" model="account.report.expression">
                         <field name="label">balance</field>
@@ -35,6 +37,8 @@
                 <field name="name">Costo de venta de bienes y servicios</field>
                 <field name="code">cogs</field>
                 <field name="hierarchy_level">1</field>
+                <field name="user_groupby">account_id</field>
+                <field name="foldable">True</field>
                 <field name="expression_ids">
                     <record id="account_financial_report_l10n_ar_estado_resultados_line_cogs_balance" model="account.report.expression">
                         <field name="label">balance</field>
@@ -64,6 +68,8 @@
                 <field name="name">Gastos de comercialización</field>
                 <field name="code">com_exp</field>
                 <field name="hierarchy_level">1</field>
+                <field name="user_groupby">account_id</field>
+                <field name="foldable">True</field>
                 <field name="expression_ids">
                     <record id="account_financial_report_l10n_ar_estado_resultados_line_com_exp_balance" model="account.report.expression">
                         <field name="label">balance</field>
@@ -79,6 +85,8 @@
                 <field name="name">Gastos de administración</field>
                 <field name="code">adm_exp</field>
                 <field name="hierarchy_level">1</field>
+                <field name="user_groupby">account_id</field>
+                <field name="foldable">True</field>
                 <field name="expression_ids">
                     <record id="account_financial_report_l10n_ar_estado_resultados_line_adm_exp_balance" model="account.report.expression">
                         <field name="label">balance</field>
@@ -94,6 +102,8 @@
                 <field name="name">Otros gastos</field>
                 <field name="code">other_exp</field>
                 <field name="hierarchy_level">1</field>
+                <field name="user_groupby">account_id</field>
+                <field name="foldable">True</field>
                 <field name="expression_ids">
                     <record id="account_financial_report_l10n_ar_estado_resultados_line_other_exp_balance" model="account.report.expression">
                         <field name="label">balance</field>
@@ -109,6 +119,8 @@
                 <field name="name">Resultados financieros y por tenencia (incluye RECPAM)</field>
                 <field name="code">fin_exp</field>
                 <field name="hierarchy_level">1</field>
+                <field name="user_groupby">account_id</field>
+                <field name="foldable">True</field>
                 <field name="expression_ids">
                     <record id="account_financial_report_l10n_ar_estado_resultados_line_fin_exp_balance" model="account.report.expression">
                         <field name="label">balance</field>
@@ -124,6 +136,8 @@
                 <field name="name">Otros ingresos y egresos</field>
                 <field name="code">other_inc_exp</field>
                 <field name="hierarchy_level">1</field>
+                <field name="user_groupby">account_id</field>
+                <field name="foldable">True</field>
                 <field name="expression_ids">
                     <record id="account_financial_report_l10n_ar_estado_resultados_line_other_inc_exp_balance" model="account.report.expression">
                         <field name="label">balance</field>
@@ -153,6 +167,8 @@
                 <field name="name">Impuesto a las ganancias</field>
                 <field name="code">tax_inc</field>
                 <field name="hierarchy_level">1</field>
+                <field name="user_groupby">account_id</field>
+                <field name="foldable">True</field>
                 <field name="expression_ids">
                     <record id="account_financial_report_l10n_ar_estado_resultados_line_tax_inc_balance" model="account.report.expression">
                         <field name="label">balance</field>
