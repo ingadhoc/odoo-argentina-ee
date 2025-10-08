@@ -39,7 +39,7 @@
                                 <span t-out="tcheck.partner_id.name" />
                             </td>
                             <td>
-                                <span t-out="tcheck.amount"/>
+                                <span t-out="tcheck.amount_total_signed"/>
                             </td>
                         </tr>
                     </tbody>
