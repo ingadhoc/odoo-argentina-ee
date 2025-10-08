@@ -49,23 +49,40 @@ class AccountCheckToDateReportWizard(models.TransientModel):
         query = """
                 SELECT DISTINCT ON (t.check_id) t.check_id AS cheque FROM
                     (
-                        SELECT ap.id as check_id, ap_move.date as operation_date, apm.code as operation_code
+                        SELECT 
+                            ap.id as check_id, 
+                            ap_move.date as operation_date, 
+                            apm.code as operation_code
                         FROM account_payment ap
-                        LEFT JOIN account_payment_method AS apm ON apm.id = ap.payment_method_id
-                        LEFT JOIN account_move AS ap_move ON ap.move_id = ap_move.id
-                        LEFT JOIN account_journal AS journal ON ap_move.journal_id = journal.id
+                        LEFT JOIN account_payment_method AS apm 
+                            ON apm.id = ap.payment_method_id
+                        LEFT JOIN account_move AS ap_move 
+                            ON ap.move_id = ap_move.id
+                        LEFT JOIN account_journal AS journal 
+                            ON ap_move.journal_id = journal.id
                         WHERE
-                        apm.code = 'check_printing' AND ap_move.date <= '%s' order by ap.id, ap_move.date desc, ap.id desc
+                        apm.code = 'check_printing' 
+                        AND ap_move.date <= '%s' 
+                        ORDER BY ap.id, ap_move.date desc, ap.id desc
                     ) t
                     LEFT JOIN
                     (
-                        SELECT ap.id as check_id, afr_full.name as conciliation_name, aml_2.date as operation_date, aml.id as aml_1, aml_2.id as aml_2
+                        SELECT 
+                            ap.id AS check_id,
+                            MAX(aml.date) AS operation_date
                         FROM account_payment ap
-                        JOIN account_payment_method AS apm ON apm.id = ap.payment_method_id
-                        JOIN account_move_line as aml ON ap.move_id = aml.move_id
-                        JOIN account_full_reconcile AS afr_full ON afr_full.id = aml.full_reconcile_id
-                        JOIN account_move_line AS aml_2 ON aml_2.full_reconcile_id = afr_full.id
-                        WHERE apm.code = 'check_printing' AND aml.id <> aml_2.id
+                        JOIN account_payment_method apm 
+                            ON apm.id = ap.payment_method_id
+                        JOIN account_move_line aml 
+                            ON ap.move_id = aml.move_id
+                        JOIN account_account aa 
+                            ON aa.id = aml.account_id
+                        LEFT JOIN account_partial_reconcile afr_partial 
+                            ON  (afr_partial.credit_move_id = aml.id OR afr_partial.debit_move_id = aml.id)
+                        WHERE apm.code = 'check_printing'
+                        AND aa.reconcile = true
+                        GROUP BY ap.id
+                        HAVING BOOL_AND(afr_partial.id IS NOT NULL) 
                     ) t2
                     ON t.check_id = t2.check_id
                 WHERE t2.operation_date >= '%s' OR t2.operation_date IS NULL
