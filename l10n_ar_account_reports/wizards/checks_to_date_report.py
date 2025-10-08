@@ -53,25 +53,47 @@ class AccountCheckToDateReportWizard(models.TransientModel):
             """
                 SELECT DISTINCT ON (t.check_id) t.check_id AS cheque FROM
                     (
-                        SELECT c.id as check_id, ap_move.date as operation_date, apm.code as operation_code
+                        SELECT
+                            c.id as check_id,
+                            ap_move.date as operation_date,
+                            apm.code as operation_code
                         FROM l10n_latam_check c
-                        JOIN account_payment AS ap ON c.payment_id = ap.id
-                        LEFT JOIN account_payment_method AS apm ON apm.id = ap.payment_method_id
-                        LEFT JOIN account_move AS ap_move ON ap.move_id = ap_move.id
-                        LEFT JOIN account_journal AS journal ON ap_move.journal_id = journal.id
+                        JOIN account_payment AS ap
+                            ON c.payment_id = ap.id
+                        LEFT JOIN account_payment_method AS apm
+                            ON apm.id = ap.payment_method_id
+                        LEFT JOIN account_move AS ap_move
+                            ON ap.move_id = ap_move.id
+                        LEFT JOIN account_journal AS journal
+                            ON ap_move.journal_id = journal.id
                         WHERE
-                        c.issue_state = 'handed' AND apm.code = 'own_checks' AND ap_move.date <= %(to_date)s order by c.id, ap_move.date desc
+                        apm.code = 'own_checks'
+                        AND ap_move.date <= %(to_date)s
+                        ORDER BY c.id, ap_move.date desc
                     ) t
                     LEFT JOIN
                     (
-                        SELECT c.id as check_id, aml_2.date as operation_date, aml.id as aml_1, aml_2.id as aml_2
+                        SELECT
+                            c.id as check_id,
+                            MAX(aml.date) AS operation_date
                         FROM l10n_latam_check c
-                        JOIN account_payment AS ap ON ap.id = c.payment_id
-                        JOIN account_payment_method AS apm ON apm.id = ap.payment_method_id
-                        JOIN account_move_line as aml ON ap.move_id = aml.move_id
-                        JOIN account_full_reconcile AS afr_full ON afr_full.id = aml.full_reconcile_id
-                        JOIN account_move_line AS aml_2 ON aml_2.full_reconcile_id = afr_full.id
-                        WHERE apm.code = 'own_checks' AND aml.id <> aml_2.id
+                        JOIN account_payment AS ap
+                            ON ap.id = c.payment_id
+                        JOIN account_payment_method AS apm
+                            ON apm.id = ap.payment_method_id
+                        JOIN account_move_line as aml
+                            ON ap.move_id = aml.move_id
+                        JOIN account_account aa
+                            ON aa.id = aml.account_id
+                        LEFT JOIN account_partial_reconcile afr_partial
+                            ON  (
+                                afr_partial.credit_move_id = aml.id
+                                OR afr_partial.debit_move_id = aml.id
+                            )
+                        WHERE apm.code = 'own_checks'
+                        AND aa.reconcile = true
+                        GROUP BY c.id
+                        HAVING BOOL_AND(afr_partial.id IS NOT NULL)
                     ) t2
                     ON t.check_id = t2.check_id
                 WHERE t2.operation_date >= %(to_date)s OR t2.operation_date IS NULL
