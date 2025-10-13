@@ -30,9 +30,21 @@
     "depends": [
         "account_reports",
         "l10n_ar",
+        "l10n_ar_reports",
         "l10n_latam_check",
     ],
     "data": [
+<<<<<<< 1dca4003050e17d31382802cfe103deff988ac74
+||||||| b67f840c6e025dcced0b73fb81a8e4c5153fd4f7
+        "data/tags_data.xml",
+        "data/estado_resultados.xml",
+        "data/balance_sheet.xml",
+=======
+        "data/tags_data.xml",
+        "data/estado_resultados.xml",
+        "data/balance_sheet.xml",
+        "data/account.account.tag.csv",
+>>>>>>> 747327c813cf066078e65039c8820542ca1e5bed
         "wizards/checks_to_date_view.xml",
         "reports/report_checks_to_date.xml",
         "security/ir.model.access.csv",
