@@ -122,7 +122,12 @@ class ResCompany(models.Model):
         """
         currency_rate = self.env["res.currency.rate"]
         currency_object = self.env["res.currency"]
-        for company in self.filtered(lambda x: x.currency_provider == "afip" and (x.rate_surcharge or x.rate_perc)):
+        companies_with_surcharge = self.filtered(
+            lambda x: x.currency_provider == "afip" and (x.rate_surcharge or x.rate_perc)
+        )
+        for company in companies_with_surcharge:
+            # Hacemos una copia del diccionario por cada compañía para no modificar el original
+            new_parsed_data = parsed_data.copy()
             for currency, (rate, date_rate) in parsed_data.items():
                 already_existing_rate = currency_rate.search(
                     [
@@ -136,6 +141,6 @@ class ResCompany(models.Model):
                     rate = rate * (1.0 + (company.rate_perc or 0.0))
                     rate += company.rate_surcharge or 0.0
                     rate = 1.0 / rate
-                    parsed_data[currency] = (rate, date_rate)
-
-        super()._generate_currency_rates(parsed_data)
+                    new_parsed_data[currency] = (rate, date_rate)
+            super(ResCompany, company)._generate_currency_rates(new_parsed_data)
+        super(ResCompany, self - companies_with_surcharge)._generate_currency_rates(parsed_data)
