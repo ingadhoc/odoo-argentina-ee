@@ -60,14 +60,17 @@ class AccountCheckToDateReportWizard(models.TransientModel):
                         FROM l10n_latam_check c
                         JOIN account_payment AS ap
                             ON c.payment_id = ap.id
+                        LEFT JOIN account_payment_method_line AS apml
+                            ON apml.id = ap.payment_method_line_id
                         LEFT JOIN account_payment_method AS apm
-                            ON apm.id = ap.payment_method_id
+                            ON apm.id = apml.payment_method_id
                         LEFT JOIN account_move AS ap_move
                             ON ap.move_id = ap_move.id
                         LEFT JOIN account_journal AS journal
                             ON ap_move.journal_id = journal.id
                         WHERE
-                        apm.code = 'own_checks'
+                        c.issue_state = 'handed'
+                        AND apm.code = 'own_checks'
                         AND ap_move.date <= %(to_date)s
                         ORDER BY c.id, ap_move.date desc
                     ) t

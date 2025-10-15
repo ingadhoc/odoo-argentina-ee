@@ -40,7 +40,7 @@
                                     <span t-out="tcheck.partner_id.name" />
                                 </td>
                                 <td>
-                                    <span t-out="tcheck.amount"/>
+                                    <span t-out="tcheck.amount"  t-options='{"widget": "monetary", "display_currency": tcheck.currency_id}'/>
                                 </td>
                             </tr>
                         </tbody>
@@ -51,7 +51,7 @@
                                 </strong>
                             </td>
                             <td class="text-end" colspan="6">
-                                <span t-esc="total_issue" style="font-size: 15px"/>
+                                <span t-esc="total_issue" style="font-size: 15px" t-options='{"widget": "monetary", "display_currency": tcheck.currency_id}'/>
                             </td>
                         </div>
                     </table>
@@ -86,7 +86,7 @@
                                     <span t-out="tcheck.issuer_vat" />
                                 </td>
                                 <td>
-                                    <span t-out="tcheck.amount"/>
+                                    <span t-out="tcheck.amount"  t-options='{"widget": "monetary", "display_currency": tcheck.currency_id}'/>
                                 </td>
                             </tr>
                         </tbody>
@@ -97,7 +97,7 @@
                                 </strong>
                             </td>
                             <td class="text-end" colspan="6">
-                                <span t-esc="total" style="font-size: 15px"/>
+                                <span t-esc="total" style="font-size: 15px" t-options='{"widget": "monetary", "display_currency": tcheck.currency_id}'/>
                             </td>
                         </div>
                     </table>
