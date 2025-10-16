@@ -20,18 +20,14 @@ class AccountChartTemplate(models.AbstractModel):
 
         # Verify that it's an Argentine chart of accounts
         # Check if applicable to "ar_ex", "ar_base"
-        if template_code in [
-            "ar_ri",
-        ]:
+        if company.account_fiscal_country_id.code == "AR":
             self._l10n_ar_account_reports_setup_account_tags([company])
 
         return res
 
     def _post_load_data(self, template_code, company, template_data):
         super()._post_load_data(template_code, company, template_data)
-        if template_code in [
-            "ar_ri",
-        ]:
+        if company.account_fiscal_country_id.code == "AR":
             self._l10n_ar_account_reports_setup_account_tags([company])
 
     def _get_ar_account_tags(self):
@@ -81,9 +77,9 @@ class AccountChartTemplate(models.AbstractModel):
         }
         return tags
 
-    def _get_tag_for_income_account(self, account, tags):
+    def _get_tag_for_income_account(self, account, tags, company):
         """Determine tag for income accounts"""
-        code = account.code
+        code = account.with_company(company).code
         name = account.name.lower() if account.name else ""
 
         # Special cases based on specific CSV codes
@@ -136,9 +132,9 @@ class AccountChartTemplate(models.AbstractModel):
 
         return None
 
-    def _get_tag_for_asset_account(self, account, tags):
+    def _get_tag_for_asset_account(self, account, tags, company):
         """Determine tag for asset accounts"""
-        code = account.code
+        code = account.with_company(company).code
         name = account.name.lower() if account.name else ""
 
         # Cash and Banks (Caja y Bancos) (1.1.1.xx.xxx)
@@ -194,9 +190,9 @@ class AccountChartTemplate(models.AbstractModel):
 
         return None
 
-    def _get_tag_for_liability_equity_account(self, account, tags):
+    def _get_tag_for_liability_equity_account(self, account, tags, company):
         """Determine tag for liability and equity accounts"""
-        code = account.code
+        code = account.with_company(company).code
         name = account.name.lower() if account.name else ""
 
         # Equity (Patrimonio Neto) (3.x.x.xx.xxx)
@@ -260,7 +256,7 @@ class AccountChartTemplate(models.AbstractModel):
                     "expense_depreciation",
                     "income_other",
                 ]:
-                    tag_id = self._get_tag_for_income_account(account, tags)
+                    tag_id = self._get_tag_for_income_account(account, tags, company)
 
                 # Asset accounts
                 elif account.account_type in [
@@ -270,7 +266,7 @@ class AccountChartTemplate(models.AbstractModel):
                     "asset_non_current",
                     "asset_fixed",
                 ]:
-                    tag_id = self._get_tag_for_asset_account(account, tags)
+                    tag_id = self._get_tag_for_asset_account(account, tags, company)
 
                 # Liability and equity accounts
                 elif account.account_type in [
@@ -280,7 +276,7 @@ class AccountChartTemplate(models.AbstractModel):
                     "equity",
                     "equity_unaffected",
                 ]:
-                    tag_id = self._get_tag_for_liability_equity_account(account, tags)
+                    tag_id = self._get_tag_for_liability_equity_account(account, tags, company)
 
                 # Assign the tag if one was found
                 if tag_id:
