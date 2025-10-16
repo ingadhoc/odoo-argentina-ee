@@ -35,7 +35,7 @@ class AccountTaxSettlementWizard(models.TransientModel):
     company_id = fields.Many2one(
         "res.company",
     )
-    account_id = fields.Many2one("account.account", check_company=True, domain=[("deprecated", "=", False)])
+    account_id = fields.Many2one("account.account", check_company=True, domain=[("active", "=", True)])
     report_settlement_allow_unbalanced = fields.Boolean(
         related="report_id.settlement_allow_unbalanced",
     )
@@ -43,8 +43,8 @@ class AccountTaxSettlementWizard(models.TransientModel):
     @api.model
     def default_get(self, fields):
         res = super(AccountTaxSettlementWizard, self).default_get(fields)
-        if self._context.get("active_model") == "account.move.line":
-            active_ids = self._context.get("active_ids")
+        if self.env.context.get("active_model") == "account.move.line":
+            active_ids = self.env.context.get("active_ids")
             res.update({"move_line_ids": active_ids})
             return res
         return res
@@ -55,7 +55,7 @@ class AccountTaxSettlementWizard(models.TransientModel):
         if self.report_id:
             move = self.report_id.with_context(skip_invoice_sync=True)._report_create_settlement_entry(
                 self.settlement_journal_id,
-                options=self._context.get("account_report_generation_options"),
+                options=self.env.context.get("account_report_generation_options"),
                 account=self.account_id,
             )
         else:

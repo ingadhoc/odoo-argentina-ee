@@ -11,7 +11,7 @@ class AccountMoveLine(models.Model):
         "account.move",
         "Tax Settlement Move",
         help="Move where this tax has been settled",
-        auto_join=True,
+        bypass_search_access=True,
         copy=False,
         index="btree_not_null",
     )

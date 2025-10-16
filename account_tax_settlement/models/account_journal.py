@@ -25,15 +25,13 @@ class AccountJournal(models.Model):
 
     tax_settlement = fields.Selection(
         [
-            # TODO deprecate yes
-            ("yes", "Yes"),
             ("allow_per_line", "Yes, allow per line"),
         ],
     )
     settlement_tax = fields.Selection(
         [],
         string="Impuesto de liquidación",
-        help="Si elije un impuesto se puede agregar alguna funcionalidad, como" " por ej. descargar archivos txt",
+        help="Si elije un impuesto se puede agregar alguna funcionalidad, como por ej. descargar archivos txt",
     )
     settlement_partner_id = fields.Many2one(
         "res.partner",
@@ -46,7 +44,7 @@ class AccountJournal(models.Model):
     settlement_account_tag_ids = fields.Many2many(
         "account.account.tag",
         "account_journal_account_tag",
-        auto_join=True,
+        bypass_search_access=True,
         string="Etiquetas para liquidación",
         help="Se pueden elegir etiquetas de impuestos y/o cuentas:\n"
         "* Para las de impuestos se van a liquidar los apuntes contables de "
@@ -71,7 +69,7 @@ class AccountJournal(models.Model):
         copy=False,
         check_company=True,
         domain="""[
-            ('deprecated', '=', False), ('account_type', 'in', ('asset_receivable', 'liability_payable'))]""",
+            ('active', '=', True), ('account_type', 'in', ('asset_receivable', 'liability_payable'))]""",
     )
 
     @api.constrains("tax_settlement", "type")
@@ -80,17 +78,15 @@ class AccountJournal(models.Model):
             if rec.tax_settlement:
                 if rec.type != "general":
                     raise ValidationError(
-                        _('Solo se puede usar "Impuesto de liquidación" en ' 'diarios del tipo "Miscelánea"')
+                        _('Solo se puede usar "Impuesto de liquidación" en diarios del tipo "Miscelánea"')
                     )
                 if not rec.settlement_partner_id:
-                    raise ValidationError(
-                        _('Si usa "Impuesto de liquidación" debe setear un ' '"Partner de liquidación"')
-                    )
+                    raise ValidationError(_('Si usa "Impuesto de liquidación" debe setear un "Partner de liquidación"'))
 
     def action_create_payment(self):
         partner = self.settlement_partner_id
         if not partner:
-            raise ValidationError(_("You can only create payment if journal has settlement partner" " configured!"))
+            raise ValidationError(_("You can only create payment if journal has settlement partner configured!"))
         return {
             "name": _("Register Payment"),
             "view_type": "form",
@@ -126,11 +122,11 @@ class AccountJournal(models.Model):
                 % draft_lines.ids
             )
         if not self.tax_settlement:
-            raise ValidationError(_("Settlement only allowed on journals with Tax Settlement " "enable"))
+            raise ValidationError(_("Settlement only allowed on journals with Tax Settlement enable"))
 
         if move_lines.filtered("tax_settlement_move_id"):
             raise ValidationError(
-                _("You can not settle lines that has already been settled!\n" "* Lines ids: %s")
+                _("You can not settle lines that has already been settled!\n* Lines ids: %s")
                 % (move_lines.filtered("tax_settlement_move_id").ids)
             )
         # if not self.tax_id:
@@ -195,7 +191,7 @@ class AccountJournal(models.Model):
 
         # agregamos la info para que se creen lineas para cada cuenta
         # etiquetada (estas lineas se llevan en cero)
-        domain = [("company_id", "="), ("deprecated", "=", False)]
+        domain = [("company_id", "="), ("active", "=", True)]
         if account_tags := self.settlement_account_tag_ids.filtered(lambda x: x.applicability == "accounts"):
             domain.append(("tag_ids", "in", account_tags.ids))
             company_id = self.company_id.id
@@ -204,7 +200,7 @@ class AccountJournal(models.Model):
             for account in self.env["account.account"].search(
                 [
                     *self.env["account.account"]._check_company_domain(company_id),
-                    ("deprecated", "=", False),
+                    ("active", "=", True),
                     ("tag_ids", "in", account_tags.ids),
                 ]
             ):
@@ -266,8 +262,8 @@ class AccountJournal(models.Model):
             line_ids.append((0, False, vals))
 
         move_vals = {
-            "ref": self._context.get("entry_ref"),
-            "date": self._context.get("entry_date", fields.Date.today()),
+            "ref": self.env.context.get("entry_ref"),
+            "date": self.env.context.get("entry_date", fields.Date.today()),
             "journal_id": self.id,
             "company_id": self.company_id.id,
             "line_ids": line_ids,
@@ -297,10 +293,10 @@ class AccountJournal(models.Model):
             ("tax_repartition_line_id.tag_ids", "in", self.settlement_account_tag_ids.ids),
         ]
 
-        if from_date := self._context.get("from_date"):
+        if from_date := self.env.context.get("from_date"):
             domain.append(("date", ">=", from_date))
 
-        if to_date := self._context.get("to_date"):
+        if to_date := self.env.context.get("to_date"):
             domain.append(("date", "<=", to_date))
 
         return domain
@@ -341,7 +337,7 @@ class AccountJournal(models.Model):
 
     def _fill_tax_settlement_dashboard_data(self, dashboard_data):
         """En diarios de liquidación en vista kanban agregamos al lado del botoncitos 'Líneas a liquidar' la cantidad de líneas de liquidar y el importe y al lado del botoncito 'Saldo a pagar' agregamos el importe"""
-        tax_settlement_journals = self.filtered(lambda journal: journal.tax_settlement != False)
+        tax_settlement_journals = self.filtered(lambda journal: journal.tax_settlement == "allow_per_line")
         if not tax_settlement_journals:
             return
         # TODO hacer por sql para mejorar performance
@@ -364,8 +360,8 @@ class AccountJournal(models.Model):
         Y si es deuda del partner muestre el partner ledger
         """
         if self.type == "general" and self.tax_settlement:
-            tax_settlement = self._context.get("tax_settlement", False)
-            debt_balance = self._context.get("debt_balance", False)
+            tax_settlement = self.env.context.get("tax_settlement", False)
+            debt_balance = self.env.context.get("debt_balance", False)
             if tax_settlement:
                 # Ingresa aquí al entrar en vista Kanban en diario de liquidacion en el botoncito "Líneas a liquidar"
                 action = self.env["ir.actions.actions"]._for_xml_id(

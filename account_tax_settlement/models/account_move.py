@@ -12,7 +12,7 @@ class AccountMove(models.Model):
         # en la vista porque si no da error al querer guardar cambios (probar
         # con usuario no admin pondiendo apuntes de liquidacion en cero)
         readonly=True,
-        auto_join=True,
+        bypass_search_access=True,
     )
 
     def download_tax_settlement_file(self):
