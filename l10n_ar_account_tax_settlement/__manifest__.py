@@ -19,7 +19,7 @@
 ##############################################################################
 {
     "name": "Tax Settlements For Argentina",
-    "version": "18.0.1.6.0",
+    "version": "19.0.1.0.0",
     "category": "Accounting",
     "author": "ADHOC SA",
     "website": "www.adhoc.com.ar",
@@ -44,7 +44,7 @@
     ],
     "demo": [],
     "test": [],
-    "installable": False,
+    "installable": True,
     "auto_install": ["l10n_ar"],
     "application": False,
     "post_init_hook": "l10n_ar_account_tax_settlement_post_init_hook",
