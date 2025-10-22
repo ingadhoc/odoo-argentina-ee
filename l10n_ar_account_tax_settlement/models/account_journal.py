@@ -438,6 +438,9 @@ class AccountJournal(models.Model):
         credito = ""
 
         company_currency = self.company_id.currency_id
+        backward_comp_is_installed = self.env["ir.module.module"].search(
+            [("name", "=", "l10n_ar_tax_settlement_backward_comp"), ("state", "=", "installed")]
+        )
         for line in move_lines.sorted("date"):
             # pay_group = payment.payment_group_id
             move = line.move_id
@@ -581,7 +584,7 @@ class AccountJournal(models.Model):
                 # solo en comprobantes A, M segun especificacion
                 vat_amount = 0.0
                 total_amount = float_round(payment.move_id.amount_total_in_currency_signed, precision_digits=2)
-                if payment.is_backward_withholding_payment:
+                if backward_comp_is_installed and payment.is_backward_withholding_payment:
                     # Buscamos los payments sin retención que vienen migrados de la versión anterior y le sumamos
                     # el amount total de los mismos (move_id.amount_total_in_currency_signed) al total_amount de la
                     # retención. Esto lo hacemos porque en la migración de 16 a 18 se migran los pagos y las retenciones
