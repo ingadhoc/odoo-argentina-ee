@@ -41,8 +41,6 @@
         "wizards/checks_to_date_view.xml",
         "reports/report_checks_to_date.xml",
         "security/ir.model.access.csv",
-        "data/arba_report.xml",
-        "data/account_return_data.xml",
     ],
     "demo": [],
     "test": [],
