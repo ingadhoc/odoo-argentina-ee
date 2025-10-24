@@ -79,7 +79,7 @@ class AccountMove(models.Model):
         """Check if the partner has CondicionIVAReceptorId configured."""
         for inv in self.filtered(lambda x: x.journal_id.l10n_ar_afip_ws and not x.l10n_ar_afip_auth_code):
             inv._check_vat_condition()
-            super(AccountMove, inv)._l10n_ar_do_afip_ws_request_cae(client, auth, transport)
+        return super()._l10n_ar_do_afip_ws_request_cae(client, auth, transport)
 
     def _post(self, soft=True):
         """Be able to validate electronic vendor bills that are type AFIP POS"""
