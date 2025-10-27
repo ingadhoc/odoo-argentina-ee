@@ -3,15 +3,15 @@
 # 	* l10n_ar_currency_update
 # 
 # Translators:
-# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024
+# ADHOC - Bot <transbot@adhoc.com.ar>, 2025
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 18.0+e\n"
+"Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-03 06:41+0000\n"
-"PO-Revision-Date: 2024-12-05 18:36+0000\n"
-"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2024\n"
+"POT-Creation-Date: 2025-10-27 12:19+0000\n"
+"PO-Revision-Date: 2025-10-27 12:19+0000\n"
+"Last-Translator: ADHOC - Bot <transbot@adhoc.com.ar>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,12 +21,12 @@ msgstr ""
 
 #. module: l10n_ar_currency_update
 #: model:ir.model.fields,field_description:l10n_ar_currency_update.field_res_company__l10n_ar_last_currency_sync_date
-msgid "AFIP Last Sync Date"
+msgid "ARCA Last Sync Date"
 msgstr "Fecha de última sincronización de AFIP"
 
 #. module: l10n_ar_currency_update
 #: model:ir.model.fields.selection,name:l10n_ar_currency_update.selection__res_company__currency_provider__afip
-msgid "AFIP Web Service (Argentina)"
+msgid "ARCA Web Service (Argentina)"
 msgstr "Web service AFIP (Argentina)"
 
 #. module: l10n_ar_currency_update
@@ -55,8 +55,22 @@ msgstr "Moneda"
 
 #. module: l10n_ar_currency_update
 #: model:ir.actions.server,name:l10n_ar_currency_update.ir_cron_re_check_afip_currency_rate_ir_actions_server
-msgid "Currency: Re Check Afip Currency Rate"
+msgid "Currency: Re Check ARCA Currency Rate"
 msgstr "Moneda: Re chequear la tasa de moneda AFIP"
+
+#. module: l10n_ar_currency_update
+#: model:ir.model.fields,field_description:l10n_ar_currency_update.field_res_company__display_name
+#: model:ir.model.fields,field_description:l10n_ar_currency_update.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:l10n_ar_currency_update.field_res_currency__display_name
+msgid "Display Name"
+msgstr "Nombre para mostrar"
+
+#. module: l10n_ar_currency_update
+#: model:ir.model.fields,field_description:l10n_ar_currency_update.field_res_company__id
+#: model:ir.model.fields,field_description:l10n_ar_currency_update.field_res_config_settings__id
+#: model:ir.model.fields,field_description:l10n_ar_currency_update.field_res_currency__id
+msgid "ID"
+msgstr ""
 
 #. module: l10n_ar_currency_update
 #: model:ir.model.fields,field_description:l10n_ar_currency_update.field_res_company__rate_perc
