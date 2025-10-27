@@ -755,4 +755,14 @@
         <field name="value">9023.973</field>
     </record>
 
+    <record id="index_08_2025" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2025-08-01')"/>
+        <field name="value">9193.2441</field>
+    </record>
+
+    <record id="index_09_2025" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2025-09-01')"/>
+        <field name="value">9384.0922</field>
+    </record>
+
 </odoo>
