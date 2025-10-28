@@ -6,6 +6,7 @@ from odoo.exceptions import UserError
 class BankRecWidget(models.Model):
     _inherit = "bank.rec.widget"
 
+<<<<<<< 7ada773caba96f8fe939e1b1b863cc93b4a3e78e
     def _prepare_embedded_views_data(self):
         data = super()._prepare_embedded_views_data()
         data['amls']['context']['default_st_line_id'] = self.st_line_id.id
@@ -14,6 +15,31 @@ class BankRecWidget(models.Model):
             data['amls']['context']['search_default_same_amount'] = True
         return data
 
+||||||| b618b19f8ca80c4eee34ab33b7219b27ef29b5c5
+    @api.depends('st_line_id')
+    def _compute_amls_widget(self):
+        for wizard in self:
+            super()._compute_amls_widget()
+            amls_widget = wizard.amls_widget
+            amls_widget['context']['default_st_line_id'] = wizard.st_line_id.id
+
+            if bool(self.env['ir.config_parameter'].sudo().get_param('account_accountant_ux.use_search_filter_amount')):
+                amls_widget['context']['search_default_same_amount'] = True
+
+            wizard.amls_widget = amls_widget
+=======
+    @api.depends('st_line_id')
+    def _compute_amls_widget(self):
+        for wizard in self:
+            super()._compute_amls_widget()
+            amls_widget = wizard.amls_widget
+            amls_widget['context']['default_st_line_id'] = wizard.st_line_id.id
+            
+            if bool(self.env['ir.config_parameter'].sudo().get_param('account_accountant_ux.use_search_filter_amount')):
+                amls_widget['context']['search_default_same_amount'] = True
+            
+            wizard.amls_widget = amls_widget
+>>>>>>> 8dbe9b902414d1530d205ab8043ae72863e8b5b0
 
     # def collect_global_info_data(self, journal_id):
 
