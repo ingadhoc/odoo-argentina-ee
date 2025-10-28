@@ -2,7 +2,6 @@ from odoo import models, api, Command
 # from odoo.tools.misc import formatLang
 from odoo.exceptions import UserError
 
-
 class BankRecWidget(models.Model):
     _inherit = "bank.rec.widget"
 
@@ -39,11 +38,12 @@ class BankRecWidget(models.Model):
         line_ids_commands = []
 
         # Clean the existing lines.
-        for exchange_diff in self.line_ids.filtered(lambda x: x.flag == 'exchange_diff'):
+        exchange_diff_lines = self.line_ids.filtered(lambda x: x.flag == 'exchange_diff')
+        for exchange_diff in exchange_diff_lines:
             line_ids_commands.append(Command.unlink(exchange_diff.id))
 
         new_amls = self.line_ids.filtered(lambda x: x.flag == 'new_aml')
-        if self.company_id.reconcile_on_company_currency:
+        if self.company_id.reconcile_on_company_currency and exchange_diff_lines:
 
             accounts_currency_ids = []
             for new_aml in new_amls:
@@ -57,7 +57,7 @@ class BankRecWidget(models.Model):
                 line_ids_commands = []
 
                 # Clean the existing lines.
-                for exchange_diff in self.line_ids.filtered(lambda x: x.flag == 'exchange_diff'):
+                for exchange_diff in exchange_diff_lines:
                     line_ids_commands.append(Command.unlink(exchange_diff.id))
 
                     self.line_ids = line_ids_commands
