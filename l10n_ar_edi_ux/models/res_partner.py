@@ -10,6 +10,14 @@ _logger = logging.getLogger(__name__)
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
+    actividades_padron = fields.Many2many(
+        "l10n_ar.arca.activity",
+        "res_partner_arca_activity_rel",
+        "partner_id",
+        "arca_activity_id",
+        "Actividades",
+    )
+
     def button_update_partner_data_from_afip(self):
         self.ensure_one()
         wiz = (
@@ -21,14 +29,6 @@ class ResPartner(models.Model):
         action = self.env["ir.actions.actions"]._for_xml_id("l10n_ar_edi_ux.action_partner_update")
         action["res_id"] = wiz.id
         return action
-
-    def update_constancia_from_padron_afip(self):
-        """Este método descargaba la constancia en PDF desde afip pero dejó de estar disponible. Lo dejamos como
-        recordatorio para implementar algo similar.
-        TODO implementar o borrar
-        """
-        self.ensure_one()
-        return True
 
     def _clean_response_obj(self, xml_tag, default_replace=None):
         """
@@ -122,12 +122,12 @@ class ResPartner(models.Model):
         else:
             company = valid_certificate[:1].company_id if valid_certificate else False
         if not company:
-            raise UserError(_("Please configure an AFIP Certificate in order to continue"))
+            raise UserError(_("Please configure an ARCA Certificate in order to continue"))
         client, auth = company._l10n_ar_get_connection("ws_sr_constancia_inscripcion")._get_client()
 
         error_msg = _(
-            "No pudimos actualizar desde padron afip al partner %s (%s).\nRecomendamos verificar manualmente en la"
-            " página de AFIP.\nObtuvimos este error:\n%s"
+            "No pudimos actualizar desde el Padron de ARCA al contacto %s (%s).\nRecomendamos verificar manualmente en la"
+            " página de ARCA.\nObtuvimos este error:\n%s"
         )
 
         errors = []
@@ -184,7 +184,7 @@ class ResPartner(models.Model):
             afip_activities = data_rg.get("actividad", []) + (
                 [data_mt.get("actividadMonotributista", [])] if data_mt else []
             )
-            actividades = self.env["afip.activity"].sudo()
+            actividades = self.env["l10n_ar.arca.activity"].sudo()
             activity_codes = actividades.search([]).mapped("code")
             for act in afip_activities:
                 if act and str(act.get("idActividad")) not in activity_codes:

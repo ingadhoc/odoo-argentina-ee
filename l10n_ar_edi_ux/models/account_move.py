@@ -55,7 +55,7 @@ class AccountMove(models.Model):
         if not vat_condition:
             raise UserError(
                 _(
-                    f"The partner {self.partner_id.name} does not have an AFIP Responsibility configured. Please set the AFIP Responsibility Type in the partner's configuration to validate the invoice."
+                    f"The partner {self.partner_id.name} does not have an ARCA Responsibility configured. Please set the ARCA Responsibility Type in the partner's configuration to validate the invoice."
                 )
             )
 
@@ -82,12 +82,12 @@ class AccountMove(models.Model):
         return super()._l10n_ar_do_afip_ws_request_cae(client, auth, transport)
 
     def _post(self, soft=True):
-        """Be able to validate electronic vendor bills that are type AFIP POS"""
+        """Be able to validate electronic vendor bills that are type ARCA POS"""
         purchase_ar_edi_invoices = self.filtered(
             lambda x: x.journal_id.type == "purchase" and x.journal_id.l10n_ar_is_pos and x.journal_id.l10n_ar_afip_ws
         )
 
-        # Send invoices to AFIP and get the return info
+        # Send invoices to ARCA and get the return info
         validated = error_vendor_bill = self.env["account.move"]
         for bill in purchase_ar_edi_invoices:
             # If we are on testing environment and we don't have certificates we validate only locally.
@@ -113,7 +113,7 @@ class AccountMove(models.Model):
             # correctly validated in AFIP in Odoo (CAE, Result, xml response/request).
             if not self.env.context.get("l10n_ar_invoice_skip_commit"):
                 # TODO ver de utilizar savepoints: https://github.com/OCA/odoo-community.org/blob/master/website/Contribution/CONTRIBUTING.rst#never-commit-the-transaction
-                self._cr.commit()  # pragma pylint: disable=invalid-commit
+                self.env.cr.commit()  # pragma pylint: disable=invalid-commit
 
         if error_vendor_bill:
             msg = (

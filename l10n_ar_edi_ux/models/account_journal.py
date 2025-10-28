@@ -23,7 +23,7 @@ class AccountJournal(models.Model):
             raise UserError(_('"Get Document Types" is not implemented for webservice %s') % self.l10n_ar_afip_ws)
 
         msg = self._format_afip_doc_types(self.l10n_ar_afip_ws, response)
-        msg = _("Authorized Document Clases on AFIP:\n%s") % msg
+        msg = _("Authorized Document Clases on ARCA:\n%s") % msg
         raise UserError(msg)
 
     def _format_afip_doc_types(self, ws, response):
@@ -67,5 +67,5 @@ class AccountJournal(models.Model):
                 line += " hasta: " + date_to
             msg += line + "\n"
         if events:
-            msg += "\n\nAdicional AFIP devuelve este evento: " + events
+            msg += "\n\nAdicionalmente, ARCA devuelve este evento: " + events
         return msg

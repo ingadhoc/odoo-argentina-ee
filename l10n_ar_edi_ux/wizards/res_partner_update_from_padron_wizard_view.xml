@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <!-- the sequence of the configuration sub menu is 30 -->
-    <!-- <menuitem id='root_menu' name='Tools' parent='base.menu_base_partner' sequence="25"/> -->
-
     <record model="ir.actions.act_window" id="action_base_partner_update_from_padron">
-        <field name="name">Update Partners From Padron AFIP</field>
+        <field name="name">Update Partners From Padron ARCA</field>
         <field name="res_model">res.partner.update.from.padron.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
-        <!-- <field name="context">{'active_test': False}</field> -->
     </record>
 
     <menuitem id='menu_base_partner_update_from_padron'
@@ -20,7 +16,7 @@
         <field name='name'>res.partner.update.from.padron.wizard.form</field>
         <field name='model'>res.partner.update.from.padron.wizard</field>
         <field name='arch' type='xml'>
-            <form string='Update From Padron AFIP'>
+            <form string='Update From Padron'>
                 <field name="state" invisible="1" />
                 <header>
                     <button name='update_selection' string='Update Selection'
@@ -55,7 +51,6 @@
                     </p>
                     <group invisible="state not in ('option',)">
                         <field name="field_to_update_ids" widget="many2many_tags" options="{'no_create': True}" />
-                        <field name="update_constancia"/>
                         <field name="title_case"/>
                     </group>
                     <group invisible="state in ('option', 'finished')">
