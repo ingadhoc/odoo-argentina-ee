@@ -29,8 +29,14 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
     @api.model
     def get_partners(self):
         # TODO deberiamos buscar de otro manera estos partners
-        domain = [("vat", "!=", False), ("l10n_latam_identification_type_id.l10n_ar_afip_code", "=", 80)]
-        active_ids = self._context.get("active_ids", [])
+        domain = [
+            ("vat", "!=", False),
+            ("l10n_latam_identification_type_id.l10n_ar_afip_code", "=", 80),
+            "|",
+            ("is_company", "=", True),
+            ("parent_id", "=", False),
+        ]
+        active_ids = self.env.context.get("active_ids", [])
         if active_ids:
             domain.append(("id", "in", active_ids))
         return self.env["res.partner"].search(domain)
@@ -38,7 +44,7 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
     @api.model
     def default_get(self, fields):
         res = super(ResPartnerUpdateFromPadronWizard, self).default_get(fields)
-        context = self._context
+        context = self.env.context
         if context.get("active_model") == "res.partner" and context.get("active_ids"):
             partners = self.get_partners()
             if not partners:
@@ -61,7 +67,6 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
             "integrante_soc_padron",
             "last_update_padron",
             "l10n_ar_afip_responsibility_type_id",
-            # 'constancia
         ]
         return [("model", "=", "res.partner"), ("name", "in", fields_names)]
 
@@ -107,9 +112,6 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
         string="Partner",
         readonly=True,
     )
-    update_constancia = fields.Boolean(
-        default=True,
-    )
     title_case = fields.Boolean(
         help="Converts retreived text fields to Title Case.",
         default=_get_default_title_case,
@@ -137,7 +139,6 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
         if partner:
             partner_vals = partner.get_data_from_padron_afip()
             lines = []
-            # partner_vals.pop('constancia')
             for key, new_value in partner_vals.items():
                 old_value = partner[key]
                 if new_value == "":
@@ -154,7 +155,6 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
                         "field": key,
                         "label": field_label.get(key),
                         "old_value": old_value,
-                        # 'new_value': new_value,
                         "new_value": new_value or False,
                     }
                     lines.append((0, False, line_vals))
@@ -172,8 +172,6 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
             else:
                 vals[field.field] = field.new_value
         self.partner_id.write(vals)
-        if self.update_constancia:
-            self.partner_id.update_constancia_from_padron_afip()
 
     def pre_process_afip_error(self, exp):
         patron = re.compile(r"'error': \['(.*?)'\]")

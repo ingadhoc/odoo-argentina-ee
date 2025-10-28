@@ -6,8 +6,13 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="l10n_latam_base.view_partner_latam_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//group/group//div[2]//field[@name='vat']" position="after">
-                <button name="button_update_partner_data_from_afip" string="Update From AFIP" class="oe_link oe_inline" type="object" invisible="not vat"/>
+            <xpath expr="//field[@name='vat']" position="after">
+                <span>
+                    <button name="button_update_partner_data_from_afip" string="Update From ARCA" class="oe_link oe_inline" type="object" invisible="not vat or (not is_company and parent_id)"/>
+                </span>
+            </xpath>
+            <xpath expr="//field[@name='actividad_monotributo_padron']" position="after">
+                <field name="actividades_padron" widget="many2many_tags"/>
             </xpath>
         </field>
     </record>

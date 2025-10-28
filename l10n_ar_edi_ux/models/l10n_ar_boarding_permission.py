@@ -11,13 +11,10 @@ class L10nArBoardingPermission(models.Model):
     )
     company_id = fields.Many2one("res.company", required=True, default=lambda self: self.env.company)
 
-    _sql_constraints = [
-        (
-            "permiso_embarque_unique",
-            "UNIQUE(number, dst_country, company_id)",
-            "Error! El permiso de embarque ya existe.",
-        ),
-    ]
+    _permiso_embarque_unique = models.Constraint(
+        "UNIQUE(number, dst_country, company_id)",
+        "Error! El permiso de embarque ya existe.",
+    )
 
     def name_get(self):
         result = []
