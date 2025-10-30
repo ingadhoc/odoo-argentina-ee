@@ -4,14 +4,15 @@
 # 
 # Translators:
 # Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025
+# ADHOC - Bot <transbot@adhoc.com.ar>, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-10-06 19:36+0000\n"
+"POT-Creation-Date: 2025-10-30 15:21+0000\n"
 "PO-Revision-Date: 2025-10-06 18:45+0000\n"
-"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025\n"
+"Last-Translator: ADHOC - Bot <transbot@adhoc.com.ar>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -33,8 +34,234 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_costo_ventas
+msgid "AR EERR: Costo de Ventas"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_gastos_administracion
+msgid "AR EERR: Gastos de Administración"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_gastos_comercializacion
+msgid "AR EERR: Gastos de Comercialización"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_impuesto_ganancias
+msgid "AR EERR: Impuesto a las ganancias"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_otros_gastos
+msgid "AR EERR: Otros Gastos"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_otros_ingresos_egresos
+msgid "AR EERR: Otros ingresos y egresos"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_rxt_resultados_financieros
+msgid "AR EERR: RxT y Resultados Financieros"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_ventas
+msgid "AR EERR: Ventas"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_activos_intangibles
+msgid "AR ESP: Activos Intangibles"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_anticipos_de_clientes
+msgid "AR ESP: Anticipos de Clientes"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_bienes_de_cambio
+msgid "AR ESP: Bienes de Cambio"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_bienes_de_cambio_nc
+msgid "AR ESP: Bienes de Cambio NC"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_bienes_de_uso
+msgid "AR ESP: Bienes de Uso"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_caja_y_bancos
+msgid "AR ESP: Caja y Bancos"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_cargas_fiscales
+msgid "AR ESP: Cargas Fiscales"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_creditos_por_ventas
+msgid "AR ESP: Créditos por Ventas"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_creditos_por_ventas_nc
+msgid "AR ESP: Créditos por Ventas NC"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_deudas_comerciales
+msgid "AR ESP: Deudas Comerciales"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_deudas_no_corrientes
+msgid "AR ESP: Deudas No Corrientes"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_dividendos_a_pagar
+msgid "AR ESP: Dividendos a Pagar"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_inversiones_temporarias
+msgid "AR ESP: Inversiones Temporarias"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_llave_de_negocio
+msgid "AR ESP: Llave de Negocio"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_otras_deudas
+msgid "AR ESP: Otras Deudas"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_otras_inversiones_nc
+msgid "AR ESP: Otras Inversiones NC"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_otros_activos
+msgid "AR ESP: Otros Activos"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_otros_activos_nc
+msgid "AR ESP: Otros Activos NC"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_otros_creditos
+msgid "AR ESP: Otros Créditos"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_otros_creditos_nc
+msgid "AR ESP: Otros Créditos NC"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_part_terceros_en_soc
+msgid "AR ESP: Part. Terceros en Soc."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_participaciones_en_sociedades
+msgid "AR ESP: Participaciones en Sociedades"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_patrimonio_neto
+msgid "AR ESP: Patrimonio Neto"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_previsiones
+msgid "AR ESP: Previsiones"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_previsiones_no_corrientes
+msgid "AR ESP: Previsiones No Corrientes"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_prestamos
+msgid "AR ESP: Préstamos"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_remun_y_cargas_sociales
+msgid "AR ESP: Remun. y Cargas Sociales"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_account_chart_template
+msgid "Account Chart Template"
+msgstr "Plantilla de plan contable"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_activo
+msgid "Activo"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_intangible_assets
+msgid "Activos intangibles"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_advances_from_customers
+msgid "Anticipos de clientes"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.column,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_column
+#: model:account.report.column,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_column
+msgid "Balance"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_inventory
+msgid "Bienes de cambio"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_inventory_noncurrent
+msgid "Bienes de cambio (No corriente)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_fixed_assets
+msgid "Bienes de uso"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_bank_cash
+msgid "Caja y Bancos"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.account_check_to_date_report_view
 msgid "Cancelar"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_tax_liabilities
+msgid "Cargas fiscales"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -65,6 +292,11 @@ msgid "Confirmar"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_cogs
+msgid "Costo de venta de bienes y servicios"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_check_to_date_report_wizard__create_uid
 msgid "Created by"
 msgstr "Creado por"
@@ -75,8 +307,28 @@ msgid "Created on"
 msgstr "Creado el"
 
 #. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_sales_rec
+msgid "Créditos por ventas"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_sales_rec_noncurrent
+msgid "Créditos por ventas (No corriente)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.checks_to_date
 msgid "Cuit"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_accounts_payable
+msgid "Deudas Comerciales"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_long_term_liabilities
+msgid "Deudas no corrientes"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -90,14 +342,34 @@ msgid "Diario:"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_chart_template__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_check_to_date_report_wizard__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partner_ledger_report_handler__display_name
 msgid "Display Name"
-msgstr "Nombre a Mostrar"
+msgstr "Nombre para mostrar"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_dividends_payable
+msgid "Dividendos a pagar"
+msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.checks_to_date
 msgid "Empresa"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial
+#: model:ir.actions.client,name:l10n_ar_account_reports.action_account_report_ar_estado_patrimonial
+#: model:ir.ui.menu,name:l10n_ar_account_reports.menu_l10n_ar_estado_patrimonial
+msgid "Estado Patrimonial"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados
+#: model:ir.actions.client,name:l10n_ar_account_reports.action_account_report_ar_estado_resultados
+#: model:ir.ui.menu,name:l10n_ar_account_reports.menu_l10n_ar_estado_resultados
+msgid "Estado de Resultados"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -111,11 +383,27 @@ msgid "Fecha de pago"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_gross_inc
+msgid "Ganancia (Pérdida) bruta"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_adm_exp
+msgid "Gastos de administración"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_com_exp
+msgid "Gastos de comercialización"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_check_to_date_report_wizard__to_date
 msgid "Hasta Fecha"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_chart_template__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_check_to_date_report_wizard__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partner_ledger_report_handler__id
 msgid "ID"
@@ -124,6 +412,16 @@ msgstr "ID (identificación)"
 #. module: l10n_ar_account_reports
 #: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.checks_to_date
 msgid "Importe"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_tax_inc
+msgid "Impuesto a las ganancias"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_temp_investments
+msgid "Inversiones temporarias"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -142,14 +440,169 @@ msgid "Listado de cheques pendientes al"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_goodwill
+msgid "Llave de negocio"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.checks_to_date
 msgid "Número"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_other_liabilities
+msgid "Otras"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_other_long_term_investments
+msgid "Otras inversiones"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_other_current_assets
+msgid "Otros activos"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_other_noncurrent_assets
+msgid "Otros activos (No corriente)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_other_rec
+msgid "Otros créditos"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_other_rec_noncurrent
+msgid "Otros créditos (No corriente)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_other_exp
+msgid "Otros gastos"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_other_inc_exp
+msgid "Otros ingresos y egresos"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_long_term_investments
+msgid "Participaciones permanentes en sociedades"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_minority_interest
+msgid "Participación de terceros en sociedades controladas"
 msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_partner_ledger_report_handler
 msgid "Partner Ledger Custom Handler"
 msgstr "Gestor personalizado del libro mayor del contacto"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_pasivo
+msgid "Pasivo"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_equity
+msgid "Patrimonio neto"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_provisions
+msgid "Previsiones"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_long_term_provisions
+msgid "Previsiones no corrientes"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_loans_payable
+msgid "Préstamos"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_payroll_liabilities
+msgid "Remuneraciones y cargas sociales"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.ui.menu,name:l10n_ar_account_reports.menu_l10n_ar_financial_reports
+msgid "Reportes Financieros Argentina"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_net_inc
+msgid "Resultado Final del ejercicio"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_inc_before_tax
+msgid "Resultado antes del impuesto a las ganancias"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_fin_exp
+msgid "Resultados financieros y por tenencia (incluye RECPAM)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_subtotal_noncurrent_assets
+msgid "Subtotal del activo no corriente"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_assets
+msgid "Total del activo"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_current_assets
+msgid "Total del activo corriente"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_noncurrent_assets
+msgid "Total del activo no corriente"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_liabilities_combined
+msgid "Total del pasivo"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_liabilities_equity
+msgid "Total del pasivo, participación de terceros y patrimonio neto"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_debts
+msgid "Total deudas"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_current_liabilities
+msgid "Total pasivo corriente"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_noncurrent_liabilities
+msgid "Total pasivo no corriente"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_sales
+msgid "Ventas netas de bienes y servicios"
+msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_check_to_date_report_wizard
