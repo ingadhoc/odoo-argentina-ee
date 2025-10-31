@@ -76,13 +76,10 @@ class AccountMoveLine(models.Model):
         move = journal.create_tax_settlement_entry(self)
         return move
 
-    @api.depends(
-        "tax_repartition_line_id",
-        "tax_settlement_move_id.line_ids.full_reconcile_id",
-    )
+    @api.depends("tax_repartition_line_id", "tax_settlement_move_id.line_ids.full_reconcile_id", "parent_state")
     def _compute_tax_state(self):
         for rec in self:
-            if not rec.tax_repartition_line_id:
+            if not rec.tax_repartition_line_id or rec.parent_state == "draft":
                 state = False
             elif not rec.tax_settlement_move_id:
                 state = "to_settle"
