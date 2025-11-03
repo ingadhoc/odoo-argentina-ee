@@ -37,9 +37,15 @@ class AfipImportWizardLine(models.TransientModel):
     @api.depends("invoice_number", "partner_vat")
     def _compute_exists(self):
         for line in self:
+            # Determine move types based on journal type
+            if line.wizard_id.journal_id.type == "sale":
+                move_types = ["out_refund", "out_invoice"]
+            else:
+                move_types = ["in_refund", "in_invoice"]
+
             existing_invoice = line.env["account.move"].search(
                 [
-                    ("move_type", "in", ["in_refund", "in_invoice"]),
+                    ("move_type", "in", move_types),
                     ("display_name", "ilike", line.invoice_number),
                     ("partner_id.vat", "=", line.partner_vat),
                     ("company_id", "=", line.wizard_id.company_id.id),
@@ -117,15 +123,17 @@ class AfipImportWizardLine(models.TransientModel):
 
     def _get_move_type(self):
         """
-        Compute the move_type based on the document type.
-        :return: None
+        Compute the move_type based on the document type and journal type.
+        :return: move_type string
         """
         move_type = False
         document_type = self._get_document_type()
+        is_sale = self.wizard_id.journal_id.type == "sale"
+
         if document_type.internal_type in ["invoice", "debit_note"]:
-            move_type = "in_invoice"
+            move_type = "out_invoice" if is_sale else "in_invoice"
         elif document_type.internal_type == "credit_note":
-            move_type = "in_refund"
+            move_type = "out_refund" if is_sale else "in_refund"
         return move_type
 
     # Definimos la funcion que crea las lineas de factura

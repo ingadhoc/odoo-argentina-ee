@@ -18,6 +18,10 @@
                     </group>
                 </group>
 
+                <group>
+                    <field name="auto_validate"/>
+                </group>
+
                 <field name="line_ids" nolabel="1" readonly="1">
 
                     <list decoration-warning="exists == True">

@@ -55,6 +55,9 @@ class TestAfipImportWizard(common.TransactionCase):
         # Load test file containing different invoice types
         wizard = self._get_wizard_from_file("invoice_type_test.xlsx")
 
+        # Enable auto-validation for the test
+        wizard.auto_validate = True
+
         # Process the file
         view_return = wizard.action_confirm()
         invoice_ids = view_return["domain"][0][2]
