@@ -15,10 +15,10 @@ class AccountJournal(models.Model):
         # OVERRIDE
         journal = self or self.browse(self.env.context.get("default_journal_id"))
 
-        if (
-            journal.type == "purchase"
-            and journal.company_id.country_code == "AR"
-            and journal.company_id.chart_template == "ar_ri"
+        # Para purchase: siempre permitir
+        # Para sale: solo si l10n_ar_afip_pos es False
+        if journal.company_id.country_code == "AR" and (
+            journal.type == "purchase" or (journal.type == "sale" and not journal.l10n_ar_is_pos)
         ):
             attachments = self.env["ir.attachment"].browse(attachment_ids or [])
 
@@ -39,8 +39,19 @@ class AccountJournal(models.Model):
             # Optimización: Convertir todas las fechas de una vez usando vectorización de pandas
             df["Fecha"] = pd.to_datetime(df["Fecha"], dayfirst=True).dt.date
 
+            # Determinar las columnas según el tipo de diario
+            # En ventas: "Nro. Doc. Receptor", en compras: "Nro. Doc. Emisor"
+            if self.type == "sale":
+                vat_column = "Nro. Doc. Receptor"
+                type_column = "Tipo Doc. Receptor"
+                name_column = "Denominación Receptor"
+            else:
+                vat_column = "Nro. Doc. Emisor"
+                type_column = "Tipo Doc. Emisor"
+                name_column = "Denominación Emisor"
+
             # Optimización: Convertir VAT a string de una vez
-            df["Nro. Doc. Emisor"] = df["Nro. Doc. Emisor"].astype(int).astype(str)
+            df[vat_column] = df[vat_column].astype(int).astype(str)
 
             # Optimización: Generar número de factura usando vectorización
             df["Punto de Venta"] = df["Punto de Venta"].astype(int)
@@ -74,33 +85,32 @@ class AccountJournal(models.Model):
                 df[col] = pd.to_numeric(df[col], errors="coerce").fillna(0.0)
 
             # Optimización: Renombrar columnas directamente en el DataFrame
-            df = df.rename(
-                columns={
-                    "Fecha": "date_invoice",
-                    "Nro. Doc. Emisor": "partner_vat",
-                    "Tipo Doc. Emisor": "partner_identification_type",
-                    "Denominación Emisor": "partner_name",
-                    "Moneda": "currency",
-                    "Tipo Cambio": "currency_rate",
-                    "Imp. Total": "amount_total",
-                    "Tipo": "document_type",
-                    "Neto No Gravado": "no_gravado",
-                    "Op. Exentas": "exento",
-                    "Otros Tributos": "otros_tributos",
-                    "Cód. Autorización": "cae",
-                    "Neto Grav. IVA 0%": "neto_grav_iva_0",
-                    "IVA 2,5%": "iva_2_5",
-                    "Neto Grav. IVA 2,5%": "neto_grav_iva_2_5",
-                    "IVA 5%": "iva_5",
-                    "Neto Grav. IVA 5%": "neto_grav_iva_5",
-                    "IVA 10,5%": "iva_10_5",
-                    "Neto Grav. IVA 10,5%": "neto_grav_iva_10_5",
-                    "IVA 21%": "iva_21",
-                    "Neto Grav. IVA 21%": "neto_grav_iva_21",
-                    "IVA 27%": "iva_27",
-                    "Neto Grav. IVA 27%": "neto_grav_iva_27",
-                }
-            )
+            rename_dict = {
+                "Fecha": "date_invoice",
+                vat_column: "partner_vat",
+                type_column: "partner_identification_type",
+                name_column: "partner_name",
+                "Moneda": "currency",
+                "Tipo Cambio": "currency_rate",
+                "Imp. Total": "amount_total",
+                "Tipo": "document_type",
+                "Neto No Gravado": "no_gravado",
+                "Op. Exentas": "exento",
+                "Otros Tributos": "otros_tributos",
+                "Cód. Autorización": "cae",
+                "Neto Grav. IVA 0%": "neto_grav_iva_0",
+                "IVA 2,5%": "iva_2_5",
+                "Neto Grav. IVA 2,5%": "neto_grav_iva_2_5",
+                "IVA 5%": "iva_5",
+                "Neto Grav. IVA 5%": "neto_grav_iva_5",
+                "IVA 10,5%": "iva_10_5",
+                "Neto Grav. IVA 10,5%": "neto_grav_iva_10_5",
+                "IVA 21%": "iva_21",
+                "Neto Grav. IVA 21%": "neto_grav_iva_21",
+                "IVA 27%": "iva_27",
+                "Neto Grav. IVA 27%": "neto_grav_iva_27",
+            }
+            df = df.rename(columns=rename_dict)
 
             # Optimización: Convertir directamente a lista de tuplas solo con campos válidos
             valid_fields = [
@@ -142,8 +152,13 @@ class AccountJournal(models.Model):
             )
             wizard.write({"line_ids": line_vals})
 
+            # Determine wizard name based on journal type
+            wizard_name = (
+                "Importación de Facturas de Cliente" if self.type == "sale" else "Importación de Facturas de Proveedor"
+            )
+
             return {
-                "name": "Importación de Facturas de Proveedor",
+                "name": wizard_name,
                 "type": "ir.actions.act_window",
                 "res_model": "afip.import.wizard",
                 "target": "new",

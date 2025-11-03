@@ -13,6 +13,7 @@ class AfipImportWizard(models.TransientModel):
     line_ids = fields.One2many("afip.import.wizard.line", "wizard_id", string="Líneas de Facturas")
     company_id = fields.Many2one("res.company", required=True)
     journal_id = fields.Many2one("account.journal", required=True)
+    auto_validate = fields.Boolean(string="Autovalidar Facturas Importadas", default=False)
     total_bills_to_create = fields.Integer(
         compute="_compute_bills_to_create",
         string="Total de Facturas a Crear",
@@ -42,10 +43,12 @@ class AfipImportWizard(models.TransientModel):
             }
 
         new_moves = self.env["account.move"]
+        # Determine tax use type based on journal type
+        tax_use_type = "sale" if self.journal_id.type == "sale" else "purchase"
         base_domain = [
             ("price_include", "=", False),
             ("company_id", "=", self.company_id.id),
-            ("type_tax_use", "=", "purchase"),
+            ("type_tax_use", "=", tax_use_type),
         ]
         tax_iva_no_corresponde = self.env["account.tax"].search(
             base_domain + [("tax_group_id.l10n_ar_vat_afip_code", "=", "0")], limit=1
@@ -151,19 +154,13 @@ class AfipImportWizard(models.TransientModel):
 
             # Si tiene otros tributos, modificamos el valor por defecto con el wizard
             if line.otros_tributos > 0:
-                tax_line = [
-                    (
-                        0,
-                        0,
-                        {
-                            "tax_id": tax_otros_tributos.id,
-                            "amount": line.otros_tributos,
-                            "new_tax": True,
-                        },
+                if not tax_otros_tributos:
+                    raise UserError(
+                        "No se encontró un impuesto de Otros Tributos. "
+                        "Debe crear un impuesto de compras con el grupo de tributo 'Otros Tributos'."
                     )
-                ]
 
-                # Crear el wizard sin modificar los impuestos existentes
+                # Crear el wizard con el contexto correcto
                 invoice_taxes = (
                     self.env["account.invoice.tax"]
                     .with_context(active_model="account.move", active_ids=[move.id])
@@ -171,22 +168,41 @@ class AfipImportWizard(models.TransientModel):
                 )
 
                 # Agregar la nueva línea de impuesto al wizard
-                invoice_taxes.write({"tax_line_ids": tax_line})
+                invoice_taxes.write(
+                    {
+                        "tax_line_ids": [
+                            (
+                                0,
+                                0,
+                                {
+                                    "tax_id": tax_otros_tributos.id,
+                                    "amount": line.otros_tributos,
+                                    "new_tax": True,
+                                },
+                            )
+                        ]
+                    }
+                )
 
                 # Actualizar los impuestos en el movimiento
                 invoice_taxes.action_update_tax()
 
-            # Confirm the invoice only if the total matches line.amount_total
-            if abs(move.amount_total - line.amount_total) <= 0.10 and line.amount_total > 0:
+            # Confirm the invoice only if auto_validate is True and the total matches line.amount_total
+            if self.auto_validate and abs(move.amount_total - line.amount_total) <= 0.10 and line.amount_total > 0:
                 move.action_post()
 
             new_moves += move
+
+        # Determine title based on journal type
+        title = (
+            "Facturas de Cliente Importadas" if self.journal_id.type == "sale" else "Facturas de Proveedor Importadas"
+        )
 
         return {
             "type": "ir.actions.act_window",
             "res_model": "account.move",
             "view_mode": "list,form",
-            "name": "Facturas de Proveedor Importadas",
+            "name": title,
             "domain": [("id", "in", new_moves.ids)],
             "target": "current",
             "views": [
