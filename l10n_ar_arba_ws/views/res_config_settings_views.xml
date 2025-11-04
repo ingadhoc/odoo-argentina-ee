@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="res_config_settings_view_form">
+        <field name="name">res.config.settings.view.form.inherit.l10n_ar_tax</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="l10n_ar_tax.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+
+            <setting id="arba_cit" position="inside">
+                <!-- <setting id="arba_cit" string="Webservice A122R (ARBA Retenciones)" company_dependent="1"> -->
+                <span class="o_form_label">Webservice Retenciones (A122R)</span>
+                <div class="content-group">
+                    <div class="row mt16">
+                        <label for="l10n_ar_arba_wh_mode" class="col-lg-3 o_light_label" string="Mode"/>
+                        <field name="l10n_ar_arba_wh_mode"/>
+                    </div>
+                    <div class="row mt16">
+                        <label for="l10n_ar_arba_dj_period" class="col-lg-3 o_light_label" string="Periodicity"/>
+                        <field name="l10n_ar_arba_dj_period"/>
+                    </div>
+                    <div class="row mt16">
+                        <label for="l10n_ar_arba_env" class="col-lg-3 o_light_label"/>
+                        <field name="l10n_ar_arba_env" widget="radio" string="Envionment"/>
+                    </div>
+                   <div class="row mt16" invisible="l10n_ar_arba_env == 'demo'">
+                        <label for="l10n_ar_arba_client_id" class="col-lg-3 o_light_label"/>
+                        <field name="l10n_ar_arba_client_id" string="Client ID"/>
+                    </div>
+                   <div class="row mt16" invisible="l10n_ar_arba_env == 'demo'">
+                        <label for="l10n_ar_arba_client_secret" class="col-lg-3 o_light_label"/>
+                        <field name="l10n_ar_arba_client_secret" string="Secret" password="True"/>
+                    </div>
+                </div>
+                <!-- </setting> -->
+            </setting>
+
+        </field>
+    </record>
+
+</odoo>

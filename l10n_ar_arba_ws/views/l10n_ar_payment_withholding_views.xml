@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_l10n_ar_payment_withholding_form" model="ir.ui.view">
+        <field name="name">l10n_ar.payment.withholding.form</field>
+        <field name="model">l10n_ar.payment.withholding</field>
+        <field name="inherit_id" ref="l10n_ar_tax.view_l10n_ar_payment_withholding_form"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="l10n_ar_cert_number"/>
+                <field name="l10n_ar_dj_arba_id"/>
+            </field>
+        </field>
+    </record>
+    <record id="view_l10n_ar_payment_withholding_tree" model="ir.ui.view">
+        <field name="name">l10n_ar.payment.withholding.tree</field>
+        <field name="model">l10n_ar.payment.withholding</field>
+        <field name="inherit_id" ref="l10n_ar_tax.view_l10n_ar_payment_withholding_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="l10n_ar_cert_number"/>
+                <field name="l10n_ar_dj_arba_id" optional="hide"/>
+            </field>
+        </field>
+    </record>
+</odoo>
