@@ -441,7 +441,7 @@ class AccountJournal(models.Model):
         backward_comp_is_installed = self.env["ir.module.module"].search(
             [("name", "=", "l10n_ar_tax_settlement_backward_comp"), ("state", "=", "installed")]
         )
-        for line in move_lines.sorted("date"):
+        for line in move_lines.filtered("amount_currency").sorted("date"):
             # pay_group = payment.payment_group_id
             move = line.move_id
             payment = line.payment_id
