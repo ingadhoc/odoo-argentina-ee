@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_payment_form" model="ir.ui.view">
+        <field name="name">account.payment.form.inherited</field>
+        <field name="model">account.payment</field>
+        <field name="priority" eval="30"/>
+        <field name="inherit_id" ref="l10n_ar_tax.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='l10n_ar_withholding_line_ids']//field[@name='ref']" position="after">
+                <button name="send_to_arba" type="object" icon="oi-arrow-right" string="ARBA" invisible="l10n_ar_arba_wh_mode == 'batch_import' or l10n_ar_cert_number or parent.state in ['draft', 'canceled', 'rejected'] or l10n_ar_state_id != %(base.state_ar_b)d" help="Sent to this withholding ARBA"/>
+                <field name="l10n_ar_cert_number" string="Cert Number" optional="hide"/>
+                <field name="l10n_ar_dj_arba_id" optional="hide"/>
+                <field name="l10n_ar_arba_wh_mode" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
