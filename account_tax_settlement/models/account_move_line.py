@@ -78,7 +78,9 @@ class AccountMoveLine(models.Model):
 
     @api.depends(
         "tax_repartition_line_id",
-        "tax_settlement_move_id.line_ids.full_reconcile_id",
+        "tax_settlement_move_id",
+        # we move this to full reconcile model because full reconcile is being created by sql and depends don't work
+        # "tax_settlement_move_id.line_ids.full_reconcile_id",
     )
     def _compute_tax_state(self):
         for rec in self:
