@@ -17,8 +17,10 @@ class AccountJournal(models.Model):
 
         # Para purchase: siempre permitir
         # Para sale: solo si l10n_ar_afip_pos es False
-        if journal.company_id.country_code == "AR" and (
-            journal.type == "purchase" or (journal.type == "sale" and not journal.l10n_ar_is_pos)
+        if (
+            (journal.type == "purchase" or (journal.type == "sale" and not journal.l10n_ar_is_pos))
+            and journal.company_id.country_code == "AR"
+            and journal.company_id.l10n_ar_afip_responsibility_type_id.code == "1"
         ):
             attachments = self.env["ir.attachment"].browse(attachment_ids or [])
 
