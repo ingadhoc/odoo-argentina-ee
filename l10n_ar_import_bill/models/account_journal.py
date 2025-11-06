@@ -18,7 +18,7 @@ class AccountJournal(models.Model):
         if (
             journal.type == "purchase"
             and journal.company_id.country_code == "AR"
-            and journal.company_id.chart_template == "ar_ri"
+            and journal.company_id.l10n_ar_afip_responsibility_type_id.code == "1"
         ):
             attachments = self.env["ir.attachment"].browse(attachment_ids or [])
 
