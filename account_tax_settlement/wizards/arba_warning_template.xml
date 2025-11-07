@@ -1,13 +1,13 @@
 <odoo>
     <template id="arba_warning_template">
         <div class="alert alert-warning" role="alert" style="margin-bottom: 1em;">
-            <span t-esc="'⚠ '"/>
-            <t t-esc="'Attention! Don''t forget to perform the Post Processing of the File.'"/>
-            <t t-esc="' You can access the documentation '"/>
-            <a href="https://www.adhoc.com.ar/odoo/knowledge/7237" target="_blank" rel="noopener noreferrer">
-                <t t-esc="'here'"/>
+            <span>⚠ </span>
+            <span>Attention! Don't forget to perform the Post Processing of the File.</span>
+            <span> You can access the documentation </span>
+            <a href="https://www.adhoc.com.ar/odoo/knowledge/8430" target="_blank" rel="noopener noreferrer">
+                <span>here</span>
             </a>
-            <t t-esc="'.'"/>
+            <span>.</span>
         </div>
     </template>
 </odoo>
