@@ -145,6 +145,12 @@ class ResCompany(models.Model):
         companies_with_surcharge = self.filtered(
             lambda x: x.currency_provider == "afip" and (x.rate_surcharge or x.rate_perc)
         )
+        _logger.log(
+            25,
+            " debug_l10n_ar_currency_update - companies_with_surcharge %s. parsed_data:%s\n",
+            ",".join(companies_with_surcharge.mapped("name")),
+            parsed_data,
+        )
         for company in companies_with_surcharge:
             # Hacemos una copia del diccionario por cada compañía para no modificar el original
             new_parsed_data = parsed_data.copy()
@@ -156,11 +162,23 @@ class ResCompany(models.Model):
                         ("company_id", "=", company.id),
                     ]
                 )
+                _logger.log(
+                    25,
+                    f"debug_l10n_ar_currency_update - already_existing_rate.inverse_company_rate {already_existing_rate.inverse_company_rate if already_existing_rate else 'False'}, currency {currency}",
+                )
                 if not already_existing_rate and rate and rate != 1.0:
                     rate = 1.0 / rate
                     rate = rate * (1.0 + (company.rate_perc or 0.0))
                     rate += company.rate_surcharge or 0.0
                     rate = 1.0 / rate
                     new_parsed_data[currency] = (rate, date_rate)
+            _logger.log(
+                25,
+                "debug_l10n_ar_currency_update - company %s. rate_perc %s. rate_surcharge %s. new_parsed_data: %s\n",
+                company.name,
+                company.rate_perc,
+                company.rate_surcharge,
+                new_parsed_data,
+            )
             super(ResCompany, company)._generate_currency_rates(new_parsed_data)
         super(ResCompany, self - companies_with_surcharge)._generate_currency_rates(parsed_data)
