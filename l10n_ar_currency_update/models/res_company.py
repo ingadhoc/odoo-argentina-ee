@@ -99,8 +99,9 @@ class ResCompany(models.Model):
             .search([("active", "=", True), ("date_end", ">=", today)])
             .filtered(lambda c: c.country_code == "AR")
         )
-        if self.l10n_ar_afip_ws_crt_id in valid_certificate:
-            company = self
+        if self.env.company.l10n_ar_afip_ws_crt_id in valid_certificate:
+            # Dejamos self.env.company porque self puede ser un recordset de más de una compañía
+            company = self.env.company
         else:
             company = valid_certificate[:1].company_id if valid_certificate else False
         if not company:
@@ -128,11 +129,6 @@ class ResCompany(models.Model):
             except Exception as e:
                 self.env.company = env_company
                 _logger.log(25, "Could not get rate for currency %s. This is what we get:\n%s", currency.name, e)
-            else:
-                for company in self.filtered(lambda x: x.currency_provider == "afip"):
-                    company.l10n_ar_last_currency_sync_date = fields.Date.context_today(
-                        self.with_context(tz="America/Argentina/Buenos_Aires")
-                    )
         return res or False
 
     def _generate_currency_rates(self, parsed_data):
@@ -142,10 +138,13 @@ class ResCompany(models.Model):
         """
         currency_rate = self.env["res.currency.rate"]
         currency_object = self.env["res.currency"]
-        companies_with_surcharge = self.filtered(
-            lambda x: x.currency_provider == "afip" and (x.rate_surcharge or x.rate_perc)
+        today = fields.Date.context_today(self.with_context(tz="America/Argentina/Buenos_Aires"))
+        ar_currency_provider_companies = self.filtered(
+            lambda x: x.currency_provider == "afip"
+            and (not x.l10n_ar_last_currency_sync_date or x.l10n_ar_last_currency_sync_date < today)
         )
-        for company in companies_with_surcharge:
+        ar_companies_with_surcharge = ar_currency_provider_companies.filtered(lambda x: x.rate_surcharge or x.rate_perc)
+        for company in ar_companies_with_surcharge:
             # Hacemos una copia del diccionario por cada compañía para no modificar el original
             new_parsed_data = parsed_data.copy()
             for currency, (rate, date_rate) in parsed_data.items():
@@ -162,5 +161,11 @@ class ResCompany(models.Model):
                     rate += company.rate_surcharge or 0.0
                     rate = 1.0 / rate
                     new_parsed_data[currency] = (rate, date_rate)
+                else:
+                    if currency != "ARS":
+                        del new_parsed_data[currency]
             super(ResCompany, company)._generate_currency_rates(new_parsed_data)
-        super(ResCompany, self - companies_with_surcharge)._generate_currency_rates(parsed_data)
+        super(ResCompany, ar_currency_provider_companies - ar_companies_with_surcharge)._generate_currency_rates(
+            parsed_data
+        )
+        ar_currency_provider_companies.l10n_ar_last_currency_sync_date = today
