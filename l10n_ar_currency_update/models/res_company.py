@@ -99,8 +99,9 @@ class ResCompany(models.Model):
             .search([("active", "=", True), ("date_end", ">=", today)])
             .filtered(lambda c: c.country_code == "AR")
         )
-        if self.l10n_ar_afip_ws_crt_id in valid_certificate:
-            company = self
+        if self.env.company.l10n_ar_afip_ws_crt_id in valid_certificate:
+            # Dejamos self.env.company porque self puede ser un recordset de más de una compañía
+            company = self.env.company
         else:
             company = valid_certificate[:1].company_id if valid_certificate else False
         if not company:
@@ -136,17 +137,19 @@ class ResCompany(models.Model):
         return res or False
 
     def _generate_currency_rates(self, parsed_data):
-        """Apply surcharge for on afip rates
-        Si tenemos definido una tasa de recargo o una percepcion definido en la compañia AR
-        necesitamos volver a calcular la información de la tasa AFIP mas esos montos extras
+        """Sobre escribimos este método para lograr dos cosas:
+
+        1. Evitar sobre escribir una cotización en las compañías Argentinas. Odoo por defecto siempre que intenta
+           sincronizar una tasa la sobre escribe. No queremos esto, si ya existe una tasa (se haya creado por 1er cron,
+           2do cron, manual, o porque fue agregada con extra de porcentaje/recargo) no deben ser modificadas.
+        2. Compañías argentinas: si una compañía tiene monto de recargo o porcentaje y otras compañías no entonces debe
+           aplicarse dicho monto de recargo o porcentaje solamente a las compañías que lo tengan configurado.
         """
         currency_rate = self.env["res.currency.rate"]
         currency_object = self.env["res.currency"]
-        companies_with_surcharge = self.filtered(
-            lambda x: x.currency_provider == "afip" and (x.rate_surcharge or x.rate_perc)
-        )
-        for company in companies_with_surcharge:
-            # Hacemos una copia del diccionario por cada compañía para no modificar el original
+        ar_companies = self.filtered(lambda x: x.currency_provider == "afip")
+
+        for company in ar_companies:
             new_parsed_data = parsed_data.copy()
             for currency, (rate, date_rate) in parsed_data.items():
                 already_existing_rate = currency_rate.search(
@@ -156,11 +159,15 @@ class ResCompany(models.Model):
                         ("company_id", "=", company.id),
                     ]
                 )
-                if not already_existing_rate and rate and rate != 1.0:
+                if currency == "ARS":
+                    continue
+                if already_existing_rate:
+                    new_parsed_data.pop(currency)
+                elif company.rate_surcharge or company.rate_perc:
                     rate = 1.0 / rate
                     rate = rate * (1.0 + (company.rate_perc or 0.0))
                     rate += company.rate_surcharge or 0.0
                     rate = 1.0 / rate
                     new_parsed_data[currency] = (rate, date_rate)
             super(ResCompany, company)._generate_currency_rates(new_parsed_data)
-        super(ResCompany, self - companies_with_surcharge)._generate_currency_rates(parsed_data)
+        super(ResCompany, self - ar_companies)._generate_currency_rates(parsed_data)
