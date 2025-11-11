@@ -1,6 +1,6 @@
 {
     "name": "Reporte de Libro Diario Contable",
-    "version": "18.0.1.1.0",
+    "version": "19.0.1.0.0",
     "author": "ADHOC SA",
     "website": "www.adhoc.com.ar",
     "category": "Localization/Accounting",
@@ -15,5 +15,5 @@
         "views/account_journal_views.xml",
         "views/account_journal_book_group_views.xml",
     ],
-    "installable": False,
+    "installable": True,
 }
