@@ -45,7 +45,7 @@
     </record>
 
     <menuitem
-        parent="account_reports.account_reports_audit_reports_menu"
+        parent="account_reports.account_reports_audit_menu"
         sequence="15"
         action="action_account_journal_book_report"
         id="menu_account_journal_book_report"
