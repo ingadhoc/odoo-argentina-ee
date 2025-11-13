@@ -1,13 +1,17 @@
 ##############################################################################
 # For copyright and license notices, see __manifest__.py file in root directory
 ##############################################################################
+import base64
+
 from dateutil.relativedelta import relativedelta
+from markupsafe import Markup
 from odoo import api, fields, models
 from odoo.tools.misc import get_lang
 
 
 class AccountJournalBookReport(models.TransientModel):
     _name = "account.journal.book.report"
+    _inherit = "base.bg"
     _description = "Journal Book Report"
 
     company_id = fields.Many2one("res.company", required=True, default=lambda self: self.env.company)
@@ -100,10 +104,38 @@ class AccountJournalBookReport(models.TransientModel):
     def action_check_report(self):
         """Este método se llama desde el botón 'Imprimir' del wizard 'Libro Diario'"""
         self.ensure_one()
-        data = {}
-        data["ids"] = self.env.context.get("active_ids", [])
-        data["model"] = self.env.context.get("active_model", "ir.ui.menu")
-        data["form"] = self.read(["date_from", "date_to", "journal_ids", "target_move", "company_id"])[0]
-        used_context = self._build_contexts(data)
-        data["form"]["used_context"] = dict(used_context, lang=get_lang(self.env).code)
-        return self.with_context(discard_logo_check=True)._print_report(data)
+        if not self._context.get("bg_job"):
+            return self.bg_enqueue("action_check_report")
+        else:
+            data = {}
+            data["ids"] = self.env.context.get("active_ids", [])
+            data["model"] = self.env.context.get("active_model", "ir.ui.menu")
+            data["form"] = self.read(["date_from", "date_to", "journal_ids", "target_move", "company_id"])[0]
+            used_context = self._build_contexts(data)
+            data["form"]["used_context"] = dict(used_context, lang=get_lang(self.env).code)
+            res = self.with_context(discard_logo_check=True)._print_report(data)
+            reportname = res.get("report_name")
+            report = self.env["ir.actions.report"].search([("report_name", "=", reportname)], limit=1)
+            docids = res.get("context")["active_ids"]
+            periods = res.get("context")["periods"]
+            document, doc_format = report.with_context(
+                must_skip_send_to_printer=True, last_entry_number=self.last_entry_number, periods=periods
+            )._render_aeroo(reportname, docids, data=data)
+            attachment = self.env["ir.attachment"].create(
+                {
+                    "name": reportname + ".xls",
+                    "datas": base64.b64encode(document),
+                    "res_model": self._name,
+                    "type": "binary",
+                    "company_id": self.company_id.id,
+                }
+            )
+
+            base_url = self.env["ir.config_parameter"].sudo().get_param("web.base.url")
+            download_url = f"{base_url}/web/content/{attachment.id}?download=true"
+
+            res_html = f"""
+                The following document has been generated:<br>
+                <a href="{download_url}" target="_blank">{attachment.name}</a>
+            """
+            return Markup(res_html)
