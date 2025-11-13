@@ -1,6 +1,6 @@
 {
     "name": "Reporte de Libro Diario Contable",
-    "version": "18.0.1.1.0",
+    "version": "18.0.1.2.0",
     "author": "ADHOC SA",
     "website": "www.adhoc.com.ar",
     "category": "Localization/Accounting",
@@ -8,6 +8,7 @@
     "depends": [
         "account_reports",
         "report_aeroo",
+        "base_bg",
     ],
     "data": [
         "wizard/account_journal_book_report_views.xml",
