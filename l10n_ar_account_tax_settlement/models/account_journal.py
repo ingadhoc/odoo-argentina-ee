@@ -784,17 +784,8 @@ class AccountJournal(models.Model):
                     or "R"
                 )
                 content += line.l10n_latam_document_type_id.l10n_ar_letter
-            # TODO el if-else de abajo es TEMPORAL, hubo un bug que hizo que algunos moves de pagos tengan el tipo
-            # de documento incluido en l10n_latam_document_number lo cual hace que se obtenga un piedrazo acá.
-            # Ejemplo: l10n_latam_document_number debe ser '0001-00000001' en lugar de 'OP-X 0001-00000001'
-            # lo dejamos por un tiempo para que los usuarios puedan descargar los txt de aquellos pagos
-            # que quedaron rotos (ejemplo: con l10n_latam_document_number = 'OP-X 0001-00000001')
-            if not move.l10n_latam_document_type_id:
-                document_number = move.l10n_latam_document_number.split(" ", 1)[-1]
-            else:
-                document_number = move.l10n_latam_document_number
             document_parts = move._l10n_ar_get_document_number_parts(
-                document_number, move.l10n_latam_document_type_id.code
+                move.l10n_latam_document_number, move.l10n_latam_document_type_id.code
             )
             # si el punto de venta es de 5 digitos no encontramos doc
             # que diga como proceder, tomamos los ultimos 4 digitos
@@ -1093,17 +1084,8 @@ class AccountJournal(models.Model):
                 content += f"{pos:>04s}"
                 content += f"{number:>016s}"
             else:
-                # TODO el if-else de abajo es TEMPORAL, hubo un bug que hizo que algunos moves de pagos tengan el tipo
-                # de documento incluido en l10n_latam_document_number lo cual hace que se obtenga un piedrazo acá.
-                # Ejemplo: l10n_latam_document_number debe ser '0001-00000001' en lugar de 'OP-X 0001-00000001'
-                # lo dejamos por un tiempo para que los usuarios puedan descargar los txt de aquellos pagos
-                # que quedaron rotos (ejemplo: con l10n_latam_document_number = 'OP-X 0001-00000001')
-                if not move.l10n_latam_document_type_id:
-                    document_number = move.l10n_latam_document_number.split(" ", 1)[-1]
-                else:
-                    document_number = move.l10n_latam_document_number
                 document_parts = move._l10n_ar_get_document_number_parts(
-                    document_number, move.l10n_latam_document_type_id.code
+                    move.l10n_latam_document_number, move.l10n_latam_document_type_id.code
                 )
                 pos = document_parts["point_of_sale"]
                 number = document_parts["invoice_number"]
