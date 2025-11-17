@@ -3,15 +3,15 @@
 # 	* l10n_ar_import_bill
 # 
 # Translators:
-# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025
+# ADHOC - Bot <transbot@adhoc.com.ar>, 2025
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 18.0+e\n"
+"Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-23 20:07+0000\n"
-"PO-Revision-Date: 2025-07-23 20:07+0000\n"
-"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025\n"
+"POT-Creation-Date: 2025-11-14 13:51+0000\n"
+"PO-Revision-Date: 2025-11-14 13:51+0000\n"
+"Last-Translator: ADHOC - Bot <transbot@adhoc.com.ar>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -25,6 +25,11 @@ msgid ""
 "<i class=\"fa fa-info-circle\" title=\"Info\"/> <span "
 "invisible=\"total_bills_exists == 0\">Invoices highlighted in yellow will "
 "not be created because they already exist. </span>"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__auto_validate
+msgid "Autovalidar Facturas Importadas"
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -65,10 +70,11 @@ msgid "Created on"
 msgstr ""
 
 #. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_account_journal__display_name
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__display_name
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nombre para mostrar"
 
 #. module: l10n_ar_import_bill
 #: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_account_move_list_bill_import
@@ -91,29 +97,45 @@ msgid "Fecha de Factura"
 msgstr ""
 
 #. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_account_journal__id
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__id
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__id
 msgid "ID"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva
-msgid "IVA"
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva_10_5
+msgid "IVA 10.5%"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva_2_5
+msgid "IVA 2.5%"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva_21
+msgid "IVA 21%"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva_27
+msgid "IVA 27%"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva_5
+msgid "IVA 5%"
 msgstr ""
 
 #. module: l10n_ar_import_bill
 #: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
-msgid "Importador de Facturas AFIP"
+msgid "Importador de Facturas ARCA"
 msgstr ""
 
 #. module: l10n_ar_import_bill
 #: model:ir.model,name:l10n_ar_import_bill.model_afip_import_wizard
 msgid "Importador de Facturas de Proveedor desde Excel AFIP"
-msgstr ""
-
-#. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__neto_gravado
-msgid "Impuesto Neto Gravado"
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -147,6 +169,36 @@ msgstr ""
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__currency
 msgid "Moneda"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__neto_grav_iva_0
+msgid "Neto Gravado IVA 0%"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__neto_grav_iva_10_5
+msgid "Neto Gravado IVA 10.5%"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__neto_grav_iva_2_5
+msgid "Neto Gravado IVA 2.5%"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__neto_grav_iva_21
+msgid "Neto Gravado IVA 21%"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__neto_grav_iva_27
+msgid "Neto Gravado IVA 27%"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__neto_grav_iva_5
+msgid "Neto Gravado IVA 5%"
 msgstr ""
 
 #. module: l10n_ar_import_bill
