@@ -11,6 +11,12 @@ class BankRecWidget(models.Model):
         data = super()._prepare_embedded_views_data()
         data["amls"]["context"]["default_st_line_id"] = self.st_line_id.id
 
+        # Activate the partner filter by default
+        for dynamic_filter in data["amls"].get("dynamic_filters", []):
+            if dynamic_filter["name"] == "receivable_payable_matching":
+                dynamic_filter["is_default"] = True
+                break
+
         if bool(self.env["ir.config_parameter"].sudo().get_param("account_accountant_ux.use_search_filter_amount")):
             data["amls"]["context"]["search_default_same_amount"] = True
         return data
