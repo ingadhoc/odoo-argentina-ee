@@ -3,74 +3,38 @@
     <!-- the sequence of the configuration sub menu is 30 -->
     <!-- <menuitem id='root_menu' name='Tools' parent='base.menu_base_partner' sequence="25"/> -->
 
-    <record model="ir.actions.act_window" id="action_base_partner_update_from_padron">
-        <field name="name">Update Partners From Padron AFIP</field>
+    <!-- <record model="ir.actions.act_window" id="action_base_partner_update_from_padron">
+        <field name="name">Update Partners From Padron ARCA</field>
         <field name="res_model">res.partner.update.from.padron.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
-        <!-- <field name="context">{'active_test': False}</field> -->
-    </record>
+    </record> -->
 
-    <menuitem id='menu_base_partner_update_from_padron'
+    <!-- <menuitem id='menu_base_partner_update_from_padron'
         action='action_base_partner_update_from_padron'
         groups='base.group_system'
-        parent='contacts.res_partner_menu_config'/>
+        parent='contacts.res_partner_menu_config'/> -->
 
-    <record model='ir.ui.view' id='view_base_partner_update_from_padron_form'>
+    <record model='ir.ui.view' id='view_base_partner_update_from_padron_ar_form'>
         <field name='name'>res.partner.update.from.padron.wizard.form</field>
         <field name='model'>res.partner.update.from.padron.wizard</field>
+        <field name='inherit_id' ref='partner_autocomplete_wizard.view_base_partner_update_from_padron_form'/>
         <field name='arch' type='xml'>
-            <form string='Update From Padron AFIP'>
-                <field name="state" invisible="1" />
-                <header>
-                    <button name='update_selection' string='Update Selection'
-                        class='oe_highlight'
-                        type='object'
-                        invisible="state in ('option', 'finished')"/>
-                    <button name='next_cb' string='Skip these partner'
-                        type='object'  class='oe_link'
-                        invisible="state != 'selection'" />
-                    <button name='start_process_cb'
-                        string='Update with Manual Check'
-                        type='object'  class='oe_highlight'
-                        invisible="state != 'option'" />
-                    <button name='automatic_process_cb'
-                        string='Update Automatically'
-                        type='object' class='oe_highlight'
-                        confirm="Are you sure to execute the automatic update of your partners ?"
-                        invisible="state != 'option'" />
-                    <span class="or_cancel" invisible="state == 'finished'">or
-                        <button string="Cancel" class="oe_link oe_inline" special="cancel"/>
-                    </span>
-                    <span class="or_cancel" invisible="state != 'finished'">
-                        <button string="Close" class="oe_link oe_inline" special="cancel"/>
-                    </span>
-                </header>
-                <sheet>
-                    <h2 invisible="state != 'finished'">There are no more partners to update for this request...</h2>
-                    <field name="wizard_error" readonly="1" invisible="not wizard_error"/>
-                    <p class="oe_grey" invisible="state != 'option'">
-                        Only Partners with cuit are going to be updated.<br/>
-                        Select the list of fields you want to update.
-                    </p>
-                    <group invisible="state not in ('option',)">
-                        <field name="field_to_update_ids" widget="many2many_tags" options="{'no_create': True}" />
-                        <field name="update_constancia"/>
-                        <field name="title_case"/>
-                    </group>
-                    <group invisible="state in ('option', 'finished')">
-                        <field name="partner_id" required="state == 'selection'"/>
-                        <field name="field_ids" nolabel="1" colspan="2">
-                            <list create="false">
-                                <field name="label"/>
-                                <field name="field" groups="base.group_no_one"/>
-                                <field name="old_value"/>
-                                <field name="new_value"/>
-                            </list>
-                        </field>
-                    </group>
-                </sheet>
-            </form>
+            <xpath expr="//form" position="attributes">
+                <attribute name="string">Update From Padron ARCA</attribute>
+            </xpath>
+            <xpath expr="//p[@class='oe_grey']" position="replace">
+                <p class="oe_grey" invisible="state != 'option'">
+                    Only Partners with CUIT are going to be updated.<br/>
+                    Select the list of fields you want to update.
+                </p>
+            </xpath>
+            <xpath expr="//field[@name='title_case']" position="after">
+                <field name="update_constancia"/>
+            </xpath>
+            <xpath expr="//button[@name='automatic_process_cb']" position="attributes">
+                <attribute name="confirm">Are you sure to execute the automatic update of your partners ?</attribute>
+            </xpath>
         </field>
     </record>
 
