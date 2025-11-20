@@ -19,7 +19,7 @@
 ##############################################################################
 {
     "name": "Tax Settlements For Argentina",
-    "version": "18.0.1.11.0",
+    "version": "18.0.1.12.0",
     "category": "Accounting",
     "author": "ADHOC SA",
     "website": "www.adhoc.com.ar",
