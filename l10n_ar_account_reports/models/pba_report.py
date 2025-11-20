@@ -1,6 +1,8 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 # TODO mejorar esa importación ya que no sabemos si estos helpers van a seguir en
 # l10n_ar_account_tax_settlement
+import re
+
 from odoo import _, fields, models
 from odoo.exceptions import UserError
 
@@ -18,34 +20,18 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
         # Add export button
         txt_export_button = [
             {
-                "name": "TXT Retenciones (excepto actividad 29, 7 quincenal, 7 y 17 de Bancos)",
-                "sequence": 30,
-                "action": "export_file",
-                "action_param": "pba_ret_txt",
-                "file_export_type": "TXT",
-                "branch_allowed": True,
-            },
-            {
-                "name": "TXT Percepciones (excepto actividad 29, 7 quincenal, 7 y 17 de Bancos)",
-                "sequence": 30,
-                "action": "export_file",
-                "action_param": "pba_perc_txt",
-                "file_export_type": "TXT",
-                "branch_allowed": True,
-            },
-            {
-                "name": "TXT Percepciones Act. 7 método Percibido (quincenal)",
-                "sequence": 30,
-                "action": "export_file",
-                "action_param": "pba_perc_act_7_txt",
-                "file_export_type": "TXT",
-                "branch_allowed": True,
-            },
-            {
                 "name": "TXT Retenciones IIBB aplicadas ARBA desde 01/03/2026: Retenciones (excepto actividad 29, 7 quincenal, 7 y 17 de Bancos)",
                 "sequence": 30,
                 "action": "export_file",
                 "action_param": "pba_ret_desde_01032026_txt",
+                "file_export_type": "TXT",
+                "branch_allowed": True,
+            },
+            {
+                "name": "TXT Retenciones IIBB aplicadas ARBA alta por lote A-122R desde 01/03/2026.",
+                "sequence": 30,
+                "action": "export_file",
+                "action_param": "pba_alta_ret_lote_a122r_01032026_txt",
                 "file_export_type": "TXT",
                 "branch_allowed": True,
             },
@@ -68,7 +54,7 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
         ]
         options["buttons"].extend(txt_export_button)
 
-    def pba_ret_txt(self, options):
+    def pba_ret_desde_01032026_txt(self, options):
         period = 1
         file_name = "AR-%s-%s-%s-LOTEX.txt" % (
             self.env.company.vat,
@@ -77,46 +63,25 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
         )
         return {
             "file_name": file_name,
-            "file_content": self._pba_get_txt_files(options, "ret"),
+            "file_content": self._pba_get_txt_files_desde_01032026(options, "ret", move_lines),
             "file_type": "txt",
         }
 
-    def pba_perc_txt(self, options):
+    def pba_alta_ret_lote_a122r_01032026_txt(self, options):
         period = 1
-        file_name = "AR-%s-%s-%s-LOTEX.txt" % (
+        # period = move_lines and fields.Date.from_string(move_lines[0].date).strftime("%Y%mX") or ""
+        # ER-vat-PERIODO-ACTIVIDAD-LOTE_MD5
+        # Esto funciona para el tipo de actividad 6 que es el regimen de retenciones generales.
+        # En el futuro si agregamos mas regimenes/actividades debemos de sacar este dato
+        # de la configuracion de la compañía
+        file_name = "ER-%s-%s-%s-LOTEXXXXX.txt" % (
             self.env.company.vat,
             period,
-            "7",  # 7 serian las percepciones
+            "6",  # 6 serian las retenciones
         )
         return {
             "file_name": file_name,
-            "file_content": self._pba_get_txt_files(options, "perc"),
-            "file_type": "txt",
-        }
-
-    def pba_perc_act_7_txt(self, options):
-        period = 1
-        file_name = "AR-%s-%s-%s-LOTEX.txt" % (
-            self.env.company.vat,
-            period,
-            "7",  # 7 serian las percepciones
-        )
-        return {
-            "file_name": file_name,
-            "file_content": self._pba_get_txt_files(options, "perc_act_7"),
-            "file_type": "txt",
-        }
-
-    def pba_ret_desde_01032026_txt(self, options):
-        period = 1
-        file_name = "AR-%s-%s-%s-LOTEX.txt" % (
-            self.env.company.vat,
-            period,
-            "6",  # 7 serian las percepciones
-        )
-        return {
-            "file_name": file_name,
-            "file_content": self._pba_get_txt_files_desde_01032026(options, "ret"),
+            "file_content": self._pba_get_txt_files_desde_01032026(options, "ret_a122r", move_lines),
             "file_type": "txt",
         }
 
@@ -129,7 +94,7 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
         )
         return {
             "file_name": file_name,
-            "file_content": self._pba_get_txt_files_desde_01032026(options, "perc"),
+            "file_content": self._pba_get_txt_files_desde_01032026(options, "perc", move_lines),
             "file_type": "txt",
         }
 
@@ -142,14 +107,20 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
         )
         return {
             "file_name": file_name,
-            "file_content": self._pba_get_txt_files_desde_01032026(options, "perc_act_7"),
+            "file_content": self._pba_get_txt_files_desde_01032026(options, "perc_act_7", move_lines),
             "file_type": "txt",
         }
 
-    def _pba_get_txt_files_desde_01032026(self, options, file_type):
+    def _pba_get_txt_files_desde_01032026(self, options, file_type, move_lines):
         """Returns PBA txt content"""
-        move_lines = self._pba_get_txt_lines(options, file_type)
-        return "".join(self._get_pba_txt_content_desde_01032026(move_lines, file_type)).encode("ISO-8859-1", "ignore")
+        if file_type == "ret_a122r":
+            return "".join(self._get_pba_alta_ret_lote_a122r_txt_content_desde_01032026(move_lines)).encode(
+                "ISO-8859-1", "ignore"
+            )
+        else:
+            return "".join(self._get_pba_txt_content_desde_01032026(move_lines, file_type)).encode(
+                "ISO-8859-1", "ignore"
+            )
 
     def _pba_get_txt_files(self, options, file_type):
         """Returns PBA txt content"""
@@ -174,6 +145,14 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
             domain += [("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier")]
         elif file_type in ["perc", "perc_act_7"]:
             domain += [("tax_line_id.type_tax_use", "=", "sale")]
+        elif file_type == "ret_a122r":
+            domain += [
+                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+                # TODO desbloquear (y adaptar si corresponde) cuando se mezcle https://github.com/ingadhoc/odoo-argentina-ee/pull/919
+                # el domain debe incluir solo las retenciones que no fueron reportadas a arba similar a esto:
+                # https://github.com/ingadhoc/odoo-argentina-ee/blob/4642e35350ae071fa75bd315a9c0e5ade21309d5/l10n_ar_account_tax_settlement/models/account_journal.py#L1654
+                # ("tax_line_id.l10n_ar_cert_number", "=", False),
+            ]
         return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
 
     def _get_pba_txt_content(self, move_lines, file_type):
@@ -334,6 +313,53 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
             # Tipo Operación (long 1, desde 71 hasta 71 o desde 81 a 81 si es act_7)
             # A= Alta, B=Baja, M=Modificación.
             content += "A"
+            content += "\r\n"
+
+            lines.append(content)
+        return lines
+
+    def _get_pba_alta_ret_lote_a122r_txt_content_desde_01032026(self, move_lines):
+        """Desarrollado según especificación Webservice (A122R):
+        https://web.arba.gov.ar/Instructivos-y-Marco-Normativo-A-122R
+        (ese enlace se obtiene de https://web.arba.gov.ar/agentes#presentacion-de-ddjj ,
+        luego hay que ir a la sección "Comprobantes de Retención (A-122R) Nuevo" y
+        hacer click en "Instructivo y Marco Normativo"). Finalmente descargar la especificación
+        donde dice 'Descargar PDF'. En este método se desarrolla el punto 1
+        'Retenciones (Régimen General y Regímenes Especiales)'
+        Solo para retenciones. Vigente desde 01/03/2026."""
+        lines = []
+        for line in move_lines:
+            content = ""
+            # Nro. transacción Agente (numérico 20, desde 1 hasta 20. Formato 99999999999999999999)
+            content += str(re.sub(r"\D", "", line.name)).zfill(20)
+
+            # CUIT contribuyente Retenido (long 11, desde 21 hasta 31. Formato 99999999999)
+            content += line.partner_id.ensure_vat()
+
+            move = line.move_id
+            document_parts = move._l10n_ar_get_document_number_parts(
+                move.l10n_latam_document_number, move.l10n_latam_document_type_id.code
+            )
+            pto_venta = "{:0>5d}".format(document_parts["point_of_sale"])[-5:]
+
+            # Sucursal (long 5, desde 32 hasta 36)
+            # Mayor a cero. Completar con ceros a la izquierda.
+            content += str(pto_venta)
+
+            # Fecha de Operación (long 10, desde 37 hasta 46. Formato dd/mm/aaaa)
+            content += fields.Date.from_string(line.date).strftime("%d/%m/%Y")
+
+            # Alícuota (long 5.2, desde 47 a 51)
+            tax = line._get_settlement_tax()
+            content += "%05.2f" % tax.amount
+
+            # Base imponible (long 16.2, desde 52 hasta 67)
+            # Con separador decimal (, o .). Mayor a cero, o Excepto para Nota de crédito,
+            # donde el importe debe ser negativo y la base debe ser menor o igual a cero.
+            # Completar con ceros a la izquierda. En las notas de crédito el signo negativo
+            # ocupará la primera posición a la izquierda. Formato: 99999999999.99
+            content += "%016.2f" % line.withholding_id.base_amount
+
             content += "\r\n"
 
             lines.append(content)

@@ -23,6 +23,13 @@
                 <field name="name">Purchase Withholdings</field>
                 <field name="domain_formula">-sum([("tax_line_id.l10n_ar_state_id.code", "=", "B"), ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"), ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier")])</field>
             </record>
+            <record id="l10n_ar_pba_report_pba_withholdings_line_a122r" model="account.report.line">
+                <field name="name">Purchase Withholdings A-122R</field>
+                <!-- # TODO cuando se mezcle https://github.com/ingadhoc/odoo-argentina-ee/pull/919
+                # el domain debe incluir solo las retenciones que no fueron reportadas a arba similar a esto:
+                # https://github.com/ingadhoc/odoo-argentina-ee/blob/4642e35350ae071fa75bd315a9c0e5ade21309d5/l10n_ar_account_tax_settlement/models/account_journal.py#L1654 -->
+                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_state_id.code", "=", "B"), ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"), ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier")])</field>
+            </record>
             <record id="l10n_ar_pba_report_pba_perceptions_line" model="account.report.line">
                 <field name="name">Sale Perceptions</field>
                 <field name="domain_formula">-sum([("tax_line_id.l10n_ar_state_id.code", "=", "B"), ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"), ("tax_line_id.type_tax_use", "=", "sale")])</field>
