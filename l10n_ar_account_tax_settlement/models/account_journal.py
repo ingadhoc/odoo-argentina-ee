@@ -1,5 +1,5 @@
 from odoo import models, fields, api, _
-from odoo.exceptions import ValidationError
+from odoo.exceptions import ValidationError, UserError
 from odoo.tools.float_utils import float_round
 # from odoo.tools.misc import formatLang
 # from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
@@ -55,15 +55,13 @@ class AccountJournal(models.Model):
         ('drei_aplicado', 'TXT DREI Aplicado'),
         ('sicore_aplicado', 'TXT SICORE Aplicado'),
         ('iibb_sufrido', 'TXT IIBB p/ SIFERE'),
-        ('iibb_aplicado', 'TXT Perc/Ret IIBB aplicadas ARBA: Percepciones ( excepto actividad 29, 7 quincenal, 7 y 17 de Bancos)'),
-        ('iibb_aplicado_act_7', 'TXT Perc/Ret IIBB aplicadas ARBA: Percepciones Act. 7 método Percibido (quincenal)'),
         ('iibb_aplicado_agip', 'TXT Perc/Ret IIBB aplicadas AGIP'),
         ('iibb_aplicado_api', 'TXT Perc/Ret IIBB aplicadas API'),
         ('iibb_aplicado_sircar', 'TXT Perc/Ret IIBB aplicadas SIRCAR'),
         ('iibb_aplicado_dgr_mendoza', 'TXT  Perc/Ret IIBB aplicado DGR Mendoza'),
         ('retenciones_iva', 'TXT Retenciones/Percepciones Sufridas IVA'),
-        ('iibb_aplicado_arba_desde_01032026', 'TXT Perc/Ret IIBB aplicadas ARBA desde 01/03/2026: Percepciones ( excepto actividad 29, 7 quincenal, 7 y 17 de Bancos)'),
-        ('iibb_aplicado_arba_act_7_desde_01032026', 'TXT Perc/Ret IIBB aplicadas ARBA desde 01/03/2026: Percepciones Act. 7 método Percibido (quincenal)'),
+        ('iibb_aplicado_arba_desde_01032026', 'TXT Perc/Ret IIBB aplicadas ARBA: Percepciones ( excepto actividad 29, 7 quincenal, 7 y 17 de Bancos) + TXT Ret IIBB aplicadas ARBA alta por lote A-122R. Vigente desde 01/03/2026'),
+        ('iibb_aplicado_arba_act_7_desde_01032026', 'TXT Perc/Ret IIBB aplicadas ARBA: Percepciones Act. 7 método Percibido (quincenal) + TXT Ret IIBB aplicadas ARBA alta por lote A-122R. Vigente desde 01/03/2026.'),
         # ('other', 'Other')
     ])
 
@@ -1549,10 +1547,15 @@ class AccountJournal(models.Model):
             'txt_content': content,
         }]
 
-    def iibb_aplicado_arba_act_7_desde_01032026_files_values(self, move_lines):
-        return self.iibb_aplicado_arba_desde_01032026_files_values(move_lines, act_7=True)
+    def iibb_aplicado_arba_desde_01032026_files_values(self, move_lines):
+        self.ensure_one()
+        return self.iibb_aplicado_arba_desde_01032026(move_lines) + self.iibb_alta_ret_aplicado_arba_por_lote_A_122R_01032026(move_lines.filtered('payment_id'))
 
-    def iibb_aplicado_arba_desde_01032026_files_values(self, move_lines, act_7=None):
+    def iibb_aplicado_arba_act_7_desde_010320266_files_values(self, move_lines):
+        self.ensure_one()
+        return self.iibb_aplicado_arba_desde_01032026(move_lines, act_7=True) + self.iibb_alta_ret_aplicado_arba_por_lote_A_122R_01032026(move_lines.filtered('payment_id'))
+
+    def iibb_aplicado_arba_desde_01032026(self, move_lines, act_7=None):
         """ Desarrollado según especificación https://web.arba.gov.ar/instructivo-y-marco-normativo
         (ese enlace se obtiene de https://web.arba.gov.ar/agentes#presentacion-de-ddjj ,
         luego hay que ir a la sección "DDJJ Periódicas Web IIBB NOVEDAD" y hacer click en
@@ -1678,4 +1681,72 @@ class AccountJournal(models.Model):
             {
                 'txt_filename': ret_txt_filename,
                 'txt_content': ret,
+            }]
+
+    def iibb_alta_ret_aplicado_arba_por_lote_A_122R_01032026(self, move_lines):
+        """ Desarrollado según especificación Webservice (A122R):
+        https://web.arba.gov.ar/Instructivos-y-Marco-Normativo-A-122R
+        (ese enlace se obtiene de https://web.arba.gov.ar/agentes#presentacion-de-ddjj ,
+        luego hay que ir a la sección "Comprobantes de Retención (A-122R) Nuevo" y
+        hacer click en "Instructivo y Marco Normativo"). Finalmente descargar la especificación
+        donde dice 'Descargar PDF'. En este método se desarrolla el punto 1
+        'Retenciones (Régimen General y Regímenes Especiales)'
+        Solo para retenciones. Vigente desde 01/03/2026."""
+        self.ensure_one()
+        content = ''
+        for line in move_lines:
+            # Nro. transacción Agente (numérico 20, desde 1 hasta 20. Formato 99999999999999999999)
+            content += str(line.name).zfill(20)
+
+            # CUIT contribuyente Retenido (long 11, desde 1 hasta 11. Formato 99999999999)
+            content += line.partner_id.ensure_vat()
+
+            move = line.move_id
+            document_parts = move._l10n_ar_get_document_number_parts(
+                move.l10n_latam_document_number, move.l10n_latam_document_type_id.code)
+            pto_venta = "{:0>5d}".format(document_parts['point_of_sale'])[-5:]
+
+            # Sucursal (long 5, desde 12 hasta 16)
+            # Mayor a cero. Completar con ceros a la izquierda.
+            content += str(pto_venta)
+
+            # Fecha de Operación (long 10, desde 17 hasta 26. Formato dd/mm/aaaa)
+            content += fields.Date.from_string(
+                line.date).strftime('%d/%m/%Y')
+
+            # Alícuota (long 5.2, desde 27 a 31)
+            tax = line.tax_line_id
+            partner = line.partner_id
+            alicuot_line = tax.get_partner_alicuot(partner, line.date)
+            if not alicuot_line:
+                raise UserError(_('No hay alícuota configurada para el impuesto "%s" en el partner "%s" (id: %s) en la fecha %s') % (
+                    tax.name, partner.name, partner.id, line.date))
+            content += '%05.2f' % alicuot_line.alicuota_retencion
+
+            # Base imponible (long 16.2, desde 39 hasta 52)
+            # Con separador decimal (, o .). Mayor a cero, o Excepto para Nota de crédito,
+            # donde el importe debe ser negativo y la base debe ser menor o igual a cero.
+            # Completar con ceros a la izquierda. En las notas de crédito el signo negativo
+            # ocupará la primera posición a la izquierda. Formato: 99999999999.99
+            content += '%016.2f' % line.payment_id.withholdable_base_amount
+
+            content += '\r\n'
+
+        period = move_lines and \
+            fields.Date.from_string(move_lines[0].date).strftime('%Y%mX') or ""
+
+        # ER-vat-PERIODO-ACTIVIDAD-LOTE_MD5
+        # Esto funciona para el tipo de actividad 6 que es el regimen de retenciones generales.
+        # En el futuro si agregamos mas regimenes/actividades debemos de sacar este dato
+        # de la configuracion de la compañía
+        filename = "ER-%s-%s-%s-LOTEXXXXX.txt" % (
+            self.company_id.vat,
+            period,
+            "6",  # 6 serian las retenciones
+        )
+
+        return [
+            {
+                'txt_filename': filename,
+                'txt_content': content,
             }]
