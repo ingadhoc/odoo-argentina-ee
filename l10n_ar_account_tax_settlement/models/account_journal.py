@@ -1576,7 +1576,7 @@ class AccountJournal(models.Model):
                 # esto contradice la especificación que dice que debe haber espacios pero en la tarea 31418 nos indicaron
                 # que debe haber espacios. Ver nota en dicha tarea 14/07/2023 10:31:00 y 13/07/2023 14:39:47
                 # importe retención (long 16)
-                content += "%016.2f" % payment.amount
+                content += "%016.2f" % line.balance
                 content += "\r\n"
             elif line.move_id.is_invoice():
                 tax = line._get_settlement_tax()
