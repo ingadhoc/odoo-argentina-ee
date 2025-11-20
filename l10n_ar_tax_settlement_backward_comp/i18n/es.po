@@ -4,14 +4,15 @@
 # 
 # Translators:
 # Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025
+# migration.bot.adhoc, 2025
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-03 06:46+0000\n"
+"POT-Creation-Date: 2025-11-19 13:09+0000\n"
 "PO-Revision-Date: 2025-06-02 23:50+0000\n"
-"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025\n"
+"Last-Translator: migration.bot.adhoc, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,26 +21,19 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
 
 #. module: l10n_ar_tax_settlement_backward_comp
-#. odoo-python
-#: code:addons/l10n_ar_tax_settlement_backward_comp/models/account_move_line.py:0
-msgid "Edit Partner"
-msgstr ""
-
-#. module: l10n_ar_tax_settlement_backward_comp
 #: model:ir.model.fields,field_description:l10n_ar_tax_settlement_backward_comp.field_account_tax__is_backward_tax
 msgid "Is Backward Tax"
 msgstr ""
 
 #. module: l10n_ar_tax_settlement_backward_comp
+#: model:ir.model,name:l10n_ar_tax_settlement_backward_comp.model_account_move
+msgid "Journal Entry"
+msgstr "Asiento contable"
+
+#. module: l10n_ar_tax_settlement_backward_comp
 #: model:ir.model,name:l10n_ar_tax_settlement_backward_comp.model_account_move_line
 msgid "Journal Item"
 msgstr "Apunte contable"
-
-#. module: l10n_ar_tax_settlement_backward_comp
-#. odoo-python
-#: code:addons/l10n_ar_tax_settlement_backward_comp/models/account_move_line.py:0
-msgid "Partner"
-msgstr ""
 
 #. module: l10n_ar_tax_settlement_backward_comp
 #: model:ir.model,name:l10n_ar_tax_settlement_backward_comp.model_account_tax
@@ -48,9 +42,8 @@ msgstr "Impuesto"
 
 #. module: l10n_ar_tax_settlement_backward_comp
 #. odoo-python
-#: code:addons/l10n_ar_tax_settlement_backward_comp/models/account_move_line.py:0
+#: code:addons/l10n_ar_tax_settlement_backward_comp/models/account_move.py:0
 msgid ""
-"The partner '%(partner_name)s' does not have '%(state_name)s "
-"%(tax_type_str)s' tax set for date %(line_date)s. [Journal entry: "
-"%(journal_entry_name)s]"
+"The backward tax '%(tax_name)s (id: %(tax_id)s)' was removed from the copied"
+" move because there is no corresponding partner tax configured."
 msgstr ""
