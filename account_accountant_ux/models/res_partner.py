@@ -57,11 +57,11 @@ class ResPartner(models.Model):
         if len(self.env.companies) > 1:
             domain = []
             for company in self.env.companies:
-                cond = self.with_company(company)._asset_difference_search(
+                cond = self.with_company(company.id)._asset_difference_search(
                     account_type="asset_receivable", operator=operator, operand=operand
                 )
                 if cond:
-                    domain = expression.OR([domain, cond])
+                    domain = expression.OR([domain or [], cond]) if domain else cond
 
             if not domain:
                 return [("id", "=", 0)]
@@ -75,11 +75,11 @@ class ResPartner(models.Model):
         if len(self.env.companies) > 1:
             domain = []
             for company in self.env.companies:
-                cond = self.with_company(company)._asset_difference_search(
+                cond = self.with_company(company.id)._asset_difference_search(
                     account_type="liability_payable", operator=operator, operand=operand
                 )
                 if cond:
-                    domain = expression.OR([domain, cond])
+                    domain = expression.OR([domain or [], cond]) if domain else cond
 
             if not domain:
                 return [("id", "=", 0)]
