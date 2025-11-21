@@ -39,6 +39,7 @@
     'data': [
     ],
     'demo': [
+        'demo/account_journal_demo.xml',  # Debe ir primero para crear diarios antes de los pagos
         'demo/account_tax_demo.xml',
         'demo/customer_payment_demo.xml',
         'demo/supplier_payment_demo.xml',
