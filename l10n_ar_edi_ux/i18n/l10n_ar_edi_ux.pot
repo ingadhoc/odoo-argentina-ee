@@ -1,0 +1,491 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ar_edi_ux
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-22 05:06+0000\n"
+"PO-Revision-Date: 2025-11-22 05:06+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/account_journal.py:0
+msgid "\"Get Document Types\" is not implemented for webservice %s"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/account_move.py:0
+msgid ". Invalid boarding permissions: %s"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_l10n_ar_afipws_connection
+msgid "ARCA Webservice Connection"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner__actividades_padron
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_users__actividades_padron
+msgid "Actividades"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "Are you sure to execute the automatic update of your partners ?"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_asoc_period_end
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_asoc_period_end
+msgid "Associated Perdio End"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_move_form
+msgid "Associated Period"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_asoc_period_start
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_asoc_period_start
+msgid "Associated Period Start"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/account_journal.py:0
+msgid ""
+"Authorized Document Clases on ARCA:\n"
+"%s"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.actions.act_window,name:l10n_ar_edi_ux.action_partner_update
+msgid "Automatic Update from Padron"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_l10n_ar_boarding_permission
+msgid "Boarding Permission"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_config_settings__arba_cit
+msgid "CIT ARBA"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__real_name
+msgid "Campo"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "Cancel"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_config_settings__arba_cit
+msgid "Clave de Identificación Tributaria de ARBA"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "Close"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__company_id
+msgid "Company"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_res_partner
+msgid "Contact"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__title_case
+msgid "Converts retreived text fields to Title Case."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__create_uid
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__create_uid
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__create_uid
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__create_date
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__create_date
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__create_date
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_journal__display_name
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__display_name
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_afipws_connection__display_name
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__display_name
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_company__display_name
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner__display_name
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__display_name
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__display_name
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.constraint,message:l10n_ar_edi_ux.constraint_l10n_ar_boarding_permission_permiso_embarque_unique
+msgid "Error! El permiso de embarque ya existe."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__label
+msgid "Field"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__field_ids
+msgid "Fields"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__field_to_update_ids
+msgid "Fields To Update"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_partner_update_from_padron_wizard__state__finished
+msgid "Finished"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_account_journal_form
+msgid "Get Document Types"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_account_journal_form
+msgid "Get valid document types for this webservice"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_journal__id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_afipws_connection__id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_company__id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_config_settings__id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner__id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/account_move.py:0
+msgid ""
+"Invalid boarding permissions:\n"
+" %s"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_account_journal
+msgid "Journal"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_account_move
+msgid "Journal Entry"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__write_uid
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__write_uid
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__write_uid
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__write_date
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__write_date
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__write_date
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__new_value
+msgid "New Value"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/res_partner.py:0
+msgid ""
+"No pudimos actualizar desde el Padron de ARCA al contacto %s (%s).\n"
+"Recomendamos verificar manualmente en la página de ARCA.\n"
+"Obtuvimos este error:\n"
+"%s"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/res_partner_update_from_padron_wizard.py:0
+msgid "No se encontró ningún partner con CUIT para actualizar"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__name
+msgid "Nombre Campo"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__old_value
+msgid "Old Value"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid ""
+"Only Partners with cuit are going to be updated.<br/>\n"
+"                        Select the list of fields you want to update."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__field_to_update_ids
+msgid "Only this fields are going to be retrived and updated"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_partner_update_from_padron_wizard__state__option
+msgid "Option"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__partner_id
+msgid "Partner"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__partner_ids
+msgid "Partners"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__dst_country
+msgid "País de destino"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__dst_country
+msgid "País de destino de la mercadería"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_boarding_permission_ids
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__l10n_ar_boarding_permission_ids
+msgid "Permiso de Embarque"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__number
+msgid "Permiso de embarque"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.actions.act_window,name:l10n_ar_edi_ux.action_l10n_ar_boarding_permission
+#: model:ir.ui.menu,name:l10n_ar_edi_ux.menu_action_l10n_ar_boarding_permission
+msgid "Permisos de embarque"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/res_partner.py:0
+msgid "Please configure an ARCA Certificate in order to continue"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/res_partner.py:0
+msgid ""
+"Posiblemente este cliente sea un consorcio/fideicomiso. Por favor debe "
+"consultar directamente con el cliente sus datos y agregar manualmente la "
+"responsabilidad de AFIP en el Odoo"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_partner_update_from_padron_wizard__state__selection
+msgid "Selection"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/l10n_ar_afipws_connection.py:0
+msgid "Servicio de Consulta a Padrón Constancia de Inscripción (ex A5)"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_asoc_period_end
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_asoc_period_start
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_asoc_period_end
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_asoc_period_start
+msgid ""
+"Set this field if it is you are reporting debit/credit note and have not "
+"related invoice. IMPORTANT: This is only applies on \"Electronic Invoice - "
+"Web Service\""
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "Skip these partner"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_boarding_permission_ids
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_move__l10n_ar_boarding_permission_ids
+msgid ""
+"Solo se envía esta información si la factura es de exportación y el "
+"'Concepto AFIP' es 'Productos / Exportación definitiva de bienes'"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__state
+msgid "State"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__field
+msgid "Technical Name"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "There are no more partners to update for this request..."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/account_move.py:0
+msgid ""
+"This is what we get:\n"
+"%s\n"
+"\n"
+"Please make the required corrections and try again"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__title_case
+msgid "Title Case"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "Update Automatically"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_partner_form
+msgid "Update From ARCA"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "Update From Padron"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.actions.act_window,name:l10n_ar_edi_ux.action_base_partner_update_from_padron
+#: model:ir.ui.menu,name:l10n_ar_edi_ux.menu_base_partner_update_from_padron
+msgid "Update Partners From Padron ARCA"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "Update Selection"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "Update with Manual Check"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/account_move.py:0
+msgid "Valid boarding permissions: %s"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_move_form
+msgid "Validar permisos de embarque"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/account_move.py:0
+msgid "We could not validate the vendor bill in AFIP"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__wizard_id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__wizard_id
+msgid "Wizard"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__wizard_error
+msgid "Wizard Error"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "or"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_res_partner_update_from_padron_field
+msgid "res.partner.update.from.padron.field"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_res_partner_update_from_padron_info
+msgid "res.partner.update.from.padron.info"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_res_partner_update_from_padron_wizard
+msgid "res.partner.update.from.padron.wizard"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_move_form
+msgid "to"
+msgstr ""
