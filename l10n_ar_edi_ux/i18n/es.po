@@ -3,16 +3,15 @@
 # 	* l10n_ar_edi_ux
 # 
 # Translators:
-# Mariana Torres <mt@adhoc.com.ar>, 2025
-# Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025
+# ADHOC - Bot <transbot@adhoc.com.ar>, 2025
 # 
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 18.0+e\n"
+"Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-07-03 06:42+0000\n"
-"PO-Revision-Date: 2024-12-16 17:58+0000\n"
-"Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025\n"
+"POT-Creation-Date: 2025-11-22 02:17+0000\n"
+"PO-Revision-Date: 2025-11-21 21:10+0000\n"
+"Last-Translator: ADHOC - Bot <transbot@adhoc.com.ar>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -35,8 +34,14 @@ msgstr ". Permiso de embarque inválidos: %s"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_l10n_ar_afipws_connection
-msgid "AFIP Webservice Connection"
+msgid "ARCA Webservice Connection"
 msgstr "Conexión Webservice de AFIP"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner__actividades_padron
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_users__actividades_padron
+msgid "Actividades"
+msgstr ""
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
@@ -66,11 +71,9 @@ msgstr "Inicio del período asociado"
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/account_journal.py:0
 msgid ""
-"Authorized Document Clases on AFIP:\n"
+"Authorized Document Clases on ARCA:\n"
 "%s"
 msgstr ""
-"Tipos de documentos autorizados en AFIP:\n"
-"%s"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.actions.act_window,name:l10n_ar_edi_ux.action_partner_update
@@ -149,12 +152,18 @@ msgid "Created on"
 msgstr "Creado el"
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_journal__display_name
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__display_name
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_afipws_connection__display_name
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__display_name
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_company__display_name
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_config_settings__display_name
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner__display_name
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__display_name
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__display_name
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__display_name
 msgid "Display Name"
-msgstr "Nombre mostrado"
+msgstr "Nombre para mostrar"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.constraint,message:l10n_ar_edi_ux.constraint_l10n_ar_boarding_permission_permiso_embarque_unique
@@ -192,7 +201,13 @@ msgid "Get valid document types for this webservice"
 msgstr "Obtener tipos de documento válidos para este servicio web"
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_journal__id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_afipws_connection__id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_company__id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_config_settings__id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner__id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__id
@@ -244,8 +259,8 @@ msgstr "Nuevo valor"
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/res_partner.py:0
 msgid ""
-"No pudimos actualizar desde padron afip al partner %s (%s).\n"
-"Recomendamos verificar manualmente en la página de AFIP.\n"
+"No pudimos actualizar desde el Padron de ARCA al contacto %s (%s).\n"
+"Recomendamos verificar manualmente en la página de ARCA.\n"
 "Obtuvimos este error:\n"
 "%s"
 msgstr ""
@@ -325,8 +340,8 @@ msgstr ""
 #. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/res_partner.py:0
-msgid "Please configure an AFIP Certificate in order to continue"
-msgstr "Por favor configura un Certificado AFIP para continuar"
+msgid "Please configure an ARCA Certificate in order to continue"
+msgstr ""
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
@@ -376,32 +391,6 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_edi_ux
-#. odoo-python
-#: code:addons/l10n_ar_edi_ux/models/account_move.py:0
-msgid ""
-"Some vendor bills where validated in AFIP but as we have an error with one vendor bill the batch validation was stopped\n"
-"\n"
-"* These vendor bills were validated:\n"
-"   * %s\n"
-"\n"
-"* These vendor bills weren't validated:\n"
-"%s\n"
-"\n"
-"\n"
-"\n"
-msgstr ""
-"Algunas facturas de proveedores fueron validadas en AFIP pero como tenemos un error con una factura de proveedores se detuvo la validación del lote\n"
-"\n"
-"* Estas facturas de proveedor fueron validadas:\n"
-"* %s\n"
-"\n"
-"* Estas facturas de  no proveedor fueron validadas:\n"
-"%s\n"
-"\n"
-"\n"
-"\n"
-
-#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__state
 msgid "State"
 msgstr "Estado"
@@ -441,24 +430,19 @@ msgid "Update Automatically"
 msgstr "Actualizar automáticamente"
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__update_constancia
-msgid "Update Constancia"
-msgstr "Acttualizar Constancia"
-
-#. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_partner_form
-msgid "Update From AFIP"
-msgstr "Actualizar desde AFIP"
+msgid "Update From ARCA"
+msgstr ""
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
-msgid "Update From Padron AFIP"
-msgstr "Actualizar desde el padrón de AFIP"
+msgid "Update From Padron"
+msgstr ""
 
 #. module: l10n_ar_edi_ux
 #: model:ir.actions.act_window,name:l10n_ar_edi_ux.action_base_partner_update_from_padron
 #: model:ir.ui.menu,name:l10n_ar_edi_ux.menu_base_partner_update_from_padron
-msgid "Update Partners From Padron AFIP"
+msgid "Update Partners From Padron ARCA"
 msgstr "Actualizar contactos desde el padrón de AFIP"
 
 #. module: l10n_ar_edi_ux
