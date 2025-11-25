@@ -134,7 +134,10 @@ class ResPartner(models.Model):
         values = {}
         try:
             res = client.service.getPersona_v2(
-                sign=auth.get("Sign"), token=auth.get("Token"), cuitRepresentada=auth.get("Cuit"), idPersona=vat
+                sign=auth.get("Sign"),
+                token=auth.get("Token"),
+                cuitRepresentada=auth.get("Cuit"),
+                idPersona=vat,
             )
 
             if res.errorConstancia:
@@ -188,7 +191,12 @@ class ResPartner(models.Model):
             activity_codes = actividades.search([]).mapped("code")
             for act in afip_activities:
                 if act and str(act.get("idActividad")) not in activity_codes:
-                    new_activity.update({"code": act.get("idActividad"), "name": act.get("descripcionActividad")})
+                    new_activity.update(
+                        {
+                            "code": act.get("idActividad"),
+                            "name": act.get("descripcionActividad"),
+                        }
+                    )
                     activity = actividades.create(new_activity)
                     res.append(activity)
                 else:
@@ -205,7 +213,12 @@ class ResPartner(models.Model):
             tax_codes = taxes.search([]).mapped("code")
             for imp in afip_taxes:
                 if imp and str(imp.get("idImpuesto")) not in tax_codes:
-                    new_tax.update({"code": imp.get("idImpuesto"), "name": imp.get("descripcionImpuesto")})
+                    new_tax.update(
+                        {
+                            "code": imp.get("idImpuesto"),
+                            "name": imp.get("descripcionImpuesto"),
+                        }
+                    )
                     tax = taxes.create(new_tax)
                     res.append(tax)
                 else:
@@ -275,12 +288,17 @@ class ResPartner(models.Model):
             # if not localidad then it should be CABA.
             if not domicilio.get("localidad"):
                 state = self.env["res.country.state"].search(
-                    [("code", "in", caba_codes), ("country_id.code", "=", "AR")], limit=1
+                    [("code", "in", caba_codes), ("country_id.code", "=", "AR")],
+                    limit=1,
                 )
             # If localidad cant be caba
             else:
                 state = self.env["res.country.state"].search(
-                    [("name", "ilike", provincia), ("code", "not in", caba_codes), ("country_id.code", "=", "AR")],
+                    [
+                        ("name", "ilike", provincia),
+                        ("code", "not in", caba_codes),
+                        ("country_id.code", "=", "AR"),
+                    ],
                     limit=1,
                 )
             if state:
@@ -295,15 +313,17 @@ class ResPartner(models.Model):
         else:
             _logger.info("We couldn't infer the AFIP responsability from padron, you must set it manually.")
 
-        # Si somos un consorcio entonces no colocamos responsbilidad afip y dejamos mensajito en el contecto avisando
+        # Si se trata de un consorcio o actividad inmobiliaria, entonces no colocamos responsabilidad afip y
+        # dejamos un mensaje en el contexto
         if "681098" in actividades or any(
             word in denominacion.lower() for word in ["fideicomiso", "consorcio", "cons.", "cons "]
         ):
             values.pop("l10n_ar_afip_responsibility_type_id", None)
             self.message_post(
                 body=_(
-                    "Posiblemente este cliente sea un consorcio/fideicomiso. Por favor debe consultar directamente con el"
-                    " cliente sus datos y agregar manualmente la responsabilidad de AFIP en el Odoo"
+                    "Posiblemente este contacto tenga declarada alguna actividad dentro del rubro inmobiliario. En este caso, "
+                    "no podemos actualizar automáticamente el campo Responsabilidad ARCA. "
+                    "Por favor, consulte el dato correspondiente y agréguelo manualmente"
                 )
             )
 
