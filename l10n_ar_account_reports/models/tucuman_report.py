@@ -4,40 +4,54 @@ from odoo import _, models
 from odoo.exceptions import UserError
 
 
-class L10n_ArArbaReportHandler(models.AbstractModel):
-    _name = "l10n_ar.arba.report.handler"
+class L10n_ArTucumanReportHandler(models.AbstractModel):
+    _name = "l10n_ar.tucuman.report.handler"
     _inherit = ["account.tax.report.handler"]
-    _description = "Argentinian ARBA Report Custom Handler"
+    _description = "Argentinian Tucumán Report Custom Handler"
 
     def _custom_options_initializer(self, report, options, previous_options):
         super()._custom_options_initializer(report, options, previous_options=previous_options)
 
         # Add export button
-        txt_export_button = {
-            "name": _("ARBA Profits Withholdings TXT"),
-            "sequence": 30,
-            "action": "export_file",
-            "action_param": "arba_book_export_files_to_txt",
-            "file_export_type": "TXT",
-        }
+        txt_export_button = [
+            {
+                "name": "TXT Retenciones / Percepciones",
+                "sequence": 30,
+                "action": "export_file",
+                "action_param": "tucuman_ret_perc_txt",
+                "file_export_type": "TXT",
+            },
+            {
+                "name": "TXT Percepciones",
+                "sequence": 30,
+                "action": "export_file",
+                "action_param": "nc_tucuman_ret_perc_txt",
+                "file_export_type": "TXT",
+            },
+        ]
 
-        options["buttons"].append(txt_export_button)
+        options["buttons"].extend(txt_export_button)
 
-    def arba_book_export_files_to_txt(self, options):
-        """Export method that lets us export the ARBA book to a txt file.
-        It contains the file that we upload to ARBA application."""
+    def tucuman_ret_perc_txt(self, options):
         return {
-            "file_name": _("ARBA_profits_withholdings.txt"),
-            "file_content": self._arba_book_get_txt_files(options),
+            "file_name": "Perc/Ret IIBB Tucumán Aplicadas.txt",
+            "file_content": self._tucuman_book_get_txt_files(options),
             "file_type": "txt",
         }
 
-    def _arba_book_get_txt_files(self, options):
-        """Returns ARBA txt content"""
-        move_lines = self._arba_book_get_txt_lines(options)
-        return "".join(self._get_arba_txt_content(move_lines)).encode("ISO-8859-1", "ignore")
+    def nc_tucuman_ret_perc_txt(self, options):
+        return {
+            "file_name": "NC Perc/Ret IIBB Tucumán Aplicadas.txt",
+            "file_content": self._tucuman_book_get_txt_files(options, refund=True),
+            "file_type": "txt",
+        }
 
-    def _arba_book_get_txt_lines(self, options):
+    def _tucuman_book_get_txt_files(self, options, refund=False):
+        """Returns Tucumán txt content"""
+        move_lines = self._tucuman_book_get_txt_lines(options, refund=refund)
+        return "".join(self._get_tucuman_txt_content(move_lines)).encode("ISO-8859-1", "ignore")
+
+    def _tucuman_book_get_txt_lines(self, options):
         state = options.get("all_entries") and "all" or "posted"
         if state != "posted":
             raise UserError(
@@ -52,10 +66,10 @@ class L10n_ArArbaReportHandler(models.AbstractModel):
             "|",
             ("tax_line_id.type_tax_use", "=", "sale"),
             ("tax_line_id.l10n_ar_withholding_payment_type", "=", "purchase"),
-        ] + self._arba_book_get_lines_domain(options)
+        ] + self._tucuman_book_get_lines_domain(options)
         return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
 
-    def _arba_book_get_lines_domain(self, options):
+    def _tucuman_book_get_lines_domain(self, options):
         company_ids = self.env.company.ids
         domain = [("company_id", "in", company_ids)]
         state = options.get("all_entries") and "all" or "posted"
@@ -67,7 +81,7 @@ class L10n_ArArbaReportHandler(models.AbstractModel):
             domain += [("date", ">=", options["date"]["date_from"])]
         return domain
 
-    def _get_arba_txt_content(self, move_lines):
+    def _get_tucuman_txt_content(self, move_lines, refund=False):
         """Returns the lines to be printed in the txt file."""
         lines = []
         # TODO implementar

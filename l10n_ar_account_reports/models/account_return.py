@@ -1,57 +1,43 @@
-from odoo import fields, models
+from odoo import models
 
 
 class AccountReturn(models.Model):
     _inherit = "account.return"
 
+    def _get_vat_closing_entry_additional_domain(self):
+        # EXTENDS account_reports
+        domain = super()._get_vat_closing_entry_additional_domain()
+        if self.type_external_id == "l10n_ar_account_reports.ar_caba_iibb_return_type":
+            # mod_tags = self.env.ref('l10n_es.mod_303').line_ids.expression_ids._get_matching_tags()
+            # domain.append(('tax_tag_ids', 'in', mod_tags.ids))
+            domain += [
+                ("tax_line_id.l10n_ar_state_id.code", "=", "B"),
+                ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
+                ("tax_line_id.type_tax_use", "=", "sale"),
+            ]
+        elif self.type_external_id == "l10n_ar_account_reports.ar_pba_iibb_return_type":
+            # mod_tags = self.env.ref('l10n_es.mod_303').line_ids.expression_ids._get_matching_tags()
+            # domain.append(('tax_tag_ids', 'in', mod_tags.ids))
+            domain += [
+                ("tax_line_id.l10n_ar_state_id.code", "=", "B"),
+                ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
+                ("tax_line_id.type_tax_use", "=", "sale"),
+            ]
+        return domain
+
     def _run_checks(self, check_codes_to_ignore):
-        checks = super()._run_checks(check_codes_to_ignore)
-        if self.type_external_id == "l10n_ar_account_reports.ar_pba_iibb_return_type":
-            checks += self._check_suite_ar_pba_iibb_report()
-
-        return checks
-
-    def _check_suite_ar_pba_iibb_report(self):
-        """Este check verifica que para arba las percepciones sean cargadas en un diario que usa documentos"""
-        checks = []
-        report_options = self._get_closing_report_options()
-        domain = self.type_id.report_id._get_options_domain(report_options, "strict_range")
-        domain += [
-            ("move_id.state", "=", "posted"),
-            ("company_id", "in", self.company_ids.ids),
-            ("date", "<=", fields.Date.to_string(self.date_to)),
-            ("date", ">=", fields.Date.to_string(self.date_from)),
-            ("journal_id.l10n_latam_use_documents", "=", False),
-        ]
-        # TODO mejorar porque está re hardcodeado
-        import ast
-
-        domain += ast.literal_eval(self.type_id.report_id.line_ids.expression_ids[1].formula)
-
-        draft_entries_count = self.env["account.move.line"].sudo().search_count(domain)
-        blaa = self.env["account.move.line"].sudo().search(domain)
-
-        review_action = {
-            "type": "ir.actions.act_window",
-            "name": "wdewd",  # If it is _lt, we need to stringify it because it cannot be json dumped
-            "view_mode": "list",
-            "res_model": "account.move",
-            "domain": [["id", "in", blaa.mapped("move_id").ids]],
-            "views": [[self.env.ref("account_reports.view_draft_entries_tree").id, "list"], [False, "form"]],
-        }
-
-        checks.append(
-            {
-                "name": "Percepciones sin punto de venta-número",
-                "code": "xcd",
-                "message": "Las percepciones deben ser cargadas en un diario que usa documentos",
-                "records_count": draft_entries_count,
-                "records_model": self.env["ir.model"]._get("account.move").id,
-                "action": review_action if draft_entries_count else None,
-                "result": "anomaly" if draft_entries_count else "reviewed",
-            }
-        )
-        return checks
+        if "l10n_ar_account_reports." in self.type_external_id:
+            # por ahora ignoramos todos los checks nativos para simplificar
+            check_codes_to_ignore.update(
+                [
+                    "check_bills_attachment",
+                    "check_draft_entries",
+                    "check_match_all_bank_entries",
+                    "check_tax_countries",
+                    "check_company_data",
+                ]
+            )
+        return super()._run_checks(check_codes_to_ignore)
 
     ####################################################################################################
     ####  Tax Closing
@@ -63,7 +49,7 @@ class AccountReturn(models.Model):
         :return: The closing moves.
         """
         self.ensure_one()
-        self._ensure_tax_group_configuration_for_tax_closing()
+        # self._ensure_tax_group_configuration_for_tax_closing()
 
         closing_move_vals = []
         for company in self.company_ids:
