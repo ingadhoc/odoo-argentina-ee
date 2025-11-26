@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="l10n_ar_sifere_report" model="account.report">
+        <field name="name">SIFERE</field>
+        <field name="root_report_id" ref="account.generic_tax_report"/>
+        <field name="sequence">40</field>
+        <field name="country_id" ref="base.ar"/>
+        <field name="filter_hierarchy">never</field>
+        <field name="filter_unreconciled" eval="False"/>
+        <field name="filter_period_comparison" eval="False"/>
+        <field name="filter_growth_comparison" eval="False"/>
+        <field name="custom_handler_model_id" ref="model_l10n_ar_sifere_report_handler"/>
+        <field name="column_ids">
+            <record id="l10n_ar_sifere_report_column_total" model="account.report.column">
+                <field name="name">Balance</field>
+                <field name="name@es_419">Balance</field>
+                <field name="expression_label">balance</field>
+            </record>
+        </field>
+        <field name="line_ids">
+            <!-- por ahora usamos l10n_ar_state y type_tax_use porque odoo no mezclo lo de tax groups, pero si lo mezclan seria mejor ir por allí. No usamos jurisdiction_code porque por ahora NO es buscable -->
+            <record id="l10n_ar_sifere_report_sifere_withholdings_line" model="account.report.line">
+                <field name="name">Purchase Withholdings</field>
+                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_state_id.code", "=", "C"), ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"), ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier")])</field>
+            </record>
+            <record id="l10n_ar_sifere_report_sifere_perceptions_line" model="account.report.line">
+                <field name="name">Sale Perceptions</field>
+                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_state_id.code", "=", "C"), ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"), ("tax_line_id.type_tax_use", "=", "sale")])</field>
+            </record>
+        </field>
+    </record>
+
+    <record id="ar_sifere_iibb_return_type" model="account.return.type">
+        <field name="name">SIFERE (Agente)</field>
+        <field name="report_id" ref="l10n_ar_account_reports.l10n_ar_sifere_report"/>
+        <field name="default_deadline_periodicity">monthly</field>
+        <field name="auto_generate" eval="False"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="deadline_days_delay">10</field>
+        <field name="default_deadline_days_delay">21</field>
+    </record>
+</odoo>
