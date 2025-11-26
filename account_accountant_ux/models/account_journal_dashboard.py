@@ -12,34 +12,33 @@ class AccountJournal(models.Model):
 
     def _fill_journal_dashboard_general_balance(self, dashboard_data):
         journals = self.filtered(lambda journal: journal.type in ["bank", "cash"] and journal.default_account_id)
-        account_ids = journals.mapped("default_account_id").ids
+        if account_ids := journals.mapped("default_account_id").ids:
+            query = """SELECT aml.account_id, sum(aml.balance) as balance, sum(aml.amount_currency) as amount_currency
+                            FROM account_move_line aml
+                            LEFT JOIN account_move move ON aml.move_id = move.id
+                            WHERE aml.account_id in %(ids)s
+                            AND move.date <= %(date)s AND move.state = 'posted'
+                            GROUP BY aml.account_id"""
+            self.env.cr.execute(
+                query,
+                {
+                    "ids": tuple(account_ids),
+                    "date": fields.Date.context_today(self),
+                },
+            )
+            query_results = {x["account_id"]: (x["balance"], x["amount_currency"]) for x in self.env.cr.dictfetchall()}
 
-        query = """SELECT aml.account_id, sum(aml.balance) as balance, sum(aml.amount_currency) as amount_currency
-                        FROM account_move_line aml
-                        LEFT JOIN account_move move ON aml.move_id = move.id
-                        WHERE aml.account_id in %(ids)s
-                        AND move.date <= %(date)s AND move.state = 'posted'
-                        GROUP BY aml.account_id"""
-        self.env.cr.execute(
-            query,
-            {
-                "ids": tuple(account_ids),
-                "date": fields.Date.context_today(self),
-            },
-        )
-        query_results = {x["account_id"]: (x["balance"], x["amount_currency"]) for x in self.env.cr.dictfetchall()}
-
-        for journal in journals:
-            if query_results and journal.default_account_id.id in query_results:
-                if not journal.currency_id or journal.currency_id == journal.company_id.currency_id:
-                    account_sum = query_results[journal.default_account_id.id][0]
-                else:
-                    account_sum = query_results[journal.default_account_id.id][1]
-                currency = journal.currency_id or journal.company_id.currency_id
-                dashboard_data[journal.id].update(
-                    {
-                        "account_balance_general": formatLang(
-                            self.env, currency.round(account_sum) + 0.0, currency_obj=currency
-                        )
-                    }
-                )
+            for journal in journals:
+                if query_results and journal.default_account_id.id in query_results:
+                    if not journal.currency_id or journal.currency_id == journal.company_id.currency_id:
+                        account_sum = query_results[journal.default_account_id.id][0]
+                    else:
+                        account_sum = query_results[journal.default_account_id.id][1]
+                    currency = journal.currency_id or journal.company_id.currency_id
+                    dashboard_data[journal.id].update(
+                        {
+                            "account_balance_general": formatLang(
+                                self.env, currency.round(account_sum) + 0.0, currency_obj=currency
+                            )
+                        }
+                    )
