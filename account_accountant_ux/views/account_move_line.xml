@@ -5,9 +5,9 @@
         <field name="inherit_id" ref="account_accountant.view_account_move_line_search_bank_rec_widget"/>
         <field name="arch" type="xml">
             <filter name="amount_received" position="before">
-                <filter name="same_amount" string="Igual Monto" domain="[('filter_amount', '=', 0.0)]"/>
-                <filter name="close_amount" string="Monto aproximado" domain="[('filter_amount', '=', 4.0)]"/>
-                <filter name="less_amount" string="Monto menor" domain="[('filter_amount', '&lt;', 0.0)]"/>
+                <filter name="same_amount" string="Igual Monto" domain="[('filter_amount', '=', 1.0)]"/>
+                <filter name="close_amount" string="Monto aproximado" domain="[('filter_amount', '=', 2.0)]"/>
+                <filter name="less_amount" string="Monto menor" domain="[('filter_amount', '=', 3.0)]"/>
                 <separator/>
             </filter>
         </field>

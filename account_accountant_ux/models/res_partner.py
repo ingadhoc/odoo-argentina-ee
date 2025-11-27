@@ -5,7 +5,7 @@ import ast
 
 from odoo import api, fields, models
 from odoo.exceptions import UserError
-from odoo.osv import expression
+from odoo.fields import Domain
 
 
 class ResPartner(models.Model):
@@ -61,7 +61,7 @@ class ResPartner(models.Model):
                     account_type="asset_receivable", operator=operator, operand=operand
                 )
                 if cond:
-                    domain = expression.OR([domain, cond])
+                    domain = Domain.OR([domain, cond])
 
             if not domain:
                 return [("id", "=", 0)]
@@ -79,7 +79,7 @@ class ResPartner(models.Model):
                     account_type="liability_payable", operator=operator, operand=operand
                 )
                 if cond:
-                    domain = expression.OR([domain, cond])
+                    domain = Domain.OR([domain, cond])
 
             if not domain:
                 return [("id", "=", 0)]

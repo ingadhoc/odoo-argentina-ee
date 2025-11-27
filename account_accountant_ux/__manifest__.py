@@ -19,7 +19,7 @@
 ##############################################################################
 {
     "name": "Accounting Accountant UX",
-    "version": "18.0.1.6.0",
+    "version": "19.0.1.0.0",
     "category": "Accounting",
     "sequence": 14,
     "summary": "",
@@ -31,19 +31,19 @@
         "account_reports",
         "account_internal_transfer",
         "account_ux",
+        "account_followup",
     ],
     "data": [
         "views/res_partner_view.xml",
         "views/account_move_line.xml",
-        "views/bank_rec_widget_views.xml",
+        "static/src/components/bank_reconciliation/button_list/assets.xml",
         "wizards/account_change_lock_date_views.xml",
-        "wizards/res_config_settings_views.xml",
         "wizards/account_reconcile_wizard.xml",
         "data/account_accountant_data.xml",
         "views/account_journal_dashboard_view.xml",
     ],
     "demo": [],
-    "installable": False,
+    "installable": True,
     "auto_install": True,
     "application": False,
 }
