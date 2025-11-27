@@ -42,4 +42,20 @@
         </field>
     </record>
 
+
+    <record model="ir.ui.view" id="res_partner_view_form">
+        <field name="name">res.partner.view.form.followup.ux</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="account_followup.res_partner_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='open_follow_up_report']" position="attributes">
+                <attribute name="invisible">not has_moves</attribute>
+            </xpath>
+            <xpath expr="//button[@name='open_follow_up_report']//span[hasclass('o_stat_text')]" position="replace">
+                <span class="o_stat_text">Libro Mayor de Empresa</span>
+            </xpath>
+        </field>
+    </record>
+
+
 </odoo>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account_accountant_ux_assets" model="ir.asset">
+        <field name="name">Account Accountant UX Assets</field>
+        <field name="bundle">web.assets_backend</field>
+        <field name="path">account_accountant_ux/static/src/components/bank_reconciliation/button_list/button_list.js</field>
+    </record>
+</odoo>

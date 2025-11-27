@@ -15,15 +15,13 @@ Account Accountant UX
 =====================
 
 #. Agrega el parámetro "Compañía" en el wizard de Fechas Bloqueadas.
-#. Agrega una opción en las configuraciones de contabilidad para forzar moneda de la compañía en los informes de seguimiento.
 #. Agrega filtros de "Igual Monto", "Monto Aproximado" y "Monto Menor" en el asistente de conciliación.
 #. Determina por defecto el filtro "Igual Monto" en el asistente de conciliación.
-#. Para asientos contables, el botón "Pagos" te lleva efectivamente al pago, mejorando la compatibilidad con asientos migrados de versiones anteriores.
 #. Ajustar conciliación bancaria para compatibilidad con la opción de reconciliar en la moneda de la compañía.
 #. Agrega advertencia para posibles conciliaciones cruzadas entre partners.
-#. restaurar comportamiento de 16 donde el boton 'libro mayor' de partners llevaba al informe (Ahora lleva a tree sin este cambio).
-#. desde el informe partner ledger, al ir a los journal items, vamos a la vista de apuntes que usamos para los menus "customer/supplier ledger" para unificar comportamiento (nativamente odoo manda a una _tree_grouped_partner)
-#. Agrega una estrategia de autoconciliacion que Permite reconciliar todas las lineas de un partner en un solo consiliacion parcial o total
+#. Desde el informe partner ledger, al ir a los journal items, vamos a la vista de apuntes que usamos para los menus "customer/supplier ledger" para unificar comportamiento (nativamente odoo manda a una _tree_grouped_partner)
+#. Agrega una estrategia de autoconciliacion que Permite reconciliar todas las lineas de un partner en un solo conciliacion parcial o total
+#. Modifica el botón "Due" de los partners para que sea siempre visible y modifica su nombre a "Libro Mayor de Empresa".
 
 Installation
 ============

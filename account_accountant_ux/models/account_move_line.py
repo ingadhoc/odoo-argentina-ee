@@ -10,35 +10,39 @@ class AccountMovetLine(models.Model):
         self.filter_amount = False
 
     def _search_filter_amount(self, operator, value):
-        res = []
-        if self.env.context.get("default_st_line_id"):
-            statement_line = self.env["account.bank.statement.line"].browse(self.env.context.get("default_st_line_id"))
+        """Search method for same amount filter"""
+        preferred_value = abs(self.env.context.get("preferred_aml_value", 0))
 
-            primary_currency = statement_line.company_id.currency_id == statement_line.currency_id
-            if primary_currency:
-                amount = statement_line["amount"]
-                amount_currency = statement_line["amount_currency"]
-            else:
-                amount = statement_line["amount_currency"]
-                amount_currency = statement_line["amount"]
+        # If users select multiple filters, Odoo combine them using 'in' operator with a set/list of values.
+        # So we have to iterate to get the operators of the sub-domains
+        if operator == "in" and hasattr(value, "__iter__"):
+            # Handle multiple values (orderset, list, tuple)
+            domains = []
+            for val in value:
+                domains.extend(self._get_amount_domain(val, preferred_value))
+            return domains
+        else:
+            # Handle single value
+            return self._get_amount_domain(value, preferred_value)
 
-            if value != 0 and operator == "=":
-                if primary_currency:
-                    base_amount = ((100 - value) / 100) * amount
-                    top_amount = ((100 + value) / 100) * amount
-                    res.append(("amount_residual", ">", base_amount))
-                    res.append(("amount_residual", "<", top_amount))
-                else:
-                    base_amount = ((100 - value) / 100) * amount_currency
-                    top_amount = ((100 + value) / 100) * amount_currency
-                    res.append(("amount_residual_currency", ">", base_amount))
-                    res.append(("amount_residual_currency", "<", top_amount))
-            else:
-                amount = ((100 - value) / 100) * amount
-                amount_currency = ((100 - value) / 100) * amount_currency
+    def _get_amount_domain(self, value, preferred_value):
+        """Helper method to get domain for a single value"""
+        # if journal has currency, search by amount in that currency
+        if self.env.context.get("preferred_aml_currency_id") != self.env.company.currency_id.id:
+            search_field = "amount_residual_currency"
+        else:
+            search_field = "amount_residual"
 
-                if primary_currency:
-                    res.append(("amount_residual", operator, amount))
-                else:
-                    res.append(("amount_residual_currency", operator, amount_currency))
-        return res
+        if value == 1.0:  # "same_amount" filter
+            if self.env.context.get("preferred_aml_currency_id") != self.env.company.currency_id.id:
+                return [(search_field, "=", preferred_value)]
+            return [(search_field, "=", preferred_value)]
+        elif value == 2.0:  # "close_amount" filter
+            return [
+                "&",
+                (search_field, ">=", preferred_value - 100),
+                (search_field, "<=", preferred_value + 100),
+            ]
+        elif value == 3.0:  # "less_amount" filter
+            return [(search_field, "<", preferred_value)]
+        return []
