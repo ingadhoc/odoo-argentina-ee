@@ -62,8 +62,9 @@ class AccountJournal(models.Model):
         ('iibb_aplicado_sircar', 'TXT Perc/Ret IIBB aplicadas SIRCAR'),
         ('iibb_aplicado_dgr_mendoza', 'TXT  Perc/Ret IIBB aplicado DGR Mendoza'),
         ('retenciones_iva', 'TXT Retenciones/Percepciones Sufridas IVA'),
-        ('iibb_aplicado_arba_desde_01122025', 'TXT Perc/Ret IIBB aplicadas ARBA desde 01/12/2025: Percepciones ( excepto actividad 29, 7 quincenal, 7 y 17 de Bancos)'),
-        ('iibb_aplicado_arba_act_7_desde_01122025', 'TXT Perc/Ret IIBB aplicadas ARBA desde 01/12/2025: Percepciones Act. 7 método Percibido (quincenal)'),
+        # TODO descomentar las 2 opciones de abajo cuando se acerque la fecha 01/03/2026
+        # ('iibb_aplicado_arba_desde_01032026', 'TXT Perc/Ret IIBB aplicadas ARBA desde 01/03/2026: Percepciones ( excepto actividad 29, 7 quincenal, 7 y 17 de Bancos)'),
+        # ('iibb_aplicado_arba_act_7_desde_01032026', 'TXT Perc/Ret IIBB aplicadas ARBA desde 01/03/2026: Percepciones Act. 7 método Percibido (quincenal)'),
         # ('other', 'Other')
     ])
 
@@ -1549,15 +1550,15 @@ class AccountJournal(models.Model):
             'txt_content': content,
         }]
 
-    def iibb_aplicado_arba_act_7_desde_01122025_files_values(self, move_lines):
-        return self.iibb_aplicado_arba_desde_01122025_files_values(move_lines, act_7=True)
+    def iibb_aplicado_arba_act_7_desde_01032026_files_values(self, move_lines):
+        return self.iibb_aplicado_arba_desde_01032026_files_values(move_lines, act_7=True)
 
-    def iibb_aplicado_arba_desde_01122025_files_values(self, move_lines, act_7=None):
+    def iibb_aplicado_arba_desde_01032026_files_values(self, move_lines, act_7=None):
         """ Desarrollado según especificación https://web.arba.gov.ar/instructivo-y-marco-normativo
         (ese enlace se obtiene de https://web.arba.gov.ar/agentes#presentacion-de-ddjj ,
         luego hay que ir a la sección "DDJJ Periódicas Web IIBB NOVEDAD" y hacer click en
         "Instructivos y Marco Normativo - NOVEDAD -"). Finalmente descargar la especificación
-        donde dice 'Descargar PDF (Nuevo Diseño - Vigente para operaciones a partir del 01/12/2025)'
+        donde dice 'Descargar PDF (Nuevo Diseño - Vigente para operaciones a partir del 01/03/2026)'
         Implementados:
             - 1.2 Percepciones Act. 7 método Percibido (quincenal)
             - 1.7 Retenciones ( excepto actividad 29, 6 de Bancos y 17 de
