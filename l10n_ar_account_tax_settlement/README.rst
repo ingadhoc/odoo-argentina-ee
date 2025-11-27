@@ -35,7 +35,15 @@ Especificación de archivos:
 
 * SIFERE en xml web?: http://www.comarb.gov.ar/descargar/faqs/sifere_web/importacion_xml_sifereweb.pdf
 
+<<<<<<< 497f007f1a8feb204ac639c247bd967812d2088c
 * ARBA: https://www.arba.gov.ar/Apartados/Agentes/PresentacionDDJJ.asp?lugar=P?apartado=AGENTES
+||||||| 6aa3721c61ec65051365d7a24ac595f167505a3a
+* ARBA:
+   * Archivos txt: https://web.arba.gov.ar/instructivo-y-marco-normativo (ese enlace se obtiene de https://web.arba.gov.ar/agentes#presentacion-de-ddjj , luego hay que ir a la sección "DDJJ Periódicas Web IIBB NOVEDAD" y hacer click en "Instructivos y Marco Normativo - NOVEDAD -").
+=======
+* ARBA:
+   * Archivos txt: https://web.arba.gov.ar/instructivo-y-marco-normativo (ese enlace se obtiene de https://web.arba.gov.ar/agentes#presentacion-de-ddjj , luego hay que ir a la sección "DDJJ Periódicas Web IIBB NOVEDAD" y hacer click en "Instructivos y Marco Normativo - NOVEDAD -"). Vigente para operaciones a partir del 01/03/2026.
+>>>>>>> 3e8cfb01f48b6aaf503ad66247f5d1fab76442a1
 
 * AGIP:  https://www.agip.gob.ar/agentes/agentes-de-recaudacion/ib-agentes-recaudacion/aplicativo-arciba/aclaraciones-sobre-las-adecuaciones-al-aplicativo-e-arciba- (Version 3.0 aplicada el 07-05-2024)
    * Notas de credito  https://www.agip.gob.ar/filemanager/source/Agentes/De%20Recaudacion/Ingresos%20brutos/NC.PDF
