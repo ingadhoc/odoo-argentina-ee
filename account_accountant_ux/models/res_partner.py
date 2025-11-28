@@ -24,6 +24,43 @@ class ResPartner(models.Model):
         action_values["domain"] = domain
         return action_values
 
+    def _open_report_action(self, report_action_xmlid, partner_ids=None):
+        """Método genérico para abrir reportes de account_reports filtrados por partners
+
+        Args:
+            report_action_xmlid: XML ID de la acción del reporte a abrir
+            partner_ids: Lista de IDs de partners. Si no se provee, usa self.id
+
+        Returns:
+            dict: Acción del reporte configurada
+        """
+        if partner_ids is None:
+            partner_ids = [self.id]
+
+        action = self.env["ir.actions.actions"]._for_xml_id(report_action_xmlid)
+        action["params"] = {
+            "options": {"partner_ids": partner_ids},
+            "ignore_session": "both",
+        }
+        return action
+
+    def _validate_mass_selection(self, max_partners=1000):
+        """Valida que la selección masiva no exceda el límite permitido
+
+        Args:
+            max_partners: Número máximo de partners permitidos
+
+        Returns:
+            list: Lista de IDs de partners seleccionados
+
+        Raises:
+            UserError: Si se excede el límite de partners
+        """
+        selected_partner_ids = self.env.context.get("active_ids", [])
+        if len(selected_partner_ids) >= max_partners:
+            raise UserError(f"Se deben seleccionar menos de {max_partners} contactos")
+        return selected_partner_ids
+
     def open_partner_ledger(self):
         """Heredamos y modificamos el método original que está en account reports y lo dejamos como estaba en 16
         para que al momento de hacer click en 'Saldo a pagar' en algún diario de liquidación de impuestos entonces se
@@ -33,24 +70,27 @@ class ResPartner(models.Model):
         Esto no solo lo hacemos para tax_Settelement si no tmb para usabilidad general al usar el botón de ir a libro mayor
         desde la form de partners
         """
-        action = self.env["ir.actions.actions"]._for_xml_id("account_reports.action_account_report_partner_ledger")
-        action["params"] = {
-            "options": {"partner_ids": [self.id]},
-            "ignore_session": "both",
-        }
-        return action
+        return self._open_report_action("account_reports.action_account_report_partner_ledger")
 
     def open_mass_partner_ledger(self):
-        selected_partner_ids = self.env.context.get("active_ids")
-        if len(selected_partner_ids) < 1000:
-            action = self.env["ir.actions.actions"]._for_xml_id("account_reports.action_account_report_partner_ledger")
-            action["params"] = {
-                "options": {"partner_ids": selected_partner_ids},
-                "ignore_session": "both",
-            }
-            return action
-        else:
-            raise UserError("Se deben seleccionar menos de 1000 contactos")
+        partner_ids = self._validate_mass_selection()
+        return self._open_report_action("account_reports.action_account_report_partner_ledger", partner_ids)
+
+    def open_aged_receivable(self):
+        """Abre el reporte de Aged Receivable filtrado por el partner actual"""
+        return self._open_report_action("account_reports.action_account_report_ar")
+
+    def open_mass_aged_receivable(self):
+        partner_ids = self._validate_mass_selection()
+        return self._open_report_action("account_reports.action_account_report_ar", partner_ids)
+
+    def open_aged_payable(self):
+        """Abre el reporte de Aged Payable filtrado por el partner actual"""
+        return self._open_report_action("account_reports.action_account_report_ap")
+
+    def open_mass_aged_payable(self):
+        partner_ids = self._validate_mass_selection()
+        return self._open_report_action("account_reports.action_account_report_ap", partner_ids)
 
     @api.model
     def _credit_search(self, operator, operand):
