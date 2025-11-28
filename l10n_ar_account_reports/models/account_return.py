@@ -11,7 +11,7 @@ class AccountReturn(models.Model):
             # mod_tags = self.env.ref('l10n_es.mod_303').line_ids.expression_ids._get_matching_tags()
             # domain.append(('tax_tag_ids', 'in', mod_tags.ids))
             domain += [
-                ("tax_line_id.l10n_ar_state_id.code", "=", "B"),
+                ("tax_line_id.l10n_ar_state_id.code", "=", "C"),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
                 ("tax_line_id.type_tax_use", "=", "sale"),
             ]

@@ -1,12 +1,7 @@
-# -*- coding: utf-8 -*-
 import logging
-import time
-from datetime import timedelta
-from dateutil.relativedelta import relativedelta
 
-from odoo import api, fields, models, Command
-from odoo.tools.misc import file_open, formatLang
-from odoo.exceptions import UserError, ValidationError
+from dateutil.relativedelta import relativedelta
+from odoo import Command, api, fields, models
 
 _logger = logging.getLogger(__name__)
 
@@ -16,7 +11,9 @@ class AccountChartTemplate(models.AbstractModel):
 
     @api.model
     def _install_l10n_ar_account_reports_demo(self, companies):
-        import pdb; pdb.set_trace()
+        import pdb
+
+        pdb.set_trace()
         # if not isinstance(companies, models.BaseModel):
         #     companies = self.env['res.company'].browse(companies)
         # for company in companies:
@@ -25,12 +22,11 @@ class AccountChartTemplate(models.AbstractModel):
         # chart_template',  'in', ('ar_base', 'ar_ri', 'ar_ex')
         for company in companies.filtered(lambda x: x.chart_template in ("ar_base", "ar_ri", "ar_ex")):
             demo_data = {
-                'account.fiscal.position': self._l10n_ar_get_demo_data_fiscal_position(company),
+                "account.fiscal.position": self._l10n_ar_get_demo_data_fiscal_position(company),
                 # 'account.move': self._l10n_ar_get_demo_data_move(company),
             }
             self.sudo().with_context(skip_pdf_attachment_generation=True)._load_data(demo_data)
         # import pdb; pdb.set_trace()
-
 
     # <!-- Perc. Córdoba + CABA -->
     # <record id="fiscal_position_caba_cordoba_perc" model="account.fiscal.position">
@@ -78,17 +74,25 @@ class AccountChartTemplate(models.AbstractModel):
     @api.model
     def _l10n_ar_get_demo_data_fiscal_position(self, company=False):
         return {
-            'demo_fp_misiones': {
-                'name': 'Percepciones Misiones',
-                'sequence': 10,
-                'auto_apply': True,
-                'country_id': 'base.ar',
-                'state_ids': [Command.set([
-                    'base.state_ar_n',
-                ])],
-                'l10n_ar_afip_responsibility_type_ids': [Command.set([
-                    'l10n_ar.res_IVARI',
-                ])],
+            "demo_fp_misiones": {
+                "name": "Percepciones Misiones",
+                "sequence": 10,
+                "auto_apply": True,
+                "country_id": "base.ar",
+                "state_ids": [
+                    Command.set(
+                        [
+                            "base.state_ar_n",
+                        ]
+                    )
+                ],
+                "l10n_ar_afip_responsibility_type_ids": [
+                    Command.set(
+                        [
+                            "l10n_ar.res_IVARI",
+                        ]
+                    )
+                ],
             }
         }
 
@@ -116,32 +120,32 @@ class AccountChartTemplate(models.AbstractModel):
         #     ('id', '!=', (company or self.env.company).account_journal_early_pay_discount_gain_account_id.id)
         # ], limit=1)
 
-    # <record id="demo_invoice_adhoc_caba" model="account.move" context="{'allowed_company_ids': [ref('base.company_ri')]}">
-    #     <field name="partner_id" ref="res_partner_adhoc_caba"/>
-    #     <field name="invoice_user_id" ref="base.user_demo"/>
-    #     <field name="invoice_payment_term_id" ref="account.account_payment_term_end_following_month"/>
-    #     <field name="move_type">out_invoice</field>
-    #     <field name="invoice_date" eval="(DateTime.today() + relativedelta(months=-1)).strftime('%Y-%m')+'-01'"/>
-    #     <field name="invoice_line_ids" eval="[
-    #         (0, 0, {'product_id': ref('product.product_product_27'), 'price_unit': 642.0, 'quantity': 5}),
-    #         (0, 0, {'product_id': ref('l10n_ar.product_product_telefonia'), 'price_unit': 250.0, 'quantity': 1}),
-    #         (0, 0, {'product_id': ref('product.product_product_25'), 'price_unit': 3245.0, 'quantity': 2}),
-    #     ]"/>
-    # </record>
-    # <function model="account.move" name="action_post">
-    #     <value eval="[ref('demo_invoice_adhoc_caba')]"/>
-    # </function>
+        # <record id="demo_invoice_adhoc_caba" model="account.move" context="{'allowed_company_ids': [ref('base.company_ri')]}">
+        #     <field name="partner_id" ref="res_partner_adhoc_caba"/>
+        #     <field name="invoice_user_id" ref="base.user_demo"/>
+        #     <field name="invoice_payment_term_id" ref="account.account_payment_term_end_following_month"/>
+        #     <field name="move_type">out_invoice</field>
+        #     <field name="invoice_date" eval="(DateTime.today() + relativedelta(months=-1)).strftime('%Y-%m')+'-01'"/>
+        #     <field name="invoice_line_ids" eval="[
+        #         (0, 0, {'product_id': ref('product.product_product_27'), 'price_unit': 642.0, 'quantity': 5}),
+        #         (0, 0, {'product_id': ref('l10n_ar.product_product_telefonia'), 'price_unit': 250.0, 'quantity': 1}),
+        #         (0, 0, {'product_id': ref('product.product_product_25'), 'price_unit': 3245.0, 'quantity': 2}),
+        #     ]"/>
+        # </record>
+        # <function model="account.move" name="action_post">
+        #     <value eval="[ref('demo_invoice_adhoc_caba')]"/>
+        # </function>
 
         return {
-            'demo_invoice_1': {
-                'move_type': 'out_invoice',
-                'partner_id': 'l10n_ar_tax.res_partner_adhoc_caba',
+            "demo_invoice_1": {
+                "move_type": "out_invoice",
+                "partner_id": "l10n_ar_tax.res_partner_adhoc_caba",
                 # 'invoice_user_id': 'base.user_demo',
                 # 'invoice_payment_term_id': 'account.account_payment_term_end_following_month',
-                'invoice_date': one_month_ago.strftime("%Y-%m-01"),
+                "invoice_date": one_month_ago.strftime("%Y-%m-01"),
                 # 'delivery_date': time.strftime('%Y-%m-01'),
-                'invoice_line_ids': [
-                    Command.create({'product_id': 'product.product_product_2', 'quantity': 1}),
+                "invoice_line_ids": [
+                    Command.create({"product_id": "product.product_product_2", "quantity": 1}),
                 ],
             },
             # 'demo_invoice_2': {
