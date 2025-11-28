@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="account_report_form_inherit_accountant_ux" model="ir.ui.view">
+        <field name="name">account.report.form.inherit.accountant.ux</field>
+        <field name="model">account.report</field>
+        <field name="inherit_id" ref="account_reports.account_report_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='filter_aml_ir_filters']" position="after">
+                <field name="require_custom_filter"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
