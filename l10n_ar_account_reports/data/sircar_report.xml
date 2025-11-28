@@ -21,11 +21,11 @@
             <!-- por ahora usamos l10n_ar_state y type_tax_use porque odoo no mezclo lo de tax groups, pero si lo mezclan seria mejor ir por allí. No usamos jurisdiction_code porque por ahora NO es buscable -->
             <record id="l10n_ar_sircar_report_sircar_withholdings_line" model="account.report.line">
                 <field name="name">Purchase Withholdings</field>
-                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_state_id.code", "=", "C"), ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"), ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier")])</field>
+                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_state_id.code", "not in", ["C", "B", "T"]), ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"), ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier")])</field>
             </record>
             <record id="l10n_ar_sircar_report_sircar_perceptions_line" model="account.report.line">
                 <field name="name">Sale Perceptions</field>
-                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_state_id.code", "=", "C"), ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"), ("tax_line_id.type_tax_use", "=", "sale")])</field>
+                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_state_id.code", "not in", ["C", "B", "T"]), ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"), ("tax_line_id.type_tax_use", "=", "sale")])</field>
             </record>
         </field>
     </record>

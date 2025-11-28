@@ -15,40 +15,25 @@ class L10n_ArSireReportHandler(models.AbstractModel):
         # Add export button
         txt_export_button = [
             {
-                "name": "TXT Retenciones / Percepciones",
+                "name": "TXT Retenciones",
                 "sequence": 30,
                 "action": "export_file",
-                "action_param": "sire_ret_perc_txt",
-                "file_export_type": "TXT",
-            },
-            {
-                "name": "TXT Percepciones",
-                "sequence": 30,
-                "action": "export_file",
-                "action_param": "nc_sire_ret_perc_txt",
+                "action_param": "sire_ret_txt",
                 "file_export_type": "TXT",
             },
         ]
-
         options["buttons"].extend(txt_export_button)
 
-    def sire_ret_perc_txt(self, options):
+    def sire_ret_txt(self, options):
         return {
-            "file_name": "Perc/Ret IIBB SIRE Aplicadas.txt",
+            "file_name": "Retenciones SIRE Aplicadas.txt",
             "file_content": self._sire_book_get_txt_files(options),
             "file_type": "txt",
         }
 
-    def nc_sire_ret_perc_txt(self, options):
-        return {
-            "file_name": "NC Perc/Ret IIBB SIRE Aplicadas.txt",
-            "file_content": self._sire_book_get_txt_files(options, refund=True),
-            "file_type": "txt",
-        }
-
-    def _sire_book_get_txt_files(self, options, refund=False):
+    def _sire_book_get_txt_files(self, options):
         """Returns SIRE txt content"""
-        move_lines = self._sire_book_get_txt_lines(options, refund=refund)
+        move_lines = self._sire_book_get_txt_lines(options)
         return "".join(self._get_sire_txt_content(move_lines)).encode("ISO-8859-1", "ignore")
 
     def _sire_book_get_txt_lines(self, options):
@@ -60,13 +45,17 @@ class L10n_ArSireReportHandler(models.AbstractModel):
                     " Please remove Include unposted entries filter and try again"
                 )
             )
-        domain = [
-            ("tax_line_id.l10n_ar_state_id.code", "=", "B"),
-            ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
-            "|",
-            ("tax_line_id.type_tax_use", "=", "sale"),
-            ("tax_line_id.l10n_ar_withholding_payment_type", "=", "purchase"),
-        ] + self._sire_book_get_lines_domain(options)
+        domain = (
+            [
+                # TODO
+                # ("tax_line_id.l10n_ar_state_id.code", "=", "B"),
+                # ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
+                # "|",
+                # ("tax_line_id.type_tax_use", "=", "sale"),
+                # ("tax_line_id.l10n_ar_withholding_payment_type", "=", "purchase"),
+            ]
+            + self._sire_book_get_lines_domain(options)
+        )
         return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
 
     def _sire_book_get_lines_domain(self, options):
@@ -81,7 +70,7 @@ class L10n_ArSireReportHandler(models.AbstractModel):
             domain += [("date", ">=", options["date"]["date_from"])]
         return domain
 
-    def _get_sire_txt_content(self, move_lines, refund=False):
+    def _get_sire_txt_content(self, move_lines):
         """Returns the lines to be printed in the txt file."""
         lines = []
         # TODO implementar

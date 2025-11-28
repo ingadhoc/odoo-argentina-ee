@@ -15,43 +15,42 @@ class L10n_ArMisionesReportHandler(models.AbstractModel):
         # Add export button
         txt_export_button = [
             {
-                "name": "TXT Retenciones / Percepciones",
+                "name": "TXT Retenciones",
                 "sequence": 30,
                 "action": "export_file",
-                "action_param": "misiones_ret_perc_txt",
+                "action_param": "misiones_ret_txt",
                 "file_export_type": "TXT",
             },
             {
                 "name": "TXT Percepciones",
                 "sequence": 30,
                 "action": "export_file",
-                "action_param": "nc_misiones_ret_perc_txt",
+                "action_param": "misiones_perc_txt",
                 "file_export_type": "TXT",
             },
         ]
-
         options["buttons"].extend(txt_export_button)
 
-    def misiones_ret_perc_txt(self, options):
+    def misiones_ret_txt(self, options):
         return {
-            "file_name": "Perc/Ret IIBB Misiones Aplicadas.txt",
-            "file_content": self._misiones_book_get_txt_files(options),
+            "file_name": "Retenciones IIBB Misiones.txt",
+            "file_content": self._misiones_book_get_txt_files(options, "ret"),
             "file_type": "txt",
         }
 
-    def nc_misiones_ret_perc_txt(self, options):
+    def misiones_perc_txt(self, options):
         return {
-            "file_name": "NC Perc/Ret IIBB Misiones Aplicadas.txt",
-            "file_content": self._misiones_book_get_txt_files(options, refund=True),
+            "file_name": "Percepciones Misiones.txt",
+            "file_content": self._misiones_book_get_txt_files(options, "perc"),
             "file_type": "txt",
         }
 
-    def _misiones_book_get_txt_files(self, options, refund=False):
+    def _misiones_book_get_txt_files(self, options, file_type):
         """Returns Misiones txt content"""
-        move_lines = self._misiones_book_get_txt_lines(options, refund=refund)
+        move_lines = self._misiones_book_get_txt_lines(options, file_type)
         return "".join(self._get_misiones_txt_content(move_lines)).encode("ISO-8859-1", "ignore")
 
-    def _misiones_book_get_txt_lines(self, options):
+    def _misiones_book_get_txt_lines(self, options, file_type):
         state = options.get("all_entries") and "all" or "posted"
         if state != "posted":
             raise UserError(
@@ -63,10 +62,13 @@ class L10n_ArMisionesReportHandler(models.AbstractModel):
         domain = [
             ("tax_line_id.l10n_ar_state_id.code", "=", "B"),
             ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
-            "|",
-            ("tax_line_id.type_tax_use", "=", "sale"),
-            ("tax_line_id.l10n_ar_withholding_payment_type", "=", "purchase"),
-        ] + self._misiones_book_get_lines_domain(options)
+        ] + self._pba_book_get_lines_domain(options)
+
+        if file_type == "ret":
+            domain += [("tax_line_id.l10n_ar_withholding_payment_type", "=", "purchase")]
+        elif file_type == "perc":
+            domain += [("tax_line_id.type_tax_use", "=", "sale")]
+
         return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
 
     def _misiones_book_get_lines_domain(self, options):
@@ -81,7 +83,7 @@ class L10n_ArMisionesReportHandler(models.AbstractModel):
             domain += [("date", ">=", options["date"]["date_from"])]
         return domain
 
-    def _get_misiones_txt_content(self, move_lines, refund=False):
+    def _get_misiones_txt_content(self, move_lines):
         """Returns the lines to be printed in the txt file."""
         lines = []
         # TODO implementar

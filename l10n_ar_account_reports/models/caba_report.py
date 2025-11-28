@@ -81,7 +81,7 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
             domain += [("date", ">=", options["date"]["date_from"])]
         return domain
 
-    def _get_caba_txt_content(self, move_lines, refund=False):
+    def _get_caba_txt_content(self, move_lines):
         """Returns the lines to be printed in the txt file."""
         lines = []
         # TODO implementar

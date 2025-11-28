@@ -21,15 +21,7 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
                 "action_param": "santa_fe_ret_perc_txt",
                 "file_export_type": "TXT",
             },
-            {
-                "name": "TXT Percepciones",
-                "sequence": 30,
-                "action": "export_file",
-                "action_param": "nc_santa_fe_ret_perc_txt",
-                "file_export_type": "TXT",
-            },
         ]
-
         options["buttons"].extend(txt_export_button)
 
     def santa_fe_ret_perc_txt(self, options):
@@ -39,16 +31,9 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
             "file_type": "txt",
         }
 
-    def nc_santa_fe_ret_perc_txt(self, options):
-        return {
-            "file_name": "NC Perc/Ret IIBB Santa Fe Aplicadas.txt",
-            "file_content": self._santa_fe_book_get_txt_files(options, refund=True),
-            "file_type": "txt",
-        }
-
-    def _santa_fe_book_get_txt_files(self, options, refund=False):
+    def _santa_fe_book_get_txt_files(self, options):
         """Returns Santa Fe txt content"""
-        move_lines = self._santa_fe_book_get_txt_lines(options, refund=refund)
+        move_lines = self._santa_fe_book_get_txt_lines(options)
         return "".join(self._get_santa_fe_txt_content(move_lines)).encode("ISO-8859-1", "ignore")
 
     def _santa_fe_book_get_txt_lines(self, options):
@@ -61,7 +46,7 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
                 )
             )
         domain = [
-            ("tax_line_id.l10n_ar_state_id.code", "=", "B"),
+            ("tax_line_id.l10n_ar_state_id.code", "=", "S"),
             ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
             "|",
             ("tax_line_id.type_tax_use", "=", "sale"),
@@ -81,7 +66,7 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
             domain += [("date", ">=", options["date"]["date_from"])]
         return domain
 
-    def _get_santa_fe_txt_content(self, move_lines, refund=False):
+    def _get_santa_fe_txt_content(self, move_lines):
         """Returns the lines to be printed in the txt file."""
         lines = []
         # TODO implementar

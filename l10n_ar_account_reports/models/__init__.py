@@ -12,6 +12,5 @@ from . import misiones_report
 from . import tucuman_report
 from . import sifere_report
 from . import sircar_report
-from . import sire_report
 from . import l10n_ar_vat_book
 from . import account_return
