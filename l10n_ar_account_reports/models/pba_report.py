@@ -77,12 +77,12 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
             "file_type": "txt",
         }
 
-    def _pba_book_get_txt_files(self, options, type):
+    def _pba_book_get_txt_files(self, options, file_type):
         """Returns PBA txt content"""
-        move_lines = self._pba_book_get_txt_lines(options)
-        return "".join(self._get_pba_txt_content(move_lines, type)).encode("ISO-8859-1", "ignore")
+        move_lines = self._pba_book_get_txt_lines(options, file_type)
+        return "".join(self._get_pba_txt_content(move_lines)).encode("ISO-8859-1", "ignore")
 
-    def _pba_book_get_txt_lines(self, options):
+    def _pba_book_get_txt_lines(self, options, file_type):
         state = options.get("all_entries") and "all" or "posted"
         if state != "posted":
             raise UserError(
@@ -94,10 +94,12 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
         domain = [
             ("tax_line_id.l10n_ar_state_id.code", "=", "B"),
             ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
-            "|",
-            ("tax_line_id.type_tax_use", "=", "sale"),
-            ("tax_line_id.l10n_ar_withholding_payment_type", "=", "purchase"),
         ] + self._pba_book_get_lines_domain(options)
+
+        if file_type == "ret":
+            domain += [("tax_line_id.l10n_ar_withholding_payment_type", "=", "purchase")]
+        elif file_type in ["perc", "perc_act_7"]:
+            domain += [("tax_line_id.type_tax_use", "=", "sale")]
         return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
 
     def _pba_book_get_lines_domain(self, options):
@@ -112,7 +114,7 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
             domain += [("date", ">=", options["date"]["date_from"])]
         return domain
 
-    def _get_pba_txt_content(self, move_lines, type):
+    def _get_pba_txt_content(self, move_lines):
         """Returns the lines to be printed in the txt file."""
         lines = []
         # TODO implementar

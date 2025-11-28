@@ -15,43 +15,56 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
         # Add export button
         txt_export_button = [
             {
-                "name": "TXT Retenciones / Percepciones",
+                "name": "TXT Datos",
                 "sequence": 30,
                 "action": "export_file",
-                "action_param": "tucuman_ret_perc_txt",
+                "action_param": "tucuman_datos_txt",
                 "file_export_type": "TXT",
             },
             {
-                "name": "TXT Percepciones",
+                "name": "TXT RETPER",
                 "sequence": 30,
                 "action": "export_file",
-                "action_param": "nc_tucuman_ret_perc_txt",
+                "action_param": "tucuman_retper_txt",
+                "file_export_type": "TXT",
+            },
+            {
+                "name": "TXT NCFACT",
+                "sequence": 30,
+                "action": "export_file",
+                "action_param": "tucuman_ncfact_txt",
                 "file_export_type": "TXT",
             },
         ]
-
         options["buttons"].extend(txt_export_button)
 
-    def tucuman_ret_perc_txt(self, options):
+    def tucuman_datos_txt(self, options):
         return {
-            "file_name": "Perc/Ret IIBB Tucumán Aplicadas.txt",
-            "file_content": self._tucuman_book_get_txt_files(options),
+            "file_name": "DATOS.txt",
+            "file_content": self._tucuman_book_get_txt_files(options, file_type="datos"),
             "file_type": "txt",
         }
 
-    def nc_tucuman_ret_perc_txt(self, options):
+    def tucuman_retper_txt(self, options):
         return {
-            "file_name": "NC Perc/Ret IIBB Tucumán Aplicadas.txt",
-            "file_content": self._tucuman_book_get_txt_files(options, refund=True),
+            "file_name": "RETPER.TXT",
+            "file_content": self._tucuman_book_get_txt_files(options, file_type="retper"),
             "file_type": "txt",
         }
 
-    def _tucuman_book_get_txt_files(self, options, refund=False):
+    def tucuman_ncfact_txt(self, options):
+        return {
+            "file_name": "NCFACT.TXT",
+            "file_content": self._tucuman_book_get_txt_files(options, file_type="ncfact"),
+            "file_type": "txt",
+        }
+
+    def _tucuman_book_get_txt_files(self, options, file_type):
         """Returns Tucumán txt content"""
-        move_lines = self._tucuman_book_get_txt_lines(options, refund=refund)
+        move_lines = self._tucuman_book_get_txt_lines(options, file_type)
         return "".join(self._get_tucuman_txt_content(move_lines)).encode("ISO-8859-1", "ignore")
 
-    def _tucuman_book_get_txt_lines(self, options):
+    def _tucuman_book_get_txt_lines(self, options, file_type):
         state = options.get("all_entries") and "all" or "posted"
         if state != "posted":
             raise UserError(
@@ -61,12 +74,17 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
                 )
             )
         domain = [
-            ("tax_line_id.l10n_ar_state_id.code", "=", "B"),
+            ("tax_line_id.l10n_ar_state_id.code", "=", "T"),
             ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
             "|",
             ("tax_line_id.type_tax_use", "=", "sale"),
             ("tax_line_id.l10n_ar_withholding_payment_type", "=", "purchase"),
         ] + self._tucuman_book_get_lines_domain(options)
+
+        # lo hacemos igual que está hoy, probablemente tengamos que hacer busqueda negativa para los otros casos?
+        if file_type == "ncfact":
+            domain += [("move_id.move_type", "=", "out_refund")]
+
         return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
 
     def _tucuman_book_get_lines_domain(self, options):
@@ -81,7 +99,7 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
             domain += [("date", ">=", options["date"]["date_from"])]
         return domain
 
-    def _get_tucuman_txt_content(self, move_lines, refund=False):
+    def _get_tucuman_txt_content(self, move_lines):
         """Returns the lines to be printed in the txt file."""
         lines = []
         # TODO implementar
