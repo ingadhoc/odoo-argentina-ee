@@ -14,6 +14,20 @@
                         <span class="o_stat_text">Matching</span>
                     </div>
                 </button>
+                <button class="oe_stat_button" type="object" groups="account.group_account_readonly"
+                    name="open_aged_receivable" icon="fa-list">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Aged</span>
+                        <span class="o_stat_text">Receivable</span>
+                    </div>
+                </button>
+                <button class="oe_stat_button" type="object" groups="account.group_account_readonly"
+                    name="open_aged_payable" icon="fa-list">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Aged</span>
+                        <span class="o_stat_text">Payable</span>
+                    </div>
+                </button>
             </div>
         </field>
     </record>
@@ -26,6 +40,30 @@
             <field name="code">
                 if records:
                     action = records.open_mass_partner_ledger()
+            </field>
+    </record>
+
+    <record model="ir.actions.server" id="action_aged_receivable">
+            <field name="name">Aged Receivable Report</field>
+            <field name="model_id" ref="model_res_partner"/>
+            <field name="binding_model_id" ref="model_res_partner" />
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.open_mass_aged_receivable()
+            </field>
+    </record>
+
+    <record model="ir.actions.server" id="action_aged_payable">
+            <field name="name">Aged Payable Report</field>
+            <field name="model_id" ref="model_res_partner"/>
+            <field name="binding_model_id" ref="model_res_partner" />
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.open_mass_aged_payable()
             </field>
     </record>
 
