@@ -35,11 +35,12 @@
         <field name="inherit_id" ref="base.view_res_partner_filter"/>
         <field name="arch" type="xml">
             <xpath expr="//filter[@name='inactive']" position="before">
-                <filter name="debt_to_charge" string="Deuda a cobrar" domain="['|', ('credit','>',0), ('credit', '&lt;', 0)]"/>
+                <filter name="debt_to_charge" string="Deuda a cobrar" domain="[('credit','>',0)]"/>
+                <filter name="customer_balance" string="Saldo a favor de cliente" domain="[('credit','&lt;',0)]"/>
                 <filter name="debt_to_pay" string="Deuda a pagar" domain="[('debit','>',0)]"/>
+                <filter name="vendor_balance" string="Saldo a favor con proveedor" domain="[('debit','&lt;',0)]"/>
                 <separator/>
             </xpath>
         </field>
     </record>
-
 </odoo>
