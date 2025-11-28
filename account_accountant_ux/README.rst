@@ -22,6 +22,7 @@ Account Accountant UX
 #. Desde el informe partner ledger, al ir a los journal items, vamos a la vista de apuntes que usamos para los menus "customer/supplier ledger" para unificar comportamiento (nativamente odoo manda a una _tree_grouped_partner)
 #. Agrega una estrategia de autoconciliacion que Permite reconciliar todas las lineas de un partner en un solo conciliacion parcial o total
 #. Modifica el botón "Due" de los partners para que sea siempre visible y modifica su nombre a "Libro Mayor de Empresa".
+#. Agrega campo booleano "Requerir Filtro Custom" en la configuración de reportes. Si está activo y no hay filtros de partners o filtros personalizados aplicados, el reporte no cargará datos y mostrará un mensaje de advertencia.
 
 Installation
 ============

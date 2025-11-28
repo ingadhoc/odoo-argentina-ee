@@ -14,6 +14,20 @@
                         <span class="o_stat_text">Matching</span>
                     </div>
                 </button>
+                <button class="oe_stat_button" type="object" groups="account.group_account_readonly"
+                    name="open_aged_receivable" icon="fa-list">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Aged</span>
+                        <span class="o_stat_text">Receivable</span>
+                    </div>
+                </button>
+                <button class="oe_stat_button" type="object" groups="account.group_account_readonly"
+                    name="open_aged_payable" icon="fa-list">
+                    <div class="o_stat_info">
+                        <span class="o_stat_text">Aged</span>
+                        <span class="o_stat_text">Payable</span>
+                    </div>
+                </button>
             </div>
         </field>
     </record>
@@ -29,14 +43,40 @@
             </field>
     </record>
 
+    <record model="ir.actions.server" id="action_aged_receivable">
+            <field name="name">Aged Receivable Report</field>
+            <field name="model_id" ref="model_res_partner"/>
+            <field name="binding_model_id" ref="model_res_partner" />
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.open_mass_aged_receivable()
+            </field>
+    </record>
+
+    <record model="ir.actions.server" id="action_aged_payable">
+            <field name="name">Aged Payable Report</field>
+            <field name="model_id" ref="model_res_partner"/>
+            <field name="binding_model_id" ref="model_res_partner" />
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">
+                if records:
+                    action = records.open_mass_aged_payable()
+            </field>
+    </record>
+
     <record id="res_partner_view_search" model="ir.ui.view">
         <field name="name">res.partner.search.inherit</field>
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_res_partner_filter"/>
         <field name="arch" type="xml">
             <xpath expr="//filter[@name='inactive']" position="before">
-                <filter name="debt_to_charge" string="Deuda a cobrar" domain="['|', ('credit','>',0), ('credit', '&lt;', 0)]"/>
+                <filter name="debt_to_charge" string="Deuda a cobrar" domain="[('credit','>',0)]"/>
+                <filter name="customer_balance" string="Saldo a favor de cliente" domain="[('credit','&lt;',0)]"/>
                 <filter name="debt_to_pay" string="Deuda a pagar" domain="[('debit','>',0)]"/>
+                <filter name="vendor_balance" string="Saldo a favor con proveedor" domain="[('debit','&lt;',0)]"/>
                 <separator/>
             </xpath>
         </field>
