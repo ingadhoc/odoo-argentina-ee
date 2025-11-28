@@ -21,14 +21,39 @@ Functional description
 
 This module adds two main functionalities:
 
-**1. Partner Ledger Report Enhancement**
+**Partner Ledger Report Enhancement**
 
 Modifies the native Partner Ledger (Libro Mayor de Empresas) report to include Argentine fiscal information alongside each partner's name. The standard Odoo report only shows "Partner Name", while with this module it displays "Partner Name (CUIT: 1234567890)".
 
 This functionality is essential for fiscal compliance in Argentina, as the report serves as the official detail of Debtors and Creditors at year-end, required for Annual Balance presentation to accounting and tax authorities.
 
-Agrega el CUIT de cada partner en el reporte "Libro Mayor de Empresas" (Partner Ledeger)
-Agrega reportes de estado de resultado y balance
+**Interface changes:**
+- Adds a new "Cheques a fecha" menu under Accounting → Reporting → Legal Statements
+- Includes a wizard with fields to select limit date and journal (optional)
+- Generates a PDF report with detailed listing of pending checks
+- Archivos para declaración de distintos impuestos (principalmente percepciones y retenciones)
+
+Archivos para declaración de impuestos
+======================================
+
+* ARBA (PBA): https://web.arba.gov.ar/agentes#presentacion-de-ddjj --> hacer click en "Instructivos y Marco Normativo - NOVEDAD -" dentro de DDJJ Periódicas Web IIBB
+
+* AGIP:  https://www.agip.gob.ar/agentes/agentes-de-recaudacion/ib-agentes-recaudacion/aplicativo-arciba/aclaraciones-sobre-las-adecuaciones-al-aplicativo-e-arciba- (Version 3.0 aplicada el 07-05-2024)
+   * Notas de credito  https://www.agip.gob.ar/filemanager/source/Agentes/De%20Recaudacion/Ingresos%20brutos/NC.PDF
+   * Retencion y percepciones  https://www.agip.gob.ar/filemanager/source/Agentes/De%20Recaudacion/Ingresos%20brutos/RP.PDF
+
+* MENDOZA https://www.atm.mendoza.gov.ar/portalatm/ModificarParametros?tipo=descargarUrl&url=/zoneBottom/serviciosDescargas/sarepe/files/SAREPE.pdf
+
+* MISIONES: https://atmisiones.gob.ar/agentes-de-retencion-y-percepcion/ (ingresar en "https://atmisiones.gob.ar/", abajo a la derecha hacer click en "Guías y Manuales de Usuario" luego en "Manuales de Usuarios" finalmente en "Agentes Ret/Percep") --> hacer click en "AG IIBB -Instructivo del Formato Archivo carga DDJJ Retenciones desde 01-06-2023" y "AG IIBB -Instructivo del Formato Archivo carga DDJJ Percepción desde 01-06-2023".
+            Correo DGR: mesadeayuda@tsgroup.com.ar
+
+* SIRCAR: especificación en /doc/sircar
+
+* SIFERE: especificación en /doc/sifere
+
+* SANTA FE: especificación en /doc/Santa Fe (siprib)
+
+* TUCUMAN: especificación en doc/Tucuman/MRETPER6R2.pdf a partir de la página 12
 
 Installation
 ============

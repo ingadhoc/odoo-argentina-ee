@@ -18,7 +18,7 @@ class L10n_ArMendozaReportHandler(models.AbstractModel):
                 "name": "TXT Retenciones",
                 "sequence": 30,
                 "action": "export_file",
-                "action_param": "mendoza_ret",
+                "action_param": "mendoza_ret_txt",
                 "file_export_type": "TXT",
             },
         ]
@@ -58,7 +58,7 @@ class L10n_ArMendozaReportHandler(models.AbstractModel):
         domain = [
             ("tax_line_id.l10n_ar_state_id.code", "=", "M"),
             ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
-            ("tax_line_id.l10n_ar_withholding_payment_type", "=", "purchase"),
+            ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
         ] + self._mendoza_book_get_lines_domain(options)
         return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
 
@@ -77,9 +77,59 @@ class L10n_ArMendozaReportHandler(models.AbstractModel):
     def _get_mendoza_txt_content(self, move_lines):
         """Returns the lines to be printed in the txt file."""
         lines = []
-        # TODO implementar
         for line in move_lines.filtered("amount_currency").sorted(key=lambda r: (r.date, r.id)):
             content = ""
+            partner = line.partner_id
+            payment = line.payment_id
+            move = line.move_id
+
+            tax = line._get_settlement_tax()
+            if not payment:
+                continue
+
+            # Campo 1: CUIT char(13). CUIT del Sujeto retenido o percibido. Ejemplo: 20-10111222-3
+            # Example "30-58710878-6"
+            partner.ensure_vat()
+            content = partner.l10n_ar_formatted_vat
+            # Campo 2: Denominación char(80). Apellido y Nombre o Razón Social. Formato: 80 posiciones, se completa con
+            # blancos a la derecha.
+            # Example "ELECTRICIDAD MAZA SRL                                                           "
+            content += f"{partner.name:80.80}"
+
+            # Campo 3: Fecha Comprobante char(8). Fecha del Comprobante de Retención/Percepción según Res.40/2012 (ddmmaaaa)
+            # Example s"16052020"
+            content += fields.Date.from_string(move.date).strftime("%d%m%Y")
+
+            # Campo 4: Comprobante char(12)- Número de Comprobante de Retención/Percepción según Res.40/2012.
+            # Formato: 999999999999 (rellenar con ceros (0) a la izquierda) Ejemplo: 000000001521
+            # Example "000000027860"
+            if len(line.name) > 12:
+                prefix, rest = line.name.split("-", 1)
+                exceso = len(line.name) - 12
+                rest = rest[exceso:]  # quitamos solo los ceros necesarios
+                name = prefix + "-" + rest
+            content += (name or "").rjust(12, "0")[:12]  # we are forcing 12 first numbers always.
+
+            # Campo 5: Fecha Ret./Perc. char(8)- Fecha de efectuada la retención / percepción (ddmmaaaa)
+            # Example "16052020"
+            content += fields.Date.from_string(payment.date).strftime("%d%m%Y")
+
+            # Campo 6. Base Imponible char(15). Formato: 999999999999.99 (doce enteros, punto decimal y dos decimales,
+            # dejando espacios en blanco a izquierda para completar las 15 posiciones). Ejemplo: "         345.21"
+            # Example "000000027229.33"
+            content += "%15.2f" % line.withholding_id.base_amount
+
+            # Campo 7: Alícuota char(5). Alícuota para la retención y/o percepción. Formato: 99.99 (dos enteros,
+            # punto decimal y dos decimales. Ejemplo: " 3.00"
+            # Example "03.00"
+            content += "%5.2f" % tax.amount
+
+            # Campo 8: Importe Ret./Perc. char(15). Importe retenido y/o percibido. Formato: 999999999999.99 (doce enteros,
+            # punto decimal y dos decimales, dejando espacios en blanco a izquierda para completar las 15 posiciones).
+            # Ejemplo: "          34.50" "000000000816.88"
+            content += "%15.2f" % -line.balance
+
+            content += "\r\n"
 
             lines.append(content)
         return lines
