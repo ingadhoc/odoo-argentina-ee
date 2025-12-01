@@ -85,3 +85,10 @@ Maintainer
 This module is maintained by the |company|.
 
 To contribute to this module, please visit https://www.adhoc.com.ar.
+
+Changelog
+=========
+
+15.0.1.19.1
+-----------
+* Fix: Normalizar documento cuando falta l10n_latam_document_type_id
