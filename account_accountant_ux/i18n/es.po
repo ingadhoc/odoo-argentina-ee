@@ -1,24 +1,56 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* account_accountant_ux
-# 
+#
 # Translators:
 # Gonzalo, 2025
 # Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-09-23 20:41+0000\n"
+"POT-Creation-Date: 2025-12-03 10:45+0000\n"
 "PO-Revision-Date: 2024-11-07 14:34+0000\n"
 "Last-Translator: Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: es\n"
-"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
+"1 : 2;\n"
+
+#. module: account_accountant_ux
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_partner_form
+#, fuzzy
+#| msgid ""
+#| "<span class=\"o_stat_text\">Payment </span>\n"
+#| "                        <span class=\"o_stat_text\">Matching</span>"
+msgid ""
+"<span class=\"o_stat_text\">Aged</span>\n"
+"                        <span class=\"o_stat_text\">Payable</span>"
+msgstr ""
+"<span class=\"o_stat_text\">Conciliación </span>\n"
+"                        <span class=\"o_stat_text\">de Pagos</span>"
+
+#. module: account_accountant_ux
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_partner_form
+#, fuzzy
+#| msgid ""
+#| "<span class=\"o_stat_text\">Payment </span>\n"
+#| "                        <span class=\"o_stat_text\">Matching</span>"
+msgid ""
+"<span class=\"o_stat_text\">Aged</span>\n"
+"                        <span class=\"o_stat_text\">Receivable</span>"
+msgstr ""
+"<span class=\"o_stat_text\">Conciliación </span>\n"
+"                        <span class=\"o_stat_text\">de Pagos</span>"
+
+#. module: account_accountant_ux
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_partner_view_form
+msgid "<span class=\"o_stat_text\">Libro Mayor de Empresa</span>"
+msgstr ""
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_partner_form
@@ -35,6 +67,12 @@ msgid "<span title=\"Balance in Odoo\">Balance in GL</span>"
 msgstr "<span title=\"Balance in Odoo\">Balance en Libro Mayor</span>"
 
 #. module: account_accountant_ux
+#. odoo-javascript
+#: code:addons/account_accountant_ux/static/src/components/bank_reconciliation/button_list/assets.xml:0
+msgid "Account Accountant UX Assets"
+msgstr ""
+
+#. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_auto_reconcile_wizard
 msgid "Account automatic reconciliation wizard"
 msgstr "Asistente de conciliación bancaria automática"
@@ -43,6 +81,21 @@ msgstr "Asistente de conciliación bancaria automática"
 #: model:ir.model,name:account_accountant_ux.model_account_reconcile_wizard
 msgid "Account reconciliation wizard"
 msgstr "Asistente de conciliación bancaria"
+
+#. module: account_accountant_ux
+#: model:ir.model,name:account_accountant_ux.model_account_report
+msgid "Accounting Report"
+msgstr ""
+
+#. module: account_accountant_ux
+#: model:ir.actions.server,name:account_accountant_ux.action_aged_payable
+msgid "Aged Payable Report"
+msgstr ""
+
+#. module: account_accountant_ux
+#: model:ir.actions.server,name:account_accountant_ux.action_aged_receivable
+msgid "Aged Receivable Report"
+msgstr ""
 
 #. module: account_accountant_ux
 #: model:ir.model.fields.selection,name:account_accountant_ux.selection__account_auto_reconcile_wizard__search_mode__all_from_partner
@@ -56,14 +109,9 @@ msgid "Automatically Reconciled Entries"
 msgstr "Entradas Conciliadas Automáticamente"
 
 #. module: account_accountant_ux
-#: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_config_settings_view_form
-msgid "Bank Reconciliation"
-msgstr "Conciliación Bancaria"
-
-#. module: account_accountant_ux
-#: model:ir.model,name:account_accountant_ux.model_bank_rec_widget
-msgid "Bank reconciliation widget for a single statement line"
-msgstr "Widget de conciliación bancaria para una sola línea del extracto"
+#: model:ir.model,name:account_accountant_ux.model_account_bank_statement_line
+msgid "Bank Statement Line"
+msgstr ""
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_change_lock_date
@@ -75,11 +123,6 @@ msgstr "Cambiar fecha de bloqueo"
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_change_lock_date__company_id
 msgid "Company"
 msgstr "Compañía"
-
-#. module: account_accountant_ux
-#: model:ir.model,name:account_accountant_ux.model_res_config_settings
-msgid "Config Settings"
-msgstr "Ajustes de configuración"
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_res_partner
@@ -97,25 +140,44 @@ msgid "Deuda a pagar"
 msgstr "Deuda a Pagar"
 
 #. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_auto_reconcile_wizard__display_name
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_bank_statement_line__display_name
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_change_lock_date__display_name
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_journal__display_name
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_move__display_name
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_move_line__display_name
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_partner_ledger_report_handler__display_name
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_reconcile_wizard__display_name
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__display_name
+#: model:ir.model.fields,field_description:account_accountant_ux.field_res_partner__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_move_line__filter_amount
 msgid "Filter Amount"
 msgstr "Filtrar Monto"
 
 #. module: account_accountant_ux
-#: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_config_settings_view_form
-msgid "Filter by same amount"
-msgstr "Filtrar por Igual Monto"
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_auto_reconcile_wizard__id
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_bank_statement_line__id
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_change_lock_date__id
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_journal__id
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_move__id
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_move_line__id
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_partner_ledger_report_handler__id
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_reconcile_wizard__id
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__id
+#: model:ir.model.fields,field_description:account_accountant_ux.field_res_partner__id
+msgid "ID"
+msgstr ""
 
 #. module: account_accountant_ux
-#: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_config_settings_view_form
+#: model:ir.model.fields,help:account_accountant_ux.field_account_report__require_custom_filter
 msgid ""
-"If you select this option, the bank reconciliation wizard will search for "
-"movement lines with the same amount                             as the "
-"selected statement line by default."
+"If enabled, the report will not load data unless a custom filter or partner "
+"filter is applied."
 msgstr ""
-"Si seleccionas esta opción, el asistente de conciliación bancaria buscará "
-"líneas de movimiento con el mismo monto que la línea de estado seleccionada "
-"por defecto."
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_account_move_line_search_bank_rec_widget
@@ -129,8 +191,8 @@ msgid ""
 "partner reconciliations may occur. Please review them carefully."
 msgstr ""
 "Es posible que si se seleccionan más de dos contactos distintos, puedan "
-"ocurrir conciliaciones cruzadas entre los mismos. Revísalas cuidadosamente y"
-" utilice los asistentes de conciliación."
+"ocurrir conciliaciones cruzadas entre los mismos. Revísalas cuidadosamente y "
+"utilice los asistentes de conciliación."
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_journal
@@ -195,6 +257,27 @@ msgstr ""
 "cero"
 
 #. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__require_custom_filter
+msgid "Require Custom Filter"
+msgstr ""
+
+#. module: account_accountant_ux
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_partner_view_search
+msgid "Saldo a favor con proveedor"
+msgstr ""
+
+#. module: account_accountant_ux
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_partner_view_search
+msgid "Saldo a favor de cliente"
+msgstr ""
+
+#. module: account_accountant_ux
+#. odoo-javascript
+#: code:addons/account_accountant_ux/static/src/components/bank_reconciliation/button_list/button_list.js:0
+msgid "Search: Journal Items to Match"
+msgstr ""
+
+#. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_partner__debit
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_users__debit
 msgid "Total Payable"
@@ -219,12 +302,51 @@ msgid "Total amount you have to pay to this vendor."
 msgstr "Importe total a pagar a este proveedor."
 
 #. module: account_accountant_ux
-#: model:ir.model.fields,field_description:account_accountant_ux.field_res_config_settings__use_search_filter_amount
-msgid "Use Search Filter Amount"
-msgstr "Utilizar Filtro \"Igual Monto\" por defecto"
-
-#. module: account_accountant_ux
 #. odoo-python
 #: code:addons/account_accountant_ux/wizards/account_change_lock_date.py:0
 msgid "You cannot set a lock date in the future."
 msgstr "No puedes elegir una fecha futura como fecha de bloqueo"
+
+#. module: account_accountant_ux
+#. odoo-javascript
+#: code:addons/account_accountant_ux/static/src/components/bank_reconciliation/button_list/assets.xml:0
+msgid ""
+"account_accountant_ux/static/src/components/bank_reconciliation/button_list/"
+"button_list.js"
+msgstr ""
+
+#. module: account_accountant_ux
+#. odoo-python
+#: code:addons/account_accountant_ux/wizards/account_auto_reconcile_wizard.py:0
+msgid "id"
+msgstr ""
+
+#. module: account_accountant_ux
+#. odoo-javascript
+#: code:addons/account_accountant_ux/static/src/components/bank_reconciliation/button_list/assets.xml:0
+msgid "web.assets_backend"
+msgstr ""
+
+#~ msgid "Bank Reconciliation"
+#~ msgstr "Conciliación Bancaria"
+
+#~ msgid "Bank reconciliation widget for a single statement line"
+#~ msgstr "Widget de conciliación bancaria para una sola línea del extracto"
+
+#~ msgid "Config Settings"
+#~ msgstr "Ajustes de configuración"
+
+#~ msgid "Filter by same amount"
+#~ msgstr "Filtrar por Igual Monto"
+
+#~ msgid ""
+#~ "If you select this option, the bank reconciliation wizard will search for "
+#~ "movement lines with the same amount                             as the "
+#~ "selected statement line by default."
+#~ msgstr ""
+#~ "Si seleccionas esta opción, el asistente de conciliación bancaria buscará "
+#~ "líneas de movimiento con el mismo monto que la línea de estado "
+#~ "seleccionada por defecto."
+
+#~ msgid "Use Search Filter Amount"
+#~ msgstr "Utilizar Filtro \"Igual Monto\" por defecto"
