@@ -11,14 +11,15 @@ class AccountJournal(models.Model):
         return res
 
     def _fill_journal_dashboard_general_balance(self, dashboard_data):
-        journals = self.filtered(lambda journal: journal.type in ["bank", "cash"] and journal.default_account_id)
+        journals = self.filtered(
+            lambda journal: journal.type in ("bank", "cash", "credit") and journal.default_account_id
+        )
         if account_ids := journals.mapped("default_account_id").ids:
-            query = """SELECT aml.account_id, sum(aml.balance) as balance, sum(aml.amount_currency) as amount_currency
-                            FROM account_move_line aml
-                            LEFT JOIN account_move move ON aml.move_id = move.id
-                            WHERE aml.account_id in %(ids)s
-                            AND move.date <= %(date)s AND move.state = 'posted'
-                            GROUP BY aml.account_id"""
+            query = """SELECT account_id, sum(balance) as balance, sum(amount_currency) as amount_currency
+                            FROM account_move_line
+                            WHERE account_id in %(ids)s
+                            AND date <= %(date)s AND parent_state = 'posted'
+                            GROUP BY account_id"""
             self.env.cr.execute(
                 query,
                 {
