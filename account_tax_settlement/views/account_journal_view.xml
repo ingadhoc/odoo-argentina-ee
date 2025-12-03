@@ -36,15 +36,15 @@
             </xpath>
             <templates>
                 <t t-name="JournalBodyTaxSettlement" class="flex-row">
-                    <div class="row" t-if="record.tax_settlement.raw_value == 'allow_per_line'">
-                        <div class="col-6">
+                    <div class="row">
+                        <div class="col-12">
                             <a role="menuitem" type="object" name="open_action" context="{'tax_settlement': True, 'search_default_posted': 1}">
                                 <span> Líneas a liquidar</span>
                             </a>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-12">
                             <a role="menuitem" type="object" name="open_action" context="{'debt_balance': True}">
                                 <span>Saldo a pagar</span>
                             </a>
