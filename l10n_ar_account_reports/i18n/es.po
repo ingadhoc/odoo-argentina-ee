@@ -1,37 +1,25 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* l10n_ar_account_reports
-# 
+#
 # Translators:
 # Juan José Scarafía <scarafia.juanjose@gmail.com>, 2025
 # ADHOC - Bot <transbot@adhoc.com.ar>, 2025
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-22 02:16+0000\n"
+"POT-Creation-Date: 2025-12-03 19:39+0000\n"
 "PO-Revision-Date: 2025-10-06 18:45+0000\n"
 "Last-Translator: ADHOC - Bot <transbot@adhoc.com.ar>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: es\n"
-"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
-
-#. module: l10n_ar_account_reports
-#: model:ir.actions.report,print_report_name:l10n_ar_account_reports.checks_to_date_report
-msgid "'Cheques a fecha - %s' % (object.to_date)"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.checks_to_date
-msgid ""
-"<strong>\n"
-"                                <span>Total</span>\n"
-"                                </strong>"
-msgstr ""
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
+"1 : 2;\n"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_costo_ventas
@@ -255,56 +243,14 @@ msgid "Caja y Bancos"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.account_check_to_date_report_view
-msgid "Cancelar"
-msgstr ""
-
-#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_tax_liabilities
 msgid "Cargas fiscales"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.account_check_to_date_report_view
-msgid "Cheques a Fecha"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:ir.actions.act_window,name:l10n_ar_account_reports.action_account_check_to_date_report
-#: model:ir.actions.report,name:l10n_ar_account_reports.checks_to_date_report
-#: model:ir.ui.menu,name:l10n_ar_account_reports.menu_account_check_to_date_report
-msgid "Cheques a fecha"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.checks_to_date
-msgid "Cheques de terceros"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.checks_to_date
-msgid "Cheques propios"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.account_check_to_date_report_view
-msgid "Confirmar"
 msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_cogs
 msgid "Costo de venta de bienes y servicios"
 msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_check_to_date_report_wizard__create_uid
-msgid "Created by"
-msgstr "Creado por"
-
-#. module: l10n_ar_account_reports
-#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_check_to_date_report_wizard__create_date
-msgid "Created on"
-msgstr "Creado el"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_sales_rec
@@ -314,11 +260,6 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_sales_rec_noncurrent
 msgid "Créditos por ventas (No corriente)"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.checks_to_date
-msgid "Cuit"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -332,18 +273,7 @@ msgid "Deudas no corrientes"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_check_to_date_report_wizard__journal_id
-msgid "Diario"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.checks_to_date
-msgid "Diario:"
-msgstr ""
-
-#. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_chart_template__display_name
-#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_check_to_date_report_wizard__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partner_ledger_report_handler__display_name
 msgid "Display Name"
 msgstr "Nombre para mostrar"
@@ -351,11 +281,6 @@ msgstr "Nombre para mostrar"
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_dividends_payable
 msgid "Dividendos a pagar"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.checks_to_date
-msgid "Empresa"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -370,16 +295,6 @@ msgstr ""
 #: model:ir.actions.client,name:l10n_ar_account_reports.action_account_report_ar_estado_resultados
 #: model:ir.ui.menu,name:l10n_ar_account_reports.menu_l10n_ar_estado_resultados
 msgid "Estado de Resultados"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.checks_to_date
-msgid "Fecha contable"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.checks_to_date
-msgid "Fecha de pago"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -398,21 +313,10 @@ msgid "Gastos de comercialización"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_check_to_date_report_wizard__to_date
-msgid "Hasta Fecha"
-msgstr ""
-
-#. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_chart_template__id
-#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_check_to_date_report_wizard__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partner_ledger_report_handler__id
 msgid "ID"
 msgstr "ID (identificación)"
-
-#. module: l10n_ar_account_reports
-#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.checks_to_date
-msgid "Importe"
-msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_tax_inc
@@ -425,28 +329,8 @@ msgid "Inversiones temporarias"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_check_to_date_report_wizard__write_uid
-msgid "Last Updated by"
-msgstr "Última actualización por"
-
-#. module: l10n_ar_account_reports
-#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_check_to_date_report_wizard__write_date
-msgid "Last Updated on"
-msgstr "Última actualización el"
-
-#. module: l10n_ar_account_reports
-#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.checks_to_date
-msgid "Listado de cheques pendientes al"
-msgstr ""
-
-#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_goodwill
 msgid "Llave de negocio"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.checks_to_date
-msgid "Número"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -604,12 +488,17 @@ msgstr ""
 msgid "Ventas netas de bienes y servicios"
 msgstr ""
 
-#. module: l10n_ar_account_reports
-#: model:ir.model,name:l10n_ar_account_reports.model_account_check_to_date_report_wizard
-msgid "account.check.to_date.report.wizard"
-msgstr ""
+#~ msgid "Created by"
+#~ msgstr "Creado por"
 
-#. module: l10n_ar_account_reports
-#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.account_check_to_date_report_view
-msgid "or"
-msgstr "o"
+#~ msgid "Created on"
+#~ msgstr "Creado el"
+
+#~ msgid "Last Updated by"
+#~ msgstr "Última actualización por"
+
+#~ msgid "Last Updated on"
+#~ msgstr "Última actualización el"
+
+#~ msgid "or"
+#~ msgstr "o"
