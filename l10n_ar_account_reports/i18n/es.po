@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-03 19:39+0000\n"
+"POT-Creation-Date: 2025-12-04 17:53+0000\n"
 "PO-Revision-Date: 2025-10-06 18:45+0000\n"
 "Last-Translator: ADHOC - Bot <transbot@adhoc.com.ar>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
@@ -202,6 +202,11 @@ msgid "Account Chart Template"
 msgstr "Plantilla de plan contable"
 
 #. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_account_return
+msgid "Accounting Return"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_activo
 msgid "Activo"
 msgstr ""
@@ -212,8 +217,94 @@ msgid "Activos intangibles"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/tucuman_report.py:0
+msgid ""
+"Algunos comprobantes no contienen información acerca de la calle/ciudad/"
+"provincia/cod postal del contacto: %s"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/tucuman_report.py:0
+msgid ""
+"Algunos comprobantes rectificativos no contienen información de que "
+"comprobante original están revirtiendo: %s"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/tucuman_report.py:0
+msgid ""
+"Algunos comprobantes tienen punto de venta de 5 dígitos y deben tener de 4 "
+"dígitos para poder generar el archivo txt de retenciones y percepciones de "
+"Tucuman: %s"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_advances_from_customers
 msgid "Anticipos de clientes"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_caba_report_handler
+#, fuzzy
+#| msgid "Partner Ledger Custom Handler"
+msgid "Argentinian CABA Report Custom Handler"
+msgstr "Gestor personalizado del libro mayor del contacto"
+
+#. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_mendoza_report_handler
+#, fuzzy
+#| msgid "Partner Ledger Custom Handler"
+msgid "Argentinian Mendoza Report Custom Handler"
+msgstr "Gestor personalizado del libro mayor del contacto"
+
+#. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_misiones_report_handler
+#, fuzzy
+#| msgid "Partner Ledger Custom Handler"
+msgid "Argentinian Misiones Report Custom Handler"
+msgstr "Gestor personalizado del libro mayor del contacto"
+
+#. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_pba_report_handler
+#, fuzzy
+#| msgid "Partner Ledger Custom Handler"
+msgid "Argentinian PBA Report Custom Handler"
+msgstr "Gestor personalizado del libro mayor del contacto"
+
+#. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_sifere_report_handler
+#, fuzzy
+#| msgid "Partner Ledger Custom Handler"
+msgid "Argentinian SIFERE Report Custom Handler"
+msgstr "Gestor personalizado del libro mayor del contacto"
+
+#. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_sircar_report_handler
+#, fuzzy
+#| msgid "Partner Ledger Custom Handler"
+msgid "Argentinian SIRCAR Report Custom Handler"
+msgstr "Gestor personalizado del libro mayor del contacto"
+
+#. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_santa_fe_report_handler
+#, fuzzy
+#| msgid "Partner Ledger Custom Handler"
+msgid "Argentinian Santa Fe Report Custom Handler"
+msgstr "Gestor personalizado del libro mayor del contacto"
+
+#. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_tax_report_handler
+#, fuzzy
+#| msgid "Partner Ledger Custom Handler"
+msgid "Argentinian Tax Report Custom Handler"
+msgstr "Gestor personalizado del libro mayor del contacto"
+
+#. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_tucuman_report_handler
+msgid "Argentinian Tucumán Report Custom Handler"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -243,6 +334,21 @@ msgid "Caja y Bancos"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
+#: code:addons/l10n_ar_account_reports/models/mendoza_report.py:0
+#: code:addons/l10n_ar_account_reports/models/misiones_report.py:0
+#: code:addons/l10n_ar_account_reports/models/pba_report.py:0
+#: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
+#: code:addons/l10n_ar_account_reports/models/sifere_report.py:0
+#: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
+#: code:addons/l10n_ar_account_reports/models/tucuman_report.py:0
+msgid ""
+"Can only generate TXT files using posted entries. Please remove Include "
+"unposted entries filter and try again"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_tax_liabilities
 msgid "Cargas fiscales"
 msgstr ""
@@ -263,6 +369,35 @@ msgid "Créditos por ventas (No corriente)"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
+msgid ""
+"Debe establecer el tipo de inscripción de IIBB del partner "
+"\"%(partner_name)s\" (id: %(partner_id)s)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
+msgid ""
+"Debe establecer la información de \"artículo/inciso\" en la configuración "
+"del impuesto \"%(tax_name)s\"en la solapa \"API\"."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
+msgid ""
+"Debe setear el tipo de inscripción de IIBB del contacto "
+"\"%(partner_name)s\" (id: %(partner_id)s)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sifere_report_sifere_despachos_line
+msgid "Despachos de importación"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_accounts_payable
 msgid "Deudas Comerciales"
 msgstr ""
@@ -274,13 +409,60 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_chart_template__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_move_line__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partner_ledger_report_handler__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_caba_report_handler__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_mendoza_report_handler__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_misiones_report_handler__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_pba_report_handler__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_santa_fe_report_handler__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sifere_report_handler__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sircar_report_handler__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_tax_report_handler__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_tucuman_report_handler__display_name
 msgid "Display Name"
 msgstr "Nombre para mostrar"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_dividends_payable
 msgid "Dividendos a pagar"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
+#: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
+msgid "Edit tax"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
+#: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
+msgid "Editar contacto"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
+msgid ""
+"El contacto \"%(partner_name)s\" (id %(partner_id)s), debe tener el tipo de "
+"identificación CUIT, CUIL, CDI."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
+msgid "El impuesto no está asociado"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
+msgid ""
+"El partner \"%(partner_name)s\" (id %(partner_id)s) no tiene número de "
+"identificación establecido"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -314,9 +496,56 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_chart_template__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_move_line__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partner_ledger_report_handler__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_caba_report_handler__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_mendoza_report_handler__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_misiones_report_handler__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_pba_report_handler__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_santa_fe_report_handler__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sifere_report_handler__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sircar_report_handler__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_tax_report_handler__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_tucuman_report_handler__id
 msgid "ID"
 msgstr "ID (identificación)"
+
+#. module: l10n_ar_account_reports
+#: model:account.report,name:l10n_ar_account_reports.l10n_ar_caba_report
+#: model:account.return.type,name:l10n_ar_account_reports.ar_caba_iibb_return_type
+msgid "IIBB CABA (Agente)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report,name:l10n_ar_account_reports.l10n_ar_mendoza_report
+#: model:account.return.type,name:l10n_ar_account_reports.ar_mendoza_iibb_return_type
+msgid "IIBB Mendoza (Agente)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report,name:l10n_ar_account_reports.l10n_ar_misiones_report
+#: model:account.return.type,name:l10n_ar_account_reports.ar_misiones_iibb_return_type
+msgid "IIBB Misiones (Agente)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report,name:l10n_ar_account_reports.l10n_ar_pba_report
+#: model:account.return.type,name:l10n_ar_account_reports.ar_pba_iibb_return_type
+msgid "IIBB PBA (Agente)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report,name:l10n_ar_account_reports.l10n_ar_santa_fe_report
+#: model:account.return.type,name:l10n_ar_account_reports.ar_santa_fe_iibb_return_type
+msgid "IIBB Santa Fe (Agente)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report,name:l10n_ar_account_reports.l10n_ar_tucuman_report
+#: model:account.return.type,name:l10n_ar_account_reports.ar_tucuman_iibb_return_type
+msgid "IIBB Tucumán (Agente)"
+msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_tax_inc
@@ -329,8 +558,69 @@ msgid "Inversiones temporarias"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_account_move_line
+msgid "Journal Item"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sifere_report.py:0
+msgid ""
+"La percepción %s (id: %d) del comprobante \"%s\" (id: %d) no tiene contacto "
+"asociado."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
+msgid ""
+"La responsabilidad frente a IVA \"%s\" no está soportada para ret/perc AGIP"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
+msgid ""
+"La responsabilidad frente a IVA \"%s\" no está soportada para ret/perc Santa "
+"Fe"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_goodwill
 msgid "Llave de negocio"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
+msgid ""
+"No hay jurisdicción establecida en el impuesto \"%(tax_name)s\"en la solapa "
+"\"API\"."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
+msgid ""
+"No hay regimen de retencion (ARCA Code 'l10n_ar_code') configurado para el "
+"impuesto '%(tax_name)s' del partner '%(partner_name)s'"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
+msgid ""
+"No hay régimen de percepción (ARCA Code 'l10n_ar_code') configurado para el "
+"impuesto: '%(tax_name)s'."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
+msgid ""
+"No pudimos encontrar el comprobante original para %s (id %s). Verifique que "
+"en la nota de crédito \"%s\", el campo origen es el número de la factura "
+"original"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -414,6 +704,18 @@ msgid "Préstamos"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_caba_report_caba_withholdings_line
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_mendoza_report_mendoza_withholdings_line
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_misiones_report_misiones_withholdings_line
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_pba_report_pba_withholdings_line
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_santa_fe_report_santa_fe_withholdings_line
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sifere_report_sifere_withholdings_line
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sircar_report_sircar_withholdings_line
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_tucuman_report_tucuman_withholdings_line
+msgid "Purchase Withholdings"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_payroll_liabilities
 msgid "Remuneraciones y cargas sociales"
 msgstr ""
@@ -439,8 +741,47 @@ msgid "Resultados financieros y por tenencia (incluye RECPAM)"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:account.report,name:l10n_ar_account_reports.l10n_ar_sifere_report
+msgid "SIFERE"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.return.type,name:l10n_ar_account_reports.ar_sifere_iibb_return_type
+msgid "SIFERE (Agente)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report,name:l10n_ar_account_reports.l10n_ar_sircar_report
+#: model:account.return.type,name:l10n_ar_account_reports.ar_sircar_iibb_return_type
+msgid "SIRCAR (Agente)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_caba_report_caba_perceptions_line
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_misiones_report_misiones_perceptions_line
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_pba_report_pba_perceptions_line
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_santa_fe_report_santa_fe_perceptions_line
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sifere_report_sifere_perceptions_line
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sircar_report_sircar_perceptions_line
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_tucuman_report_tucuman_perceptions_line
+msgid "Sale Perceptions"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_subtotal_noncurrent_assets
 msgid "Subtotal del activo no corriente"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
+msgid "Tipo de comprobante no reconocido"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
+msgid "Tipo de impuesto %s equivocado"
 msgstr ""
 
 #. module: l10n_ar_account_reports
