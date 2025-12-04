@@ -3,6 +3,7 @@
 # directory
 ##############################################################################
 from . import models
+from . import demo
 
 
 def _post_init_hook_configure_ar_account_tags(env):

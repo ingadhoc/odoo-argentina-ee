@@ -29,7 +29,7 @@
     "images": [],
     "depends": [
         "account_reports",
-        # "l10n_ar_tax",
+        "l10n_ar_tax",
         "l10n_ar_withholding",
         "l10n_latam_check",
         "l10n_ar_reports",
@@ -52,6 +52,8 @@
         "data/misiones_report.xml",
         "data/santa_fe_report.xml",
         "data/tucuman_report.xml",
+        "demo/res_partner_demo.xml",
+        "demo/account_demo.xml",
     ],
     "demo": [
         # "demo/account_demo.xml",

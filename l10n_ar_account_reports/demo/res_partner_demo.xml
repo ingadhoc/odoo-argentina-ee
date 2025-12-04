@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_partner_adhoc_mendoza" model="res.partner">
+        <field name="name">Oficina Mendoza</field>
+        <field name="parent_id" ref="l10n_ar.res_partner_adhoc"/>
+        <field name="state_id" ref="base.state_ar_m"/>
+        <field name="type">delivery</field>
+        <field name="zip">1000</field>
+        <field name="country_id" ref="base.ar"/>
+        <field name="street">Libertador 1234</field>
+    </record>
+
+    <record id="res_partner_adhoc_misiones" model="res.partner">
+        <field name="name">Oficina Misiones</field>
+        <field name="parent_id" ref="l10n_ar.res_partner_adhoc"/>
+        <field name="state_id" ref="base.state_ar_n"/>
+        <field name="type">delivery</field>
+        <field name="zip">5000</field>
+        <field name="country_id" ref="base.ar"/>
+        <field name="street">Santa María 1234</field>
+    </record>
+
+    <record id="res_partner_adhoc_santa_fe" model="res.partner">
+        <field name="name">Oficina Santa Fe</field>
+        <field name="parent_id" ref="l10n_ar.res_partner_adhoc"/>
+        <field name="state_id" ref="base.state_ar_s"/>
+        <field name="type">delivery</field>
+        <field name="zip">5000</field>
+        <field name="country_id" ref="base.ar"/>
+        <field name="street">Ovidio Lagos 1234</field>
+    </record>
+
+    <record id="res_partner_adhoc_pba" model="res.partner">
+        <field name="name">Oficina PBA</field>
+        <field name="parent_id" ref="l10n_ar.res_partner_adhoc"/>
+        <field name="state_id" ref="base.state_ar_b"/>
+        <field name="type">delivery</field>
+        <field name="zip">5000</field>
+        <field name="country_id" ref="base.ar"/>
+        <field name="street">Ramallo 1234</field>
+    </record>
+
+</odoo>
