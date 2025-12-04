@@ -12,10 +12,7 @@ class AccountChartTemplate(models.AbstractModel):
     _inherit = "account.chart.template"
 
     @api.model
-    def _install_l10n_ar_account_reports_demo(self):
-        # por ahora lo hacemos solo para RI, si luego queremos usar lógica de que pueda aplicar a cualquier compañía
-        # deberiamos hacer parecido a _install_demo
-        companies = self.env.ref("base.company_ri")
+    def _install_l10n_ar_account_reports_demo(self, companies):
         for company in companies:
             self = self.with_company(company)
             demo_data = {
@@ -28,26 +25,51 @@ class AccountChartTemplate(models.AbstractModel):
             )
             self._l10n_ar_post_load_demo_data()
             self._l10n_ar_create_payments()
-        # import pdb; pdb.set_trace()
 
+    @api.model
     def _l10n_ar_create_payments(self):
-        # def _l10n_ar_get_demo_data_payment(self):
-        # mendoza_invoice = self.ref("demo_sup_invoice_mendoza")
-        invoices = (
-            self.ref("demo_sup_invoice_mendoza")
-            + self.ref("demo_sup_invoice_mendoza")
-            + self.ref("demo_sup_invoice_misiones")
-            + self.ref("demo_sup_invoice_santa_fe")
-            + self.ref("demo_sup_invoice_caba")
-            + self.ref("demo_sup_invoice_pba")
-        )
-        # mendoza_invoice.action_register_payment(
-        for invoice in invoices.filtered("amount_residual"):
+        invoices = self._l10n_ar_demo_get_invoices()
+        for invoice in invoices.filtered(
+            lambda x: x.move_type == "in_invoice" and x.state == "posted" and x.amount_residual > 0.0
+        ):
             action_context = invoice.action_register_payment()["context"]
             vals = {
-                # "journal_id": self.company_bank_journal.id,
                 "amount": invoice.amount_residual,
-                # "date": self.today,
+                # queremos el pago en el mes pasado
+                "date": invoice.invoice_date,
+            }
+            payment = self.env["account.payment"].with_context(**action_context).create(vals)
+            payment.action_post()
+        for invoice in invoices.filtered(
+            lambda x: x.move_type == "out_invoice" and x.state == "posted" and x.amount_residual > 0.0
+        ):
+            action_context = invoice.action_register_payment()["context"]
+            withholding_amount = 1.1
+            # para jugar con distintos casos usamos la provincia del cliente y suponemos que nos retiene de la misma jurisdicción
+            tax = self.env["account.tax"].search(
+                [
+                    ("company_id", "=", invoice.company_id.id),
+                    ("l10n_ar_state_id", "!=", invoice.partner_id.state_id.id),
+                    ("l10n_ar_state_id.country_id.code", "=", "AR"),
+                    ("l10n_ar_withholding_payment_type", "=", "customer"),
+                ],
+                limit=1,
+            )
+            vals = {
+                "amount": invoice.amount_residual - withholding_amount if tax else invoice.amount_residual,
+                # queremos el pago en el mes pasado
+                "date": invoice.invoice_date,
+                "l10n_ar_withholding_line_ids": [
+                    Command.create(
+                        {
+                            "name": "0001-00000001",
+                            "tax_id": tax.id,
+                            "amount": withholding_amount,
+                        }
+                    )
+                ]
+                if tax
+                else [],
             }
             payment = self.env["account.payment"].with_context(**action_context).create(vals)
             payment.action_post()
@@ -81,246 +103,144 @@ class AccountChartTemplate(models.AbstractModel):
 
     @api.model
     def _l10n_ar_get_demo_data_fiscal_position(self):
-        santafe_perc = self._l10n_ar_get_tax("ri_tax_percepcion_iibb_sf_aplicada", 3)
-        misiones_perc = self._l10n_ar_get_tax("ri_tax_percepcion_iibb_mi_aplicada", 3)
-        misiones_ret = self._l10n_ar_get_tax("ex_tax_withholding_iibb_ms_applied", 3)
-        santafe_ret = self._l10n_ar_get_tax("ex_tax_withholding_iibb_sf_applied", 3)
-        mendoza_ret = self._l10n_ar_get_tax("ex_tax_withholding_iibb_mza_applied", 3)
+        # Función auxiliar para generar la estructura repetitiva
+        def _get_vals(name, state_xml_id, tax_type, tax_rec, sequence):
+            return {
+                "name": name,
+                "sequence": sequence,
+                "auto_apply": True,
+                "country_id": "base.ar",
+                "state_ids": [Command.set([state_xml_id])],
+                "l10n_ar_afip_responsibility_type_ids": [Command.set(["l10n_ar.res_IVARI"])],
+                "l10n_ar_tax_ids": [
+                    Command.clear(),
+                    Command.create({"tax_type": tax_type, "default_tax_id": tax_rec.id}),
+                ],
+            }
+
+        # Obtención de impuestos (nombres de variables acortados para legibilidad)
+        pba_perc = self._l10n_ar_get_tax("ri_tax_percepcion_iibb_ba_aplicada", 3)
+        mis_perc = self._l10n_ar_get_tax("ri_tax_percepcion_iibb_mi_aplicada", 3)
+        sf_perc = self._l10n_ar_get_tax("ri_tax_percepcion_iibb_sf_aplicada", 3)
+        tuc_perc = self._l10n_ar_get_tax("ri_tax_percepcion_iibb_tn_aplicada", 3)
+
+        pba_ret = self._l10n_ar_get_tax("ex_tax_withholding_iibb_ba_applied", 3)
+        mis_ret = self._l10n_ar_get_tax("ex_tax_withholding_iibb_ms_applied", 3)
+        sf_ret = self._l10n_ar_get_tax("ex_tax_withholding_iibb_sf_applied", 3)
+        tuc_ret = self._l10n_ar_get_tax("ex_tax_withholding_iibb_t_applied", 3)
+        mza_ret = self._l10n_ar_get_tax("ex_tax_withholding_iibb_mza_applied", 3)
+
         return {
-            "demo_fp_perc_misiones": {
-                "name": "Percepciones Misiones",
-                "sequence": 15,
-                "auto_apply": True,
-                "country_id": "base.ar",
-                "state_ids": [Command.set(["base.state_ar_n"])],
-                "l10n_ar_afip_responsibility_type_ids": [
-                    Command.set(
-                        [
-                            "l10n_ar.res_IVARI",
-                        ]
-                    )
-                ],
-                "l10n_ar_tax_ids": [
-                    Command.clear(),
-                    Command.create({"tax_type": "perception", "default_tax_id": misiones_perc.id}),
-                ],
-            },
-            "demo_fp_perc_santa_fe": {
-                "name": "Percepciones Santa Fe",
-                "sequence": 15,
-                "auto_apply": True,
-                "country_id": "base.ar",
-                "state_ids": [
-                    Command.set(
-                        [
-                            "base.state_ar_s",
-                        ]
-                    )
-                ],
-                "l10n_ar_afip_responsibility_type_ids": [
-                    Command.set(
-                        [
-                            "l10n_ar.res_IVARI",
-                        ]
-                    )
-                ],
-                "l10n_ar_tax_ids": [
-                    Command.clear(),
-                    Command.create({"tax_type": "perception", "default_tax_id": santafe_perc.id}),
-                ],
-            },
-            "demo_fp_ret_santa_fe": {
-                "name": "Retenciones Santa Fe",
-                "sequence": 60,
-                "auto_apply": True,
-                "country_id": "base.ar",
-                "state_ids": [
-                    Command.set(
-                        [
-                            "base.state_ar_s",
-                        ]
-                    )
-                ],
-                "l10n_ar_afip_responsibility_type_ids": [
-                    Command.set(
-                        [
-                            "l10n_ar.res_IVARI",
-                        ]
-                    )
-                ],
-                "l10n_ar_tax_ids": [
-                    Command.clear(),
-                    Command.create({"tax_type": "withholding", "default_tax_id": santafe_ret.id}),
-                ],
-            },
-            "demo_fp_ret_misiones": {
-                "name": "Retenciones Misiones",
-                "sequence": 60,
-                "auto_apply": True,
-                "country_id": "base.ar",
-                "state_ids": [
-                    Command.set(
-                        [
-                            "base.state_ar_n",
-                        ]
-                    )
-                ],
-                "l10n_ar_afip_responsibility_type_ids": [
-                    Command.set(
-                        [
-                            "l10n_ar.res_IVARI",
-                        ]
-                    )
-                ],
-                "l10n_ar_tax_ids": [
-                    Command.clear(),
-                    Command.create({"tax_type": "withholding", "default_tax_id": misiones_ret.id}),
-                ],
-            },
-            "demo_fp_ret_mendoza": {
-                "name": "Retenciones Mendoza",
-                "sequence": 60,
-                "auto_apply": True,
-                "country_id": "base.ar",
-                "state_ids": [
-                    Command.set(
-                        [
-                            "base.state_ar_m",
-                        ]
-                    )
-                ],
-                "l10n_ar_afip_responsibility_type_ids": [
-                    Command.set(
-                        [
-                            "l10n_ar.res_IVARI",
-                        ]
-                    )
-                ],
-                "l10n_ar_tax_ids": [
-                    Command.clear(),
-                    Command.create({"tax_type": "withholding", "default_tax_id": mendoza_ret.id}),
-                ],
-            },
+            "demo_fp_perc_pba": _get_vals(
+                "Percepciones P. Buenos Aires", "base.state_ar_b", "perception", pba_perc, 15
+            ),
+            "demo_fp_perc_misiones": _get_vals("Percepciones Misiones", "base.state_ar_n", "perception", mis_perc, 15),
+            "demo_fp_perc_santa_fe": _get_vals("Percepciones Santa Fe", "base.state_ar_s", "perception", sf_perc, 15),
+            "demo_fp_perc_tucuman": _get_vals("Percepciones Tucumán", "base.state_ar_t", "perception", tuc_perc, 15),
+            "demo_fp_ret_pba": _get_vals("Retenciones P. Buenos Aires", "base.state_ar_b", "withholding", pba_ret, 60),
+            "demo_fp_ret_misiones": _get_vals("Retenciones Misiones", "base.state_ar_n", "withholding", mis_ret, 60),
+            "demo_fp_ret_santa_fe": _get_vals("Retenciones Santa Fe", "base.state_ar_s", "withholding", sf_ret, 60),
+            "demo_fp_ret_tucuman": _get_vals("Retenciones Tucumán", "base.state_ar_t", "withholding", tuc_ret, 60),
+            "demo_fp_ret_mendoza": _get_vals("Retenciones Mendoza", "base.state_ar_m", "withholding", mza_ret, 60),
         }
 
+    @api.model
     def _l10n_ar_get_demo_data_move(self):
         one_month_ago = fields.Date.today() + relativedelta(months=-1)
-        return {
-            "demo_invoice_mendoza": {
-                "move_type": "out_invoice",
-                "partner_id": "l10n_ar_account_reports.res_partner_adhoc_mendoza",
-                "invoice_date": one_month_ago.strftime("%Y-%m-01"),
-                "invoice_line_ids": [
-                    Command.create({"product_id": "product.product_product_2", "quantity": 1}),
-                ],
-            },
-            "demo_invoice_misiones": {
-                "move_type": "out_invoice",
-                "partner_id": "l10n_ar_account_reports.res_partner_adhoc_misiones",
-                "invoice_date": one_month_ago.strftime("%Y-%m-01"),
-                "invoice_line_ids": [
-                    Command.create({"product_id": "product.product_product_2", "quantity": 1}),
-                ],
-            },
-            "demo_invoice_caba": {
-                "move_type": "out_invoice",
-                "partner_id": "l10n_ar_account_reports.res_partner_adhoc_caba",
-                "invoice_date": one_month_ago.strftime("%Y-%m-01"),
-                "invoice_line_ids": [
-                    Command.create({"product_id": "product.product_product_2", "quantity": 1}),
-                ],
-            },
-            "demo_invoice_pba": {
-                "move_type": "out_invoice",
-                "partner_id": "l10n_ar_account_reports.res_partner_adhoc_pba",
-                "invoice_date": one_month_ago.strftime("%Y-%m-01"),
-                "invoice_line_ids": [
-                    Command.create({"product_id": "product.product_product_2", "quantity": 1}),
-                ],
-            },
-            "demo_invoice_cordoba": {
-                "move_type": "out_invoice",
-                "partner_id": "l10n_ar_account_reports.res_partner_adhoc_cordoba",
-                "invoice_date": one_month_ago.strftime("%Y-%m-01"),
-                "invoice_line_ids": [
-                    Command.create({"product_id": "product.product_product_2", "quantity": 1}),
-                ],
-            },
-            "demo_invoice_santa_fe": {
-                "move_type": "out_invoice",
-                "partner_id": "l10n_ar_account_reports.res_partner_adhoc_santa_fe",
-                "invoice_date": one_month_ago.strftime("%Y-%m-01"),
-                "invoice_line_ids": [
-                    Command.create({"product_id": "product.product_product_2", "quantity": 1}),
-                ],
-            },
-            "demo_sup_invoice_misiones": {
-                "move_type": "in_invoice",
-                "partner_id": "l10n_ar_account_reports.res_partner_adhoc_misiones",
-                "invoice_date": one_month_ago.strftime("%Y-%m-01"),
-                "l10n_latam_document_number": "0001-00001234",
-                "invoice_line_ids": [
-                    Command.create({"product_id": "product.product_product_2", "quantity": 1, "price_unit": 100.0}),
-                ],
-            },
-            "demo_sup_invoice_santa_fe": {
-                "move_type": "in_invoice",
-                "partner_id": "l10n_ar_account_reports.res_partner_adhoc_santa_fe",
-                "invoice_date": one_month_ago.strftime("%Y-%m-01"),
-                "l10n_latam_document_number": "0001-00001234",
-                "invoice_line_ids": [
-                    Command.create({"product_id": "product.product_product_2", "quantity": 1, "price_unit": 100.0}),
-                ],
-            },
-            "demo_sup_invoice_caba": {
-                "move_type": "in_invoice",
-                "partner_id": "l10n_ar_account_reports.res_partner_adhoc_caba",
-                "invoice_date": one_month_ago.strftime("%Y-%m-01"),
-                "l10n_latam_document_number": "0001-00001234",
-                "invoice_line_ids": [
-                    Command.create({"product_id": "product.product_product_2", "quantity": 1, "price_unit": 100.0}),
-                ],
-            },
-            "demo_sup_invoice_pba": {
-                "move_type": "in_invoice",
-                "partner_id": "l10n_ar_account_reports.res_partner_adhoc_pba",
-                "invoice_date": one_month_ago.strftime("%Y-%m-01"),
-                "l10n_latam_document_number": "0001-00001234",
-                "invoice_line_ids": [
-                    Command.create({"product_id": "product.product_product_2", "quantity": 1, "price_unit": 100.0}),
-                ],
-            },
-            "demo_sup_invoice_cordoba": {
-                "move_type": "in_invoice",
-                "partner_id": "l10n_ar_account_reports.res_partner_adhoc_cordoba",
-                "invoice_date": one_month_ago.strftime("%Y-%m-01"),
-                "l10n_latam_document_number": "0001-00001234",
-                "invoice_line_ids": [
-                    Command.create({"product_id": "product.product_product_2", "quantity": 1, "price_unit": 100.0}),
-                ],
-            },
-            "demo_sup_invoice_mendoza": {
-                "move_type": "in_invoice",
-                "partner_id": "l10n_ar_account_reports.res_partner_adhoc_mendoza",
-                "invoice_date": one_month_ago.strftime("%Y-%m-01"),
-                "l10n_latam_document_number": "0001-00001234",
-                "invoice_line_ids": [
-                    Command.create({"product_id": "product.product_product_2", "quantity": 1, "price_unit": 100.0}),
-                ],
-            },
-        }
+        invoice_date = one_month_ago.strftime("%Y-%m-01")
+        provinces = ["mendoza", "misiones", "caba", "pba", "cordoba", "santa_fe", "tucuman"]
+        result = {}
+        for idx, province in enumerate(provinces, start=1):
+            module = "l10n_ar_tax" if province in ["caba", "cordoba"] else "l10n_ar_account_reports"
 
+            # create customer invoice
+            result[f"demo_invoice_{province}"] = {
+                "move_type": "out_invoice",
+                "partner_id": f"{module}.res_partner_adhoc_{province}",
+                "invoice_date": invoice_date,
+                "invoice_line_ids": [Command.create({"product_id": "product.product_product_2", "quantity": 1})],
+            }
+
+            # create supplier invoice
+            result[f"demo_sup_invoice_{province}"] = {
+                "move_type": "in_invoice",
+                "partner_id": f"{module}.res_partner_adhoc_{province}",
+                "invoice_date": invoice_date,
+                "l10n_latam_document_number": f"1-100{idx}",
+                "invoice_line_ids": [
+                    Command.create({"product_id": "product.product_product_2", "quantity": 1, "price_unit": 100.0})
+                ],
+            }
+        # despacho
+        result["demo_sup_invoice_suffered_1"] = {
+            "move_type": "in_invoice",
+            "partner_id": "l10n_ar.res_partner_mipyme",
+            "invoice_date": invoice_date,
+            "l10n_latam_document_number": "12-1234",
+            "invoice_line_ids": [
+                Command.create(
+                    {
+                        "product_id": "product.product_product_2",
+                        "quantity": 1,
+                        "price_unit": 100.0,
+                        "tax_ids": [
+                            Command.set(
+                                [
+                                    "ri_tax_percepcion_iva_sufrida",
+                                    "ri_tax_vat_21_compras",
+                                    "ri_tax_percepcion_iibb_ba_sufrida",
+                                    "ri_tax_percepcion_iibb_caba_sufrida",
+                                    "ri_tax_percepcion_iibb_ca_sufrida",
+                                    "ri_tax_percepcion_iibb_co_sufrida",
+                                    "ri_tax_percepcion_iibb_rr_sufrida",
+                                    "ri_tax_percepcion_iibb_er_sufrida",
+                                ]
+                            )
+                        ],
+                    }
+                ),
+            ],
+        }
+        # factura con percepciones
+        result["demo_sup_invoice_suffered_2"] = {
+            "move_type": "in_invoice",
+            "partner_id": "l10n_ar.partner_afip",
+            "invoice_date": invoice_date,
+            "l10n_latam_document_number": "1234567890123456",
+            "invoice_line_ids": [
+                Command.create(
+                    {
+                        "product_id": "product.product_product_2",
+                        "quantity": 1,
+                        "price_unit": 100.0,
+                        "tax_ids": [
+                            Command.set(
+                                [
+                                    "ri_tax_percepcion_iva_sufrida",
+                                    "ri_tax_vat_21_compras",
+                                    "ri_tax_percepcion_iibb_ba_sufrida",
+                                    "ri_tax_percepcion_iibb_caba_sufrida",
+                                    "ri_tax_percepcion_iibb_ca_sufrida",
+                                    "ri_tax_percepcion_iibb_co_sufrida",
+                                    "ri_tax_percepcion_iibb_rr_sufrida",
+                                    "ri_tax_percepcion_iibb_er_sufrida",
+                                ]
+                            )
+                        ],
+                    }
+                ),
+            ],
+        }
+        return result
+
+    @api.model
+    def _l10n_ar_demo_get_invoices(self):
+        invoices = self.env["account.move"]
+        for xmlid in self._l10n_ar_get_demo_data_move().keys():
+            invoices |= self.ref(xmlid)
+        return invoices
+
+    @api.model
     def _l10n_ar_post_load_demo_data(self):
-        invoices = (
-            self.ref("demo_invoice_mendoza")
-            + self.ref("demo_invoice_misiones")
-            + self.ref("demo_invoice_caba")
-            + self.ref("demo_invoice_pba")
-            + self.ref("demo_invoice_cordoba")
-            + self.ref("demo_sup_invoice_mendoza")
-            + self.ref("demo_sup_invoice_misiones")
-            + self.ref("demo_sup_invoice_santa_fe")
-            + self.ref("demo_sup_invoice_caba")
-            + self.ref("demo_sup_invoice_pba")
-        )
+        invoices = self._l10n_ar_demo_get_invoices()
         invoices.filtered(lambda m: m.state == "draft").action_post()

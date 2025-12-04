@@ -52,11 +52,10 @@
         "data/misiones_report.xml",
         "data/santa_fe_report.xml",
         "data/tucuman_report.xml",
-        "demo/res_partner_demo.xml",
-        "demo/account_demo.xml",
     ],
     "demo": [
-        # "demo/account_demo.xml",
+        "demo/res_partner_demo.xml",
+        "demo/account_demo.xml",
     ],
     "test": [],
     "installable": True,
