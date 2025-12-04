@@ -5,7 +5,7 @@ from odoo import _, fields, models
 from odoo.exceptions import RedirectWarning, UserError
 from odoo.tools.float_utils import float_round
 
-from .helpers import format_amount
+from .helpers import format_amount, get_standard_lines_domain
 
 
 class L10n_ArCabaReportHandler(models.AbstractModel):
@@ -39,23 +39,23 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
     def caba_ret_perc_txt(self, options):
         return {
             "file_name": "Perc/Ret IIBB CABA Aplicadas.txt",
-            "file_content": self._caba_book_get_txt_files(options),
+            "file_content": self._caba_get_txt_files(options),
             "file_type": "txt",
         }
 
     def nc_caba_ret_perc_txt(self, options):
         return {
             "file_name": "NC Perc/Ret IIBB CABA Aplicadas.txt",
-            "file_content": self._caba_book_get_txt_files(options, refund=True),
+            "file_content": self._caba_get_txt_files(options, refund=True),
             "file_type": "txt",
         }
 
-    def _caba_book_get_txt_files(self, options, refund=False):
+    def _caba_get_txt_files(self, options, refund=False):
         """Returns CABA txt content"""
-        move_lines = self._caba_book_get_txt_lines(options, refund=refund)
+        move_lines = self._caba_get_txt_lines(options, refund=refund)
         return "".join(self._get_caba_txt_content(move_lines)).encode("ISO-8859-1", "ignore")
 
-    def _caba_book_get_txt_lines(self, options, refund=False):
+    def _caba_get_txt_lines(self, options, refund=False):
         state = options.get("all_entries") and "all" or "posted"
         if state != "posted":
             raise UserError(
@@ -70,19 +70,11 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
             "|",
             ("tax_line_id.type_tax_use", "=", "sale"),
             ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
-        ] + self._caba_book_get_lines_domain(options, refund)
+        ] + self._caba_get_lines_domain(options, refund)
         return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
 
-    def _caba_book_get_lines_domain(self, options, refund=False):
-        company_ids = self.env.company.ids
-        domain = [("company_id", "in", company_ids)]
-        state = options.get("all_entries") and "all" or "posted"
-        if state and state.lower() != "all":
-            domain += [("move_id.state", "=", state)]
-        if options.get("date").get("date_to"):
-            domain += [("date", "<=", options["date"]["date_to"])]
-        if options.get("date").get("date_from"):
-            domain += [("date", ">=", options["date"]["date_from"])]
+    def _caba_get_lines_domain(self, options, refund=False):
+        domain = get_standard_lines_domain(self.env.company.ids, options)
         if refund:
             domain += [("move_id.move_type", "=", "out_refund")]
         else:
@@ -187,7 +179,10 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
                     # por si se olvidaron de poner agip en una linea de factura
                     # la base la sacamos desde las lineas de impuesto
                     # taxable_amount = line.move_id.cc_amount_untaxed
-                    taxable_amount = line.tax_base_amount
+                    # TODO: le tuve que agregar abs(), investigar si está bien que en facturas
+                    # de cliente line.tax_base_amount da negativo y por qué da positivo en nc
+                    # En 18 no hace falta agregarle abs()
+                    taxable_amount = abs(line.tax_base_amount)
 
                     # tambien lo sacamos por diferencia para no tener error (por el
                     # calculo trucado de taxable_amount por ejemplo) y

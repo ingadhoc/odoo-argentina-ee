@@ -5,7 +5,7 @@ import re
 from odoo import _, api, fields, models
 from odoo.exceptions import RedirectWarning, UserError
 
-from .helpers import format_amount, get_line_tax_base
+from .helpers import format_amount, get_line_tax_base, get_standard_lines_domain
 
 
 class L10n_ArSircarReportHandler(models.AbstractModel):
@@ -39,23 +39,23 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
     def sircar_ret_txt(self, options):
         return {
             "file_name": "Retenciones IIBB SIRCAR Aplicadas.txt",
-            "file_content": self._sircar_book_get_txt_files(options, file_type="ret"),
+            "file_content": self._sircar_get_txt_files(options, file_type="ret"),
             "file_type": "txt",
         }
 
     def sircar_perc_txt(self, options):
         return {
             "file_name": "Percepciones IIBB SIRCAR Aplicadas.txt",
-            "file_content": self._sircar_book_get_txt_files(options, file_type="perc"),
+            "file_content": self._sircar_get_txt_files(options, file_type="perc"),
             "file_type": "txt",
         }
 
-    def _sircar_book_get_txt_files(self, options, file_type):
+    def _sircar_get_txt_files(self, options, file_type):
         """Returns SIRCAR txt content"""
-        move_lines = self._sircar_book_get_txt_lines(options, file_type)
+        move_lines = self._sircar_get_txt_lines(options, file_type)
         return "".join(self._get_sircar_txt_content(move_lines, file_type)).encode("ISO-8859-1", "ignore")
 
-    def _sircar_book_get_txt_lines(self, options, file_type):
+    def _sircar_get_txt_lines(self, options, file_type):
         state = options.get("all_entries") and "all" or "posted"
         if state != "posted":
             raise UserError(
@@ -67,25 +67,13 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
         domain = [
             ("tax_line_id.l10n_ar_state_id.code", "not in", ["C", "B", "T"]),
             ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
-        ] + self._sircar_book_get_lines_domain(options)
+        ] + get_standard_lines_domain(self.env.company.ids, options)
 
         if file_type == "ret":
             domain += [("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier")]
         elif file_type == "perc":
             domain += [("tax_line_id.type_tax_use", "=", "sale")]
         return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
-
-    def _sircar_book_get_lines_domain(self, options):
-        company_ids = self.env.company.ids
-        domain = [("company_id", "in", company_ids)]
-        state = options.get("all_entries") and "all" or "posted"
-        if state and state.lower() != "all":
-            domain += [("move_id.state", "=", state)]
-        if options.get("date").get("date_to"):
-            domain += [("date", "<=", options["date"]["date_to"])]
-        if options.get("date").get("date_from"):
-            domain += [("date", ">=", options["date"]["date_from"])]
-        return domain
 
     def _get_sircar_txt_content(self, move_lines, file_type):
         """Returns the lines to be printed in the txt file.
