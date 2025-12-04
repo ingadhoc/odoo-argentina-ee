@@ -95,15 +95,15 @@ class ResPartner(models.Model):
     @api.model
     def _credit_search(self, operator, operand):
         if len(self.env.companies) > 1:
-            domain = []
+            domain = None
             for company in self.env.companies:
                 cond = self.with_company(company)._asset_difference_search(
                     account_type="asset_receivable", operator=operator, operand=operand
                 )
                 if cond:
-                    domain = Domain.OR([domain, cond])
+                    domain = cond if domain is None else Domain.OR([domain, cond])
 
-            if not domain:
+            if domain is None:
                 return [("id", "=", 0)]
 
             return domain
@@ -113,15 +113,15 @@ class ResPartner(models.Model):
     @api.model
     def _debit_search(self, operator, operand):
         if len(self.env.companies) > 1:
-            domain = []
+            domain = None
             for company in self.env.companies:
                 cond = self.with_company(company)._asset_difference_search(
                     account_type="liability_payable", operator=operator, operand=operand
                 )
                 if cond:
-                    domain = Domain.OR([domain, cond])
+                    domain = cond if domain is None else Domain.OR([domain, cond])
 
-            if not domain:
+            if domain is None:
                 return [("id", "=", 0)]
 
             return domain
