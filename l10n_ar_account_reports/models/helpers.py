@@ -44,3 +44,15 @@ def remove_accents_and_dieresis(input_str):
     input_str = ustr(input_str)
     nkfd_form = unicodedata.normalize("NFKD", input_str)
     return "".join([c for c in nkfd_form if not unicodedata.combining(c)])
+
+
+def get_standard_lines_domain(company_ids, options):
+    domain = [("company_id", "in", company_ids)]
+    state = options.get("all_entries") and "all" or "posted"
+    if state and state.lower() != "all":
+        domain += [("move_id.state", "=", state)]
+    if options.get("date").get("date_to"):
+        domain += [("date", "<=", options["date"]["date_to"])]
+    if options.get("date").get("date_from"):
+        domain += [("date", ">=", options["date"]["date_from"])]
+    return domain

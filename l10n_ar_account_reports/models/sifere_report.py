@@ -6,7 +6,7 @@ from odoo import _, fields, models
 from odoo.exceptions import UserError
 from odoo.tools.float_utils import float_round
 
-from .helpers import format_amount, get_pos_and_number
+from .helpers import format_amount, get_pos_and_number, get_standard_lines_domain
 
 
 class L10n_ArSifereReportHandler(models.AbstractModel):
@@ -46,30 +46,30 @@ class L10n_ArSifereReportHandler(models.AbstractModel):
     def sifere_ret_txt(self, options):
         return {
             "file_name": "Retenciones Sufridas SIFERE.txt",
-            "file_content": self._sifere_book_get_txt_files(options, "ret"),
+            "file_content": self._sifere_get_txt_files(options, "ret"),
             "file_type": "txt",
         }
 
     def sifere_perc_txt(self, options):
         return {
             "file_name": "Percepciones Sufridas SIFERE.txt",
-            "file_content": self._sifere_book_get_txt_files(options, "perc"),
+            "file_content": self._sifere_get_txt_files(options, "perc"),
             "file_type": "txt",
         }
 
     def sifere_despachos_txt(self, options):
         return {
             "file_name": "Despachos de importación (no importar).txt",
-            "file_content": self._sifere_book_get_txt_files(options, "despachos"),
+            "file_content": self._sifere_get_txt_files(options, "despachos"),
             "file_type": "txt",
         }
 
-    def _sifere_book_get_txt_files(self, options, file_type):
+    def _sifere_get_txt_files(self, options, file_type):
         """Returns SIFERE txt content"""
-        move_lines = self._sifere_book_get_txt_lines(options, file_type)
+        move_lines = self._sifere_get_txt_lines(options, file_type)
         return "".join(self._get_sifere_txt_content(move_lines, file_type)).encode("ISO-8859-1", "ignore")
 
-    def _sifere_book_get_txt_lines(self, options, file_type):
+    def _sifere_get_txt_lines(self, options, file_type):
         state = options.get("all_entries") and "all" or "posted"
         if state != "posted":
             raise UserError(
@@ -80,7 +80,7 @@ class L10n_ArSifereReportHandler(models.AbstractModel):
             )
         domain = [
             ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
-        ] + self._sifere_book_get_lines_domain(options)
+        ] + get_standard_lines_domain(self.env.company.ids, options)
 
         if file_type == "ret":
             domain += [("tax_line_id.l10n_ar_withholding_payment_type", "=", "customer")]
@@ -92,18 +92,6 @@ class L10n_ArSifereReportHandler(models.AbstractModel):
         elif file_type == "despachos":
             domain += [("l10n_latam_document_type_id.code", "in", ["66", "67"])]
         return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
-
-    def _sifere_book_get_lines_domain(self, options):
-        company_ids = self.env.company.ids
-        domain = [("company_id", "in", company_ids)]
-        state = options.get("all_entries") and "all" or "posted"
-        if state and state.lower() != "all":
-            domain += [("move_id.state", "=", state)]
-        if options.get("date").get("date_to"):
-            domain += [("date", "<=", options["date"]["date_to"])]
-        if options.get("date").get("date_from"):
-            domain += [("date", ">=", options["date"]["date_from"])]
-        return domain
 
     def _get_sifere_txt_content(self, move_lines, file_type):
         """Returns the lines to be printed in the txt file.
@@ -118,7 +106,6 @@ class L10n_ArSifereReportHandler(models.AbstractModel):
         """
         lines = []
         desp_imp = []
-        # TODO implementar
         for line in move_lines.filtered("amount_currency").sorted(key=lambda r: (r.date, r.id)):
             content = ""
 
@@ -153,17 +140,8 @@ class L10n_ArSifereReportHandler(models.AbstractModel):
                 content += f"{pos:>04s}"
                 content += f"{number:>016s}"
             else:
-                # TODO el if-else de abajo es TEMPORAL, hubo un bug que hizo que algunos moves de pagos tengan el tipo
-                # de documento incluido en l10n_latam_document_number lo cual hace que se obtenga un piedrazo acá.
-                # Ejemplo: l10n_latam_document_number debe ser '0001-00000001' en lugar de 'OP-X 0001-00000001'
-                # lo dejamos por un tiempo para que los usuarios puedan descargar los txt de aquellos pagos
-                # que quedaron rotos (ejemplo: con l10n_latam_document_number = 'OP-X 0001-00000001')
-                if not move.l10n_latam_document_type_id:
-                    document_number = move.l10n_latam_document_number.split(" ", 1)[-1]
-                else:
-                    document_number = move.l10n_latam_document_number
                 document_parts = move._l10n_ar_get_document_number_parts(
-                    document_number, move.l10n_latam_document_type_id.code
+                    move.l10n_latam_document_number, move.l10n_latam_document_type_id.code
                 )
                 pos = document_parts["point_of_sale"]
                 number = document_parts["invoice_number"]

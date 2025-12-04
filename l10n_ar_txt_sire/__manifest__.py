@@ -6,7 +6,7 @@
     "website": "www.adhoc.com.ar",
     "license": "LGPL-3",
     "depends": [
-        "l10n_ar_account_tax_settlement",
+        "l10n_ar_account_reports",
         "l10n_ar_tax",
     ],
     "data": [

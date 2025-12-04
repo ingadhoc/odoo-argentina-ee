@@ -18,21 +18,18 @@
             </record>
         </field>
         <field name="line_ids">
-            <!-- por ahora usamos l10n_ar_state y type_tax_use porque odoo no mezclo lo de tax groups, pero si lo mezclan seria mejor ir por allí. No usamos jurisdiction_code porque por ahora NO es buscable -->
             <record id="l10n_ar_sire_report_sire_withholdings_line" model="account.report.line">
                 <field name="name">Purchase Withholdings</field>
+                <!-- TODO: ver que agregamos en el domain para retenciones/percepciones iva sufridas
+                 las identificamos por tax group? -->
                 <field name="domain_formula">-sum([("tax_line_id.l10n_ar_state_id.code", "=", "C"), ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"), ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier")])</field>
-            </record>
-            <record id="l10n_ar_sire_report_sire_perceptions_line" model="account.report.line">
-                <field name="name">Sale Perceptions</field>
-                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_state_id.code", "=", "C"), ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"), ("tax_line_id.type_tax_use", "=", "sale")])</field>
             </record>
         </field>
     </record>
 
     <record id="ar_sire_iibb_return_type" model="account.return.type">
         <field name="name">SIRE (Agente)</field>
-        <field name="report_id" ref="l10n_ar_account_reports.l10n_ar_sire_report"/>
+        <field name="report_id" ref="l10n_ar_txt_sire.l10n_ar_sire_report"/>
         <field name="default_deadline_periodicity">monthly</field>
         <field name="auto_generate" eval="False"/>
         <field name="country_id" ref="base.ar"/>

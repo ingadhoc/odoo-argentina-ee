@@ -3,7 +3,7 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
-from .helpers import remove_accents_and_dieresis
+from .helpers import get_standard_lines_domain, remove_accents_and_dieresis
 
 
 class L10n_ArTucumanReportHandler(models.AbstractModel):
@@ -43,27 +43,27 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
     def tucuman_datos_txt(self, options):
         return {
             "file_name": "DATOS.txt",
-            "file_content": self._tucuman_book_get_txt_files(options, file_type="datos"),
+            "file_content": self._tucuman_get_txt_files(options, file_type="datos"),
             "file_type": "txt",
         }
 
     def tucuman_retper_txt(self, options):
         return {
             "file_name": "RETPER.TXT",
-            "file_content": self._tucuman_book_get_txt_files(options, file_type="retper"),
+            "file_content": self._tucuman_get_txt_files(options, file_type="retper"),
             "file_type": "txt",
         }
 
     def tucuman_ncfact_txt(self, options):
         return {
             "file_name": "NCFACT.TXT",
-            "file_content": self._tucuman_book_get_txt_files(options, file_type="ncfact"),
+            "file_content": self._tucuman_get_txt_files(options, file_type="ncfact"),
             "file_type": "txt",
         }
 
-    def _tucuman_book_get_txt_files(self, options, file_type):
+    def _tucuman_get_txt_files(self, options, file_type):
         """Returns Tucumán txt content"""
-        move_lines = self._tucuman_book_get_txt_lines(options, file_type)
+        move_lines = self._tucuman_get_txt_lines(options, file_type)
         self._iibb_tucuman_validations(move_lines)
         if file_type == "datos":
             return "".join(self._get_tucuman_datos_txt_file(move_lines)).encode("ISO-8859-1", "ignore")
@@ -72,7 +72,7 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
         if file_type == "ncfact":
             return "".join(self._get_tucuman_ncfact_txt_file(move_lines)).encode("ISO-8859-1", "ignore")
 
-    def _tucuman_book_get_txt_lines(self, options, file_type):
+    def _tucuman_get_txt_lines(self, options, file_type):
         state = options.get("all_entries") and "all" or "posted"
         if state != "posted":
             raise UserError(
@@ -87,25 +87,13 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
             "|",
             ("tax_line_id.type_tax_use", "=", "sale"),
             ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
-        ] + self._tucuman_book_get_lines_domain(options)
+        ] + get_standard_lines_domain(self.env.company.ids, options)
 
         # lo hacemos igual que está hoy, probablemente tengamos que hacer busqueda negativa para los otros casos?
         if file_type == "ncfact":
             domain += [("move_id.move_type", "=", "out_refund")]
 
         return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
-
-    def _tucuman_book_get_lines_domain(self, options):
-        company_ids = self.env.company.ids
-        domain = [("company_id", "in", company_ids)]
-        state = options.get("all_entries") and "all" or "posted"
-        if state and state.lower() != "all":
-            domain += [("move_id.state", "=", state)]
-        if options.get("date").get("date_to"):
-            domain += [("date", "<=", options["date"]["date_to"])]
-        if options.get("date").get("date_from"):
-            domain += [("date", ">=", options["date"]["date_from"])]
-        return domain
 
     @api.model
     def _iibb_tucuman_validations(self, move_lines):
@@ -118,7 +106,7 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
             raise UserError(
                 _(
                     "Algunos comprobantes rectificativos no contienen información de que "
-                    "comprobante original están revirtiendo: %s"
+                    "comprobante original están revirtiendo:\n %s"
                 )
                 % (", ".join(nc_without_reversed_entry_id.mapped("move_id.name")))
             )
@@ -131,7 +119,7 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
             raise UserError(
                 _(
                     "Algunos comprobantes no contienen información acerca de la calle/ciudad/provincia/cod "
-                    "postal del contacto: %s"
+                    "postal del contacto:\n %s"
                 )
                 % (", ".join(moves_without_street_city_state.mapped("move_id.name")))
             )
@@ -145,7 +133,7 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
             raise UserError(
                 _(
                     "Algunos comprobantes tienen punto de venta de 5 dígitos y deben tener de 4 dígitos para "
-                    "poder generar el archivo txt de retenciones y percepciones de Tucuman: %s"
+                    "poder generar el archivo txt de retenciones y percepciones de Tucuman:\n %s"
                 )
                 % (", ".join(move_lines_with_five_digits_pos.mapped("move_id.name")))
             )
@@ -175,7 +163,10 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
             # 7, NUMERO, longitud: 8
             content += str(document_number_parts["invoice_number"]).zfill(8)
             # 8, BASE_CALCULO, longitud: 15,2
-            content += "%015.2f" % (line.tax_base_amount if is_perception else line.withholding_id.base_amount)
+            # TODO: le tuve que agregar abs(), investigar si está bien que en facturas
+            # de cliente line.tax_base_amount da negativo y por qué da positivo en nc
+            # En 18 no hace falta agregarle abs()
+            content += "%015.2f" % (abs(line.tax_base_amount) if is_perception else line.withholding_id.base_amount)
             # 9, PORCENTAJE/ALICUOTA, longitud: 6,3
             tax = line._get_settlement_tax()
             content += "%06.3f" % tax.amount
@@ -210,7 +201,11 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
             # 7, NUMERO, longitud: 8
             content += str(document_number_parts["invoice_number"]).zfill(8)
             # 8, BASE_CALCULO, longitud: 15,2
-            content += "%015.2f" % (line.tax_base_amount if is_perception else line.withholding_id.base_amount)
+            # 8, BASE_CALCULO, longitud: 15,2
+            # TODO: le tuve que agregar abs(), investigar si está bien que en facturas
+            # de cliente line.tax_base_amount da negativo y por qué da positivo en nc
+            # En 18 no hace falta agregarle abs()
+            content += "%015.2f" % (abs(line.tax_base_amount) if is_perception else line.withholding_id.base_amount)
             # 9, PORCENTAJE/ALICUOTA, longitud: 6,3
             tax = line._get_settlement_tax()
             content += "%06.3f" % tax.amount

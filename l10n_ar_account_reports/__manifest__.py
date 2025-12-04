@@ -19,7 +19,7 @@
 ##############################################################################
 {
     "name": "Accounting Reports Customized for Argentina",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.1.0",
     "category": "Accounting",
     "sequence": 14,
     "summary": "",
@@ -33,6 +33,10 @@
         "l10n_ar_withholding",
         "l10n_latam_check",
         "l10n_ar_reports",
+        # necesitamos talonario de recibo para que los pagos
+        # salgan con formato correcto, ejemplo: OP-X 0001-00000001
+        # ya que esto es requerido en la descarga de algunos txt de impuestos
+        "account_payment_pro_receiptbook",
     ],
     "data": [
         "data/tags_data.xml",
@@ -43,6 +47,7 @@
         "data/sircar_report.xml",
         "data/pba_report.xml",
         "data/caba_report.xml",
+        "data/l10n_ar_vat_ret_perc_sufrido.xml",
         "data/mendoza_report.xml",
         "data/misiones_report.xml",
         "data/santa_fe_report.xml",

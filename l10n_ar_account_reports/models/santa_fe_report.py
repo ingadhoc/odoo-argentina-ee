@@ -4,7 +4,7 @@ import re
 from odoo import _, fields, models
 from odoo.exceptions import RedirectWarning, UserError
 
-from .helpers import get_pos_and_number
+from .helpers import get_pos_and_number, get_standard_lines_domain
 
 
 class L10n_ArSantaFeReportHandler(models.AbstractModel):
@@ -30,16 +30,16 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
     def santa_fe_ret_perc_txt(self, options):
         return {
             "file_name": "Perc/Ret IIBB Santa Fe Aplicadas.txt",
-            "file_content": self._santa_fe_book_get_txt_files(options),
+            "file_content": self._santa_fe_get_txt_files(options),
             "file_type": "txt",
         }
 
-    def _santa_fe_book_get_txt_files(self, options):
+    def _santa_fe_get_txt_files(self, options):
         """Returns Santa Fe txt content"""
-        move_lines = self._santa_fe_book_get_txt_lines(options)
+        move_lines = self._santa_fe_get_txt_lines(options)
         return "".join(self._get_santa_fe_txt_content(move_lines)).encode("ISO-8859-1", "ignore")
 
-    def _santa_fe_book_get_txt_lines(self, options):
+    def _santa_fe_get_txt_lines(self, options):
         state = options.get("all_entries") and "all" or "posted"
         if state != "posted":
             raise UserError(
@@ -54,26 +54,13 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
             "|",
             ("tax_line_id.type_tax_use", "=", "sale"),
             ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
-        ] + self._santa_fe_book_get_lines_domain(options)
+        ] + get_standard_lines_domain(self.env.company.ids, options)
         return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
-
-    def _santa_fe_book_get_lines_domain(self, options):
-        company_ids = self.env.company.ids
-        domain = [("company_id", "in", company_ids)]
-        state = options.get("all_entries") and "all" or "posted"
-        if state and state.lower() != "all":
-            domain += [("move_id.state", "=", state)]
-        if options.get("date").get("date_to"):
-            domain += [("date", "<=", options["date"]["date_to"])]
-        if options.get("date").get("date_from"):
-            domain += [("date", ">=", options["date"]["date_from"])]
-        return domain
 
     def _get_santa_fe_txt_content(self, move_lines):
         """Returns the lines to be printed in the txt file."""
         lines = []
 
-        # TODO implementar
         def format_amount(amount, integers, decimals=2):
             # overwrite default format_amount
             template = "%0" + "%ss" % (integers + decimals + 1)
