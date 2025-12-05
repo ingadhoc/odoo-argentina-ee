@@ -6,8 +6,9 @@
         <field name="model">account.report</field>
         <field name="inherit_id" ref="account_reports.account_report_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='filter_aml_ir_filters']" position="after">
+            <xpath expr="//field[@name='filter_aml_ir_filters']" position="before">
                 <field name="require_custom_filter"/>
+                <field name="filter_show_all_custom" invisible="not require_custom_filter"/>
             </xpath>
         </field>
     </record>
