@@ -1,3 +1,16 @@
 <odoo noupdate="1">
         <function model="ir.config_parameter" name="set_param" eval="('account_accountant_ux.use_search_filter_amount', 'True')"/>
+
+        <!-- Configurar require_custom_filter en reportes de partners -->
+        <record id="account_reports.partner_ledger_report" model="account.report">
+            <field name="require_custom_filter">True</field>
+        </record>
+
+        <record id="account_reports.aged_receivable_report" model="account.report">
+            <field name="require_custom_filter">True</field>
+        </record>
+
+        <record id="account_reports.aged_payable_report" model="account.report">
+            <field name="require_custom_filter">True</field>
+        </record>
 </odoo>

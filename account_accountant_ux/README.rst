@@ -23,6 +23,7 @@ Account Accountant UX
 #. Agrega una estrategia de autoconciliacion que Permite reconciliar todas las lineas de un partner en un solo conciliacion parcial o total
 #. Modifica el botón "Due" de los partners para que sea siempre visible y modifica su nombre a "Libro Mayor de Empresa".
 #. Agrega campo booleano "Requerir Filtro Custom" en la configuración de reportes. Si está activo y no hay filtros de partners o filtros personalizados aplicados, el reporte no cargará datos y mostrará un mensaje de advertencia.
+#. Los reportes contables de partner (Partner Ledger, Aged Receivable, Aged payable) vienen configurados por defecto con el campo "Requerir Filtro Custom" activo (True), forzando al usuario a aplicar filtros antes de cargar los datos.
 
 Installation
 ============
