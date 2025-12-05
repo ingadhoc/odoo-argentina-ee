@@ -3,6 +3,7 @@
 # directory
 ##############################################################################
 from odoo import fields, models
+from odoo.fields import Domain
 
 
 class AccountReport(models.Model):
@@ -27,6 +28,6 @@ class AccountReport(models.Model):
                 has_aml_filter = any(f.get("selected") for f in aml_ir_filters)
 
             if not has_partner_filter and not has_aml_filter and not has_partner_categories_filter:
-                domain = [("id", "=", False)]
+                domain = Domain("id", "=", False)
 
         return domain
