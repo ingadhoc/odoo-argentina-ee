@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Crear diarios de retenciones para las empresas demo -->
+        <!-- Estos normalmente se crean por account_chart_template._create_bank_journals -->
+        <!-- pero solo si l10n_ar_account_withholding está instalado cuando se aplica el chart template -->
+        
+        <record id="withholding_journal_ri" model="account.journal">
+            <field name="name">Retenciones</field>
+            <field name="type">cash</field>
+            <field name="company_id" ref="l10n_ar.company_ri"/>
+            <field name="code">RET</field>
+        </record>
+
+        <record id="withholding_journal_exento" model="account.journal">
+            <field name="name">Retenciones</field>
+            <field name="type">cash</field>
+            <field name="company_id" ref="l10n_ar.company_exento"/>
+            <field name="code">RET</field>
+        </record>
+
+        <record id="withholding_journal_mono" model="account.journal">
+            <field name="name">Retenciones</field>
+            <field name="type">cash</field>
+            <field name="company_id" ref="l10n_ar.company_mono"/>
+            <field name="code">RET</field>
+        </record>
+    </data>
+</odoo>
