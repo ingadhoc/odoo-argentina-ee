@@ -19,7 +19,7 @@
 ##############################################################################
 {
     'name': 'More demo data for Argentina Localization (Enterprise version)',
-    'version': "16.0.1.0.0",
+    'version': "16.0.1.1.0",
     'category': 'Accounting',
     'sequence': 14,
     'summary': '',
@@ -39,6 +39,7 @@
     'data': [
     ],
     'demo': [
+        'demo/account_journal_demo.xml',
         'demo/account_tax_demo.xml',
         'demo/customer_payment_demo.xml',
         'demo/supplier_payment_demo.xml',
