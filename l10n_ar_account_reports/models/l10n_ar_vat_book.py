@@ -141,7 +141,9 @@ class L10n_ArTaxReportHandler(models.AbstractModel):
         line_ids = self.env["account.move.line"].browse(aml_ids)
 
         currency_id = line_ids[:1].move_id.currency_id
-        tax_data = line_ids.tax_ids.compute_all(total, currency=currency_id)
+        tax_data = line_ids.tax_ids.filtered("tax_group_id.l10n_ar_vat_afip_code").compute_all(
+            total, currency=currency_id
+        )
         return currency_id.round(tax_data["total_included"] - tax_data["total_excluded"])
 
     def _vat_simple_build_purchase_query(self, file_type, move_ids):
