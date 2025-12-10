@@ -22,6 +22,7 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
                 "action": "export_file",
                 "action_param": "tucuman_datos_txt",
                 "file_export_type": "TXT",
+                "branch_allowed": True,
             },
             {
                 "name": "TXT RETPER",
@@ -29,6 +30,7 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
                 "action": "export_file",
                 "action_param": "tucuman_retper_txt",
                 "file_export_type": "TXT",
+                "branch_allowed": True,
             },
             {
                 "name": "TXT NCFACT",
@@ -36,6 +38,7 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
                 "action": "export_file",
                 "action_param": "tucuman_ncfact_txt",
                 "file_export_type": "TXT",
+                "branch_allowed": True,
             },
         ]
         options["buttons"].extend(txt_export_button)

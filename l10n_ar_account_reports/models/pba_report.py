@@ -23,6 +23,7 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
                 "action": "export_file",
                 "action_param": "pba_ret_txt",
                 "file_export_type": "TXT",
+                "branch_allowed": True,
             },
             {
                 "name": "TXT Percepciones (excepto actividad 29, 7 quincenal, 7 y 17 de Bancos)",
@@ -30,6 +31,7 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
                 "action": "export_file",
                 "action_param": "pba_perc_txt",
                 "file_export_type": "TXT",
+                "branch_allowed": True,
             },
             {
                 "name": "TXT Percepciones Act. 7 método Percibido (quincenal)",
@@ -37,6 +39,7 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
                 "action": "export_file",
                 "action_param": "pba_perc_act_7_txt",
                 "file_export_type": "TXT",
+                "branch_allowed": True,
             },
             # TODO descomentar las 3 opciones de abajo cuando se acerque la fecha 01/03/2026
             # {
