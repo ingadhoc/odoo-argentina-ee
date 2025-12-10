@@ -20,7 +20,7 @@
         <field name="line_ids">
             <record id="l10n_ar_sire_report_sire_withholdings_line" model="account.report.line">
                 <field name="name">Purchase Withholdings</field>
-                <!-- TODO: ver que agregamos en el domain para retenciones/percepciones iva sufridas
+                <!-- TODO: ver que agregamos en el domain para retenciones de sire,
                  las identificamos por tax group? -->
                 <field name="domain_formula">-sum([("tax_line_id.l10n_ar_state_id.code", "=", "C"), ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"), ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier")])</field>
             </record>
@@ -34,6 +34,7 @@
         <field name="auto_generate" eval="False"/>
         <field name="country_id" ref="base.ar"/>
         <field name="deadline_days_delay">10</field>
-        <field name="default_deadline_days_delay">21</field>
+        <field name="default_deadline_days_delay">31</field>
+        <field name="states_workflow">generic_state_review</field>
     </record>
 </odoo>

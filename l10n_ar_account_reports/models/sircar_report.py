@@ -24,6 +24,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
                 "action": "export_file",
                 "action_param": "sircar_ret_txt",
                 "file_export_type": "TXT",
+                "branch_allowed": True,
             },
             {
                 "name": "TXT Percepciones",
@@ -31,6 +32,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
                 "action": "export_file",
                 "action_param": "sircar_perc_txt",
                 "file_export_type": "TXT",
+                "branch_allowed": True,
             },
         ]
 

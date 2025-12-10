@@ -22,6 +22,7 @@ class L10n_ArMendozaReportHandler(models.AbstractModel):
                 "action": "export_file",
                 "action_param": "mendoza_ret_txt",
                 "file_export_type": "TXT",
+                "branch_allowed": True,
             },
         ]
 

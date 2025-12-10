@@ -25,6 +25,7 @@ class L10n_ArSifereReportHandler(models.AbstractModel):
                 "action": "export_file",
                 "action_param": "sifere_ret_txt",
                 "file_export_type": "TXT",
+                "branch_allowed": True,
             },
             {
                 "name": "TXT Percepciones sufridas",
@@ -32,6 +33,7 @@ class L10n_ArSifereReportHandler(models.AbstractModel):
                 "action": "export_file",
                 "action_param": "sifere_perc_txt",
                 "file_export_type": "TXT",
+                "branch_allowed": True,
             },
             {
                 "name": "Despachos de importación (no importar)",
@@ -39,6 +41,7 @@ class L10n_ArSifereReportHandler(models.AbstractModel):
                 "action": "export_file",
                 "action_param": "sifere_despachos_txt",
                 "file_export_type": "TXT",
+                "branch_allowed": True,
             },
         ]
         options["buttons"].extend(txt_export_button)

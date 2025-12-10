@@ -23,6 +23,7 @@ class L10n_ArIvaReportHandler(models.AbstractModel):
                 "action": "export_file",
                 "action_param": "ret_iva_sufridas_txt",
                 "file_export_type": "TXT",
+                "branch_allowed": True,
             },
             {
                 "name": "Percepciones de IVA sufridas",
@@ -30,6 +31,7 @@ class L10n_ArIvaReportHandler(models.AbstractModel):
                 "action": "export_file",
                 "action_param": "perc_iva_sufridas_txt",
                 "file_export_type": "TXT",
+                "branch_allowed": True,
             },
         ]
 

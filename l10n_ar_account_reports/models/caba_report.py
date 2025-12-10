@@ -24,6 +24,7 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
                 "action": "export_file",
                 "action_param": "caba_ret_perc_txt",
                 "file_export_type": "TXT",
+                "branch_allowed": True,
             },
             {
                 "name": "TXT NC Perc/Ret Aplicadas",
@@ -31,6 +32,7 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
                 "action": "export_file",
                 "action_param": "nc_caba_ret_perc_txt",
                 "file_export_type": "TXT",
+                "branch_allowed": True,
             },
         ]
 
@@ -163,7 +165,8 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
 
                 # obtenemos montos de los comprobantes
                 if payment:
-                    other_taxes_amount = self._complete_payment_content(
+                    vat_amount = 0.0
+                    total_amount, other_taxes_amount, taxable_amount = self._complete_payment_content(
                         line, alicuot, backward_comp_is_installed, payment, company_currency
                     )
                 elif line.move_id.is_invoice():
@@ -394,7 +397,6 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
 
     def _complete_payment_content(self, line, alicuot, backward_comp_is_installed, payment, company_currency):
         # solo en comprobantes A, M segun especificacion
-        vat_amount = 0.0
         # es lo mismo que payment_group.matched_amount_untaxed
         taxable_amount = float_round(line.withholding_id.base_amount, precision_digits=2)
         rounded_withholding = float_round((taxable_amount * alicuot / 100), precision_digits=2)
@@ -430,4 +432,4 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
                 )
 
         # lo sacamos por diferencia
-        return company_currency.round(total_amount - taxable_amount - vat_amount)
+        return total_amount, company_currency.round(total_amount - taxable_amount), taxable_amount
