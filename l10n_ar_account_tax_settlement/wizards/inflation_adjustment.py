@@ -60,9 +60,10 @@ class InflationAdjustment(models.TransientModel):
         company = self.env.company
         res["company_id"] = company.id
         company_fiscalyear_dates = company.compute_fiscalyear_dates(today - relativedelta(year=today.year - 1))
+        # Filter out keys that are not fields of this model (e.g., 'record')
         for key, value in company_fiscalyear_dates.items():
-            company_fiscalyear_dates[key] = value
-        res.update(company_fiscalyear_dates)
+            if key in self._fields:
+                res[key] = value
         return res
 
     @api.depends("date_from", "date_to")
