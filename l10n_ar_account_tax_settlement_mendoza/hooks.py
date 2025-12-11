@@ -17,7 +17,15 @@ def post_init_hook(cr, registry):
         if not ret_mendoza_aplicada_tax:
             continue
         ret_mendoza_aplicada_tax.withholding_type = "code"
-        ret_mendoza_aplicada_tax.withholding_python_compute = "\n# withholdable_base_amount\n# payment: account.payment.group object\n# partner: res.partner object (commercial partner of payment group)\n# withholding_tax: account.tax.withholding object\n\nmove_to_pay = payment.to_pay_move_line_ids.move_id\nactivities = move_to_pay.activities_mendoza_ids\nif activities:\n    activity_codes = activities.mapped('code')\n    partner_vat = move_to_pay.partner_id.l10n_ar_formatted_vat\n    actividades_con_riesgo, actividades_con_alicuota_cero = payment.company_id.process_mendoza_csv_file(partner_vat, activity_codes)\n    menor_alicuota = activities.menor_alicuota(actividades_con_alicuota_cero)\n\n    if menor_alicuota[0] in actividades_con_riesgo:\n           alicuota = menor_alicuota[1] * 2\n    else:\n           alicuota = menor_alicuota[1]\n    payment.write({'alicuota_mendoza': alicuota})\n    result = withholdable_base_amount * alicuota\nelse:\n    result = False\n        "
+        ret_mendoza_aplicada_tax.withholding_python_compute = (
+            "\n# withholdable_base_amount\n# payment: account.payment.group object\n# partner: res.partner object (commercial partner of payment group)\n"
+            "# withholding_tax: account.tax.withholding object\n\nmove_to_pay = payment.to_pay_move_line_ids.move_id\nactivities = move_to_pay.activities_mendoza_ids\n"
+            "if activities:\n    activity_codes = activities.mapped('code')\n    partner_vat = move_to_pay.partner_id.l10n_ar_formatted_vat\n"
+            "    actividades_con_riesgo, actividades_con_alicuota_cero = payment.company_id.process_mendoza_csv_file(partner_vat, activity_codes)\n"
+            "    menor_alicuota = activities.menor_alicuota(actividades_con_alicuota_cero)\n\n    if menor_alicuota[0] in actividades_con_riesgo:\n"
+            "           alicuota = menor_alicuota[1] * 2\n    else:\n           alicuota = menor_alicuota[1]\n    payment.write({'alicuota_mendoza': alicuota})\n"
+            "    result = withholdable_base_amount * alicuota\nelse:\n    result = False\n        "
+        )
         _logger.info(
             "Se establece código python en impuesto de Retención IIBB Mendoza Aplicada para la compañía %s"
             % (company.name)
