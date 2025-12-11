@@ -11,190 +11,227 @@ msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-12-09 19:51+0000\n"
-"PO-Revision-Date: 2025-10-06 18:45+0000\n"
-"Last-Translator: ADHOC - Bot <transbot@adhoc.com.ar>, 2025\n"
-"Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
+"PO-Revision-Date: 2025-12-11 18:10+0000\n"
+"Last-Translator: Mariana Torres <mt@adhoc.inc>\n"
+"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
+"odoo-argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_account_reports/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
-"1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == 0)"
+" ? 1 : 2);\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_costo_ventas
+#, fuzzy
 msgid "AR EERR: Costo de Ventas"
-msgstr ""
+msgstr "AR EERR: Costo de Ventas"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_gastos_administracion
+#, fuzzy
 msgid "AR EERR: Gastos de Administración"
-msgstr ""
+msgstr "AR EERR: Gastos de Administración"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_gastos_comercializacion
+#, fuzzy
 msgid "AR EERR: Gastos de Comercialización"
-msgstr ""
+msgstr "AR EERR: Gastos de Comercialización"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_impuesto_ganancias
+#, fuzzy
 msgid "AR EERR: Impuesto a las ganancias"
-msgstr ""
+msgstr "AR EERR: Impuesto a las ganancias"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_otros_gastos
+#, fuzzy
 msgid "AR EERR: Otros Gastos"
-msgstr ""
+msgstr "AR EERR: Otros Gastos"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_otros_ingresos_egresos
+#, fuzzy
 msgid "AR EERR: Otros ingresos y egresos"
-msgstr ""
+msgstr "AR EERR: Otros ingresos y egresos"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_rxt_resultados_financieros
+#, fuzzy
 msgid "AR EERR: RxT y Resultados Financieros"
-msgstr ""
+msgstr "AR EERR: RxT y Resultados Financieros"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_ventas
+#, fuzzy
 msgid "AR EERR: Ventas"
-msgstr ""
+msgstr "AR EERR: Ventas"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_activos_intangibles
+#, fuzzy
 msgid "AR ESP: Activos Intangibles"
-msgstr ""
+msgstr "AR ESP: Activos Intangibles"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_anticipos_de_clientes
+#, fuzzy
 msgid "AR ESP: Anticipos de Clientes"
-msgstr ""
+msgstr "AR ESP: Anticipos de Clientes"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_bienes_de_cambio
+#, fuzzy
 msgid "AR ESP: Bienes de Cambio"
-msgstr ""
+msgstr "AR ESP: Bienes de Cambio"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_bienes_de_cambio_nc
+#, fuzzy
 msgid "AR ESP: Bienes de Cambio NC"
-msgstr ""
+msgstr "AR ESP: Bienes de Cambio NC"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_bienes_de_uso
+#, fuzzy
 msgid "AR ESP: Bienes de Uso"
-msgstr ""
+msgstr "AR ESP: Bienes de Uso"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_caja_y_bancos
+#, fuzzy
 msgid "AR ESP: Caja y Bancos"
-msgstr ""
+msgstr "AR ESP: Caja y Bancos"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_cargas_fiscales
+#, fuzzy
 msgid "AR ESP: Cargas Fiscales"
-msgstr ""
+msgstr "AR ESP: Cargas Fiscales"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_creditos_por_ventas
+#, fuzzy
 msgid "AR ESP: Créditos por Ventas"
-msgstr ""
+msgstr "AR ESP: Créditos por Ventas"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_creditos_por_ventas_nc
+#, fuzzy
 msgid "AR ESP: Créditos por Ventas NC"
-msgstr ""
+msgstr "AR ESP: Créditos por Ventas NC"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_deudas_comerciales
+#, fuzzy
 msgid "AR ESP: Deudas Comerciales"
-msgstr ""
+msgstr "AR ESP: Deudas Comerciales"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_deudas_no_corrientes
+#, fuzzy
 msgid "AR ESP: Deudas No Corrientes"
-msgstr ""
+msgstr "AR ESP: Deudas No Corrientes"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_dividendos_a_pagar
+#, fuzzy
 msgid "AR ESP: Dividendos a Pagar"
-msgstr ""
+msgstr "AR ESP: Dividendos a Pagar"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_inversiones_temporarias
+#, fuzzy
 msgid "AR ESP: Inversiones Temporarias"
-msgstr ""
+msgstr "AR ESP: Inversiones Temporarias"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_llave_de_negocio
+#, fuzzy
 msgid "AR ESP: Llave de Negocio"
-msgstr ""
+msgstr "AR ESP: Llave de Negocio"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_otras_deudas
+#, fuzzy
 msgid "AR ESP: Otras Deudas"
-msgstr ""
+msgstr "AR ESP: Otras Deudas"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_otras_inversiones_nc
+#, fuzzy
 msgid "AR ESP: Otras Inversiones NC"
-msgstr ""
+msgstr "AR ESP: Otras Inversiones NC"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_otros_activos
+#, fuzzy
 msgid "AR ESP: Otros Activos"
-msgstr ""
+msgstr "AR ESP: Otros Activos"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_otros_activos_nc
+#, fuzzy
 msgid "AR ESP: Otros Activos NC"
-msgstr ""
+msgstr "AR ESP: Otros Activos NC"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_otros_creditos
+#, fuzzy
 msgid "AR ESP: Otros Créditos"
-msgstr ""
+msgstr "AR ESP: Otros Créditos"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_otros_creditos_nc
+#, fuzzy
 msgid "AR ESP: Otros Créditos NC"
-msgstr ""
+msgstr "AR ESP: Otros Créditos NC"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_part_terceros_en_soc
+#, fuzzy
 msgid "AR ESP: Part. Terceros en Soc."
-msgstr ""
+msgstr "AR ESP: Part. Terceros en Soc."
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_participaciones_en_sociedades
+#, fuzzy
 msgid "AR ESP: Participaciones en Sociedades"
-msgstr ""
+msgstr "AR ESP: Participaciones en Sociedades"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_patrimonio_neto
+#, fuzzy
 msgid "AR ESP: Patrimonio Neto"
-msgstr ""
+msgstr "AR ESP: Patrimonio Neto"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_previsiones
+#, fuzzy
 msgid "AR ESP: Previsiones"
-msgstr ""
+msgstr "AR ESP: Previsiones"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_previsiones_no_corrientes
+#, fuzzy
 msgid "AR ESP: Previsiones No Corrientes"
-msgstr ""
+msgstr "AR ESP: Previsiones No Corrientes"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_prestamos
+#, fuzzy
 msgid "AR ESP: Préstamos"
-msgstr ""
+msgstr "AR ESP: Préstamos"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_remun_y_cargas_sociales
+#, fuzzy
 msgid "AR ESP: Remun. y Cargas Sociales"
-msgstr ""
+msgstr "AR ESP: Remun. y Cargas Sociales"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_chart_template
@@ -203,56 +240,70 @@ msgstr "Plantilla de plan contable"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_return
+#, fuzzy
 msgid "Accounting Return"
-msgstr ""
+msgstr "Accounting Return"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_activo
+#, fuzzy
 msgid "Activo"
-msgstr ""
+msgstr "Activo"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_intangible_assets
+#, fuzzy
 msgid "Activos intangibles"
-msgstr ""
+msgstr "Activos intangibles"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/tucuman_report.py:0
+#, fuzzy
 msgid ""
 "Algunos comprobantes no contienen información acerca de la calle/ciudad/"
 "provincia/cod postal del contacto:\n"
 " %s"
 msgstr ""
+"Algunos comprobantes no contienen información acerca de la calle/ciudad/"
+"provincia/cod postal del contacto:\n"
+" %s"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/tucuman_report.py:0
+#, fuzzy
 msgid ""
 "Algunos comprobantes rectificativos no contienen información de que "
 "comprobante original están revirtiendo:\n"
 " %s"
 msgstr ""
+"Algunos comprobantes rectificativos no contienen información de que "
+"comprobante original están revirtiendo:\n"
+" %s"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/tucuman_report.py:0
+#, fuzzy
 msgid ""
 "Algunos comprobantes tienen punto de venta de 5 dígitos y deben tener de 4 "
 "dígitos para poder generar el archivo txt de retenciones y percepciones de "
 "Tucuman:\n"
 " %s"
 msgstr ""
+"Algunos comprobantes tienen punto de venta de 5 dígitos y deben tener de 4 "
+"dígitos para poder generar el archivo txt de retenciones y percepciones de "
+"Tucuman:\n"
+" %s"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_advances_from_customers
 msgid "Anticipos de clientes"
-msgstr ""
+msgstr "Anticipos de clientes"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_caba_report_handler
-#, fuzzy
-#| msgid "Partner Ledger Custom Handler"
 msgid "Argentinian CABA Report Custom Handler"
 msgstr "Gestor personalizado del libro mayor del contacto"
 
