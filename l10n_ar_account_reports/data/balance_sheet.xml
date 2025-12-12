@@ -599,7 +599,7 @@
                         <field name="label">ingresos_no_asignados</field>
                         <field name="engine">aggregation</field>
                         <field name="formula">net_inc.balance</field>
-                        <field name="subformula">cross_report</field>
+                        <field name="subformula">cross_report(l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados)</field>
                     </record>
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_equity_balance" model="account.report.expression">
                         <field name="label">balance</field>
