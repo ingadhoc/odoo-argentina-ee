@@ -237,11 +237,11 @@ class L10n_ArTaxReportHandler(models.AbstractModel):
                 """
                 (CASE
                     WHEN btg.l10n_ar_vat_afip_code IN ('0', '1', '2') THEN 3
-                    WHEN aaat.account_account_tag_id IN %(tag_id)s THEN 2
+                    WHEN aaat.account_account_tag_id = %(tag_id)s THEN 2
                     ELSE 1
                 END)
                 """,
-                tag_id=tuple(tag_id.ids),
+                tag_id=tag_id.id,
             )
             columns_map["Debito Fiscal Facturado"] = "vat_amount"
             columns_map["Debito Fiscal O.D.P."] = "vat_amount"
@@ -249,7 +249,7 @@ class L10n_ArTaxReportHandler(models.AbstractModel):
             # Since we are SELECT DISTINCT ON, we need a stable ORDER BY. Prioritize fixed asset tag for the op type.
             cte_order_query = SQL(
                 "ORDER BY aml.id, (CASE when aaat.account_account_tag_id = %(tag_id)s THEN 1 ELSE 2 END)",
-                tag_id=tuple(tag_id.ids),
+                tag_id=tag_id.id,
             )
         else:
             operation_type_query = SQL(
