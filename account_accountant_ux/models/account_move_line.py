@@ -11,7 +11,7 @@ class AccountMovetLine(models.Model):
 
     def _search_filter_amount(self, operator, value):
         """Search method for same amount filter"""
-        preferred_value = abs(self.env.context.get("preferred_aml_value", 0))
+        preferred_value = self.env.context.get("preferred_aml_value", 0)
 
         # If users select multiple filters, Odoo combine them using 'in' operator with a set/list of values.
         # So we have to iterate to get the operators of the sub-domains
