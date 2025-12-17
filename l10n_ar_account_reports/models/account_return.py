@@ -122,3 +122,27 @@ class AccountReturn(models.Model):
 
         moves = self.env["account.move"].sudo().create(closing_move_vals)
         moves.action_post()
+
+    def _proceed_with_locking(self, options_to_inject=None):
+        """
+        EXTENDS account_reports
+        For Argentinian provincial tax returns (Ingresos Brutos), we handle the locking process differently.
+        We don't want to set the tax_lock_date when validating the "asiento de liquidación".
+        We temporarily store the current tax_lock_date, call super(), then restore it to prevent changes.
+        """
+        tax_lock_dates = {
+            company: company.tax_lock_date for company in self.company_ids.filtered(lambda c: c.country_id.code == "AR")
+        }
+        res = super()._proceed_with_locking(options_to_inject=options_to_inject)
+        if (
+            self.type_id
+            and self.type_id.report_id
+            and self.is_tax_return
+            and self.type_id.report_id.country_id.code == "AR"
+            and self.company_id.country_id.code == "AR"
+        ):
+            # Restore tax_lock_date to prevent it from being modified by provincial returns
+            for company, original_date in tax_lock_dates.items():
+                if company.tax_lock_date != original_date:
+                    company.sudo().tax_lock_date = original_date
+        return res
