@@ -18,6 +18,7 @@
 #
 ##############################################################################
 {
+<<<<<<< c1a05a3959b44a67425761b584e0309d5799449c
     "name": "Accounting Accountant UX",
     "version": "18.0.1.8.0",
     "category": "Accounting",
@@ -31,6 +32,27 @@
         "account_reports",
         "account_internal_transfer",
         "account_ux",
+||||||| 08fc29225e2b1d4edec14d8b197935cc4b0a9089
+    'name': 'Accounting Accountant UX',
+    'version': "17.0.1.8.0",
+    'category': 'Accounting',
+    'sequence': 14,
+    'summary': '',
+    'author': 'ADHOC SA',
+    'website': 'www.adhoc.com.ar',
+    'license': 'AGPL-3',
+    'images': [
+=======
+    'name': 'Accounting Accountant UX',
+    'version': "17.0.1.9.0",
+    'category': 'Accounting',
+    'sequence': 14,
+    'summary': '',
+    'author': 'ADHOC SA',
+    'website': 'www.adhoc.com.ar',
+    'license': 'AGPL-3',
+    'images': [
+>>>>>>> 454b8a0824d025561ab31ff0452a707d83c46f09
     ],
     "data": [
         "views/res_partner_view.xml",
