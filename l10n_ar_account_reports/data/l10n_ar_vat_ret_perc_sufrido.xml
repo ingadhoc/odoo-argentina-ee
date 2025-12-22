@@ -3,7 +3,7 @@
     <record id="l10n_ar_iva_report" model="account.report">
         <field name="name">IVA Sufrido</field>
         <field name="root_report_id" ref="account.generic_tax_report"/>
-        <field name="sequence">110</field>
+        <field name="sequence">20</field>
         <field name="country_id" ref="base.ar"/>
         <field name="filter_hierarchy">never</field>
         <field name="filter_unreconciled" eval="False"/>
@@ -18,11 +18,11 @@
             </record>
         </field>
         <field name="line_ids">
-            <record id="l10n_ar_iva_report_iva_withholdings_line" model="account.report.line">
+            <!-- TODO: ver que agregamos en el domain para retenciones iva sufridas las identificamos por tax group? -->
+            <!-- <record id="l10n_ar_iva_report_iva_withholdings_line" model="account.report.line">
                 <field name="name">Sale Withholdings</field>
-                <!-- TODO: ver que agregamos en el domain para retenciones iva sufridas las identificamos por tax group? -->
                 <field name="domain_formula">sum([("tax_line_id.l10n_ar_state_id", "=", False), ("tax_line_id.l10n_ar_withholding_payment_type", "=", "customer")])</field>
-            </record>
+            </record> -->
             <record id="l10n_ar_iva_report_iva_perceptions_line" model="account.report.line">
                 <field name="name">Purchase Perceptions</field>
                 <field name="domain_formula">sum([("tax_line_id.l10n_ar_state_id", "=", False), ("tax_line_id.type_tax_use", "=", "purchase"), ("tax_line_id.tax_group_id.l10n_ar_tribute_afip_code", "=", "06")])</field>
