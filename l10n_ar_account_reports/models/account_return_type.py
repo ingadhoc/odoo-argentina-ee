@@ -146,31 +146,3 @@ class AccountReturnType(models.Model):
                 return f"{ordinal} Quincena {month_name} {period_from.year}"
 
         return super()._get_period_name(main_company, period_from, period_to, minimal, lang_code)
-
-    # @api.model
-    # def _generate_all_returns(self, country_code, main_company, tax_unit=None):
-    #     rslt = super()._generate_all_returns(country_code, main_company, tax_unit=tax_unit)
-
-    #     if country_code == "AR":
-    #         ar_sales_return_type = self.env.ref("l10n_ar_account_reports.ar_pba_iibb_return_type")
-    #         # Handle both monthly and sub-monthly periods (like fortnightly)
-    #         if ar_sales_return_type._is_sub_monthly_period(main_company):
-    #             period_days = ar_sales_return_type._get_periodicity_days_delay(main_company)
-    #             date_in_previous_period = fields.Date.context_today(self) - relativedelta(days=period_days)
-    #         else:
-    #             offset = ar_sales_return_type._get_periodicity_months_delay(main_company)
-    #             date_in_previous_period = fields.Date.context_today(self) - relativedelta(months=offset)
-    #         date_from, date_to = ar_sales_return_type._get_period_boundaries(main_company, date_in_previous_period)
-    #         tax_ids = self.env["account.tax"].filtered(lambda x: x.l10n_ar_state_id.country_id.code == "AR")
-
-    #         domain = [
-    #             ("tax_ids", "in", tax_ids),
-    #             ("balance", "!=", 0),
-    #             ("date", ">=", date_from),
-    #             ("date", "<=", date_to),
-    #             ("parent_state", "=", "posted"),
-    #         ]
-    #         if self.env["account.move.line"].search_count(domain, limit=1):
-    #             ar_sales_return_type._try_create_return_for_period(date_from, main_company, tax_unit)
-
-    #     return rslt
