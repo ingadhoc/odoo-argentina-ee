@@ -10,17 +10,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-09 19:51+0000\n"
+"POT-Creation-Date: 2025-12-22 18:15+0000\n"
 "PO-Revision-Date: 2025-12-11 18:10+0000\n"
 "Last-Translator: Mariana Torres <mt@adhoc.inc>\n"
-"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
-"odoo-argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_account_reports/es/>\n"
+"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
+"argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_account_reports/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == 0)"
-" ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == "
+"0) ? 1 : 2);\n"
 "X-Generator: Weblate 5.10.4\n"
 
 #. module: l10n_ar_account_reports
@@ -245,6 +245,12 @@ msgid "Accounting Return"
 msgstr "Accounting Return"
 
 #. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_account_return_type
+#, fuzzy
+msgid "Accounting Return Type"
+msgstr "Accounting Return"
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_activo
 #, fuzzy
 msgid "Activo"
@@ -441,6 +447,11 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__default_deadline_periodicity
+msgid "Default Periodicity"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sifere_report_sifere_despachos_line
 msgid "Despachos de importación"
 msgstr ""
@@ -460,6 +471,8 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_move_line__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partner_ledger_report_handler__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_creation_wizard__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_caba_report_handler__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_iva_report_handler__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_mendoza_report_handler__display_name
@@ -537,6 +550,12 @@ msgid "Estado de Resultados"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model.fields.selection,name:l10n_ar_account_reports.selection__account_return_type__deadline_periodicity__fortnightly
+#: model:ir.model.fields.selection,name:l10n_ar_account_reports.selection__account_return_type__default_deadline_periodicity__fortnightly
+msgid "Fortnightly"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_gross_inc
 msgid "Ganancia (Pérdida) bruta"
 msgstr ""
@@ -556,6 +575,8 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_move_line__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partner_ledger_report_handler__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_creation_wizard__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_caba_report_handler__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_iva_report_handler__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_mendoza_report_handler__id
@@ -770,6 +791,11 @@ msgid "Patrimonio neto"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__deadline_periodicity
+msgid "Periodicity"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_provisions
 msgid "Previsiones"
 msgstr ""
@@ -786,6 +812,7 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_iva_perceptions_line
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sifere_report_sifere_perceptions_line
 msgid "Purchase Perceptions"
 msgstr ""
 
@@ -795,7 +822,6 @@ msgstr ""
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_misiones_report_misiones_withholdings_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_pba_report_pba_withholdings_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_santa_fe_report_santa_fe_withholdings_line
-#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sifere_report_sifere_withholdings_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sircar_report_sircar_withholdings_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_tucuman_report_tucuman_withholdings_line
 msgid "Purchase Withholdings"
@@ -827,6 +853,11 @@ msgid "Resultados financieros y por tenencia (incluye RECPAM)"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_account_return_creation_wizard
+msgid "Return creation wizard"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report,name:l10n_ar_account_reports.l10n_ar_sifere_report
 msgid "SIFERE"
 msgstr ""
@@ -847,14 +878,13 @@ msgstr ""
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_misiones_report_misiones_perceptions_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_pba_report_pba_perceptions_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_santa_fe_report_santa_fe_perceptions_line
-#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sifere_report_sifere_perceptions_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sircar_report_sircar_perceptions_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_tucuman_report_tucuman_perceptions_line
 msgid "Sale Perceptions"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_iva_withholdings_line
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sifere_report_sifere_withholdings_line
 msgid "Sale Withholdings"
 msgstr ""
 
