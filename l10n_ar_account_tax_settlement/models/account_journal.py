@@ -902,19 +902,27 @@ class AccountJournal(models.Model):
             # 10 Tipo de Régimen de Percepción
             # (código correspondiente según tabla definida por la jurisdicción)
             if not tax.l10n_ar_code:
-                raise ValidationError(
-                    _(
-                        "No hay regimen de retencion configurado para el impuesto '%(tax_name)s' del partner '%(partner_name)s'",
+                raise RedirectWarning(
+                    message=_(
+                        "No hay régimen de retención (Código AFIP 'l10n_ar_code') configurado para el impuesto: '%(tax_name)s'.",
                         tax_name=tax.name,
-                        partner_name=line.partner_id.name,
-                    )
+                    ),
+                    action=tax.get_formview_action(),
+                    button_text=_("Edit Tax"),
                 )
             content.append(tax.l10n_ar_code)
 
             # 11 Jurisdicción: código en Convenio Multilateral de la
             # jurisdicción a la cual está presentando la DDJJ
-            if not tax.l10n_ar_state_id.jurisdiction_code:
-                raise ValidationError(_("No hay jurisdicción configurada en el impuesto!"))
+            if not tax.l10n_ar_state_id or not tax.l10n_ar_state_id.jurisdiction_code:
+                raise RedirectWarning(
+                    message=_(
+                        "No hay jurisdicción establecida en el impuesto '%(tax_name)s' o no tiene código de jurisdicción.",
+                        tax_name=tax.name,
+                    ),
+                    action=tax.get_formview_action(),
+                    button_text=_("Edit Tax"),
+                )
 
             content.append(tax.l10n_ar_state_id.jurisdiction_code)
 
@@ -991,15 +999,27 @@ class AccountJournal(models.Model):
             # 10 Tipo de Régimen de Percepción
             # (código correspondiente según tabla definida por la jurisdicción)
             if not tax.l10n_ar_code:
-                raise ValidationError(
-                    _("No hay régimen de percepción configurado para el impuesto: '%(tax_name)s'", tax_name=tax.name)
+                raise RedirectWarning(
+                    message=_(
+                        "No hay régimen de percepción (Código AFIP 'l10n_ar_code') configurado para el impuesto: '%(tax_name)s'.",
+                        tax_name=tax.name,
+                    ),
+                    action=tax.get_formview_action(),
+                    button_text=_("Edit Tax"),
                 )
             content.append(tax.l10n_ar_code)
 
             # 11 Jurisdicción: código en Convenio Multilateral de la
             # jurisdicción a la cual está presentando la DDJJ
-            if not tax.l10n_ar_state_id.jurisdiction_code:
-                raise ValidationError(_("No hay jurisdicción configurada en el impuesto!"))
+            if not tax.l10n_ar_state_id or not tax.l10n_ar_state_id.jurisdiction_code:
+                raise RedirectWarning(
+                    message=_(
+                        "No hay jurisdicción establecida en el impuesto '%(tax_name)s' o no tiene código de jurisdicción.",
+                        tax_name=tax.name,
+                    ),
+                    action=tax.get_formview_action(),
+                    button_text=_("Edit Tax"),
+                )
 
             content.append(tax.l10n_ar_state_id.jurisdiction_code)
 
