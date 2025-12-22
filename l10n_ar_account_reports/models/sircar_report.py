@@ -137,10 +137,10 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
 
                 # 11 Jurisdicción: código en Convenio Multilateral de la
                 # jurisdicción a la cual está presentando la DDJJ
-                if not tax.l10n_ar_state_id.jurisdiction_code:
+                if not tax.l10n_ar_state_id.jurisdiction_code or not tax.l10n_ar_state_id.jurisdiction_code:
                     raise RedirectWarning(
                         message=_(
-                            'No hay jurisdicción establecida en el impuesto "%(tax_name)s"en la solapa "API".',
+                            'No hay jurisdicción establecida en el impuesto "%(tax_name)s" o no tiene código de jurisdicción.',
                             tax_name=tax.name,
                         ),
                         action=tax.get_formview_action(),
@@ -231,10 +231,10 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
 
                 # 11 Jurisdicción: código en Convenio Multilateral de la
                 # jurisdicción a la cual está presentando la DDJJ
-                if not tax.l10n_ar_state_id.jurisdiction_code:
+                if not tax.l10n_ar_state_id.jurisdiction_code or not tax.l10n_ar_state_id.jurisdiction_code:
                     raise RedirectWarning(
                         message=_(
-                            'No hay jurisdicción establecida en el impuesto "%(tax_name)s"en la solapa "API".',
+                            'No hay jurisdicción establecida en el impuesto "%(tax_name)s" o no tiene código de jurisdicción.',
                             tax_name=tax.name,
                         ),
                         action=tax.get_formview_action(),
