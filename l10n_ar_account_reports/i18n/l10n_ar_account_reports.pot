@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-22 18:15+0000\n"
-"PO-Revision-Date: 2025-12-22 18:15+0000\n"
+"POT-Creation-Date: 2025-12-23 18:00+0000\n"
+"PO-Revision-Date: 2025-12-23 18:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -265,6 +265,11 @@ msgid "Argentinian PBA Report Custom Handler"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_sicore_report_handler
+msgid "Argentinian SICORE Report Custom Handler"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_sifere_report_handler
 msgid "Argentinian SIFERE Report Custom Handler"
 msgstr ""
@@ -318,6 +323,7 @@ msgstr ""
 #: code:addons/l10n_ar_account_reports/models/misiones_report.py:0
 #: code:addons/l10n_ar_account_reports/models/pba_report.py:0
 #: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
+#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
 #: code:addons/l10n_ar_account_reports/models/sifere_report.py:0
 #: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
 #: code:addons/l10n_ar_account_reports/models/tucuman_report.py:0
@@ -403,6 +409,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_misiones_report_handler__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_pba_report_handler__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_santa_fe_report_handler__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sicore_report_handler__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sifere_report_handler__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sircar_report_handler__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_tucuman_report_handler__display_name
@@ -507,6 +514,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_misiones_report_handler__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_pba_report_handler__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_santa_fe_report_handler__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sicore_report_handler__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sifere_report_handler__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sircar_report_handler__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_tucuman_report_handler__id
@@ -738,6 +746,11 @@ msgid "Purchase Perceptions"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sicore_report_profits_line
+msgid "Purchase Profits Withholdings"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_caba_report_caba_withholdings_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_mendoza_report_mendoza_withholdings_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_misiones_report_misiones_withholdings_line
@@ -779,6 +792,22 @@ msgid "Return creation wizard"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:account.return.type,name:l10n_ar_account_reports.sicore_return_type
+msgid "SICORE Ganancias (Agente)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report,name:l10n_ar_account_reports.l10n_ar_sicore_report
+msgid "SICORE Profits"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
+msgid "SICORE_profits_withholdings.txt"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report,name:l10n_ar_account_reports.l10n_ar_sifere_report
 msgid "SIFERE"
 msgstr ""
@@ -810,8 +839,30 @@ msgid "Sale Withholdings"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
+msgid "Sicore Profits Withholdings TXT"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_subtotal_noncurrent_assets
 msgid "Subtotal del activo no corriente"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
+msgid ""
+"The identification type \"%(identification_type)s\" does not have ARCA code "
+"set."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
+msgid ""
+"The partner \"%(partner_name)s\" (id %(partner_id)s) does not have the vat "
+"set."
 msgstr ""
 
 #. module: l10n_ar_account_reports
