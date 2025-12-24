@@ -1,8 +1,29 @@
-from odoo import models
+from odoo import fields, models
 
 
 class AccountReturn(models.Model):
     _inherit = "account.return"
+
+    def _get_closing_report_options(self):
+        """Extends to handle sub-monthly periods like fortnightly.
+
+        For sub-monthly periods, we use 'custom' filter instead of 'custom_return_period'
+        to avoid JS errors when months_per_period is 0. We also set months_per_period to 1
+        to prevent division by zero errors in the JS filters component.
+        """
+        options = super()._get_closing_report_options()
+
+        # For sub-monthly periods, use 'custom' filter and fake months_per_period
+        # to avoid JS calculation errors with division by 0
+        if self.type_id._is_sub_monthly_period(self.company_id):
+            options["date"]["filter"] = "custom"
+            options["date"]["date_from"] = fields.Date.to_string(self.date_from)
+            # Set months_per_period to 1 to avoid JS division by zero errors
+            # The 'custom' filter won't use this value anyway
+            if "return_periodicity" in options:
+                options["return_periodicity"]["months_per_period"] = 1
+
+        return options
 
     def _get_vat_closing_entry_additional_domain(self):
         # EXTENDS account_reports
@@ -76,6 +97,12 @@ class AccountReturn(models.Model):
                 "|",
                 ("tax_line_id.type_tax_use", "=", "sale"),
                 ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+            ]
+        elif self.type_external_id == "l10n_ar_account_reports.sicore_return_type":
+            domain += [
+                ("tax_line_id.l10n_ar_tax_type", "in", ["earnings", "earnings_scale"]),
+                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+                ("tax_line_id.country_code", "=", "AR"),
             ]
         return domain
 

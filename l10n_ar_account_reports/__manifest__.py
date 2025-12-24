@@ -58,6 +58,11 @@
         "demo/res_partner_demo.xml",
         "demo/account_demo.xml",
     ],
+    "assets": {
+        "web.assets_backend": [
+            "l10n_ar_account_reports/static/src/**/*",
+        ],
+    },
     "test": [],
     "installable": True,
     "auto_install": True,
