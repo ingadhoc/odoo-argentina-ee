@@ -106,6 +106,16 @@ class AccountReturn(models.Model):
             ]
         return domain
 
+    def _add_tax_group_closing_items(self, tax_group_subtotal):
+        # EXTENDS account_reports
+        line_ids_vals = super()._add_tax_group_closing_items(tax_group_subtotal)
+        if self.type_id.payment_partner_id:
+            for line_val in line_ids_vals:
+                vals = line_val[2]
+                if not vals.get("partner_id"):
+                    vals["partner_id"] = self.type_id.payment_partner_id.id
+        return line_ids_vals
+
     def _run_checks(self, check_codes_to_ignore):
         if "l10n_ar_account_reports." in self.type_external_id:
             # por ahora ignoramos todos los checks nativos para simplificar
@@ -143,3 +153,34 @@ class AccountReturn(models.Model):
                 if company.tax_lock_date != original_date:
                     company.sudo().tax_lock_date = original_date
         return res
+
+    def _get_pay_wizard(self):
+        # EXTENDS account_reports
+        if self.company_id.country_id.code == "AR" and self.is_tax_return and self.type_id.payment_partner_id:
+            line_to_pay = self.closing_move_ids.line_ids.filtered(
+                lambda l: l.partner_id == self.type_id.payment_partner_id
+                and l.account_id.account_type in ("asset_receivable", "liability_payable")
+            )
+            if line_to_pay:
+                return line_to_pay.action_register_payment()
+        return super()._get_pay_wizard()
+
+    def _update_payment_state(self):
+        """Método manual para actualizar el estado basado en conciliación"""
+        for record in self:
+            if record.closing_move_ids:
+                lines_to_pay = record.closing_move_ids.line_ids.filtered(
+                    lambda l: l.partner_id == record.type_id.payment_partner_id
+                    and l.account_id.account_type in ("asset_receivable", "liability_payable")
+                )
+                if lines_to_pay:
+                    is_paid = all(lines_to_pay.mapped("reconciled"))
+                    workflow_field = record.type_id.states_workflow
+                    if is_paid and record.state != "paid":
+                        record.state = "paid"
+                    elif not is_paid and record.state == "paid":
+                        # Si se desconcilia, volvemos al estado anterior según el workflow
+                        if workflow_field == "generic_state_tax_report":
+                            record.state = "submitted"
+                        else:
+                            record.state = "reviewed"
