@@ -1,6 +1,5 @@
 from odoo import Command, _, fields, models
 from odoo.exceptions import UserError
-from odoo.tools import SQL
 
 
 class AccountReturn(models.Model):
@@ -26,6 +25,12 @@ class AccountReturn(models.Model):
                 options["return_periodicity"]["months_per_period"] = 1
 
         return options
+
+    def _get_vat_closing_entry_additional_domain(self):
+        # EXTENDS account_reports
+        domain = super()._get_vat_closing_entry_additional_domain()
+        domain += self._get_ar_tax_domain_for_return_type()
+        return domain
 
     def _get_ar_tax_domain_for_return_type(self):
         """
@@ -108,6 +113,12 @@ class AccountReturn(models.Model):
             ]
         return []
 
+    def _is_ar_simple_closing_return(self):
+        """Check if this return should use simple closing (no carryover, no tax_lock_date)."""
+        return self.company_id.country_id.code == "AR" and self.type_id.report_id != self.env.ref(
+            "l10n_ar_reports.l10n_ar_vat_book_report"
+        )
+
     def _proceed_with_locking(self, options_to_inject=None):
         """
         For Argentinian provincial tax returns and sicore, we handle the locking process differently.
@@ -117,14 +128,18 @@ class AccountReturn(models.Model):
         - Entonces por ahora directamente pisamos método. Otra alternativa es pisar "_generate_tax_closing_entries" y
         hacer como estabamos haciendo antes de este commit
         """
-        if self.type_id.report_id != self.env.ref("l10n_ar_reports.l10n_ar_vat_book_report"):
+        if self._is_ar_simple_closing_return():
             self._check_failing_checks_in_current_stage()
 
             options = {**self._get_closing_report_options(), **(options_to_inject or {})}
             # Generate PDF attachments
             self._generate_locking_attachments(options)
-            # Generate simple closing entry (no carryover)
-            self._generate_ar_simple_closing_entry(options)
+            # Generate closing entry using standard method (our _add_tax_group_closing_items override handles the simple counterpart)
+            self._generate_tax_closing_entries(options)
+
+            # Calculate amount to pay from the partner line in closing move
+            # For AR simple closing, period_amount_to_pay = total_amount_to_pay (no carryover)
+            self._compute_ar_amount_to_pay()
 
             # Set lock date and change state (but do NOT modify tax_lock_date)
             self.date_lock = fields.Date.context_today(self)
@@ -147,144 +162,93 @@ class AccountReturn(models.Model):
 
         return super()._proceed_with_locking(options_to_inject=options_to_inject)
 
-    def _generate_ar_simple_closing_entry(self, options):
+    def _compute_ar_amount_to_pay(self):
         """
-        Generate a simple closing entry for AR provincial tax returns.
-        This creates closing entries without the carryover mechanism (no "Balance tax current account" lines).
-        Uses the partner's property_account_payable_id instead of tax group accounts.
+        Compute the amount to pay for AR simple closing returns.
+        Since we don't use carryover, period_amount_to_pay = total_amount_to_pay.
+        The amount is calculated from the partner line in the closing move.
         """
-        self.ensure_one()
+        partner = self.type_id.payment_partner_id
+        if not partner or not self.closing_move_ids:
+            return
 
-        closing_move_vals = []
-        for company in self.company_ids:
-            line_ids_vals = self._compute_ar_simple_closing_lines(company, options)
+        # Find the line with the payment partner (the AP/AR line we created)
+        partner_lines = self.closing_move_ids.line_ids.filtered(
+            lambda l: l.partner_id == partner and l.account_id.account_type in ("asset_receivable", "liability_payable")
+        )
 
-            if not line_ids_vals:
-                continue
+        # Amount to pay is the negative of the balance (credit = positive amount to pay)
+        amount = -sum(partner_lines.mapped("balance"))
+        self.total_amount_to_pay = self.amount_to_pay_currency_id.round(amount)
+        self.period_amount_to_pay = self.total_amount_to_pay
 
-            closing_move_vals.append(
+    def _ensure_tax_group_configuration_for_tax_closing(self):
+        """
+        EXTENDS account_reports
+        Skip tax group account validation for AR simple closing returns,
+        since we use the partner's AP/AR accounts instead of tax group accounts.
+        """
+        if self._is_ar_simple_closing_return():
+            return
+        return super()._ensure_tax_group_configuration_for_tax_closing()
+
+    def _add_tax_group_closing_items(self, tax_group_subtotal):
+        """
+        EXTENDS account_reports
+        For AR simple closing returns, create a simple counterpart line using the partner's AP/AR account.
+        This avoids the carryover mechanism (no "Balance tax current account" lines).
+        """
+        if not self._is_ar_simple_closing_return():
+            return super()._add_tax_group_closing_items(tax_group_subtotal)
+
+        # Sum all tax group subtotals to get the total amount
+        total = sum(tax_group_subtotal.values())
+        currency = self.company_id.currency_id
+
+        if currency.is_zero(total):
+            return []
+
+        partner = self.type_id.payment_partner_id
+        if not partner:
+            raise UserError(
+                _(
+                    "The return type '%s' has no payment partner configured. "
+                    "Please set a Payment Partner on the return type.",
+                    self.type_id.name,
+                )
+            )
+
+        # Use partner's payable account for amounts to pay, receivable for credits
+        if total < 0:
+            # Amount to pay (negative balance means we owe taxes)
+            account = partner.with_company(self.company_id).property_account_payable_id
+            line_name = _("Tax to pay")
+        else:
+            # Credit in favor (positive balance means tax credit)
+            account = partner.with_company(self.company_id).property_account_receivable_id
+            line_name = _("Tax credit")
+
+        if not account:
+            raise UserError(
+                _(
+                    "The partner '%s' has no %s account configured for company '%s'.",
+                    partner.name,
+                    _("payable") if total < 0 else _("receivable"),
+                    self.company_id.name,
+                )
+            )
+
+        return [
+            Command.create(
                 {
-                    "company_id": company.id,
-                    "journal_id": company._get_tax_closing_journal().id,
-                    "date": self.date_to,
-                    "closing_return_id": self.id,
-                    "ref": self.name,
-                    "line_ids": line_ids_vals,
+                    "name": line_name,
+                    "debit": total if total > 0 else 0,
+                    "credit": abs(total) if total < 0 else 0,
+                    "account_id": account.id,
+                    "partner_id": partner.id,
                 }
             )
-
-        if closing_move_vals:
-            moves = self.env["account.move"].sudo().create(closing_move_vals)
-            moves.action_post()
-
-    def _compute_ar_simple_closing_lines(self, company, options):
-        """
-        Compute the closing entry lines for AR provincial tax returns.
-        Returns move line commands that:
-        - Reverse the balance of each tax account (like standard closing)
-        - Create a single payable/receivable line using the partner's AP/AR account
-        """
-        self.env.flush_all()
-
-        query = self.type_id.report_id._get_report_query(
-            options,
-            "strict_range",
-            domain=[("company_id", "=", company.id)] + self._get_ar_tax_domain_for_return_type(),
-        )
-
-        # Get tax name with translation support
-        tax_name = self.env["account.tax"]._field_to_sql("tax", "name")
-
-        query = SQL(
-            """
-            SELECT "account_move_line".tax_line_id as tax_id,
-                    %(tax_name)s as tax_name,
-                    "account_move_line".account_id,
-                    COALESCE(SUM("account_move_line".balance), 0) as amount
-            FROM account_tax tax, account_tax_repartition_line repartition, %(table_references)s
-            WHERE %(search_condition)s
-              AND tax.id = "account_move_line".tax_line_id
-              AND repartition.id = "account_move_line".tax_repartition_line_id
-              AND repartition.use_in_tax_closing
-            GROUP BY "account_move_line".tax_line_id, tax.name, "account_move_line".account_id
-            """,
-            tax_name=tax_name,
-            table_references=query.from_clause,
-            search_condition=query.where_clause,
-        )
-        self.env.cr.execute(query)
-        results = self.env.cr.dictfetchall()
-
-        move_vals_lines = []
-        total = 0
-        currency = company.currency_id
-
-        for result in results:
-            tax_name = result.get("tax_name")
-            account_id = result.get("account_id")
-            amt = result.get("amount", 0)
-
-            if currency.is_zero(amt):
-                continue
-
-            # Line to balance the tax account (reverse the balance)
-            move_vals_lines.append(
-                Command.create(
-                    {
-                        "name": tax_name,
-                        "debit": abs(amt) if amt < 0 else 0,
-                        "credit": amt if amt > 0 else 0,
-                        "account_id": account_id,
-                    }
-                )
-            )
-            total += amt
-
-        # Add the final payable/receivable line using partner's account
-        if not currency.is_zero(total) and move_vals_lines:
-            partner = self.type_id.payment_partner_id
-            if not partner:
-                raise UserError(
-                    _(
-                        "The return type '%s' has no payment partner configured. "
-                        "Please set a Payment Partner on the return type.",
-                        self.type_id.name,
-                    )
-                )
-
-            # Use partner's payable account for amounts to pay, receivable for credits
-            if total < 0:
-                # Amount to pay (negative balance means we owe taxes)
-                account = partner.with_company(company).property_account_payable_id
-                line_name = _("Tax to pay")
-            else:
-                # Credit in favor (positive balance means tax credit)
-                account = partner.with_company(company).property_account_receivable_id
-                line_name = _("Tax credit")
-
-            if not account:
-                raise UserError(
-                    _(
-                        "The partner '%s' has no %s account configured for company '%s'.",
-                        partner.name,
-                        _("payable") if total < 0 else _("receivable"),
-                        company.name,
-                    )
-                )
-
-            move_vals_lines.append(
-                Command.create(
-                    {
-                        "name": line_name,
-                        "debit": total if total > 0 else 0,
-                        "credit": abs(total) if total < 0 else 0,
-                        "account_id": account.id,
-                        "partner_id": partner.id,
-                    }
-                )
-            )
-
-        return move_vals_lines
+        ]
 
     def _run_checks(self, check_codes_to_ignore):
         if "l10n_ar_account_reports." in self.type_external_id:
