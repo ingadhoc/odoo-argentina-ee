@@ -115,13 +115,33 @@ class AccountReturn(models.Model):
 
     def _ensure_tax_group_configuration_for_tax_closing(self):
         """
-        EXTENDS account_reports
         Skip tax group account validation for AR simple closing returns,
         since we use the partner's AP/AR accounts instead of tax group accounts.
+        NOTA: esto de acá no suma tanto porque si se quiere liquidar el informde "vat" u otro igual se van a chequear
+        todas las cuentas
         """
         if self._is_ar_simple_closing_return():
             return
         return super()._ensure_tax_group_configuration_for_tax_closing()
+
+    def _get_tax_closing_payable_and_receivable_accounts(self):
+        """Eso es necesario para que los importes total_amount_to_pay y period_amount_to_pay se calcule bien"""
+        if self._is_ar_simple_closing_return():
+            partner = self.type_id.payment_partner_id
+            return partner.with_company(self.company_id).property_account_payable_id, partner.with_company(
+                self.company_id
+            ).property_account_receivable_id
+        return super()._get_tax_closing_payable_and_receivable_accounts()
+
+    def _on_post_submission_event(self):
+        """No queremos que luego de submit dispare directamente pago, prefiero que se haga click en en boton,
+        mas adelante se puede implementar un wizard de submit o similar como hacen otros heredando método action_submit
+        """
+        if self._is_ar_simple_closing_return():
+            if self.type_id.states_workflow == "generic_state_review_submit":
+                return self._mark_completed()
+            return
+        return super()._on_post_submission_event()
 
     def _add_tax_group_closing_items(self, tax_group_subtotal):
         """
@@ -183,7 +203,6 @@ class AccountReturn(models.Model):
 
     def _proceed_with_locking(self, options_to_inject=None):
         """
-        EXTENDS account_reports
         For Argentinian provincial tax returns (Ingresos Brutos), we handle the locking process differently.
         We don't want to set the tax_lock_date when validating the "asiento de liquidación".
         We temporarily store the current tax_lock_date, call super(), then restore it to prevent changes.
