@@ -120,36 +120,6 @@ class AccountReturn(models.Model):
             )
         return super()._run_checks(check_codes_to_ignore)
 
-    ####################################################################################################
-    ####  Tax Closing
-    ####################################################################################################
-    def _generate_tax_closing_entries(self, options):
-        """
-        Generates and compute a closing move for every companies of the return.
-        :param options: report options
-        :return: The closing moves.
-        """
-        self.ensure_one()
-        # self._ensure_tax_group_configuration_for_tax_closing()
-
-        closing_move_vals = []
-        for company in self.company_ids:
-            line_ids_vals, tax_group_subtotal = self.sudo()._compute_tax_closing_entry(company, options)
-            line_ids_vals += self.sudo()._add_tax_group_closing_items(tax_group_subtotal)
-            closing_move_vals.append(
-                {
-                    "company_id": company.id,  # Important to specify together with the journal, for branches
-                    "journal_id": company._get_tax_closing_journal().id,
-                    "date": self.date_to,
-                    "closing_return_id": self.id,
-                    "ref": self.name,
-                    "line_ids": line_ids_vals,
-                }
-            )
-
-        moves = self.env["account.move"].sudo().create(closing_move_vals)
-        moves.action_post()
-
     def _proceed_with_locking(self, options_to_inject=None):
         """
         EXTENDS account_reports
