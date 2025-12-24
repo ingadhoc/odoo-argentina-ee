@@ -36,8 +36,7 @@
         <field name="default_deadline_periodicity">monthly</field>
         <field name="auto_generate" eval="False"/>
         <field name="country_id" ref="base.ar"/>
-        <field name="deadline_days_delay">10</field>
-        <field name="default_deadline_days_delay">31</field>
+        <field name="default_deadline_days_delay">10</field>
         <field name="states_workflow">generic_state_review</field>
         <field name="payment_partner_id" ref="l10n_ar.partner_afip"/>
     </record>
