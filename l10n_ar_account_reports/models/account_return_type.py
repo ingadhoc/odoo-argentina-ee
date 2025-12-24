@@ -5,7 +5,7 @@
 import datetime
 
 from dateutil.relativedelta import relativedelta
-from odoo import fields, models
+from odoo import api, fields, models
 from odoo.tools.misc import format_date
 
 # Extended periods to include fortnightly (quincenal) for Argentina
@@ -146,3 +146,105 @@ class AccountReturnType(models.Model):
                 return f"{ordinal} Quincena {month_name} {period_from.year}"
 
         return super()._get_period_name(main_company, period_from, period_to, minimal, lang_code)
+
+    @api.model
+    def _generate_all_returns(self, country_code, main_company, tax_unit=None):
+        """
+        Generate all periodic returns for Argentina (AR).
+        Many returns are only created if there is activity (move lines with specific tags/taxes)
+        in the period, to avoid cluttering the UI with empty returns.
+        """
+        super()._generate_all_returns(country_code, main_company, tax_unit=tax_unit)
+
+        if country_code != "AR":
+            return
+
+        # Mapping of return types to their activity detection domains
+        # We use the same logic as the report lines to detect if there is activity
+        return_type_domains = {
+            "l10n_ar_account_reports.ar_pba_iibb_return_type": [
+                ("tax_line_id.l10n_ar_state_id.code", "=", "B"),
+                ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
+            ],
+            "l10n_ar_account_reports.ar_caba_iibb_return_type": [
+                ("tax_line_id.l10n_ar_state_id.code", "=", "C"),
+                ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
+            ],
+            "l10n_ar_account_reports.ar_mendoza_iibb_return_type": [
+                ("tax_line_id.l10n_ar_state_id.code", "=", "M"),
+                ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
+            ],
+            "l10n_ar_account_reports.ar_misiones_iibb_return_type": [
+                ("tax_line_id.l10n_ar_state_id.code", "=", "N"),
+                ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
+            ],
+            "l10n_ar_account_reports.ar_santa_fe_iibb_return_type": [
+                ("tax_line_id.l10n_ar_state_id.code", "=", "S"),
+                ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
+            ],
+            "l10n_ar_account_reports.ar_tucuman_iibb_return_type": [
+                ("tax_line_id.l10n_ar_state_id.code", "=", "T"),
+                ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
+            ],
+            "l10n_ar_account_reports.sicore_return_type": [
+                ("tax_line_id.l10n_ar_tax_type", "in", ["earnings", "earnings_scale"]),
+                ("tax_line_id.country_code", "=", "AR"),
+            ],
+            "l10n_ar_account_reports.ar_sifere_iibb_return_type": [
+                ("tax_line_id.l10n_ar_state_id", "!=", False),
+                ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
+            ],
+            "l10n_ar_account_reports.ar_sircar_iibb_return_type": [
+                ("tax_line_id.l10n_ar_state_id.code", "not in", ["C", "B", "T"]),
+                ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
+            ],
+            "l10n_ar_account_reports.ar_iva_iibb_return_type": [
+                ("tax_line_id.l10n_ar_state_id", "=", False),
+                ("tax_line_id.tax_group_id.l10n_ar_tribute_afip_code", "=", "06"),
+            ],
+        }
+
+        today = fields.Date.context_today(self)
+
+        for xml_id, domain in return_type_domains.items():
+            return_type = self.env.ref(xml_id, raise_if_not_found=False)
+            if not return_type:
+                continue
+
+            # We check activity for the previous period and the current one
+            # to ensure returns are created as soon as activity is detected.
+            months_offset = return_type._get_periodicity_months_delay(main_company)
+            # para periodos quincenales
+            days_offset = return_type._get_periodicity_days_delay(main_company)
+
+            if months_offset:
+                periods = [today, today - relativedelta(months=months_offset)]
+            elif days_offset:
+                periods = [today, today - relativedelta(days=days_offset)]
+            else:
+                periods = [today]
+
+            company_ids = (
+                self.env["account.return"].sudo()._get_company_ids(main_company, tax_unit, return_type.report_id)
+            )
+
+            for period_date in periods:
+                start, end = return_type._get_period_boundaries(main_company, period_date)
+
+                has_activity = (
+                    self.env["account.move.line"]
+                    .sudo()
+                    .search_count(
+                        [
+                            *domain,
+                            ("company_id", "in", company_ids.ids),
+                            ("date", ">=", start),
+                            ("date", "<=", end),
+                            ("parent_state", "=", "posted"),
+                        ],
+                        limit=1,
+                    )
+                )
+
+                if has_activity:
+                    return_type._try_create_return_for_period(start, main_company, tax_unit)
