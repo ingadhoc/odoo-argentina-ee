@@ -22,6 +22,7 @@ class L10n_ArSicoreReportHandler(models.AbstractModel):
             "action": "export_file",
             "action_param": "sicore_book_export_files_to_txt",
             "file_export_type": "TXT",
+            "branch_allowed": True,
         }
 
         options["buttons"].append(txt_export_button)
