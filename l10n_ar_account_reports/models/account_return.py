@@ -65,7 +65,9 @@ class AccountReturn(models.Model):
             domain += [
                 ("tax_line_id.l10n_ar_state_id.code", "=", "N"),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
+                "|",
                 ("tax_line_id.type_tax_use", "=", "sale"),
+                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
             ]
         elif self.type_external_id == "l10n_ar_account_reports.ar_santa_fe_iibb_return_type":
             domain += [
