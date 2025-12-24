@@ -49,10 +49,10 @@ class AccountReturn(models.Model):
         elif self.type_external_id == "l10n_ar_account_reports.ar_iva_iibb_return_type":
             domain += [
                 ("tax_line_id.l10n_ar_state_id", "=", False),
+                ("tax_line_id.tax_group_id.l10n_ar_tribute_afip_code", "=", "06"),
                 "|",
                 ("tax_line_id.l10n_ar_withholding_payment_type", "=", "customer"),
                 ("tax_line_id.type_tax_use", "=", "purchase"),
-                ("tax_line_id.tax_group_id.l10n_ar_tribute_afip_code", "=", "06"),
             ]
         elif self.type_external_id == "l10n_ar_account_reports.ar_mendoza_iibb_return_type":
             domain += [
@@ -70,16 +70,16 @@ class AccountReturn(models.Model):
             domain += [
                 ("tax_line_id.l10n_ar_state_id.code", "=", "S"),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
-                ("tax_line_id.type_tax_use", "=", "sale"),
                 "|",
+                ("tax_line_id.type_tax_use", "=", "sale"),
                 ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
             ]
         elif self.type_external_id == "l10n_ar_account_reports.ar_sifere_iibb_return_type":
             domain += [
                 ("tax_line_id.l10n_ar_state_id", "!=", False),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
-                ("tax_line_id.type_tax_use", "=", "purchase"),
                 "|",
+                ("tax_line_id.type_tax_use", "=", "purchase"),
                 ("tax_line_id.l10n_ar_withholding_payment_type", "=", "customer"),
             ]
         elif self.type_external_id == "l10n_ar_account_reports.ar_sircar_iibb_return_type":
