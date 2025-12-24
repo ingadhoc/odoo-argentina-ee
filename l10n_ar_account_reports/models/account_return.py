@@ -29,16 +29,10 @@ class AccountReturn(models.Model):
     def _get_vat_closing_entry_additional_domain(self):
         # EXTENDS account_reports
         domain = super()._get_vat_closing_entry_additional_domain()
-        domain += self._get_ar_tax_domain_for_return_type()
-        return domain
-
-    def _get_ar_tax_domain_for_return_type(self):
-        """
-        Returns the domain to filter tax move lines for the current return type.
-        Used both by _get_vat_closing_entry_additional_domain and _generate_ar_simple_closing_entry.
-        """
         if self.type_external_id == "l10n_ar_account_reports.ar_caba_iibb_return_type":
-            return [
+            # mod_tags = self.env.ref('l10n_es.mod_303').line_ids.expression_ids._get_matching_tags()
+            # domain.append(('tax_tag_ids', 'in', mod_tags.ids))
+            domain += [
                 ("tax_line_id.l10n_ar_state_id.code", "=", "C"),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
                 "|",
@@ -46,7 +40,7 @@ class AccountReturn(models.Model):
                 ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
             ]
         elif self.type_external_id == "l10n_ar_account_reports.ar_pba_iibb_return_type":
-            return [
+            domain += [
                 ("tax_line_id.l10n_ar_state_id.code", "=", "B"),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
                 "|",
@@ -54,7 +48,7 @@ class AccountReturn(models.Model):
                 ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
             ]
         elif self.type_external_id == "l10n_ar_account_reports.ar_iva_iibb_return_type":
-            return [
+            domain += [
                 ("tax_line_id.l10n_ar_state_id", "=", False),
                 ("tax_line_id.tax_group_id.l10n_ar_tribute_afip_code", "=", "06"),
                 "|",
@@ -62,19 +56,19 @@ class AccountReturn(models.Model):
                 ("tax_line_id.type_tax_use", "=", "purchase"),
             ]
         elif self.type_external_id == "l10n_ar_account_reports.ar_mendoza_iibb_return_type":
-            return [
+            domain += [
                 ("tax_line_id.l10n_ar_state_id.code", "=", "M"),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
                 ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
             ]
         elif self.type_external_id == "l10n_ar_account_reports.ar_misiones_iibb_return_type":
-            return [
+            domain += [
                 ("tax_line_id.l10n_ar_state_id.code", "=", "N"),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
                 ("tax_line_id.type_tax_use", "=", "sale"),
             ]
         elif self.type_external_id == "l10n_ar_account_reports.ar_santa_fe_iibb_return_type":
-            return [
+            domain += [
                 ("tax_line_id.l10n_ar_state_id.code", "=", "S"),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
                 "|",
@@ -82,7 +76,7 @@ class AccountReturn(models.Model):
                 ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
             ]
         elif self.type_external_id == "l10n_ar_account_reports.ar_sifere_iibb_return_type":
-            return [
+            domain += [
                 ("tax_line_id.l10n_ar_state_id", "!=", False),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
                 "|",
@@ -90,7 +84,7 @@ class AccountReturn(models.Model):
                 ("tax_line_id.l10n_ar_withholding_payment_type", "=", "customer"),
             ]
         elif self.type_external_id == "l10n_ar_account_reports.ar_sircar_iibb_return_type":
-            return [
+            domain += [
                 ("tax_line_id.l10n_ar_state_id.code", "not in", ["C", "B", "T"]),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
                 "|",
@@ -98,7 +92,7 @@ class AccountReturn(models.Model):
                 ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
             ]
         elif self.type_external_id == "l10n_ar_account_reports.ar_tucuman_iibb_return_type":
-            return [
+            domain += [
                 ("tax_line_id.l10n_ar_state_id.code", "=", "T"),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
                 "|",
@@ -106,81 +100,18 @@ class AccountReturn(models.Model):
                 ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
             ]
         elif self.type_external_id == "l10n_ar_account_reports.sicore_return_type":
-            return [
+            domain += [
                 ("tax_line_id.l10n_ar_tax_type", "in", ["earnings", "earnings_scale"]),
                 ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
                 ("tax_line_id.country_code", "=", "AR"),
             ]
-        return []
+        return domain
 
     def _is_ar_simple_closing_return(self):
         """Check if this return should use simple closing (no carryover, no tax_lock_date)."""
         return self.company_id.country_id.code == "AR" and self.type_id.report_id != self.env.ref(
             "l10n_ar_reports.l10n_ar_vat_book_report"
         )
-
-    def _proceed_with_locking(self, options_to_inject=None):
-        """
-        For Argentinian provincial tax returns and sicore, we handle the locking process differently.
-        - No queremos tener lock de fechas (Solo en tax return)
-        - No queremos que el asiento haga carryover de saldos (porque estamos compartiendo cuentas contables). Además
-        usamos la cuenta AP del partner del reporte
-        - Entonces por ahora directamente pisamos método. Otra alternativa es pisar "_generate_tax_closing_entries" y
-        hacer como estabamos haciendo antes de este commit
-        """
-        if self._is_ar_simple_closing_return():
-            self._check_failing_checks_in_current_stage()
-
-            options = {**self._get_closing_report_options(), **(options_to_inject or {})}
-            # Generate PDF attachments
-            self._generate_locking_attachments(options)
-            # Generate closing entry using standard method (our _add_tax_group_closing_items override handles the simple counterpart)
-            self._generate_tax_closing_entries(options)
-
-            # Calculate amount to pay from the partner line in closing move
-            # For AR simple closing, period_amount_to_pay = total_amount_to_pay (no carryover)
-            self._compute_ar_amount_to_pay()
-
-            # Set lock date and change state (but do NOT modify tax_lock_date)
-            self.date_lock = fields.Date.context_today(self)
-            self.state = "reviewed"
-
-            # Handle workflow
-            if self.type_id.states_workflow == "generic_state_review":
-                return self._mark_completed()
-
-            return {
-                "type": "ir.actions.client",
-                "tag": "display_notification",
-                "params": {
-                    "type": "success",
-                    "title": _("Checks Validated"),
-                    "message": _("Closing entry posted."),
-                    "next": {"type": "ir.actions.act_window_close"},
-                },
-            }
-
-        return super()._proceed_with_locking(options_to_inject=options_to_inject)
-
-    def _compute_ar_amount_to_pay(self):
-        """
-        Compute the amount to pay for AR simple closing returns.
-        Since we don't use carryover, period_amount_to_pay = total_amount_to_pay.
-        The amount is calculated from the partner line in the closing move.
-        """
-        partner = self.type_id.payment_partner_id
-        if not partner or not self.closing_move_ids:
-            return
-
-        # Find the line with the payment partner (the AP/AR line we created)
-        partner_lines = self.closing_move_ids.line_ids.filtered(
-            lambda l: l.partner_id == partner and l.account_id.account_type in ("asset_receivable", "liability_payable")
-        )
-
-        # Amount to pay is the negative of the balance (credit = positive amount to pay)
-        amount = -sum(partner_lines.mapped("balance"))
-        self.total_amount_to_pay = self.amount_to_pay_currency_id.round(amount)
-        self.period_amount_to_pay = self.total_amount_to_pay
 
     def _ensure_tax_group_configuration_for_tax_closing(self):
         """
@@ -249,6 +180,24 @@ class AccountReturn(models.Model):
                 }
             )
         ]
+
+    def _proceed_with_locking(self, options_to_inject=None):
+        """
+        EXTENDS account_reports
+        For Argentinian provincial tax returns (Ingresos Brutos), we handle the locking process differently.
+        We don't want to set the tax_lock_date when validating the "asiento de liquidación".
+        We temporarily store the current tax_lock_date, call super(), then restore it to prevent changes.
+        """
+        tax_lock_dates = {
+            company: company.tax_lock_date for company in self.company_ids.filtered(lambda c: c.country_id.code == "AR")
+        }
+        res = super()._proceed_with_locking(options_to_inject=options_to_inject)
+        if self._is_ar_simple_closing_return():
+            # Restore tax_lock_date to prevent it from being modified by provincial returns
+            for company, original_date in tax_lock_dates.items():
+                if company.tax_lock_date != original_date:
+                    company.sudo().tax_lock_date = original_date
+        return res
 
     def _run_checks(self, check_codes_to_ignore):
         if "l10n_ar_account_reports." in self.type_external_id:
