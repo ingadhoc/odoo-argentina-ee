@@ -33,7 +33,7 @@ patch(AccountReportFilters.prototype, {
      * Override to handle sub-monthly periods safely.
      * Falls back to month display if months_per_period is 0.
     */
-   displayPeriod(periodType) {
+    displayPeriod(periodType) {
         if (periodType === "return_period") {
             const periodicitySettings = this.controller.cachedFilterOptions.return_periodicity;
             // Fall back to month for sub-monthly periods to avoid division by zero
