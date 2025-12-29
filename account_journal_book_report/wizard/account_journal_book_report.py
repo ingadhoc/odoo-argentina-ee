@@ -105,7 +105,8 @@ class AccountJournalBookReport(models.TransientModel):
         """Este método se llama desde el botón 'Imprimir' del wizard 'Libro Diario'"""
         self.ensure_one()
         if not self._context.get("bg_job"):
-            return self.bg_enqueue("action_check_report")
+            res, _ = self.bg_enqueue("action_check_report")
+            return res
         else:
             data = {}
             data["ids"] = self.env.context.get("active_ids", [])
