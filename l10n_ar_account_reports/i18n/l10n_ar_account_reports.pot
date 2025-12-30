@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-29 11:49+0000\n"
-"PO-Revision-Date: 2025-12-29 11:49+0000\n"
+"POT-Creation-Date: 2025-12-30 20:21+0000\n"
+"PO-Revision-Date: 2025-12-30 20:21+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -399,6 +399,7 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_chart_template__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_move_line__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partial_reconcile__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partner_ledger_report_handler__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_creation_wizard__display_name
@@ -504,6 +505,7 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_chart_template__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_move_line__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partial_reconcile__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partner_ledger_report_handler__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_creation_wizard__id
@@ -695,6 +697,11 @@ msgid "Otros ingresos y egresos"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_account_partial_reconcile
+msgid "Partial Reconcile"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_long_term_investments
 msgid "Participaciones permanentes en sociedades"
 msgstr ""
@@ -847,6 +854,18 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid "Tax credit"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid "Tax to pay"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
 #: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
 msgid ""
 "The identification type \"%(identification_type)s\" does not have ARCA code "
@@ -859,6 +878,20 @@ msgstr ""
 msgid ""
 "The partner \"%(partner_name)s\" (id %(partner_id)s) does not have the vat "
 "set."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid "The partner '%s' has no %s account configured for company '%s'."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid ""
+"The return type '%s' has no payment partner configured. Please set a Payment"
+" Partner on the return type."
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -916,4 +949,16 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_sales
 msgid "Ventas netas de bienes y servicios"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid "payable"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid "receivable"
 msgstr ""
