@@ -168,7 +168,7 @@ class AccountChartTemplate(models.AbstractModel):
                 "invoice_date": invoice_date,
                 "l10n_latam_document_number": f"1-100{idx}",
                 "invoice_line_ids": [
-                    Command.create({"product_id": "product.product_product_2", "quantity": 1, "price_unit": 100.0})
+                    Command.create({"product_id": "product.product_product_2", "quantity": 1, "price_unit": 300000.0})
                 ],
             }
         # despacho
@@ -182,7 +182,7 @@ class AccountChartTemplate(models.AbstractModel):
                     {
                         "product_id": "product.product_product_2",
                         "quantity": 1,
-                        "price_unit": 100.0,
+                        "price_unit": 300000.0,
                         "tax_ids": [
                             Command.set(
                                 [
@@ -212,7 +212,7 @@ class AccountChartTemplate(models.AbstractModel):
                     {
                         "product_id": "product.product_product_2",
                         "quantity": 1,
-                        "price_unit": 100.0,
+                        "price_unit": 300000.0,
                         "tax_ids": [
                             Command.set(
                                 [
