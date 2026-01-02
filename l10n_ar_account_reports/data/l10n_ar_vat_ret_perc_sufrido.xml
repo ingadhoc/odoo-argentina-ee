@@ -30,14 +30,9 @@
         </field>
     </record>
 
-    <record id="ar_iva_iibb_return_type" model="account.return.type">
-        <field name="name">IVA Sufrido (Agente)</field>
-        <field name="report_id" ref="l10n_ar_account_reports.l10n_ar_iva_report"/>
-        <field name="default_deadline_periodicity">monthly</field>
-        <field name="auto_generate" eval="False"/>
-        <field name="country_id" ref="base.ar"/>
-        <field name="default_deadline_days_delay">10</field>
-        <field name="states_workflow">generic_state_review</field>
+    <record id="l10n_ar_reports.ar_tax_return_type" model="account.return.type">
+        <field name="name">IVA</field>
         <field name="payment_partner_id" ref="l10n_ar.partner_afip"/>
+        <field name="default_deadline_days_delay">15</field>
     </record>
 </odoo>
