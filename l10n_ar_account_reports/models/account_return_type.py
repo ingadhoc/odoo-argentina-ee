@@ -198,10 +198,6 @@ class AccountReturnType(models.Model):
                 ("tax_line_id.l10n_ar_state_id.code", "not in", ["C", "B", "T"]),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
             ],
-            "l10n_ar_account_reports.ar_iva_iibb_return_type": [
-                ("tax_line_id.l10n_ar_state_id", "=", False),
-                ("tax_line_id.tax_group_id.l10n_ar_tribute_afip_code", "=", "06"),
-            ],
         }
 
         today = fields.Date.context_today(self)
