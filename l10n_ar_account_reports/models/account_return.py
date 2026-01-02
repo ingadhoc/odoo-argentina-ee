@@ -47,14 +47,6 @@ class AccountReturn(models.Model):
                 ("tax_line_id.type_tax_use", "=", "sale"),
                 ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
             ]
-        elif self.type_external_id == "l10n_ar_account_reports.ar_iva_iibb_return_type":
-            domain += [
-                ("tax_line_id.l10n_ar_state_id", "=", False),
-                ("tax_line_id.tax_group_id.l10n_ar_tribute_afip_code", "=", "06"),
-                "|",
-                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "customer"),
-                ("tax_line_id.type_tax_use", "=", "purchase"),
-            ]
         elif self.type_external_id == "l10n_ar_account_reports.ar_mendoza_iibb_return_type":
             domain += [
                 ("tax_line_id.l10n_ar_state_id.code", "=", "M"),
@@ -221,14 +213,16 @@ class AccountReturn(models.Model):
         return res
 
     def _run_checks(self, check_codes_to_ignore):
-        if "l10n_ar_account_reports." in self.type_external_id:
+        # if "l10n_ar_account_reports." in self.type_external_id:
+        # smplificamos check de todos los reportes argentinos
+        if self.company_id.country_id.code == "AR" and self.is_tax_return:
             # por ahora ignoramos todos los checks nativos para simplificar
             check_codes_to_ignore.update(
                 [
                     "check_bills_attachment",
-                    "check_draft_entries",
+                    # "check_draft_entries",  # este nos parece útil
                     "check_match_all_bank_entries",
-                    "check_tax_countries",
+                    "check_tax_countries",  # odoo chequea que el country de la FP sea igual al del partner, no le vemos utlidad
                     "check_company_data",
                 ]
             )
