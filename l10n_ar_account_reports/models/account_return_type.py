@@ -201,46 +201,34 @@ class AccountReturnType(models.Model):
         }
 
         today = fields.Date.context_today(self)
+        fy_dates = main_company.compute_fiscalyear_dates(today)
+        start_fy = fy_dates["date_from"]
+        end_fy = fy_dates["date_to"]
 
         for xml_id, domain in return_type_domains.items():
             return_type = self.env.ref(xml_id, raise_if_not_found=False)
             if not return_type:
                 continue
 
-            # We check activity for the previous period and the current one
-            # to ensure returns are created as soon as activity is detected.
-            months_offset = return_type._get_periodicity_months_delay(main_company)
-            # para periodos quincenales
-            days_offset = return_type._get_periodicity_days_delay(main_company)
-
-            if months_offset:
-                periods = [today, today - relativedelta(months=months_offset)]
-            elif days_offset:
-                periods = [today, today - relativedelta(days=days_offset)]
-            else:
-                periods = [today]
-
             company_ids = (
                 self.env["account.return"].sudo()._get_company_ids(main_company, tax_unit, return_type.report_id)
             )
 
-            for period_date in periods:
-                start, end = return_type._get_period_boundaries(main_company, period_date)
-
-                has_activity = (
-                    self.env["account.move.line"]
-                    .sudo()
-                    .search_count(
-                        [
-                            *domain,
-                            ("company_id", "in", company_ids.ids),
-                            ("date", ">=", start),
-                            ("date", "<=", end),
-                            ("parent_state", "=", "posted"),
-                        ],
-                        limit=1,
-                    )
+            # Check if there is activity in the current fiscal year
+            has_activity = (
+                self.env["account.move.line"]
+                .sudo()
+                .search_count(
+                    [
+                        *domain,
+                        ("company_id", "in", company_ids.ids),
+                        ("date", ">=", start_fy),
+                        ("date", "<=", end_fy),
+                        ("parent_state", "=", "posted"),
+                    ],
+                    limit=1,
                 )
+            )
 
-                if has_activity:
-                    return_type._try_create_return_for_period(start, main_company, tax_unit)
+            if has_activity:
+                return_type._try_create_returns_for_fiscal_year(main_company, tax_unit)
