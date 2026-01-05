@@ -42,7 +42,6 @@
         "data/tags_data.xml",
         "data/estado_resultados.xml",
         "data/balance_sheet.xml",
-        "views/menu_reports.xml",
         "data/sifere_report.xml",
         "data/sircar_report.xml",
         "data/pba_report.xml",
