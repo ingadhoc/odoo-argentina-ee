@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-30 20:21+0000\n"
-"PO-Revision-Date: 2025-12-30 20:21+0000\n"
+"POT-Creation-Date: 2026-01-05 13:33+0000\n"
+"PO-Revision-Date: 2026-01-05 13:33+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -469,15 +469,11 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:account.report,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial
-#: model:ir.actions.client,name:l10n_ar_account_reports.action_account_report_ar_estado_patrimonial
-#: model:ir.ui.menu,name:l10n_ar_account_reports.menu_l10n_ar_estado_patrimonial
 msgid "Estado Patrimonial"
 msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:account.report,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados
-#: model:ir.actions.client,name:l10n_ar_account_reports.action_account_report_ar_estado_resultados
-#: model:ir.ui.menu,name:l10n_ar_account_reports.menu_l10n_ar_estado_resultados
 msgid "Estado de Resultados"
 msgstr ""
 
@@ -562,11 +558,6 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:account.report,name:l10n_ar_account_reports.l10n_ar_iva_report
 msgid "IVA Sufrido"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.return.type,name:l10n_ar_account_reports.ar_iva_iibb_return_type
-msgid "IVA Sufrido (Agente)"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -771,11 +762,6 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_payroll_liabilities
 msgid "Remuneraciones y cargas sociales"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:ir.ui.menu,name:l10n_ar_account_reports.menu_l10n_ar_financial_reports
-msgid "Reportes Financieros Argentina"
 msgstr ""
 
 #. module: l10n_ar_account_reports
