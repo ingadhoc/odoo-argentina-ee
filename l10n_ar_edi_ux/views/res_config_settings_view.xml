@@ -1,0 +1,18 @@
+<odoo>
+
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="l10n_ar_edi.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Permite vincular correctamente la clave privada con el certificado, y forzar que el certificado se cree usando el create and edit -->
+            <field name="l10n_ar_afip_ws_crt_id" position="attributes">
+                <attribute name="context">{'default_private_key_id': l10n_ar_afip_ws_key_id}</attribute>
+                <attribute name="options">{'no_quick_create': True}</attribute>
+            </field>
+
+        </field>
+    </record>
+
+</odoo>
