@@ -43,14 +43,20 @@ class AccountJournal(models.Model):
 
             # Determinar las columnas según el tipo de diario
             # En ventas: "Nro. Doc. Receptor", en compras: "Nro. Doc. Emisor"
-            if self.type == "sale":
+            if self.type == "sale" or self.env.context.get("import_type") == "sale":
                 vat_column = "Nro. Doc. Receptor"
                 type_column = "Tipo Doc. Receptor"
                 name_column = "Denominación Receptor"
-            else:
+            elif self.type == "purchase" or self.env.context.get("import_type") == "purchase":
                 vat_column = "Nro. Doc. Emisor"
                 type_column = "Tipo Doc. Emisor"
                 name_column = "Denominación Emisor"
+            else:
+                raise UserError(
+                    _(
+                        "Se subio un archivo que no se corresponde ni con ventas ni con compras para importar facturas desde AFIP."
+                    )
+                )
 
             # Optimización: Convertir VAT a string de una vez
             df[vat_column] = df[vat_column].astype(int).astype(str)

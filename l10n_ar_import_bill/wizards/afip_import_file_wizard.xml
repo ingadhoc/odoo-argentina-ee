@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_afip_import_file_wizard_form" model="ir.ui.view">
+        <field name="name">afip.import.file.wizard.form</field>
+        <field name="model">afip.import.file.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Upload ARCA File">
+                <div class="alert alert-warning" role="status">
+                   <i class="fa fa-exclamation-triangle" title="Warning"/>
+                   <span>Importing sales from ARCA: Only invoices dated before the accounting start date will be imported.</span>
+                </div>
+
+                <group>
+                    <field name="company_id" invisible="1"/>
+                    <field name="journal_id"/>
+                    <field name="counterpart_account_id"/>
+                    <field name="file_data" filename="file_name"/>
+                    <field name="file_name" invisible="1"/>
+                </group>
+
+                <footer>
+                    <button name="action_process_file" type="object" string="Continue" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_afip_import_file_wizard" model="ir.actions.act_window">
+        <field name="name">Import Sales from ARCA</field>
+        <field name="res_model">afip.import.file.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

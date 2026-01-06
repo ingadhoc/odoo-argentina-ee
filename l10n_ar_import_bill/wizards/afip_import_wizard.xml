@@ -9,6 +9,11 @@
                    <i class="fa fa-info-circle" title="Info"/> <span invisible="total_bills_exists == 0">Invoices highlighted in yellow will not be created because they already exist. </span>
                 </div>
 
+                <div class="alert alert-warning" role="status" invisible="not context.get('from_settings')">
+                   <i class="fa fa-exclamation-triangle" title="Warning"/>
+                   <span>Importing sales from ARCA: Only invoices dated before the accounting start date will be imported.</span>
+                </div>
+
                 <group>
                     <group>
                     <field name="total_bills_to_create"  class="oe_inline"/>
@@ -17,7 +22,6 @@
                     <field name="total_bills_exists"  class="oe_inline"/>
                     </group>
                 </group>
-
                 <group>
                     <field name="auto_validate"/>
                 </group>
@@ -40,8 +44,6 @@
 
                     <button name="action_confirm" type="object" string="Crear Facturas" class="btn-primary"/>
                     <button string="Cancelar" special="cancel" class="btn-secondary"/>
-
-
 
                 </footer>
             </form>
