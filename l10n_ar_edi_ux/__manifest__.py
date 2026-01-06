@@ -1,6 +1,6 @@
 {
     "name": "Argentinian Electronic Invoicing UX",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.1.0",
     "category": "Localization/Argentina",
     "sequence": 14,
     "author": "ADHOC SA",
@@ -15,9 +15,11 @@
     ],
     "data": [
         "wizards/res_partner_update_from_padron_wizard_view.xml",
+        "views/certificate_certificate_view.xml",
         "views/res_partner_view.xml",
         "views/account_move_view.xml",
         "views/account_journal_view.xml",
+        "views/res_config_settings_view.xml",
         "views/l10n_ar_boarding_permission_view.xml",
         "security/ir.model.access.csv",
     ],

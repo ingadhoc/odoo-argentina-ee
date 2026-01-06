@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="certificate_certificate_view_form" model="ir.ui.view">
+        <field name="name">certificate_certificate_view_form.inherit.l10n_cl_edi</field>
+        <field name="model">certificate.certificate</field>
+        <field name="inherit_id" ref="certificate.certificate_certificate_view_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Almacenar y mostrar correctamente el nombre del archivo certificado -->
+            <field name="content" position="before">
+                <field name="content_filename" invisible="1"/><!-- Necesario para que se almacene el nombre del archivo -->
+            </field>
+            <field name="content" position="attributes">
+                <attribute name="filename">content_filename</attribute>
+            </field>
+
+            <!-- Esconder Public Key si es un Certificado argentino -->
+            <field name="public_key_id" position="attributes">
+                <attribute name="invisible" add="country_code == 'AR'" separator="or"/>
+            </field>
+
+            <!-- Esconder la contraseña del certificado (pkcs12_password) si es certificado argentino -->
+            <field name="pkcs12_password" position="attributes">
+                <attribute name="invisible" add="country_code == 'AR'" separator="or"/>
+            </field>
+
+        </field>
+    </record>
+</odoo>
