@@ -133,11 +133,16 @@ class AfipImportWizard(models.TransientModel):
 
             # Handle case when no VAT lines were created
             if not move_vals["line_ids"]:
-                # Si no encuentra IVA ni importe "No Gravado" agrega la linea como "IVA No Corresponde" o "IVA No Gravado"
+                # Si no encuentra IVA ni importe "No Gravado" agrega la linea como "IVA No Corresponde"
                 base_amount = line.amount_total
                 if line.otros_tributos > 0:
                     base_amount -= line.otros_tributos
 
+                if not tax_iva_no_corresponde:
+                    raise UserError(
+                        "No se encontró un impuesto de IVA No Corresponde. "
+                        "Debe crear un impuesto de compras con el grupo 'IVA No Corresponde'"
+                    )
                 move_vals["line_ids"].append(line._create_line(base_amount, [tax_iva_no_corresponde.id]))
 
             move = self.env["account.move"].create(move_vals)
