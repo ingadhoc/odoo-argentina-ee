@@ -11,9 +11,16 @@ class AfipImportWizard(models.TransientModel):
     _description = "Importador de Facturas de Proveedor desde Excel AFIP"
 
     line_ids = fields.One2many("afip.import.wizard.line", "wizard_id", string="Líneas de Facturas")
-    company_id = fields.Many2one("res.company", required=True)
+    company_id = fields.Many2one("res.company", required=True, default=lambda self: self.env.company)
     journal_id = fields.Many2one("account.journal", required=True)
     auto_validate = fields.Boolean(string="Autovalidar Facturas Importadas", default=False)
+    counterpart_account_id = fields.Many2one(
+        "account.account",
+        default=lambda self: self.env.company.get_unaffected_earnings_account(),
+        string="Counterpart Account",
+        help="Account used as counterpart when importing from settings",
+        domain="[('company_ids','=', company_id), ('active', '=', True)]",
+    )
     total_bills_to_create = fields.Integer(
         compute="_compute_bills_to_create",
         string="Total de Facturas a Crear",
@@ -23,13 +30,44 @@ class AfipImportWizard(models.TransientModel):
         string="Total de Facturas Existentes",
     )
 
+    def default_get(self, fields_list):
+        """Set default journal based on context"""
+        res = super().default_get(fields_list)
+
+        # Ensure company_id is set (either from context or current company)
+        if not res.get("company_id"):
+            res["company_id"] = self.env.company.id
+
+        if self.env.context.get("from_settings") and self.env.get("default_journal_id"):
+            res["journal_id"] = self.env.context.get("default_journal_id")
+
+        return res
+
     def _compute_bills_to_create(self):
         self.total_bills_to_create = len(self.line_ids.filtered(lambda l: not l.exists))
 
     def _compute_bills_exists(self):
         self.total_bills_exists = len(self.line_ids.filtered(lambda l: l.exists))
 
-    def action_confirm(self):
+    def action_confirm(self):  # noqa: C901
+        # Validate if importing from settings (sales from ARCA)
+        if self.env.context.get("from_settings") and self.env.context.get("require_counterpart_account"):
+            if not self.counterpart_account_id:
+                raise UserError(
+                    "Counterpart account is required when importing sales from ARCA. Please select an account."
+                )
+
+            # Check for invoices after accounting start date
+            if self.company_id.account_opening_date:
+                for line in self.line_ids.filtered(lambda l: not l.exists):
+                    if line.date_invoice and line.date_invoice >= self.company_id.account_opening_date:
+                        raise UserError(
+                            f"Cannot import invoice dated {line.date_invoice.strftime('%Y-%m-%d')} "
+                            f"because it is after the accounting start date "
+                            f"({self.company_id.account_opening_date.strftime('%Y-%m-%d')}). "
+                            "Only invoices before the accounting start date can be imported."
+                        )
+
         if all(line.exists for line in self.line_ids):
             return {
                 "type": "ir.actions.client",
@@ -63,25 +101,32 @@ class AfipImportWizard(models.TransientModel):
             base_domain + [("tax_group_id.l10n_ar_vat_afip_code", "=", "2")], limit=1
         )
 
+        # Determine if we should use counterpart account (when importing from settings with general journal)
+        use_counterpart = self.env.context.get("from_settings") and self.counterpart_account_id
+        counterpart_account_id = self.counterpart_account_id.id if use_counterpart else None
+
         for line in self.line_ids.filtered(lambda l: not l.exists):
             partner = line._get_partner_by_vat()
 
             document_type = line._get_document_type()
 
             currency = line._get_currency()
+
             move_type = line._get_move_type()
 
             move_vals = {
                 "move_type": move_type,
-                "l10n_latam_document_type_id": document_type.id,
                 "partner_id": partner.id,
-                "invoice_date": line.date_invoice,
-                "l10n_latam_document_number": line.invoice_number,
+                "date": line.date_invoice,
+                "ref": f"{document_type.name} {line.invoice_number}",
                 "currency_id": currency.id,
                 "journal_id": self.journal_id.id,
                 "company_id": self.company_id.id,
-                "l10n_ar_afip_auth_code": line.cae,
                 "line_ids": [],
+                "l10n_latam_document_type_id": document_type.id,
+                "invoice_date": line.date_invoice,
+                "l10n_latam_document_number": line.invoice_number,
+                "l10n_ar_afip_auth_code": line.cae,
             }
 
             # Agregamos la linea con IVA y otros tributos (si existen).
@@ -106,7 +151,9 @@ class AfipImportWizard(models.TransientModel):
                     )
 
                     if iva_tax:
-                        move_vals["line_ids"].append(line._create_line(neto_amount, [iva_tax.id]))
+                        move_vals["line_ids"].append(
+                            line._create_line(neto_amount, [iva_tax.id], counterpart_account_id)
+                        )
                     else:
                         raise UserError(
                             f"No se encontró un impuesto de IVA para la alícuota {vat_rate}%. "
@@ -120,7 +167,9 @@ class AfipImportWizard(models.TransientModel):
                         "No se encontró un impuesto de IVA Exento. "
                         "Debe crear un impuesto de compras con el grupo 'IVA Exento'."
                     )
-                move_vals["line_ids"].append(line._create_line(line.exento, [tax_iva_exento.id]))
+                move_vals["line_ids"].append(
+                    line._create_line(line.exento, [tax_iva_exento.id], counterpart_account_id)
+                )
 
             # Add line for "no gravado" if it has a value
             if not math.isnan(line.no_gravado) and line.no_gravado > 0:
@@ -129,15 +178,22 @@ class AfipImportWizard(models.TransientModel):
                         "No se encontró un impuesto de IVA No Gravado. "
                         "Debe crear un impuesto de compras con el grupo 'IVA No Gravado'."
                     )
-                move_vals["line_ids"].append(line._create_line(line.no_gravado, [tax_iva_no_gravado.id]))
+                move_vals["line_ids"].append(
+                    line._create_line(line.no_gravado, [tax_iva_no_gravado.id], counterpart_account_id)
+                )
 
             # Handle case when no VAT lines were created
             if not move_vals["line_ids"]:
-                # Si no encuentra IVA ni importe "No Gravado" agrega la linea como "IVA No Corresponde" o "IVA No Gravado"
+                # Si no encuentra IVA ni importe "No Gravado" agrega la linea como "IVA No Corresponde"
                 base_amount = line.amount_total
                 if line.otros_tributos > 0:
                     base_amount -= line.otros_tributos
 
+                if not tax_iva_no_corresponde:
+                    raise UserError(
+                        "No se encontró un impuesto de IVA No Corresponde. "
+                        "Debe crear un impuesto de compras con el grupo 'IVA No Corresponde'"
+                    )
                 move_vals["line_ids"].append(line._create_line(base_amount, [tax_iva_no_corresponde.id]))
 
             move = self.env["account.move"].create(move_vals)

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.l10n.ar.import.bill</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account_balance_import.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Import Sales from ARCA button below Set Periods -->
+            <xpath expr="//div[hasclass('mt16')][button[@name='action_open_fiscal_year_setup']]/button" position="after">
+                <div class="mt16" invisible="country_code != 'AR'">
+                    <div class="o_light_label">Import Sales from ARCA</div>
+                    <div class="text-muted">
+                        Import your sales invoices from ARCA Excel file.
+                    </div>
+                    <button type="object"
+                            name="action_import_sales_from_arca"
+                            class="btn-link p-0">
+                        Import your Sales from ARCA
+                    </button>
+                </div>
+                <div class="mt16" invisible="country_code != 'AR'">
+                    <div class="o_light_label">Import Purchases from ARCA</div>
+                    <div class="text-muted">
+                        Import your purchase invoices from ARCA Excel file.
+                    </div>
+                    <button type="object"
+                            name="action_import_purchases_from_arca"
+                            class="btn-link p-0">
+                        Import your Purchases from ARCA
+                    </button>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>
