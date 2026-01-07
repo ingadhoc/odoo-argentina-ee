@@ -286,6 +286,18 @@ msgstr "No puedes elegir una fecha futura como fecha de bloqueo"
 
 #. module: account_accountant_ux
 #. odoo-javascript
+#: code:addons/account_accountant_ux/static/src/components/account_report/filters/filters.js:0
+msgid "Show All"
+msgstr ""
+
+#. module: account_accountant_ux
+#. odoo-javascript
+#: code:addons/account_accountant_ux/static/src/components/account_report/filters/filters.js:0
+msgid "With Filters"
+msgstr ""
+
+#. module: account_accountant_ux
+#. odoo-javascript
 #: code:addons/account_accountant_ux/static/src/components/bank_reconciliation/button_list/assets.xml:0
 msgid ""
 "account_accountant_ux/static/src/components/bank_reconciliation/button_list/"
