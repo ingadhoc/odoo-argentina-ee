@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-12-16 15:17+0000\n"
+"POT-Creation-Date: 2026-01-07 13:50+0000\n"
 "PO-Revision-Date: 2025-12-11 18:11+0000\n"
 "Last-Translator: Mariana Torres <mt@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
@@ -255,6 +255,13 @@ msgid "Search: Journal Items to Match"
 msgstr ""
 
 #. module: account_accountant_ux
+#. odoo-javascript
+#: code:addons/account_accountant_ux/static/src/components/account_report/filters/filters.js:0
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__filter_show_all_custom
+msgid "Show All"
+msgstr ""
+
+#. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_partner__debit
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_users__debit
 msgid "Total Payable"
@@ -279,22 +286,16 @@ msgid "Total amount you have to pay to this vendor."
 msgstr "Importe total a pagar a este proveedor."
 
 #. module: account_accountant_ux
-#. odoo-python
-#: code:addons/account_accountant_ux/wizards/account_change_lock_date.py:0
-msgid "You cannot set a lock date in the future."
-msgstr "No puedes elegir una fecha futura como fecha de bloqueo"
-
-#. module: account_accountant_ux
-#. odoo-javascript
-#: code:addons/account_accountant_ux/static/src/components/account_report/filters/filters.js:0
-msgid "Show All"
-msgstr ""
-
-#. module: account_accountant_ux
 #. odoo-javascript
 #: code:addons/account_accountant_ux/static/src/components/account_report/filters/filters.js:0
 msgid "With Filters"
 msgstr ""
+
+#. module: account_accountant_ux
+#. odoo-python
+#: code:addons/account_accountant_ux/wizards/account_change_lock_date.py:0
+msgid "You cannot set a lock date in the future."
+msgstr "No puedes elegir una fecha futura como fecha de bloqueo"
 
 #. module: account_accountant_ux
 #. odoo-javascript
