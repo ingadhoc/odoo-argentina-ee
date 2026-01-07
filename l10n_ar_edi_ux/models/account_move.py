@@ -8,11 +8,13 @@ class AccountMove(models.Model):
 
     l10n_ar_afip_asoc_period_start = fields.Date(
         string="Associated Period Start",
+        copy=False,
         help="Set this field if it is you are reporting debit/credit note and have not related invoice."
         ' IMPORTANT: This is only applies on "Electronic Invoice - Web Service"',
     )
     l10n_ar_afip_asoc_period_end = fields.Date(
         string="Associated Perdio End",
+        copy=False,
         help="Set this field if it is you are reporting debit/credit note and have not related invoice."
         ' IMPORTANT: This is only applies on "Electronic Invoice - Web Service"',
     )
@@ -23,6 +25,10 @@ class AccountMove(models.Model):
         ondelete="restrict",
         help="Solo se envía esta información si la factura es de exportación y el 'Concepto AFIP' es 'Productos / Exportación definitiva de bienes'",
     )
+
+    # Esto se podria sugerir para hacerlo en odoo oficial
+    l10n_ar_afip_service_start = fields.Date(copy=False)
+    l10n_ar_afip_service_end = fields.Date(copy=False)
 
     def _found_related_invoice(self):
         """
