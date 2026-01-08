@@ -30,19 +30,6 @@ class AfipImportWizard(models.TransientModel):
         string="Total de Facturas Existentes",
     )
 
-    def default_get(self, fields_list):
-        """Set default journal based on context"""
-        res = super().default_get(fields_list)
-
-        # Ensure company_id is set (either from context or current company)
-        if not res.get("company_id"):
-            res["company_id"] = self.env.company.id
-
-        if self.env.context.get("from_settings") and self.env.get("default_journal_id"):
-            res["journal_id"] = self.env.context.get("default_journal_id")
-
-        return res
-
     def _compute_bills_to_create(self):
         self.total_bills_to_create = len(self.line_ids.filtered(lambda l: not l.exists))
 
@@ -117,7 +104,6 @@ class AfipImportWizard(models.TransientModel):
             move_vals = {
                 "move_type": move_type,
                 "partner_id": partner.id,
-                "date": line.date_invoice,
                 "ref": f"{document_type.name} {line.invoice_number}",
                 "currency_id": currency.id,
                 "journal_id": self.journal_id.id,

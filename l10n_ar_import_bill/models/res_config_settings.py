@@ -14,17 +14,11 @@ class ResConfigSettings(models.TransientModel):
                 "Please use 'Set Periods' button to configure your fiscal year."
             )
 
-        return {
-            "type": "ir.actions.act_window",
-            "name": "Import Sales from ARCA",
-            "res_model": "afip.import.file.wizard",
-            "view_mode": "form",
-            "target": "new",
-            "context": {
-                "default_company_id": self.company_id.id,
-                "import_type": "sale",
-            },
-        }
+        return (
+            self.env["afip.import.file.wizard"]
+            .with_context(default_company_id=self.company_id.id, import_type="sale")
+            ._get_records_action(name="Import Sales from ARCA", target="new")
+        )
 
     def action_import_purchases_from_arca(self):
         """Open wizard to import purchases from ARCA with counterpart account requirement"""
@@ -34,15 +28,8 @@ class ResConfigSettings(models.TransientModel):
                 "You must set fiscal periods first before importing purchases from ARCA. "
                 "Please use 'Set Periods' button to configure your fiscal year."
             )
-
-        return {
-            "type": "ir.actions.act_window",
-            "name": "Import Purchases from ARCA",
-            "res_model": "afip.import.file.wizard",
-            "view_mode": "form",
-            "target": "new",
-            "context": {
-                "default_company_id": self.company_id.id,
-                "import_type": "purchase",
-            },
-        }
+        return (
+            self.env["afip.import.file.wizard"]
+            .with_context(default_company_id=self.company_id.id, import_type="purchase")
+            ._get_records_action(name="Import Purchases from ARCA", target="new")
+        )
