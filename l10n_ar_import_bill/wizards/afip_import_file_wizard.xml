@@ -12,7 +12,7 @@
 
                 <group>
                     <field name="company_id" invisible="1"/>
-                    <field name="journal_id"/>
+                    <field name="journal_id" options="{'no_create': True}"/>
                     <field name="counterpart_account_id"/>
                     <field name="file_data" filename="file_name"/>
                     <field name="file_name" invisible="1"/>
@@ -26,10 +26,4 @@
         </field>
     </record>
 
-    <record id="action_afip_import_file_wizard" model="ir.actions.act_window">
-        <field name="name">Import Sales from ARCA</field>
-        <field name="res_model">afip.import.file.wizard</field>
-        <field name="view_mode">form</field>
-        <field name="target">new</field>
-    </record>
 </odoo>

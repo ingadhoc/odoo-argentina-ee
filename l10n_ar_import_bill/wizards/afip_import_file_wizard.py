@@ -41,6 +41,7 @@ class AfipImportFileWizard(models.TransientModel):
                         ("company_id", "=", wizard.company_id.id),
                         ("type", "in", import_type),
                         ("l10n_ar_is_pos", "=", False),
+                        ("l10n_latam_use_documents", "=", False if import_type == "sale" else True),
                     ]
                 )
                 wizard.available_journal_ids = journals
@@ -55,13 +56,7 @@ class AfipImportFileWizard(models.TransientModel):
         if not res.get("company_id"):
             res["company_id"] = self.env.company.id
 
-        journal_type = self.env.context.get("import_type")
         # Get first general journal
-        journal = self.env["account.journal"].search(
-            [("type", "=", journal_type), ("company_id", "=", res["company_id"])], limit=1
-        )
-        if journal:
-            res["journal_id"] = journal.id
         # Get default counterpart account
         res["counterpart_account_id"] = self.env.company.get_unaffected_earnings_account().id
 
