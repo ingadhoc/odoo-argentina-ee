@@ -19,7 +19,7 @@
 ##############################################################################
 {
     "name": "Accounting Reports Customized for Argentina",
-    "version": "19.0.1.6.0",
+    "version": "19.0.1.7.0",
     "category": "Accounting",
     "sequence": 14,
     "summary": "",
@@ -54,6 +54,7 @@
         "data/santa_fe_report.xml",
         "data/tucuman_report.xml",
         "data/sicore_report.xml",
+        "views/account_return_type_views.xml",
     ],
     "demo": [
         "demo/res_partner_demo.xml",

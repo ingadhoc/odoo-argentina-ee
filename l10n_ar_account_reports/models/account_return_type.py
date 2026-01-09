@@ -31,6 +31,12 @@ class AccountReturnType(models.Model):
     # le ponemos store porque en odoo es un campo solo related y si no hay cuenta bancaria no hay partner
     # issue en odoo: https://github.com/odoo/odoo/issues/240322
     payment_partner_id = fields.Many2one(store=True)
+    debt_account_id = fields.Many2one(
+        "account.account",
+        domain=[("active", "=", True), ("account_type", "in", ("asset_receivable", "liability_payable"))],
+        copy=False,
+    )
+    country_code = fields.Char(related="country_id.code", store=True, readonly=True)
 
     def _get_periodicity_months_delay(self, company):
         """Returns the number of months separating two returns.
