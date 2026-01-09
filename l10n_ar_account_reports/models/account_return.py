@@ -93,6 +93,27 @@ class AccountReturn(models.Model):
                 ("tax_line_id.type_tax_use", "=", "sale"),
                 ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
             ]
+        elif self.type_external_id == "l10n_ar_reports.ar_tax_return_type":
+            #     domain += [
+            #         ("tax_line_id.l10n_ar_state_id", "=", False),
+            #         ("tax_line_id.country_code", "=", "AR"),
+            #         ("tax_line_id.tax_group_id.l10n_ar_tribute_afip_code", "in", ["01", "06", "07"]),
+            #     ]
+            domain += [
+                "|",
+                # GRUPO A: Impuestos con código de IVA AFIP (Ventas o Compras)
+                "&",
+                ("tax_line_id.tax_group_id.l10n_ar_vat_afip_code", "!=", False),
+                ("tax_line_id.type_tax_use", "in", ["sale", "purchase"]),
+                # GRUPO B: Retenciones / Percepciones sufridas
+                "&",
+                "&",
+                ("tax_line_id.l10n_ar_state_id", "=", False),
+                ("tax_line_id.tax_group_id.l10n_ar_tribute_afip_code", "=", "06"),
+                "|",
+                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "customer"),
+                ("tax_line_id.type_tax_use", "=", "purchase"),
+            ]
         elif self.type_external_id == "l10n_ar_account_reports.sicore_return_type":
             domain += [
                 ("tax_line_id.l10n_ar_tax_type", "in", ["earnings", "earnings_scale"]),
@@ -103,9 +124,10 @@ class AccountReturn(models.Model):
 
     def _is_ar_simple_closing_return(self):
         """Check if this return should use simple closing (no carryover, no tax_lock_date)."""
-        return self.company_id.country_id.code == "AR" and self.type_id.report_id != self.env.ref(
-            "l10n_ar_reports.l10n_ar_vat_book_report"
-        )
+        return self.company_id.country_id.code == "AR" and self.type_id.report_id not in [
+            self.env.ref("l10n_ar_reports.l10n_ar_vat_book_report"),
+            self.env.ref("l10n_ar_account_reports.l10n_ar_iva_report"),
+        ]
 
     def _ensure_tax_group_configuration_for_tax_closing(self):
         """
@@ -204,12 +226,22 @@ class AccountReturn(models.Model):
         tax_lock_dates = {
             company: company.tax_lock_date for company in self.company_ids.filtered(lambda c: c.country_id.code == "AR")
         }
-        res = super()._proceed_with_locking(options_to_inject=options_to_inject)
+        # mandamos contexto para que no se postee si no queremos
+        res = super(AccountReturn, self.with_context(post_from_tax_return=True))._proceed_with_locking(
+            options_to_inject=options_to_inject
+        )
+
+        # por ahora no queremos ningun informe argentino que haga lock porque, IVA, que es el principal lo estamos
+        # dejando editable para que el usuario termine de acomodarlo, luego deberá hacer lock manualmente
         if self._is_ar_simple_closing_return():
             # Restore tax_lock_date to prevent it from being modified by provincial returns
             for company, original_date in tax_lock_dates.items():
                 if company.tax_lock_date != original_date:
                     company.sudo().tax_lock_date = original_date
+
+        # si no posteamos devolvemos acción
+        if self.closing_move_ids.filtered(lambda m: m.state == "draft"):
+            return self.closing_move_ids._get_records_action()
         return res
 
     def _run_checks(self, check_codes_to_ignore):

@@ -16,7 +16,7 @@ class AccountChartTemplate(models.AbstractModel):
         for company in companies:
             self = self.with_company(company)
             if not company.account_opening_date:
-                company.account_opening_date = fields.Date.today() + relativedelta(months=-1, day=1)
+                company.account_opening_date = fields.Date.today() + relativedelta(months=-2, day=1)
             demo_data = {
                 "account.fiscal.position": self._l10n_ar_get_demo_data_fiscal_position(),
                 "account.move": self._l10n_ar_get_demo_data_move(),
@@ -46,7 +46,7 @@ class AccountChartTemplate(models.AbstractModel):
             lambda x: x.move_type == "out_invoice" and x.state == "posted" and x.amount_residual > 0.0
         ):
             action_context = invoice.action_register_payment()["context"]
-            withholding_amount = 1.1
+            withholding_amount = 1000.50
             # para jugar con distintos casos usamos la provincia del cliente y suponemos que nos retiene de la misma jurisdicción
             tax = self.env["account.tax"].search(
                 [
@@ -57,11 +57,9 @@ class AccountChartTemplate(models.AbstractModel):
                 ],
                 limit=1,
             )
-            vals = {
-                "amount": invoice.amount_residual - withholding_amount if tax else invoice.amount_residual,
-                # queremos el pago en el mes pasado
-                "date": invoice.invoice_date,
-                "l10n_ar_withholding_line_ids": [
+
+            if tax:
+                l10n_ar_withholding_line_ids = [
                     Command.create(
                         {
                             "name": "0001-00000001",
@@ -70,8 +68,25 @@ class AccountChartTemplate(models.AbstractModel):
                         }
                     )
                 ]
-                if tax
-                else [],
+            else:
+                l10n_ar_withholding_line_ids = []
+
+            # para este partner creamos tmb retención de IVA
+            if invoice.partner_id.id == self.env.ref("l10n_ar_account_reports.res_partner_adhoc_pba").id:
+                l10n_ar_withholding_line_ids.append(
+                    Command.create(
+                        {
+                            "name": "0001-00000002",
+                            "tax_id": self.ref("ri_tax_withholding_vat_incurred").id,
+                            "amount": 10000.0,
+                        }
+                    )
+                )
+            vals = {
+                "amount": invoice.amount_residual - withholding_amount if tax else invoice.amount_residual,
+                # queremos el pago en el mes pasado
+                "date": invoice.invoice_date,
+                "l10n_ar_withholding_line_ids": l10n_ar_withholding_line_ids,
             }
             payment = self.env["account.payment"].with_context(**action_context).create(vals)
             payment.action_post()
@@ -148,26 +163,46 @@ class AccountChartTemplate(models.AbstractModel):
 
     @api.model
     def _l10n_ar_get_demo_data_move(self):
-        one_month_ago = fields.Date.today() + relativedelta(months=-1)
-        invoice_date = one_month_ago.strftime("%Y-%m-01")
-        provinces = ["mendoza", "misiones", "caba", "pba", "cordoba", "santa_fe", "tucuman"]
         result = {}
+        one_month_ago = fields.Date.today() + relativedelta(months=-1, day=1)
+        two_month_ago = fields.Date.today() + relativedelta(months=-2, day=1)
+        result["demo_invoice_two_months"] = {
+            "move_type": "out_invoice",
+            "partner_id": "l10n_ar_account_reports.res_partner_adhoc_pba",
+            "invoice_date": two_month_ago,
+            "invoice_line_ids": [
+                Command.create({"product_id": "product.product_product_2", "quantity": 1, "price_unit": 300000.0})
+            ],
+        }
+        result["demo_sup_invoice_customer_two_months"] = {
+            "move_type": "in_invoice",
+            "partner_id": "l10n_ar.res_partner_mipyme",
+            "invoice_date": two_month_ago,
+            "l10n_latam_document_number": "12-0001",
+            "invoice_line_ids": [
+                Command.create({"product_id": "product.product_product_2", "quantity": 1, "price_unit": 330000.0})
+            ],
+        }
+        provinces = ["mendoza", "misiones", "caba", "pba", "cordoba", "santa_fe", "tucuman"]
         for idx, province in enumerate(provinces, start=1):
             module = "l10n_ar_tax" if province in ["caba", "cordoba"] else "l10n_ar_account_reports"
 
             # create customer invoice
+            # usamos precio unitario más grande que en compras para que quede IVA a pagar
             result[f"demo_invoice_{province}"] = {
                 "move_type": "out_invoice",
                 "partner_id": f"{module}.res_partner_adhoc_{province}",
-                "invoice_date": invoice_date,
-                "invoice_line_ids": [Command.create({"product_id": "product.product_product_2", "quantity": 1})],
+                "invoice_date": one_month_ago,
+                "invoice_line_ids": [
+                    Command.create({"product_id": "product.product_product_2", "quantity": 1, "price_unit": 600000.0})
+                ],
             }
 
             # create supplier invoice
             result[f"demo_sup_invoice_{province}"] = {
                 "move_type": "in_invoice",
                 "partner_id": f"{module}.res_partner_adhoc_{province}",
-                "invoice_date": invoice_date,
+                "invoice_date": one_month_ago,
                 "l10n_latam_document_number": f"1-100{idx}",
                 "invoice_line_ids": [
                     Command.create({"product_id": "product.product_product_2", "quantity": 1, "price_unit": 300000.0})
@@ -177,7 +212,7 @@ class AccountChartTemplate(models.AbstractModel):
         result["demo_sup_invoice_suffered_1"] = {
             "move_type": "in_invoice",
             "partner_id": "l10n_ar.res_partner_mipyme",
-            "invoice_date": invoice_date,
+            "invoice_date": one_month_ago,
             "l10n_latam_document_number": "12-1234",
             "invoice_line_ids": [
                 Command.create(
@@ -207,7 +242,7 @@ class AccountChartTemplate(models.AbstractModel):
         result["demo_sup_invoice_suffered_2"] = {
             "move_type": "in_invoice",
             "partner_id": "l10n_ar.partner_afip",
-            "invoice_date": invoice_date,
+            "invoice_date": one_month_ago,
             "l10n_latam_document_number": "1234567890123456",
             "invoice_line_ids": [
                 Command.create(
