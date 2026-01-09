@@ -28,6 +28,9 @@ class AccountReturnType(models.Model):
     default_deadline_periodicity = fields.Selection(
         selection_add=L10N_AR_PERIODS,
     )
+    # le ponemos store porque en odoo es un campo solo related y si no hay cuenta bancaria no hay partner
+    # issue en odoo: https://github.com/odoo/odoo/issues/240322
+    payment_partner_id = fields.Many2one(store=True)
 
     def _get_periodicity_months_delay(self, company):
         """Returns the number of months separating two returns.
