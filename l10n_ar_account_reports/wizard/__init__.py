@@ -3,3 +3,4 @@
 # directory
 ##############################################################################
 from . import return_creation_wizard
+from . import inflation_adjustment

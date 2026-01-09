@@ -55,6 +55,10 @@
         "data/santa_fe_report.xml",
         "data/tucuman_report.xml",
         "data/sicore_report.xml",
+        "security/ir.model.access.csv",
+        "data/inflation_adjustment_index.xml",
+        "views/inflation_adjustment_index_view.xml",
+        "wizard/inflation_adjustment_view.xml",
     ],
     "demo": [
         "demo/res_partner_demo.xml",

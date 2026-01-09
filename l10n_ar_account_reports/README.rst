@@ -33,6 +33,10 @@ This functionality is essential for fiscal compliance in Argentina, as the repor
 - Generates a PDF report with detailed listing of pending checks
 - Archivos para declaración de distintos impuestos (principalmente percepciones y retenciones)
 
+**Inflation adjustment index management**
+
+Provides a model to manage inflation adjustment indices, which are used to adjust amounts for inflation. The model ensures that only one index can be set per month and that the date of the index corresponds to the first day of the month. The indexes are updated automatically from https://www.facpce.org.ar/indices-facpce/ .
+
 Archivos para declaración de impuestos
 ======================================
 
