@@ -15,6 +15,7 @@ from . import sircar_report
 from . import l10n_ar_vat_ret_perc_sufrido
 from . import account_return
 from . import account_return_type
+from . import account_move
 from . import account_move_line
 from . import helpers
 from . import sicore_report

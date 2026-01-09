@@ -19,7 +19,7 @@
 ##############################################################################
 {
     "name": "Accounting Reports Customized for Argentina",
-    "version": "19.0.1.4.0",
+    "version": "19.0.1.5.0",
     "category": "Accounting",
     "sequence": 14,
     "summary": "",
@@ -28,6 +28,8 @@
     "license": "AGPL-3",
     "images": [],
     "depends": [
+        "accountant",  # en si este modulo no es necesario pero de alguna manera este modulo solo tiene sentido para
+        # bases que usan contabilida (tienen accountant)
         "account_reports",
         "l10n_ar_tax",
         "l10n_ar_withholding",
