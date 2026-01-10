@@ -281,15 +281,7 @@ class AfipImportWizard(models.TransientModel):
             "Facturas de Cliente Importadas" if self.journal_id.type == "sale" else "Facturas de Proveedor Importadas"
         )
 
-        return {
-            "type": "ir.actions.act_window",
-            "res_model": "account.move",
-            "view_mode": "list,form",
-            "name": title,
-            "domain": [("id", "in", new_moves.ids)],
-            "target": "current",
-            "views": [
-                [self.env.ref("l10n_ar_import_bill.view_account_move_list_bill_import").id, "list"],
-                [False, "form"],
-            ],
-        }
+        return new_moves._get_records_action(
+            name=title,
+            target="current",
+        )

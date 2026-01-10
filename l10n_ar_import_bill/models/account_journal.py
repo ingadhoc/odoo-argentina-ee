@@ -165,11 +165,7 @@ class AccountJournal(models.Model):
                 "Importación de Facturas de Cliente" if self.type == "sale" else "Importación de Facturas de Proveedor"
             )
 
-            return {
-                "name": wizard_name,
-                "type": "ir.actions.act_window",
-                "res_model": "afip.import.wizard",
-                "target": "new",
-                "views": [[self.env.ref("l10n_ar_import_bill.view_afip_import_wizard_form").id, "form"]],
-                "res_id": wizard.id,
-            }
+            return wizard._get_records_action(
+                name=wizard_name,
+                target="new",
+            )

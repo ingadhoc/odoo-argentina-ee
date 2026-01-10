@@ -11,7 +11,6 @@
     "data": [
         "security/ir.model.access.csv",
         "wizards/afip_import_wizard.xml",
-        "views/account_move.xml",
         "views/res_config_settings_views.xml",
     ],
     "installable": True,
