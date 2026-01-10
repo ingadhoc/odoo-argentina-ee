@@ -139,7 +139,7 @@ class AfipImportWizardLine(models.TransientModel):
     # Definimos la funcion que crea las lineas de factura
     # con el precio unitario y los impuestos correspondientes
 
-    def _create_line(self, price_unit, tax_ids, account_id=None):
+    def _create_line(self, price_unit, tax_ids):
         partner = self._get_partner_by_vat()
         vals = {
             "name": "Creado por importación de facturas",
@@ -148,6 +148,4 @@ class AfipImportWizardLine(models.TransientModel):
             "tax_ids": [(6, 0, tax_ids)],
             "partner_id": partner.id,
         }
-        if account_id:
-            vals["account_id"] = account_id
         return (0, 0, vals)

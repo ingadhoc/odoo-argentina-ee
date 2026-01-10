@@ -43,11 +43,11 @@ class AccountJournal(models.Model):
 
             # Determinar las columnas según el tipo de diario
             # En ventas: "Nro. Doc. Receptor", en compras: "Nro. Doc. Emisor"
-            if self.type == "sale" or self.env.context.get("import_type") == "sale":
+            if self.type == "sale":
                 vat_column = "Nro. Doc. Receptor"
                 type_column = "Tipo Doc. Receptor"
                 name_column = "Denominación Receptor"
-            elif self.type == "purchase" or self.env.context.get("import_type") == "purchase":
+            elif self.type == "purchase":
                 vat_column = "Nro. Doc. Emisor"
                 type_column = "Tipo Doc. Emisor"
                 name_column = "Denominación Emisor"
