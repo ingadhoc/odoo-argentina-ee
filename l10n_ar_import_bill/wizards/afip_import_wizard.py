@@ -176,9 +176,7 @@ class AfipImportWizard(models.TransientModel):
                     )
 
                     if iva_tax:
-                        move_vals["line_ids"].append(
-                            line._create_line(neto_amount, [iva_tax.id], counterpart_account_id)
-                        )
+                        move_vals["line_ids"].append(line._create_line(neto_amount, [iva_tax.id]))
                     else:
                         raise UserError(
                             f"No se encontró un impuesto de IVA para la alícuota {vat_rate}%. "
@@ -192,9 +190,7 @@ class AfipImportWizard(models.TransientModel):
                         "No se encontró un impuesto de IVA Exento. "
                         "Debe crear un impuesto de compras con el grupo 'IVA Exento'."
                     )
-                move_vals["line_ids"].append(
-                    line._create_line(line.exento, [tax_iva_exento.id], counterpart_account_id)
-                )
+                move_vals["line_ids"].append(line._create_line(line.exento, [tax_iva_exento.id]))
 
             # Add line for "no gravado" if it has a value
             if not math.isnan(line.no_gravado) and line.no_gravado > 0:
@@ -203,9 +199,7 @@ class AfipImportWizard(models.TransientModel):
                         "No se encontró un impuesto de IVA No Gravado. "
                         "Debe crear un impuesto de compras con el grupo 'IVA No Gravado'."
                     )
-                move_vals["line_ids"].append(
-                    line._create_line(line.no_gravado, [tax_iva_no_gravado.id], counterpart_account_id)
-                )
+                move_vals["line_ids"].append(line._create_line(line.no_gravado, [tax_iva_no_gravado.id]))
 
             # Handle case when no VAT lines were created
             if not move_vals["line_ids"]:
@@ -219,9 +213,7 @@ class AfipImportWizard(models.TransientModel):
                         "No se encontró un impuesto de IVA No Corresponde. "
                         "Debe crear un impuesto de compras con el grupo 'IVA No Corresponde'"
                     )
-                move_vals["line_ids"].append(
-                    line._create_line(base_amount, [tax_iva_no_corresponde.id]), counterpart_account_id
-                )
+                move_vals["line_ids"].append(line._create_line(base_amount, [tax_iva_no_corresponde.id]))
 
             move = self.env["account.move"].create(move_vals)
 
@@ -269,6 +261,15 @@ class AfipImportWizard(models.TransientModel):
 
                 # Actualizar los impuestos en el movimiento
                 invoice_taxes.action_update_tax()
+
+            # If importing from settings, all lines (except receivable/payable) should use counterpart account
+            if counterpart_account_id:
+                # Odoo genera las líneas de impuestos automáticamente en el create() usando las cuentas por defecto
+                # de los impuestos. Para forzar la cuenta de contrapartida sin que el motor de sincronización de Odoo
+                # las sobreescriba, usamos 'skip_invoice_sync' en el contexto.
+                move.line_ids.filtered(lambda x: x.display_type != "payment_term" and x.account_id).with_context(
+                    skip_invoice_sync=True
+                ).write({"account_id": counterpart_account_id})
 
             # Confirm the invoice only if auto_validate is True and the total matches line.amount_total
             if self.auto_validate and abs(move.amount_total - line.amount_total) <= 0.10 and line.amount_total > 0:
