@@ -1,23 +1,33 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* l10n_ar_import_bill
-# 
+#
 # Translators:
 # ADHOC - Bot <transbot@adhoc.com.ar>, 2025
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-14 13:51+0000\n"
+"POT-Creation-Date: 2026-01-10 15:26+0000\n"
 "PO-Revision-Date: 2025-11-14 13:51+0000\n"
 "Last-Translator: ADHOC - Bot <transbot@adhoc.com.ar>, 2025\n"
 "Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: es\n"
-"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
+"1 : 2;\n"
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_file_wizard_form
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
+msgid ""
+"<i class=\"fa fa-exclamation-triangle\" title=\"Warning\"/>\n"
+"                   <span>Importing sales from ARCA: Only invoices dated "
+"before the accounting start date will be imported.</span>"
+msgstr ""
 
 #. module: l10n_ar_import_bill
 #: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
@@ -28,18 +38,33 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_import_bill
+#: model:ir.model.fields,help:l10n_ar_import_bill.field_afip_import_wizard__counterpart_account_id
+msgid "Account used as counterpart when importing from settings"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__file_data
+msgid "Archivo ARCA Excel"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,help:l10n_ar_import_bill.field_afip_import_wizard__file_data
+msgid "Archivo Excel exportado desde ARCA"
+msgstr ""
+
+#. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__auto_validate
 msgid "Autovalidar Facturas Importadas"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_account_move_list_bill_import
-msgid "Bill Date"
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__cae
+msgid "CAE"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__cae
-msgid "CAE"
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_file_wizard_form
+msgid "Cancel"
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -50,6 +75,21 @@ msgstr ""
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__company_id
 msgid "Company"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model,name:l10n_ar_import_bill.model_res_config_settings
+msgid "Config Settings"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_file_wizard_form
+msgid "Continue"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__counterpart_account_id
+msgid "Counterpart Account"
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -73,22 +113,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_account_journal__display_name
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__display_name
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__display_name
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_res_config_settings__display_name
 msgid "Display Name"
 msgstr "Nombre para mostrar"
 
 #. module: l10n_ar_import_bill
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_account_move_list_bill_import
-msgid "Due Date"
-msgstr ""
-
-#. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__exento
 msgid "Exento"
-msgstr ""
-
-#. module: l10n_ar_import_bill
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_account_move_list_bill_import
-msgid "Facturas de Proveedor Importadas"
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -100,6 +131,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_account_journal__id
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__id
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__id
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_res_config_settings__id
 msgid "ID"
 msgstr ""
 
@@ -129,13 +161,38 @@ msgid "IVA 5%"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
-msgid "Importador de Facturas ARCA"
+#: model:ir.model,name:l10n_ar_import_bill.model_afip_import_wizard
+msgid "Import AFIP bills from xlsx"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model:ir.model,name:l10n_ar_import_bill.model_afip_import_wizard
-msgid "Importador de Facturas de Proveedor desde Excel AFIP"
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.res_config_settings_view_form
+msgid "Import Purchases from ARCA"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.res_config_settings_view_form
+msgid "Import Sales from ARCA"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.res_config_settings_view_form
+msgid "Import your Purchases from ARCA"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.res_config_settings_view_form
+msgid "Import your Sales from ARCA"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.res_config_settings_view_form
+msgid "Import your purchase invoices from ARCA Excel file."
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.res_config_settings_view_form
+msgid "Import your sales invoices from ARCA Excel file."
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -143,6 +200,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__journal_id
 msgid "Journal"
 msgstr "Diario"
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__journal_domain
+msgid "Journal Domain"
+msgstr ""
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__write_uid
@@ -225,8 +287,8 @@ msgid "No document type found for code: %s"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_account_move_list_bill_import
-msgid "Number"
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__file_name
+msgid "Nombre del Archivo"
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -245,13 +307,11 @@ msgid "Proveedor"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_account_move_list_bill_import
-msgid "Status"
-msgstr ""
-
-#. module: l10n_ar_import_bill
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_account_move_list_bill_import
-msgid "Tax Excluded"
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/models/account_journal.py:0
+msgid ""
+"Se subió un archivo que no se corresponde ni con ventas ni con compras para "
+"importar facturas desde AFIP."
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -271,7 +331,6 @@ msgstr ""
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__amount_total
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_account_move_list_bill_import
 msgid "Total"
 msgstr ""
 
@@ -293,11 +352,6 @@ msgstr ""
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__currency_rate
 msgid "Valor de cambio"
-msgstr ""
-
-#. module: l10n_ar_import_bill
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_account_move_list_bill_import
-msgid "Vendor"
 msgstr ""
 
 #. module: l10n_ar_import_bill
