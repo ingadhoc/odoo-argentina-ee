@@ -15,8 +15,6 @@ class AccountChartTemplate(models.AbstractModel):
     def _install_l10n_ar_account_reports_demo(self, companies):
         for company in companies:
             self = self.with_company(company)
-            if not company.account_opening_date:
-                company.account_opening_date = fields.Date.today() + relativedelta(months=-2, day=1)
             demo_data = {
                 "account.fiscal.position": self._l10n_ar_get_demo_data_fiscal_position(),
                 "account.move": self._l10n_ar_get_demo_data_move(),
@@ -27,6 +25,8 @@ class AccountChartTemplate(models.AbstractModel):
             )
             self._l10n_ar_post_load_demo_data()
             self._l10n_ar_create_payments()
+            if not company.account_opening_date:
+                company.account_opening_date = fields.Date.today() + relativedelta(months=-2, day=1)
 
     @api.model
     def _l10n_ar_create_payments(self):

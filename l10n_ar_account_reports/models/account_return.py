@@ -36,10 +36,9 @@ class AccountReturn(models.Model):
 
     def _is_ar_simple_closing_return(self):
         """Check if this return should use simple closing (no carryover, no tax_lock_date)."""
-        return self.company_id.country_id.code == "AR" and self.type_id.report_id not in [
-            self.env.ref("l10n_ar_reports.l10n_ar_vat_book_report"),
-            self.env.ref("l10n_ar_account_reports.l10n_ar_iva_report"),
-        ]
+        return self.company_id.country_id.code == "AR" and self.type_id == self.env.ref(
+            "l10n_ar_reports.ar_tax_return_type"
+        )
 
     def _ensure_tax_group_configuration_for_tax_closing(self):
         """
