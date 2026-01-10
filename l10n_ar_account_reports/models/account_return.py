@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 from odoo import Command, _, fields, models
 from odoo.exceptions import UserError
 
@@ -38,12 +36,10 @@ class AccountReturn(models.Model):
 
     def _is_ar_simple_closing_return(self):
         """Check if this return should use simple closing (no carryover, no tax_lock_date)."""
-        if self.company_id.country_id.code != "AR":
-            return False
-        # For Argentina, we prefer simple closing (no automatic odoo carryover)
-        # for almost all liquidation reports (IVA, IIBB, etc) to handle technical
-        # and unrestricted balances manually or via simple counter-part lines.
-        return True
+        return self.company_id.country_id.code == "AR" and self.type_id.report_id not in [
+            self.env.ref("l10n_ar_reports.l10n_ar_vat_book_report"),
+            self.env.ref("l10n_ar_account_reports.l10n_ar_iva_report"),
+        ]
 
     def _ensure_tax_group_configuration_for_tax_closing(self):
         """
@@ -78,11 +74,18 @@ class AccountReturn(models.Model):
     def _add_tax_group_closing_items(self, tax_group_subtotal):
         """
         EXTENDS account_reports
-        For AR simple closing returns, create counterpart lines based on Tax Group configuration.
-        This allows separating technical balance from unrestricted balance if different accounts are set.
+        For AR simple closing returns, create a simple counterpart line using the partner's AP/AR account.
+        This avoids the carryover mechanism (no "Balance tax current account" lines).
         """
         if not self._is_ar_simple_closing_return():
             return super()._add_tax_group_closing_items(tax_group_subtotal)
+
+        # Sum all tax group subtotals to get the total amount
+        total = sum(tax_group_subtotal.values())
+        currency = self.company_id.currency_id
+
+        if currency.is_zero(total):
+            return []
 
         partner = self.type_id.payment_partner_id
         if not partner:
@@ -94,60 +97,37 @@ class AccountReturn(models.Model):
                 )
             )
 
-        # Dictionary to group amounts by account_id
-        totals_by_account = defaultdict(float)
-        currency = self.company_id.currency_id
+        # Use partner's payable account for amounts to pay, receivable for credits
+        if total < 0:
+            # Amount to pay (negative balance means we owe taxes)
+            account = partner.with_company(self.company_id).property_account_payable_id
+            line_name = _("Tax to pay")
+        else:
+            # Credit in favor (positive balance means tax credit)
+            account = partner.with_company(self.company_id).property_account_receivable_id
+            line_name = _("Tax credit")
 
-        # tax_group_subtotal keys are (advance_account_id, receivable_account_id, payable_account_id)
-        # as returned by _compute_tax_closing_entry
-        for (adv_id, rec_id, pay_id), amount in tax_group_subtotal.items():
-            # Identify the account to use for this tax group
-            # We prioritize:
-            # 1. advance_tax_payment_account_id (if credit and it exists)
-            # 2. tax_receivable_account_id / tax_payable_account_id
-            # 3. fallback to partner properties
-            account_id = False
-            if amount > 0:  # Credit in favor (receivable)
-                # This is the key change: if we have an advance account (adv_id is not None),
-                # we use it. This allows separating Unrestricted Balance from Technical Balance.
-                # NOTA: igualmente por ahora no estamos seteando adv_id en el chart y seguimos usando la rec_id
-                account_id = adv_id or rec_id
-                if not account_id:
-                    account_id = partner.with_company(self.company_id).property_account_receivable_id.id
-            else:  # Debt (payable)
-                account_id = pay_id
-                if not account_id:
-                    account_id = partner.with_company(self.company_id).property_account_payable_id.id
-
-            if account_id:
-                totals_by_account[account_id] += amount
-
-        res = []
-        for account_id, total in totals_by_account.items():
-            if currency.is_zero(total):
-                continue
-
-            account = self.env["account.account"].browse(account_id)
-            # We keep the generic name if it's the partner property, otherwise use account name
-            if account_id == partner.with_company(self.company_id).property_account_payable_id.id:
-                line_name = _("Tax to pay")
-            elif account_id == partner.with_company(self.company_id).property_account_receivable_id.id:
-                line_name = _("Tax credit")
-            else:
-                line_name = account.name
-
-            res.append(
-                Command.create(
-                    {
-                        "name": line_name,
-                        "debit": total if total > 0 else 0,
-                        "credit": abs(total) if total < 0 else 0,
-                        "account_id": account_id,
-                        "partner_id": partner.id,
-                    }
+        if not account:
+            raise UserError(
+                _(
+                    "The partner '%s' has no %s account configured for company '%s'.",
+                    partner.name,
+                    _("payable") if total < 0 else _("receivable"),
+                    self.company_id.name,
                 )
             )
-        return res
+
+        return [
+            Command.create(
+                {
+                    "name": line_name,
+                    "debit": total if total > 0 else 0,
+                    "credit": abs(total) if total < 0 else 0,
+                    "account_id": account.id,
+                    "partner_id": partner.id,
+                }
+            )
+        ]
 
     def _proceed_with_locking(self, options_to_inject=None):
         """
