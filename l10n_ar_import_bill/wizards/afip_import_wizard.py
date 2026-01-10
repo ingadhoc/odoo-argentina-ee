@@ -1,25 +1,25 @@
 import math
 
-from odoo import fields, models
+from odoo import api, fields, models
 from odoo.exceptions import UserError
 
 
 class AfipImportWizard(models.TransientModel):
     _name = "afip.import.wizard"
     _description = "Import AFIP bills from xlsx"
-
-    _description = "Importador de Facturas de Proveedor desde Excel AFIP"
+    _check_company_auto = True
+    _check_company_domain = models.check_companies_domain_parent_of
 
     line_ids = fields.One2many("afip.import.wizard.line", "wizard_id", string="Líneas de Facturas")
     company_id = fields.Many2one("res.company", required=True, default=lambda self: self.env.company)
-    journal_id = fields.Many2one("account.journal", required=True)
+    journal_id = fields.Many2one("account.journal", required=True, check_company=True, domain="journal_domain")
     auto_validate = fields.Boolean(string="Autovalidar Facturas Importadas", default=False)
     counterpart_account_id = fields.Many2one(
         "account.account",
         default=lambda self: self.env.company.get_unaffected_earnings_account(),
         string="Counterpart Account",
         help="Account used as counterpart when importing from settings",
-        domain="[('company_ids','=', company_id), ('active', '=', True)]",
+        check_company=True,
     )
     total_bills_to_create = fields.Integer(
         compute="_compute_bills_to_create",
@@ -30,6 +30,46 @@ class AfipImportWizard(models.TransientModel):
         string="Total de Facturas Existentes",
     )
 
+    #####
+    # for initial import from settings
+    #####
+
+    file_data = fields.Binary(string="Archivo ARCA Excel", help="Archivo Excel exportado desde ARCA")
+    file_name = fields.Char(string="Nombre del Archivo")
+    journal_domain = fields.Binary(
+        compute="_compute_journal_domain",
+    )
+
+    @api.depends_context("import_type")
+    def _compute_journal_domain(self):
+        if self._context.get("import_type") == "sale":
+            domain = [("type", "in", "sale"), ("l10n_ar_is_pos", "=", False)]
+        elif self._context.get("import_type") == "purchase":
+            domain = [("type", "in", "purchase"), ("l10n_latam_use_documents", "=", True)]
+        else:
+            domain = []
+        self.journal_domain = domain
+
+    def action_process_file(self):
+        """Process the uploaded file and open the main import wizard"""
+        if not self.file_data:
+            raise UserError("Please upload an Excel file to import.")
+
+        # Create a temporary attachment
+        attachment = self.env["ir.attachment"].create(
+            {
+                "name": self.file_name or "import.xlsx",
+                "datas": self.file_data,
+            }
+        )
+        return self.journal_id.with_context(
+            initial_setup=True, default_counterpart_account_id=self.counterpart_account_id.id
+        ).import_bills_from_xls(attachment)
+
+    #####
+    # common code for both import from settings and from journal
+    #####
+
     def _compute_bills_to_create(self):
         self.total_bills_to_create = len(self.line_ids.filtered(lambda l: not l.exists))
 
@@ -38,7 +78,8 @@ class AfipImportWizard(models.TransientModel):
 
     def action_confirm(self):  # noqa: C901
         # Validate if importing from settings (sales from ARCA)
-        if self.env.context.get("from_settings") and self.env.context.get("require_counterpart_account"):
+        counterpart_account_id = None
+        if self.env.context.get("initial_setup"):
             if not self.counterpart_account_id:
                 raise UserError(
                     "Counterpart account is required when importing sales from ARCA. Please select an account."
@@ -54,6 +95,8 @@ class AfipImportWizard(models.TransientModel):
                             f"({self.company_id.account_opening_date.strftime('%Y-%m-%d')}). "
                             "Only invoices before the accounting start date can be imported."
                         )
+
+            counterpart_account_id = self.counterpart_account_id.id
 
         if all(line.exists for line in self.line_ids):
             return {
@@ -87,10 +130,6 @@ class AfipImportWizard(models.TransientModel):
         tax_iva_exento = self.env["account.tax"].search(
             base_domain + [("tax_group_id.l10n_ar_vat_afip_code", "=", "2")], limit=1
         )
-
-        # Determine if we should use counterpart account (when importing from settings with general journal)
-        use_counterpart = self.env.context.get("from_settings") and self.counterpart_account_id
-        counterpart_account_id = self.counterpart_account_id.id if use_counterpart else None
 
         for line in self.line_ids.filtered(lambda l: not l.exists):
             partner = line._get_partner_by_vat()
@@ -180,7 +219,9 @@ class AfipImportWizard(models.TransientModel):
                         "No se encontró un impuesto de IVA No Corresponde. "
                         "Debe crear un impuesto de compras con el grupo 'IVA No Corresponde'"
                     )
-                move_vals["line_ids"].append(line._create_line(base_amount, [tax_iva_no_corresponde.id]))
+                move_vals["line_ids"].append(
+                    line._create_line(base_amount, [tax_iva_no_corresponde.id]), counterpart_account_id
+                )
 
             move = self.env["account.move"].create(move_vals)
 

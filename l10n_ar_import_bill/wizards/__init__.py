@@ -4,4 +4,3 @@
 ##############################################################################
 from . import afip_import_wizard
 from . import afip_import_wizard_line
-from . import afip_import_file_wizard

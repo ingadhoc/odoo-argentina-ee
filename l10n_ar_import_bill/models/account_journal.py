@@ -54,7 +54,7 @@ class AccountJournal(models.Model):
             else:
                 raise UserError(
                     _(
-                        "Se subio un archivo que no se corresponde ni con ventas ni con compras para importar facturas desde AFIP."
+                        "Se subió un archivo que no se corresponde ni con ventas ni con compras para importar facturas desde AFIP."
                     )
                 )
 
