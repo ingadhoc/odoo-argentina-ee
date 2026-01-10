@@ -15,9 +15,13 @@ class ResConfigSettings(models.TransientModel):
             )
 
         return (
-            self.env["afip.import.file.wizard"]
+            self.env["afip.import.wizard"]
             .with_context(default_company_id=self.company_id.id, import_type="sale")
-            ._get_records_action(name="Import Sales from ARCA", target="new")
+            ._get_records_action(
+                name="Import Sales from ARCA",
+                target="new",
+                views=[(self.env.ref("l10n_ar_import_bill.view_afip_import_file_wizard_form").id, "form")],
+            )
         )
 
     def action_import_purchases_from_arca(self):
@@ -29,7 +33,11 @@ class ResConfigSettings(models.TransientModel):
                 "Please use 'Set Periods' button to configure your fiscal year."
             )
         return (
-            self.env["afip.import.file.wizard"]
+            self.env["afip.import.wizard"]
             .with_context(default_company_id=self.company_id.id, import_type="purchase")
-            ._get_records_action(name="Import Purchases from ARCA", target="new")
+            ._get_records_action(
+                name="Import Purchases from ARCA",
+                target="new",
+                views=[(self.env.ref("l10n_ar_import_bill.view_afip_import_file_wizard_form").id, "form")],
+            )
         )

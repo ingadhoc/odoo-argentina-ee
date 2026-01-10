@@ -1,4 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 afip_import_wizard,afip.import.wizard,model_afip_import_wizard,account.group_account_invoice,1,1,1,0
 afip_import_wizard_line,afip.import.wizard.line,model_afip_import_wizard_line,account.group_account_invoice,1,1,1,0
-afip_import_file_wizard,afip.import.file.wizard,model_afip_import_file_wizard,account.group_account_invoice,1,1,1,0
