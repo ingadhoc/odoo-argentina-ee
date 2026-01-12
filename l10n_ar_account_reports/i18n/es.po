@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-05 13:33+0000\n"
+"POT-Creation-Date: 2026-01-12 13:26+0000\n"
 "PO-Revision-Date: 2025-12-11 18:10+0000\n"
 "Last-Translator: Mariana Torres <mt@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
@@ -22,6 +22,31 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == "
 "0) ? 1 : 2);\n"
 "X-Generator: Weblate 5.10.4\n"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_debito_fiscal
+msgid "(+) Débito Fiscal (Ventas)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_credito_fiscal
+msgid "(-) Crédito Fiscal (Compras)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_iva_perceptions_line
+msgid "(-) Percepciones Sufridas"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_iva_withholdings_line
+msgid "(-) Retenciones Sufridas"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_saldo_tecnico
+msgid "(=) Saldo Técnico (1er Párrafo)"
+msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_costo_ventas
@@ -474,6 +499,7 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_chart_template__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_move__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_move_line__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partial_reconcile__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partner_ledger_report_handler__display_name
@@ -576,6 +602,7 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_chart_template__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_move__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_move_line__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partial_reconcile__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partner_ledger_report_handler__id
@@ -633,7 +660,7 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:account.report,name:l10n_ar_account_reports.l10n_ar_iva_report
-msgid "IVA Sufrido"
+msgid "IVA"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -651,6 +678,11 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_temp_investments
 msgid "Inversiones temporarias"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_account_move
+msgid "Journal Entry"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -684,6 +716,11 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_goodwill
 msgid "Llave de negocio"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_total
+msgid "Monto a Pagar O Saldo Libre Disponibilidad"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -797,6 +834,11 @@ msgid "Patrimonio neto"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__payment_partner_id
+msgid "Payment Partner"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__deadline_periodicity
 msgid "Periodicity"
 msgstr ""
@@ -817,7 +859,6 @@ msgid "Préstamos"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_iva_perceptions_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sifere_report_sifere_perceptions_line
 msgid "Purchase Perceptions"
 msgstr ""
