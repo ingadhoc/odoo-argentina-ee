@@ -14,6 +14,12 @@
                 <field name='l10n_ar_boarding_permission_ids' widget="many2many_tags" invisible="l10n_ar_afip_ws != 'wsfex'" options="{'no_quick_create': True}"/>
                 <button name="check_valid_boarding_permission" string="Validar permisos de embarque" type="object" invisible="l10n_ar_afip_ws != 'wsfex'" icon="fa-arrow-right" class="oe_link" colspan="2"/>
             </field>
+
+            <!-- Cambiamos comportamiento de Odoo, movemos el campo Resultado ARCA a la pestaña ARCA como estaba previo a este cambio https://github.com/odoo/enterprise/commit/792907aad38ad283f923680222afe2b51ea5f0dd -->
+            <xpath expr="//page[@name='afip']/group/label" position="before">
+                <field name="l10n_ar_afip_result" position="move"/>
+            </xpath>
+
         </field>
     </record>
 
