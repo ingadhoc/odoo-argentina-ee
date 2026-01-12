@@ -36,7 +36,7 @@ class AccountReturn(models.Model):
 
     def _is_ar_simple_closing_return(self):
         """Check if this return should use simple closing (no carryover, no tax_lock_date)."""
-        return self.company_id.country_id.code == "AR" and self.type_id == self.env.ref(
+        return self.company_id.country_id.code == "AR" and self.type_id != self.env.ref(
             "l10n_ar_reports.ar_tax_return_type"
         )
 
@@ -152,6 +152,11 @@ class AccountReturn(models.Model):
 
         # si no posteamos devolvemos acción
         if self.closing_move_ids.filtered(lambda m: m.state == "draft"):
+            # para el libro de IVA asignamos también el partner si está definido
+            if self.type_id == self.env.ref("l10n_ar_reports.ar_tax_return_type") and self.type_id.payment_partner_id:
+                self.closing_move_ids.line_ids.filtered(
+                    lambda l: l.account_id.account_type in ("asset_receivable", "liability_payable")
+                ).partner_id = self.type_id.payment_partner_id.id
             return self.closing_move_ids._get_records_action()
         return res
 
