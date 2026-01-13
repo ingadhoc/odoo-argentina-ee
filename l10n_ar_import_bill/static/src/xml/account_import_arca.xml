@@ -3,28 +3,28 @@
 <templates>
 
     <t t-name="account_base_import.accountImportTemplate" t-inherit="account_base_import.accountImportTemplate" t-inherit-mode="extension">
-        <!-- Add Import Sales from ARCA option after Journals Dashboard -->
-        <xpath expr="//li[.//h3[text()='Journals Dashboard']]" position="after">
-            <li class="col-lg-6 pt-4">
+        <!-- Import Sales from ARCA at the end of left column -->
+        <xpath expr="//div[@name='left_column']" position="inside">
+            <div class="pt-4" t-if="countryCode == 'AR'" name="import_sales_arca">
                 <div class="row">
-                    <div class="col-lg-10">
+                    <div class="col-10">
                         <h3>Import Sales from ARCA</h3>
                         <p>Import your sales invoices from ARCA Excel file.</p>
                         <button type="button" class="btn btn-primary" t-on-click="() => this._importSalesFromArca()">Import your Sales from ARCA</button>
                     </div>
-                    <div class="col-lg-2 border-start"/>
+                    <div class="col-2 border-start"/>
                 </div>
-            </li>
-            <li class="col-lg-6 pt-4">
+            </div>
+            <div class="pt-4" t-if="countryCode == 'AR'" name="import_purchases_arca">
                 <div class="row">
-                    <div class="col-lg-10">
+                    <div class="col-10">
                         <h3>Import Purchases from ARCA</h3>
                         <p>Import your purchase invoices from ARCA Excel file.</p>
                         <button type="button" class="btn btn-primary" t-on-click="() => this._importPurchasesFromArca()">Import your Purchases from ARCA</button>
                     </div>
-                    <div class="col-lg-2 border-start"/>
+                    <div class="col-2 border-start"/>
                 </div>
-            </li>
+            </div>
         </xpath>
     </t>
 
