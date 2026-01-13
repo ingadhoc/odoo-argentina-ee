@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-10 15:26+0000\n"
-"PO-Revision-Date: 2026-01-10 15:26+0000\n"
+"POT-Creation-Date: 2026-01-13 20:02+0000\n"
+"PO-Revision-Date: 2026-01-13 20:02+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -29,6 +29,11 @@ msgid ""
 "<i class=\"fa fa-info-circle\" title=\"Info\"/> <span "
 "invisible=\"total_bills_exists == 0\">Invoices highlighted in yellow will "
 "not be created because they already exist. </span>"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model,name:l10n_ar_import_bill.model_account_import_summary
+msgid "Account import summary view"
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -72,11 +77,6 @@ msgid "Company"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model:ir.model,name:l10n_ar_import_bill.model_res_config_settings
-msgid "Config Settings"
-msgstr ""
-
-#. module: l10n_ar_import_bill
 #: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_file_wizard_form
 msgid "Continue"
 msgstr ""
@@ -104,10 +104,10 @@ msgid "Created on"
 msgstr ""
 
 #. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_account_import_summary__display_name
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_account_journal__display_name
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__display_name
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__display_name
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_res_config_settings__display_name
 msgid "Display Name"
 msgstr ""
 
@@ -122,10 +122,10 @@ msgid "Fecha de Factura"
 msgstr ""
 
 #. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_account_import_summary__id
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_account_journal__id
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__id
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__id
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_res_config_settings__id
 msgid "ID"
 msgstr ""
 
@@ -160,32 +160,38 @@ msgid "Import AFIP bills from xlsx"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.res_config_settings_view_form
+#. odoo-javascript
+#: code:addons/l10n_ar_import_bill/static/src/xml/account_import_arca.xml:0
 msgid "Import Purchases from ARCA"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.res_config_settings_view_form
+#. odoo-javascript
+#: code:addons/l10n_ar_import_bill/static/src/xml/account_import_arca.xml:0
 msgid "Import Sales from ARCA"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.res_config_settings_view_form
+#. odoo-javascript
+#: code:addons/l10n_ar_import_bill/static/src/xml/account_import_arca.xml:0
 msgid "Import your Purchases from ARCA"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.res_config_settings_view_form
+#. odoo-javascript
+#: code:addons/l10n_ar_import_bill/static/src/xml/account_import_arca.xml:0
 msgid "Import your Sales from ARCA"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.res_config_settings_view_form
+#. odoo-javascript
+#: code:addons/l10n_ar_import_bill/static/src/xml/account_import_arca.xml:0
 msgid "Import your purchase invoices from ARCA Excel file."
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.res_config_settings_view_form
+#. odoo-javascript
+#: code:addons/l10n_ar_import_bill/static/src/xml/account_import_arca.xml:0
 msgid "Import your sales invoices from ARCA Excel file."
 msgstr ""
 
