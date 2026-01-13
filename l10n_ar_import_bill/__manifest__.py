@@ -11,8 +11,13 @@
     "data": [
         "security/ir.model.access.csv",
         "wizards/afip_import_wizard.xml",
-        "views/res_config_settings_views.xml",
     ],
+    "assets": {
+        "web.assets_backend": [
+            "l10n_ar_import_bill/static/src/js/**/*",
+            "l10n_ar_import_bill/static/src/xml/**/*",
+        ],
+    },
     "installable": True,
     "auto_install": False,
     "application": False,
