@@ -1,25 +1,25 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* l10n_ar_edi_ux
-# 
+#
 # Translators:
 # ADHOC - Bot <transbot@adhoc.com.ar>, 2025
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-22 02:17+0000\n"
+"POT-Creation-Date: 2026-01-12 15:28+0000\n"
 "PO-Revision-Date: 2025-12-11 18:10+0000\n"
 "Last-Translator: Mariana Torres <mt@adhoc.inc>\n"
-"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
-"odoo-argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_edi_ux/es/>\n"
+"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
+"argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_edi_ux/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == 0)"
-" ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == "
+"0) ? 1 : 2);\n"
 "X-Generator: Weblate 5.10.4\n"
 
 #. module: l10n_ar_edi_ux
@@ -34,6 +34,18 @@ msgstr ""
 #: code:addons/l10n_ar_edi_ux/models/account_move.py:0
 msgid ". Invalid boarding permissions: %s"
 msgstr ". Permiso de embarque inválidos: %s"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_service_end
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_service_end
+msgid "ARCA Service End Date"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_service_start
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_service_start
+msgid "ARCA Service Start Date"
+msgstr ""
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_l10n_ar_afipws_connection
@@ -104,6 +116,11 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_certificate_certificate
+msgid "Certificate"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_config_settings__arba_cit
 msgid "Clave de Identificación Tributaria de ARBA"
 msgstr ""
@@ -134,6 +151,11 @@ msgid "Contact"
 msgstr "Contacto"
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_certificate_certificate__content_filename
+msgid "Content Filename"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__title_case
 msgid "Converts retreived text fields to Title Case."
 msgstr "Convierte campos de texto recuperados a mayúsculas y minúsculas."
@@ -157,6 +179,7 @@ msgstr "Creado el"
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_journal__display_name
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__display_name
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_certificate_certificate__display_name
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_afipws_connection__display_name
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__display_name
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_company__display_name
@@ -206,6 +229,7 @@ msgstr "Obtener tipos de documento válidos para este servicio web"
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_journal__id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_certificate_certificate__id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_afipws_connection__id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_company__id
@@ -350,9 +374,10 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/res_partner.py:0
 msgid ""
-"Posiblemente este cliente sea un consorcio/fideicomiso. Por favor debe "
-"consultar directamente con el cliente sus datos y agregar manualmente la "
-"responsabilidad de AFIP en el Odoo"
+"Posiblemente este contacto tenga declarada alguna actividad dentro del rubro "
+"inmobiliario. En este caso, no podemos actualizar automáticamente el campo "
+"Responsabilidad ARCA. Por favor, consulte el dato correspondiente y "
+"agréguelo manualmente"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
