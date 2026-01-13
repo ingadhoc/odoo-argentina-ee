@@ -77,17 +77,6 @@
                     </record>
                 </field>
             </record>
-            <record id="l10n_ar_iva_report_total" model="account.report.line">
-                <field name="name">Monto a Pagar O Saldo Libre Disponibilidad</field>
-                <field name="code">L10N_AR_IVA_TOTAL</field>
-                <field name="expression_ids">
-                    <record id="l10n_ar_iva_report_total_balance" model="account.report.expression">
-                        <field name="label">balance</field>
-                        <field name="engine">aggregation</field>
-                        <field name="formula">L10N_AR_IVA_SALDO_TECNICO.balance + L10N_AR_IVA_RETENCIONES.balance + L10N_AR_IVA_PERCEPCIONES.balance</field>
-                    </record>
-                </field>
-            </record>
         </field>
     </record>
 
