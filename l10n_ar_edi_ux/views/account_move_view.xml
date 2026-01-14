@@ -34,6 +34,13 @@
                 <button name="l10n_ar_verify_on_afip" position="move"/>
             </div>
 
+            <!-- Solo hacemos requeridos estos campo cuando validamos la factura, no antes-->
+            <field name="l10n_latam_document_number" position="attributes">
+                <attribute name="modifiers">{"required": [["state", "=", "posted"], ["l10n_latam_use_documents", "=", true]]}</attribute>
+            </field>
+            <field name="l10n_latam_document_type_id" position="attributes">
+                <attribute name="modifiers">{"required": [["state", "=", "posted"], ["l10n_latam_use_documents", "=", true]]}</attribute>
+            </field>
 
         </field>
     </record>
