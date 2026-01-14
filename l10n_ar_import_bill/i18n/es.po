@@ -28,6 +28,8 @@ msgid ""
 "                   <span>Importing sales from ARCA: Only invoices dated "
 "before the accounting start date will be imported.</span>"
 msgstr ""
+"<i class=\"fa fa-exclamation-triangle\" title=\"Advertencia\"/>\n"
+"                   <span>Importación de ventas desde ARCA: Solo se importarán las facturas con fecha anterior a la fecha de inicio contable.</span>"
 
 #. module: l10n_ar_import_bill
 #: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
@@ -36,16 +38,18 @@ msgid ""
 "invisible=\"total_bills_exists == 0\">Invoices highlighted in yellow will "
 "not be created because they already exist. </span>"
 msgstr ""
+"<i class=\"fa fa-info-circle\" title=\"Información\"/> <span "
+"invisible=\"total_bills_exists == 0\">Las facturas resaltadas en amarillo no se crearán porque ya existen. </span>"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model,name:l10n_ar_import_bill.model_account_import_summary
 msgid "Account import summary view"
-msgstr ""
+msgstr "Vista de resumen de importación de cuenta"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,help:l10n_ar_import_bill.field_afip_import_wizard__counterpart_account_id
 msgid "Account used as counterpart when importing from settings"
-msgstr ""
+msgstr "Cuenta utilizada como contrapartida al importar desde configuración"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__file_data
@@ -70,7 +74,7 @@ msgstr ""
 #. module: l10n_ar_import_bill
 #: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_file_wizard_form
 msgid "Cancel"
-msgstr ""
+msgstr "Cancelar"
 
 #. module: l10n_ar_import_bill
 #: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
@@ -80,17 +84,17 @@ msgstr ""
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__company_id
 msgid "Company"
-msgstr ""
+msgstr "Compañía"
 
 #. module: l10n_ar_import_bill
 #: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_file_wizard_form
 msgid "Continue"
-msgstr ""
+msgstr "Continuar"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__counterpart_account_id
 msgid "Counterpart Account"
-msgstr ""
+msgstr "Cuenta de contrapartida"
 
 #. module: l10n_ar_import_bill
 #: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
@@ -101,13 +105,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__create_uid
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Creado por"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__create_date
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Creado el"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_account_import_summary__display_name
@@ -163,43 +167,43 @@ msgstr ""
 #. module: l10n_ar_import_bill
 #: model:ir.model,name:l10n_ar_import_bill.model_afip_import_wizard
 msgid "Import AFIP bills from xlsx"
-msgstr ""
+msgstr "Importar facturas AFIP desde xlsx"
 
 #. module: l10n_ar_import_bill
 #. odoo-javascript
 #: code:addons/l10n_ar_import_bill/static/src/xml/account_import_arca.xml:0
 msgid "Import Purchases from ARCA"
-msgstr ""
+msgstr "Importar Compras desde ARCA"
 
 #. module: l10n_ar_import_bill
 #. odoo-javascript
 #: code:addons/l10n_ar_import_bill/static/src/xml/account_import_arca.xml:0
 msgid "Import Sales from ARCA"
-msgstr ""
+msgstr "Importar Ventas desde ARCA"
 
 #. module: l10n_ar_import_bill
 #. odoo-javascript
 #: code:addons/l10n_ar_import_bill/static/src/xml/account_import_arca.xml:0
 msgid "Import your Purchases from ARCA"
-msgstr ""
+msgstr "Importe sus compras desde ARCA"
 
 #. module: l10n_ar_import_bill
 #. odoo-javascript
 #: code:addons/l10n_ar_import_bill/static/src/xml/account_import_arca.xml:0
 msgid "Import your Sales from ARCA"
-msgstr ""
+msgstr "Importe sus ventas desde ARCA"
 
 #. module: l10n_ar_import_bill
 #. odoo-javascript
 #: code:addons/l10n_ar_import_bill/static/src/xml/account_import_arca.xml:0
 msgid "Import your purchase invoices from ARCA Excel file."
-msgstr ""
+msgstr "Importe sus facturas de compra desde el archivo Excel de ARCA."
 
 #. module: l10n_ar_import_bill
 #. odoo-javascript
 #: code:addons/l10n_ar_import_bill/static/src/xml/account_import_arca.xml:0
 msgid "Import your sales invoices from ARCA Excel file."
-msgstr ""
+msgstr "Importe sus facturas de venta desde el archivo Excel de ARCA."
 
 #. module: l10n_ar_import_bill
 #: model:ir.model,name:l10n_ar_import_bill.model_account_journal
@@ -210,19 +214,19 @@ msgstr "Diario"
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__journal_domain
 msgid "Journal Domain"
-msgstr ""
+msgstr "Dominio del diario"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__write_uid
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Última actualización por"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__write_date
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Última actualización el"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model,name:l10n_ar_import_bill.model_afip_import_wizard_line
@@ -278,19 +282,19 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_import_bill/models/account_journal.py:0
 msgid "No attachment was provided"
-msgstr ""
+msgstr "No se proporcionó ningún adjunto"
 
 #. module: l10n_ar_import_bill
 #. odoo-python
 #: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard_line.py:0
 msgid "No currency found for code: %s"
-msgstr ""
+msgstr "No se encontró moneda para el código: %s"
 
 #. module: l10n_ar_import_bill
 #. odoo-python
 #: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard_line.py:0
 msgid "No document type found for code: %s"
-msgstr ""
+msgstr "No se encontró tipo de documento para el código: %s"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__file_name
@@ -363,7 +367,7 @@ msgstr ""
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__wizard_id
 msgid "Wizard"
-msgstr ""
+msgstr "Asistente"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__exists
