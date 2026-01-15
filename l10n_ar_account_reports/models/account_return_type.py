@@ -333,6 +333,37 @@ class AccountReturnType(models.Model):
             if not return_type:
                 continue
 
+            if not return_type._can_return_exist(main_company, tax_unit):
+                continue
+
+            gi_type = main_company.l10n_ar_gross_income_type
+
+            # Lógica de selección de reportes de IIBB según régimen
+            # SIFERE y SIRCAR solo si es multilateral
+            if (
+                xml_id
+                in [
+                    "l10n_ar_account_reports.ar_sircar_iibb_return_type",
+                    "l10n_ar_account_reports.ar_sifere_iibb_return_type",
+                ]
+                and gi_type != "multilateral"
+            ):
+                continue
+
+            # Mendoza, Misiones y Santa Fe NO van si es multilateral (usan SIRCAR)
+            sircar_provinces = [
+                "l10n_ar_account_reports.ar_mendoza_iibb_return_type",
+                "l10n_ar_account_reports.ar_misiones_iibb_return_type",
+                "l10n_ar_account_reports.ar_santa_fe_iibb_return_type",
+            ]
+            if gi_type == "multilateral" and xml_id in sircar_provinces:
+                continue
+
+            # Caso SIFERE: se genera siempre que sea multilateral, incluso sin operaciones
+            if xml_id == "l10n_ar_account_reports.ar_sifere_iibb_return_type":
+                return_type._try_create_returns_for_fiscal_year(main_company, tax_unit, bypass_period_check=True)
+                continue
+
             domain = return_type._get_l10n_ar_activity_domain()
             if not domain:
                 continue
