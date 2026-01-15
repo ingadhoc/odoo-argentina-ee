@@ -15,6 +15,9 @@ class AccountChartTemplate(models.AbstractModel):
     def _install_l10n_ar_account_reports_demo(self, companies):
         for company in companies:
             self = self.with_company(company)
+            # seteamos multilateral a los fines de demo. si luego queremos manejar otros casos podemos hacer esto
+            # SOLO sobre RI
+            company.l10n_ar_gross_income_type = "multilateral"
             demo_data = {
                 "account.fiscal.position": self._l10n_ar_get_demo_data_fiscal_position(),
                 "account.move": self._l10n_ar_get_demo_data_move(),
