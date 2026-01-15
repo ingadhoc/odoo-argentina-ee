@@ -22,6 +22,7 @@ class AccountChartTemplate(models.AbstractModel):
         # Check if applicable to "ar_ex", "ar_base"
         if company.account_fiscal_country_id.code == "AR":
             self._l10n_ar_account_reports_setup_account_tags([company])
+            self._l10n_ar_setup_return_type_accounts(company)
 
         return res
 
@@ -29,6 +30,52 @@ class AccountChartTemplate(models.AbstractModel):
         super()._post_load_data(template_code, company, template_data)
         if company.account_fiscal_country_id.code == "AR":
             self._l10n_ar_account_reports_setup_account_tags([company])
+            self._l10n_ar_setup_return_type_accounts(company)
+
+    def _l10n_ar_setup_return_type_accounts(self, companies):
+        """Configure l10n_ar_account_id for AR return types when installing chart of accounts.
+
+        Account mapping (account template code):
+        - sicore: ri_retencion_sicore_a_pagar
+        - IVA: ri_iva_saldo_a_pagar
+        - iibb agents (provincial): ri_retencion_iibb_a_pagar
+        - iibb sufrido (Sifere): base_iibb_a_pagar
+        """
+        # Mapping: return_type xml_id -> account template code
+        # Note: Some accounts only exist in ar_ri or ar_ex templates
+        return_type_account_mapping = {
+            # SICORE (ganancias) - exists in ar_ri and ar_ex
+            "l10n_ar_account_reports.sicore_return_type": "ri_retencion_sicore_a_pagar",
+            # IVA - exists in ar_ri
+            "l10n_ar_reports.ar_tax_return_type": "ri_iva_saldo_a_pagar",
+            # SIFERE (iibb sufrido) - exists in all AR templates
+            "l10n_ar_account_reports.ar_sifere_iibb_return_type": "base_iibb_a_pagar",
+            # Provincial IIBB agents - exists in ar_ri and ar_ex
+            "l10n_ar_account_reports.ar_caba_iibb_return_type": "ri_retencion_iibb_a_pagar",
+            "l10n_ar_account_reports.ar_pba_iibb_return_type": "ri_retencion_iibb_a_pagar",
+            "l10n_ar_account_reports.ar_mendoza_iibb_return_type": "ri_retencion_iibb_a_pagar",
+            "l10n_ar_account_reports.ar_santa_fe_iibb_return_type": "ri_retencion_iibb_a_pagar",
+            "l10n_ar_account_reports.ar_tucuman_iibb_return_type": "ri_retencion_iibb_a_pagar",
+            "l10n_ar_account_reports.ar_misiones_iibb_return_type": "ri_retencion_iibb_a_pagar",
+            "l10n_ar_account_reports.ar_sircar_iibb_return_type": "ri_retencion_iibb_a_pagar",
+        }
+        for company in companies:
+            # para que le ref de "chart" funcione bien, necesita tener en el env la company correcta
+            self = self.with_company(company)
+            # TODO mejorar, tal vez estamos iterando demasiado? hace falta? en los de abajo también. Podriamos mejorar
+            # performance probablemente
+            for return_type_xmlid, account_code in return_type_account_mapping.items():
+                return_type = self.env.ref(return_type_xmlid, raise_if_not_found=False)
+                if not return_type:
+                    continue
+
+                # Build the account external id for this company
+                account = self.ref(account_code, raise_if_not_found=False)
+                if not account:
+                    continue
+
+                # Set the account on the return type for this company (company dependent field)
+                return_type.with_company(company).l10n_ar_account_id = account
 
     def _get_ar_account_tags(self):
         """Get all account tags defined in l10n_ar_account_reports

@@ -30,7 +30,33 @@ class AccountReturnType(models.Model):
     )
     # le ponemos store porque en odoo es un campo solo related y si no hay cuenta bancaria no hay partner
     # issue en odoo: https://github.com/odoo/odoo/issues/240322
-    payment_partner_id = fields.Many2one(store=True)
+    # al final le sacamos también el related porque si no en el create no se guarda. Podria implementarse como compute
+    # pero no vemos necesidad por el momento
+    payment_partner_id = fields.Many2one(store=True, related=False)
+
+    l10n_ar_account_id = fields.Many2one(
+        comodel_name="account.account",
+        string="AR Closing Account",
+        company_dependent=True,
+        domain="[('account_type', 'in', ('liability_payable', 'asset_receivable'))]",
+        help="Account to use for the closing entry of this return type. "
+        "If not set, the partner's payable/receivable account will be used.",
+    )
+    l10n_ar_is_simple_closing_return = fields.Boolean(
+        string="AR Simple Closing",
+        compute="_compute_l10n_ar_is_simple_closing_return",
+        help="If enabled, this return type uses simplified closing logic: "
+        "no carryover mechanism and no automatic tax_lock_date update.",
+    )
+
+    @api.depends("country_id")
+    def _compute_l10n_ar_is_simple_closing_return(self):
+        """Compute if this return type should use simple closing (no carryover, no tax_lock_date).
+        Al libro de IVA también lo hacemos tipo 'simple' porque los carryover confunden,
+        mezclan libre disponibilidad y saldo a favor, además crean líneas de neto que confunden.
+        """
+        for record in self:
+            record.l10n_ar_is_simple_closing_return = record.country_id.code == "AR"
 
     def _get_periodicity_months_delay(self, company):
         """Returns the number of months separating two returns.

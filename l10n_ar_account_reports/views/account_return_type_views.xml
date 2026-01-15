@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="account_return_type_form_view" model="ir.ui.view">
+        <field name="name">account.return.type.form.l10n_ar</field>
+        <field name="model">account.return.type</field>
+        <field name="inherit_id" ref="account_reports.account_return_type_form_view"/>
+        <field name="arch" type="xml">
+            <field name="payment_partner_id" position="after">
+                <field name="l10n_ar_is_simple_closing_return" invisible="1"/>
+                <field name="l10n_ar_account_id"
+                    invisible="not l10n_ar_is_simple_closing_return"
+                    options="{'no_create': True}"/>
+            </field>
+        </field>
+    </record>
+</odoo>

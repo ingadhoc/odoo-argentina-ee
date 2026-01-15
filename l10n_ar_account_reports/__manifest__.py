@@ -19,7 +19,7 @@
 ##############################################################################
 {
     "name": "Accounting Reports Customized for Argentina",
-    "version": "19.0.1.6.0",
+    "version": "19.0.1.7.0",
     "category": "Accounting",
     "sequence": 14,
     "summary": "",
@@ -41,6 +41,7 @@
         "account_payment_pro_receiptbook",
     ],
     "data": [
+        "views/account_return_type_views.xml",
         "data/tags_data.xml",
         "data/estado_resultados.xml",
         "data/balance_sheet.xml",
