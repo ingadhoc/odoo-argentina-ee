@@ -174,12 +174,16 @@ class AccountReturn(models.Model):
     def _get_pay_wizard(self):
         # EXTENDS account_reports
         if self.company_id.country_id.code == "AR" and self.is_tax_return and self.type_id.payment_partner_id:
-            line_to_pay = self.closing_move_ids.line_ids.filtered(
+            lines_to_pay = self.closing_move_ids.line_ids.filtered(
                 lambda l: l.partner_id == self.type_id.payment_partner_id
                 and l.account_id.account_type in ("asset_receivable", "liability_payable")
             )
-            if line_to_pay:
-                return line_to_pay.action_register_payment()
+            # si el saldo es a favor (balance >= 0), actualizamos estado y no abrimos wizard
+            if lines_to_pay and sum(lines_to_pay.mapped("balance")) >= 0:
+                self._update_payment_state()
+                return
+            if lines_to_pay:
+                return lines_to_pay.action_register_payment()
         return super()._get_pay_wizard()
 
     def _update_payment_state(self):
@@ -191,7 +195,8 @@ class AccountReturn(models.Model):
                     and l.account_id.account_type in ("asset_receivable", "liability_payable")
                 )
                 if lines_to_pay:
-                    is_paid = all(lines_to_pay.mapped("reconciled"))
+                    # Si el saldo es "a favor" (balance >= 0) o está conciliado, lo pasamos a pagado
+                    is_paid = sum(lines_to_pay.mapped("balance")) >= 0 or all(lines_to_pay.mapped("reconciled"))
                     workflow_field = record.type_id.states_workflow
                     if is_paid and record.state != "paid":
                         record.state = "paid"
