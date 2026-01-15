@@ -52,12 +52,30 @@ class AccountReturn(models.Model):
         return super()._ensure_tax_group_configuration_for_tax_closing()
 
     def _get_tax_closing_payable_and_receivable_accounts(self):
-        """Eso es necesario para que los importes total_amount_to_pay y period_amount_to_pay se calcule bien"""
+        """Get the payable and receivable accounts for tax closing.
+
+        For AR simple closing returns:
+        - Uses debt_account_id if configured in return type
+        - Falls back to payment_partner_id accounts if no debt_account_id
+        """
         if self._is_ar_simple_closing_return():
+            debt_account = self.type_id.debt_account_id
             partner = self.type_id.payment_partner_id
-            return partner.with_company(self.company_id).property_account_payable_id, partner.with_company(
-                self.company_id
-            ).property_account_receivable_id
+
+            if debt_account:
+                # When debt_account_id is set, use it for both payable and receivable
+                # (the system will use the appropriate side based on balance)
+                return debt_account, debt_account
+            elif partner:
+                # Fall back to partner accounts
+                return (
+                    partner.with_company(self.company_id).property_account_payable_id,
+                    partner.with_company(self.company_id).property_account_receivable_id,
+                )
+            else:
+                # No configuration found, will fail in _add_tax_group_closing_items
+                return False, False
+
         return super()._get_tax_closing_payable_and_receivable_accounts()
 
     def _on_post_submission_event(self):
@@ -87,34 +105,43 @@ class AccountReturn(models.Model):
             return []
 
         partner = self.type_id.payment_partner_id
-        if not partner:
+
+        # Priority 1: Use debt_account_id if configured
+        if self.type_id.debt_account_id:
+            account = self.type_id.debt_account_id
+        # Priority 2: Use partner's payable/receivable account
+        elif partner:
+            # Use partner's payable account for amounts to pay, receivable for credits
+            if total < 0:
+                # Amount to pay (negative balance means we owe taxes)
+                account = partner.with_company(self.company_id).property_account_payable_id
+            else:
+                # Credit in favor (positive balance means tax credit)
+                account = partner.with_company(self.company_id).property_account_receivable_id
+
+            if not account:
+                raise UserError(
+                    _(
+                        "The partner '%s' has no %s account configured for company '%s'.",
+                        partner.name,
+                        _("payable") if total < 0 else _("receivable"),
+                        self.company_id.name,
+                    )
+                )
+        else:
             raise UserError(
                 _(
-                    "The return type '%s' has no payment partner configured. "
-                    "Please set a Payment Partner on the return type.",
+                    "The return type '%s' has no debt account or payment partner configured. "
+                    "Please set a Debt Account or Payment Partner on the return type.",
                     self.type_id.name,
                 )
             )
 
-        # Use partner's payable account for amounts to pay, receivable for credits
+        # Determine line name based on amount sign
         if total < 0:
-            # Amount to pay (negative balance means we owe taxes)
-            account = partner.with_company(self.company_id).property_account_payable_id
             line_name = _("Tax to pay")
         else:
-            # Credit in favor (positive balance means tax credit)
-            account = partner.with_company(self.company_id).property_account_receivable_id
             line_name = _("Tax credit")
-
-        if not account:
-            raise UserError(
-                _(
-                    "The partner '%s' has no %s account configured for company '%s'.",
-                    partner.name,
-                    _("payable") if total < 0 else _("receivable"),
-                    self.company_id.name,
-                )
-            )
 
         return [
             Command.create(
@@ -123,7 +150,7 @@ class AccountReturn(models.Model):
                     "debit": total if total > 0 else 0,
                     "credit": abs(total) if total < 0 else 0,
                     "account_id": account.id,
-                    "partner_id": partner.id,
+                    "partner_id": partner.id if partner else False,
                 }
             )
         ]
@@ -160,29 +187,245 @@ class AccountReturn(models.Model):
             return self.closing_move_ids._get_records_action()
         return res
 
+    def _get_common_check_domain(self):
+        """Build common domain filters for all checks."""
+        return [
+            ("company_id.account_fiscal_country_id.code", "=", "AR"),
+            ("company_id", "in", self.company_ids.ids),
+            ("date", ">=", self.date_from),
+            ("date", "<=", self.date_to),
+        ]
+
+    def _create_check_dict(self, name, message, code, records_count, records_model, domain):
+        """Create a standardized check dictionary."""
+        action = (
+            {
+                "type": "ir.actions.act_window",
+                "name": name,
+                "view_mode": "list",
+                "res_model": records_model,
+                "domain": domain,
+                "views": [[False, "list"], [False, "form"]],
+            }
+            if records_count
+            else False
+        )
+        return {
+            "name": name,
+            "message": message,
+            "code": code,
+            "records_count": records_count,
+            "records_model": self.env["ir.model"]._get(records_model).id,
+            "result": "anomaly" if records_count else "reviewed",
+            "action": action,
+        }
+
+    def _check_draft_perceptions(self, state_code, state_name):
+        """Check for draft perceptions for a given state."""
+        domain = self._get_common_check_domain() + [
+            ("tax_ids.l10n_ar_state_id.code", "=", state_code),
+            ("tax_ids.type_tax_use", "=", "sale"),
+            ("move_id.state", "=", "draft"),
+        ]
+        count = self.env["account.move.line"].search_count(domain)
+        return self._create_check_dict(
+            name=_("Moves with Draft %s Perceptions", state_name),
+            message=_("There are draft %s perceptions in the selected period.", state_name),
+            code=f"{state_code.lower()}_iibb_draft_perceptions",
+            records_count=count,
+            records_model="account.move.line",
+            domain=domain,
+        )
+
+    def _check_draft_withholdings(self, state_code, state_name, tax_filter=None):
+        """Check for draft withholdings for a given state or tax type.
+
+        Args:
+            state_code: State code to filter (e.g., 'B', 'C', 'M')
+            state_name: Human readable state name
+            tax_filter: Additional tax filter dict (e.g., {'l10n_ar_tax_type': ['earnings']})
+        """
+        domain = self._get_common_check_domain() + [("state", "=", "draft")]
+
+        if tax_filter:
+            # For special cases like SICORE (earnings withholdings)
+            for key, value in tax_filter.items():
+                if isinstance(value, list):
+                    domain.append((f"l10n_ar_withholding_line_ids.tax_id.{key}", "in", value))
+                else:
+                    domain.append((f"l10n_ar_withholding_line_ids.tax_id.{key}", "=", value))
+        else:
+            # Standard state-based withholding checks
+            domain.append(("l10n_ar_withholding_line_ids.tax_id.l10n_ar_state_id.code", "=", state_code))
+
+        domain.append(("l10n_ar_withholding_line_ids.tax_id.l10n_ar_withholding_payment_type", "=", "supplier"))
+
+        count = self.env["account.payment"].search_count(domain)
+        return self._create_check_dict(
+            name=_("Payments with Draft %s Withholdings", state_name),
+            message=_("There are draft %s withholdings in the selected period.", state_name),
+            code=f"{state_code.lower()}_draft_withholdings" if not tax_filter else "sicore_draft_withholdings",
+            records_count=count,
+            records_model="account.payment",
+            domain=domain,
+        )
+
+    def _check_draft_sifere_withholdings(self):
+        """Check for draft SIFERE withholdings (customer withholdings)."""
+        domain = self._get_common_check_domain() + [
+            ("l10n_ar_withholding_line_ids.tax_id.l10n_ar_state_id", "!=", False),
+            ("l10n_ar_withholding_line_ids.tax_id.l10n_ar_withholding_payment_type", "=", "customer"),
+            ("state", "=", "draft"),
+        ]
+        count = self.env["account.payment"].search_count(domain)
+        return self._create_check_dict(
+            name=_("Payments with Draft SIFERE Withholdings"),
+            message=_("There are draft SIFERE withholdings in the selected period."),
+            code="sifere_draft_withholdings",
+            records_count=count,
+            records_model="account.payment",
+            domain=domain,
+        )
+
+    def _check_draft_sifere_perceptions(self):
+        """Check for draft SIFERE perceptions (purchase perceptions)."""
+        domain = self._get_common_check_domain() + [
+            ("tax_ids.l10n_ar_state_id", "!=", False),
+            ("tax_ids.type_tax_use", "=", "purchase"),
+            ("move_id.state", "=", "draft"),
+        ]
+        count = self.env["account.move.line"].search_count(domain)
+        return self._create_check_dict(
+            name=_("Moves with Draft SIFERE Perceptions"),
+            message=_("There are draft SIFERE perceptions in the selected period."),
+            code="sifere_draft_perceptions",
+            records_count=count,
+            records_model="account.move.line",
+            domain=domain,
+        )
+
+    def _check_draft_sircar_perceptions(self):
+        """Check for draft SIRCAR perceptions (excluding CABA, PBA, Tucumán)."""
+        domain = self._get_common_check_domain() + [
+            ("tax_ids.l10n_ar_state_id.code", "not in", ["C", "B", "T"]),
+            ("tax_ids.l10n_ar_state_id.country_id.code", "=", "AR"),
+            ("tax_ids.type_tax_use", "=", "sale"),
+            ("move_id.state", "=", "draft"),
+        ]
+        count = self.env["account.move.line"].search_count(domain)
+        return self._create_check_dict(
+            name=_("Moves with Draft SIRCAR Perceptions"),
+            message=_("There are draft SIRCAR perceptions in the selected period."),
+            code="sircar_draft_perceptions",
+            records_count=count,
+            records_model="account.move.line",
+            domain=domain,
+        )
+
+    def _check_draft_sircar_withholdings(self):
+        """Check for draft SIRCAR withholdings (excluding CABA, PBA, Tucumán)."""
+        domain = self._get_common_check_domain() + [
+            ("l10n_ar_withholding_line_ids.tax_id.l10n_ar_state_id.code", "not in", ["C", "B", "T"]),
+            ("l10n_ar_withholding_line_ids.tax_id.l10n_ar_state_id.country_id.code", "=", "AR"),
+            ("l10n_ar_withholding_line_ids.tax_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+            ("state", "=", "draft"),
+        ]
+        count = self.env["account.payment"].search_count(domain)
+        return self._create_check_dict(
+            name=_("Payments with Draft SIRCAR Withholdings"),
+            message=_("There are draft SIRCAR withholdings in the selected period."),
+            code="sircar_draft_withholdings",
+            records_count=count,
+            records_model="account.payment",
+            domain=domain,
+        )
+
     def _run_checks(self, check_codes_to_ignore):
-        # if "l10n_ar_account_reports." in self.type_external_id:
-        # smplificamos check de todos los reportes argentinos
-        if self.company_id.country_id.code == "AR" and self.is_tax_return:
-            # por ahora ignoramos todos los checks nativos para simplificar
-            check_codes_to_ignore.update(
-                [
-                    "check_bills_attachment",
-                    # "check_draft_entries",  # este nos parece útil
-                    "check_match_all_bank_entries",
-                    "check_tax_countries",  # odoo chequea que el country de la FP sea igual al del partner, no le vemos utlidad
-                    "check_company_data",
-                ]
-            )
+        """
+        EXTENDS account_reports
+        Run specific checks for Argentinian tax returns based on return type.
+        """
+        if self.company_id.country_id.code != "AR" or not self.is_tax_return:
+            return super()._run_checks(check_codes_to_ignore)
+
+        # Mapping of return types to their check methods
+        checks_mapping = {
+            "l10n_ar_account_reports.sicore_return_type": [
+                lambda: self._check_draft_withholdings(
+                    state_code="SICORE",
+                    state_name="Earnings",
+                    tax_filter={"l10n_ar_tax_type": ["earnings", "earnings_scale"]},
+                )
+            ],
+            "l10n_ar_account_reports.ar_caba_iibb_return_type": [
+                lambda: self._check_draft_perceptions("C", "CABA"),
+                lambda: self._check_draft_withholdings("C", "CABA"),
+            ],
+            "l10n_ar_account_reports.ar_pba_iibb_return_type": [
+                lambda: self._check_draft_perceptions("B", "PBA"),
+                lambda: self._check_draft_withholdings("B", "PBA"),
+            ],
+            "l10n_ar_account_reports.ar_mendoza_iibb_return_type": [
+                lambda: self._check_draft_withholdings("M", "Mendoza"),
+            ],
+            "l10n_ar_account_reports.ar_misiones_iibb_return_type": [
+                lambda: self._check_draft_perceptions("N", "Misiones"),
+                lambda: self._check_draft_withholdings("N", "Misiones"),
+            ],
+            "l10n_ar_account_reports.ar_santa_fe_iibb_return_type": [
+                lambda: self._check_draft_perceptions("S", "Santa Fe"),
+                lambda: self._check_draft_withholdings("S", "Santa Fe"),
+            ],
+            "l10n_ar_account_reports.ar_tucuman_iibb_return_type": [
+                lambda: self._check_draft_perceptions("T", "Tucumán"),
+                lambda: self._check_draft_withholdings("T", "Tucumán"),
+            ],
+            "l10n_ar_account_reports.ar_sifere_iibb_return_type": [
+                self._check_draft_sifere_withholdings,
+                self._check_draft_sifere_perceptions,
+            ],
+            "l10n_ar_account_reports.ar_sircar_iibb_return_type": [
+                self._check_draft_sircar_perceptions,
+                self._check_draft_sircar_withholdings,
+            ],
+        }
+
+        # Get check methods for this return type
+        check_methods = checks_mapping.get(self.type_external_id, [])
+
+        if check_methods:
+            # Execute all checks for this return type
+            checks = [check_method() for check_method in check_methods]
+            return checks
+
+        # For other AR return types, ignore some standard checks
+        check_codes_to_ignore.update(
+            [
+                "check_bills_attachment",
+                # "check_draft_entries",  # Keep this check as it's useful
+                "check_match_all_bank_entries",
+                "check_tax_countries",  # Odoo checks FP country equals partner country, not useful
+                "check_company_data",
+            ]
+        )
         return super()._run_checks(check_codes_to_ignore)
 
     def _get_pay_wizard(self):
         # EXTENDS account_reports
-        if self.company_id.country_id.code == "AR" and self.is_tax_return and self.type_id.payment_partner_id:
-            line_to_pay = self.closing_move_ids.line_ids.filtered(
-                lambda l: l.partner_id == self.type_id.payment_partner_id
-                and l.account_id.account_type in ("asset_receivable", "liability_payable")
-            )
+        if self.company_id.country_id.code == "AR" and self.is_tax_return:
+            # Filter lines by debt_account_id or partner's account
+            if self.type_id.debt_account_id:
+                line_to_pay = self.closing_move_ids.line_ids.filtered(
+                    lambda l: l.account_id == self.type_id.debt_account_id
+                )
+            elif self.type_id.payment_partner_id:
+                line_to_pay = self.closing_move_ids.line_ids.filtered(
+                    lambda l: l.partner_id == self.type_id.payment_partner_id
+                    and l.account_id.account_type in ("asset_receivable", "liability_payable")
+                )
+            else:
+                line_to_pay = self.env["account.move.line"]
+
             if line_to_pay:
                 return line_to_pay.action_register_payment()
         return super()._get_pay_wizard()
@@ -191,10 +434,19 @@ class AccountReturn(models.Model):
         """Método manual para actualizar el estado basado en conciliación"""
         for record in self:
             if record.closing_move_ids:
-                lines_to_pay = record.closing_move_ids.line_ids.filtered(
-                    lambda l: l.partner_id == record.type_id.payment_partner_id
-                    and l.account_id.account_type in ("asset_receivable", "liability_payable")
-                )
+                # Filter lines by debt_account_id or partner's account
+                if record.type_id.debt_account_id:
+                    lines_to_pay = record.closing_move_ids.line_ids.filtered(
+                        lambda l: l.account_id == record.type_id.debt_account_id
+                    )
+                elif record.type_id.payment_partner_id:
+                    lines_to_pay = record.closing_move_ids.line_ids.filtered(
+                        lambda l: l.partner_id == record.type_id.payment_partner_id
+                        and l.account_id.account_type in ("asset_receivable", "liability_payable")
+                    )
+                else:
+                    lines_to_pay = record.env["account.move.line"]
+
                 if lines_to_pay:
                     is_paid = all(lines_to_pay.mapped("reconciled"))
                     workflow_field = record.type_id.states_workflow
