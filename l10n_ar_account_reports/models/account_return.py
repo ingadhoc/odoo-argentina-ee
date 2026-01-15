@@ -34,13 +34,6 @@ class AccountReturn(models.Model):
             domain += l10n_ar_domain
         return domain
 
-    def _is_ar_simple_closing_return(self):
-        """Check if this return should use simple closing (no carryover, no tax_lock_date).
-        Al libro de IVA también lo hacemos tipo "simple" porque los carryvoer confunden, mezclan libre disponibilidad y
-        saldo a favor, además crean líneas de neto que confunden.
-        """
-        return self.company_id.country_id.code == "AR"
-
     def _ensure_tax_group_configuration_for_tax_closing(self):
         """
         Skip tax group account validation for AR simple closing returns,
@@ -48,13 +41,13 @@ class AccountReturn(models.Model):
         NOTA: esto de acá no suma tanto porque si se quiere liquidar el informde "vat" u otro igual se van a chequear
         todas las cuentas
         """
-        if self._is_ar_simple_closing_return():
+        if self.type_id.l10n_ar_is_simple_closing_return:
             return
         return super()._ensure_tax_group_configuration_for_tax_closing()
 
     def _get_tax_closing_payable_and_receivable_accounts(self):
         """Eso es necesario para que los importes total_amount_to_pay y period_amount_to_pay se calcule bien"""
-        if self._is_ar_simple_closing_return():
+        if self.type_id.l10n_ar_is_simple_closing_return:
             partner = self.type_id.payment_partner_id
             return partner.with_company(self.company_id).property_account_payable_id, partner.with_company(
                 self.company_id
@@ -65,7 +58,7 @@ class AccountReturn(models.Model):
         """No queremos que luego de submit dispare directamente pago, prefiero que se haga click en en boton,
         mas adelante se puede implementar un wizard de submit o similar como hacen otros heredando método action_submit
         """
-        if self._is_ar_simple_closing_return():
+        if self.type_id.l10n_ar_is_simple_closing_return:
             if self.type_id.states_workflow == "generic_state_review_submit":
                 return self._mark_completed()
             return
@@ -77,7 +70,7 @@ class AccountReturn(models.Model):
         For AR simple closing returns, create a simple counterpart line using the partner's AP/AR account.
         This avoids the carryover mechanism (no "Balance tax current account" lines).
         """
-        if not self._is_ar_simple_closing_return():
+        if not self.type_id.l10n_ar_is_simple_closing_return:
             return super()._add_tax_group_closing_items(tax_group_subtotal)
 
         # Sum all tax group subtotals to get the total amount
@@ -97,15 +90,21 @@ class AccountReturn(models.Model):
                 )
             )
 
-        # Use partner's payable account for amounts to pay, receivable for credits
-        if total < 0:
-            # Amount to pay (negative balance means we owe taxes)
-            account = partner.with_company(self.company_id).property_account_payable_id
-            line_name = _("Tax to pay")
+        # Check if a specific account is configured on the return type
+        configured_account = self.type_id.l10n_ar_account_id
+
+        line_name = _("Tax to pay") if total < 0 else _("Tax credit")
+        if configured_account:
+            # Use the configured account from the return type
+            account = configured_account
         else:
-            # Credit in favor (positive balance means tax credit)
-            account = partner.with_company(self.company_id).property_account_receivable_id
-            line_name = _("Tax credit")
+            # Fallback: Use partner's payable account for amounts to pay, receivable for credits
+            if total < 0:
+                # Amount to pay (negative balance means we owe taxes)
+                account = partner.with_company(self.company_id).property_account_payable_id
+            else:
+                # Credit in favor (positive balance means tax credit)
+                account = partner.with_company(self.company_id).property_account_receivable_id
 
         if not account:
             raise UserError(
@@ -145,7 +144,7 @@ class AccountReturn(models.Model):
 
         # por ahora no queremos ningun informe argentino que haga lock porque, IVA, que es el principal lo estamos
         # dejando editable para que el usuario termine de acomodarlo, luego deberá hacer lock manualmente
-        if self._is_ar_simple_closing_return():
+        if self.type_id.l10n_ar_is_simple_closing_return:
             # Restore tax_lock_date to prevent it from being modified by provincial returns
             for company, original_date in tax_lock_dates.items():
                 if company.tax_lock_date != original_date:
