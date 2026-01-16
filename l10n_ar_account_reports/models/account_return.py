@@ -197,6 +197,51 @@ class AccountReturn(models.Model):
             )
         return super()._run_checks(check_codes_to_ignore)
 
+    def _check_draft_entries(self, code, name, message, exclude_entries=False):
+        """Para liquidaciones de Argentina, filtramos los asientos en borrador para mostrar solo aquellos que
+        afectan el informe que se está liquidando aprovechando el dominio de actividad ya definido.
+        """
+        if self.company_id.country_id.code == "AR" and self.is_tax_return:
+            activity_domain = self.type_id._get_l10n_ar_activity_domain()
+            if activity_domain:
+                move_domain = [
+                    ("state", "=", "draft"),
+                    ("company_id", "in", self.company_ids.ids),
+                    ("date", "<=", self.date_to),
+                    ("date", ">=", self.date_from),
+                    ("line_ids", "any", activity_domain),
+                ]
+                # en los informes argentinos evaluamos todos los tipos de asientos (por ej. retenciones son pagos)
+                # if exclude_entries:
+                #     move_domain.append(("move_type", "!=", "entry"))
+
+                # El límite de 21 es el estándar de Odoo (LIMIT_CHECK_ENTRIES)
+                count = self.env["account.move"].sudo().search_count(move_domain, limit=21)
+
+                return {
+                    "name": name,
+                    "code": code,
+                    "message": message,
+                    "records_count": count,
+                    "records_model": self.env["ir.model"]._get("account.move").id,
+                    "action": {
+                        "type": "ir.actions.act_window",
+                        "name": str(name),
+                        "view_mode": "list",
+                        "res_model": "account.move",
+                        "domain": move_domain,
+                        "views": [
+                            [self.env.ref("account_reports.view_draft_entries_tree").id, "list"],
+                            [False, "form"],
+                        ],
+                    }
+                    if count
+                    else None,
+                    "result": "anomaly" if count else "reviewed",
+                }
+
+        return super()._check_draft_entries(code, name, message, exclude_entries)
+
     def _get_pay_wizard(self):
         # EXTENDS account_reports
         if self.company_id.country_id.code == "AR" and self.is_tax_return and self.type_id.payment_partner_id:
