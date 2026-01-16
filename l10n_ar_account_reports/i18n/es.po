@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-12 13:26+0000\n"
+"POT-Creation-Date: 2026-01-16 02:13+0000\n"
 "PO-Revision-Date: 2025-12-11 18:10+0000\n"
 "Last-Translator: Mariana Torres <mt@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
@@ -46,6 +46,11 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_saldo_tecnico
 msgid "(=) Saldo Técnico (1er Párrafo)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__l10n_ar_account_id
+msgid "AR Closing Account"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -259,9 +264,21 @@ msgid "AR ESP: Remun. y Cargas Sociales"
 msgstr "AR ESP: Remun. y Cargas Sociales"
 
 #. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__l10n_ar_is_simple_closing_return
+msgid "AR Simple Closing"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_chart_template
 msgid "Account Chart Template"
 msgstr "Plantilla de plan contable"
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,help:l10n_ar_account_reports.field_account_return_type__l10n_ar_account_id
+msgid ""
+"Account to use for the closing entry of this return type. If not set, the "
+"partner's payable/receivable account will be used."
+msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_return
@@ -671,6 +688,13 @@ msgid "IVA Sufrido Report Custom Handler"
 msgstr "Gestor personalizado del libro mayor del contacto"
 
 #. module: l10n_ar_account_reports
+#: model:ir.model.fields,help:l10n_ar_account_reports.field_account_return_type__l10n_ar_is_simple_closing_return
+msgid ""
+"If enabled, this return type uses simplified closing logic: no carryover "
+"mechanism and no automatic tax_lock_date update."
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_tax_inc
 msgid "Impuesto a las ganancias"
 msgstr ""
@@ -716,11 +740,6 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_goodwill
 msgid "Llave de negocio"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_total
-msgid "Monto a Pagar O Saldo Libre Disponibilidad"
 msgstr ""
 
 #. module: l10n_ar_account_reports
