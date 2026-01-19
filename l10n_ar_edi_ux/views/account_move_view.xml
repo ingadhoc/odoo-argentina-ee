@@ -20,6 +20,21 @@
                 <field name="l10n_ar_afip_result" position="move"/>
             </xpath>
 
+            <!-- Mostrar datos relacionados a la verificacion de CAE solo si es compras y no es WS ARCA -->
+            <label for="l10n_ar_afip_auth_code" position="attributes">
+                <attribute name="invisible" separator=" or " add="l10n_ar_afip_ws"/>
+            </label>
+            <div invisible="l10n_ar_afip_verification_type == 'not_available' or move_type not in ('in_invoice', 'in_refund', 'in_receipt')" position="attributes">
+                <attribute name="class">d-flex gap-2</attribute>
+                <attribute name="name">ar_verify_vendor</attribute>
+                <attribute name="invisible" separator=" or " add="l10n_ar_afip_ws"/>
+            </div>
+
+            <div name="ar_verify_vendor" position="after">
+                <button name="l10n_ar_verify_on_afip" position="move"/>
+            </div>
+
+
         </field>
     </record>
 
