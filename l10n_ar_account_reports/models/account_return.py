@@ -1,4 +1,4 @@
-from odoo import Command, _, api, fields, models
+from odoo import Command, _, fields, models
 from odoo.exceptions import UserError
 
 
@@ -45,37 +45,34 @@ class AccountReturn(models.Model):
             return
         return super()._ensure_tax_group_configuration_for_tax_closing()
 
-    # ver en _compute_show_amount_to_pay
-    # def _get_tax_closing_payable_and_receivable_accounts(self):
-    #     """Eso es necesario para que los importes total_amount_to_pay y period_amount_to_pay se calcule bien"""
-    #     if self._is_ar_simple_closing_return():
-    #         partner = self.type_id.payment_partner_id
-    #         return partner.with_company(self.company_id).property_account_payable_id, partner.with_company(
-    #             self.company_id
-    #         ).property_account_receivable_id
-    #     return super()._get_tax_closing_payable_and_receivable_accounts()
-
-    @api.depends(
-        "type_id.l10n_ar_is_simple_closing_return",
-    )
-    def _compute_show_amount_to_pay(self):
+    def _get_tax_closing_payable_and_receivable_accounts(self):
+        """Para simple closing returns argentinos, usamos la cuenta configurada en el return type
+        o las cuentas del partner de pago. Esto permite que period_amount_to_pay y total_amount_to_pay
+        se calculen correctamente basándose en las líneas del asiento de cierre.
         """
-        Para liquidaciones simples de Argentina, los importes calculados por Odoo al bloquear el informe
-        pueden no ser representativos si el asiento fue modificado manualmente o si no se utiliza
-        la configuración estándar de grupos de impuestos. Ocultamos el bloque si los importes son cero
-        para evitar mostrar información irrelevante o confusa.
-        TODO mas adelante podriamos:
-        a) borrar el partche en "_proceed_with_locking"
-        b) dejar que los montos se muestren para los asientos que se publicana automáticamente y/o mejorar para que
-        cambiar asiento manualmente actualice los montos
-        c) agregar en condición de abajo "and not record.total_amount_to_pay and not record.period_amount_to_pay"
+        if self.type_id.l10n_ar_is_simple_closing_return:
+            # l10n_ar_account_id es company_dependent, aseguramos usar la compañía del return
+            configured_account = self.type_id.with_company(self.company_id).l10n_ar_account_id
+            if configured_account:
+                # Si hay cuenta configurada, la usamos para ambos (payable y receivable)
+                # ya que es la única cuenta donde registramos el saldo
+                return configured_account, configured_account
+            # Fallback: usar cuentas del partner
+            partner = self.type_id.payment_partner_id
+            if partner:
+                return (
+                    partner.with_company(self.company_id).property_account_payable_id,
+                    partner.with_company(self.company_id).property_account_receivable_id,
+                )
+        return super()._get_tax_closing_payable_and_receivable_accounts()
 
-        Por ahora vamos por lo simple
+    def _evaluate_total_amount_to_pay_from_tax_closing_accounts(self, payable_accounts, receivable_accounts):
+        """Para simple closing returns, total_amount_to_pay = period_amount_to_pay (sin carryover).
+        Esto evita que saldos históricos en las cuentas afecten el monto mostrado.
         """
-        super()._compute_show_amount_to_pay()
-        for record in self:
-            if record.type_id.l10n_ar_is_simple_closing_return:
-                record.show_amount_to_pay = False
+        if self.type_id.l10n_ar_is_simple_closing_return:
+            return self.period_amount_to_pay
+        return super()._evaluate_total_amount_to_pay_from_tax_closing_accounts(payable_accounts, receivable_accounts)
 
     def _on_post_submission_event(self):
         """No queremos que luego de submit dispare directamente pago, prefiero que se haga click en en boton,
@@ -114,7 +111,8 @@ class AccountReturn(models.Model):
             )
 
         # Check if a specific account is configured on the return type
-        configured_account = self.type_id.l10n_ar_account_id
+        # l10n_ar_account_id es company_dependent, aseguramos usar la compañía del return
+        configured_account = self.type_id.with_company(self.company_id).l10n_ar_account_id
 
         line_name = _("Tax to pay") if total < 0 else _("Tax credit")
         if configured_account:
@@ -168,9 +166,6 @@ class AccountReturn(models.Model):
         # por ahora no queremos ningun informe argentino que haga lock porque, IVA, que es el principal lo estamos
         # dejando editable para que el usuario termine de acomodarlo, luego deberá hacer lock manualmente
         if self.type_id.l10n_ar_is_simple_closing_return:
-            # ver notas en _compute_show_amount_to_pay
-            self.write({"total_amount_to_pay": False, "period_amount_to_pay": False})
-
             # Restore tax_lock_date to prevent it from being modified by provincial returns
             for company, original_date in tax_lock_dates.items():
                 if company.tax_lock_date != original_date:
