@@ -61,7 +61,7 @@
         <field name="view_mode">kanban,form</field>
         <field name="view_id" ref="account.account_journal_dashboard_kanban_view"/>
         <field name="usage">menu</field>
-        <field name="domain">[('tax_settlement', '!=', False)]</field>
+        <field name="domain">[('tax_settlement', '!=', False), ('active', '=', True)]</field>
     </record>
 
     <menuitem id="menu_board_journal_10" name="Tax Settlement" action="open_account_tax_settlement_kanban" parent="account.menu_finance_entries" sequence="20" groups="account.group_account_user"/>

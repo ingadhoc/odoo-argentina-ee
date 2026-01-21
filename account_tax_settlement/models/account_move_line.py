@@ -54,6 +54,7 @@ class AccountMoveLine(models.Model):
         self.ensure_one()
         return self.env["account.journal"].search(
             [
+                ("active", "=", True),
                 ("company_id", "parent_of", self.company_id.id),
                 ("settlement_account_tag_ids", "in", self.tax_repartition_line_id.tag_ids.ids),
             ],
