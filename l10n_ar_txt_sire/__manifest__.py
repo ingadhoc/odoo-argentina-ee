@@ -1,6 +1,6 @@
 {
     "name": "Txt SIRE",
-    "version": "17.0.1.0.0",
+    "version": "18.0.1.0.0",
     "category": "Accounting",
     "author": "ADHOC SA",
     "website": "www.adhoc.com.ar",
@@ -15,7 +15,7 @@
         "views/l10n_ar_payment_withholding_views.xml",
     ],
     "demo": [],
-    "installable": False,
+    "installable": True,
     "auto_install": False,
     "application": False,
 }
