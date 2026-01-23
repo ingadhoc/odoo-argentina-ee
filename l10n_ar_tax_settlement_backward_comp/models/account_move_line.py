@@ -23,7 +23,7 @@ class AccountMoveLine(models.Model):
             lambda x: x.company_id == self.company_id
             and x.tax_id.l10n_ar_state_id == self.tax_line_id.l10n_ar_state_id
             and (x.from_date <= date if x.from_date else not x.from_date)
-            and (x.to_date >= date if x.to_date else not x.to_date)
+            and (x.to_date >= date if x.to_date else not x.from_date)
         ):
             return partner_tax.tax_id
         return self.tax_line_id
