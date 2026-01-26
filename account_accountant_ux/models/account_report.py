@@ -35,12 +35,14 @@ class AccountReport(models.Model):
     def _get_options_domain(self, options, date_scope):
         """Override to add a dummy domain if custom filter is required and no filters are applied."""
         domain = super()._get_options_domain(options, date_scope)
-
         if self.require_custom_filter:
             # Si el filtro "Mostrar todo" está activo, no aplicar restricción
             if options.get("show_all_custom"):
                 return domain
 
+            custom_display_config = (
+                options.get("custom_display_config", {}).get("components", {}).get("AccountReportLine")
+            )
             has_partner_filter = options.get("partner_ids") and len(options.get("partner_ids", [])) > 0
             has_aml_filter = False
             has_partner_categories_filter = options.get("selected_partner_categories")
@@ -49,7 +51,12 @@ class AccountReport(models.Model):
             if aml_ir_filters:
                 has_aml_filter = any(f.get("selected") for f in aml_ir_filters)
 
-            if not has_partner_filter and not has_aml_filter and not has_partner_categories_filter:
+            if (
+                not has_partner_filter
+                and not custom_display_config
+                and not has_aml_filter
+                and not has_partner_categories_filter
+            ):
                 domain = Domain("id", "=", False)
 
         return domain
