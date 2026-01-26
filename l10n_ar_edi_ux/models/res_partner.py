@@ -184,12 +184,27 @@ class ResPartner(models.Model):
         def check_activity(data_rg, data_mt):
             res = []
             new_activity = {}
-            afip_activities = data_rg.get("actividad", []) + (
+
+            # Evitamos duplicar actividades que puedan venir en ambos regimenes
+            combined_acts = data_rg.get("actividad", []) + (
                 [data_mt.get("actividadMonotributista", [])] if data_mt else []
             )
+            unique_acts = []
+            seen_ids = set()
+            for act in combined_acts:
+                if not isinstance(act, dict):
+                    continue
+                act_id = act.get("idActividad")
+                if act_id is None:
+                    continue
+                if act_id in seen_ids:
+                    continue
+                seen_ids.add(act_id)
+                unique_acts.append(act)
+
             actividades = self.env["afip.activity"].sudo()
             activity_codes = actividades.search([]).mapped("code")
-            for act in afip_activities:
+            for act in unique_acts:
                 if act and str(act.get("idActividad")) not in activity_codes:
                     new_activity.update(
                         {
