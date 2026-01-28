@@ -18,8 +18,16 @@
 #
 ##############################################################################
 {
+<<<<<<< 10fb780cf59c2680d8c388e5ed0eb38d57491458:l10n_ar_account_reports_backward_comp/__manifest__.py
     "name": "Backward compatibility for tax Settlements on Argentina",
     "version": "19.0.1.0.0",
+||||||| b61c17ecaea5c4ae21831df96cda27ba3d244547:l10n_ar_account_tax_settlement/__manifest__.py
+    "name": "Tax Settlements For Argentina",
+    "version": "18.0.1.9.0",
+=======
+    "name": "Tax Settlements For Argentina",
+    "version": "18.0.1.10.0",
+>>>>>>> d8c17160ce3956b3ae70c1269b0da5b8e1a2f9a3:l10n_ar_account_tax_settlement/__manifest__.py
     "category": "Accounting",
     "author": "ADHOC SA",
     "website": "www.adhoc.com.ar",
