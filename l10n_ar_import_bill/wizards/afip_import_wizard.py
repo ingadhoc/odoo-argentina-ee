@@ -165,7 +165,7 @@ class AfipImportWizard(models.TransientModel):
             ]
 
             for vat_rate, vat_amount, neto_amount in vat_rates:
-                if not math.isnan(vat_amount) and vat_amount > 0 and not math.isnan(neto_amount) and neto_amount > 0:
+                if not math.isnan(vat_amount) and vat_amount > 0:
                     # Search for the specific VAT tax
                     iva_tax = self.env["account.tax"].search(
                         base_domain
@@ -177,6 +177,9 @@ class AfipImportWizard(models.TransientModel):
                     )
 
                     if iva_tax:
+                        if math.isnan(neto_amount) or neto_amount == 0:
+                            neto_amount = round(vat_amount / (vat_rate / 100), 2)
+
                         move_vals["line_ids"].append(line._create_line(neto_amount, [iva_tax.id]))
                     else:
                         raise UserError(
