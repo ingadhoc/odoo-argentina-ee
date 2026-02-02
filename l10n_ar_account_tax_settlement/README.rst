@@ -55,6 +55,8 @@ Especificación de archivos:
 * MISIONES: https://www.atm.misiones.gob.ar/index.php/guia-de-tramites/instructivos/category/53-agentes
             Correo DGR: mesadeayuda@tsgroup.com.ar
 
+* SIRCIP: Implementación según especificación indicada en tarea 60704. Ver diseño en /doc/sircip/Diseno_de_Registros_del_Sistema_SIRCIP.pdf desde página 2 "2. Formato de Presentación de Declaración Jurada (DDJJ)". El pdf con la especificación se obtuvo desde https://www.ca.gob.ar/sistemas/sircip , sección "Instructivo y tablas" haciendo click en "Diseño de Registros".
+
 
 Installation
 ============
