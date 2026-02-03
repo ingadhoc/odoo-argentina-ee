@@ -58,7 +58,7 @@ class AccountReturnType(models.Model):
         for record in self:
             record.l10n_ar_is_simple_closing_return = record.country_id.code == "AR"
 
-    def _get_periodicity_months_delay(self, company):
+    def _get_periodicity_months_delay(self, company, date=None):
         """Returns the number of months separating two returns.
         For sub-monthly periods (like fortnightly), returns 0.
         Use _get_periodicity_days_delay for sub-monthly periods.
@@ -67,7 +67,7 @@ class AccountReturnType(models.Model):
         periodicity = self._get_periodicity(company)
         if periodicity in L10N_AR_DAYS_PER_PERIOD:
             return 0
-        return super()._get_periodicity_months_delay(company)
+        return super()._get_periodicity_months_delay(company, date=date)
 
     def _get_periodicity_days_delay(self, company):
         """Returns the number of days separating two returns for sub-monthly periods.
@@ -157,7 +157,16 @@ class AccountReturnType(models.Model):
 
         return start_date, end_date
 
-    def _get_period_name(self, main_company, period_from=None, period_to=None, minimal=False, lang_code=None):
+    def _get_period_name(
+        self,
+        main_company=None,
+        period_from=None,
+        period_to=None,
+        start_day=1,
+        start_month=1,
+        minimal=False,
+        lang_code=None,
+    ):
         """Extended to support fortnightly period names."""
         periodicity = self._get_periodicity(main_company)
 
@@ -174,7 +183,15 @@ class AccountReturnType(models.Model):
                 ordinal = "1ra" if fortnight_num == 1 else "2da"
                 return f"{ordinal} Quincena {month_name} {period_from.year}"
 
-        return super()._get_period_name(main_company, period_from, period_to, minimal, lang_code)
+        return super()._get_period_name(
+            main_company,
+            period_from,
+            period_to,
+            start_day=start_day,
+            start_month=start_month,
+            minimal=minimal,
+            lang_code=lang_code,
+        )
 
     def _get_l10n_ar_activity_domain(self):
         """Returns the domain to detect activity for this return type.
