@@ -152,6 +152,7 @@ class AfipImportWizard(models.TransientModel):
                 "invoice_date": line.date_invoice,
                 "l10n_latam_document_number": line.invoice_number,
                 "l10n_ar_afip_auth_code": line.cae,
+                "l10n_ar_afip_auth_mode": "CAE",
             }
 
             # Agregamos la linea con IVA y otros tributos (si existen).
