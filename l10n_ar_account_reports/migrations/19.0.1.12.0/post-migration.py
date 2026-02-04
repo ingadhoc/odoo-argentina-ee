@@ -29,3 +29,10 @@ def migrate(env, version):
             _logger.warning("⚠ Error deleting %s: %s", xml_id, e)
 
     _logger.info("l10n_ar_account_reports: Migration 19.0.1.12.0 completed")
+
+    # Apply report tags to AR companies after removing old patrimonio_neto tag.
+    companies = env["res.company"].search([("account_fiscal_country_id.code", "=", "AR")])
+
+    if companies:
+        chart_template = env["account.chart.template"]
+        chart_template._l10n_ar_account_reports_setup_account_tags(companies)

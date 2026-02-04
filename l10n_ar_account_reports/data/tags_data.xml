@@ -139,8 +139,20 @@
         <field name="name">AR ESP: Part. Terceros en Soc.</field>
         <field name="applicability">accounts</field>
     </record>
-    <record id="ar_esp_patrimonio_neto" model="account.account.tag">
-        <field name="name">AR ESP: Patrimonio Neto</field>
+    <record id="ar_esp_capital" model="account.account.tag">
+        <field name="name">AR ESP: Capital</field>
+        <field name="applicability">accounts</field>
+    </record>
+    <record id="ar_esp_reservas" model="account.account.tag">
+        <field name="name">AR ESP: Reservas</field>
+        <field name="applicability">accounts</field>
+    </record>
+    <record id="ar_esp_resultados" model="account.account.tag">
+        <field name="name">AR ESP: Resultados</field>
+        <field name="applicability">accounts</field>
+    </record>
+    <record id="ar_esp_resultado_del_ejercicio" model="account.account.tag">
+        <field name="name">AR ESP: Resultado del Ejercicio</field>
         <field name="applicability">accounts</field>
     </record>
 </odoo>

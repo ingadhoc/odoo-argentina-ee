@@ -120,7 +120,10 @@ class AccountChartTemplate(models.AbstractModel):
             "previsiones": self.env.ref("l10n_ar_account_reports.ar_esp_previsiones"),
             "deudas_nc": self.env.ref("l10n_ar_account_reports.ar_esp_deudas_no_corrientes"),
             "previsiones_nc": self.env.ref("l10n_ar_account_reports.ar_esp_previsiones_no_corrientes"),
-            "patrimonio_neto": self.env.ref("l10n_ar_account_reports.ar_esp_patrimonio_neto"),
+            "capital": self.env.ref("l10n_ar_account_reports.ar_esp_capital"),
+            "reservas": self.env.ref("l10n_ar_account_reports.ar_esp_reservas"),
+            "resultados": self.env.ref("l10n_ar_account_reports.ar_esp_resultados"),
+            "resultado_del_ejercicio": self.env.ref("l10n_ar_account_reports.ar_esp_resultado_del_ejercicio"),
         }
         return tags
 
@@ -246,8 +249,14 @@ class AccountChartTemplate(models.AbstractModel):
         if any(keyword in name for keyword in ["loan", "prestamo"]):
             return tags["prestamos"].id
 
-        if code and code.startswith("3."):
-            return tags["patrimonio_neto"].id
+        elif code and code.startswith("3.1"):
+            return tags["capital"].id
+        elif code and code.startswith("3.2"):
+            return tags["reservas"].id
+        elif code and code.startswith("3.3") and account.account_type == "equity_unaffected":
+            return tags["resultado_del_ejercicio"].id
+        elif code and code.startswith("3.3"):
+            return tags["resultados"].id
         # Pasivos no circulantes
         if account.account_type in ["liability_current", "liability_payable"]:
             if code and code.startswith("1.1.1"):
