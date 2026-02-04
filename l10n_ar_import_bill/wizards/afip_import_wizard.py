@@ -78,6 +78,7 @@ class AfipImportWizard(models.TransientModel):
                 "journal_id": self.journal_id.id,
                 "company_id": self.company_id.id,
                 "l10n_ar_afip_auth_code": line.cae,
+                "l10n_ar_afip_auth_mode": "CAE",
                 "line_ids": [],
             }
 
