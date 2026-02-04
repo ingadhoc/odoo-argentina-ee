@@ -37,6 +37,7 @@
     "data": [
         "data/inflation_adjustment_index.xml",
         "data/ir_actions_server.xml",
+        "data/account_report_data.xml",
         "views/inflation_adjustmen_index_view.xml",
         "views/account_tax_view.xml",
         "wizards/inflation_adjustment_view.xml",

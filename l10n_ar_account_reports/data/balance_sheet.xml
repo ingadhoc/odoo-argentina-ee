@@ -589,12 +589,6 @@
                 <field name="code">equity</field>
                 <field name="hierarchy_level">0</field>
                 <field name="expression_ids">
-                    <record id="account_financial_report_l10n_ar_estado_patrimonial_line_equity_patrimonio" model="account.report.expression">
-                        <field name="label">patrimonio</field>
-                        <field name="engine">domain</field>
-                        <field name="formula" eval="[('account_id.tag_ids','=', ref('l10n_ar_account_reports.ar_esp_patrimonio_neto'))]"/>
-                        <field name="subformula">-sum</field>
-                    </record>
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_equity_ingresos_no_asignados" model="account.report.expression">
                         <field name="label">ingresos_no_asignados</field>
                         <field name="engine">aggregation</field>
@@ -604,8 +598,127 @@
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_equity_balance" model="account.report.expression">
                         <field name="label">balance</field>
                         <field name="engine">aggregation</field>
-                        <field name="formula">equity.patrimonio + equity.ingresos_no_asignados</field>
-                        <field name="subformula"></field>
+                        <field name="formula">equity_capital.balance + equity_reserves.balance + equity_results.balance</field>
+                    </record>
+                </field>
+                <field name="children_ids">
+                    <!-- Capital -->
+                    <record id="account_financial_report_l10n_ar_estado_patrimonial_line_equity_capital" model="account.report.line">
+                        <field name="name">Capital</field>
+                        <field name="code">equity_capital</field>
+                        <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
+                        <field name="expression_ids">
+                            <record id="account_financial_report_l10n_ar_estado_patrimonial_line_equity_capital_balance" model="account.report.expression">
+                                <field name="label">balance</field>
+                                <field name="engine">domain</field>
+                                <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_esp_capital'))]"/>
+                                <field name="subformula">-sum</field>
+                            </record>
+                        </field>
+                    </record>
+                    <!-- Reservas -->
+                    <record id="account_financial_report_l10n_ar_estado_patrimonial_line_equity_reserves" model="account.report.line">
+                        <field name="name">Reservas</field>
+                        <field name="code">equity_reserves</field>
+                        <field name="hierarchy_level">3</field>
+                        <field name="user_groupby">account_id</field>
+                        <field name="foldable">True</field>
+                        <field name="expression_ids">
+                            <record id="account_financial_report_l10n_ar_estado_patrimonial_line_equity_reserves_balance" model="account.report.expression">
+                                <field name="label">balance</field>
+                                <field name="engine">domain</field>
+                                <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_esp_reservas'))]"/>
+                                <field name="subformula">-sum</field>
+                            </record>
+                        </field>
+                    </record>
+                    <!-- Resultados -->
+                    <record id="account_financial_report_l10n_ar_estado_patrimonial_line_equity_results" model="account.report.line">
+                        <field name="name">Resultados</field>
+                        <field name="code">equity_results</field>
+                        <field name="hierarchy_level">2</field>
+                        <field name="expression_ids">
+                            <record id="account_financial_report_l10n_ar_estado_patrimonial_line_equity_results_balance" model="account.report.expression">
+                                <field name="label">balance</field>
+                                <field name="engine">aggregation</field>
+                                <field name="formula">ar_curr_year_earnings.balance + ar_prev_year_earnings.balance + equity_results_detail.balance</field>
+                            </record>
+                        </field>
+                        <field name="children_ids">
+                            <!-- Resultado del Ejercicio -->
+                            <record id="account_financial_report_l10n_ar_estado_patrimonial_line_ar_curr_year_earnings" model="account.report.line">
+                                <field name="name">Resultado del Ejercicio</field>
+                                <field name="code">ar_curr_year_earnings</field>
+                                <field name="hierarchy_level">3</field>
+                                <field name="action_id" ref="action_account_report_l10n_ar_estado_resultados"/>
+                                <field name="expression_ids">
+                                    <record id="account_financial_report_l10n_ar_estado_patrimonial_line_ar_curr_year_earnings_pnl" model="account.report.expression">
+                                        <field name="label">pnl</field>
+                                        <field name="engine">aggregation</field>
+                                        <field name="formula">net_inc.balance</field>
+                                        <field name="date_scope">from_fiscalyear</field>
+                                        <field name="subformula">cross_report</field>
+                                    </record>
+                                    <record id="account_financial_report_l10n_ar_estado_patrimonial_line_ar_curr_year_earnings_alloc" model="account.report.expression">
+                                        <field name="label">alloc</field>
+                                        <field name="engine">domain</field>
+                                        <field name="formula" eval="[('account_id.account_type', '=', 'equity_unaffected')]"/>
+                                        <field name="date_scope">from_fiscalyear</field>
+                                        <field name="subformula">-sum</field>
+                                    </record>
+                                    <record id="account_financial_report_l10n_ar_estado_patrimonial_line_ar_curr_year_earnings_balance" model="account.report.expression">
+                                        <field name="label">balance</field>
+                                        <field name="engine">aggregation</field>
+                                        <field name="formula">ar_curr_year_earnings.pnl + ar_curr_year_earnings.alloc</field>
+                                    </record>
+                                </field>
+                            </record>
+                            <!-- Resultados sin asignar de años anteriores -->
+                            <record id="account_financial_report_l10n_ar_estado_patrimonial_line_ar_prev_year_earnings" model="account.report.line">
+                                <field name="name">Resultados sin asignar de años anteriores</field>
+                                <field name="code">ar_prev_year_earnings</field>
+                                <field name="hierarchy_level">3</field>
+                                <field name="expression_ids">
+                                    <record id="account_financial_report_l10n_ar_estado_patrimonial_line_ar_prev_year_earnings_allocated" model="account.report.expression">
+                                        <field name="label">allocated_earnings</field>
+                                        <field name="engine">domain</field>
+                                        <field name="formula" eval="[('account_id.account_type', '=', 'equity_unaffected')]"/>
+                                        <field name="subformula">-sum</field>
+                                        <field name="date_scope">from_beginning</field>
+                                    </record>
+                                    <record id="account_financial_report_l10n_ar_estado_patrimonial_line_ar_prev_year_earnings_domain" model="account.report.expression">
+                                        <field name="label">balance_domain</field>
+                                        <field name="engine">domain</field>
+                                        <field name="formula" eval="[('account_id.account_type', 'in', ('income', 'income_other', 'expense_direct_cost', 'expense', 'expense_depreciation'))]"/>
+                                        <field name="subformula">-sum</field>
+                                        <field name="date_scope">from_beginning</field>
+                                    </record>
+                                    <record id="account_financial_report_l10n_ar_estado_patrimonial_line_ar_prev_year_earnings_balance" model="account.report.expression">
+                                        <field name="label">balance</field>
+                                        <field name="engine">aggregation</field>
+                                        <field name="formula">ar_prev_year_earnings.balance_domain + ar_prev_year_earnings.allocated_earnings - ar_curr_year_earnings.balance</field>
+                                    </record>
+                                </field>
+                            </record>
+                            <!-- Resultados Acumulados -->
+                            <record id="account_financial_report_l10n_ar_estado_patrimonial_line_equity_results_detail" model="account.report.line">
+                                <field name="name">Resultados Acumulados</field>
+                                <field name="code">equity_results_detail</field>
+                                <field name="hierarchy_level">3</field>
+                                <field name="user_groupby">account_id</field>
+                                <field name="foldable">True</field>
+                                <field name="expression_ids">
+                                    <record id="account_financial_report_l10n_ar_estado_patrimonial_line_equity_results_detail_balance" model="account.report.expression">
+                                        <field name="label">balance</field>
+                                        <field name="engine">domain</field>
+                                        <field name="formula" eval="[('account_id.tag_ids', '=', ref('l10n_ar_account_reports.ar_esp_resultados'))]"/>
+                                        <field name="subformula">-sum</field>
+                                    </record>
+                                </field>
+                            </record>
+                        </field>
                     </record>
                 </field>
             </record>

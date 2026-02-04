@@ -1,0 +1,11 @@
+<odoo noupdate="True">
+    <record id="l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados" model="account.report">
+        <field name="allow_settlement" eval="True"/>
+        <field name="settlement_title">Asiento de refundición</field>
+        <field name="settlement_allow_unbalanced" eval="True"/>
+    </record>
+    <record id="l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial" model="account.report">
+        <field name="allow_settlement" eval="True"/>
+        <field name="settlement_title">Generar asiento de cierre</field>
+    </record>
+</odoo>

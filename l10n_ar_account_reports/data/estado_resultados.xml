@@ -194,4 +194,11 @@
             </record>
         </field>
     </record>
+
+    <!-- Action para abrir el Estado de Resultados -->
+    <record id="action_account_report_l10n_ar_estado_resultados" model="ir.actions.client">
+        <field name="name">Estado de Resultados</field>
+        <field name="tag">account_report</field>
+        <field name="context" eval="{'report_id': ref('account_financial_report_l10n_ar_estado_resultados')}"/>
+    </record>
 </odoo>
