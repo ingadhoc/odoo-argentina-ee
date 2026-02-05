@@ -1,35 +1,76 @@
 import logging
 
-from odoo import SUPERUSER_ID, api
-
 _logger = logging.getLogger(__name__)
 
 
-def post_init_hook(cr, registry):
+def post_init_hook(env):
     """Loaded after installing the module. Configuramos impuesto de Retención IIBB Mendoza Aplicada para que tengan código python.
     Se crea registro de coincidencia de importación para importar archivo de actividades de mendoza para que se actualice en base a los códigos
     existentes."""
-    env = api.Environment(cr, SUPERUSER_ID, {})
-    ar_companies = env["res.company"].search([]).filtered(lambda x: x.country_code == "AR")
-    for company in ar_companies:
-        ret_mendoza_aplicada_ext_id = "l10n_ar_account_withholding.%s_ri_tax_retencion_iibb_za_aplicada" % (company.id)
-        ret_mendoza_aplicada_tax = env.ref(ret_mendoza_aplicada_ext_id, False)
-        if not ret_mendoza_aplicada_tax:
+    # Crear registros de fiscal position para todas las compañías argentinas
+    for company in env["res.company"].search([]).filtered(lambda x: x.country_code == "AR"):
+        # Buscar la posición fiscal "Retenciones" de esta compañía --> esta se crea en la ul 1415 [RET18] Migración retenciones de  Ganancias
+        fiscal_position = env["account.fiscal.position"].search(
+            [("name", "=", "Retenciones"), ("company_id", "=", company.id)], limit=1
+        )
+
+        if not fiscal_position:
+            # No se encontró la posición fiscal 'Retenciones' para la compañía
             continue
-        ret_mendoza_aplicada_tax.withholding_type = "code"
-        ret_mendoza_aplicada_tax.withholding_python_compute = (
-            "\n# withholdable_base_amount\n# payment: account.payment.group object\n# partner: res.partner object (commercial partner of payment group)\n"
-            "# withholding_tax: account.tax.withholding object\n\nmove_to_pay = payment.to_pay_move_line_ids.move_id\nactivities = move_to_pay.activities_mendoza_ids\n"
-            "if activities:\n    activity_codes = activities.mapped('code')\n    partner_vat = move_to_pay.partner_id.l10n_ar_formatted_vat\n"
-            "    actividades_con_riesgo, actividades_con_alicuota_cero = payment.company_id.process_mendoza_csv_file(partner_vat, activity_codes)\n"
-            "    menor_alicuota = activities.menor_alicuota(actividades_con_alicuota_cero)\n\n    if menor_alicuota[0] in actividades_con_riesgo:\n"
-            "           alicuota = menor_alicuota[1] * 2\n    else:\n           alicuota = menor_alicuota[1]\n    payment.write({'alicuota_mendoza': alicuota})\n"
-            "    result = withholdable_base_amount * alicuota\nelse:\n    result = False\n        "
+
+        tax_ext_id_option_a = "account.%s_ex_tax_withholding_iibb_mza_applied" % company.id
+        tax_ext_id_option_b = "l10n_ar_tax.%s_ri_tax_retencion_iibb_za_aplicada" % company.id
+        default_tax = env.ref(tax_ext_id_option_a, raise_if_not_found=False) or env.ref(
+            tax_ext_id_option_b, raise_if_not_found=False
         )
-        _logger.info(
-            "Se establece código python en impuesto de Retención IIBB Mendoza Aplicada para la compañía %s"
-            % (company.name)
+        if not default_tax:
+            _logger.warning(
+                "No se encontró el impuesto %s ni %s para la compañía %s"
+                % (tax_ext_id_option_a, tax_ext_id_option_b, company.name)
+            )
+            continue
+
+        # Verificar si ya existe el registro para esta compañía
+        existing_record = env["account.fiscal.position.l10n_ar_tax"].search(
+            [
+                ("fiscal_position_id", "=", fiscal_position.id),
+                ("default_tax_id", "=", default_tax.id),
+                ("tax_type", "=", "withholding"),
+            ],
+            limit=1,
         )
+
+        if not existing_record:
+            python_formula = """
+# payment: account.payment object
+# partner: res.partner object (commercial partner of payment)
+
+move_to_pay = payment.to_pay_move_line_ids.move_id
+activities = move_to_pay.activities_mendoza_ids
+if move_to_pay and activities:
+    activity_codes = activities.mapped('code')
+    partner_vat = move_to_pay.partner_id.l10n_ar_formatted_vat
+    actividades_con_riesgo, actividades_con_alicuota_cero = payment.company_id.process_mendoza_csv_file(partner_vat, activity_codes)
+    menor_alicuota = activities.menor_alicuota(actividades_con_alicuota_cero)
+
+    if menor_alicuota[0] in actividades_con_riesgo:
+        aliquot = menor_alicuota[1] * 2
+    else:
+        aliquot = menor_alicuota[1]
+else:
+    aliquot = 0
+"""
+            env["account.fiscal.position.l10n_ar_tax"].create(
+                {
+                    "fiscal_position_id": fiscal_position.id,
+                    "default_tax_id": default_tax.id,
+                    "tax_type": "withholding",
+                    "webservice": "python_formula",
+                    "python_formula": python_formula,
+                }
+            )
+            _logger.info("Se crea registro de fiscal position para IIBB Mendoza en la compañía %s" % (company.name))
+
     afip_activity_model_id = env["ir.model"].search([("name", "=", "afip.activity")]).id
 
     # Se crea registro de coincidencia de importación para importar archivo de actividades de mendoza para que se actualice en base a los códigos existentes.
