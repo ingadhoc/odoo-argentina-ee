@@ -11,7 +11,7 @@ class AccountMove(models.Model):
         # b) y no tenian fp o la fp no tenía "percepciones argentinas"
         # c) tiene impuestos con "is_backward_tax" archivados
         # re-calculamos pa percepción desde partner tax
-        for rec in self.filtered(lambda m: m.is_sale_document() and not m.fiscal_position_id.l10n_ar_tax_ids):
+        for rec in self.filtered(lambda m: m.is_sale_document() and m.country_code == "AR"):
             backward_taxes = rec.line_ids.mapped("tax_line_id").filtered("is_backward_tax")
             for bw_tax in backward_taxes:
                 if bw_tax.active:
