@@ -159,7 +159,7 @@ class ResCompany(models.Model):
                         ("company_id", "=", company.id),
                     ]
                 )
-                if currency == "ARS":
+                if currency == company.currency_id.name:
                     continue
                 if already_existing_rate:
                     new_parsed_data.pop(currency)
