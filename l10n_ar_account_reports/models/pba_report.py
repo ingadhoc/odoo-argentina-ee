@@ -41,28 +41,30 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
                 "file_export_type": "TXT",
                 "branch_allowed": True,
             },
-            # TODO descomentar las 3 opciones de abajo cuando se acerque la fecha 01/03/2026
-            # {
-            #    "name": "TXT Retenciones IIBB aplicadas ARBA desde 01/03/2026: Retenciones ( excepto actividad 29, 7 quincenal, 7 y 17 de Bancos)",
-            #    "sequence": 30,
-            #    "action": "export_file",
-            #    "action_param": "pba_ret_desde_01032026_txt",
-            #    "file_export_type": "TXT",
-            # },
-            # {
-            #    "name": "TXT Percepciones IIBB aplicadas ARBA desde 01/03/2026: Percepciones Act. 7 método Percibido (quincenal)",
-            #    "sequence": 30,
-            #    "action": "export_file",
-            #    "action_param": "pba_perc_desde_01032026_txt",
-            #    "file_export_type": "TXT",
-            # },
-            # {
-            #    "name": "TXT Percepciones IIBB aplicadas ARBA desde 01/03/2026: Percepciones Act. 7 método Percibido (quincenal)",
-            #    "sequence": 30,
-            #    "action": "export_file",
-            #    "action_param": "pba_perc_act_7_desde_01032026_txt",
-            #    "file_export_type": "TXT",
-            # },
+            {
+                "name": "TXT Retenciones IIBB aplicadas ARBA desde 01/03/2026: Retenciones (excepto actividad 29, 7 quincenal, 7 y 17 de Bancos)",
+                "sequence": 30,
+                "action": "export_file",
+                "action_param": "pba_ret_desde_01032026_txt",
+                "file_export_type": "TXT",
+                "branch_allowed": True,
+            },
+            {
+                "name": "TXT Percepciones IIBB aplicadas ARBA desde 01/03/2026: Percepciones (excepto actividad 29, 7 quincenal, 7 y 17 de Bancos)",
+                "sequence": 30,
+                "action": "export_file",
+                "action_param": "pba_perc_desde_01032026_txt",
+                "file_export_type": "TXT",
+                "branch_allowed": True,
+            },
+            {
+                "name": "TXT Percepciones IIBB aplicadas ARBA desde 01/03/2026: Percepciones Act. 7 método Percibido (quincenal)",
+                "sequence": 30,
+                "action": "export_file",
+                "action_param": "pba_perc_act_7_desde_01032026_txt",
+                "file_export_type": "TXT",
+                "branch_allowed": True,
+            },
         ]
         options["buttons"].extend(txt_export_button)
 
