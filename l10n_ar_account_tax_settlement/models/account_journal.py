@@ -62,9 +62,8 @@ class AccountJournal(models.Model):
         ('iibb_aplicado_sircar', 'TXT Perc/Ret IIBB aplicadas SIRCAR'),
         ('iibb_aplicado_dgr_mendoza', 'TXT  Perc/Ret IIBB aplicado DGR Mendoza'),
         ('retenciones_iva', 'TXT Retenciones/Percepciones Sufridas IVA'),
-        # TODO descomentar las 2 opciones de abajo cuando se acerque la fecha 01/03/2026
-        # ('iibb_aplicado_arba_desde_01032026', 'TXT Perc/Ret IIBB aplicadas ARBA desde 01/03/2026: Percepciones ( excepto actividad 29, 7 quincenal, 7 y 17 de Bancos)'),
-        # ('iibb_aplicado_arba_act_7_desde_01032026', 'TXT Perc/Ret IIBB aplicadas ARBA desde 01/03/2026: Percepciones Act. 7 método Percibido (quincenal)'),
+        ('iibb_aplicado_arba_desde_01032026', 'TXT Perc/Ret IIBB aplicadas ARBA desde 01/03/2026: Percepciones ( excepto actividad 29, 7 quincenal, 7 y 17 de Bancos)'),
+        ('iibb_aplicado_arba_act_7_desde_01032026', 'TXT Perc/Ret IIBB aplicadas ARBA desde 01/03/2026: Percepciones Act. 7 método Percibido (quincenal)'),
         # ('other', 'Other')
     ])
 
