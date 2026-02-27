@@ -127,3 +127,45 @@ class ResPartner(models.Model):
             return domain
         else:
             return super()._debit_search(operator, operand)
+
+    @api.depends_context("company", "allowed_company_ids")
+    @api.depends("invoice_ids", "invoice_ids.line_ids.no_followup")
+    def _compute_total_due(self):
+        """Override to exclude lines with no_followup=True from totals."""
+        from collections import defaultdict
+
+        due_data = defaultdict(float)
+        overdue_data = defaultdict(float)
+        receivable_due_data = defaultdict(float)
+        receivable_overdue_data = defaultdict(float)
+        receivable_overdue_followup_data = defaultdict(float)
+        unreconciled_aml_ids = defaultdict(list)
+        for account_type, overdue, partner, no_followup, amount_residual_sum, aml_ids in self.env[
+            "account.move.line"
+        ]._read_group(
+            domain=self._get_unreconciled_aml_domain(),
+            groupby=["account_type", "followup_overdue", "partner_id", "no_followup"],
+            aggregates=["amount_residual:sum", "id:array_agg"],
+        ):
+            # Skip lines with no_followup=True
+            if no_followup:
+                continue
+
+            if account_type == "asset_receivable":
+                unreconciled_aml_ids[partner] += aml_ids
+                receivable_due_data[partner] += amount_residual_sum
+                if overdue:
+                    receivable_overdue_data[partner] += amount_residual_sum
+                    receivable_overdue_followup_data[partner] += amount_residual_sum
+
+            due_data[partner] += amount_residual_sum
+            if overdue:
+                overdue_data[partner] += amount_residual_sum
+
+        for partner in self:
+            partner.total_all_due = due_data.get(partner, 0.0)
+            partner.total_all_overdue = overdue_data.get(partner, 0.0)
+            partner.total_due = receivable_due_data.get(partner, 0.0)
+            partner.total_overdue = receivable_overdue_data.get(partner, 0.0)
+            partner.total_overdue_followup = receivable_overdue_followup_data.get(partner, 0.0)
+            partner.unreconciled_aml_ids = self.env["account.move.line"].browse(unreconciled_aml_ids.get(partner, []))

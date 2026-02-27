@@ -77,8 +77,9 @@
             <xpath expr="//button[@name='open_follow_up_report']" position="attributes">
                 <attribute name="invisible">not has_moves</attribute>
             </xpath>
+
             <xpath expr="//button[@name='open_follow_up_report']//span[hasclass('o_stat_text')]" position="replace">
-                <span class="o_stat_text">Libro Mayor de Empresa</span>
+                <span class="o_stat_text">Follow-up Report</span>
             </xpath>
         </field>
     </record>
