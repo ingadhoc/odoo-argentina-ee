@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-16 02:13+0000\n"
-"PO-Revision-Date: 2026-01-16 02:13+0000\n"
+"POT-Creation-Date: 2026-02-27 18:59+0000\n"
+"PO-Revision-Date: 2026-02-27 18:59+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -38,6 +38,14 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_saldo_tecnico
 msgid "(=) Saldo Técnico (1er Párrafo)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.inflation_adjustment_form
+msgid ""
+"<span>\n"
+"                                    %\n"
+"                                </span>"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -226,6 +234,11 @@ msgid "AR Simple Closing"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__account_id
+msgid "Account"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_chart_template
 msgid "Account Chart Template"
 msgstr ""
@@ -255,6 +268,30 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_intangible_assets
 msgid "Activos intangibles"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid "Ajuste por inflación %s"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid "Ajuste por inflación %s (%s * %.2f%%)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid "Ajuste por inflación Global [%s] / [%s]"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid "Ajuste por inflación cuentas al inicio (%s * %.2f%%)"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -332,6 +369,22 @@ msgid "Argentinian Tucumán Report Custom Handler"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.actions.act_window,name:l10n_ar_account_reports.inflation_adjustment_action
+#: model:ir.ui.menu,name:l10n_ar_account_reports.inflation_adjustment_menu
+msgid "Asiento de ajuste por inflación"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__open_move_id
+msgid "Asiento de apertura"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__closure_move_id
+msgid "Asiento de cierre"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.column,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_column
 #: model:account.report.column,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_column
 msgid "Balance"
@@ -375,13 +428,40 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.inflation_adjustment_form
+msgid "Cancel"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_tax_liabilities
 msgid "Cargas fiscales"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__company_id
+msgid "Company"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.inflation_adjustment_form
+msgid "Confirm"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_cogs
 msgid "Costo de venta de bienes y servicios"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__create_uid
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment_index__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__create_date
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment_index__create_date
+msgid "Created on"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -392,6 +472,21 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_sales_rec_noncurrent
 msgid "Créditos por ventas (No corriente)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment_index__date
+msgid "Date"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__date_from
+msgid "Date From"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__date_to
+msgid "Date To"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -447,6 +542,8 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_creation_wizard__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment_index__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_caba_report_handler__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_iva_report_handler__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_mendoza_report_handler__display_name
@@ -482,6 +579,14 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid ""
+"El asiento de ajuste por inflación no puede ser generado ya que hace falta "
+"el indice de ajuste para el periodo %(month)s %(year)s"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
 #: code:addons/l10n_ar_account_reports/models/caba_report.py:0
 msgid ""
 "El contacto \"%(partner_name)s\" (id %(partner_id)s), debe tener el tipo de "
@@ -511,6 +616,17 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/inflation_adjustment_index.py:0
+msgid "El índice debe comenzar el primer día de cada mes"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__end_index
+msgid "End Index"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial
 msgid "Estado Patrimonial"
 msgstr ""
@@ -518,6 +634,16 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:account.report,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados
 msgid "Estado de Resultados"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model_terms:ir.actions.act_window,help:l10n_ar_account_reports.inflation_adjustment_index_action
+msgid "Estos son necesarios para generar el asiento de ajuste por inflación."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment_index__xml_id
+msgid "External ID"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -542,6 +668,11 @@ msgid "Gastos de comercialización"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__open_cloure_entry
+msgid "Ha realizado asientos de cierre/apertura?"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_chart_template__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_move__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_move_line__id
@@ -550,6 +681,8 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_creation_wizard__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment_index__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_caba_report_handler__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_iva_report_handler__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_mendoza_report_handler__id
@@ -622,8 +755,34 @@ msgid "Impuesto a las ganancias"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.actions.act_window,name:l10n_ar_account_reports.inflation_adjustment_index_action
+#: model:ir.ui.menu,name:l10n_ar_account_reports.inflation_adjustment_index_menu
+msgid "Indices de Ajuste de Inflación"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.inflation_adjustment_form
+msgid "Inflation Adjustment"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_inflation_adjustment_index
+msgid "Inflation Adjustment Index"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_inflation_adjustment
+msgid "Inflation adjustment"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_temp_investments
 msgid "Inversiones temporarias"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__journal_id
+msgid "Journal"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -660,8 +819,25 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__write_uid
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment_index__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__write_date
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment_index__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_goodwill
 msgid "Llave de negocio"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields.selection,name:l10n_ar_account_reports.selection__inflation_adjustment__open_cloure_entry__no
+msgid "No"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -695,12 +871,33 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model_terms:ir.actions.act_window,help:l10n_ar_account_reports.inflation_adjustment_index_action
+msgid "No hay índices de ajuste por inflación aún. Por favor cree uno."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid ""
+"No hemos encontrado ningún asiento contable para ajustar asociado al periodo"
+" seleccionado."
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/caba_report.py:0
 msgid ""
 "No pudimos encontrar el comprobante original para %s (id %s). Verifique que "
 "en la nota de crédito \"%s\", el campo origen es el número de la factura "
 "original"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid ""
+"No se encontró un índice de ajuste por inflación para la fecha anterior "
+"(%s). Por favor, configure el índice correspondiente."
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -781,6 +978,12 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__deadline_periodicity
 msgid "Periodicity"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid "Por favor indique el rango de fecha de inicio y fin"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -888,9 +1091,31 @@ msgid "Sale Withholdings"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.inflation_adjustment_index_search
+msgid "Search Description"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields.selection,name:l10n_ar_account_reports.selection__inflation_adjustment__open_cloure_entry__yes
+msgid "Si"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,help:l10n_ar_account_reports.field_inflation_adjustment__open_cloure_entry
+msgid ""
+"Si usted ha realizado los asientos de cierre/apertura debe indicarnos cuales"
+" son para poder excluir los mismos en el cálculo."
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
 msgid "Sicore Profits Withholdings TXT"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__start_index
+msgid "Start Index"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -993,8 +1218,21 @@ msgid "Total pasivo no corriente"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment_index__value
+msgid "Value"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_sales
 msgid "Ventas netas de bienes y servicios"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/inflation_adjustment_index.py:0
+msgid ""
+"Ya existe un índice para el periodo %s %s. Solo puedes tener un índice de "
+"inflación por mes"
 msgstr ""
 
 #. module: l10n_ar_account_reports
