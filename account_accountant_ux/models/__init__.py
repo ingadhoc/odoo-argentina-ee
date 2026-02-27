@@ -10,4 +10,5 @@ from . import (
     account_partner_ledger,
     res_partner,
     account_report,
+    account_followup_report,
 )

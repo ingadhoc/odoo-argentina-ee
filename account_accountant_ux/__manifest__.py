@@ -19,7 +19,7 @@
 ##############################################################################
 {
     "name": "Accounting Accountant UX",
-    "version": "19.0.1.3.0",
+    "version": "19.0.1.4.0",
     "category": "Accounting",
     "sequence": 14,
     "summary": "",
@@ -46,8 +46,10 @@
     "assets": {
         "web.assets_backend": [
             "account_accountant_ux/static/src/components/account_report/filters/filters.js",
+            "account_accountant_ux/static/src/components/account_report/controller.js",
         ]
     },
+    "post_init_hook": "post_init_hook",
     "demo": [],
     "installable": True,
     "auto_install": True,
