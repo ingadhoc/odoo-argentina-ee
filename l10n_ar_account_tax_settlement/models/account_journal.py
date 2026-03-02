@@ -86,6 +86,7 @@ class AccountJournal(models.Model):
                 "TXT Perc/Ret IIBB aplicadas ARBA desde 01/03/2026: Percepciones Act. 7 método Percibido (quincenal)",
             ),
             # ('other', 'Other')
+            ("percepciones_sircip", "TXT Percepciones Aplicadas SIRCIP"),
         ]
     )
 
@@ -1784,4 +1785,122 @@ class AccountJournal(models.Model):
                 "txt_filename": ret_txt_filename,
                 "txt_content": ret,
             },
+        ]
+
+    def percepciones_sircip_files_values(self, move_lines):
+        """Implementado según especificación indicada en tarea 60704.
+        La longitud de los campos, ejemplo 'Numérico 2' es la máxima permitida.
+        Ej. de registro:
+        30100100106,34,03/03/2026,11,1,,904,1,A,2,3431222,12342.03,2.00,246.84,,,A
+        Aclaración: Las validaciones del archivo cargado se realizan con posterioridad a la carga.
+        El resultado del procesamiento, se informará en la propia aplicación. En caso de errores,
+        se generará un archivo con los mismos, para ser descargado por el agente"""
+        self.ensure_one()
+        content = ""
+        for line in move_lines.sorted(key=lambda r: (r.date, r.id)):
+            # 1 Nro de CUIT del Contribuyente (Numérico 11, ejemplo 30100100106)
+            content += line.partner_id.ensure_vat() + ","
+
+            # 2 CRC del contribuyente período (Numérico 2, ejemplo: 34)
+            # TODO consultar
+            content += "  " + ","
+
+            # 3 Fecha de Percepción (dd/mm/aaaa, ejemplo: 03/03/2026)
+            content += fields.Date.from_string(line.date).strftime("%d/%m/%Y") + ","
+
+            # 4 Tipo de Régimen de Percepción (código correspondiente según tabla
+            # definida por la jurisdicción, numérico 3, ejemplo: 11)
+            # TODO consultar
+            content += "   " + ","
+
+            # 5 Tipo de Registro (1-Percepción, 2-Informativo, 3-Excluido, 4-No Inscripto
+            # 5-Sobretasa, 6-Anulada, 7-Omitida). (Numérico 2, ejemplo: 1)
+            # TODO consultar: solo 1 va?
+            content += "1" + ","
+
+            # 6 Código de Operación Exceptuada (sólo para tipo de registro 3-Excluido).
+            # Definir tabla de valores. (Numérico 2)
+            content += "  " + ","
+
+            # 7 Jurisdicción a imputar (No inscripto o Sobretasa), o donde se realizó la
+            # operación (Percepción, Informativo o Excluiodo). (Numérico 3, ejemplo: 904)
+            tax = line._get_settlement_tax()
+            content += tax.l10n_ar_state_id.jurisdiction_code + ","
+
+            # 8 Tipo de Comprobante. Numérico 3, ejemplo: 1. 1 factura, 2 nota de débito, 3
+            # recibo, 4 nota de venta al contado, 5 factura de exportación, 6 nota de débito
+            # para op. c/exterior, 7 liquidacíon, 20 otros comprobantes de débito,
+            # 102 nota crédito, 106 nota crédito op. c/exterior, 120 otros comprobantes
+            # de crédito, 900 devolución. (numérico 3, ejemplo: 1)
+            internal_type = line.l10n_latam_document_type_id.internal_type
+            tipo_comp = ""
+            if line.l10n_latam_document_type_id.code == "19":
+                tipo_comp = "5"
+            elif line.l10n_latam_document_type_id.code in ["17", "18", "63", "64", "27", "28", "29"]:
+                tipo_comp = "7"
+            elif internal_type == "invoice":
+                tipo_comp = "1"
+            elif internal_type == "debit_note":
+                tipo_comp = "2"
+            elif internal_type == "credit_note":
+                tipo_comp = "102"
+            content += tipo_comp + ","
+
+            # 9 letra del comprobante (A,B,C,E o M, según tipo de comprobante).
+            # Char 1, ejemplo: A.
+            content += line.l10n_latam_document_type_id.l10n_ar_letter + ","
+
+            document_parts = line.move_id._l10n_ar_get_document_number_parts(
+                line.move_id.l10n_latam_document_number, line.l10n_latam_document_type_id.code
+            )
+            # 10 punto de venta. Numérico 5, ejemplo: 2.
+            content += "{:0>5d}".format(document_parts["point_of_sale"])[-5:] + ","
+
+            # 11 número de comprobante. Numérico 8, ejemplo: 3431222.
+            content += "{:0>8d}".format(document_parts["invoice_number"])[-8:] + ","
+
+            # 12 Monto Sujeto a Percepción (numérico sin separador de miles y “Punto”
+            # como separador decimal). Numérico 13, ejemplo: 12342.03
+            content += format_amount(-get_line_tax_base(line), 13, 2, ".") + ","
+
+            # 13 Alícuota (en porcentaje y “Punto” como separador decimal)
+            # Numérico(3,2), ejemplo: 2.00
+            content += "%03.2f" % tax.amount + ","
+
+            # 14 Monto Percibido o Devuelto (numérico sin separador de miles, se
+            # obtiene de multiplicar el campo 12 por el campo 13 y dividirlo por 100)
+            # Numérico 10, ejemplo: 246.84
+            content += "%0.2f" % (-line.balance) + ","
+
+            # 15 Número de comprobante original (sólo para las Anulaciones/Devoluciones)
+            # (Tipo, Letra, Punto de venta y Número de Comprobante). Alfanumérico (17)
+            comp_original = ""
+            if reversed_entry := line.move_id.reversed_entry_id:
+                reversed_internal_type = reversed_entry.l10n_latam_document_type_id.internal_type
+                if reversed_entry.l10n_latam_document_type_id.code == "19":
+                    comp_original += "5"
+                elif reversed_entry.l10n_latam_document_type_id.code in ["17", "18", "63", "64", "27", "28", "29"]:
+                    comp_original += "7"
+                elif reversed_internal_type == "invoice":
+                    comp_original += "1"
+                elif reversed_internal_type == "debit_note":
+                    comp_original += "2"
+                comp_original += reversed_entry.l10n_latam_document_type_id.l10n_ar_letter
+                reversed_entry_document_parts = reversed_entry._l10n_ar_get_document_number_parts(
+                    reversed_entry.l10n_latam_document_number, reversed_entry.l10n_latam_document_type_id.code
+                )
+                comp_original += "{:0>5d}".format(reversed_entry_document_parts["point_of_sale"])[-5:]
+                comp_original += "{:0>8d}".format(reversed_entry_document_parts["invoice_number"])[-8:]
+            content += comp_original.ljust(17) + ","
+            # 16 CRC del contribuyente devolución. Numérico(2)
+            content += "  " + ","
+
+            # 17 ABM (Indica si es un registro de Alta, Modificación o Baja).
+            # Alfanumérico(1), ejemplo: A
+            content += "A" + "\r\n"
+        return [
+            {
+                "txt_filename": "Percepciones_sircip.txt",
+                "txt_content": content,
+            }
         ]
