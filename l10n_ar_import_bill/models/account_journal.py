@@ -32,11 +32,52 @@ class AccountJournal(models.Model):
     def import_bills_from_xls(self, attachments):
         for attachment in attachments:
             file_content = base64.b64decode(attachment.datas)
-            df = pd.read_excel(BytesIO(file_content), engine="openpyxl")  # use openpyxl for .xlsx
-
+            try:
+                df = pd.read_excel(BytesIO(file_content), engine="openpyxl")  # use openpyxl for .xlsx
+            except Exception as e:
+                raise UserError(
+                    _(
+                        "Error al leer el archivo. Por favor verifique que sea un archivo válido de tipo .xlsx. Error: %s"
+                    )
+                    % e
+                )
             # El archivo tiene un header en la primera fila, lo eliminamos
             df.columns = df.iloc[0]
             df = df[1:].reset_index(drop=True)
+
+            # Definir el mapeo de columnas del archivo Excel a campos del modelo
+            column_mapping = {
+                "Fecha": "date_invoice",
+                "Nro. Doc. Emisor": "partner_vat",
+                "Tipo Doc. Emisor": "partner_identification_type",
+                "Denominación Emisor": "partner_name",
+                "Moneda": "currency",
+                "Tipo Cambio": "currency_rate",
+                "Imp. Total": "amount_total",
+                "Tipo": "document_type",
+                "Neto No Gravado": "no_gravado",
+                "Op. Exentas": "exento",
+                "Otros Tributos": "otros_tributos",
+                "Cód. Autorización": "cae",
+                "Neto Grav. IVA 0%": "neto_grav_iva_0",
+                "IVA 2,5%": "iva_2_5",
+                "Neto Grav. IVA 2,5%": "neto_grav_iva_2_5",
+                "IVA 5%": "iva_5",
+                "Neto Grav. IVA 5%": "neto_grav_iva_5",
+                "IVA 10,5%": "iva_10_5",
+                "Neto Grav. IVA 10,5%": "neto_grav_iva_10_5",
+                "IVA 21%": "iva_21",
+                "Neto Grav. IVA 21%": "neto_grav_iva_21",
+                "IVA 27%": "iva_27",
+                "Neto Grav. IVA 27%": "neto_grav_iva_27",
+            }
+
+            # Columnas adicionales requeridas para procesamiento
+            additional_required_columns = ["Punto de Venta", "Número Desde"]
+
+            # Validar que todas las columnas requeridas estén presentes
+            required_columns = list(column_mapping.keys()) + additional_required_columns
+            self._validate_required_columns(df, required_columns)
 
             # Optimización: Convertir todas las fechas de una vez usando vectorización de pandas
             df["Fecha"] = pd.to_datetime(df["Fecha"], dayfirst=True).dt.date
@@ -123,30 +164,10 @@ class AccountJournal(models.Model):
             # Optimización: Convertir directamente a lista de tuplas solo con campos válidos
             valid_fields = [
                 "invoice_number",
-                "date_invoice",
-                "partner_vat",
-                "partner_identification_type",
-                "partner_name",
-                "currency",
-                "currency_rate",
-                "amount_total",
-                "document_type",
-                "no_gravado",
-                "exento",
-                "otros_tributos",
-                "cae",
-                "neto_grav_iva_0",
-                "iva_2_5",
-                "neto_grav_iva_2_5",
-                "iva_5",
-                "neto_grav_iva_5",
-                "iva_10_5",
-                "neto_grav_iva_10_5",
-                "iva_21",
-                "neto_grav_iva_21",
-                "iva_27",
-                "neto_grav_iva_27",
-            ]
+            ] + list(column_mapping.values())
+
+            # Validar que todas las columnas necesarias estén presentes después del renombrado
+            self._validate_required_columns(df, valid_fields)
 
             # Filtrar solo las columnas que existen en el modelo
             filtered_df = df[valid_fields]
@@ -168,4 +189,24 @@ class AccountJournal(models.Model):
             return wizard._get_records_action(
                 name=wizard_name,
                 target="new",
+            )
+
+    def _validate_required_columns(self, df, required_columns):
+        """Valida que el DataFrame contenga todas las columnas requeridas.
+        Args:
+            df: DataFrame de pandas
+            required_columns: Lista de nombres de columnas requeridas
+        Raises:
+            UserError: Si falta alguna columna requerida
+        """
+        missing_columns = [col for col in required_columns if col not in df.columns]
+        if missing_columns:
+            raise UserError(
+                _(
+                    "El archivo no contiene las siguientes columnas requeridas: %s.\n\n"
+                    "Si no realizó cambios manuales en el archivo Excel, es posible que ARCA haya "
+                    "modificado el formato del archivo. En ese caso, por favor reporte el inconveniente "
+                    "a través de un ticket de soporte."
+                )
+                % ", ".join(missing_columns)
             )
