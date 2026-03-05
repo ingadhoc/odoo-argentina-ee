@@ -76,9 +76,7 @@ class L10nArAfipwsConnection(models.Model):
 
         error = False
         try:
-            _logger.info(
-                "Connect to ARBA to get token: %s %s %s", afip_ws, company.l10n_ar_afip_ws_crt_id.name, company.name
-            )
+            _logger.info("Connect to ARBA to get token: %s %s", afip_ws, company.name)
             payload = (
                 f"client_id={client_id}&username={user}&password={password}&client_secret={client_secret}&"
                 "grant_type=password&scope=arba-profile%20arba-roles%20openid"
