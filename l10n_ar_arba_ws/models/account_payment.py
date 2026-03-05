@@ -19,10 +19,8 @@ class AccountPayment(models.Model):
 
             # Filtramos solo las lineas asociadas a retencion de arba que no tengan
             # numero de certificado aun (no informadas)
-            # TODO mejorar la forma de calcular las lineas de retencion de arba
-            state_ar_b = self.env.ref("base.state_ar_b")
             wh_lines = payment.l10n_ar_withholding_line_ids.filtered(
-                lambda x: (x.tax_id.l10n_ar_state_id == state_ar_b and not x.l10n_ar_cert_number)
+                lambda x: x.is_arba_ws_needed and not x.l10n_ar_cert_number
             )
             wh_lines.send_to_arba()
         return res
