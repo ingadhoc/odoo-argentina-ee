@@ -111,6 +111,7 @@ class ResCompany(models.Model):
         # Create a new environment with the company context
         # Cambiamos el env de esta manera como vimos en este PR:
         # https://github.com/odoo/enterprise/commit/4fdcf86392f#diff-05c14fb3f27dcc12f22adcfaef217ec6f80ef5ad0b0f37a4bd7b501fdc55461dR499
+        original_env = self.env
         self.env = self.env(context=dict(self.env.context, allowed_company_ids=company.ids))
         for currency in available_currencies:
             try:
@@ -135,6 +136,7 @@ class ResCompany(models.Model):
                     company.l10n_ar_last_currency_sync_date = fields.Date.context_today(
                         self.with_context(tz="America/Argentina/Buenos_Aires")
                     )
+        self.env = original_env
         return res or False
 
     def _generate_currency_rates(self, parsed_data):
