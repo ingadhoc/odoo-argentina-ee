@@ -125,15 +125,14 @@ class ResCompany(models.Model):
                         "Returned Afip rate is not today's rate (%s, %s vs %s, %s)"
                         % (afip_date.strftime("%A"), afip_date, rate_date.strftime("%A"), rate_date)
                     )
-                self.env.company = env_company
             except Exception as e:
-                self.env.company = env_company
                 _logger.log(25, "Could not get rate for currency %s. This is what we get:\n%s", currency.name, e)
             else:
                 for company in self.filtered(lambda x: x.currency_provider == "afip"):
                     company.l10n_ar_last_currency_sync_date = fields.Date.context_today(
                         self.with_context(tz="America/Argentina/Buenos_Aires")
                     )
+        self.env.company = env_company
         return res or False
 
     def _generate_currency_rates(self, parsed_data):
