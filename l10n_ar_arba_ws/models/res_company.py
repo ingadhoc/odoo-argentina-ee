@@ -29,15 +29,6 @@ class ResCompany(models.Model):
     #     20 INSTITUTO PROV.DE LOTERIA Y CASINOS
     #     23 HONORARIOS
 
-    l10n_ar_arba_dj_period = fields.Selection(
-        selection=[
-            ("monthly", "Monthly"),
-            ("fortnightly", "Fortnightly"),
-        ],
-        default="monthly",
-        string="ARBA DJ Periodicity",
-    )
-
     l10n_ar_arba_wh_mode = fields.Selection(
         selection=[
             ("automatic", "Automatic"),

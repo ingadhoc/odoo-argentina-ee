@@ -5,7 +5,6 @@ from http import HTTPStatus
 
 import requests
 from odoo import api, fields, models
-from odoo.exceptions import UserError
 from odoo.tools import format_date
 
 WS_NAME = "A122R"
@@ -137,24 +136,15 @@ class L10nArDjArba(models.Model):
         wh_line.payment_id.message_post(body=msg)
 
     def _ensure_dj(self, wh_date, company):
-        """Encontrar la declaracion jurada que corresponde, que este abierta y que este en el
-        mismo periodo.
-        Si no existe entonces genera una automaticamente"""
-
-        period_type = company.l10n_ar_arba_dj_period
-        if period_type == "monthly":
-            from_date = fields.Date.start_of(wh_date, "month")
+        """Encontrar la declaracion jurada que corresponde, que este abierta y
+        que este en el mismo periodo de la retención.
+        Si no existe entonces genera una nueva declaración automaticamente"""
+        if wh_date.day > 15:
+            from_date = wh_date.replace(day=16)
             to_date = fields.Date.end_of(wh_date, "month")
-        elif period_type == "fortnightly":
-            if wh_date.day > 15:
-                from_date = wh_date.replace(day=16)
-                to_date = fields.Date.end_of(wh_date, "month")
-            else:
-                from_date = fields.Date.start_of(wh_date, "month")
-                to_date = wh_date.replace(day=15)
         else:
-            raise UserError("ARBA DJ Period not implemented yet %s" % period_type)
-
+            from_date = fields.Date.start_of(wh_date, "month")
+            to_date = wh_date.replace(day=15)
         dj_arba = self.search(
             [
                 ("company_id", "=", company.id),
