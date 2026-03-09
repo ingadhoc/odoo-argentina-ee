@@ -10,5 +10,4 @@ class ResConfigSettings(models.TransientModel):
     )
     l10n_ar_arba_client_id = fields.Char(related="company_id.l10n_ar_arba_client_id", readonly=False)
     l10n_ar_arba_client_secret = fields.Char(related="company_id.l10n_ar_arba_client_secret", readonly=False)
-    l10n_ar_arba_dj_period = fields.Selection(related="company_id.l10n_ar_arba_dj_period", readonly=False)
     l10n_ar_arba_wh_mode = fields.Selection(related="company_id.l10n_ar_arba_wh_mode", readonly=False)
