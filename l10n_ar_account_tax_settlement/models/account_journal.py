@@ -1551,7 +1551,7 @@ class AccountJournal(models.Model):
         self.ensure_one()
         return self.iibb_aplicado_arba_desde_01032026(move_lines) + self.iibb_alta_ret_aplicado_arba_por_lote_A_122R_01032026(move_lines.filtered('payment_id'))
 
-    def iibb_aplicado_arba_act_7_desde_010320266_files_values(self, move_lines):
+    def iibb_aplicado_arba_act_7_desde_01032026_files_values(self, move_lines):
         self.ensure_one()
         return self.iibb_aplicado_arba_desde_01032026(move_lines, act_7=True) + self.iibb_alta_ret_aplicado_arba_por_lote_A_122R_01032026(move_lines.filtered('payment_id'))
 
