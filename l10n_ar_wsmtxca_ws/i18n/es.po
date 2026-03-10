@@ -1,0 +1,136 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ar_wsmtxca_ws
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-15 00:00+0000\n"
+"PO-Revision-Date: 2026-05-15 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Language: es\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_move.py:0
+#: code:addons/l10n_ar_wsmtxca_ws/wizards/l10n_ar_afip_ws_consult.py:0
+msgid "\nAdditional Information:\n"
+msgstr "\nInformación adicional:\n"
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_move.py:0
+#: code:addons/l10n_ar_wsmtxca_ws/wizards/l10n_ar_afip_ws_consult.py:0
+msgid "\n* Code %s: %s"
+msgstr "\n* Código %s: %s"
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/wizards/l10n_ar_afip_ws_consult.py:0
+msgid "\n* Evento %s: %s"
+msgstr "\n* Evento %s: %s"
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/wizards/l10n_ar_afip_ws_consult.py:0
+msgid "\n* Observations %s: %s"
+msgstr "\n* Observaciones %s: %s"
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/wizards/l10n_ar_afip_ws_consult.py:0
+#, python-format
+msgid "AFIP Errors: %(error)s"
+msgstr "Errores AFIP: %(error)s"
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_move.py:0
+msgid "AFIP Messages"
+msgstr "Mensajes AFIP"
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_journal.py:0
+msgid "Codificación de producto - RG2904 (WSMTXCA)"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_journal.py:0
+msgid "Codificación de producto - Web Service"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/wizards/l10n_ar_afip_ws_consult.py:0
+msgid "Invoice number %s\n"
+msgstr "Número de factura %s\n"
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/wizards/l10n_ar_afip_ws_consult.py:0
+msgid "No AFIP WS selected on point of sale %s"
+msgstr "No hay WS de AFIP seleccionado en el punto de venta %s"
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/res_currency.py:0
+msgid ""
+"No AFIP code for currency %s. Please configure the AFIP code consulting "
+"information in AFIP page"
+msgstr ""
+"No hay código AFIP para la moneda %s. Por favor configure el código AFIP "
+"consultando información en la página de AFIP"
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_move.py:0
+msgid "No AFIP code in %s UOM"
+msgstr "No hay código AFIP en la unidad de medida %s"
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/res_currency.py:0
+msgid "No rate for ARS (is the base currency for AFIP)"
+msgstr "No hay tipo de cambio para ARS (es la moneda base para AFIP)"
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/wizards/l10n_ar_afip_ws_consult.py:0
+msgid "Please set the number you want to consult"
+msgstr "Por favor establezca el número que desea consultar"
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_move.py:0
+msgid ""
+"The product '%s' does not have a valid Codigo MTX for ARCA. "
+"Please set a valid barcode in the product to continue."
+msgstr ""
+"El producto '%s' no tiene un Código MTX válido para ARCA. "
+"Por favor establezca un código de barras válido en el producto para continuar."
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_move.py:0
+msgid "The product %s has an invalid barcode for ARCA (only GS1 o Códigos GTIN 8/12/13)"
+msgstr "El producto %s tiene un código de barras inválido para ARCA (solo GS1 o Códigos GTIN 8/12/13)"
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_journal.py:0
+msgid "\"Check Available AFIP PoS\" is not implemented in testing mode for webservice %s"
+msgstr "\"Consultar Puntos de Venta AFIP\" no está implementado en modo de prueba para el webservice %s"
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_journal.py:0
+msgid "We receive this error trying to consult the last invoice number to AFIP:\n%s"
+msgstr "Recibimos este error al intentar consultar el último número de factura a AFIP:\n%s"
