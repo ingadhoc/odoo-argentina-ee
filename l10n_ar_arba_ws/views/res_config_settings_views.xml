@@ -8,7 +8,7 @@
 
             <setting id="arba_cit" position="inside">
                 <!-- <setting id="arba_cit" string="Webservice A122R (ARBA Retenciones)" company_dependent="1"> -->
-                <span class="o_form_label">Webservice Retenciones (A122R)</span>
+                <span class="o_form_label">Withholding Webservice (A122R)</span>
                 <div class="content-group">
                     <div class="row mt16">
                         <label for="l10n_ar_arba_wh_mode" class="col-lg-3 o_light_label" string="Mode"/>

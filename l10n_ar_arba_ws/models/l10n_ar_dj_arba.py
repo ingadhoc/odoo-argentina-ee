@@ -12,7 +12,7 @@ WS_NAME = "A122R"
 
 class L10nArDjArba(models.Model):
     _name = "l10n_ar.dj.arba"
-    _description = "Declaración Jurada ARBA"
+    _description = "ARBA Sworn Statement"
     _inherit = ["mail.thread.main.attachment", "mail.activity.mixin", "analytic.mixin"]
 
     name = fields.Char(help="Declaration ID returned by webservice", string="Id DJ", readonly=True)
@@ -22,7 +22,9 @@ class L10nArDjArba(models.Model):
         required=True,
         default=lambda self: self.env.company,
     )
-    is_refund = fields.Boolean()
+    is_refund = fields.Boolean(
+        string="It is annulment",
+    )
     state = fields.Selection(
         [
             ("draft", "Draft"),
@@ -48,7 +50,7 @@ class L10nArDjArba(models.Model):
         (
             "unique_ddjj_id",
             "UNIQUE(name)",
-            "Error! Duplicado - Ya existe la DDJJ.",
+            "Error! Duplicate - The sworn statement already exists.",
         ),
     ]
 

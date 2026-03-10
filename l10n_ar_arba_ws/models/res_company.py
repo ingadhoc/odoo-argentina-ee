@@ -11,10 +11,11 @@ class ResCompany(models.Model):
             ("production", "Production"),
         ],
         default="demo",
+        string="ARBA Environment",
     )
 
-    l10n_ar_arba_client_id = fields.Char()
-    l10n_ar_arba_client_secret = fields.Char()
+    l10n_ar_arba_client_id = fields.Char("Client ID")
+    l10n_ar_arba_client_secret = fields.Char("Client Secret")
 
     # Revisar si necesitamos campo para guardar actividad ARBA
     # posibles valores son
