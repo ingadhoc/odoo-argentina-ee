@@ -604,9 +604,11 @@ class AccountJournal(models.Model):
                     # el amount total de los mismos (move_id.amount_total_in_currency_signed) al total_amount de la
                     # retención. Esto lo hacemos porque en la migración de 16 a 18 se migran los pagos y las retenciones
                     # por separado a diferencia de 16 que estaba todo en el mismo asiento.
+                    # Ignoramos sufijos automáticos tipo " (2)" (por ejemplo) al comparar nombres de pago.
+                    payment_name = re.sub(r"\s\(\d+\)$", "", payment.name)
                     related_payments = self.env["account.payment"].search(
                         [
-                            ("name", "=", payment.name),
+                            ("name", "in", list({payment_name, payment.name})),
                             ("company_id", "=", payment.company_id.id),
                             ("partner_id", "=", payment.partner_id.id),
                             ("id", "!=", payment.id),
