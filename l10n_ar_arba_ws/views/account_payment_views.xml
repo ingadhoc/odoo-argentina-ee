@@ -7,11 +7,8 @@
         <field name="inherit_id" ref="l10n_ar_tax.view_account_payment_form"/>
         <field name="arch" type="xml">
             <xpath expr="//field[@name='l10n_ar_withholding_line_ids']//field[@name='ref']" position="after">
-                <field name="is_arba_ws_needed" invisible="1"/>
                 <button name="send_to_arba" type="object" icon="oi-arrow-right" string="ARBA" invisible="not is_arba_ws_needed or l10n_ar_arba_wh_mode == 'batch_import' or l10n_ar_cert_number or parent.state in ['draft', 'canceled', 'rejected']" help="Sent to this withholding ARBA"/>
-                <field name="l10n_ar_cert_number" string="Cert Number" optional="hide"/>
-                <field name="l10n_ar_dj_arba_id" optional="hide"/>
-                <field name="l10n_ar_arba_wh_mode" optional="hide"/>
+                <field name="l10n_ar_dj_arba_id" optional="hide" readonly="1"/>
             </xpath>
         </field>
     </record>
