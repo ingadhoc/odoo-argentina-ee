@@ -102,7 +102,9 @@ class L10nArDjArba(models.Model):
         if env_type == "demo":
             # Simular que nos conectamos y hacemos un comprobante dummy local
             wh_line.l10n_ar_cert_number = "CERT-ARBA-Demo-%s" % fields.Datetime.now().strftime("%Y%m%d%H%M%S")
-            wh_line.name = f"{wh_line.l10n_ar_cert_number} ({wh_line.name})"
+            wh_line.ref = wh_line.name  # almacenamos numero interno en el ref
+            wh_line.name = wh_line.l10n_ar_cert_number
+            wh_line.l10n_ar_dj_arba_id = self
             msg = f"(MODO DEMO) Fue informada Retención en ARBA ({wh_line.l10n_ar_cert_number})"
             wh_line.payment_id.message_post(body=msg)
             self.message_post(body=msg)
@@ -132,7 +134,8 @@ class L10nArDjArba(models.Model):
 
         wh_line.l10n_ar_dj_arba_id = self
         wh_line.l10n_ar_cert_number = response.get("nroEmision")
-        wh_line.name = f"{wh_line.l10n_ar_cert_number} ({wh_line.name})"
+        wh_line.ref = wh_line.name  # almacenamos numero interno en el ref
+        wh_line.name = wh_line.l10n_ar_cert_number
         msg = f"Fue informada Retención en ARBA ({wh_line.l10n_ar_cert_number})"
         self.message_post(body=msg)
         wh_line.payment_id.message_post(body=msg)
