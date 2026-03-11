@@ -40,7 +40,9 @@ Provides a model to manage inflation adjustment indices, which are used to adjus
 Archivos para declaración de impuestos
 ======================================
 
-* ARBA (PBA): https://web.arba.gov.ar/agentes#presentacion-de-ddjj --> hacer click en "Instructivos y Marco Normativo - NOVEDAD -" dentro de DDJJ Periódicas Web IIBB
+* ARBA (PBA):
+   * https://web.arba.gov.ar/agentes#presentacion-de-ddjj --> hacer click en "Instructivos y Marco Normativo - NOVEDAD -" dentro de DDJJ Periódicas Web IIBB
+   * TXT Webservice (A122R): https://web.arba.gov.ar/Instructivos-y-Marco-Normativo-A-122R (ese enlace se obtiene de https://web.arba.gov.ar/agentes#presentacion-de-ddjj , luego hay que ir a la sección "Comprobantes de Retención (A-122R) Nuevo" y hacer click en "Instructivo y Marco Normativo"). Vigente desde 01/03/2026.
 
 * AGIP:  https://www.agip.gob.ar/agentes/agentes-de-recaudacion/ib-agentes-recaudacion/aplicativo-arciba/aclaraciones-sobre-las-adecuaciones-al-aplicativo-e-arciba- (Version 3.0 aplicada el 07-05-2024)
    * Notas de credito  https://www.agip.gob.ar/filemanager/source/Agentes/De%20Recaudacion/Ingresos%20brutos/NC.PDF
