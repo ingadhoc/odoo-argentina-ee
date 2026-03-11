@@ -55,7 +55,8 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
         options["buttons"].extend(txt_export_button)
 
     def pba_ret_desde_01032026_txt(self, options):
-        period = 1
+        move_lines = self._pba_get_txt_lines(options, "ret")
+        period = move_lines and fields.Date.to_date(move_lines[0].date).strftime("%Y%mX") or ""
         file_name = "AR-%s-%s-%s-LOTEX.txt" % (
             self.env.company.vat,
             period,
@@ -68,8 +69,8 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
         }
 
     def pba_alta_ret_lote_a122r_01032026_txt(self, options):
-        period = 1
-        # period = move_lines and fields.Date.from_string(move_lines[0].date).strftime("%Y%mX") or ""
+        move_lines = self._pba_get_txt_lines(options, "ret_a122r")
+        period = move_lines and fields.Date.to_date(move_lines[0].date).strftime("%Y%mX") or ""
         # ER-vat-PERIODO-ACTIVIDAD-LOTE_MD5
         # Esto funciona para el tipo de actividad 6 que es el regimen de retenciones generales.
         # En el futuro si agregamos mas regimenes/actividades debemos de sacar este dato
@@ -86,7 +87,8 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
         }
 
     def pba_perc_desde_01032026_txt(self, options):
-        period = 1
+        move_lines = self._pba_get_txt_lines(options, "perc")
+        period = move_lines and fields.Date.to_date(move_lines[0].date).strftime("%Y%mX") or ""
         file_name = "AR-%s-%s-%s-LOTEX.txt" % (
             self.env.company.vat,
             period,
@@ -99,7 +101,8 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
         }
 
     def pba_perc_act_7_desde_01032026_txt(self, options):
-        period = 1
+        move_lines = self._pba_get_txt_lines(options, "perc_act_7")
+        period = move_lines and fields.Date.to_date(move_lines[0].date).strftime("%Y%mX") or ""
         file_name = "AR-%s-%s-%s-LOTEX.txt" % (
             self.env.company.vat,
             period,
