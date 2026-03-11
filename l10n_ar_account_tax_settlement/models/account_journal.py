@@ -64,7 +64,7 @@ class AccountJournal(models.Model):
             # ('vat', 'VAT'),
             # ('profits', 'Profits'),
             ("misiones", "TXT IIBB aplicado DGR Misiones"),
-            # ("drei_aplicado", "TXT DREI Aplicado"),
+            ("drei_aplicado", "TXT DREI Aplicado"),
             ("sicore_aplicado", "TXT SICORE Aplicado"),
             ("iibb_sufrido", "TXT IIBB p/ SIFERE"),
             ("iibb_aplicado_agip", "TXT Perc/Ret IIBB aplicadas AGIP"),
@@ -1349,35 +1349,36 @@ class AccountJournal(models.Model):
             }
         ]
 
-    # def drei_aplicado_files_values(self, move_lines):
-    #     """ Implementado segun especificación indicada en ticket 39347. También se puede ver detalles en readme
-    #     """
-    #     self.ensure_one()
-    #     content = ''
-    #     for line in move_lines.sorted(key=lambda r: (r.date, r.id)):
-    #         if line.payment_id:
-    #             date = line.payment_id.date
-    #             # cuit (req): 11
-    #             content += line.partner_id.ensure_vat()
-    #             # razon_soc (req): 80
-    #             content += line.partner_id.name.ljust(80)[:80]
-    #             # nro_certificado: 10
-    #             content += '%010d' % int(line.withholding_id.name)
-    #             # fecha_ret: 10 (formato "dd/mm/aaaa")
-    #             content += fields.Date.from_string(date).strftime('%d/%m/%Y')
-    #             # base_imp: 09.2
-    #             content += '%012.2f' % line.withholding_id.base_amount
-    #             # alicuota: 09.6 . En principio por ahora lo estamos haciendo el cálculo de retención "basado en regla".
-    #             # TODO: no existe más el cálculo de retención "Basado en regla" en 18, ¿cómo lo implementamos?
-    #             content += "{:0>16.6f}".format(line.withholding_id.tax_id._get_rule(line.payment_id).percentage * 100)
-    #             # importe (req): 09.2
-    #             content += '%012.2f' % abs(line.amount_currency)
-    #             content += '\n'
+    def drei_aplicado_files_values(self, move_lines):
+        """Implementado segun especificación indicada en ticket 39347. También se puede ver detalles en readme"""
+        self.ensure_one()
+        content = ""
+        for line in move_lines.sorted(key=lambda r: (r.date, r.id)):
+            if line.payment_id:
+                date = line.payment_id.date
+                # cuit (req): 11
+                content += line.partner_id.ensure_vat()
+                # razon_soc (req): 80
+                content += line.partner_id.name.ljust(80)[:80]
+                # nro_certificado: 10
+                content += "%010d" % int(line.withholding_id.name)
+                # fecha_ret: 10 (formato "dd/mm/aaaa")
+                content += fields.Date.from_string(date).strftime("%d/%m/%Y")
+                # base_imp: 09.2
+                content += "%012.2f" % line.withholding_id.base_amount
+                tax = line._get_settlement_tax() or line.tax_line_id
+                # alicuota: 09.6
+                content += f"{tax.amount:0>16.6f}"
+                # importe (req): 09.2
+                content += "%012.2f" % abs(line.amount_currency)
+                content += "\n"
 
-    #     return [{
-    #         'txt_filename': 'DREI retenciones aplicadas.txt',
-    #         'txt_content': content,
-    #     }]
+        return [
+            {
+                "txt_filename": "DREI retenciones aplicadas.txt",
+                "txt_content": content,
+            }
+        ]
 
     def misiones_files_values(self, move_lines):
         """Implementado segun especificación indicada en ticket 60295. También se puede ver detalles en readme"""
