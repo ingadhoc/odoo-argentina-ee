@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 19.0+e\n"
+"Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-18 23:11+0000\n"
-"PO-Revision-Date: 2026-03-18 23:11+0000\n"
+"POT-Creation-Date: 2026-03-10 13:00+0000\n"
+"PO-Revision-Date: 2026-03-10 13:00+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -23,23 +23,25 @@ msgid ""
 "* Automatic: Withholdings will be automatically reported to ARBA when the payment is confirmed\n"
 "* Batch Import: Withholdings must be manually reported to ARBA by clicking the 'Inform to ARBA' button after payment validation"
 msgstr ""
+"* Automático: Las retenciones serán informadas automáticamente a ARBA cuando el pago sea confirmado\n"
+"* Importación por Lote: Las retenciones deben ser informadas manualmente a ARBA haciendo clic en el botón 'Informar a ARBA' luego de validar el pago"
 
 #. module: l10n_ar_arba_ws
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "1st"
-msgstr ""
+msgstr "1ra"
 
 #. module: l10n_ar_arba_ws
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "2nd"
-msgstr ""
+msgstr "2da"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
 msgid "<span class=\"o_form_label\">Withholding Webservice (A122R)</span>"
-msgstr ""
+msgstr "<span class=\"o_form_label\">Webservice Retenciones (A122R)</span>"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
@@ -48,11 +50,14 @@ msgid ""
 "                            Select a date to calculate the applicable period\n"
 "                        </span>"
 msgstr ""
+"<span class=\"oe_title\">\n"
+"                            Seleccione fecha para calcular periodo que aplica\n"
+"                        </span>"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model,name:l10n_ar_arba_ws.model_l10n_ar_afipws_connection
 msgid "AFIP Webservice Connection"
-msgstr ""
+msgstr "Conexión Webservice de AFIP"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_account_payment_form
@@ -63,147 +68,147 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_company__l10n_ar_arba_env
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_config_settings__l10n_ar_arba_env
 msgid "ARBA Environment"
-msgstr ""
+msgstr "Entorno ARBA"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
 msgid "ARBA Information"
-msgstr ""
+msgstr "Información de ARBA"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model,name:l10n_ar_arba_ws.model_l10n_ar_dj_arba
 msgid "ARBA Sworn Statement"
-msgstr ""
+msgstr "Declaración Jurada ARBA"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.actions.server,name:l10n_ar_arba_ws.ir_cron_arba_ws_ir_actions_server
 msgid "ARBA WS - Update DDJJ"
-msgstr ""
+msgstr "ARBA WS - Actualizar DDJJ"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__l10n_ar_cert_number
 msgid "ARBA Withholding Certificate Number"
-msgstr ""
+msgstr "Número de Certificado de Retención ARBA"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__l10n_ar_arba_wh_mode
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_company__l10n_ar_arba_wh_mode
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_config_settings__l10n_ar_arba_wh_mode
 msgid "ARBA Withholding Mode"
-msgstr ""
+msgstr "Modo de Retención ARBA"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__l10n_ar_dj_arba_id
 msgid "ARBA sworn statement associated with this withholding"
-msgstr ""
+msgstr "Declaración Jurada de ARBA asociada a esta retención"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_needaction
 msgid "Action Needed"
-msgstr ""
+msgstr "Acción Requerida"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_ids
 msgid "Activities"
-msgstr ""
+msgstr "Actividades"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_exception_decoration
 msgid "Activity Exception Decoration"
-msgstr ""
+msgstr "Decoración de Excepción de Actividad"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_state
 msgid "Activity State"
-msgstr ""
+msgstr "Estado de Actividad"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_type_icon
 msgid "Activity Type Icon"
-msgstr ""
+msgstr "Ícono de Tipo de Actividad"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__analytic_distribution
 msgid "Analytic Distribution"
-msgstr ""
+msgstr "Distribución Analítica"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__analytic_precision
 msgid "Analytic Precision"
-msgstr ""
+msgstr "Precisión Analítica"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_attachment_count
 msgid "Attachment Count"
-msgstr ""
+msgstr "Cantidad de Adjuntos"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields.selection,name:l10n_ar_arba_ws.selection__res_company__l10n_ar_arba_wh_mode__automatic
 msgid "Automatic"
-msgstr ""
+msgstr "Automático"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields.selection,name:l10n_ar_arba_ws.selection__res_company__l10n_ar_arba_wh_mode__batch_import
 msgid "Batch Import"
-msgstr ""
+msgstr "Importación por Lote"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_account_payment_form
 msgid "Cert Number"
-msgstr ""
+msgstr "Número de Certificado"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_company__l10n_ar_arba_client_id
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_config_settings__l10n_ar_arba_client_id
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
 msgid "Client ID"
-msgstr ""
+msgstr "ID de Cliente"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_company__l10n_ar_arba_client_secret
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_config_settings__l10n_ar_arba_client_secret
 msgid "Client Secret"
-msgstr ""
+msgstr "Secreto de Cliente"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__close_date
 msgid "Close Date"
-msgstr ""
+msgstr "Fecha de Cierre"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields.selection,name:l10n_ar_arba_ws.selection__l10n_ar_dj_arba__state__close
 msgid "Closed"
-msgstr ""
+msgstr "Cerrado"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model,name:l10n_ar_arba_ws.model_res_company
 msgid "Companies"
-msgstr ""
+msgstr "Empresa"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__company_id
 msgid "Company"
-msgstr ""
+msgstr "Compañía"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model,name:l10n_ar_arba_ws.model_res_config_settings
 msgid "Config Settings"
-msgstr ""
+msgstr "Ajustes de Configuración"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
 msgid "Connect to webservice"
-msgstr ""
+msgstr "Conectar al webservice"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Creado por"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Creado el"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.actions.act_window,name:l10n_ar_arba_ws.l10n_ar_dj_arba_action
@@ -219,12 +224,12 @@ msgstr ""
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__date
 msgid "Date"
-msgstr ""
+msgstr "Fecha"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_dj_arba__name
 msgid "Declaration ID returned by webservice"
-msgstr ""
+msgstr "ID de Declaración devuelto por el webservice"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields.selection,name:l10n_ar_arba_ws.selection__res_company__l10n_ar_arba_env__demo
@@ -234,52 +239,52 @@ msgstr ""
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nombre Mostrado"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__distribution_analytic_account_ids
 msgid "Distribution Analytic Account"
-msgstr ""
+msgstr "Cuenta Analítica de Distribución"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields.selection,name:l10n_ar_arba_ws.selection__l10n_ar_dj_arba__state__draft
 msgid "Draft"
-msgstr ""
+msgstr "Borrador"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__due_date
 msgid "Due Date"
-msgstr ""
+msgstr "Fecha de Vencimiento"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
 msgid "Envionment"
-msgstr ""
+msgstr "Entorno"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.constraint,message:l10n_ar_arba_ws.constraint_l10n_ar_dj_arba_unique_ddjj_id
 msgid "Error! Duplicate - The sworn statement already exists."
-msgstr ""
+msgstr "¡Error! Duplicado - Ya existe la DDJJ."
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_follower_ids
 msgid "Followers"
-msgstr ""
+msgstr "Seguidores"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_partner_ids
 msgid "Followers (Partners)"
-msgstr ""
+msgstr "Seguidores (Contactos)"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_type_icon
 msgid "Font awesome icon e.g. fa-tasks"
-msgstr ""
+msgstr "Ícono Font Awesome, por ejemplo fa-tasks"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__has_message
 msgid "Has Message"
-msgstr ""
+msgstr "Tiene Mensaje"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__id
@@ -289,12 +294,12 @@ msgstr ""
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_exception_icon
 msgid "Icon"
-msgstr ""
+msgstr "Ícono"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_exception_icon
 msgid "Icon to indicate an exception activity."
-msgstr ""
+msgstr "Ícono para indicar una actividad de excepción."
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__name
@@ -304,113 +309,108 @@ msgstr ""
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_needaction
 msgid "If checked, new messages require your attention."
-msgstr ""
+msgstr "Si está marcado, hay nuevos mensajes que requieren su atención."
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_has_error
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_has_sms_error
 msgid "If checked, some messages have a delivery error."
-msgstr ""
+msgstr "Si está marcado, algunos mensajes tienen un error de entrega."
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_is_follower
 msgid "Is Follower"
-msgstr ""
+msgstr "Es Seguidor"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__is_refund
 msgid "It is annulment"
-msgstr ""
+msgstr "Es anulación"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__is_arba_ws_needed
 msgid "It needs to be sent to the ARBA A122R webservice"
-msgstr ""
+msgstr "Debe enviarse al webservice ARBA A122R"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
 msgid "It will apply to"
-msgstr ""
-
-#. module: l10n_ar_arba_ws
-#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__is_arba_ws_needed
-msgid "It needs to be sent to the ARBA A122R webservice"
-msgstr ""
+msgstr "Aplicará al"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__l10n_ar_state_id
 msgid "Jurisdiction"
-msgstr ""
+msgstr "Jurisdicción"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Última Actualización por"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Última Actualización el"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_main_attachment_id
 msgid "Main Attachment"
-msgstr ""
+msgstr "Adjunto Principal"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_has_error
 msgid "Message Delivery error"
-msgstr ""
+msgstr "Error de Entrega de Mensaje"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_ids
 msgid "Messages"
-msgstr ""
+msgstr "Mensajes"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
 msgid "Mode"
-msgstr ""
+msgstr "Modo"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__my_activity_date_deadline
 msgid "My Activity Deadline"
-msgstr ""
+msgstr "Vencimiento de Mi Actividad"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_date_deadline
 msgid "Next Activity Deadline"
-msgstr ""
+msgstr "Vencimiento de Próxima Actividad"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_summary
 msgid "Next Activity Summary"
-msgstr ""
+msgstr "Resumen de Próxima Actividad"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_type_id
 msgid "Next Activity Type"
-msgstr ""
+msgstr "Tipo de Próxima Actividad"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_needaction_counter
 msgid "Number of Actions"
-msgstr ""
+msgstr "Número de Acciones"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_has_error_counter
 msgid "Number of errors"
-msgstr ""
+msgstr "Número de Errores"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_needaction_counter
 msgid "Number of messages requiring action"
-msgstr ""
+msgstr "Número de mensajes que requieren acción"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_has_error_counter
 msgid "Number of messages with delivery error"
-msgstr ""
+msgstr "Número de mensajes con error de entrega"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__is_arba_ws_needed
@@ -418,68 +418,70 @@ msgid ""
 "Only applies to incurred withholding for ARBA on taxes with type supplier "
 "payments"
 msgstr ""
+"Solo aplica a retenciones sufridas para ARBA en impuestos con tipo pagos a "
+"proveedores"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields.selection,name:l10n_ar_arba_ws.selection__l10n_ar_dj_arba__state__open
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
 msgid "Open"
-msgstr ""
+msgstr "Abierto"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__open_date
 msgid "Open Date"
-msgstr ""
+msgstr "Fecha de Apertura"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model,name:l10n_ar_arba_ws.model_l10n_ar_payment_withholding
 msgid "Payment withholding lines"
-msgstr ""
+msgstr "Líneas de pago de retención"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model,name:l10n_ar_arba_ws.model_account_payment
 msgid "Payments"
-msgstr ""
+msgstr "Pagos"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_search
 msgid "Period"
-msgstr ""
+msgstr "Período"
 
 #. module: l10n_ar_arba_ws
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "Period %s %s - %s Fortnight"
-msgstr ""
+msgstr "Período %s %s - %s Quincena"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields.selection,name:l10n_ar_arba_ws.selection__res_company__l10n_ar_arba_env__production
 msgid "Production"
-msgstr ""
+msgstr "Producción"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_user_id
 msgid "Responsible User"
-msgstr ""
+msgstr "Usuario Responsable"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_has_sms_error
 msgid "SMS Delivery error"
-msgstr ""
+msgstr "Error de Entrega de SMS"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
 msgid "Secret"
-msgstr ""
+msgstr "Secreto"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_account_payment_form
 msgid "Sent to this withholding ARBA"
-msgstr ""
+msgstr "Enviado a esta retención ARBA"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__state
 msgid "State"
-msgstr ""
+msgstr "Estado"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_state
@@ -489,51 +491,55 @@ msgid ""
 "Today: Activity date is today\n"
 "Planned: Future activities."
 msgstr ""
+"Estado basado en actividades\n"
+"Vencido: La fecha de vencimiento ya pasó\n"
+"Hoy: La fecha de actividad es hoy\n"
+"Planificado: Actividades futuras."
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields.selection,name:l10n_ar_arba_ws.selection__res_company__l10n_ar_arba_env__testing
 msgid "Testing"
-msgstr ""
+msgstr "Pruebas"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_exception_decoration
 msgid "Type of the exception activity on record."
-msgstr ""
+msgstr "Tipo de actividad de excepción en el registro."
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_list
 msgid "Update"
-msgstr ""
+msgstr "Actualizar"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
 msgid "Update Status"
-msgstr ""
+msgstr "Actualizar Estado"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_list
 msgid "Update the status via ws"
-msgstr ""
+msgstr "Actualizar el estado vía webservice"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__website_message_ids
 msgid "Website Messages"
-msgstr ""
+msgstr "Mensajes del Sitio Web"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_dj_arba__website_message_ids
 msgid "Website communication history"
-msgstr ""
+msgstr "Historial de comunicación del sitio web"
 
 #. module: l10n_ar_arba_ws
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_afipws_connection.py:0
 msgid "Withholding Webservice (A122R)"
-msgstr ""
+msgstr "Webservice Retenciones (A122R)"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__l10n_ar_withholding_ids
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
 msgid "Withholdings"
-msgstr ""
+msgstr "Retenciones"
