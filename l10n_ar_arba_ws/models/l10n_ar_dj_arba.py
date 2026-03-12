@@ -120,9 +120,7 @@ class L10nArDjArba(models.Model):
             "alicuota": wh_line.tax_id.amount,
             "baseImponible": wh_line.base_amount,
             "importeRetencion": wh_line.amount,
-            "fechaOperacion": fields.Datetime.now().strftime(
-                "%Y-%m-%dT%H:%M:%S.000Z"
-            ),  # wh_line.payment_id.date.strftime("%Y-%m-%dT%H:%M:%S.000Z")
+            "fechaOperacion": wh_line.payment_id.date.strftime("%Y-%m-%dT%H:%M:%S.000Z"),
             "nTransaccionAgente": re.sub("[^0-9]", "", wh_line.name),  # Obligatorio String(20)
         }
         response, error = self._process_arba_response(
