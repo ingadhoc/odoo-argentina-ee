@@ -18,6 +18,7 @@ class AfipImportWizardLine(models.TransientModel):
     document_type = fields.Char(string="Tipo de Documento")
     move_type = fields.Char(string="Tipo de Factura")
     exists = fields.Boolean("Ya Existe", compute="_compute_exists", store=True)
+    iva_0 = fields.Float("IVA 0%")
     neto_grav_iva_0 = fields.Float("Neto Gravado IVA 0%")
     iva_2_5 = fields.Float("IVA 2.5%")
     neto_grav_iva_2_5 = fields.Float("Neto Gravado IVA 2.5%")
@@ -108,10 +109,10 @@ class AfipImportWizardLine(models.TransientModel):
         if self.currency == "$":
             currency_id = self.env["res.currency"].search([("name", "=", "ARS")], limit=1)
         else:
-            currency_id = self.env["res.currency"].search([("name", "=", self.currency)], limit=1)
+            currency_id = self.env["res.currency"].search([("symbol", "=", self.currency)], limit=1)
 
         if not currency_id:
-            raise UserError(_("No currency found for code: %s") % currency_id)
+            raise UserError(_("No currency found for code: %s") % self.currency)
 
         return currency_id
 

@@ -84,6 +84,7 @@ class AfipImportWizard(models.TransientModel):
 
             # Agregamos la linea con IVA y otros tributos (si existen).
             vat_rates = [
+                (0.0, line.iva_0, line.neto_grav_iva_0),
                 (2.5, line.iva_2_5, line.neto_grav_iva_2_5),
                 (5.0, line.iva_5, line.neto_grav_iva_5),
                 (10.5, line.iva_10_5, line.neto_grav_iva_10_5),
@@ -92,16 +93,23 @@ class AfipImportWizard(models.TransientModel):
             ]
 
             for vat_rate, vat_amount, neto_amount in vat_rates:
-                if not math.isnan(vat_amount) and vat_amount > 0:
+                if not math.isnan(neto_amount) and neto_amount > 0:
                     # Search for the specific VAT tax
-                    iva_tax = self.env["account.tax"].search(
-                        base_domain
-                        + [
-                            ("amount", "=", vat_rate),
-                            ("tax_group_id.l10n_ar_vat_afip_code", "!=", False),
-                        ],
-                        limit=1,
-                    )
+                    if vat_rate == 0.0:
+                        # For 0% VAT, search for tax with AFIP code 3 and amount 0
+                        iva_tax = self.env["account.tax"].search(
+                            base_domain + [("amount", "=", 0.0), ("tax_group_id.l10n_ar_vat_afip_code", "=", "3")],
+                            limit=1,
+                        )
+                    else:
+                        iva_tax = self.env["account.tax"].search(
+                            base_domain
+                            + [
+                                ("amount", "=", vat_rate),
+                                ("tax_group_id.l10n_ar_vat_afip_code", "!=", False),
+                            ],
+                            limit=1,
+                        )
 
                     if iva_tax:
                         if math.isnan(neto_amount) or neto_amount == 0:
