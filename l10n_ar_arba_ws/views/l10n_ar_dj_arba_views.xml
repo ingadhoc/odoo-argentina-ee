@@ -28,12 +28,12 @@
                 <sheet>
                     <group>
                         <span class="oe_title">
-                            Seleccione fecha para calcular periodo que aplica
+                            Select a date to calculate the applicable period
                         </span>
                         <field name="date"/>
-                        <field name="display_name" string="Aplicará al"/>
+                        <field name="display_name" string="It will apply to"/>
                     </group>
-                    <group string="Información de ARBA">
+                    <group string="ARBA Information">
                         <field name="name"/>
                         <field name="open_date"/>
                         <field name="due_date"/>

@@ -14,7 +14,7 @@ class L10nArAfipwsConnection(models.Model):
     def _get_l10n_ar_afip_ws(self):
         # EXTEND l10n_ar_edi
         """Agregamos el webservice para conectarnos a ARBA y manejar DJ y RET"""
-        return super()._get_l10n_ar_afip_ws() + [("A122R", self.env._("Webservice Retenciones (A122R)"))]
+        return super()._get_l10n_ar_afip_ws() + [("A122R", self.env._("Withholding Webservice (A122R)"))]
 
     @api.model
     def _l10n_ar_get_afip_ws_url(self, afip_ws, environment_type):

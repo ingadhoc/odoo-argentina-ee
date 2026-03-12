@@ -5,7 +5,6 @@ from http import HTTPStatus
 
 import requests
 from odoo import api, fields, models
-from odoo.exceptions import UserError
 from odoo.tools import format_date
 
 WS_NAME = "A122R"
@@ -13,7 +12,7 @@ WS_NAME = "A122R"
 
 class L10nArDjArba(models.Model):
     _name = "l10n_ar.dj.arba"
-    _description = "Declaración Jurada ARBA"
+    _description = "ARBA Sworn Statement"
     _inherit = ["mail.thread.main.attachment", "mail.activity.mixin", "analytic.mixin"]
 
     name = fields.Char(help="Declaration ID returned by webservice", string="Id DJ", readonly=True)
@@ -23,7 +22,9 @@ class L10nArDjArba(models.Model):
         required=True,
         default=lambda self: self.env.company,
     )
-    is_refund = fields.Boolean()
+    is_refund = fields.Boolean(
+        string="It is annulment",
+    )
     state = fields.Selection(
         [
             ("draft", "Draft"),
@@ -98,7 +99,9 @@ class L10nArDjArba(models.Model):
         if env_type == "demo":
             # Simular que nos conectamos y hacemos un comprobante dummy local
             wh_line.l10n_ar_cert_number = "CERT-ARBA-Demo-%s" % fields.Datetime.now().strftime("%Y%m%d%H%M%S")
-            wh_line.name = f"{wh_line.l10n_ar_cert_number} ({wh_line.name})"
+            wh_line.ref = wh_line.name  # almacenamos numero interno en el ref
+            wh_line.name = wh_line.l10n_ar_cert_number
+            wh_line.l10n_ar_dj_arba_id = self
             msg = f"(MODO DEMO) Fue informada Retención en ARBA ({wh_line.l10n_ar_cert_number})"
             wh_line.payment_id.message_post(body=msg)
             self.message_post(body=msg)
@@ -114,9 +117,7 @@ class L10nArDjArba(models.Model):
             "alicuota": wh_line.tax_id.amount,
             "baseImponible": wh_line.base_amount,
             "importeRetencion": wh_line.amount,
-            "fechaOperacion": fields.Datetime.now().strftime(
-                "%Y-%m-%dT%H:%M:%S.000Z"
-            ),  # wh_line.payment_id.date.strftime("%Y-%m-%dT%H:%M:%S.000Z")
+            "fechaOperacion": wh_line.payment_id.date.strftime("%Y-%m-%dT%H:%M:%S.000Z"),
             "nTransaccionAgente": re.sub("[^0-9]", "", wh_line.name),  # Obligatorio String(20)
         }
         response, error = self._process_arba_response(
@@ -128,30 +129,22 @@ class L10nArDjArba(models.Model):
 
         wh_line.l10n_ar_dj_arba_id = self
         wh_line.l10n_ar_cert_number = response.get("nroEmision")
-        wh_line.name = f"{wh_line.l10n_ar_cert_number} ({wh_line.name})"
+        wh_line.ref = wh_line.name  # almacenamos numero interno en el ref
+        wh_line.name = wh_line.l10n_ar_cert_number
         msg = f"Fue informada Retención en ARBA ({wh_line.l10n_ar_cert_number})"
         self.message_post(body=msg)
         wh_line.payment_id.message_post(body=msg)
 
     def _ensure_dj(self, wh_date, company):
-        """Encontrar la declaracion jurada que corresponde, que este abierta y que este en el
-        mismo periodo.
-        Si no existe entonces genera una automaticamente"""
-
-        period_type = company.l10n_ar_arba_dj_period
-        if period_type == "monthly":
-            from_date = fields.Date.start_of(wh_date, "month")
+        """Encontrar la declaracion jurada que corresponde, que este abierta y
+        que este en el mismo periodo de la retención.
+        Si no existe entonces genera una nueva declaración automaticamente"""
+        if wh_date.day > 15:
+            from_date = wh_date.replace(day=16)
             to_date = fields.Date.end_of(wh_date, "month")
-        elif period_type == "fortnightly":
-            if wh_date.day > 15:
-                from_date = wh_date.replace(day=16)
-                to_date = fields.Date.end_of(wh_date, "month")
-            else:
-                from_date = fields.Date.start_of(wh_date, "month")
-                to_date = wh_date.replace(day=15)
         else:
-            raise UserError("ARBA DJ Period not implemented yet %s" % period_type)
-
+            from_date = fields.Date.start_of(wh_date, "month")
+            to_date = wh_date.replace(day=15)
         dj_arba = self.search(
             [
                 ("company_id", "=", company.id),
