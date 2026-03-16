@@ -584,14 +584,7 @@ class AccountJournal(models.Model):
             if payment:
                 # solo en comprobantes A, M segun especificacion
                 vat_amount = 0.0
-                # es lo mismo que payment_group.matched_amount_untaxed
-                taxable_amount = float_round(line.withholding_id.base_amount, precision_digits=2)
-                rounded_withholding = float_round((taxable_amount * alicuot / 100), precision_digits=2)
-                # TODO en febrero 2026 sacar el if de abajo (más información en tarea 59174).
-                # Hacer revert de https://github.com/ingadhoc/odoo-argentina-ee/pull/743 en febrero 2026
                 total_amount = float_round(payment.move_id.amount_total_in_currency_signed, precision_digits=2)
-                if rounded_withholding != -line.balance:
-                    total_amount = float_round(total_amount + line.balance + rounded_withholding, precision_digits=2)
                 if backward_comp_is_installed and payment.is_backward_withholding_payment:
                     # Buscamos los payments sin retención que vienen migrados de la versión anterior y le sumamos
                     # el amount total de los mismos (move_id.amount_total_in_currency_signed) al total_amount de la
@@ -614,6 +607,8 @@ class AccountJournal(models.Model):
                         total_amount += float_round(
                             sum(related_payments.mapped("move_id.amount_total_in_currency_signed")), precision_digits=2
                         )
+                # es lo mismo que payment_group.matched_amount_untaxed
+                taxable_amount = float_round(line.withholding_id.base_amount, precision_digits=2)
 
                 # lo sacamos por diferencia
                 other_taxes_amount = company_currency.round(total_amount - taxable_amount - vat_amount)
@@ -719,16 +714,8 @@ class AccountJournal(models.Model):
 
             # si la línea tiene moneda diferente de la moneda de la compañía queremos que la ret/perc
             # se calcule aplicando la alícuota sobre la base imponible en la moneda de la compañía
-            # TODO en febrero 2026 sacar lo que está a la derecha del "or" del if de abajo
-            # (más información en tarea 59174).
-            # Hacer revert de esto https://github.com/ingadhoc/odoo-argentina-ee/pull/743 en febrero 2026
-            rounded_ret_perc_applied = float_round((taxable_amount * alicuot / 100), precision_digits=2)
-            if (
-                line.currency_id
-                and line.currency_id != line.company_id.currency_id
-                or rounded_ret_perc_applied != -line.balance
-            ):
-                ret_perc_applied = rounded_ret_perc_applied
+            if line.currency_id and line.currency_id != line.company_id.currency_id:
+                ret_perc_applied = float_round((taxable_amount * alicuot / 100), precision_digits=2)
             content += format_amount((-line.balance if not ret_perc_applied else ret_perc_applied), 16, 2, ",")
 
             # 21 - Monto Total Retenido/Percibido
