@@ -1649,20 +1649,20 @@ class AccountJournal(models.Model):
         ]
 
     def iibb_aplicado_arba_desde_01032026_files_values(self, move_lines):
+        """Extendemos para que solo si esta disponible el módulo de arba_ws se incluya la generación del
+        archivo para registrar reteciones por lote"""
         self.ensure_one()
         return self.iibb_aplicado_arba_desde_01032026(
             move_lines
-        ) + self.iibb_alta_ret_aplicado_arba_por_lote_a122r_01032026(
-            move_lines.filtered(lambda x: x.withholding_id and not x.withholding_id.l10n_ar_cert_number)
-        )
+        ) + self.iibb_alta_ret_aplicado_arba_por_lote_a122r_01032026(move_lines)
 
     def iibb_aplicado_arba_act_7_desde_01032026_files_values(self, move_lines):
+        """Extendemos para que solo si esta disponible el módulo de arba_ws se incluya la generación del
+        archivo para registrar reteciones por lote"""
         self.ensure_one()
         return self.iibb_aplicado_arba_desde_01032026(
             move_lines, act_7=True
-        ) + self.iibb_alta_ret_aplicado_arba_por_lote_a122r_01032026(
-            move_lines.filtered(lambda x: x.withholding_id and not x.withholding_id.l10n_ar_cert_number)
-        )
+        ) + self.iibb_alta_ret_aplicado_arba_por_lote_a122r_01032026(move_lines)
 
     def iibb_aplicado_arba_desde_01032026(self, move_lines, act_7=None):
         """Desarrollado según especificación https://web.arba.gov.ar/instructivo-y-marco-normativo
@@ -1804,6 +1804,17 @@ class AccountJournal(models.Model):
         Solo para retenciones. Vigente desde 01/03/2026."""
         self.ensure_one()
         content = ""
+
+        # Forzamos para informar solo las retenciones (por las dudas por error seleccionen percepciones)
+        move_lines = move_lines.filtered(lambda x: x.withholding_id)
+
+        # Si el módulo de WS ARBA A122R está instalado, debemos filtrar para no informar en el TXT
+        # las retenciones que ya fueron informadas via webservice.
+        if self.env["ir.module.module"].search(
+            [("name", "=", "l10n_ar_arba_ws"), ("state", "in", ["installed", "to upgrade"])]
+        ):
+            move_lines = move_lines.filtered(lambda x: not x.withholding_id.l10n_ar_cert_number)
+
         for line in move_lines:
             # Nro. transacción Agente (numérico 20, desde 1 hasta 20. Formato 99999999999999999999)
             content += str(line.name).zfill(20)
