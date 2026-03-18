@@ -9,17 +9,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-13 20:02+0000\n"
+"POT-Creation-Date: 2026-03-18 13:05+0000\n"
 "PO-Revision-Date: 2026-01-15 16:10+0000\n"
 "Last-Translator: Gonzalo Lenzi <gl@adhoc.inc>\n"
-"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
-"odoo-argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_import_bill/es/>\n"
+"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
+"argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_import_bill/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == 0)"
-" ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == "
+"0) ? 1 : 2);\n"
 "X-Generator: Weblate 5.10.4\n"
 
 #. module: l10n_ar_import_bill
@@ -135,6 +135,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__id
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__id
 msgid "ID"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva_0
+msgid "IVA 0%"
 msgstr ""
 
 #. module: l10n_ar_import_bill
