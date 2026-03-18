@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-18 22:44+0000\n"
-"PO-Revision-Date: 2026-03-18 22:44+0000\n"
+"POT-Creation-Date: 2026-03-18 23:11+0000\n"
+"PO-Revision-Date: 2026-03-18 23:11+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -335,6 +335,11 @@ msgid "Is Refund"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__is_arba_ws_needed
+msgid "It needs to be sent to the ARBA A122R webservice"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__l10n_ar_state_id
 msgid "Jurisdiction"
 msgstr ""
@@ -430,6 +435,13 @@ msgstr ""
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_has_error_counter
 msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+#: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__is_arba_ws_needed
+msgid ""
+"Only applies to incurred withholding for ARBA on taxes with type supplier "
+"payments"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
