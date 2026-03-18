@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-18 23:11+0000\n"
-"PO-Revision-Date: 2026-03-18 23:11+0000\n"
+"POT-Creation-Date: 2026-03-18 23:42+0000\n"
+"PO-Revision-Date: 2026-03-18 23:42+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -47,11 +47,6 @@ msgid ""
 "<span class=\"oe_title\">\n"
 "                            Select a date to calculate the applicable period\n"
 "                        </span>"
-msgstr ""
-
-#. module: l10n_ar_arba_ws
-#: model:ir.model,name:l10n_ar_arba_ws.model_l10n_ar_afipws_connection
-msgid "AFIP Webservice Connection"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
@@ -95,6 +90,11 @@ msgstr ""
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__l10n_ar_dj_arba_id
 msgid "ARBA sworn statement associated with this withholding"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+#: model:ir.model,name:l10n_ar_arba_ws.model_l10n_ar_afipws_connection
+msgid "ARCA Webservice Connection"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
@@ -145,11 +145,6 @@ msgstr ""
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields.selection,name:l10n_ar_arba_ws.selection__res_company__l10n_ar_arba_wh_mode__batch_import
 msgid "Batch Import"
-msgstr ""
-
-#. module: l10n_ar_arba_ws
-#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_account_payment_form
-msgid "Cert Number"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
@@ -232,7 +227,12 @@ msgid "Demo"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_account_payment__display_name
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_afipws_connection__display_name
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__display_name
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__display_name
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_company__display_name
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_config_settings__display_name
 msgid "Display Name"
 msgstr ""
 
@@ -253,12 +253,12 @@ msgstr ""
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
-msgid "Envionment"
+msgid "Environment"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.constraint,message:l10n_ar_arba_ws.constraint_l10n_ar_dj_arba_unique_ddjj_id
-msgid "Error! Duplicate - The sworn statement already exists."
+msgid "Error! DDJJ ARBA already exists."
 msgstr ""
 
 #. module: l10n_ar_arba_ws
@@ -282,7 +282,12 @@ msgid "Has Message"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_account_payment__id
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_afipws_connection__id
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__id
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__id
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_company__id
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_config_settings__id
 msgid "ID"
 msgstr ""
 
@@ -330,11 +335,6 @@ msgstr ""
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
 msgid "It will apply to"
-msgstr ""
-
-#. module: l10n_ar_arba_ws
-#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__is_arba_ws_needed
-msgid "It needs to be sent to the ARBA A122R webservice"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
