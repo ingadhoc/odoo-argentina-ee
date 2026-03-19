@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-07 13:50+0000\n"
-"PO-Revision-Date: 2026-01-07 13:50+0000\n"
+"POT-Creation-Date: 2026-03-19 15:32+0000\n"
+"PO-Revision-Date: 2026-03-19 15:32+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_partner_view_form
-msgid "<span class=\"o_stat_text\">Libro Mayor de Empresa</span>"
+msgid "<span class=\"o_stat_text\">Follow-up Report</span>"
 msgstr ""
 
 #. module: account_accountant_ux
@@ -109,6 +109,8 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_auto_reconcile_wizard__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_bank_statement_line__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_change_lock_date__display_name
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_followup_manual_reminder__display_name
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_followup_report_handler__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_journal__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_move__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_move_line__display_name
@@ -125,9 +127,16 @@ msgid "Filter Amount"
 msgstr ""
 
 #. module: account_accountant_ux
+#: model:ir.model,name:account_accountant_ux.model_account_followup_report_handler
+msgid "Follow-Up Report Custom Handler"
+msgstr ""
+
+#. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_auto_reconcile_wizard__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_bank_statement_line__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_change_lock_date__id
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_followup_manual_reminder__id
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_followup_report_handler__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_journal__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_move__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_move_line__id
@@ -244,6 +253,18 @@ msgid "Show All"
 msgstr ""
 
 #. module: account_accountant_ux
+#. odoo-python
+#: code:addons/account_accountant_ux/models/account_followup_report.py:0
+msgid "Total Due"
+msgstr ""
+
+#. module: account_accountant_ux
+#. odoo-python
+#: code:addons/account_accountant_ux/models/account_followup_report.py:0
+msgid "Total Overdue"
+msgstr ""
+
+#. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_partner__debit
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_users__debit
 msgid "Total Payable"
@@ -271,6 +292,11 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/account_accountant_ux/static/src/components/account_report/filters/filters.js:0
 msgid "With Filters"
+msgstr ""
+
+#. module: account_accountant_ux
+#: model:ir.model,name:account_accountant_ux.model_account_followup_manual_reminder
+msgid "Wizard for sending manual reminders to clients"
 msgstr ""
 
 #. module: account_accountant_ux
