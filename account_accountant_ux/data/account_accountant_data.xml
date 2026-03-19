@@ -2,19 +2,19 @@
 
         <!-- Configurar require_custom_filter en reportes de partners -->
         <record id="account_reports.partner_ledger_report" model="account.report">
-            <field name="require_custom_filter">True</field>
+            <field name="require_custom_filter">False</field>
             <field name="filter_aml_ir_filters">True</field>
             <field name="filter_show_all_custom">True</field>
         </record>
 
         <record id="account_reports.aged_receivable_report" model="account.report">
-            <field name="require_custom_filter">True</field>
+            <field name="require_custom_filter">False</field>
             <field name="filter_aml_ir_filters">True</field>
             <field name="filter_show_all_custom">True</field>
         </record>
 
         <record id="account_reports.aged_payable_report" model="account.report">
-            <field name="require_custom_filter">True</field>
+            <field name="require_custom_filter">False</field>
             <field name="filter_aml_ir_filters">True</field>
             <field name="filter_show_all_custom">True</field>
         </record>
