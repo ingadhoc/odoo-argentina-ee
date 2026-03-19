@@ -47,7 +47,7 @@ msgstr "<span title=\"Balance in Odoo\">Balance en Libro Mayor</span>"
 #. odoo-javascript
 #: code:addons/account_accountant_ux/static/src/components/bank_reconciliation/button_list/assets.xml:0
 msgid "Account Accountant UX Assets"
-msgstr ""
+msgstr "Recursos de Contabilidad UX"
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_auto_reconcile_wizard
@@ -62,17 +62,17 @@ msgstr "Asistente de conciliación bancaria"
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_report
 msgid "Accounting Report"
-msgstr ""
+msgstr "Reporte Contable"
 
 #. module: account_accountant_ux
 #: model:ir.actions.server,name:account_accountant_ux.action_aged_payable
 msgid "Aged Payable Report"
-msgstr ""
+msgstr "Reporte de Antigüedad de Cuentas por Pagar"
 
 #. module: account_accountant_ux
 #: model:ir.actions.server,name:account_accountant_ux.action_aged_receivable
 msgid "Aged Receivable Report"
-msgstr ""
+msgstr "Reporte de Antigüedad de Cuentas por Cobrar"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields.selection,name:account_accountant_ux.selection__account_auto_reconcile_wizard__search_mode__all_from_partner
@@ -88,7 +88,7 @@ msgstr "Entradas Conciliadas Automáticamente"
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_bank_statement_line
 msgid "Bank Statement Line"
-msgstr ""
+msgstr "Línea de Extracto Bancario"
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_change_lock_date
@@ -128,7 +128,7 @@ msgstr "Deuda a Pagar"
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_partner__display_name
 msgid "Display Name"
-msgstr ""
+msgstr "Nombre para Mostrar"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_move_line__filter_amount
@@ -155,6 +155,8 @@ msgid ""
 "If enabled, the report will not load data unless a custom filter or partner "
 "filter is applied."
 msgstr ""
+"Si está habilitado, el reporte no cargará datos a menos que se aplique un "
+"filtro personalizado o un filtro de contacto."
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_account_move_line_search_bank_rec_widget
@@ -236,7 +238,7 @@ msgstr ""
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__require_custom_filter
 msgid "Require Custom Filter"
-msgstr ""
+msgstr "Requiere Filtro Personalizado"
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_partner_view_search
@@ -252,14 +254,14 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/account_accountant_ux/static/src/components/bank_reconciliation/button_list/button_list.js:0
 msgid "Search: Journal Items to Match"
-msgstr ""
+msgstr "Buscar: Apuntes Contables para Conciliar"
 
 #. module: account_accountant_ux
 #. odoo-javascript
 #: code:addons/account_accountant_ux/static/src/components/account_report/filters/filters.js:0
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__filter_show_all_custom
 msgid "Show All"
-msgstr ""
+msgstr "Mostrar Todo"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_partner__debit
@@ -289,7 +291,7 @@ msgstr "Importe total a pagar a este proveedor."
 #. odoo-javascript
 #: code:addons/account_accountant_ux/static/src/components/account_report/filters/filters.js:0
 msgid "With Filters"
-msgstr ""
+msgstr "Con Filtros"
 
 #. module: account_accountant_ux
 #. odoo-python
@@ -362,3 +364,15 @@ msgstr ""
 
 #~ msgid "Use Search Filter Amount"
 #~ msgstr "Utilizar Filtro \"Igual Monto\" por defecto"
+
+#. module: account_accountant_ux
+#. odoo-python
+#: code:addons/account_accountant_ux/models/account_followup_report.py:0
+msgid "Total Due"
+msgstr "Total Adeudado"
+
+#. module: account_accountant_ux
+#. odoo-python
+#: code:addons/account_accountant_ux/models/account_followup_report.py:0
+msgid "Total Overdue"
+msgstr "Total Vencido"
