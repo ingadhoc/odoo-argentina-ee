@@ -1807,7 +1807,7 @@ class AccountJournal(models.Model):
 
         for line in move_lines:
             # Nro. transacción Agente (numérico 20, desde 1 hasta 20. Formato 99999999999999999999)
-            content += str(line.name).zfill(20)
+            content += re.sub(r"[^0-9]", "", str(line.name))[-20:].zfill(20)
 
             # CUIT contribuyente Retenido (long 11, desde 21 hasta 31. Formato 99999999999)
             content += line.partner_id.ensure_vat()
