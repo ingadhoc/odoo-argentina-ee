@@ -10,6 +10,7 @@ msgstr ""
 "PO-Revision-Date: 2026-03-20 09:02+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
@@ -26,11 +27,15 @@ msgstr "(MODO DEMO) %s"
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_res_company__l10n_ar_arba_wh_mode
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_res_config_settings__l10n_ar_arba_wh_mode
 msgid ""
-"* Automatic: Withholdings will be automatically reported to ARBA when the payment is confirmed\n"
-"* Batch Import: Withholdings must be manually reported to ARBA by clicking the 'Inform to ARBA' button after payment validation"
+"* Automatic: Withholdings will be automatically reported to ARBA when the "
+"payment is confirmed\n"
+"* Batch Import: Withholdings must be manually reported to ARBA by clicking "
+"the 'Inform to ARBA' button after payment validation"
 msgstr ""
-"* Automático: Las retenciones serán informadas automáticamente a ARBA cuando el pago sea confirmado\n"
-"* Importación por Lote: Las retenciones deben ser informadas manualmente a ARBA haciendo clic en el botón 'Informar a ARBA' luego de validar el pago"
+"* Automático: Las retenciones serán informadas automáticamente a ARBA cuando "
+"el pago sea confirmado\n"
+"* Importación por Lote: Las retenciones deben ser informadas manualmente a "
+"ARBA haciendo clic en el botón 'Informar a ARBA' luego de validar el pago"
 
 #. module: l10n_ar_arba_ws
 #. odoo-python
@@ -65,11 +70,13 @@ msgstr "<span class=\"o_form_label\">Webservice Retenciones (A122R)</span>"
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
 msgid ""
 "<span class=\"oe_title\" colspan=\"2\">\n"
-"                            Select a date to calculate the applicable period\n"
+"                            Select a date to calculate the applicable "
+"period\n"
 "                        </span>"
 msgstr ""
 "<span class=\"oe_title\" colspan=\"2\">\n"
-"                            Seleccione fecha para calcular periodo que aplica\n"
+"                            Seleccione fecha para calcular periodo que "
+"aplica\n"
 "                        </span>"
 
 #. module: l10n_ar_arba_ws
@@ -302,8 +309,8 @@ msgstr ""
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid ""
 "ERROR we were not able to create the withholding because of another error: "
-msgstr ""
-"ERROR no pudimos crear la renteción debido a otro error: "
+msgstr "ERROR no pudimos crear la renteción debido a otro error: "
+
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
 msgid "Environment"
@@ -319,11 +326,11 @@ msgstr "Error al abrir la declaración: No se obtuvo el ID de DDJJ"
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid ""
-"Error when creating DDJJ ARBA, there is already one for the same period (%s)"
-" and company (%s)"
+"Error when creating DDJJ ARBA, there is already one for the same period (%s) "
+"and company (%s)"
 msgstr ""
-"Error al crear DDJJ ARBA, ya habia otra para el mismo periodo (%s)"
-" y empresa (%s)"
+"Error al crear DDJJ ARBA, ya habia otra para el mismo periodo (%s) y empresa "
+"(%s)"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.constraint,message:l10n_ar_arba_ws.constraint_l10n_ar_dj_arba_unique_ddjj_id
