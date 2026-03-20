@@ -22,15 +22,16 @@
             <form>
                 <header>
                     <button name="action_open" type="object" string="Open" help="Connect to webservice" invisible="state != 'draft'"/>
+                    <button name="action_find_existing" type="object" string="Find" help="Find open DDJJ and load info" invisible="state != 'draft'" groups="base.group_no_one"/>
                     <button name="action_update_status" type="object" string="Update Status" help="Update the status via ws" invisible="state == 'draft'"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
                     <group>
-                        <span class="oe_title">
+                        <span class="oe_title" colspan="2">
                             Select a date to calculate the applicable period
                         </span>
-                        <field name="date"/>
+                        <field name="date" readonly="state != 'draft'"/>
                         <field name="display_name" string="It will apply to"/>
                     </group>
                     <group string="ARBA Information">
