@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-18 20:45+0000\n"
-"PO-Revision-Date: 2026-03-18 20:45+0000\n"
+"POT-Creation-Date: 2026-03-26 17:53+0000\n"
+"PO-Revision-Date: 2026-03-26 17:53+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -47,14 +47,14 @@ msgstr "2da"
 #. module: l10n_ar_arba_ws
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
-msgid "<br>Response ERROR: %s"
-msgstr "<br>ERROR en Respuesta: %s"
+msgid "<br>Response: %s"
+msgstr "<br>Respuesta: %s"
 
 #. module: l10n_ar_arba_ws
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
-msgid "<br>Unknown ERROR: %s"
-msgstr "<br>ERROR Desconocido: %s"
+msgid "<br>Unknown: %s"
+msgstr "<br>Desconocido: %s"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
@@ -214,7 +214,7 @@ msgstr "Cerrado"
 #. module: l10n_ar_arba_ws
 #: model:ir.model,name:l10n_ar_arba_ws.model_res_company
 msgid "Companies"
-msgstr "Empresas"
+msgstr "Compañías"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__company_id
@@ -247,6 +247,12 @@ msgstr "Creado el"
 #: model:ir.ui.menu,name:l10n_ar_arba_ws.l10n_ar_dj_arba_menu_act
 msgid "DDJJ ARBA"
 msgstr ""
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "DDJJ could not be opened, the withholding cannot be created"
+msgstr "La DDJJ no puede ser abierta, la retención no puede ser creada"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__date
@@ -295,10 +301,8 @@ msgstr ""
 #. module: l10n_ar_arba_ws
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
-msgid ""
-"ERROR we were not able to create the withholding because of another error: "
-msgstr ""
-"ERROR no pudimos crear la renteción debido a otro error: "
+msgid "ERROR trying to inform the withholding: "
+msgstr "ERROR tratando de informar la retención: "
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
@@ -318,8 +322,8 @@ msgid ""
 "Error when creating DDJJ ARBA, there is already one for the same period (%s)"
 " and company (%s)"
 msgstr ""
-"Error al crear DDJJ ARBA, ya habia otra para el mismo periodo (%s)"
-" y empresa (%s)"
+"Error al crear DDJJ ARBA, ya habia otra para el mismo periodo (%s) y empresa"
+" (%s)"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.constraint,message:l10n_ar_arba_ws.constraint_l10n_ar_dj_arba_unique_ddjj_id
@@ -686,5 +690,17 @@ msgstr "Retenciones"
 #. module: l10n_ar_arba_ws
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "You can only delete DDJJ ARBA records in draft state."
+msgstr "Solo puede eliminar DDJJ ARBA en estado borrador."
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "You can only update status from informed DDJJ"
 msgstr "Solo puede actualizar el estado de una DDJJ informada"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "You cannot delete a DDJJ ARBA that has withholding lines."
+msgstr "No puede eliminar una DDJJ ARBA que tiene líneas de retención."

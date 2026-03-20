@@ -320,6 +320,16 @@ class L10nArDjArba(models.Model):
 
         return response, error
 
+    @api.ondelete(at_uninstall=False)
+    def _unlink_only_draft_without_withholdings(self):
+        non_draft_records = self.filtered(lambda record: record.state != "draft")
+        if non_draft_records:
+            raise UserError(self.env._("You can only delete DDJJ ARBA records in draft state."))
+
+        records_with_withholdings = self.filtered("l10n_ar_withholding_ids")
+        if records_with_withholdings:
+            raise UserError(self.env._("You cannot delete a DDJJ ARBA that has withholding lines."))
+
     # Buttons
 
     def action_open(self):
