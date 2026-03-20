@@ -10,6 +10,7 @@
                 <field name="name"/>
                 <field name="state"/>
                 <field name="is_refund"/>
+                <field name="company_id" groups="base.group_multi_company"/>
                 <button name="action_update_status" type="object" title="Update" help="Update the status via ws" icon="fa-refresh"/>
             </list>
         </field>
@@ -31,6 +32,7 @@
                         <span class="oe_title" colspan="2">
                             Select a date to calculate the applicable period
                         </span>
+                        <field name="company_id" readonly="state != 'draft'" groups="base.group_multi_company"/>
                         <field name="date" readonly="state != 'draft'"/>
                         <field name="display_name" string="It will apply to"/>
                     </group>
@@ -57,6 +59,7 @@
         <field name="arch" type="xml">
             <search>
                 <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
                 <field name="date"/>
                 <field name="state"/>
                 <filter name="groupby_date" string="Period" context="{'group_by': 'date:month'}"/>
