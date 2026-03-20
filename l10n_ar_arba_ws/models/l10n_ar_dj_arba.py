@@ -301,7 +301,7 @@ class L10nArDjArba(models.Model):
         data = json.dumps(data)
         response = None
         try:
-            response = requests.request(method, url, headers=headers, data=data, timeout=(10, 60))
+            response = requests.request(method, url, headers=headers, data=data, timeout=(45, 60))
         except Exception as exp:
             error = str(exp)
 
