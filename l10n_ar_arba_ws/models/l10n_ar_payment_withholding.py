@@ -6,7 +6,7 @@ class L10nArPaymentWithholding(models.Model):
 
     l10n_ar_cert_number = fields.Char(readonly=True, string="ARBA Withholding Certificate Number")
     l10n_ar_dj_arba_id = fields.Many2one(
-        "l10n_ar.dj.arba", "DJ ARBA", help="ARBA sworn statement associated with this withholding"
+        "l10n_ar.dj.arba", "DDJJ ARBA", help="ARBA DDJJ associated with this withholding"
     )
     l10n_ar_arba_wh_mode = fields.Selection(
         related="company_id.l10n_ar_arba_wh_mode",

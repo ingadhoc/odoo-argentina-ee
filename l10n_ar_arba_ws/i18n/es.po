@@ -6,14 +6,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-10 13:00+0000\n"
-"PO-Revision-Date: 2026-03-10 13:00+0000\n"
+"POT-Creation-Date: 2026-03-20 09:02+0000\n"
+"PO-Revision-Date: 2026-03-20 09:02+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "(DEMO MODE) %s"
+msgstr "(MODO DEMO) %s"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__l10n_ar_arba_wh_mode
@@ -39,6 +45,18 @@ msgid "2nd"
 msgstr "2da"
 
 #. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "<br>Response ERROR: %s"
+msgstr "<br>ERROR en Respuesta: %s"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "<br>Unknown ERROR: %s"
+msgstr "<br>ERROR Desconocido: %s"
+
+#. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
 msgid "<span class=\"o_form_label\">Withholding Webservice (A122R)</span>"
 msgstr "<span class=\"o_form_label\">Webservice Retenciones (A122R)</span>"
@@ -46,23 +64,40 @@ msgstr "<span class=\"o_form_label\">Webservice Retenciones (A122R)</span>"
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
 msgid ""
-"<span class=\"oe_title\">\n"
+"<span class=\"oe_title\" colspan=\"2\">\n"
 "                            Select a date to calculate the applicable period\n"
 "                        </span>"
 msgstr ""
-"<span class=\"oe_title\">\n"
+"<span class=\"oe_title\" colspan=\"2\">\n"
 "                            Seleccione fecha para calcular periodo que aplica\n"
 "                        </span>"
 
 #. module: l10n_ar_arba_ws
-#: model:ir.model,name:l10n_ar_arba_ws.model_l10n_ar_afipws_connection
-msgid "AFIP Webservice Connection"
-msgstr "Conexión Webservice de AFIP"
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "<ul><li> STATUS %s</li><li>CODE %s</li><li>MESSAGE %s</li></ul>"
+msgstr "<ul><li> ESTADO %s</li><li>CÓDIGO %s</li><li>MENSAJE %s</li></ul>"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_account_payment_form
 msgid "ARBA"
 msgstr ""
+
+#. module: l10n_ar_arba_ws
+#: model:ir.model,name:l10n_ar_arba_ws.model_l10n_ar_dj_arba
+msgid "ARBA DDJJ"
+msgstr "DDJJ ARBA"
+
+#. module: l10n_ar_arba_ws
+#: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__l10n_ar_dj_arba_id
+msgid "ARBA DDJJ associated with this withholding"
+msgstr "DDJJ ARBA asociada a esta retención"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "ARBA ERROR"
+msgstr "ERROR ARBA"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_company__l10n_ar_arba_env
@@ -74,11 +109,6 @@ msgstr "Entorno ARBA"
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
 msgid "ARBA Information"
 msgstr "Información de ARBA"
-
-#. module: l10n_ar_arba_ws
-#: model:ir.model,name:l10n_ar_arba_ws.model_l10n_ar_dj_arba
-msgid "ARBA Sworn Statement"
-msgstr "Declaración Jurada ARBA"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.actions.server,name:l10n_ar_arba_ws.ir_cron_arba_ws_ir_actions_server
@@ -98,9 +128,9 @@ msgid "ARBA Withholding Mode"
 msgstr "Modo de Retención ARBA"
 
 #. module: l10n_ar_arba_ws
-#: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__l10n_ar_dj_arba_id
-msgid "ARBA sworn statement associated with this withholding"
-msgstr "Declaración Jurada de ARBA asociada a esta retención"
+#: model:ir.model,name:l10n_ar_arba_ws.model_l10n_ar_afipws_connection
+msgid "ARCA Webservice Connection"
+msgstr "Conexión Webservice de ARCA"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_needaction
@@ -128,6 +158,12 @@ msgid "Activity Type Icon"
 msgstr "Ícono de Tipo de Actividad"
 
 #. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "An existing DDJJ was successfully linked"
+msgstr "Una DDJJ existente fue exitosamente vinculada"
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__analytic_distribution
 msgid "Analytic Distribution"
 msgstr "Distribución Analítica"
@@ -151,11 +187,6 @@ msgstr "Automático"
 #: model:ir.model.fields.selection,name:l10n_ar_arba_ws.selection__res_company__l10n_ar_arba_wh_mode__batch_import
 msgid "Batch Import"
 msgstr "Importación por Lote"
-
-#. module: l10n_ar_arba_ws
-#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_account_payment_form
-msgid "Cert Number"
-msgstr "Número de Certificado"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_company__l10n_ar_arba_client_id
@@ -183,17 +214,17 @@ msgstr "Cerrado"
 #. module: l10n_ar_arba_ws
 #: model:ir.model,name:l10n_ar_arba_ws.model_res_company
 msgid "Companies"
-msgstr "Empresa"
+msgstr "Empresas"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__company_id
 msgid "Company"
-msgstr "Compañía"
+msgstr "Empresa"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model,name:l10n_ar_arba_ws.model_res_config_settings
 msgid "Config Settings"
-msgstr "Ajustes de Configuración"
+msgstr "Ajustes de configuración"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
@@ -212,13 +243,9 @@ msgstr "Creado el"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.actions.act_window,name:l10n_ar_arba_ws.l10n_ar_dj_arba_action
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__l10n_ar_dj_arba_id
 #: model:ir.ui.menu,name:l10n_ar_arba_ws.l10n_ar_dj_arba_menu_act
 msgid "DDJJ ARBA"
-msgstr ""
-
-#. module: l10n_ar_arba_ws
-#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__l10n_ar_dj_arba_id
-msgid "DJ ARBA"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
@@ -237,9 +264,14 @@ msgid "Demo"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_account_payment__display_name
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_afipws_connection__display_name
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__display_name
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__display_name
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_company__display_name
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_config_settings__display_name
 msgid "Display Name"
-msgstr "Nombre Mostrado"
+msgstr "Nombre a Mostrar"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__distribution_analytic_account_ids
@@ -257,14 +289,56 @@ msgid "Due Date"
 msgstr "Fecha de Vencimiento"
 
 #. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid ""
+"ERROR - %s:\n"
+"\n"
+"%s"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid ""
+"ERROR we were not able to create the withholding because of another error: "
+msgstr ""
+"ERROR no pudimos crear la renteción debido a otro error: "
+#. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
-msgid "Envionment"
+msgid "Environment"
 msgstr "Entorno"
 
 #. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "Error opening the declaration: DDJJ ID number was not generated"
+msgstr "Error al abrir la declaración: No se obtuvo el ID de DDJJ"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid ""
+"Error when creating DDJJ ARBA, there is already one for the same period (%s)"
+" and company (%s)"
+msgstr ""
+"Error al crear DDJJ ARBA, ya habia otra para el mismo periodo (%s)"
+" y empresa (%s)"
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.constraint,message:l10n_ar_arba_ws.constraint_l10n_ar_dj_arba_unique_ddjj_id
-msgid "Error! Duplicate - The sworn statement already exists."
+msgid "Error! DDJJ ARBA already exists."
 msgstr "¡Error! Duplicado - Ya existe la DDJJ."
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
+msgid "Find"
+msgstr "Buscar"
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
+msgid "Find open DDJJ and load info"
+msgstr "Buscar una DDJJ abierta y cargar información"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_follower_ids
@@ -282,14 +356,25 @@ msgid "Font awesome icon e.g. fa-tasks"
 msgstr "Ícono Font Awesome, por ejemplo fa-tasks"
 
 #. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "Get DDJJ Information"
+msgstr "Obtener la información de la DDJJ"
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__has_message
 msgid "Has Message"
 msgstr "Tiene Mensaje"
 
 #. module: l10n_ar_arba_ws
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_account_payment__id
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_afipws_connection__id
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__id
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__id
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_company__id
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_config_settings__id
 msgid "ID"
-msgstr ""
+msgstr "ID (identificación)"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_exception_icon
@@ -303,7 +388,7 @@ msgstr "Ícono para indicar una actividad de excepción."
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__name
-msgid "Id DJ"
+msgid "Id DDJJ"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
@@ -351,6 +436,12 @@ msgstr "Última Actualización por"
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__write_date
 msgid "Last Updated on"
 msgstr "Última Actualización el"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "Linking existing DDJJ:"
+msgstr "Vincular una DDJJ existente:"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_main_attachment_id
@@ -425,12 +516,18 @@ msgstr ""
 #: model:ir.model.fields.selection,name:l10n_ar_arba_ws.selection__l10n_ar_dj_arba__state__open
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
 msgid "Open"
-msgstr "Abierto"
+msgstr "Abrir"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__open_date
 msgid "Open Date"
 msgstr "Fecha de Apertura"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "Open Declaration"
+msgstr "Abrir Declaración"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model,name:l10n_ar_arba_ws.model_l10n_ar_payment_withholding
@@ -459,6 +556,15 @@ msgid "Production"
 msgstr "Producción"
 
 #. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid ""
+"Reporting withholding via webservice (Certificate number was not generated)"
+msgstr ""
+"Informando retención vía webservice (El Número de certificado no fue "
+"generado)"
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_user_id
 msgid "Responsible User"
 msgstr "Usuario Responsable"
@@ -472,6 +578,12 @@ msgstr "Error de Entrega de SMS"
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
 msgid "Secret"
 msgstr "Secreto"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "Send Withholding to ARBA"
+msgstr "Enviar Retención a ARBA"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_account_payment_form
@@ -502,6 +614,24 @@ msgid "Testing"
 msgstr "Pruebas"
 
 #. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "The DDJJ's status has been updated"
+msgstr "El estado de la DDJJ ha sido actualizado"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "The declaration was successfully opened"
+msgstr "La declaración se abrió con éxito"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "The withholding was reported to ARBA (%s) successfully"
+msgstr "La retención fue informada a ARBA (%s) exitosamente"
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_exception_decoration
 msgid "Type of the exception activity on record."
 msgstr "Tipo de actividad de excepción en el registro."
@@ -510,6 +640,12 @@ msgstr "Tipo de actividad de excepción en el registro."
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_list
 msgid "Update"
 msgstr "Actualizar"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "Update Declaration"
+msgstr "Actualizar Declaración"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
@@ -521,6 +657,18 @@ msgstr "Actualizar Estado"
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_list
 msgid "Update the status via ws"
 msgstr "Actualizar el estado vía webservice"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "Updating status:"
+msgstr "Actualizando estado:"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "We did not receive any response"
+msgstr "No obtuvimos respuesta"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__website_message_ids
@@ -543,3 +691,9 @@ msgstr "Webservice Retenciones (A122R)"
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
 msgid "Withholdings"
 msgstr "Retenciones"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "You can only update status from informed DDJJ"
+msgstr "Solo puede actualizar el estado de una DDJJ informada"
