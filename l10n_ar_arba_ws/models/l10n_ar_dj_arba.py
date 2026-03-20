@@ -125,17 +125,24 @@ class L10nArDjArba(models.Model):
         ok_msg = self.env._("The withholding was reported to ARBA (%s) successfully")
         error_prefix = self.env._("Reporting withholding via webservice (Certificate number was not generated)")
 
-        if not self:
+        ddjj = self
+        open_ddjj_error = False
+        if not ddjj:
             try:
-                self = self._ensure_dj(wh_line.payment_id.date, wh_line.company_id)
+                ddjj = self._ensure_dj(wh_line.payment_id.date, wh_line.company_id)
+                if ddjj.state != "open":
+                    open_ddjj_error = self.env._("DDJJ could not be opened, the withholding cannot be created")
             except (UserError, ValidationError) as exp:
                 self.env.cr.rollback()
-                wh_line.payment_id.message_post(
-                    body=self.env._("ERROR we were not able to create the withholding because of another error: ")
-                    + str(exp)
-                )
-                return
+                open_ddjj_error = str(exp)
 
+        if open_ddjj_error or not ddjj:
+            wh_line.payment_id.message_post(
+                body=self.env._("ERROR trying to inform the withholding: ") + str(open_ddjj_error)
+            )
+            return
+
+        self = ddjj
         env_type = self.company_id._get_arba_environment_type()
 
         if env_type == "demo":
@@ -196,10 +203,9 @@ class L10nArDjArba(models.Model):
         return from_date, to_date
 
     def _ensure_dj(self, wh_date, company):
-        """Encontrar la declaracion jurada que corresponde, que este abierta y
-        que este en el mismo periodo de la retención.
+        """Encontrar la declaracion jurada que corresponde, que este en el mismo periodo de la retención.
 
-        :return: DDJJ ARBA recordset or False if not DDJJ open found"""
+        :return: DDJJ ARBA recordset of the matching DDJJ for the given period"""
         from_date, to_date = self._find_dates(wh_date)
         dj_arba = self.search(
             [
@@ -218,7 +224,7 @@ class L10nArDjArba(models.Model):
                 }
             )
             dj_arba.action_open()
-        return dj_arba if dj_arba.state == "open" else False
+        return dj_arba
 
     def _get_fortnight(self, date):
         if date.day > 15:
