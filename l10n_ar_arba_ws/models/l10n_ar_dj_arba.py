@@ -1,4 +1,5 @@
 import json
+import logging
 import re
 from datetime import datetime
 from http import HTTPStatus
@@ -10,6 +11,8 @@ from odoo.exceptions import UserError, ValidationError
 from odoo.tools import format_date, html_escape
 
 WS_NAME = "A122R"
+
+_logger = logging.getLogger(__name__)
 
 
 class L10nArDjArba(models.Model):
@@ -281,11 +284,12 @@ class L10nArDjArba(models.Model):
                 str(html_escape(response.get("message")) or ""),
             )
         elif isinstance(error_obj, str):
-            error_msg = self.env._("<br>Response ERROR: %s", str(html_escape(error_obj)))
+            error_msg = self.env._("<br>Response: %s", str(html_escape(error_obj)))
         else:
-            error_msg = self.env._("<br>Unknown ERROR: %s", str(html_escape(str(error_obj))))
+            error_msg = self.env._("<br>Unknown: %s", str(html_escape(str(error_obj))))
         prefix_text = self.env._("ARBA ERROR") + (" " + msg_prefix if msg_prefix else " ")
         record.message_post(body=Markup(prefix_text + error_msg))
+        _logger.error("ARBA WS ERROR: %s", prefix_text + error_msg)
 
     def _process_arba_response(self, method, url, env_type, msg, data=None):
         """Let us to have both clean response dictionary and string of errors if exists
@@ -310,6 +314,7 @@ class L10nArDjArba(models.Model):
             error = f"{response.status_code} - {res.get('error')} {res.get('message')}"
         if error:
             self.message_post(body=self.env._("ERROR - %s:\n\n%s", msg, error))
+            _logger.error("ARBA WS ERROR - %s: %s", msg, error)
         else:
             response = response.json()
 
