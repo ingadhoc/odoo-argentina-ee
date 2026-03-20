@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-07 13:50+0000\n"
+"POT-Creation-Date: 2026-03-19 15:32+0000\n"
 "PO-Revision-Date: 2025-12-11 18:11+0000\n"
 "Last-Translator: Mariana Torres <mt@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
@@ -25,9 +25,8 @@ msgstr ""
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_partner_view_form
-#, fuzzy
-msgid "<span class=\"o_stat_text\">Libro Mayor de Empresa</span>"
-msgstr "<span class=\"o_stat_text\">Libro Mayor de Empresa</span>"
+msgid "<span class=\"o_stat_text\">Follow-up Report</span>"
+msgstr ""
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_partner_form
@@ -120,6 +119,8 @@ msgstr "Deuda a Pagar"
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_auto_reconcile_wizard__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_bank_statement_line__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_change_lock_date__display_name
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_followup_manual_reminder__display_name
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_followup_report_handler__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_journal__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_move__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_move_line__display_name
@@ -136,9 +137,16 @@ msgid "Filter Amount"
 msgstr "Filtrar Monto"
 
 #. module: account_accountant_ux
+#: model:ir.model,name:account_accountant_ux.model_account_followup_report_handler
+msgid "Follow-Up Report Custom Handler"
+msgstr ""
+
+#. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_auto_reconcile_wizard__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_bank_statement_line__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_change_lock_date__id
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_followup_manual_reminder__id
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_followup_report_handler__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_journal__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_move__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_move_line__id
@@ -264,6 +272,18 @@ msgid "Show All"
 msgstr "Mostrar Todo"
 
 #. module: account_accountant_ux
+#. odoo-python
+#: code:addons/account_accountant_ux/models/account_followup_report.py:0
+msgid "Total Due"
+msgstr "Total Adeudado"
+
+#. module: account_accountant_ux
+#. odoo-python
+#: code:addons/account_accountant_ux/models/account_followup_report.py:0
+msgid "Total Overdue"
+msgstr "Total Vencido"
+
+#. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_partner__debit
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_users__debit
 msgid "Total Payable"
@@ -294,6 +314,11 @@ msgid "With Filters"
 msgstr "Con Filtros"
 
 #. module: account_accountant_ux
+#: model:ir.model,name:account_accountant_ux.model_account_followup_manual_reminder
+msgid "Wizard for sending manual reminders to clients"
+msgstr ""
+
+#. module: account_accountant_ux
 #. odoo-python
 #: code:addons/account_accountant_ux/wizards/account_change_lock_date.py:0
 msgid "You cannot set a lock date in the future."
@@ -318,6 +343,10 @@ msgstr ""
 #: code:addons/account_accountant_ux/static/src/components/bank_reconciliation/button_list/assets.xml:0
 msgid "web.assets_backend"
 msgstr ""
+
+#, fuzzy
+#~ msgid "<span class=\"o_stat_text\">Libro Mayor de Empresa</span>"
+#~ msgstr "<span class=\"o_stat_text\">Libro Mayor de Empresa</span>"
 
 #, fuzzy
 #~| msgid ""
@@ -364,15 +393,3 @@ msgstr ""
 
 #~ msgid "Use Search Filter Amount"
 #~ msgstr "Utilizar Filtro \"Igual Monto\" por defecto"
-
-#. module: account_accountant_ux
-#. odoo-python
-#: code:addons/account_accountant_ux/models/account_followup_report.py:0
-msgid "Total Due"
-msgstr "Total Adeudado"
-
-#. module: account_accountant_ux
-#. odoo-python
-#: code:addons/account_accountant_ux/models/account_followup_report.py:0
-msgid "Total Overdue"
-msgstr "Total Vencido"
