@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-20 09:02+0000\n"
-"PO-Revision-Date: 2026-03-20 09:02+0000\n"
+"POT-Creation-Date: 2026-03-20 22:20+0000\n"
+"PO-Revision-Date: 2026-03-20 22:20+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -45,13 +45,13 @@ msgstr ""
 #. module: l10n_ar_arba_ws
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
-msgid "<br>Response ERROR: %s"
+msgid "<br>Response: %s"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
-msgid "<br>Unknown ERROR: %s"
+msgid "<br>Unknown: %s"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
@@ -244,6 +244,12 @@ msgid "DDJJ ARBA"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "DDJJ could not be opened, the withholding cannot be created"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__date
 msgid "Date"
 msgstr ""
@@ -295,8 +301,7 @@ msgstr ""
 #. module: l10n_ar_arba_ws
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
-msgid ""
-"ERROR we were not able to create the withholding because of another error: "
+msgid "ERROR trying to inform the withholding: "
 msgstr ""
 
 #. module: l10n_ar_arba_ws
