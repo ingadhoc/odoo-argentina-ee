@@ -780,4 +780,14 @@
         <field name="value">10121.3715</field>
     </record>
 
+    <record id="index_01_2026" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2026-01-01')"/>
+        <field name="value">10413.0309</field>
+    </record>
+
+    <record id="index_02_2026" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2026-02-01')"/>
+        <field name="value">10714.6255</field>
+    </record>
+
 </odoo>
