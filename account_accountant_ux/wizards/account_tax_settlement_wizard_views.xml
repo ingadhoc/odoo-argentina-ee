@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+
+    <record id="view_account_tax_settlement_wizard_form" model="ir.ui.view">
+        <field name="name">account.tax.settlement.wizard.form</field>
+        <field name="model">account.tax.settlement.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Asiento de liquidación">
+                <!-- Campos técnicos / invisibles -->
+                <field name="company_id" invisible="1" />
+                <field name="report_id" invisible="1" />
+                <field name="report_settlement_allow_unbalanced" invisible="1" />
+
+                <p>
+                    Se va a crear un asiento de liquidación con la información del
+                    reporte. ¿Desea continuar?
+                </p>
+
+                <group>
+                    <field name="date" />
+                    <field name="settlement_journal_id" />
+                    <field
+                        name="account_id"
+                        invisible="not report_settlement_allow_unbalanced"
+                        required="report_settlement_allow_unbalanced"
+                    />
+                </group>
+
+                <footer>
+                    <button
+                        name="confirm"
+                        string="Confirmar"
+                        type="object"
+                        class="btn-primary"
+                    />
+                    <button string="Cancelar" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>
