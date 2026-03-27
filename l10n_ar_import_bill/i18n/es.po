@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-18 13:05+0000\n"
+"POT-Creation-Date: 2026-03-27 12:55+0000\n"
 "PO-Revision-Date: 2026-01-15 16:10+0000\n"
 "Last-Translator: Gonzalo Lenzi <gl@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
@@ -118,6 +118,25 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__display_name
 msgid "Display Name"
 msgstr "Nombre para mostrar"
+
+#. module: l10n_ar_import_bill
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/models/account_journal.py:0
+msgid ""
+"El archivo no contiene las siguientes columnas requeridas: %s.\n"
+"\n"
+"Si no realizó cambios manuales en el archivo Excel, es posible que ARCA haya "
+"modificado el formato del archivo. En ese caso, por favor reporte el "
+"inconveniente a través de un ticket de soporte."
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/models/account_journal.py:0
+msgid ""
+"Error al leer el archivo. Por favor verifique que sea un archivo válido de "
+"tipo .xlsx. Error: %s"
+msgstr ""
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__exento
