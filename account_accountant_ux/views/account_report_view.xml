@@ -10,6 +10,11 @@
                 <field name="require_custom_filter"/>
                 <field name="filter_show_all_custom" invisible="not require_custom_filter"/>
             </xpath>
+            <xpath expr="//field[@name='filter_date_range']" position="before">
+                <field name="allow_settlement"/>
+                <field name="settlement_title" invisible="not allow_settlement" required="allow_settlement"/>
+                <field name="settlement_allow_unbalanced" invisible="not allow_settlement"/>
+            </xpath>
         </field>
     </record>
 

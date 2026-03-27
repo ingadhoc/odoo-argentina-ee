@@ -41,7 +41,9 @@
         "account_payment_pro_receiptbook",
     ],
     "data": [
+        "security/ir.model.access.csv",
         "views/account_return_type_views.xml",
+        "views/inflation_adjustment_index_view.xml",
         "data/tags_data.xml",
         "data/estado_resultados.xml",
         "data/balance_sheet.xml",
@@ -55,9 +57,8 @@
         "data/santa_fe_report.xml",
         "data/tucuman_report.xml",
         "data/sicore_report.xml",
-        "security/ir.model.access.csv",
         "data/inflation_adjustment_index.xml",
-        "views/inflation_adjustment_index_view.xml",
+        "data/account_report_settlement.xml",
         "wizard/inflation_adjustment_view.xml",
     ],
     "demo": [
