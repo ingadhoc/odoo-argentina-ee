@@ -29,15 +29,18 @@
     "depends": [
         "l10n_ar_tax",
         "l10n_ar_edi",
+        "l10n_ar_account_reports",
     ],
     "data": [
         "security/ir.model.access.csv",
         "data/ir_cron_data.xml",
+        "data/pba_report.xml",
         "views/l10n_ar_dj_arba_views.xml",
         "views/account_payment_views.xml",
         "views/res_config_settings_views.xml",
         "views/l10n_ar_payment_withholding_views.xml",
     ],
+    "uninstall_hook": "uninstall_hook",
     "installable": True,
     "auto_install": False,
     "application": False,

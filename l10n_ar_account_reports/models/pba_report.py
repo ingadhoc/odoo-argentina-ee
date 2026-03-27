@@ -150,13 +150,10 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
             domain += [("tax_line_id.type_tax_use", "=", "sale")]
         elif file_type == "ret_a122r":
             domain += [("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier")]
-            # TODO desbloquear (y adaptar si corresponde) cuando se mezcle https://github.com/ingadhoc/odoo-argentina-ee/pull/919
-            # el domain debe incluir solo las retenciones que no fueron reportadas a arba similar a esto:
-            # https://github.com/ingadhoc/odoo-argentina-ee/blob/4642e35350ae071fa75bd315a9c0e5ade21309d5/l10n_ar_account_tax_settlement/models/account_journal.py#L1654
-            # if self.env["ir.module.module"].search([("name", "=", "l10n_ar_arba_ws"), ("state", "in", ["installed", "to upgrade"])]):
-            #     domain += [
-            #         ("tax_line_id.l10n_ar_cert_number", "=", False)
-            #     ]
+            if self.env["ir.module.module"].search(
+                [("name", "=", "l10n_ar_arba_ws"), ("state", "in", ["installed", "to upgrade"])]
+            ):
+                domain += [("withholding_id.l10n_ar_cert_number", "=", False)]
         return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
 
     def _get_pba_txt_content(self, move_lines, file_type):

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="l10n_ar_account_reports.l10n_ar_pba_report" model="account.report">
+        <field name="line_ids">
+            <record id="l10n_ar_pba_report_pba_withholdings_line_a122r" model="account.report.line">
+                <field name="name">Purchase Withholdings A-122R not reported via ARBA webservice</field>
+                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_state_id.code", "=", "B"), ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"), ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"), ("withholding_id.l10n_ar_cert_number", "=", False)])</field>
+            </record>
+        </field>
+    </record>
+</odoo>
