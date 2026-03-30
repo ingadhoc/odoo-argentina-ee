@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-20 22:20+0000\n"
-"PO-Revision-Date: 2026-03-20 22:20+0000\n"
+"POT-Creation-Date: 2026-03-30 14:49+0000\n"
+"PO-Revision-Date: 2026-03-30 14:49+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -685,5 +685,17 @@ msgstr ""
 #. module: l10n_ar_arba_ws
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "You can only delete DDJJ ARBA records in draft state."
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "You can only update status from informed DDJJ"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "You cannot delete a DDJJ ARBA that has withholding lines."
 msgstr ""
