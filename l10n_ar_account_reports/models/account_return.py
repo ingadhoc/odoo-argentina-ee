@@ -6,25 +6,36 @@ class AccountReturn(models.Model):
     _inherit = "account.return"
 
     def _get_closing_report_options(self):
-        """Extends to handle sub-monthly periods like fortnightly.
+        """Avoid custom_return_period for sub-monthly return types.
 
-        For sub-monthly periods, we use 'custom' filter instead of 'custom_return_period'
-        to avoid JS errors when months_per_period is 0. We also set months_per_period to 1
-        to prevent division by zero errors in the JS filters component.
+        account_reports uses months_per_period to compute period offsets when the
+        filter is ``custom_return_period``. For sub-monthly return types,
+        months_per_period can be 0, which crashes the core computation
+        (division by zero / invalid floor division).
         """
-        options = super()._get_closing_report_options()
+        if not self.type_id._is_sub_monthly_period(self.company_id):
+            return super()._get_closing_report_options()
 
-        # For sub-monthly periods, use 'custom' filter and fake months_per_period
-        # to avoid JS calculation errors with division by 0
-        if self.type_id._is_sub_monthly_period(self.company_id):
-            options["date"]["filter"] = "custom"
-            options["date"]["date_from"] = fields.Date.to_string(self.date_from)
-            # Set months_per_period to 1 to avoid JS division by zero errors
-            # The 'custom' filter won't use this value anyway
-            if "return_periodicity" in options:
-                options["return_periodicity"]["months_per_period"] = 1
-
-        return options
+        report = self.type_id.report_id
+        options = {
+            "date": {
+                "date_from": fields.Date.to_string(self.date_from),
+                "date_to": fields.Date.to_string(self.date_to),
+                "filter": "custom",
+                "mode": "range",
+            },
+            "selected_variant_id": report.id,
+            "sections_source_id": report.id,
+            "tax_unit": "company_only" if not self.tax_unit_id else self.tax_unit_id.id,
+            "selected_return_type_id": self.type_id.id,
+        }
+        company_ids = self.company_ids.ids
+        return (
+            report.sudo()
+            .with_context(allowed_company_ids=company_ids)
+            .with_company(self.company_id)
+            .get_options(previous_options=options)
+        )
 
     def _get_vat_closing_entry_additional_domain(self):
         # EXTENDS account_reports
