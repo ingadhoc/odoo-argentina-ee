@@ -22,6 +22,34 @@ L10N_AR_DAYS_PER_PERIOD = {
 class AccountReturnType(models.Model):
     _inherit = "account.return.type"
 
+    @api.model
+    def _l10n_ar_mark_old_returns_as_completed(self, main_company, tax_unit=None):
+        """Mark AR tax returns older than 3 months as completed.
+
+        This keeps old obligations archived while preserving recent returns visible
+        for active follow-up.
+        """
+        today = fields.Date.context_today(self)
+        cutoff_date = today - relativedelta(months=2)
+
+        company_ids = self.env["account.return"].sudo()._get_company_ids(main_company, tax_unit, report=False)
+        old_returns = (
+            self.env["account.return"]
+            .sudo()
+            .search(
+                [
+                    ("company_id", "in", company_ids.ids),
+                    ("type_id.country_id.code", "=", "AR"),
+                    ("is_tax_return", "=", True),
+                    ("is_completed", "=", False),
+                    ("date_to", "<=", cutoff_date),
+                ]
+            )
+        )
+
+        for account_return in old_returns:
+            account_return.with_context(in_checks_view=True)._mark_completed()
+
     deadline_periodicity = fields.Selection(
         selection_add=L10N_AR_PERIODS,
     )
@@ -415,3 +443,5 @@ class AccountReturnType(models.Model):
                 # bypass_period_check=True permite crear returns incluso para períodos
                 # cuyo deadline ya pasó (importante para el año fiscal anterior)
                 return_type._try_create_returns_for_fiscal_year(main_company, tax_unit, bypass_period_check=True)
+
+        self._l10n_ar_mark_old_returns_as_completed(main_company, tax_unit)
