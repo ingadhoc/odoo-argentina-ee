@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-11 13:23+0000\n"
-"PO-Revision-Date: 2026-03-11 13:23+0000\n"
+"POT-Creation-Date: 2026-04-01 13:03+0000\n"
+"PO-Revision-Date: 2026-04-01 13:03+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1020,11 +1020,6 @@ msgstr ""
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sircar_report_sircar_withholdings_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_tucuman_report_tucuman_withholdings_line
 msgid "Purchase Withholdings"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_pba_report_pba_withholdings_line_a122r
-msgid "Purchase Withholdings A-122R"
 msgstr ""
 
 #. module: l10n_ar_account_reports
