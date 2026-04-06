@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-19 15:32+0000\n"
+"POT-Creation-Date: 2026-04-06 15:01+0000\n"
 "PO-Revision-Date: 2025-12-11 18:11+0000\n"
 "Last-Translator: Mariana Torres <mt@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
@@ -79,6 +79,18 @@ msgid "All balances from one partner"
 msgstr "Balances parciales por contacto"
 
 #. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__allow_settlement
+msgid "Allow Settlement"
+msgstr ""
+
+#. module: account_accountant_ux
+#. odoo-python
+#: code:addons/account_accountant_ux/wizards/account_tax_settlement_wizard.py:0
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_account_tax_settlement_wizard_form
+msgid "Asiento de liquidación"
+msgstr ""
+
+#. module: account_accountant_ux
 #. odoo-python
 #: code:addons/account_accountant_ux/wizards/account_auto_reconcile_wizard.py:0
 msgid "Automatically Reconciled Entries"
@@ -88,6 +100,11 @@ msgstr "Entradas Conciliadas Automáticamente"
 #: model:ir.model,name:account_accountant_ux.model_account_bank_statement_line
 msgid "Bank Statement Line"
 msgstr "Línea de Extracto Bancario"
+
+#. module: account_accountant_ux
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_account_tax_settlement_wizard_form
+msgid "Cancelar"
+msgstr ""
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_change_lock_date
@@ -101,9 +118,34 @@ msgid "Company"
 msgstr "Compañía"
 
 #. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__company_id
+msgid "Compañía"
+msgstr ""
+
+#. module: account_accountant_ux
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_account_tax_settlement_wizard_form
+msgid "Confirmar"
+msgstr ""
+
+#. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_res_partner
 msgid "Contact"
 msgstr "Contacto"
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__account_id
+msgid "Cuenta de contrapartida"
+msgstr ""
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_partner_view_search
@@ -114,6 +156,11 @@ msgstr "Deuda a Cobrar"
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_partner_view_search
 msgid "Deuda a pagar"
 msgstr "Deuda a Pagar"
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__settlement_journal_id
+msgid "Diario"
+msgstr ""
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_auto_reconcile_wizard__display_name
@@ -127,9 +174,30 @@ msgstr "Deuda a Pagar"
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_partner_ledger_report_handler__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_reconcile_wizard__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__display_name
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_partner__display_name
 msgid "Display Name"
 msgstr "Nombre para Mostrar"
+
+#. module: account_accountant_ux
+#. odoo-python
+#: code:addons/account_accountant_ux/models/account_report.py:0
+msgid ""
+"El reporte no tiene expresiones con engine \"domain\". No es posible generar "
+"un asiento de liquidación."
+msgstr ""
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,help:account_accountant_ux.field_account_report__allow_settlement
+msgid ""
+"Esta opción habilita un botón en este reporte para liquidar todas las líneas "
+"cuya expresión tenga engine \"domain\"."
+msgstr ""
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__date
+msgid "Fecha del asiento"
+msgstr ""
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_move_line__filter_amount
@@ -153,6 +221,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_partner_ledger_report_handler__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_reconcile_wizard__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__id
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_partner__id
 msgid "ID"
 msgstr ""
@@ -197,6 +266,30 @@ msgid "Journal Item"
 msgstr "Apunte contable"
 
 #. module: account_accountant_ux
+#. odoo-python
+#: code:addons/account_accountant_ux/models/account_report.py:0
+msgid "La fórmula de la expresión '%(expression)s' está mal formada: %(error)s"
+msgstr ""
+
+#. module: account_accountant_ux
+#. odoo-python
+#: code:addons/account_accountant_ux/models/account_report.py:0
+msgid ""
+"La liquidación se debe realizar filtrando por 1 y solo 1 compañía en el "
+"reporte"
+msgstr ""
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_account_move_line_search_bank_rec_widget
 msgid "Monto aproximado"
 msgstr "Monto Aproximado"
@@ -213,11 +306,31 @@ msgstr "Múltiples Contactos"
 
 #. module: account_accountant_ux
 #. odoo-python
+#: code:addons/account_accountant_ux/models/account_report.py:0
+msgid "No hay saldos para liquidar."
+msgstr ""
+
+#. module: account_accountant_ux
+#. odoo-python
 #: code:addons/account_accountant_ux/wizards/account_change_lock_date.py:0
 msgid "Only Billing Administrators are allowed to change lock dates!"
 msgstr ""
 "Solo usuarios con el permiso de Administración de Facturación pueden "
 "modificar fechas de bloqueo!"
+
+#. module: account_accountant_ux
+#. odoo-python
+#: code:addons/account_accountant_ux/models/account_report.py:0
+msgid ""
+"Parece que la liquidación quedaría desbalanceada. Si desea generarla "
+"igualmente puede:\n"
+"1. Ir a \"Contabilidad / Configuración / Administración / Informes "
+"contables\"\n"
+"2. Buscar el informe correspondiente\n"
+"3. En opciones, marcar \"Settlement Allow Unbalanced\"\n"
+"4. Volver a crear el asiento seleccionando la cuenta de contrapartida "
+"solicitada"
+msgstr ""
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_partner_ledger_report_handler
@@ -228,6 +341,11 @@ msgstr "Gestor personalizado del libro mayor de la empresa"
 #: model:ir.actions.server,name:account_accountant_ux.action_partner_ledger
 msgid "Partner Ledger Report"
 msgstr "Libro Mayor de Empresa"
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__report_settlement_allow_unbalanced
+msgid "Permite desbalance"
+msgstr ""
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_auto_reconcile_wizard__search_mode
@@ -242,6 +360,11 @@ msgid ""
 msgstr ""
 "Conciliar asientos contables con saldos opuestos o vaciar cuentas con saldo "
 "cero"
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__report_id
+msgid "Reporte"
+msgstr ""
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__require_custom_filter
@@ -259,10 +382,27 @@ msgid "Saldo a favor de cliente"
 msgstr ""
 
 #. module: account_accountant_ux
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_account_tax_settlement_wizard_form
+msgid ""
+"Se va a crear un asiento de liquidación con la información del\n"
+"                    reporte. ¿Desea continuar?"
+msgstr ""
+
+#. module: account_accountant_ux
 #. odoo-javascript
 #: code:addons/account_accountant_ux/static/src/components/bank_reconciliation/button_list/button_list.js:0
 msgid "Search: Journal Items to Match"
 msgstr "Buscar: Apuntes Contables para Conciliar"
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__settlement_allow_unbalanced
+msgid "Settlement Allow Unbalanced"
+msgstr ""
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__settlement_title
+msgid "Settlement Title"
+msgstr ""
 
 #. module: account_accountant_ux
 #. odoo-javascript
@@ -270,6 +410,15 @@ msgstr "Buscar: Apuntes Contables para Conciliar"
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__filter_show_all_custom
 msgid "Show All"
 msgstr "Mostrar Todo"
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,help:account_accountant_ux.field_account_report__settlement_allow_unbalanced
+#: model:ir.model.fields,help:account_accountant_ux.field_account_tax_settlement_wizard__report_settlement_allow_unbalanced
+msgid ""
+"Si se habilita esta opción, se requerirá una cuenta de contrapartida al "
+"crear el asiento de liquidación, de modo que el balance del reporte se envíe "
+"a dicha cuenta."
+msgstr ""
 
 #. module: account_accountant_ux
 #. odoo-python
@@ -316,6 +465,11 @@ msgstr "Con Filtros"
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_followup_manual_reminder
 msgid "Wizard for sending manual reminders to clients"
+msgstr ""
+
+#. module: account_accountant_ux
+#: model:ir.model,name:account_accountant_ux.model_account_tax_settlement_wizard
+msgid "Wizard para generar liquidaciones de impuestos desde reportes"
 msgstr ""
 
 #. module: account_accountant_ux
