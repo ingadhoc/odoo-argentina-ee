@@ -137,7 +137,7 @@ class L10nArDjArba(models.Model):
             try:
                 ddjj = self._ensure_dj(wh_line.payment_id.date, wh_line.company_id)
                 if ddjj.state != "open":
-                    open_ddjj_error = self.env._("DDJJ could not be opened, the withholding cannot be created")
+                    open_ddjj_error = self.env._("DDJJ could not be opened, the withholding cannot be created (%s)", ddjj)
             except (UserError, ValidationError) as exp:
                 self.env.cr.rollback()
                 open_ddjj_error = str(exp)
