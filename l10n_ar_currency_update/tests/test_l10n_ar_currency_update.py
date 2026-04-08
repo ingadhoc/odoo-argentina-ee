@@ -60,6 +60,7 @@ class TestL10nArCurrencyUpdate(AccountTestInvoicingCommon):
                 "name": "Test Argentine Company 2",
                 "country_id": ar_country.id,
                 "currency_id": self.ARS.id,
+                "tax_calculation_rounding_method": "round_globally",
             }
         )
 
