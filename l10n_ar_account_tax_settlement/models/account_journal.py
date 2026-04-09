@@ -1,5 +1,6 @@
 # from odoo.tools.misc import formatLang
 # from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
+import logging
 import re
 import unicodedata
 
@@ -7,6 +8,8 @@ from odoo import _, fields, models
 from odoo.exceptions import RedirectWarning, ValidationError
 from odoo.tools import ustr
 from odoo.tools.float_utils import float_round
+
+_logger = logging.getLogger(__name__)
 
 #########
 # helpers
@@ -1668,6 +1671,7 @@ class AccountJournal(models.Model):
         self.ensure_one()
         ret = ""
         perc = ""
+        percepciones_monto_modificado = []
 
         for line in move_lines:
             # pay_group = payment.payment_group_id
@@ -1723,18 +1727,39 @@ class AccountJournal(models.Model):
             # donde el importe debe ser negativo y la base debe ser menor o igual a cero.
             # Completar con ceros a la izquierda. En las notas de crédito el signo negativo
             # ocupará la primera posición a la izquierda. Formato: 99999999999.99
+            monto_imponible = False
             if payment:
                 content += format_amount(line.withholding_id.base_amount, 14, 2, ",")
             else:
-                content += format_amount(-get_line_tax_base(line), 14, 2, ",")
+                monto_imponible = float_round(-get_line_tax_base(line), precision_digits=2)
+                content += format_amount(monto_imponible, 14, 2, ",")
             # Alícuota (long 5.2, desde 53 a 57)
-            content += "%05.2f" % tax.amount
+            alicuota = float_round(tax.amount, precision_digits=2)
+            content += "%05.2f" % alicuota
             # este es para el primer tipo de la especificación
             # Importe de la percepción (long 13.2, desde 58 hasta 70)
             # Con separador decimal (, o .). Mayor a cero, excepto para notas de crédito donde
             # debe ser negativo. Completar con ceros a la izquierda. En las notas de crédito el
             # signo negativo ocupará la primera posición a la izquierda. Formato: 9999999999.99
-            content += format_amount(-line.balance, 13, 2, ",")
+            importe_percepcion = format_amount(-line.balance, 13, 2, ",")
+            if monto_imponible:
+                # por ahora solo hacemos este cálculo para percepciones,
+                # no lo hacemos para retenciones por ahora
+                importe_percepcion_calculado = format_amount(monto_imponible * alicuota / 100, 13, 2, ",")
+            # ARBA valida importe = base * alícuota; informar el importe calculado
+            # cuando difiere del original por redondeos (calculado por odoo).
+            if monto_imponible and importe_percepcion != importe_percepcion_calculado:
+                percepciones_monto_modificado.append(
+                    {
+                        "id": line.id,
+                        "nombre": line.move_id.display_name,
+                        "importe_original": importe_percepcion,
+                        "importe_calculado": importe_percepcion_calculado,
+                    }
+                )
+                content += importe_percepcion_calculado
+            else:
+                content += importe_percepcion
 
             # según especificación se requiere fecha nuevamente
             # por ahora lo sacamos ya que en ticket 16448 nos mandaron ej.
@@ -1771,6 +1796,16 @@ class AccountJournal(models.Model):
             period,
             "6",  # 6 serian las retenciones
         )
+
+        if percepciones_monto_modificado:
+            comprobantes_modificados = "\n".join(
+                "%(id)s - %(nombre)s - %(importe_original)s - %(importe_calculado)s" % percepcion
+                for percepcion in percepciones_monto_modificado
+            )
+            _logger.info(
+                "Percepciones ARBA con importe ajustado:\nid - nombre - importe original - importe calculado\n%s",
+                comprobantes_modificados,
+            )
 
         return [
             {
