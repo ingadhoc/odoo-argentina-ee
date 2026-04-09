@@ -1,12 +1,16 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 # TODO mejorar esa importación ya que no sabemos si estos helpers van a seguir en
 # l10n_ar_account_tax_settlement
+import logging
 import re
 
 from odoo import _, fields, models
 from odoo.exceptions import UserError
+from odoo.tools.float_utils import float_round
 
 from .helpers import format_amount, get_line_tax_base, get_standard_lines_domain
+
+_logger = logging.getLogger(__name__)
 
 
 class L10n_ArPbaReportHandler(models.AbstractModel):
@@ -237,6 +241,7 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
     def _get_pba_txt_content_desde_01032026(self, move_lines, file_type):
         """Returns the lines to be printed in the txt file."""
         lines = []
+        percepciones_monto_modificado = []
         # TODO implementar
         for line in move_lines.filtered("amount_currency").sorted(key=lambda r: (r.date, r.id)):
             content = ""
@@ -293,16 +298,36 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
             # donde el importe debe ser negativo y la base debe ser menor o igual a cero.
             # Completar con ceros a la izquierda. En las notas de crédito el signo negativo
             # ocupará la primera posición a la izquierda. Formato: 99999999999.99
-            content += format_amount(-get_line_tax_base(line), 14, 2, ",")
+            monto_imponible = float_round(-get_line_tax_base(line), precision_digits=2)
+            content += format_amount(monto_imponible, 14, 2, ",")
             # Alícuota (long 5.2, desde 53 a 57)
-            content += "%05.2f" % tax.amount
+            alicuota = float_round(tax.amount, precision_digits=2)
+            content += "%05.2f" % alicuota
             # este es para el primer tipo de la especificación
             # Importe de la percepción (long 13.2, desde 58 hasta 70)
             # Con separador decimal (, o .). Mayor a cero, excepto para notas de crédito donde
             # debe ser negativo. Completar con ceros a la izquierda. En las notas de crédito el
             # signo negativo ocupará la primera posición a la izquierda. Formato: 9999999999.99
-            content += format_amount(-line.balance, 13, 2, ",")
-
+            importe_percepcion = format_amount(-line.balance, 13, 2, ",")
+            importe_percepcion_calculado = False
+            # por ahora solo hacemos este cálculo para percepciones,
+            # TODO ver cuando podemos hacer revert de esto en tarea 66283
+            if file_type in ["perc", "perc_act_7"]:
+                importe_percepcion_calculado = format_amount(monto_imponible * alicuota / 100, 13, 2, ",")
+            # ARBA valida importe = base * alícuota; informar el importe calculado
+            # cuando difiere del original por redondeos (calculado por odoo).
+            if importe_percepcion_calculado and importe_percepcion != importe_percepcion_calculado:
+                percepciones_monto_modificado.append(
+                    {
+                        "id": line.id,
+                        "nombre": line.move_id.display_name,
+                        "importe_original": importe_percepcion,
+                        "importe_calculado": importe_percepcion_calculado,
+                    }
+                )
+                content += importe_percepcion_calculado
+            else:
+                content += importe_percepcion
             # según especificación se requiere fecha nuevamente
             # por ahora lo sacamos ya que en ticket 16448 nos mandaron ej.
             # donde no se incluía, en realidad tal vez depende de la actividad
@@ -316,6 +341,15 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
             content += "\r\n"
 
             lines.append(content)
+        if percepciones_monto_modificado:
+            comprobantes_modificados = "\n".join(
+                "%(id)s - %(nombre)s - %(importe_original)s - %(importe_calculado)s" % percepcion
+                for percepcion in percepciones_monto_modificado
+            )
+            _logger.info(
+                "Percepciones ARBA con importe ajustado:\nid - nombre - importe original - importe calculado\n%s",
+                comprobantes_modificados,
+            )
         return lines
 
     def _get_pba_alta_ret_lote_a122r_txt_content_desde_01032026(self, move_lines):
