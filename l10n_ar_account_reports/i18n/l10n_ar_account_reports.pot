@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-06 15:01+0000\n"
-"PO-Revision-Date: 2026-04-06 15:01+0000\n"
+"POT-Creation-Date: 2026-04-09 11:48+0000\n"
+"PO-Revision-Date: 2026-04-09 11:48+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -124,6 +124,11 @@ msgid "AR ESP: Caja y Bancos"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_capital
+msgid "AR ESP: Capital"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_cargas_fiscales
 msgid "AR ESP: Cargas Fiscales"
 msgstr ""
@@ -204,11 +209,6 @@ msgid "AR ESP: Participaciones en Sociedades"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_patrimonio_neto
-msgid "AR ESP: Patrimonio Neto"
-msgstr ""
-
-#. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_previsiones
 msgid "AR ESP: Previsiones"
 msgstr ""
@@ -226,6 +226,21 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_remun_y_cargas_sociales
 msgid "AR ESP: Remun. y Cargas Sociales"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_reservas
+msgid "AR ESP: Reservas"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_resultado_del_ejercicio
+msgid "AR ESP: Resultado del Ejercicio"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_resultados
+msgid "AR ESP: Resultados"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -438,6 +453,11 @@ msgid "Cancel"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_equity_capital
+msgid "Capital"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_tax_liabilities
 msgid "Cargas fiscales"
 msgstr ""
@@ -638,6 +658,7 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:account.report,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados
+#: model:ir.actions.client,name:l10n_ar_account_reports.action_account_report_l10n_ar_estado_resultados
 msgid "Estado de Resultados"
 msgstr ""
 
@@ -1038,6 +1059,11 @@ msgid "Remuneraciones y cargas sociales"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_equity_reserves
+msgid "Reservas"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_net_inc
 msgid "Resultado Final del ejercicio"
 msgstr ""
@@ -1048,8 +1074,28 @@ msgid "Resultado antes del impuesto a las ganancias"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_ar_curr_year_earnings
+msgid "Resultado del Ejercicio"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_equity_results
+msgid "Resultados"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_equity_results_detail
+msgid "Resultados Acumulados"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_fin_exp
 msgid "Resultados financieros y por tenencia (incluye RECPAM)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_ar_prev_year_earnings
+msgid "Resultados sin asignar de años anteriores"
 msgstr ""
 
 #. module: l10n_ar_account_reports
