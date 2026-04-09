@@ -1723,18 +1723,33 @@ class AccountJournal(models.Model):
             # donde el importe debe ser negativo y la base debe ser menor o igual a cero.
             # Completar con ceros a la izquierda. En las notas de crédito el signo negativo
             # ocupará la primera posición a la izquierda. Formato: 99999999999.99
+            monto_imponible = False
             if payment:
                 content += format_amount(line.withholding_id.base_amount, 14, 2, ",")
             else:
-                content += format_amount(-get_line_tax_base(line), 14, 2, ",")
+                monto_imponible = format_amount(-get_line_tax_base(line), 14, 2, ",")
+                content += monto_imponible
             # Alícuota (long 5.2, desde 53 a 57)
-            content += "%05.2f" % tax.amount
+            alicuota = tax.amount
+            content += "%05.2f" % alicuota
             # este es para el primer tipo de la especificación
             # Importe de la percepción (long 13.2, desde 58 hasta 70)
             # Con separador decimal (, o .). Mayor a cero, excepto para notas de crédito donde
             # debe ser negativo. Completar con ceros a la izquierda. En las notas de crédito el
             # signo negativo ocupará la primera posición a la izquierda. Formato: 9999999999.99
-            content += format_amount(-line.balance, 13, 2, ",")
+            importe_percepcion = format_amount(-line.balance, 13, 2, ",")
+            importe_percepcion_calculado = format_amount(monto_imponible * alicuota / 100, 13, 2, ",")
+            # Llegaron varios tickets con problemas al presentar txt de percepciones de ARBA
+            # que ahora está validando que el importe de la percepción sea consistente con la
+            # alícuota y base imponible informada en el txt y algunas líneas son rechazadas
+            # por ARBA y no permite continuar con la presentación. En esta reunión vamos a
+            # aplicar un parche para que calculemos en la descarga del txt cuál debería ser 
+            # el importe de percepción aceptado por ARBA y ese importe de percepción va a ser
+            # el que informemos en el txt
+            if monto_imponible and importe_percepcion != importe_percepcion_calculado:
+                content += importe_percepcion_calculado
+            else:
+                content += importe_percepcion
 
             # según especificación se requiere fecha nuevamente
             # por ahora lo sacamos ya que en ticket 16448 nos mandaron ej.
