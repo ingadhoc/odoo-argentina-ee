@@ -65,6 +65,7 @@
                         <field name="date_invoice"/>
                         <field name="currency"/>
                         <field name="amount_total"/>
+                        <button name="action_remove" type="object" icon="fa-trash-o" title="Eliminar" class="oe_inline"/>
                     </list>
 
                 </field>
