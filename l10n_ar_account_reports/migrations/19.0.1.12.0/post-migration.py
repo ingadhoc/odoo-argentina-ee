@@ -1,9 +1,11 @@
 import logging
 
+from odoo import SUPERUSER_ID, api
+
 _logger = logging.getLogger(__name__)
 
 
-def migrate(env, version):
+def migrate(cr, version):
     """Remove obsolete account.report.line records.
 
     The l10n_ar_pba_report_pba_withholdings_line_a122r record was an old
@@ -11,7 +13,7 @@ def migrate(env, version):
     XML file is not enough for existing databases - this migration ensures
     the record is deleted from the database to avoid orphaned references.
     """
-
+    env = api.Environment(cr, SUPERUSER_ID, {})
     # IDs of obsolete records to delete
     obsolete_line_ids = [
         "l10n_ar_account_reports.l10n_ar_pba_report_pba_withholdings_line_a122r",
@@ -27,12 +29,3 @@ def migrate(env, version):
                 _logger.info("⊘ Record not found (already deleted?): %s", xml_id)
         except Exception as e:
             _logger.warning("⚠ Error deleting %s: %s", xml_id, e)
-
-    _logger.info("l10n_ar_account_reports: Migration 19.0.1.12.0 completed")
-
-    # Apply report tags to AR companies after removing old patrimonio_neto tag.
-    companies = env["res.company"].search([("account_fiscal_country_id.code", "=", "AR")])
-
-    if companies:
-        chart_template = env["account.chart.template"]
-        chart_template._l10n_ar_account_reports_setup_account_tags(companies)
