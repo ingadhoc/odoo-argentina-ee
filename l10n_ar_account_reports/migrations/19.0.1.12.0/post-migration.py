@@ -1,9 +1,11 @@
 import logging
 
+from odoo import SUPERUSER_ID, api
+
 _logger = logging.getLogger(__name__)
 
 
-def migrate(env, version):
+def migrate(cr, version):
     """Remove obsolete account.report.line records.
 
     The l10n_ar_pba_report_pba_withholdings_line_a122r record was an old
@@ -11,6 +13,7 @@ def migrate(env, version):
     XML file is not enough for existing databases - this migration ensures
     the record is deleted from the database to avoid orphaned references.
     """
+    env = api.Environment(cr, SUPERUSER_ID, {})
 
     # IDs of obsolete records to delete
     obsolete_line_ids = [
