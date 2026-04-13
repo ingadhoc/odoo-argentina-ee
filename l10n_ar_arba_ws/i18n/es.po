@@ -268,8 +268,8 @@ msgstr ""
 #. module: l10n_ar_arba_ws
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
-msgid "DDJJ could not be opened, the withholding cannot be created (%s)"
-msgstr "La DDJJ no puede ser abierta, la retención no puede ser creada (%s)"
+msgid "DDJJ could not be opened, the withholding cannot be created"
+msgstr "La DDJJ no puede ser abierta, la retención no puede ser creada"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__date

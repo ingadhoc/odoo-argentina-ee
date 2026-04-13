@@ -246,7 +246,7 @@ msgstr ""
 #. module: l10n_ar_arba_ws
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
-msgid "DDJJ could not be opened, the withholding cannot be created (%s)"
+msgid "DDJJ could not be opened, the withholding cannot be created"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
