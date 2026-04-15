@@ -186,6 +186,12 @@ msgid "Attachment Count"
 msgstr "Cantidad de Adjuntos"
 
 #. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/account_payment.py:0
+msgid "Amount:"
+msgstr "Monto:"
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.fields.selection,name:l10n_ar_arba_ws.selection__res_company__l10n_ar_arba_wh_mode__automatic
 msgid "Automatic"
 msgstr "Automático"
@@ -194,6 +200,17 @@ msgstr "Automático"
 #: model:ir.model.fields.selection,name:l10n_ar_arba_ws.selection__res_company__l10n_ar_arba_wh_mode__batch_import
 msgid "Batch Import"
 msgstr "Importación por Lote"
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/account_payment.py:0
+msgid "Certificate:"
+msgstr "Certificado:"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_company__l10n_ar_arba_client_id
@@ -703,6 +720,32 @@ msgstr "Webservice Retenciones (A122R)"
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
 msgid "Withholdings"
 msgstr "Retenciones"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/account_payment.py:0
+msgid "Warning - ARBA Withholdings"
+msgstr "Advertencia - Retenciones ARBA"
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid "⚠️ Warning:"
+msgstr "⚠️ Advertencia:"
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid "This payment has <strong><field name=\"withholding_count\"/> withholding(s)</strong> that have already been reported to ARBA through a Tax Return (DDJJ)."
+msgstr "Este pago tiene <strong><field name=\"withholding_count\"/> retención(es)</strong> que ya fueron informadas a ARBA a través de una Declaración Jurada (DDJJ)."
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid "We recommend not making modifications to the payment, as they will not impact the withholdings already reported."
+msgstr "Recomendamos no realizar modificaciones en el pago, ya que las mismas no impactarán en las retenciones ya informadas."
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid "I understand, reset to draft"
+msgstr "Entiendo, volver a borrador"
 
 #. module: l10n_ar_arba_ws
 #. odoo-python
