@@ -37,6 +37,7 @@
         "views/account_payment_views.xml",
         "views/res_config_settings_views.xml",
         "views/l10n_ar_payment_withholding_views.xml",
+        "wizard/arba_withholding_draft_warning_views.xml",
     ],
     "installable": True,
     "auto_install": False,
