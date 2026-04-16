@@ -1,25 +1,25 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
 # 	* l10n_ar_currency_update
-# 
+#
 # Translators:
 # ADHOC - Bot <transbot@adhoc.com.ar>, 2025
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-06 23:07+0000\n"
+"POT-Creation-Date: 2026-04-16 12:14+0000\n"
 "PO-Revision-Date: 2025-12-11 18:11+0000\n"
 "Last-Translator: Mariana Torres <mt@adhoc.inc>\n"
-"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
-"odoo-argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_currency_update/es/>\n"
+"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
+"argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_currency_update/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == 0)"
-" ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == "
+"0) ? 1 : 2);\n"
 "X-Generator: Weblate 5.10.4\n"
 
 #. module: l10n_ar_currency_update
@@ -31,18 +31,6 @@ msgstr "Fecha de última sincronización de AFIP"
 #: model:ir.model.fields.selection,name:l10n_ar_currency_update.selection__res_company__currency_provider__afip
 msgid "ARCA Web Service (Argentina)"
 msgstr "Web service AFIP (Argentina)"
-
-#. module: l10n_ar_currency_update
-#. odoo-python
-#: code:addons/l10n_ar_currency_update/models/res_currency.py:0
-msgid ""
-"Cambiar el nombre de la moneda puede repercutir tanto en el servicio de la "
-"sincronización automática de tasa de cambio como en el servicio de la "
-"facturación electrónica."
-msgstr ""
-"Cambiar el nombre de la moneda puede repercutir tanto en el servicio de la "
-"sincronización automática de tasa de cambio como en el servicio de la "
-"facturación electrónica."
 
 #. module: l10n_ar_currency_update
 #: model:ir.model,name:l10n_ar_currency_update.model_res_company
@@ -79,6 +67,16 @@ msgid "ID"
 msgstr "ID (identificación)"
 
 #. module: l10n_ar_currency_update
+#. odoo-python
+#: code:addons/l10n_ar_currency_update/models/res_currency.py:0
+msgid ""
+"No se puede cambiar el nombre/código de %(currencies)s ya que tiene un "
+"Código ARCA definido. \n"
+"Hacerlo repercutiría tanto en el servicio de sincronización automática de "
+"tasa de cambio como en el servicio de facturación electrónica."
+msgstr ""
+
+#. module: l10n_ar_currency_update
 #: model:ir.model.fields,field_description:l10n_ar_currency_update.field_res_company__rate_perc
 #: model:ir.model.fields,field_description:l10n_ar_currency_update.field_res_config_settings__rate_perc
 msgid "Rate Perc"
@@ -95,8 +93,14 @@ msgstr "Recargo Fijo de Tasa"
 msgid "Service Provider"
 msgstr "Proveedor de servicio"
 
-#. module: l10n_ar_currency_update
-#. odoo-python
-#: code:addons/l10n_ar_currency_update/models/res_currency.py:0
-msgid "Warning"
-msgstr "Advertencia"
+#~ msgid ""
+#~ "Cambiar el nombre de la moneda puede repercutir tanto en el servicio de "
+#~ "la sincronización automática de tasa de cambio como en el servicio de la "
+#~ "facturación electrónica."
+#~ msgstr ""
+#~ "Cambiar el nombre de la moneda puede repercutir tanto en el servicio de "
+#~ "la sincronización automática de tasa de cambio como en el servicio de la "
+#~ "facturación electrónica."
+
+#~ msgid "Warning"
+#~ msgstr "Advertencia"
