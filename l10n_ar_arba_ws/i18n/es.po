@@ -34,6 +34,27 @@ msgstr ""
 
 #. module: l10n_ar_arba_ws
 #. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/res_config_settings.py:0
+#, python-format
+msgid "* %(webservice)s: Connection failed. %(message)s"
+msgstr "* %(webservice)s: Conexión fallida. %(message)s"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/res_config_settings.py:0
+#, python-format
+msgid "* %(webservice)s: Connection failed. This is what we get: %(error)s"
+msgstr "* %(webservice)s: Conexión fallida. Esto es lo que obtuvimos: %(error)s"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/res_config_settings.py:0
+#, python-format
+msgid "* %(webservice)s: Connection is available (ARBA env: %(arba_env)s)"
+msgstr "* %(webservice)s: Conexión disponible (entorno ARBA: %(arba_env)s)"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "1st"
 msgstr "1ra"
@@ -747,3 +768,13 @@ msgstr "Solo puede actualizar el estado de una DDJJ informada"
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "You cannot delete a DDJJ ARBA that has withholding lines."
 msgstr "No puede eliminar una DDJJ ARBA que tiene líneas de retención."
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
+msgid "Tests the connection to the ARBA A122R webservice using the selected ARBA environment (testing or production), regardless of the database's AFIP environment."
+msgstr "Prueba la conexión con el webservice A122R de ARBA usando el ambiente ARBA seleccionado (testing o producción), independientemente del ambiente AFIP de la base."
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
+msgid "⇒ Test WS A122R Connection"
+msgstr "⇒ Probar conexión WS A122R"
