@@ -9,17 +9,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-27 12:55+0000\n"
+"POT-Creation-Date: 2026-04-16 19:40+0000\n"
 "PO-Revision-Date: 2026-04-14 15:41+0000\n"
 "Last-Translator: julia elizondo <jue@adhoc.inc>\n"
-"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
-"odoo-argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_import_bill/es/>\n"
+"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
+"argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_import_bill/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == 0)"
-" ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == "
+"0) ? 1 : 2);\n"
 "X-Generator: Weblate 5.10.4\n"
 
 #. module: l10n_ar_import_bill
@@ -42,9 +42,9 @@ msgid ""
 "invisible=\"total_bills_exists == 0\">Invoices highlighted in yellow will "
 "not be created because they already exist. </span>"
 msgstr ""
-"<i class=\"fa fa-info-circle\" title=\"Info\"/> <span invisible="
-"\"total_bills_exists == 0\">Las facturas resaltadas en amarillo no se "
-"crearán porque ya existen. </span>"
+"<i class=\"fa fa-info-circle\" title=\"Info\"/> <span "
+"invisible=\"total_bills_exists == 0\">Las facturas resaltadas en amarillo no "
+"se crearán porque ya existen. </span>"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model,name:l10n_ar_import_bill.model_account_import_summary
@@ -135,6 +135,11 @@ msgid ""
 "Si no realizó cambios manuales en el archivo Excel, es posible que ARCA haya "
 "modificado el formato del archivo. En ese caso, por favor reporte el "
 "inconveniente a través de un ticket de soporte."
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
+msgid "Eliminar"
 msgstr ""
 
 #. module: l10n_ar_import_bill
