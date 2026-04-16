@@ -146,7 +146,7 @@ class L10nArDjArba(models.Model):
             return
 
         self = ddjj
-        env_type = self.company_id._get_arba_environment_type()
+        env_type = self.company_id._get_arba_ws_environment_type()
 
         if env_type == "demo":
             # Simular que nos conectamos y hacemos un comprobante dummy local
@@ -371,7 +371,7 @@ class L10nArDjArba(models.Model):
         }
         """
         self.ensure_one()
-        env_type = self.company_id._get_arba_environment_type()
+        env_type = self.company_id._get_arba_ws_environment_type()
         ok_msg = self.env._("The declaration was successfully opened")
 
         if env_type == "demo":
@@ -420,7 +420,7 @@ class L10nArDjArba(models.Model):
             return
 
         ok_msg = self.env._("An existing DDJJ was successfully linked")
-        env_type = self.company_id._get_arba_environment_type()
+        env_type = self.company_id._get_arba_ws_environment_type()
         if env_type == "demo":
             # Simular que nos conectamos y hacemos la declaracion pero modo dummy local
             self.write(
@@ -492,7 +492,7 @@ class L10nArDjArba(models.Model):
         ]
         """
         self.ensure_one()
-        env_type = self.company_id._get_arba_environment_type()
+        env_type = self.company_id._get_arba_ws_environment_type()
         ok_msg = self.env._("The DDJJ's status has been updated")
         if env_type == "demo":
             # Simular que nos conectamos y hacemos la declaracion pero modo dummy local
