@@ -19,7 +19,7 @@
 ##############################################################################
 {
     "name": "ARBA Webservice (A122R)",
-    "version": "18.0.1.5.0",
+    "version": "18.0.1.6.0",
     "category": "Localization/Argentina",
     "sequence": 14,
     "author": "ADHOC SA",
