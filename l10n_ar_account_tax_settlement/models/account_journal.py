@@ -1839,7 +1839,7 @@ class AccountJournal(models.Model):
         if self.env["ir.module.module"].search(
             [("name", "=", "l10n_ar_arba_ws"), ("state", "in", ["installed", "to upgrade"])]
         ):
-            move_lines = move_lines.filtered(lambda x: not x.withholding_id.l10n_ar_cert_number)
+            move_lines = move_lines.filtered(lambda x: not x.withholding_id.l10n_ar_dj_arba_id)
 
         for line in move_lines:
             # Nro. transacción Agente (numérico 20, desde 1 hasta 20. Formato 99999999999999999999)
