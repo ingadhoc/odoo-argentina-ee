@@ -283,3 +283,50 @@ class AccountReturn(models.Model):
                             record.state = "submitted"
                         else:
                             record.state = "reviewed"
+
+    def _check_suite_annual_closing(self, check_codes_to_ignore):
+        checks = super()._check_suite_annual_closing(check_codes_to_ignore)
+
+        if self.company_id.country_id.code != "AR":
+            return checks
+
+        ar_checks = []
+
+        if "l10n_ar_cheques_a_fecha" not in check_codes_to_ignore:
+            action = self.env["ir.actions.actions"]._for_xml_id(
+                "l10n_latam_check_ux.action_account_check_to_date_report"
+            )
+            ar_checks.append(
+                {
+                    "name": _("Cheques a fecha"),
+                    "message": _(
+                        "Revisar y procesar los cheques de terceros con fecha de pago diferida "
+                        "pendientes al cierre del período."
+                    ),
+                    "code": "l10n_ar_cheques_a_fecha",
+                    "action": action,
+                    "result": "todo",
+                }
+            )
+
+        if "l10n_ar_inflation_adjustment" not in check_codes_to_ignore:
+            action = self.env["ir.actions.actions"]._for_xml_id("l10n_ar_account_reports.inflation_adjustment_action")
+            ar_checks.append(
+                {
+                    "name": _("Asiento de ajuste por inflación"),
+                    "message": _("Generar el asiento de ajuste por inflación para el período fiscal."),
+                    "code": "l10n_ar_inflation_adjustment",
+                    "action": action,
+                    "result": "todo",
+                }
+            )
+
+        # Insertar los pasos AR antes de "earnings_allocation"
+        earnings_idx = next(
+            (i for i, c in enumerate(checks) if c.get("code") == "earnings_allocation"),
+            len(checks),
+        )
+        for offset, check in enumerate(ar_checks):
+            checks.insert(earnings_idx + offset, check)
+
+        return checks

@@ -34,7 +34,7 @@
         "l10n_ar",
         "l10n_ar_tax",
         "l10n_ar_withholding",
-        "l10n_latam_check",
+        "l10n_latam_check_ux",
         "l10n_ar_reports",
         # necesitamos talonario de recibo para que los pagos
         # salgan con formato correcto, ejemplo: OP-X 0001-00000001
