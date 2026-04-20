@@ -10,16 +10,16 @@ msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-16 19:40+0000\n"
-"PO-Revision-Date: 2026-04-14 15:41+0000\n"
+"PO-Revision-Date: 2026-04-20 15:41+0000\n"
 "Last-Translator: julia elizondo <jue@adhoc.inc>\n"
-"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
-"argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_import_bill/es/>\n"
+"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
+"odoo-argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_import_bill/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == "
-"0) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == 0)"
+" ? 1 : 2);\n"
 "X-Generator: Weblate 5.10.4\n"
 
 #. module: l10n_ar_import_bill
@@ -201,7 +201,7 @@ msgstr ""
 #. module: l10n_ar_import_bill
 #: model:ir.model,name:l10n_ar_import_bill.model_afip_import_wizard
 msgid "Import AFIP bills from xlsx"
-msgstr ""
+msgstr "Importar facturas de ARCA desde xlsx"
 
 #. module: l10n_ar_import_bill
 #. odoo-javascript
@@ -219,13 +219,13 @@ msgstr "Importar Ventas desde ARCA"
 #. odoo-javascript
 #: code:addons/l10n_ar_import_bill/static/src/xml/account_import_arca.xml:0
 msgid "Import your Purchases from ARCA"
-msgstr ""
+msgstr "Importar tus compras desde ARCA"
 
 #. module: l10n_ar_import_bill
 #. odoo-javascript
 #: code:addons/l10n_ar_import_bill/static/src/xml/account_import_arca.xml:0
 msgid "Import your Sales from ARCA"
-msgstr ""
+msgstr "Importar tus ventas desde ARCA"
 
 #. module: l10n_ar_import_bill
 #. odoo-javascript
@@ -248,19 +248,19 @@ msgstr "Diario"
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__journal_domain
 msgid "Journal Domain"
-msgstr ""
+msgstr "Dominio Diario"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__write_uid
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Última Actualización Por"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__write_date
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Última Actualización en"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model,name:l10n_ar_import_bill.model_afip_import_wizard_line
@@ -316,19 +316,19 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_import_bill/models/account_journal.py:0
 msgid "No attachment was provided"
-msgstr ""
+msgstr "Ningún adjunto fue obtenido"
 
 #. module: l10n_ar_import_bill
 #. odoo-python
 #: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard_line.py:0
 msgid "No currency found for code: %s"
-msgstr ""
+msgstr "No se encontró moneda para el código: %s"
 
 #. module: l10n_ar_import_bill
 #. odoo-python
 #: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard_line.py:0
 msgid "No document type found for code: %s"
-msgstr ""
+msgstr "No se encontró tipo de documento para el código: %s"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__file_name
@@ -401,7 +401,7 @@ msgstr ""
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__wizard_id
 msgid "Wizard"
-msgstr ""
+msgstr "Asistente"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__exists
