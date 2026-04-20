@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-06 15:01+0000\n"
-"PO-Revision-Date: 2026-04-14 15:41+0000\n"
+"PO-Revision-Date: 2026-04-20 15:41+0000\n"
 "Last-Translator: julia elizondo <jue@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
 "odoo-argentina-ee-19-0/odoo-argentina-ee-19-0-account_accountant_ux/es/>\n"
@@ -282,12 +282,12 @@ msgstr ""
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Última Actualización Por"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Última Actualización en"
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_account_move_line_search_bank_rec_widget
