@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-09 11:48+0000\n"
-"PO-Revision-Date: 2026-04-14 15:41+0000\n"
+"PO-Revision-Date: 2026-04-20 15:41+0000\n"
 "Last-Translator: julia elizondo <jue@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
 "odoo-argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_account_reports/es/>\n"
@@ -25,28 +25,33 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_debito_fiscal
+#, fuzzy
 msgid "(+) Débito Fiscal (Ventas)"
-msgstr ""
+msgstr "(+) Débito Fiscal (Ventas)"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_credito_fiscal
+#, fuzzy
 msgid "(-) Crédito Fiscal (Compras)"
-msgstr ""
+msgstr "(-) Crédito Fiscal (Compras)"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_iva_perceptions_line
+#, fuzzy
 msgid "(-) Percepciones Sufridas"
-msgstr ""
+msgstr "(-) Percepciones Sufridas"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_iva_withholdings_line
+#, fuzzy
 msgid "(-) Retenciones Sufridas"
-msgstr ""
+msgstr "(-) Retenciones Sufridas"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_saldo_tecnico
+#, fuzzy
 msgid "(=) Saldo Técnico (1er Párrafo)"
-msgstr ""
+msgstr "(=) Saldo Técnico (1er Párrafo)"
 
 #. module: l10n_ar_account_reports
 #: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.inflation_adjustment_form
@@ -55,11 +60,15 @@ msgid ""
 "                                    %\n"
 "                                </span>"
 msgstr ""
+"<span>\n"
+"                                    %\n"
+"                                </span>"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__l10n_ar_account_id
+#, fuzzy
 msgid "AR Closing Account"
-msgstr ""
+msgstr "AR Closing Account"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_costo_ventas
@@ -147,8 +156,9 @@ msgstr "AR ESP: Caja y Bancos"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_capital
+#, fuzzy
 msgid "AR ESP: Capital"
-msgstr ""
+msgstr "AR ESP: Capital"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_cargas_fiscales
@@ -288,12 +298,12 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__l10n_ar_is_simple_closing_return
 msgid "AR Simple Closing"
-msgstr ""
+msgstr "AR Cierre Simple"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__account_id
 msgid "Account"
-msgstr ""
+msgstr "Cuenta"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_chart_template
@@ -306,18 +316,19 @@ msgid ""
 "Account to use for the closing entry of this return type. If not set, the "
 "partner's payable/receivable account will be used."
 msgstr ""
+"Cuenta que se utilizará para el asiento de cierre de este tipo de "
+"declaración. Si no se configura, se utilizará la cuenta de cuentas por pagar "
+"o por cobrar del socio."
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_return
-#, fuzzy
 msgid "Accounting Return"
-msgstr "Accounting Return"
+msgstr "Declaración contable"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_return_type
-#, fuzzy
 msgid "Accounting Return Type"
-msgstr "Accounting Return"
+msgstr "Tipo de Declaración contable"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_activo
@@ -403,60 +414,51 @@ msgstr "Anticipos de clientes"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_caba_report_handler
+#, fuzzy
 msgid "Argentinian CABA Report Custom Handler"
-msgstr "Gestor personalizado del libro mayor del contacto"
+msgstr "Gestor personalizado de informes de la CABA argentina"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_mendoza_report_handler
-#, fuzzy
-#| msgid "Partner Ledger Custom Handler"
 msgid "Argentinian Mendoza Report Custom Handler"
-msgstr "Gestor personalizado del libro mayor del contacto"
+msgstr "Gestor personalizado de informes Argentinos Mendoza"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_misiones_report_handler
-#, fuzzy
-#| msgid "Partner Ledger Custom Handler"
 msgid "Argentinian Misiones Report Custom Handler"
-msgstr "Gestor personalizado del libro mayor del contacto"
+msgstr "Gestor personalizado de informes Argentinos Misiones"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_pba_report_handler
 #, fuzzy
 #| msgid "Partner Ledger Custom Handler"
 msgid "Argentinian PBA Report Custom Handler"
-msgstr "Gestor personalizado del libro mayor del contacto"
+msgstr "Gestor personalizado de informes Argentinos PBA"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_sicore_report_handler
 msgid "Argentinian SICORE Report Custom Handler"
-msgstr ""
+msgstr "Gestor personalizado de informes Argentinos SICORE"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_sifere_report_handler
-#, fuzzy
-#| msgid "Partner Ledger Custom Handler"
 msgid "Argentinian SIFERE Report Custom Handler"
-msgstr "Gestor personalizado del libro mayor del contacto"
+msgstr "Gestor personalizado de informes Argentinos SIFERE"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_sircar_report_handler
-#, fuzzy
-#| msgid "Partner Ledger Custom Handler"
 msgid "Argentinian SIRCAR Report Custom Handler"
-msgstr "Gestor personalizado del libro mayor del contacto"
+msgstr "Gestor personalizado de informes Argentinos SIRCAR"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_santa_fe_report_handler
-#, fuzzy
-#| msgid "Partner Ledger Custom Handler"
 msgid "Argentinian Santa Fe Report Custom Handler"
-msgstr "Gestor personalizado del libro mayor del contacto"
+msgstr "Gestor personalizado de informes Argentinos Santa Fe"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_tucuman_report_handler
 msgid "Argentinian Tucumán Report Custom Handler"
-msgstr ""
+msgstr "Gestor personalizado de informes Argentinos Tucumán"
 
 #. module: l10n_ar_account_reports
 #: model:ir.actions.act_window,name:l10n_ar_account_reports.inflation_adjustment_action
@@ -521,6 +523,8 @@ msgid ""
 "Can only generate TXT files using posted entries. Please remove Include "
 "unposted entries filter and try again"
 msgstr ""
+"Solo se pueden generar archivos TXT a partir de entradas publicadas. "
+"Desactiva el filtro «Incluir entradas no publicadas» e inténtalo de nuevo"
 
 #. module: l10n_ar_account_reports
 #: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.inflation_adjustment_form
@@ -545,7 +549,7 @@ msgstr "Companía"
 #. module: l10n_ar_account_reports
 #: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.inflation_adjustment_form
 msgid "Confirm"
-msgstr ""
+msgstr "Confirmar"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_cogs
@@ -582,12 +586,12 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__date_from
 msgid "Date From"
-msgstr ""
+msgstr "Fecha Desde"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__date_to
 msgid "Date To"
-msgstr ""
+msgstr "Fecha Hasta"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -856,6 +860,9 @@ msgid ""
 "If enabled, this return type uses simplified closing logic: no carryover "
 "mechanism and no automatic tax_lock_date update."
 msgstr ""
+"Si se habilita, este tipo de declaración utiliza una lógica de cierre "
+"simplificada: sin mecanismo de traspaso y sin actualización automática de la "
+"fecha de bloqueo fiscal."
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_tax_inc
@@ -871,17 +878,17 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.inflation_adjustment_form
 msgid "Inflation Adjustment"
-msgstr ""
+msgstr "Ajuste por Inflación"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_inflation_adjustment_index
 msgid "Inflation Adjustment Index"
-msgstr ""
+msgstr "Índice de Ajuste por Inflación"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_inflation_adjustment
 msgid "Inflation adjustment"
-msgstr ""
+msgstr "Ajuste por Inflación"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_temp_investments
@@ -930,13 +937,13 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__write_uid
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment_index__write_uid
 msgid "Last Updated by"
-msgstr "Última actualización por"
+msgstr "Última Actualización Por"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__write_date
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment_index__write_date
 msgid "Last Updated on"
-msgstr "Última actualización el"
+msgstr "Última Actualización en"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_goodwill
@@ -1082,12 +1089,12 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__payment_partner_id
 msgid "Payment Partner"
-msgstr ""
+msgstr "Contacto del Pago"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__deadline_periodicity
 msgid "Periodicity"
-msgstr ""
+msgstr "Periodicidad"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1113,12 +1120,12 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sifere_report_sifere_perceptions_line
 msgid "Purchase Perceptions"
-msgstr ""
+msgstr "Percepciones de Compra"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sicore_report_profits_line
 msgid "Purchase Profits Withholdings"
-msgstr ""
+msgstr "Retenciones sobre las ganancias por compra"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_caba_report_caba_withholdings_line
@@ -1129,7 +1136,7 @@ msgstr ""
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sircar_report_sircar_withholdings_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_tucuman_report_tucuman_withholdings_line
 msgid "Purchase Withholdings"
-msgstr ""
+msgstr "Retenciones de Compra"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_payroll_liabilities
@@ -1179,7 +1186,7 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_return_creation_wizard
 msgid "Return creation wizard"
-msgstr ""
+msgstr "Asistente de creación de Declaración"
 
 #. module: l10n_ar_account_reports
 #: model:account.return.type,name:l10n_ar_account_reports.sicore_return_type
@@ -1189,13 +1196,13 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:account.report,name:l10n_ar_account_reports.l10n_ar_sicore_report
 msgid "SICORE Profits"
-msgstr ""
+msgstr "SICORE Ganancias"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
 msgid "SICORE_profits_withholdings.txt"
-msgstr ""
+msgstr "SICORE_ganancias_retenciones.txt"
 
 #. module: l10n_ar_account_reports
 #: model:account.report,name:l10n_ar_account_reports.l10n_ar_sifere_report
@@ -1217,17 +1224,17 @@ msgstr ""
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sircar_report_sircar_perceptions_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_tucuman_report_tucuman_perceptions_line
 msgid "Sale Perceptions"
-msgstr ""
+msgstr "Percepciones de Venta"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sifere_report_sifere_withholdings_line
 msgid "Sale Withholdings"
-msgstr ""
+msgstr "Retenciones de Venta"
 
 #. module: l10n_ar_account_reports
 #: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.inflation_adjustment_index_search
 msgid "Search Description"
-msgstr ""
+msgstr "Buscar Descripción"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields.selection,name:l10n_ar_account_reports.selection__inflation_adjustment__open_cloure_entry__yes
@@ -1245,12 +1252,12 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
 msgid "Sicore Profits Withholdings TXT"
-msgstr ""
+msgstr "TXT SICORE Retenciones Ganancias"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__start_index
 msgid "Start Index"
-msgstr ""
+msgstr "Índice Inicio"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_subtotal_noncurrent_assets
@@ -1261,13 +1268,13 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "Tax credit"
-msgstr ""
+msgstr "Crédito impositivo"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "Tax to pay"
-msgstr ""
+msgstr "Impuesto a pagar"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1276,6 +1283,8 @@ msgid ""
 "The identification type \"%(identification_type)s\" does not have ARCA code "
 "set."
 msgstr ""
+"El tipo de identificación «%(identification_type)s» no tiene asignado ningún "
+"código ARCA."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1284,12 +1293,14 @@ msgid ""
 "The partner \"%(partner_name)s\" (id %(partner_id)s) does not have the vat "
 "set."
 msgstr ""
+"El socio «%(partner_name)s» (id %(partner_id)s) no tiene configurado el IVA."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "The partner '%s' has no %s account configured for company '%s'."
 msgstr ""
+"El socio «%s» no tiene ninguna cuenta %s configurada para la empresa «%s»."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1298,6 +1309,8 @@ msgid ""
 "The return type '%s' has no payment partner configured. Please set a Payment "
 "Partner on the return type."
 msgstr ""
+"El tipo de devolución «%s» no tiene ningún socio de pago configurado. "
+"Configure un socio de pago para el tipo de devolución."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1373,13 +1386,13 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "payable"
-msgstr ""
+msgstr "pagable"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "receivable"
-msgstr ""
+msgstr "por cobrar"
 
 #, fuzzy
 #~ msgid "AR ESP: Patrimonio Neto"
