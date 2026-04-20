@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 12:43+0000\n"
-"PO-Revision-Date: 2026-04-14 15:41+0000\n"
+"PO-Revision-Date: 2026-04-20 15:41+0000\n"
 "Last-Translator: julia elizondo <jue@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
 "odoo-argentina-ee-19-0/odoo-argentina-ee-19-0-account_journal_book_report/es/"
@@ -106,13 +106,13 @@ msgstr "Reporte de Grupo de Diario"
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal_book_group__write_uid
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal_book_report__write_uid
 msgid "Last Updated by"
-msgstr "Última Actualización por"
+msgstr "Última Actualización Por"
 
 #. module: account_journal_book_report
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal_book_group__write_date
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal_book_report__write_date
 msgid "Last Updated on"
-msgstr "Última Actualización el"
+msgstr "Última Actualización en"
 
 #. module: account_journal_book_report
 #: model:ir.actions.act_window,name:account_journal_book_report.action_account_journal_book_report
