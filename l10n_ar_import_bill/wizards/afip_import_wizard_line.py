@@ -142,6 +142,7 @@ class AfipImportWizardLine(models.TransientModel):
 
     def _create_line(self, price_unit, tax_ids):
         partner = self._get_partner_by_vat()
+<<<<<<< 6b9e15f62242d84e5fef59cc3c088c288b715c13
         vals = {
             "name": "Creado por importación de facturas",
             "quantity": 1.0,
@@ -166,3 +167,44 @@ class AfipImportWizardLine(models.TransientModel):
         if view:
             action.update({"view_id": view.id, "views": [(view.id, "form")]})
         return action
+||||||| 94e6f75679f39d82befdd494a3e4a7f0a0572aa1
+        return (
+            0,
+            0,
+            {
+                "name": "Creado por importación de facturas",
+                "quantity": 1.0,
+                "price_unit": price_unit,
+                "tax_ids": [(6, 0, tax_ids)],
+                "partner_id": partner.id,
+            },
+        )
+=======
+        return (
+            0,
+            0,
+            {
+                "name": "Creado por importación de facturas",
+                "quantity": 1.0,
+                "price_unit": price_unit,
+                "tax_ids": [(6, 0, tax_ids)],
+                "partner_id": partner.id,
+            },
+        )
+
+    def action_remove(self):
+        wizard = self.mapped("wizard_id")
+        self.unlink()
+        # Re-open the same wizard in a modal to refresh only its content (lines)
+        view = self.env.ref("l10n_ar_import_bill.view_afip_import_wizard_form", raise_if_not_found=False)
+        action = {
+            "type": "ir.actions.act_window",
+            "res_model": "afip.import.wizard",
+            "res_id": wizard.id if wizard else False,
+            "view_mode": "form",
+            "target": "new",
+        }
+        if view:
+            action.update({"view_id": view.id, "views": [(view.id, "form")]})
+        return action
+>>>>>>> 150022d2fb2cb426328da06966910ee1a9c046b2
