@@ -10,6 +10,21 @@ _logger = logging.getLogger(__name__)
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
+    # Fix for l10n_ec field when module is not installed
+    # This prevents "field is undefined" errors in views that reference l10n_ec fields
+    # Using compute to avoid creating a column in the database
+    l10n_ec_vat_validation = fields.Char(
+        string="VAT Error message validation (EC)",
+        compute="_compute_l10n_ec_vat_validation_dummy",
+        help="This is a dummy field to prevent errors when l10n_ec module is not installed",
+        store=False,
+    )
+
+    def _compute_l10n_ec_vat_validation_dummy(self):
+        """Dummy compute method that always returns False"""
+        for partner in self:
+            partner.l10n_ec_vat_validation = False
+
     def button_update_partner_data_from_afip(self):
         self.ensure_one()
         wiz = (
