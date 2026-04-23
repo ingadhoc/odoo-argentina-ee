@@ -11,22 +11,22 @@ msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-21 16:36+0000\n"
-"PO-Revision-Date: 2026-04-20 15:41+0000\n"
+"PO-Revision-Date: 2026-04-23 18:41+0000\n"
 "Last-Translator: julia elizondo <jue@adhoc.inc>\n"
-"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
-"argentina-ee-19-0/odoo-argentina-ee-19-0-account_accountant_ux/es/>\n"
+"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
+"odoo-argentina-ee-19-0/odoo-argentina-ee-19-0-account_accountant_ux/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == "
-"0) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == 0)"
+" ? 1 : 2);\n"
 "X-Generator: Weblate 5.10.4\n"
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_partner_view_form
 msgid "<span class=\"o_stat_text\">Follow-up Report</span>"
-msgstr ""
+msgstr "<span class=\"o_stat_text\">Informe de seguimiento</span>"
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_partner_view_form
@@ -34,6 +34,8 @@ msgid ""
 "<span class=\"o_stat_text\">Partner</span>\n"
 "                        <span class=\"o_stat_text\">Ledger</span>"
 msgstr ""
+"<span class=\"o_stat_text\">Contacto</span>\n"
+"                        <span class=\"o_stat_text\">Ledger</span>"
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_partner_form
@@ -88,7 +90,7 @@ msgstr "Balances parciales por contacto"
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__allow_settlement
 msgid "Allow Settlement"
-msgstr ""
+msgstr "Permitir la liquidación"
 
 #. module: account_accountant_ux
 #. odoo-python
@@ -214,7 +216,7 @@ msgstr "Filtrar Monto"
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_followup_report_handler
 msgid "Follow-Up Report Custom Handler"
-msgstr ""
+msgstr "Manejador personalizado de informes de seguimiento"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_auto_reconcile_wizard__id
@@ -404,12 +406,12 @@ msgstr "Buscar: Apuntes Contables para Conciliar"
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__settlement_allow_unbalanced
 msgid "Settlement Allow Unbalanced"
-msgstr ""
+msgstr "Permitir desequilibrio en la liquidación"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__settlement_title
 msgid "Settlement Title"
-msgstr ""
+msgstr "Título de la liquidación"
 
 #. module: account_accountant_ux
 #. odoo-javascript
@@ -472,7 +474,7 @@ msgstr "Con Filtros"
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_followup_manual_reminder
 msgid "Wizard for sending manual reminders to clients"
-msgstr ""
+msgstr "Asistente para enviar recordatorios manuales a clientes"
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_tax_settlement_wizard
