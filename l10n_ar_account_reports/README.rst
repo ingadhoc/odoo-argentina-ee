@@ -10,28 +10,32 @@
    :target: https://www.gnu.org/licenses/agpl
    :alt: License: AGPL-3
 
-============================================
-Accounting Reports with Accounting Documents
-============================================
+==========================================
+Customized Accounting Reports - Argentina
+==========================================
 
-Customizes Odoo standard accounting reports to meet specific Argentine requirements, adding necessary fiscal information for balance presentation and generating additional reports for check control.
+Customizes Odoo standard accounting reports to meet specific Argentine requirements, including Income Statement and Balance Sheet according to Argentine regulations, automatic configuration of account tags, Partner Ledger enhancements, and tax declaration file generation for various provincial tax authorities.
 
 Functional description
 ======================
 
-This module adds two main functionalities:
+**1. Income Statement and Balance Sheet Reports**
 
-**Partner Ledger Report Enhancement**
+Provides Income Statement (Estado de Resultados) and Balance Sheet (Estado Patrimonial) structured according to Argentine accounting regulations, with proper classification of accounts.
+
+**2. Automatic Account Tags Configuration**
+
+When installing the Argentine chart of accounts, the module automatically assigns the corresponding account tags to each account based on its code and type, enabling proper report generation.
+
+**3. Partner Ledger Report Enhancement**
 
 Modifies the native Partner Ledger (Libro Mayor de Empresas) report to include Argentine fiscal information alongside each partner's name. The standard Odoo report only shows "Partner Name", while with this module it displays "Partner Name (CUIT: 1234567890)".
 
 This functionality is essential for fiscal compliance in Argentina, as the report serves as the official detail of Debtors and Creditors at year-end, required for Annual Balance presentation to accounting and tax authorities.
 
-**Interface changes:**
-- Adds a new "Cheques a fecha" menu under Accounting → Reporting → Legal Statements
-- Includes a wizard with fields to select limit date and journal (optional)
-- Generates a PDF report with detailed listing of pending checks
-- Archivos para declaración de distintos impuestos (principalmente percepciones y retenciones)
+**4. Tax Declaration Files (Percepciones y Retenciones)**
+
+Generates text files for tax declaration to various provincial tax authorities (mainly withholdings and perceptions):
 
 **Inflation adjustment index management**
 
@@ -61,34 +65,45 @@ Archivos para declaración de impuestos
 
 * TUCUMAN: especificación en doc/Tucuman/MRETPER6R2.pdf a partir de la página 12
 
+**5. VAT Withholdings and Perceptions Report (IVA Sufrido)**
+
+Generates reports for VAT withholdings and perceptions suffered, used for tax compliance and declaration purposes.
+
 Installation
 ============
 
-To install this module, you need to:
+To install this module:
 
-#. Install the module from Apps menu
-#. The module will auto-install if l10n_ar and account_reports are installed
+#. The module will auto-install if l10n_ar, account_reports and l10n_ar_reports are installed
+#. It can also be installed manually from the Apps menu
 
 Configuration
 =============
 
 This module doesn't require specific configuration. It automatically:
 
+#. Creates the Income Statement and Balance Sheet reports for Argentina
+#. Configures account tags when installing the Argentine chart of accounts
 #. Enhances the Partner Ledger report with CUIT information
-#. Adds the "Cheques a fecha" menu under Accounting → Reporting → Legal Statements
+#. Provides access to tax declaration file generators
 
 Usage
 =====
 
-**Partner Ledger Report:**
+**Income Statement and Balance Sheet:**
+#. Go to Accounting → Reporting → Income Statement (or Balance Sheet)
+#. Select the desired period
+#. The report is generated with the structure according to Argentine regulations
+
+**Partner Ledger:**
 #. Go to Accounting → Reporting → Partner Ledger
 #. Generate the report normally - partner names will automatically include CUIT information
 
-**Checks to Date Report:**
-#. Go to Accounting → Reporting → Legal Statements → Cheques a fecha
-#. Select the date up to which you want to see pending checks
-#. Optionally filter by journal
-#. Click "Confirmar" to generate the PDF report
+**Tax Declaration Files:**
+#. Go to Accounting → Reporting → Argentina
+#. Select the appropriate report (ARBA, AGIP, SIFERE, SIRCAR, etc.)
+#. Configure the period and filters
+#. Generate and download the text file for tax authority submission
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
    :alt: Try me on Runbot
