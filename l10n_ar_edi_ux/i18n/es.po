@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-01-12 15:28+0000\n"
-"PO-Revision-Date: 2026-04-20 15:41+0000\n"
+"PO-Revision-Date: 2026-04-23 18:41+0000\n"
 "Last-Translator: julia elizondo <jue@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
 "odoo-argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_edi_ux/es/>\n"
@@ -39,13 +39,13 @@ msgstr ". Permiso de embarque inválidos: %s"
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_service_end
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_service_end
 msgid "ARCA Service End Date"
-msgstr ""
+msgstr "Fecha Fin Servicio ARCA"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_service_start
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_service_start
 msgid "ARCA Service Start Date"
-msgstr ""
+msgstr "Fecha Inicio Servicio ARCA"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_l10n_ar_afipws_connection
@@ -89,6 +89,8 @@ msgid ""
 "Authorized Document Clases on ARCA:\n"
 "%s"
 msgstr ""
+"Clases de Documentos Autorizados en ARCA:\n"
+"%s"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.actions.act_window,name:l10n_ar_edi_ux.action_partner_update
@@ -118,7 +120,7 @@ msgstr "Cancelar"
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_certificate_certificate
 msgid "Certificate"
-msgstr ""
+msgstr "Certificado"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_config_settings__arba_cit
@@ -153,7 +155,7 @@ msgstr "Contacto"
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_certificate_certificate__content_filename
 msgid "Content Filename"
-msgstr ""
+msgstr "Nombre del archivo de contenido"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__title_case
@@ -330,7 +332,7 @@ msgstr "Opción"
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__partner_id
 msgid "Partner"
-msgstr ""
+msgstr "Contacto"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__partner_ids
@@ -368,7 +370,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/res_partner.py:0
 msgid "Please configure an ARCA Certificate in order to continue"
-msgstr ""
+msgstr "Configure un certificado ARCA para continuar"
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
@@ -460,12 +462,12 @@ msgstr "Actualizar automáticamente"
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_partner_form
 msgid "Update From ARCA"
-msgstr ""
+msgstr "Actualizar desde ARCA"
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
 msgid "Update From Padron"
-msgstr ""
+msgstr "Actualizar desde Padrón"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.actions.act_window,name:l10n_ar_edi_ux.action_base_partner_update_from_padron
