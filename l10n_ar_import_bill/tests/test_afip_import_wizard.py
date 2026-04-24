@@ -80,6 +80,28 @@ class TestAfipImportWizard(common.TransactionCase):
 
             self.assertEqual(invoice.l10n_latam_document_type_id.code, expected_code)
 
+    def test_non_ars_currency_rate(self):
+        """Regression: en v19 account.move reemplazó user_currency_rate por
+        invoice_currency_rate. El wizard debe setear el rate del XLSX sobre
+        el campo correcto sin crashear al confirmar una factura en USD.
+        """
+        wizard = self._get_wizard_from_file("invoice_currency_rate_test.xlsx")
+        wizard.auto_validate = True
+
+        view_return = wizard.action_confirm()
+        invoice_ids = view_return["domain"][0][2]
+        self.assertEqual(len(invoice_ids), 1, "Should import exactly one invoice")
+
+        invoice = self.env["account.move"].browse(invoice_ids[0])
+        self.assertEqual(invoice.currency_id, self.currency_usd, "Currency should be USD")
+        # La factura del fixture trae Tipo Cambio=1200 (1 USD = 1200 ARS)
+        self.assertAlmostEqual(
+            invoice.invoice_currency_rate,
+            1200.0,
+            places=2,
+            msg="invoice_currency_rate should match the XLSX Tipo Cambio column",
+        )
+
     def test_partner_creation_and_search(self):
         """Test correct creation and search of partners based on identification"""
         # Load test file containing partner data
