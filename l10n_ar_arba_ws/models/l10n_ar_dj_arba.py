@@ -35,6 +35,7 @@ class L10nArDjArba(models.Model):
             ("draft", "Draft"),
             ("open", "Open"),
             ("close", "Closed"),
+            ("cancel", "Cancelled"),
         ],
         default="draft",
         tracking=True,
@@ -291,6 +292,8 @@ class L10nArDjArba(models.Model):
         record.message_post(body=Markup(prefix_text + error_msg))
         _logger.error("ARBA WS ERROR: %s", prefix_text + error_msg)
 
+        return prefix_text + error_msg
+
     def _process_arba_response(self, method, url, env_type, msg, data=None):
         """Let us to have both clean response dictionary and string of errors if exists
         :return: tuple (response, error) -- type (dict, string)"""
@@ -514,7 +517,20 @@ class L10nArDjArba(models.Model):
         )
         prefix_error = self.env._("Updating status:")
         if error:
-            self._process_arba_error(error, prefix_error)
+            import pdb
+
+            pdb.set_trace()
+            error_msg = self._process_arba_error(error, prefix_error)
+            pdb.set_trace()
+            if "DDJJ_NO_ENCONTRADA" in error_msg:
+                # Si la DDJJ no fue encontrada entonces pasamos la declaracion a cancelada, ya que seguramente la
+                # borraron an la interfaz de usuario de portal arba y no vamos a poder actualizarla.
+                self.message_post(
+                    body=self.env._(
+                        "The DDJJ was not found in ARBA, probably was deleted in ARBA portal, so we are moving it to cancelled state"
+                    )
+                )
+                self.state = "cancel"
             return
 
         if not response:
