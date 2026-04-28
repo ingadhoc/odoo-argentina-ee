@@ -45,12 +45,29 @@ class AccountJournal(models.Model):
             df.columns = df.iloc[0]
             df = df[1:].reset_index(drop=True)
 
+            # Determinar las columnas según el tipo de diario
+            # En ventas: "Nro. Doc. Receptor", en compras: "Nro. Doc. Emisor"
+            if self.type == "sale":
+                vat_column = "Nro. Doc. Receptor"
+                type_column = "Tipo Doc. Receptor"
+                name_column = "Denominación Receptor"
+            elif self.type == "purchase":
+                vat_column = "Nro. Doc. Emisor"
+                type_column = "Tipo Doc. Emisor"
+                name_column = "Denominación Emisor"
+            else:
+                raise UserError(
+                    _(
+                        "Se subió un archivo que no se corresponde ni con ventas ni con compras para importar facturas desde AFIP."
+                    )
+                )
+
             # Definir el mapeo de columnas del archivo Excel a campos del modelo
             column_mapping = {
                 "Fecha": "date_invoice",
-                "Nro. Doc. Emisor": "partner_vat",
-                "Tipo Doc. Emisor": "partner_identification_type",
-                "Denominación Emisor": "partner_name",
+                vat_column: "partner_vat",
+                type_column: "partner_identification_type",
+                name_column: "partner_name",
                 "Moneda": "currency",
                 "Tipo Cambio": "currency_rate",
                 "Imp. Total": "amount_total",
@@ -81,23 +98,6 @@ class AccountJournal(models.Model):
 
             # Optimización: Convertir todas las fechas de una vez usando vectorización de pandas
             df["Fecha"] = pd.to_datetime(df["Fecha"], dayfirst=True).dt.date
-
-            # Determinar las columnas según el tipo de diario
-            # En ventas: "Nro. Doc. Receptor", en compras: "Nro. Doc. Emisor"
-            if self.type == "sale":
-                vat_column = "Nro. Doc. Receptor"
-                type_column = "Tipo Doc. Receptor"
-                name_column = "Denominación Receptor"
-            elif self.type == "purchase":
-                vat_column = "Nro. Doc. Emisor"
-                type_column = "Tipo Doc. Emisor"
-                name_column = "Denominación Emisor"
-            else:
-                raise UserError(
-                    _(
-                        "Se subió un archivo que no se corresponde ni con ventas ni con compras para importar facturas desde AFIP."
-                    )
-                )
 
             # Optimización: Convertir VAT a string de una vez
             df[vat_column] = df[vat_column].astype(int).astype(str)
