@@ -115,7 +115,9 @@ class AfipImportWizardLine(models.TransientModel):
         if self.currency == "$":
             currency_id = self.env["res.currency"].search([("name", "=", "ARS")], limit=1)
         else:
-            currency_id = self.env["res.currency"].search([("symbol", "=", self.currency)], limit=1)
+            currency_id = self.env["res.currency"].search(
+                ["|", ("name", "=", self.currency), ("symbol", "=", self.currency)], limit=1
+            )
 
         if not currency_id:
             raise UserError(_("No currency found for code: %s") % self.currency)
