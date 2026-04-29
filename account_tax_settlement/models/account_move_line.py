@@ -148,6 +148,7 @@ class AccountMoveLine(models.Model):
         """
         if not journal:
             journal = self.get_tax_settlement_journal()
+        self.mapped("move_id").filtered("l10n_latam_document_number")._validate_document_number_parts()
         res = self.env["res.download_files_wizard"].action_get_files(
             journal.get_tax_settlement_files_values(self), journal.settlement_tax
         )

@@ -516,6 +516,18 @@ msgstr "Impuesto"
 
 #. module: l10n_ar_account_tax_settlement
 #. odoo-python
+#: code:addons/l10n_ar_account_tax_settlement/models/account_move.py:0
+msgid ""
+"The following document(s) have an invalid document number format.\n"
+"ARCA requires the format XXXXX-XXXXXXXX (e.g.: 00001-00000001).\n"
+"Please correct them before generating the file:\n%s"
+msgstr ""
+"Los siguientes comprobantes tienen un número de documento con formato inválido.\n"
+"ARCA requiere el formato XXXXX-XXXXXXXX (ej: 00001-00000001).\n"
+"Por favor corrija los siguientes comprobantes antes de generar el archivo:\n%s"
+
+#. module: l10n_ar_account_tax_settlement
+#. odoo-python
 #: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
 msgid "Tipo de comprobante no reconocido"
 msgstr ""
