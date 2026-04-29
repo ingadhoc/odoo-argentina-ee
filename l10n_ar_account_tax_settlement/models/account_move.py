@@ -6,10 +6,45 @@ import csv
 from io import StringIO
 
 from odoo import _, models
+from odoo.exceptions import ValidationError
 
 
 class AccountMove(models.Model):
     _inherit = "account.move"
+
+    def _get_document_number_parts(self):
+        """Wrapper around _l10n_ar_get_document_number_parts for single-record use.
+        Callers should invoke _validate_document_number_parts() on the full recordset
+        first so that all invalid documents are reported at once."""
+        self.ensure_one()
+        return self._l10n_ar_get_document_number_parts(
+            self.l10n_latam_document_number, self.l10n_latam_document_type_id.code
+        )
+
+    def _validate_document_number_parts(self):
+        """Validate document number format for all records in self.
+        Collects every invalid document and raises a single ValidationError
+        listing them all, instead of stopping at the first failure."""
+        invalid = []
+        for move in self:
+            try:
+                move._l10n_ar_get_document_number_parts(
+                    move.l10n_latam_document_number, move.l10n_latam_document_type_id.code
+                )
+            except (ValueError, AttributeError):
+                invalid.append(move)
+        if invalid:
+            doc_list = "\n".join(
+                '- "%s" (id: %d): "%s"' % (m.display_name, m.id, m.l10n_latam_document_number) for m in invalid
+            )
+            raise ValidationError(
+                _(
+                    "The following document(s) have an invalid document number format.\n"
+                    "ARCA requires the format XXXXX-XXXXXXXX (e.g.: 00001-00000001).\n"
+                    "Please correct them before generating the file:\n%s"
+                )
+                % doc_list
+            )
 
     def action_download_vat_differences_csv(self):
         """Acción para descargar CSV con diferencias de IVA"""

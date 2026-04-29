@@ -792,9 +792,7 @@ class AccountJournal(models.Model):
                     or "R"
                 )
                 content += line.l10n_latam_document_type_id.l10n_ar_letter
-            document_parts = move._l10n_ar_get_document_number_parts(
-                move.l10n_latam_document_number, move.l10n_latam_document_type_id.code
-            )
+            document_parts = move._get_document_number_parts()
             # si el punto de venta es de 5 digitos no encontramos doc
             # que diga como proceder, tomamos los ultimos 4 digitos
             pto_venta = "{:0>4d}".format(document_parts["point_of_sale"])[-4:]
@@ -1112,9 +1110,7 @@ class AccountJournal(models.Model):
                 content += f"{pos:>04s}"
                 content += f"{number:>016s}"
             else:
-                document_parts = move._l10n_ar_get_document_number_parts(
-                    move.l10n_latam_document_number, move.l10n_latam_document_type_id.code
-                )
+                document_parts = move._get_document_number_parts()
                 pos = document_parts["point_of_sale"]
                 number = document_parts["invoice_number"]
                 # si el punto de venta es de 5 digitos no encontramos doc
@@ -1710,9 +1706,7 @@ class AccountJournal(models.Model):
                 )
                 # Letra Comprobante (long 1, desde 25 hasta 25. Valores A,B,C, o “ ” (blanco)).
                 content += line.l10n_latam_document_type_id.l10n_ar_letter
-            document_parts = move._l10n_ar_get_document_number_parts(
-                move.l10n_latam_document_number, move.l10n_latam_document_type_id.code
-            )
+            document_parts = move._get_document_number_parts()
             pto_venta = "{:0>5d}".format(document_parts["point_of_sale"])[-5:]
             nro_documento = "{:0>8d}".format(document_parts["invoice_number"])[-8:]
             # Numero Sucursal (long 5, desde 26 hasta 30)
@@ -1849,9 +1843,7 @@ class AccountJournal(models.Model):
             content += line.partner_id.ensure_vat()
 
             move = line.move_id
-            document_parts = move._l10n_ar_get_document_number_parts(
-                move.l10n_latam_document_number, move.l10n_latam_document_type_id.code
-            )
+            document_parts = move._get_document_number_parts()
             pto_venta = "{:0>5d}".format(document_parts["point_of_sale"])[-5:]
 
             # Sucursal (long 5, desde 32 hasta 36)
