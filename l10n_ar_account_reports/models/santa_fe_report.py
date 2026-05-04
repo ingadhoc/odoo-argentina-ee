@@ -225,7 +225,7 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
 
             # 17 - Importe IVA (solo si factura)
             if line.move_id.is_invoice():
-                amounts = line.move_id._l10n_ar_get_amounts(company_currency=True)
+                amounts = line.move_id._l10n_ar_get_amounts()
                 vat_amount = amounts["vat_amount"]
                 base_amount = amounts["vat_taxable_amount"]
             else:
