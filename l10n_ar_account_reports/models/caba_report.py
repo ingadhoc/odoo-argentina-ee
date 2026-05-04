@@ -172,7 +172,7 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
                         line, alicuot, backward_comp_is_installed, payment, company_currency
                     )
                 elif line.move_id.is_invoice():
-                    amounts = line.move_id._l10n_ar_get_amounts(company_currency=True)
+                    amounts = line.move_id._l10n_ar_get_amounts()
                     # segun especificacion el iva solo se reporta para estos
                     if line.l10n_latam_document_type_id.l10n_ar_letter in ["A", "M"]:
                         vat_amount = amounts["vat_amount"]
