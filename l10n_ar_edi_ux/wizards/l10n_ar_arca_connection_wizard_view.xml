@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_l10n_ar_arca_connection_wizard_form" model="ir.ui.view">
+        <field name="name">l10n_ar.arca.connection.wizard.form</field>
+        <field name="model">l10n_ar.arca.connection.wizard</field>
+        <field name="arch" type="xml">
+            <form string="ARCA Connection Setup">
+                <div class="alert alert-info" role="alert">
+                    <strong>Configure ARCA Web Services Connection</strong><br/>
+                    Upload your certificate and private key to connect to ARCA electronic invoicing services.
+                </div>
+
+                <group>
+                    <group>
+                        <field name="company_id" invisible="1"/>
+                        <field name="has_valid_certificate" invisible="1"/>
+                        <field name="l10n_ar_afip_ws_environment" widget="radio" options="{'horizontal': true}"/>
+                    </group>
+                    <group>
+                        <field name="l10n_ar_afip_ws_key_id"
+                               context="{'default_public': False}"
+                               options="{'no_create': False, 'no_open': False}"/>
+                        <field name="l10n_ar_afip_ws_crt_id"
+                               options="{'no_create': False, 'no_open': False}"/>
+                    </group>
+                </group>
+
+                <group>
+                    <field name="connection_status_html" nolabel="1"/>
+                </group>
+
+                <div class="alert alert-secondary mt-3" role="alert">
+                    <p><strong>Need help?</strong></p>
+                    <ul>
+                        <li>For testing, you can use demo certificates from ARCA</li>
+                        <li>For production, obtain your certificate from the ARCA portal</li>
+                        <li>Certificates must be in PEM format</li>
+                    </ul>
+                    <button name="action_open_documentation" type="object" class="btn btn-link p-0" string="📚 View ARCA Documentation"/>
+                </div>
+
+                <footer>
+                    <button string="Test Connections" name="action_test_connections" type="object" class="btn-primary" invisible="not has_valid_certificate"/>
+                    <button string="Save &amp; Close" name="action_save_and_close" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_l10n_ar_arca_connection_wizard" model="ir.actions.act_window">
+        <field name="name">ARCA Connection Setup</field>
+        <field name="res_model">l10n_ar.arca.connection.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'dialog_size': 'medium'}</field>
+    </record>
+</odoo>

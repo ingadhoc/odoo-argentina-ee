@@ -10,4 +10,12 @@
             </button>
         </field>
     </record>
+
+    <!-- Add menu item for the journal wizard -->
+    <menuitem id="menu_l10n_ar_arca_journal_wizard"
+              name="Create Journals from ARCA"
+              parent="account.account_account_menu"
+              action="action_l10n_ar_arca_journal_wizard"
+              sequence="50"
+              groups="account.group_account_manager"/>
 </odoo>

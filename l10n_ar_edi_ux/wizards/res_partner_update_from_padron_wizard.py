@@ -48,7 +48,7 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
         if context.get("active_model") == "res.partner" and context.get("active_ids"):
             partners = self.get_partners()
             if not partners:
-                raise UserError(_("No se encontró ningún partner con CUIT para actualizar"))
+                raise UserError(_("No partner with CUIT found to update"))
         return res
 
     @api.model
@@ -189,7 +189,7 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
                 self._update()
             except UserError as exp:
                 error = self.pre_process_afip_error(exp)
-                partner.message_post(body="Falló actualización AFIP: " + error)
+                partner.message_post(body=_("ARCA update failed: %s") % error)
                 continue
         self.write({"state": "finished"})
         return {
@@ -249,7 +249,7 @@ class ResPartnerUpdateFromPadronWizard(models.TransientModel):
             self.change_partner()
         except UserError as exp:
             error = self.pre_process_afip_error(exp)
-            partner.message_post(body="Falló actualización AFIP: " + error)
+            partner.message_post(body=_("ARCA update failed: %s") % error)
             self.wizard_error = (
                 '<div class= "alert alert-warning" role="alert" style="margin-bottom:0px;" >' + error + "</div>"
             )
@@ -271,6 +271,6 @@ class ResPartnerUpdateFromPadronInfo(models.TransientModel):
     _name = "res.partner.update.from.padron.info"
     _description = "res.partner.update.from.padron.info"
 
-    name = fields.Char("Nombre Campo")
-    real_name = fields.Char("Campo")
+    name = fields.Char("Field Label")
+    real_name = fields.Char("Field Name")
     wizard_id = fields.Many2one("res.partner.update.from.padron.wizard")

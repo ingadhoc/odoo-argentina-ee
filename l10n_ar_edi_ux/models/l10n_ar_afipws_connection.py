@@ -8,9 +8,7 @@ class L10nArAfipwsConnection(models.Model):
     def _get_l10n_ar_afip_ws(self):
         """Return the list of values of the selection field."""
         res = super()._get_l10n_ar_afip_ws()
-        return [
-            ("ws_sr_constancia_inscripcion", _("Servicio de Consulta a Padrón Constancia de Inscripción (ex A5)"))
-        ] + res
+        return [("ws_sr_constancia_inscripcion", _("ARCA Registration Certificate Inquiry Service (ex A5)"))] + res
 
     @api.model
     def _l10n_ar_get_afip_ws_url(self, afip_ws, environment_type):

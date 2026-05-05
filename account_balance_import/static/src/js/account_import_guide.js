@@ -15,9 +15,21 @@ patch(AccountImportGuide.prototype, {
             const company = await this.orm.read(
                 "res.company",
                 [companyId],
-                ["account_opening_move_id"]
+                ["account_opening_move_id", "country_id"]
             );
             this.accountOpeningMoveId = company[0].account_opening_move_id;
+            // Load country code to conditionally show ARCA connection
+            const countryId = company[0].country_id;
+            if (countryId) {
+                const country = await this.orm.read(
+                    "res.country",
+                    [countryId[0]],
+                    ["code"]
+                );
+                this.companyCountryCode = country[0].code;
+            } else {
+                this.companyCountryCode = null;
+            }
         });
     },
 
@@ -63,6 +75,20 @@ patch(AccountImportGuide.prototype, {
         this.actionService.doAction(result);
     },
 
+    async _openArcaJournalWizard() {
+        const config = await this.orm.call(
+            "account.import.summary",
+            "create",
+            [{}]
+        );
+        const result = await this.orm.call(
+            "account.import.summary",
+            "action_open_arca_journal_wizard",
+            [config]
+        );
+        this.actionService.doAction(result);
+    },
+
     async _openPartnerBalanceImport() {
         const config = await this.orm.call(
             "account.import.summary",
@@ -88,6 +114,20 @@ patch(AccountImportGuide.prototype, {
                 target: "current",
             });
         }
+    },
+
+    async _openArcaConnectionSetup() {
+        const config = await this.orm.call(
+            "account.import.summary",
+            "create",
+            [{}]
+        );
+        const result = await this.orm.call(
+            "account.import.summary",
+            "action_open_arca_connection_setup",
+            [config]
+        );
+        this.actionService.doAction(result);
     },
 
 });

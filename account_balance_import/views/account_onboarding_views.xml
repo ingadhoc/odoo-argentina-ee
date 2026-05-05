@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Override Odoo core onboarding step to change "Set Periods" to "Fiscal Year" -->
+    <record id="account.onboarding_onboarding_step_fiscal_year" model="onboarding.onboarding.step">
+        <field name="title">Fiscal Year</field>
+        <field name="description">Define your fiscal years &amp; tax returns periodicity.</field>
+    </record>
+</odoo>

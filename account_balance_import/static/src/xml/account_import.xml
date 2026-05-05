@@ -30,9 +30,20 @@
                                 <div class="pt-4">
                                     <div class="row">
                                         <div class="col-10">
-                                            <h3>Set Periods</h3>
+                                            <h3>Fiscal Year</h3>
                                             <p>Configure fiscal years and periods.</p>
                                             <button type="button" class="btn btn-primary" t-on-click="() => this._openFiscalYearSetup()">Set Periods</button>
+                                        </div>
+                                        <div class="col-2 border-start"/>
+                                    </div>
+                                </div>
+                                <!-- ARCA Connection for Argentinian companies -->
+                                <div class="pt-4" name="arca_connection" t-if="companyCountryCode === 'AR'">
+                                    <div class="row">
+                                        <div class="col-10">
+                                            <h3>ARCA Connection</h3>
+                                            <p>Configure Web Services connection to ARCA.</p>
+                                            <button type="button" class="btn btn-primary" t-on-click="() => this._openArcaConnectionSetup()">Configure Connection</button>
                                         </div>
                                         <div class="col-2 border-start"/>
                                     </div>
@@ -42,7 +53,7 @@
                                         <div class="col-10">
                                             <h3>Journals Dashboard</h3>
                                             <p>Review and manage your accounting journals.</p>
-                                            <button type="button" class="btn btn-primary" t-on-click="() => this._openJournalDashboard()">Review Journals</button>
+                                            <button type="button" class="btn btn-primary" t-on-click="() => this._openArcaJournalWizard()">Create Journals</button>
                                         </div>
                                         <div class="col-2 border-start"/>
                                     </div>

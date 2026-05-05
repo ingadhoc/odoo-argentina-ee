@@ -3,8 +3,8 @@
 <templates>
 
     <t t-name="account_base_import.accountImportTemplate" t-inherit="account_base_import.accountImportTemplate" t-inherit-mode="extension">
-        <!-- Import Sales from ARCA at the end of left column -->
-        <xpath expr="//div[@name='left_column']" position="inside">
+        <!-- Import Sales and Purchases from ARCA in right column -->
+        <xpath expr="//div[@name='right_column']" position="inside">
             <div class="pt-4" t-if="countryCode == 'AR'" name="import_sales_arca">
                 <div class="row">
                     <div class="col-10">

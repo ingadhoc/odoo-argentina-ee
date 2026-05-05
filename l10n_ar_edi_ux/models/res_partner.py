@@ -15,7 +15,7 @@ class ResPartner(models.Model):
         "res_partner_arca_activity_rel",
         "partner_id",
         "arca_activity_id",
-        "Actividades",
+        "ARCA Activities",
     )
 
     def button_update_partner_data_from_afip(self):
@@ -126,8 +126,7 @@ class ResPartner(models.Model):
         client, auth = company._l10n_ar_get_connection("ws_sr_constancia_inscripcion")._get_client()
 
         error_msg = _(
-            "No pudimos actualizar desde el Padron de ARCA al contacto %s (%s).\nRecomendamos verificar manualmente en la"
-            " página de ARCA.\nObtuvimos este error:\n%s"
+            "Could not update contact %s (%s) from ARCA Padron.\nWe recommend verifying manually on the ARCA website.\nError:\n%s"
         )
 
         errors = []
@@ -163,7 +162,7 @@ class ResPartner(models.Model):
 
         denominacion = data.get("razonSocial", "") or ", ".join([data.get("apellido", ""), data.get("nombre", "")])
         if not denominacion or denominacion == ", ":
-            raise UserError(error_msg % (self.name, vat, "La afip no devolvió nombre"))
+            raise UserError(error_msg % (self.name, vat, _("ARCA did not return a name")))
 
         domicilio = data.get("domicilioFiscal")
         data_mt = res.get("datosMonotributo")
@@ -336,9 +335,9 @@ class ResPartner(models.Model):
             values.pop("l10n_ar_afip_responsibility_type_id", None)
             self.message_post(
                 body=_(
-                    "Posiblemente este contacto tenga declarada alguna actividad dentro del rubro inmobiliario. En este caso, "
-                    "no podemos actualizar automáticamente el campo Responsabilidad ARCA. "
-                    "Por favor, consulte el dato correspondiente y agréguelo manualmente"
+                    "This contact might have a real estate activity declared. In this case, "
+                    "we cannot automatically update the ARCA Responsibility field. "
+                    "Please check the corresponding data and add it manually."
                 )
             )
 

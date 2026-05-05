@@ -20,10 +20,10 @@ class AccountMove(models.Model):
     )
     l10n_ar_boarding_permission_ids = fields.Many2many(
         "l10n_ar.boarding_permission",
-        string="Permiso de Embarque",
+        string="Boarding Permission",
         check_company=True,
         ondelete="restrict",
-        help="Solo se envía esta información si la factura es de exportación y el 'Concepto AFIP' es 'Productos / Exportación definitiva de bienes'",
+        help="This information is only sent if the invoice is an export invoice and the 'AFIP Concept' is 'Products / Definitive export of goods'.",
     )
 
     # Esto se podria sugerir para hacerlo en odoo oficial
@@ -61,8 +61,9 @@ class AccountMove(models.Model):
         if not vat_condition:
             raise UserError(
                 _(
-                    f"The partner {self.partner_id.name} does not have an ARCA Responsibility configured. Please set the ARCA Responsibility Type in the partner's configuration to validate the invoice."
+                    "The partner %s does not have an ARCA Responsibility configured. Please set the ARCA Responsibility Type in the partner's configuration to validate the invoice."
                 )
+                % self.partner_id.name
             )
 
     @api.model
@@ -125,9 +126,9 @@ class AccountMove(models.Model):
             msg = (
                 _("We could not validate the vendor bill in AFIP")
                 + (
-                    ' "%s" %s. ' % (error_vendor_bill.partner_id.name, error_vendor_bill.display_name)
+                    _(' "%s" %s. ') % (error_vendor_bill.partner_id.name, error_vendor_bill.display_name)
                     if error_vendor_bill.exists()
-                    else ". "
+                    else _(". ")
                 )
                 + _("This is what we get:\n%s\n\nPlease make the required corrections and try again") % (return_info)
             )
