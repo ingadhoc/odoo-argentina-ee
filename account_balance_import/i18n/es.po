@@ -318,8 +318,26 @@ msgstr "Revisar Datos de la Compañía"
 #. module: account_balance_import
 #. odoo-javascript
 #: code:addons/account_balance_import/static/src/xml/account_import.xml:0
-msgid "Review Journals"
-msgstr "Revisar Diarios"
+msgid "Create Journals"
+msgstr "Crear Diarios"
+
+#. module: account_balance_import
+#. odoo-javascript
+#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
+msgid "ARCA Connection"
+msgstr "Conexión ARCA"
+
+#. module: account_balance_import
+#. odoo-javascript
+#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
+msgid "Configure Connection"
+msgstr "Configurar Conexión"
+
+#. module: account_balance_import
+#. odoo-javascript
+#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
+msgid "Configure Web Services connection to ARCA."
+msgstr "Configure la conexión de Servicios Web con ARCA."
 
 #. module: account_balance_import
 #. odoo-javascript
@@ -353,8 +371,8 @@ msgstr "Saldos de Partners"
 #. module: account_balance_import
 #. odoo-javascript
 #: code:addons/account_balance_import/static/src/xml/account_import.xml:0
-msgid "Set Periods"
-msgstr "Establecer Periodos"
+msgid "Fiscal Year"
+msgstr "Año Fiscal"
 
 #. module: account_balance_import
 #. odoo-javascript

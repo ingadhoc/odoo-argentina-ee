@@ -59,13 +59,13 @@ class AccountJournal(models.Model):
             date_from = format_date(
                 self.env, datetime.datetime.strptime(document[date_from_key], "%Y%m%d"), date_format="dd/MM/Y"
             )
-            line = " - [" + str(document[id_key]) + "] " + document[name_key] + " Vigente desde: " + date_from
+            line = " - [" + str(document[id_key]) + "] " + document[name_key] + _(" Vigente desde: ") + date_from
             if document[date_to_key] != "NULL":
                 date_to = format_date(
                     self.env, datetime.datetime.strptime(document[date_to_key], "%Y%m%d"), date_format="dd/MM/Y"
                 )
-                line += " hasta: " + date_to
+                line += _(" hasta: ") + date_to
             msg += line + "\n"
         if events:
-            msg += "\n\nAdicionalmente, ARCA devuelve este evento: " + events
+            msg += _("\n\nAdicionalmente, ARCA devuelve este evento: ") + events
         return msg

@@ -13,6 +13,7 @@
     ],
     "data": [
         "security/ir.model.access.csv",
+        "views/account_onboarding_views.xml",
         "wizards/account_balance_import_wizard.xml",
         "views/account_account_views.xml",
         "views/res_config_settings_views.xml",

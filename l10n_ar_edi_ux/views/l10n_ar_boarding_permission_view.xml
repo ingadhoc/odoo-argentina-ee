@@ -27,11 +27,11 @@
     </record>
 
     <record model="ir.actions.act_window" id="action_l10n_ar_boarding_permission">
-        <field name="name">Permisos de embarque</field>
+        <field name="name">Boarding Permissions</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">l10n_ar.boarding_permission</field>
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem name="Permisos de embarque" action="action_l10n_ar_boarding_permission" id="menu_action_l10n_ar_boarding_permission" parent="l10n_ar.menu_afip_config"/>
+    <menuitem name="Boarding Permissions" action="action_l10n_ar_boarding_permission" id="menu_action_l10n_ar_boarding_permission" parent="l10n_ar.menu_afip_config"/>
 </odoo>

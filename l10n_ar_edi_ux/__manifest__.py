@@ -12,9 +12,12 @@
         "l10n_ar_edi",
         "l10n_ar_reports_simple",
         "account_accountant",
+        "account_base_import",
     ],
     "data": [
         "wizards/res_partner_update_from_padron_wizard_view.xml",
+        "wizards/l10n_ar_arca_connection_wizard_view.xml",
+        "wizards/l10n_ar_arca_journal_wizard_view.xml",
         "views/certificate_certificate_view.xml",
         "views/res_partner_view.xml",
         "views/account_move_view.xml",

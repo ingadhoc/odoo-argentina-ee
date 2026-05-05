@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_l10n_ar_arca_journal_wizard_form" model="ir.ui.view">
+        <field name="name">l10n_ar.arca.journal.wizard.form</field>
+        <field name="model">l10n_ar.arca.journal.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Create Journals from ARCA Points of Sale">
+                <div class="alert alert-info" role="alert">
+                    <strong>Automatic Journal Creation</strong><br/>
+                    This wizard will fetch your points of sale from ARCA and create journals automatically.
+                </div>
+
+                <group>
+                    <field name="company_id" invisible="1"/>
+                    <field name="has_points_of_sale" invisible="1"/>
+                </group>
+
+                <notebook>
+                    <page string="Points of Sale" name="pos_list">
+                        <div invisible="has_points_of_sale" class="alert alert-info" role="alert">
+                            <p><strong>No points of sale loaded yet.</strong></p>
+                            <p>Click "Fetch from ARCA" to upload your points of sale from ARCA Web Services. Then configure the default accounts for each one.</p>
+                        </div>
+
+                        <field name="pos_line_ids" invisible="not has_points_of_sale">
+                            <list editable="bottom" create="false" delete="false">
+                                <field name="to_create" widget="boolean_toggle"/>
+                                <field name="pos_number" readonly="1"/>
+                                <field name="afip_ws_name" string="Type" readonly="1"/>
+                                <field name="name"/>
+                                <field name="branch_id" optional="show"/>
+                                <field name="shared_to_branches" optional="show"/>
+                                <field name="error_message" readonly="1" decoration-warning="error_message"/>
+                                <field name="afip_ws" invisible="1"/>
+                                <field name="pos_system" invisible="1"/>
+                                <field name="company_id" invisible="1"/>
+                            </list>
+                        </field>
+                    </page>
+
+
+                </notebook>
+
+                <footer>
+                    <button string="Fetch from ARCA" name="action_fetch_points_of_sale" type="object" class="btn-primary"/>
+                    <button string="Create Journals" name="action_create_journals" type="object" class="btn-primary" invisible="not has_points_of_sale"/>
+                    <button string="Create Manually" name="action_create_manually" type="object" class="btn-secondary"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_l10n_ar_arca_journal_wizard" model="ir.actions.act_window">
+        <field name="name">Create Journals from ARCA</field>
+        <field name="res_model">l10n_ar.arca.journal.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'dialog_size': 'extra-large'}</field>
+    </record>
+</odoo>

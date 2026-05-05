@@ -5,15 +5,15 @@ class L10nArBoardingPermission(models.Model):
     _name = "l10n_ar.boarding_permission"
     _description = "Boarding Permission"
 
-    number = fields.Char(string="Permiso de embarque", required=True, size=16)
+    number = fields.Char(string="Boarding Permission Number", required=True, size=16)
     dst_country = fields.Many2one(
-        "res.country", string="País de destino", help="País de destino de la mercadería", required=True
+        "res.country", string="Destination Country", help="Destination country of the goods", required=True
     )
     company_id = fields.Many2one("res.company", required=True, default=lambda self: self.env.company)
 
     _permiso_embarque_unique = models.Constraint(
         "UNIQUE(number, dst_country, company_id)",
-        "Error! El permiso de embarque ya existe.",
+        "Boarding permission already exists.",
     )
 
     def name_get(self):
