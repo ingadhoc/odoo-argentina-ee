@@ -19,5 +19,5 @@ def migrate(cr, version):
 
     if companies:
         chart_template = env["account.chart.template"]
-        chart_template._l10n_ar_account_reports_setup_account_tags(companies)
+        chart_template._l10n_ar_account_reports_setup_account_tags(companies, only_missing=True)
         _logger.info("✓ Account tags applied successfully")
