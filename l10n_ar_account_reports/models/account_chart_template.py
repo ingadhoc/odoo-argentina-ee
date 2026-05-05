@@ -284,21 +284,32 @@ class AccountChartTemplate(models.AbstractModel):
 
         return None
 
-    def _l10n_ar_account_reports_setup_account_tags(self, ar_companies):
-        """Set up account tags for Argentine chart templates"""
+    def _l10n_ar_account_reports_setup_account_tags(self, ar_companies, only_missing=False):
+        """Set up account tags for Argentine chart templates.
+
+        :param only_missing: When True, preserves manual tag customizations by only
+            assigning tags to accounts that have none of the module's AR tags.
+            Use only_missing=False (default) exclusively for fresh chart installations.
+            Always pass only_missing=True from migration scripts to avoid overwriting
+            tags that clients configured manually.
+        """
         tags = self._get_ar_account_tags()
         tag_ids = list(tags.values())
         tag_ids_list = [tag.id for tag in tag_ids]  # Lista de IDs de todas las etiquetas
-
         for company in ar_companies:
             # En Odoo 18, las cuentas usan company_ids (many2many) en lugar de company_id
             accounts = self.env["account.account"].search([("company_ids", "in", company.id)])
 
-            # Primero limpiar todas las etiquetas específicas de reportes argentinos
-            for account in accounts:
-                # Quitar todas las etiquetas argentinas existentes
-                for tag_id in tag_ids_list:
-                    account.write({"tag_ids": [(3, tag_id)]})
+            if not only_missing:
+                # Primero limpiar todas las etiquetas específicas de reportes argentinos
+                for account in accounts:
+                    # Quitar todas las etiquetas argentinas existentes
+                    for tag_id in tag_ids_list:
+                        account.write({"tag_ids": [(3, tag_id)]})
+            else:
+                # Excluir en una sola query las cuentas que ya tienen algún tag AR
+                # (preservamos la configuración manual del cliente)
+                accounts = accounts.filtered_domain([("tag_ids", "not in", tag_ids_list)])
 
             # Luego asignar las etiquetas correctas
             for account in accounts:
