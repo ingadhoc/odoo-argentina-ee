@@ -141,12 +141,11 @@ class L10nArDjArba(models.Model):
             except (UserError, ValidationError) as exp:
                 self.env.cr.rollback()
                 open_ddjj_error = str(exp)
-
         if open_ddjj_error or not ddjj:
             wh_line.payment_id.message_post(
                 body=self.env._("ERROR trying to inform the withholding: ") + str(open_ddjj_error)
             )
-            return
+            raise ValidationError(self.env._("Error trying to inform the withholding: ") + str(open_ddjj_error))
 
         self = ddjj
         env_type = self.company_id._get_arba_environment_type()
