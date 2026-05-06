@@ -1,31 +1,12 @@
 from base64 import b64encode
 from os import path
 
-from odoo.tests import common
+from odoo.addons.l10n_ar.tests.common import TestArCommon
+from odoo.tests import tagged
 
 
-class TestAfipImportWizard(common.TransactionCase):
-    def setUp(self):
-        super().setUp()
-
-        # Find first company that is RI
-        self.company = self.env["res.company"].search([("l10n_ar_afip_responsibility_type_id.code", "=", "1")], limit=1)
-
-        # Basic setup
-        self.env.user.company_id = self.company
-        self.currency_ars = self.env.ref("base.ARS")
-        self.currency_usd = self.env.ref("base.USD")
-
-        # Create purchase journal
-        self.journal = self.env["account.journal"].create(
-            {
-                "name": "Test Purchase Journal",
-                "code": "TPJ",
-                "type": "purchase",
-                "company_id": self.company.id,
-            }
-        )
-
+@tagged("post_install", "-at_install")
+class TestAfipImportWizard(TestArCommon):
     def _get_wizard_from_file(self, filename):
         """Helper to create and return wizard from file
         Args:
@@ -37,7 +18,7 @@ class TestAfipImportWizard(common.TransactionCase):
             file_data = b64encode(f.read())
 
         # Create attachment and get wizard through journal method
-        result = self.journal.import_bills_from_xls(
+        result = self.company_data["default_journal_purchase"].import_bills_from_xls(
             [
                 self.env["ir.attachment"].create(
                     {
@@ -50,13 +31,10 @@ class TestAfipImportWizard(common.TransactionCase):
 
         return self.env["afip.import.wizard"].browse(result["res_id"])
 
-    def test_invoice_type_identification(self):
-        """Test correct identification of different AFIP document types"""
+    def test_invoice_document_type(self):
+        """Test correct assignment of document types based on file data"""
         # Load test file containing different invoice types
         wizard = self._get_wizard_from_file("invoice_type_test.xlsx")
-
-        # Enable auto-validation for the test
-        wizard.auto_validate = True
 
         # Process the file
         view_return = wizard.action_confirm()
