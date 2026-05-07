@@ -70,6 +70,16 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
             # "{0:>16.2f}".format(12.1)
             return template % f"{round(amount, decimals):.2f}".replace(".", ",")
 
+        moves_to_validate = (
+            move_lines.filtered(
+                lambda line: line.move_id.l10n_latam_document_type_id.internal_type
+                in ("invoice", "credit_note", "debit_note")
+            )
+            .mapped("move_id")
+            .filtered(lambda m: m.l10n_latam_document_type_id and m.l10n_latam_document_number)
+        )
+        moves_to_validate._validate_document_number_parts()
+
         for line in move_lines.filtered("amount_currency").sorted(key=lambda r: (r.date, r.id)):
             content = ""
 

@@ -107,6 +107,16 @@ class L10n_ArSifereReportHandler(models.AbstractModel):
         * para consultas directo a sifere mesa de ayuda enviar correo electronico a
         sifereweb@comisionarbitral.gob.ar
         """
+        # Validamos que los comprobantes tengan número de documento correcto
+        # Solo validamos las facturas, notas de crédito y notas de débito.
+        move_lines.filtered(
+            lambda line: (
+                not line.payment_id
+                and line.move_id.l10n_latam_document_type_id
+                and line.move_id.l10n_latam_document_number
+            )
+        ).mapped("move_id")._validate_document_number_parts()
+
         lines = []
         desp_imp = []
         for line in move_lines.filtered("amount_currency").sorted(key=lambda r: (r.date, r.id)):
