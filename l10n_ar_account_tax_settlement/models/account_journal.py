@@ -199,6 +199,15 @@ class AccountJournal(models.Model):
             return template % f"{round(amount, decimals):.2f}".replace(".", ",")
 
         self.ensure_one()
+        moves_to_validate = (
+            move_lines.filtered(
+                lambda line: line.move_id.l10n_latam_document_type_id.internal_type
+                in ("invoice", "credit_note", "debit_note")
+            )
+            .mapped("move_id")
+            .filtered(lambda m: m.l10n_latam_document_type_id and m.l10n_latam_document_number)
+        )
+        moves_to_validate._validate_document_number_parts()
         ret = ""
         perc = ""
 
@@ -1074,6 +1083,13 @@ class AccountJournal(models.Model):
         sifereweb@comisionarbitral.gob.ar
         """
         self.ensure_one()
+        move_lines.filtered(
+            lambda line: (
+                not line.payment_id
+                and line.move_id.l10n_latam_document_type_id
+                and line.move_id.l10n_latam_document_number
+            )
+        ).mapped("move_id")._validate_document_number_parts()
 
         ret = ""
         perc = ""
