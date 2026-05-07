@@ -1416,6 +1416,18 @@ msgstr "pagable"
 msgid "receivable"
 msgstr "por cobrar"
 
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_move.py:0
+msgid ""
+"The following document(s) have an invalid document number format.\n"
+"ARCA requires the format XXXXX-XXXXXXXX (e.g.: 00001-00000001).\n"
+"Please correct them before generating the file:\n%s"
+msgstr ""
+"Los siguientes comprobantes tienen un número de documento con formato inválido.\n"
+"ARCA requiere el formato XXXXX-XXXXXXXX (ej: 00001-00000001).\n"
+"Por favor corrija los siguientes comprobantes antes de generar el archivo:\n%s"
+
 #, fuzzy
 #~ msgid "AR ESP: Patrimonio Neto"
 #~ msgstr "AR ESP: Patrimonio Neto"
