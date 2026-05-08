@@ -3,8 +3,10 @@ from odoo.exceptions import ValidationError, UserError
 from odoo.tools.float_utils import float_round
 # from odoo.tools.misc import formatLang
 # from odoo.tools import DEFAULT_SERVER_DATE_FORMAT
-import re
 
+import logging
+import re
+_logger = logging.getLogger(__name__)
 #########
 # helpers
 #########
@@ -1544,11 +1546,25 @@ class AccountJournal(models.Model):
 
     def iibb_aplicado_arba_desde_01032026_files_values(self, move_lines):
         self.ensure_one()
-        return self.iibb_aplicado_arba_desde_01032026(move_lines) + self.iibb_alta_ret_aplicado_arba_por_lote_A_122R_01032026(move_lines.filtered('payment_id'))
+        txt_perc = []
+        txt_ret = []
+        if percepciones := move_lines.filtered(lambda x: not x.payment_id):
+            txt_perc = self.iibb_aplicado_arba_desde_01032026(percepciones) or []
+        if retenciones := move_lines.filtered('payment_id'):
+            txt_ret = self.iibb_alta_ret_aplicado_arba_por_lote_A_122R_01032026(retenciones) or []
+        return txt_perc + txt_ret
 
     def iibb_aplicado_arba_act_7_desde_01032026_files_values(self, move_lines):
         self.ensure_one()
-        return self.iibb_aplicado_arba_desde_01032026(move_lines, act_7=True) + self.iibb_alta_ret_aplicado_arba_por_lote_A_122R_01032026(move_lines.filtered('payment_id'))
+        txt_perc = []
+        txt_ret = []
+        if percepciones := move_lines.filtered(lambda x: not x.payment_id):
+            txt_perc = self.iibb_aplicado_arba_desde_01032026(
+                percepciones, act_7=True) or []
+        if retenciones := move_lines.filtered('payment_id'):
+            txt_ret = self.iibb_alta_ret_aplicado_arba_por_lote_A_122R_01032026(
+                retenciones) or []
+        return txt_perc + txt_ret
 
     def iibb_aplicado_arba_desde_01032026(self, move_lines, act_7=None):
         """ Desarrollado según especificación https://web.arba.gov.ar/instructivo-y-marco-normativo
@@ -1556,44 +1572,37 @@ class AccountJournal(models.Model):
         luego hay que ir a la sección "DDJJ Periódicas Web IIBB NOVEDAD" y hacer click en
         "Instructivos y Marco Normativo - NOVEDAD -"). Finalmente descargar la especificación
         donde dice 'Descargar PDF (Nuevo Diseño - Vigente para operaciones a partir del 01/03/2026)'
-        Implementados:
-            - 1.2 Percepciones Act. 7 método Percibido (quincenal)
-            - 1.7 Retenciones ( excepto actividad 29, 6 de Bancos y 17 de
-            Bancos y No Bancos)
+        Implementado:
+        - 1.2 Percepciones Act. 7 método Percibido (quincenal)
         """
         self.ensure_one()
-        ret = ''
-        perc = ''
-
+        content = ''
+        percepciones_monto_modificado = []
         for line in move_lines:
-            # pay_group = payment.payment_group_id
             move = line.move_id
-            payment = line.payment_id
             internal_type = line.l10n_latam_document_type_id.internal_type
             document_code = line.l10n_latam_document_type_id.code
 
             line.partner_id.ensure_vat()
 
             # CUIT contribuyente Percibido (long 13, desde 1 hasta 13. Formato 99-99999999-9)
-            content = line.partner_id.l10n_ar_formatted_vat
+            content += line.partner_id.l10n_ar_formatted_vat
             # Fecha Percepción (long 10, desde 14 hasta 23. Formato dd/mm/aaaa)
             content += fields.Date.from_string(
                 line.date).strftime('%d/%m/%Y')
 
-            # solo para percepciones
-            if not payment:
-                # Tipo de Comprobante (long 1, desde 24 hasta 24)
-                # Valores F=Factura, R=Recibo, C=Nota Crédito, D =Nota Debito, V=Nota de Venta, E=Factura de Crédito
-                # Electrónica, H=Nota de Crédito Electrónica, I=Nota de Débito Electrónica.
-                content += (
-                    document_code in ['201', '206', '211'] and 'E' or
-                    document_code in ['203', '208', '213'] and 'H' or
-                    document_code in ['202', '207', '212'] and 'I' or
-                    internal_type == 'invoice' and 'F' or
-                    internal_type == 'credit_note' and 'C' or
-                    internal_type == 'debit_note' and 'D' or 'R')
-                # Letra Comprobante (long 1, desde 25 hasta 25. Valores A,B,C, o “ ” (blanco)).
-                content += line.l10n_latam_document_type_id.l10n_ar_letter
+            # Tipo de Comprobante (long 1, desde 24 hasta 24)
+            # Valores F=Factura, R=Recibo, C=Nota Crédito, D =Nota Debito, V=Nota de Venta, E=Factura de Crédito
+            # Electrónica, H=Nota de Crédito Electrónica, I=Nota de Débito Electrónica.
+            content += (
+                document_code in ['201', '206', '211'] and 'E' or
+                document_code in ['203', '208', '213'] and 'H' or
+                document_code in ['202', '207', '212'] and 'I' or
+                internal_type == 'invoice' and 'F' or
+                internal_type == 'credit_note' and 'C' or
+                internal_type == 'debit_note' and 'D' or 'R')
+            # Letra Comprobante (long 1, desde 25 hasta 25. Valores A,B,C, o “ ” (blanco)).
+            content += line.l10n_latam_document_type_id.l10n_ar_letter
             document_parts = move._l10n_ar_get_document_number_parts(
                 move.l10n_latam_document_number, move.l10n_latam_document_type_id.code)
             pto_venta = "{:0>5d}".format(document_parts['point_of_sale'])[-5:]
@@ -1616,37 +1625,51 @@ class AccountJournal(models.Model):
             # donde el importe debe ser negativo y la base debe ser menor o igual a cero.
             # Completar con ceros a la izquierda. En las notas de crédito el signo negativo
             # ocupará la primera posición a la izquierda. Formato: 99999999999.99
+            monto_imponible = False
+            monto_imponible = float_round(-get_line_tax_base(line), precision_digits=2)
+            content += format_amount(monto_imponible, 14, 2, ",")
             # Alícuota (long 5.2, desde 53 a 57)
-            if payment:
-                content += format_amount(line.withholding_id.withholdable_base_amount or line.withholding_id.base_amount, 14, 2, ',')
-                content += '%05.2f' % alicuot_line.alicuota_retencion
-            else:
-                content += format_amount(-get_line_tax_base(line), 14, 2, ',')
-                content += '%05.2f' % alicuot_line.alicuota_percepcion
+            alicuota = float_round(alicuot_line.alicuota_percepcion, precision_digits=2)
+            content += '%05.2f' % alicuota
             # este es para el primer tipo de la especificación
             # Importe de la percepción (long 13.2, desde 58 hasta 70)
             # Con separador decimal (, o .). Mayor a cero, excepto para notas de crédito donde
             # debe ser negativo. Completar con ceros a la izquierda. En las notas de crédito el
             # signo negativo ocupará la primera posición a la izquierda. Formato: 9999999999.99
-            content += format_amount(-line.balance, 13, 2, ',')
+            importe_percepcion = format_amount(-line.balance, 13, 2, ",")
+            if monto_imponible:
+                # por ahora solo hacemos este cálculo para percepciones,
+                # no lo hacemos para retenciones por ahora
+                importe_percepcion_calculado = format_amount(
+                    float_round(monto_imponible * alicuota / 100, precision_digits=2), 13, 2, ","
+                )
+            # ARBA valida importe = base * alícuota; informar el importe calculado
+            # cuando difiere del original por redondeos (calculado por odoo).
+            if monto_imponible and importe_percepcion != importe_percepcion_calculado:
+                percepciones_monto_modificado.append(
+                    {
+                        "id": line.move_id.id,
+                        "nombre": line.move_id.display_name,
+                        "importe_original": importe_percepcion,
+                        "importe_calculado": importe_percepcion_calculado,
+                    }
+                )
+                content += importe_percepcion_calculado
+            else:
+                content += importe_percepcion
 
             # según especificación se requiere fecha nuevamente
             # por ahora lo sacamos ya que en ticket 16448 nos mandaron ej.
             # donde no se incluía, en realidad tal vez depende de la actividad
             # ya que en la primer tabla del pdf la agrega y en la segunda no
-            if act_7 and not payment:
+            if act_7:
                 # Fecha Emisión (long 10, desde 71 hasta 80)
                 content += fields.Date.from_string(
-                    line.date).strftime('%d/%m/%Y')
+                    line.date).strftime("%d/%m/%Y")
             # Tipo Operación (long 1, desde 71 hasta 71 o desde 81 a 81 si es act_7)
             # A= Alta, B=Baja, M=Modificación.
-            content += 'A'
-            content += '\r\n'
-
-            if payment:
-                ret += content
-            else:
-                perc += content
+            content += "A"
+            content += "\r\n"
 
         # para la fecha de la presentación tomamos la fecha de un apunte a liquidar
         # el valor de la quincena puede ser 0, 1, 2. deberiamos ver si podemos
@@ -1661,22 +1684,22 @@ class AccountJournal(models.Model):
             "7",  # 7 serian las percepciones
         )
 
-        # AR-vat-PERIODO-ACTIVIDAD-LOTE_MD5
-        ret_txt_filename = "AR-%s-%s-%s-LOTEX.txt" % (
-            self.company_id.vat,
-            period,
-            "6",  # 6 serian las retenciones
-        )
+        if percepciones_monto_modificado:
+            comprobantes_modificados = "\n".join(
+                "%(id)s - %(nombre)s - %(importe_original)s - %(importe_calculado)s" % percepcion
+                for percepcion in percepciones_monto_modificado
+            )
+            _logger.info(
+                "Percepciones ARBA con importe ajustado:\nid - nombre - importe original - importe calculado\n%s",
+                comprobantes_modificados,
+            )
 
         return [
             {
                 'txt_filename': perc_txt_filename,
-                'txt_content': perc,
+                'txt_content': content,
             },
-            {
-                'txt_filename': ret_txt_filename,
-                'txt_content': ret,
-            }]
+        ]
 
     def iibb_alta_ret_aplicado_arba_por_lote_A_122R_01032026(self, move_lines):
         """ Desarrollado según especificación Webservice (A122R):
