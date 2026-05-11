@@ -1659,18 +1659,25 @@ class AccountJournal(models.Model):
     def iibb_aplicado_arba_desde_01032026_files_values(self, move_lines):
         """Extendemos para que solo si esta disponible el módulo de arba_ws se incluya la generación del
         archivo para registrar reteciones por lote"""
-        self.ensure_one()
-        return self.iibb_aplicado_arba_desde_01032026(
-            move_lines
-        ) + self.iibb_alta_ret_aplicado_arba_por_lote_a122r_01032026(move_lines)
+        txt_perc = []
+        txt_ret = []
+        if percepciones := move_lines.filtered(lambda x: not x.payment_id):
+            txt_perc = self.iibb_aplicado_arba_desde_01032026(percepciones) or []
+        if retenciones := move_lines.filtered(lambda x: x.payment_id and x.withholding_id):
+            txt_ret = self.iibb_alta_ret_aplicado_arba_por_lote_a122r_01032026(retenciones) or []
+        return txt_perc + txt_ret
 
     def iibb_aplicado_arba_act_7_desde_01032026_files_values(self, move_lines):
         """Extendemos para que solo si esta disponible el módulo de arba_ws se incluya la generación del
         archivo para registrar reteciones por lote"""
         self.ensure_one()
-        return self.iibb_aplicado_arba_desde_01032026(
-            move_lines, act_7=True
-        ) + self.iibb_alta_ret_aplicado_arba_por_lote_a122r_01032026(move_lines)
+        txt_perc = []
+        txt_ret = []
+        if percepciones := move_lines.filtered(lambda x: not x.payment_id):
+            txt_perc = self.iibb_aplicado_arba_desde_01032026(percepciones, act_7=True) or []
+        if retenciones := move_lines.filtered(lambda x: x.payment_id and x.withholding_id):
+            txt_ret = self.iibb_alta_ret_aplicado_arba_por_lote_a122r_01032026(retenciones) or []
+        return txt_perc + txt_ret
 
     def iibb_aplicado_arba_desde_01032026(self, move_lines, act_7=None):
         """Desarrollado según especificación https://web.arba.gov.ar/instructivo-y-marco-normativo
@@ -1678,52 +1685,45 @@ class AccountJournal(models.Model):
         luego hay que ir a la sección "DDJJ Periódicas Web IIBB NOVEDAD" y hacer click en
         "Instructivos y Marco Normativo - NOVEDAD -"). Finalmente descargar la especificación
         donde dice 'Descargar PDF (Nuevo Diseño - Vigente para operaciones a partir del 01/03/2026)'
-        Implementados:
+        Implementado:
             - 1.2 Percepciones Act. 7 método Percibido (quincenal)
-            - 1.7 Retenciones ( excepto actividad 29, 6 de Bancos y 17 de
-            Bancos y No Bancos)
         """
         self.ensure_one()
-        ret = ""
-        perc = ""
+        content = ""
         percepciones_monto_modificado = []
 
         for line in move_lines:
-            # pay_group = payment.payment_group_id
             move = line.move_id
-            payment = line.payment_id
             internal_type = line.l10n_latam_document_type_id.internal_type
             document_code = line.l10n_latam_document_type_id.code
 
             line.partner_id.ensure_vat()
 
             # CUIT contribuyente Percibido (long 13, desde 1 hasta 13. Formato 99-99999999-9)
-            content = line.partner_id.l10n_ar_formatted_vat
+            content += line.partner_id.l10n_ar_formatted_vat
             # Fecha Percepción (long 10, desde 14 hasta 23. Formato dd/mm/aaaa)
             content += fields.Date.from_string(line.date).strftime("%d/%m/%Y")
 
-            # solo para percepciones
-            if not payment:
-                # Tipo de Comprobante (long 1, desde 24 hasta 24)
-                # Valores F=Factura, R=Recibo, C=Nota Crédito, D =Nota Debito, V=Nota de Venta, E=Factura de Crédito
-                # Electrónica, H=Nota de Crédito Electrónica, I=Nota de Débito Electrónica.
-                content += (
-                    document_code in ["201", "206", "211"]
-                    and "E"
-                    or document_code in ["203", "208", "213"]
-                    and "H"
-                    or document_code in ["202", "207", "212"]
-                    and "I"
-                    or internal_type == "invoice"
-                    and "F"
-                    or internal_type == "credit_note"
-                    and "C"
-                    or internal_type == "debit_note"
-                    and "D"
-                    or "R"
-                )
-                # Letra Comprobante (long 1, desde 25 hasta 25. Valores A,B,C, o “ ” (blanco)).
-                content += line.l10n_latam_document_type_id.l10n_ar_letter
+            # Tipo de Comprobante (long 1, desde 24 hasta 24)
+            # Valores F=Factura, R=Recibo, C=Nota Crédito, D =Nota Debito, V=Nota de Venta, E=Factura de Crédito
+            # Electrónica, H=Nota de Crédito Electrónica, I=Nota de Débito Electrónica.
+            content += (
+                document_code in ["201", "206", "211"]
+                and "E"
+                or document_code in ["203", "208", "213"]
+                and "H"
+                or document_code in ["202", "207", "212"]
+                and "I"
+                or internal_type == "invoice"
+                and "F"
+                or internal_type == "credit_note"
+                and "C"
+                or internal_type == "debit_note"
+                and "D"
+                or "R"
+            )
+            # Letra Comprobante (long 1, desde 25 hasta 25. Valores A,B,C, o “ ” (blanco)).
+            content += line.l10n_latam_document_type_id.l10n_ar_letter
             document_parts = move._get_document_number_parts()
             pto_venta = "{:0>5d}".format(document_parts["point_of_sale"])[-5:]
             nro_documento = "{:0>8d}".format(document_parts["invoice_number"])[-8:]
@@ -1741,11 +1741,8 @@ class AccountJournal(models.Model):
             # Completar con ceros a la izquierda. En las notas de crédito el signo negativo
             # ocupará la primera posición a la izquierda. Formato: 99999999999.99
             monto_imponible = False
-            if payment:
-                content += format_amount(line.withholding_id.base_amount, 14, 2, ",")
-            else:
-                monto_imponible = float_round(-get_line_tax_base(line), precision_digits=2)
-                content += format_amount(monto_imponible, 14, 2, ",")
+            monto_imponible = float_round(-get_line_tax_base(line), precision_digits=2)
+            content += format_amount(monto_imponible, 14, 2, ",")
             # Alícuota (long 5.2, desde 53 a 57)
             alicuota = float_round(tax.amount, precision_digits=2)
             content += "%05.2f" % alicuota
@@ -1780,18 +1777,13 @@ class AccountJournal(models.Model):
             # por ahora lo sacamos ya que en ticket 16448 nos mandaron ej.
             # donde no se incluía, en realidad tal vez depende de la actividad
             # ya que en la primer tabla del pdf la agrega y en la segunda no
-            if act_7 and not payment:
+            if act_7:
                 # Fecha Emisión (long 10, desde 71 hasta 80)
                 content += fields.Date.from_string(line.date).strftime("%d/%m/%Y")
             # Tipo Operación (long 1, desde 71 hasta 71 o desde 81 a 81 si es act_7)
             # A= Alta, B=Baja, M=Modificación.
             content += "A"
             content += "\r\n"
-
-            if payment:
-                ret += content
-            else:
-                perc += content
 
         # para la fecha de la presentación tomamos la fecha de un apunte a liquidar
         # el valor de la quincena puede ser 0, 1, 2. deberiamos ver si podemos
@@ -1803,13 +1795,6 @@ class AccountJournal(models.Model):
             self.company_id.vat,
             period,
             "7",  # 7 serian las percepciones
-        )
-
-        # AR-vat-PERIODO-ACTIVIDAD-LOTE_MD5
-        ret_txt_filename = "AR-%s-%s-%s-LOTEX.txt" % (
-            self.company_id.vat,
-            period,
-            "6",  # 6 serian las retenciones
         )
 
         if percepciones_monto_modificado:
@@ -1825,11 +1810,7 @@ class AccountJournal(models.Model):
         return [
             {
                 "txt_filename": perc_txt_filename,
-                "txt_content": perc,
-            },
-            {
-                "txt_filename": ret_txt_filename,
-                "txt_content": ret,
+                "txt_content": content,
             },
         ]
 
@@ -1844,9 +1825,6 @@ class AccountJournal(models.Model):
         Solo para retenciones. Vigente desde 01/03/2026."""
         self.ensure_one()
         content = ""
-
-        # Forzamos para informar solo las retenciones (por las dudas por error seleccionen percepciones)
-        move_lines = move_lines.filtered(lambda x: x.withholding_id)
 
         # Si el módulo de WS ARBA A122R está instalado, debemos filtrar para no informar en el TXT
         # las retenciones que ya fueron informadas via webservice.
