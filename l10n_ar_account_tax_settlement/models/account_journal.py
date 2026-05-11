@@ -200,10 +200,7 @@ class AccountJournal(models.Model):
 
         self.ensure_one()
         moves_to_validate = (
-            move_lines.filtered(
-                lambda line: line.move_id.l10n_latam_document_type_id.internal_type
-                in ("invoice", "credit_note", "debit_note")
-            )
+            move_lines.filtered(lambda line: line.move_id.is_sale_document())
             .mapped("move_id")
             .filtered(lambda m: m.l10n_latam_document_type_id and m.l10n_latam_document_number)
         )
@@ -259,18 +256,17 @@ class AccountJournal(models.Model):
             # 5 - letra de comprobante
             internal_type = line.l10n_latam_document_type_id.internal_type
             # No se si esto es correcto en 17: si no tiene internal type entonces es pago
-            if internal_type:
+            if internal_type and line.move_id.is_sale_document():
                 move = line.move_id
+                if internal_type == "invoice":
+                    # factura
+                    content += "01" + line.l10n_latam_document_type_id.l10n_ar_letter
 
-            if internal_type and internal_type == "invoice":
-                # factura
-                content += "01" + line.l10n_latam_document_type_id.l10n_ar_letter
-
-            elif internal_type and internal_type == "debit_note":
-                # ND
-                content += "02" + line.l10n_latam_document_type_id.l10n_ar_letter
-            elif internal_type and internal_type == "credit_note":
-                content += "10" + line.l10n_latam_document_type_id.l10n_ar_letter
+                elif internal_type == "debit_note":
+                    # ND
+                    content += "02" + line.l10n_latam_document_type_id.l10n_ar_letter
+                elif internal_type == "credit_note":
+                    content += "10" + line.l10n_latam_document_type_id.l10n_ar_letter
             else:
                 # orden de pago (sin letra)
                 # 09 sería otro comprobante y 10 reinitegro de perc/ret
@@ -280,7 +276,11 @@ class AccountJournal(models.Model):
                 content += "03 "
 
             # 6 - numero comprobante Texto(16)
-            if internal_type and internal_type in ("invoice", "credit_note", "debit_note"):
+            if (
+                internal_type
+                and internal_type in ("invoice", "credit_note", "debit_note")
+                and line.move_id.is_sale_document()
+            ):
                 # TODO el aplicativo deberia empezar a aceptar 5 digitos
                 pos, number = get_pos_and_number(move.l10n_latam_document_number)
                 # versión 4.0 de siprib release 0 no acepta 5 dígitos aún
