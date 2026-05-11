@@ -1758,7 +1758,9 @@ class AccountJournal(models.Model):
             if monto_imponible:
                 # por ahora solo hacemos este cálculo para percepciones,
                 # no lo hacemos para retenciones por ahora
-                importe_percepcion_calculado = format_amount(monto_imponible * alicuota / 100, 13, 2, ",")
+                importe_percepcion_calculado = format_amount(
+                    float_round(monto_imponible * alicuota / 100, precision_digits=2), 13, 2, ","
+                )
             # ARBA valida importe = base * alícuota; informar el importe calculado
             # cuando difiere del original por redondeos (calculado por odoo).
             if monto_imponible and importe_percepcion != importe_percepcion_calculado:
