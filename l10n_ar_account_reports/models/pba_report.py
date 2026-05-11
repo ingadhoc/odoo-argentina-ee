@@ -313,7 +313,9 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
             # por ahora solo hacemos este cálculo para percepciones,
             # TODO ver cuando podemos hacer revert de esto en tarea 66283
             if file_type in ["perc", "perc_act_7"]:
-                importe_percepcion_calculado = format_amount(monto_imponible * alicuota / 100, 13, 2, ",")
+                importe_percepcion_calculado = format_amount(
+                    float_round(monto_imponible * alicuota / 100, precision_digits=2), 13, 2, ","
+                )
             # ARBA valida importe = base * alícuota; informar el importe calculado
             # cuando difiere del original por redondeos (calculado por odoo).
             if importe_percepcion_calculado and importe_percepcion != importe_percepcion_calculado:
