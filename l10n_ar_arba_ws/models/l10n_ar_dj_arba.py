@@ -71,6 +71,7 @@ class L10nArDjArba(models.Model):
                     ("company_id", "=", ddjj.company_id.id),
                     # We need to also have the state because we can a have valid open, close and draft one for the same period.
                     ("state", "=", ddjj.state),
+                    ("state", "!=", "cancel"),
                     ("date", ">=", from_date),
                     ("date", "<=", to_date),
                     ("id", "!=", ddjj.id),
@@ -516,13 +517,10 @@ class L10nArDjArba(models.Model):
             self.env._("Update Declaration"),
         )
         prefix_error = self.env._("Updating status:")
-        if error:
-            import pdb
 
-            pdb.set_trace()
-            error_msg = self._process_arba_error(error, prefix_error)
-            pdb.set_trace()
-            if "DDJJ_NO_ENCONTRADA" in error_msg:
+        if error:
+            self._post_message_arba_error(error, prefix_error)
+            if "DDJJ_NO_ENCONTRADA" in error:
                 # Si la DDJJ no fue encontrada entonces pasamos la declaracion a cancelada, ya que seguramente la
                 # borraron an la interfaz de usuario de portal arba y no vamos a poder actualizarla.
                 self.message_post(
