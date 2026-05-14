@@ -28,10 +28,10 @@
     "depends": [
         "l10n_ar_tax_backward_compatibility",
         "l10n_ar_account_reports",
+        "sale",
     ],
     "data": [],
     "demo": [],
-    "test": [],
     "installable": True,
     "auto_install": True,
     "application": False,
