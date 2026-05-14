@@ -44,6 +44,11 @@
         "views/account_journal_dashboard_view.xml",
     ],
     "demo": [],
+    "assets": {
+        "web.assets_backend": [
+            "account_accountant_ux/static/src/account_report_filters_patch.js",
+        ],
+    },
     "installable": True,
     "auto_install": True,
     "application": False,
