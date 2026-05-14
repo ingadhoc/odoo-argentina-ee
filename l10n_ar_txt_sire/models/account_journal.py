@@ -136,12 +136,14 @@ class AccountJournal(models.Model):
         for line in move_lines.sorted(key=lambda r: (r.date, r.id)):
             tax = line._get_settlement_tax()
             if not tax.l10n_ar_code:
+                field_label = tax._fields["l10n_ar_code"].string
                 raise RedirectWarning(
                     message=_(
-                        "El impuesto '%(tax_name)s' (id: %(tax_id)s) no tiene código de régimen establecido. Es obligatorio para generar el"
-                        " archivo txt Sire. Editar campo 'Codigo AFIP' (l10n_ar_code) en la vista formulario del impuesto.",
+                        "El impuesto '%(tax_name)s' (id: %(tax_id)s) no tiene el campo '%(field_label)s' establecido. Es obligatorio para generar el"
+                        " archivo txt Sire.",
                         tax_id=tax.id,
                         tax_name=tax.name,
+                        field_label=field_label,
                     ),
                     action=tax.get_formview_action(),
                     button_text=_("Editar impuesto"),
@@ -209,12 +211,12 @@ class AccountJournal(models.Model):
             payment = line.payment_id
             tax = line._get_settlement_tax()
             if not tax.l10n_ar_code:
+                field_label = tax._fields["l10n_ar_code"].string
                 raise RedirectWarning(
                     message=_(
-                        "El impuesto '%s' no tiene código de régimen establecido."
-                        " Editar campo 'Codigo de regimen IVA' en solapa 'Opciones avanzadas'"
-                        "en la vista formulario",
-                        tax.name,
+                        "El impuesto '%(tax_name)s' no tiene el campo '%(field_label)s' establecido.",
+                        tax_name=tax.name,
+                        field_label=field_label,
                     ),
                     action={
                         "type": "ir.actions.act_window",
