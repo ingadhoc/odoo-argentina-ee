@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-14 15:50+0000\n"
+"POT-Creation-Date: 2026-05-15 18:57+0000\n"
 "PO-Revision-Date: 2026-04-20 15:41+0000\n"
 "Last-Translator: julia elizondo <jue@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
@@ -1300,6 +1300,21 @@ msgstr "Impuesto a pagar"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_move.py:0
+msgid ""
+"The following document(s) have an invalid document number format.\n"
+"ARCA requires the format XXXXX-XXXXXXXX (e.g.: 00001-00000001).\n"
+"Please correct them before generating the file:\n"
+"%s"
+msgstr ""
+"Los siguientes comprobantes tienen un número de documento con formato "
+"inválido.\n"
+"ARCA requiere el formato XXXXX-XXXXXXXX (ej: 00001-00000001).\n"
+"Por favor corrija los siguientes comprobantes antes de generar el archivo:\n"
+"%s"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
 #: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
 msgid ""
 "The identification type \"%(identification_type)s\" does not have ARCA code "
@@ -1415,18 +1430,6 @@ msgstr "pagable"
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "receivable"
 msgstr "por cobrar"
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/account_move.py:0
-msgid ""
-"The following document(s) have an invalid document number format.\n"
-"ARCA requires the format XXXXX-XXXXXXXX (e.g.: 00001-00000001).\n"
-"Please correct them before generating the file:\n%s"
-msgstr ""
-"Los siguientes comprobantes tienen un número de documento con formato inválido.\n"
-"ARCA requiere el formato XXXXX-XXXXXXXX (ej: 00001-00000001).\n"
-"Por favor corrija los siguientes comprobantes antes de generar el archivo:\n%s"
 
 #, fuzzy
 #~ msgid "AR ESP: Patrimonio Neto"
