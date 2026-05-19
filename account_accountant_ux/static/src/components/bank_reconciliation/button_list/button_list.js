@@ -49,11 +49,19 @@ patch(BankRecButtonList.prototype, {
                 reference: this.statementLineData.payment_ref,
                 date: this.statementLineData.date,
             },
-            {
-                onClose: () => {
-                    this.restoreFocus();
-                },
-            }
+            { onClose: () => this.restoreFocus() }
         );
+    },
+
+    get buttonsToDisplay() {
+        const result = super.buttonsToDisplay;
+        const buttons = this.buttons || {};
+
+        // Add reconcile button when partner and account are shown
+        if (buttons?.partner && buttons?.account && buttons?.reconcile) {
+            result.push({ ...buttons.reconcile, primary: true });
+        }
+
+        return result;
     },
 });

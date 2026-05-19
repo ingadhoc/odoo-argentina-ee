@@ -19,7 +19,7 @@
 ##############################################################################
 {
     "name": "ARBA Webservice (A122R)",
-    "version": "19.0.1.2.0",
+    "version": "19.0.1.3.0",
     "category": "Localization/Argentina",
     "sequence": 14,
     "author": "ADHOC SA",
@@ -37,6 +37,7 @@
         "views/account_payment_views.xml",
         "views/res_config_settings_views.xml",
         "views/l10n_ar_payment_withholding_views.xml",
+        "wizard/arba_withholding_draft_warning_views.xml",
     ],
     "installable": True,
     "auto_install": False,

@@ -19,7 +19,7 @@
 ##############################################################################
 {
     "name": "Argentinian Currency Rate Update",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.1.0",
     "category": "Localization/Argentina",
     "sequence": 14,
     "author": "ADHOC SA,Odoo Community Association (OCA)",
@@ -33,6 +33,7 @@
     "data": [
         "data/ir_cron_data.xml",
         "data/res_company_data.xml",
+        "views/res_currency_views.xml",
         "wizards/res_config_settings_views.xml",
     ],
     "installable": True,

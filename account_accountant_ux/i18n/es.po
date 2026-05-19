@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-06 15:01+0000\n"
-"PO-Revision-Date: 2025-12-11 18:11+0000\n"
-"Last-Translator: Mariana Torres <mt@adhoc.inc>\n"
+"POT-Creation-Date: 2026-05-14 15:50+0000\n"
+"PO-Revision-Date: 2026-04-23 18:41+0000\n"
+"Last-Translator: julia elizondo <jue@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
 "argentina-ee-19-0/odoo-argentina-ee-19-0-account_accountant_ux/es/>\n"
 "Language: es\n"
@@ -26,7 +26,16 @@ msgstr ""
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_partner_view_form
 msgid "<span class=\"o_stat_text\">Follow-up Report</span>"
+msgstr "<span class=\"o_stat_text\">Informe de seguimiento</span>"
+
+#. module: account_accountant_ux
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_partner_view_form
+msgid ""
+"<span class=\"o_stat_text\">Partner</span>\n"
+"                        <span class=\"o_stat_text\">Ledger</span>"
 msgstr ""
+"<span class=\"o_stat_text\">Contacto</span>\n"
+"                        <span class=\"o_stat_text\">Ledger</span>"
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_partner_form
@@ -64,6 +73,11 @@ msgid "Accounting Report"
 msgstr "Reporte Contable"
 
 #. module: account_accountant_ux
+#: model:ir.model,name:account_accountant_ux.model_account_return
+msgid "Accounting Return"
+msgstr ""
+
+#. module: account_accountant_ux
 #: model:ir.actions.server,name:account_accountant_ux.action_aged_payable
 msgid "Aged Payable Report"
 msgstr "Reporte de Antigüedad de Cuentas por Pagar"
@@ -81,7 +95,7 @@ msgstr "Balances parciales por contacto"
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__allow_settlement
 msgid "Allow Settlement"
-msgstr ""
+msgstr "Permitir la liquidación"
 
 #. module: account_accountant_ux
 #. odoo-python
@@ -115,7 +129,7 @@ msgstr "Cambiar fecha de bloqueo"
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_auto_reconcile_wizard__company_id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_change_lock_date__company_id
 msgid "Company"
-msgstr "Compañía"
+msgstr "Companía"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__company_id
@@ -135,12 +149,12 @@ msgstr "Contacto"
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__create_uid
 msgid "Created by"
-msgstr ""
+msgstr "Creado Por"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__create_date
 msgid "Created on"
-msgstr ""
+msgstr "Creado en"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__account_id
@@ -174,6 +188,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_partner_ledger_report_handler__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_reconcile_wizard__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__display_name
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_return__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_partner__display_name
 msgid "Display Name"
@@ -207,7 +222,7 @@ msgstr "Filtrar Monto"
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_followup_report_handler
 msgid "Follow-Up Report Custom Handler"
-msgstr ""
+msgstr "Manejador personalizado de informes de seguimiento"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_auto_reconcile_wizard__id
@@ -221,6 +236,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_partner_ledger_report_handler__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_reconcile_wizard__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__id
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_return__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_partner__id
 msgid "ID"
@@ -282,12 +298,12 @@ msgstr ""
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__write_uid
 msgid "Last Updated by"
-msgstr ""
+msgstr "Última Actualización Por"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__write_date
 msgid "Last Updated on"
-msgstr ""
+msgstr "Última Actualización en"
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_account_move_line_search_bank_rec_widget
@@ -397,12 +413,12 @@ msgstr "Buscar: Apuntes Contables para Conciliar"
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__settlement_allow_unbalanced
 msgid "Settlement Allow Unbalanced"
-msgstr ""
+msgstr "Permitir desequilibrio en la liquidación"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__settlement_title
 msgid "Settlement Title"
-msgstr ""
+msgstr "Título de la liquidación"
 
 #. module: account_accountant_ux
 #. odoo-javascript
@@ -465,7 +481,7 @@ msgstr "Con Filtros"
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_followup_manual_reminder
 msgid "Wizard for sending manual reminders to clients"
-msgstr ""
+msgstr "Asistente para enviar recordatorios manuales a clientes"
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_tax_settlement_wizard

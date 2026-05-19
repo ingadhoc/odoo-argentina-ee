@@ -231,13 +231,7 @@ class AfipImportWizard(models.TransientModel):
 
             # Agregamos el rate despues de crear la factura, para que Odoo no lo recalcule
             if line.currency_rate and line.currency_rate != 1:
-                wizard = self.env["account.move.change.rate"].create(
-                    {
-                        "move_id": move.id,
-                        "currency_rate": line.currency_rate,
-                    }
-                )
-                wizard.confirm()
+                move.inverse_invoice_currency_rate = line.currency_rate
 
             # Si tiene otros tributos, modificamos el valor por defecto con el wizard
             if line.otros_tributos > 0:

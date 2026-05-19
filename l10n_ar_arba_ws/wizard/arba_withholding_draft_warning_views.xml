@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_arba_withholding_draft_warning_form" model="ir.ui.view">
+        <field name="name">arba.withholding.draft.warning.form</field>
+        <field name="model">arba.withholding.draft.warning</field>
+        <field name="arch" type="xml">
+            <form string="ARBA Withholding Warning">
+                <div class="alert alert-warning" role="alert">
+                    <p><strong>⚠️ Warning:</strong></p>
+                    <p>This payment has <strong><field name="withholding_count"/> withholding(s)</strong> that have already been reported to ARBA through a Tax Return (DDJJ).</p>
+                    <p>We recommend not making modifications to the payment, as they will not impact the withholdings already reported.</p>
+                </div>
+                <group>
+                    <field name="payment_id" invisible="1"/>
+                    <field name="withholding_info" nolabel="1" widget="html"/>
+                </group>
+                <footer>
+                    <button string="I understand, reset to draft" name="action_confirm_reset_to_draft" type="object" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

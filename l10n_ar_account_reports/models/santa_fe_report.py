@@ -70,6 +70,16 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
             # "{0:>16.2f}".format(12.1)
             return template % f"{round(amount, decimals):.2f}".replace(".", ",")
 
+        moves_to_validate = (
+            move_lines.filtered(
+                lambda line: line.move_id.l10n_latam_document_type_id.internal_type
+                in ("invoice", "credit_note", "debit_note")
+            )
+            .mapped("move_id")
+            .filtered(lambda m: m.l10n_latam_document_type_id and m.l10n_latam_document_number)
+        )
+        moves_to_validate._validate_document_number_parts()
+
         for line in move_lines.filtered("amount_currency").sorted(key=lambda r: (r.date, r.id)):
             content = ""
 
@@ -225,7 +235,8 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
 
             # 17 - Importe IVA (solo si factura)
             if line.move_id.is_invoice():
-                amounts = line.move_id._l10n_ar_get_amounts(company_currency=True)
+                base_lines, _tax_lines = line.move_id._get_rounded_base_and_tax_lines()
+                amounts = line.move_id._l10n_ar_get_amounts(base_lines=base_lines)
                 vat_amount = amounts["vat_amount"]
                 base_amount = amounts["vat_taxable_amount"]
             else:

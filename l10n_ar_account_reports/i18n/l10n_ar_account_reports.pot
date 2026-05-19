@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-09 11:48+0000\n"
-"PO-Revision-Date: 2026-04-09 11:48+0000\n"
+"POT-Creation-Date: 2026-05-15 18:57+0000\n"
+"PO-Revision-Date: 2026-05-15 18:57+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -384,6 +384,8 @@ msgid "Argentinian Tucumán Report Custom Handler"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
 #: model:ir.actions.act_window,name:l10n_ar_account_reports.inflation_adjustment_action
 #: model:ir.ui.menu,name:l10n_ar_account_reports.inflation_adjustment_menu
 msgid "Asiento de ajuste por inflación"
@@ -460,6 +462,12 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_tax_liabilities
 msgid "Cargas fiscales"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid "Cheques a fecha"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -696,6 +704,12 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:account.report,settlement_title:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial
 msgid "Generar asiento de cierre"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid "Generar el asiento de ajuste por inflación para el período fiscal."
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -1104,6 +1118,14 @@ msgid "Return creation wizard"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid ""
+"Revisar y procesar los cheques de terceros con fecha de pago diferida "
+"pendientes al cierre del período."
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.return.type,name:l10n_ar_account_reports.sicore_return_type
 msgid "SICORE Ganancias (Agente)"
 msgstr ""
@@ -1189,6 +1211,16 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "Tax to pay"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_move.py:0
+msgid ""
+"The following document(s) have an invalid document number format.\n"
+"ARCA requires the format XXXXX-XXXXXXXX (e.g.: 00001-00000001).\n"
+"Please correct them before generating the file:\n"
+"%s"
 msgstr ""
 
 #. module: l10n_ar_account_reports

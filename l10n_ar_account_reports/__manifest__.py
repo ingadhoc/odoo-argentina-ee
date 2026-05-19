@@ -19,7 +19,7 @@
 ##############################################################################
 {
     "name": "Accounting Reports Customized for Argentina",
-    "version": "19.0.1.14.0",
+    "version": "19.0.1.18.0",
     "category": "Accounting",
     "sequence": 14,
     "summary": "",
@@ -31,9 +31,10 @@
         "accountant",  # en si este modulo no es necesario pero de alguna manera este modulo solo tiene sentido para
         # bases que usan contabilida (tienen accountant)
         "account_reports",
+        "l10n_ar",
         "l10n_ar_tax",
         "l10n_ar_withholding",
-        "l10n_latam_check",
+        "l10n_latam_check_ux",
         "l10n_ar_reports",
         # necesitamos talonario de recibo para que los pagos
         # salgan con formato correcto, ejemplo: OP-X 0001-00000001
@@ -72,7 +73,7 @@
     },
     "test": [],
     "installable": True,
-    "auto_install": True,
+    "auto_install": ["l10n_ar"],
     "application": False,
     "post_init_hook": "_post_init_hook_configure_ar_account_tags",
 }

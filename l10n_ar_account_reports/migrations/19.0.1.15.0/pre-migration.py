@@ -7,9 +7,8 @@ def migrate(cr, version):
     The old tag 'ar_esp_patrimonio_neto' is being removed and split into three
     more specific tags: 'ar_esp_capital', 'ar_esp_reservas', and 'ar_esp_resultados'.
 
-    This migration removes the old tag assignment from all accounts that have it.
-    The new tags will be assigned automatically by the post-migration hook based
-    on the account type.
+    This migration removes the old tag assignment from all accounts that have it
+    (if not already removed by 19.0.1.12.0 migration) and deletes old report lines.
     """
     # Remove all account assignments for the old patrimonio_neto tag
     openupgrade.logged_query(

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-03-30 14:49+0000\n"
-"PO-Revision-Date: 2026-03-30 14:49+0000\n"
+"POT-Creation-Date: 2026-04-29 14:13+0000\n"
+"PO-Revision-Date: 2026-04-29 14:13+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -68,6 +68,11 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid "<strong>⚠️ Warning:</strong>"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "<ul><li> STATUS %s</li><li>CODE %s</li><li>MESSAGE %s</li></ul>"
@@ -116,10 +121,20 @@ msgid "ARBA Withholding Certificate Number"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+#: model:ir.model,name:l10n_ar_arba_ws.model_arba_withholding_draft_warning
+msgid "ARBA Withholding Draft Warning"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__l10n_ar_arba_wh_mode
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_company__l10n_ar_arba_wh_mode
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_config_settings__l10n_ar_arba_wh_mode
 msgid "ARBA Withholding Mode"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid "ARBA Withholding Warning"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
@@ -184,6 +199,11 @@ msgid "Batch Import"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid "Cancel"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_company__l10n_ar_arba_client_id
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_config_settings__l10n_ar_arba_client_id
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
@@ -227,11 +247,13 @@ msgid "Connect to webservice"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_arba_withholding_draft_warning__create_uid
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__create_uid
 msgid "Created by"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_arba_withholding_draft_warning__create_date
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__create_date
 msgid "Created on"
 msgstr ""
@@ -266,6 +288,7 @@ msgstr ""
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_account_payment__display_name
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_arba_withholding_draft_warning__display_name
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_afipws_connection__display_name
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__display_name
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__display_name
@@ -365,7 +388,13 @@ msgid "Has Message"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid "I understand, reset to draft"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_account_payment__id
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_arba_withholding_draft_warning__id
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_afipws_connection__id
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__id
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__id
@@ -426,11 +455,13 @@ msgid "Jurisdiction"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_arba_withholding_draft_warning__write_uid
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__write_uid
 msgid "Last Updated by"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_arba_withholding_draft_warning__write_date
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__write_date
 msgid "Last Updated on"
 msgstr ""
@@ -523,6 +554,11 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "Open Declaration"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_arba_withholding_draft_warning__payment_id
+msgid "Payment"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
@@ -622,6 +658,11 @@ msgid "The withholding was reported to ARBA (%s) successfully"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid "This payment has"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_exception_decoration
 msgid "Type of the exception activity on record."
 msgstr ""
@@ -661,6 +702,13 @@ msgid "We did not receive any response"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid ""
+"We recommend not making modifications to the payment, as they will not "
+"impact the withholdings already reported."
+msgstr ""
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__website_message_ids
 msgid "Website Messages"
 msgstr ""
@@ -668,6 +716,16 @@ msgstr ""
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_dj_arba__website_message_ids
 msgid "Website communication history"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_arba_withholding_draft_warning__withholding_count
+msgid "Withholding Count"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_arba_withholding_draft_warning__withholding_info
+msgid "Withholding Info"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
@@ -698,4 +756,14 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "You cannot delete a DDJJ ARBA that has withholding lines."
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid "that have already been reported to ARBA through a Tax Return (DDJJ)."
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid "withholding(s)"
 msgstr ""

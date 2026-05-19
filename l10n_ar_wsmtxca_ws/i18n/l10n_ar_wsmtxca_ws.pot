@@ -1,0 +1,187 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ar_wsmtxca_ws
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-19 15:31+0000\n"
+"PO-Revision-Date: 2026-05-19 15:31+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_move.py:0
+#: code:addons/l10n_ar_wsmtxca_ws/wizards/l10n_ar_afip_ws_consult.py:0
+msgid ""
+"\n"
+"* Code %s: %s"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/wizards/l10n_ar_afip_ws_consult.py:0
+msgid ""
+"\n"
+"* Evento %s: %s"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/wizards/l10n_ar_afip_ws_consult.py:0
+msgid ""
+"\n"
+"* Observations %s: %s"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/wizards/l10n_ar_afip_ws_consult.py:0
+msgid ""
+"\n"
+"Additional Information:\n"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_journal.py:0
+msgid ""
+"\"Check Available AFIP PoS\" is not implemented in testing mode for "
+"webservice %s"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/wizards/l10n_ar_afip_ws_consult.py:0
+msgid "AFIP Errors: %(error)s"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_move.py:0
+msgid "AFIP Messages"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#: model:ir.model,name:l10n_ar_wsmtxca_ws.model_l10n_ar_afipws_connection
+msgid "ARCA Webservice Connection"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_journal.py:0
+msgid "Codificación de producto - RG2904 (WSMTXCA)"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_journal.py:0
+msgid "Codificación de producto - Web Service"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#: model:ir.model,name:l10n_ar_wsmtxca_ws.model_l10n_ar_afip_ws_consult
+msgid "Consult Invoice Data in ARCA"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#: model:ir.model,name:l10n_ar_wsmtxca_ws.model_res_currency
+msgid "Currency"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#: model:ir.model.fields,field_description:l10n_ar_wsmtxca_ws.field_account_journal__display_name
+#: model:ir.model.fields,field_description:l10n_ar_wsmtxca_ws.field_account_move__display_name
+#: model:ir.model.fields,field_description:l10n_ar_wsmtxca_ws.field_l10n_ar_afip_ws_consult__display_name
+#: model:ir.model.fields,field_description:l10n_ar_wsmtxca_ws.field_l10n_ar_afipws_connection__display_name
+#: model:ir.model.fields,field_description:l10n_ar_wsmtxca_ws.field_res_currency__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#: model:ir.model.fields,field_description:l10n_ar_wsmtxca_ws.field_account_journal__id
+#: model:ir.model.fields,field_description:l10n_ar_wsmtxca_ws.field_account_move__id
+#: model:ir.model.fields,field_description:l10n_ar_wsmtxca_ws.field_l10n_ar_afip_ws_consult__id
+#: model:ir.model.fields,field_description:l10n_ar_wsmtxca_ws.field_l10n_ar_afipws_connection__id
+#: model:ir.model.fields,field_description:l10n_ar_wsmtxca_ws.field_res_currency__id
+msgid "ID"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/wizards/l10n_ar_afip_ws_consult.py:0
+msgid "Invoice number %s\n"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#: model:ir.model,name:l10n_ar_wsmtxca_ws.model_account_journal
+#: model:ir.model.fields,field_description:l10n_ar_wsmtxca_ws.field_l10n_ar_afip_ws_consult__journal_id
+msgid "Journal"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#: model:ir.model,name:l10n_ar_wsmtxca_ws.model_account_move
+msgid "Journal Entry"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/wizards/l10n_ar_afip_ws_consult.py:0
+msgid "No AFIP WS selected on point of sale %s"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/res_currency.py:0
+msgid ""
+"No AFIP code for currency %s. Please configure the AFIP code consulting "
+"information in AFIP page"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_move.py:0
+msgid "No AFIP code in %s UOM"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/res_currency.py:0
+msgid "No rate for ARS (is the base currency for AFIP)"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/wizards/l10n_ar_afip_ws_consult.py:0
+msgid "Please set the number you want to consult"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_move.py:0
+msgid ""
+"The product %s has an invalid barcode for ARCA (only GS1 o Códigos GTIN "
+"8/12/13)"
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_move.py:0
+msgid ""
+"The product '%s' does not have a valid Codigo MTX for ARCA. Please set a "
+"valid barcode in the product to continue."
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_journal.py:0
+msgid ""
+"We received this error while consulting the last invoice number from ARCA:\n"
+"%s"
+msgstr ""

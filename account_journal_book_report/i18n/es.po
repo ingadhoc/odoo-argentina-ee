@@ -10,14 +10,18 @@ msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-11-12 12:43+0000\n"
-"PO-Revision-Date: 2025-11-12 12:43+0000\n"
-"Last-Translator: ADHOC - Bot <transbot@adhoc.com.ar>, 2025\n"
-"Language-Team: Spanish (https://app.transifex.com/adhoc/teams/46451/es/)\n"
+"PO-Revision-Date: 2026-04-20 15:41+0000\n"
+"Last-Translator: julia elizondo <jue@adhoc.inc>\n"
+"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
+"odoo-argentina-ee-19-0/odoo-argentina-ee-19-0-account_journal_book_report/es/"
+">\n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Language: es\n"
-"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == 0)"
+" ? 1 : 2);\n"
+"X-Generator: Weblate 5.10.4\n"
 
 #. module: account_journal_book_report
 #: model:ir.model,name:account_journal_book_report.model_account_journal_book_group
@@ -47,19 +51,19 @@ msgstr "Cancelar"
 #. module: account_journal_book_report
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal_book_report__company_id
 msgid "Company"
-msgstr "Compañía"
+msgstr "Companía"
 
 #. module: account_journal_book_report
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal_book_group__create_uid
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal_book_report__create_uid
 msgid "Created by"
-msgstr "Creado por"
+msgstr "Creado Por"
 
 #. module: account_journal_book_report
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal_book_group__create_date
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal_book_report__create_date
 msgid "Created on"
-msgstr "Creado el"
+msgstr "Creado en"
 
 #. module: account_journal_book_report
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal__display_name
@@ -102,13 +106,13 @@ msgstr "Reporte de Grupo de Diario"
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal_book_group__write_uid
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal_book_report__write_uid
 msgid "Last Updated by"
-msgstr "Última Actualización por"
+msgstr "Última Actualización Por"
 
 #. module: account_journal_book_report
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal_book_group__write_date
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal_book_report__write_date
 msgid "Last Updated on"
-msgstr "Última Actualización el"
+msgstr "Última Actualización en"
 
 #. module: account_journal_book_report
 #: model:ir.actions.act_window,name:account_journal_book_report.action_account_journal_book_report

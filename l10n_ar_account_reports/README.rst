@@ -57,7 +57,7 @@ Archivos para declaración de impuestos
 
 * SIFERE: especificación en /doc/sifere
 
-* SANTA FE: especificación en /doc/Santa Fe (siprib)
+* SANTA FE: especificación en /doc/Santa Fe (siprib). La especificación se obtuvo de https://www.santafe.gov.ar/index.php/web/content/view/full/249467/%28subtema%29/102284 --> aplicativo SiPRIB (versión 4.0 Release 2) de SIAP.
 
 * TUCUMAN: especificación en doc/Tucuman/MRETPER6R2.pdf a partir de la página 12
 

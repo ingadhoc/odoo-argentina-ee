@@ -115,7 +115,9 @@ class AfipImportWizardLine(models.TransientModel):
         if self.currency == "$":
             currency_id = self.env["res.currency"].search([("name", "=", "ARS")], limit=1)
         else:
-            currency_id = self.env["res.currency"].search([("symbol", "=", self.currency)], limit=1)
+            currency_id = self.env["res.currency"].search(
+                ["|", ("name", "=", self.currency), ("symbol", "=", self.currency)], limit=1
+            )
 
         if not currency_id:
             raise UserError(_("No currency found for code: %s") % self.currency)
@@ -150,3 +152,19 @@ class AfipImportWizardLine(models.TransientModel):
             "partner_id": partner.id,
         }
         return (0, 0, vals)
+
+    def action_remove(self):
+        wizard = self.mapped("wizard_id")
+        self.unlink()
+        # Re-open the same wizard in a modal to refresh only its content (lines)
+        view = self.env.ref("l10n_ar_import_bill.view_afip_import_wizard_form", raise_if_not_found=False)
+        action = {
+            "type": "ir.actions.act_window",
+            "res_model": "afip.import.wizard",
+            "res_id": wizard.id if wizard else False,
+            "view_mode": "form",
+            "target": "new",
+        }
+        if view:
+            action.update({"view_id": view.id, "views": [(view.id, "form")]})
+        return action
