@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates>
+
+    <t t-name="account_base_import.accountImportTemplate" t-inherit="account_base_import.accountImportTemplate" t-inherit-mode="extension">
+        <!-- Add Import Checks before Partners Balance in right column -->
+        <xpath expr="//div[@name='partners_balance']" position="before">
+            <div class="pt-4" name="import_checks">
+                <div class="row">
+                    <div class="col-10">
+                        <h3>Import Checks</h3>
+                        <p>Import initial balances for checks.</p>
+                        <button type="button" class="btn btn-primary" t-on-click="() => this._openCheckBalanceImport()">Import Checks</button>
+                    </div>
+                    <div class="col-2 border-start"/>
+                </div>
+            </div>
+        </xpath>
+    </t>
+
+</templates>
