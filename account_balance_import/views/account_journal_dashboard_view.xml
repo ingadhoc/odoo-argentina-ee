@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="account_journal_dashboard_kanban_view_inherit">
+        <field name="name">account.journal.dashboard.kanban.inherit.balance.import</field>
+        <field name="model">account.journal</field>
+        <field name="inherit_id" ref="account_reports.account_reports_journal_dashboard_kanban_view" />
+        <field name="arch" type="xml">
+            <!-- Hide onboarding widget for Tax Return journal -->
+            <xpath expr="//t[@t-name='JournalTaxReturn']//widget[@name='account_onboarding']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

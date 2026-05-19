@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="account_balance_import_wizard">
+        <field name="name">account_balance_import_wizard</field>
+        <field name="model">account.balance_import_wizard</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group class="alert alert-info" role="alert" style="margin-bottom: 20px;">
+
+                        <h1>
+                            <span class="fa fa-info" aria-label="info"></span>
+                        </h1>
+
+                        <p style="margin-bottom: 0px;">
+                            Descargue la plantilla de importación siguiendo el link
+                            y edítelo manteniendo la estructura del archivo.<br/>
+                            Una vez finalizada la edición, suba el archivo modificado
+                            y haga click en el botón "Importar" ubicado más abajo.
+                        </p>
+                    </group>
+
+                    <group>
+                        <group>
+                            <!-- por ahora lo hacemos invisible para que funcione como el resto de cosas en ajustes contables, pero si es mejor para algunos casos podríamos tranquilamente permitir que se pueda cambiar la compañía -->
+                            <field name="company_id" groups="base.group_multi_company" invisible="1"/>
+                            <field name="accounting_date" invisible="True"/>
+                            <field name="journal_id" required="True"/>
+                            <field name="counterpart_account_id"/>
+                            <div name="files" colspan="2">
+                                <button name="action_generate_partner_balance_xls" type="object" class="btn btn-link" invisible="mode != 'partner_balance'" role="button">
+                                    <span class="fa fa-download" title="download"></span>
+                                    Descargar Plantilla de Importación de Saldos de Partners
+                                </button>
+                            </div>
+                            <field name="file"/>
+                        </group>
+                        <group>
+                            <field name="mode" readonly="1" invisible="1"/>
+                            <field name="partner_balance_type" invisible="mode != 'partner_balance'" required="mode == 'partner_balance'" widget="radio"/>
+                            <field name="export_partners" invisible="mode != 'partner_balance'"/>
+                            <field name="import_type" invisible="mode != 'partner_balance'" widget="radio"/>
+                            <field name="reconcile_debt" invisible="mode != 'partner_balance' or import_type != 'adjust'"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button type="object" name="action_import" class="btn btn-primary">Importar</button>
+                    <button special="cancel" string="Cancelar"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="account_balance_import_action" model="ir.actions.act_window">
+        <field name="name">Account Balance Import Wizard</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">account.balance_import_wizard</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="account_balance_import_wizard"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

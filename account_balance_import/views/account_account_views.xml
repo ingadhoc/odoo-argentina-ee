@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Add filters for init_accounts_tree view -->
+    <record id="view_account_init_search" model="ir.ui.view">
+        <field name="name">account.account.init.search.inherit</field>
+        <field name="model">account.account</field>
+        <field name="inherit_id" ref="account.view_account_search"/>
+        <field name="arch" type="xml">
+            <filter name="assetsacc" position="after">
+                <filter string="Cash &amp; Bank" name="asset_cash" domain="[('account_type', '=', 'asset_cash')]"/>
+                <filter string="Credit Card" name="credit_card" domain="[('account_type', '=', 'asset_credit_card')]"/>
+            </filter>
+        </field>
+    </record>
+
+    <!-- Inherit init_accounts_tree to add company currency amount column -->
+    <record id="view_account_init_tree_inherit_company_currency" model="ir.ui.view">
+        <field name="name">account.account.init.tree.inherit.company.currency</field>
+        <field name="model">account.account</field>
+        <field name="inherit_id" ref="account.init_accounts_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='opening_debit']" position="before">
+                <field name="currency_id" width="150px"/>
+                <field name="amount_in_currency" width="200px" options="{'no_symbol': True}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
