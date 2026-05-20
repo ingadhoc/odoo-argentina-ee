@@ -24,6 +24,11 @@
                 <attribute name="invisible" add="country_code == 'AR'" separator="or"/>
             </field>
 
+            <!-- Mostrar el número de serie del sujeto si es un certificado argentino -->
+            <field name="serial_number" position="after">
+                <field name="l10n_ar_subject_serial_number" invisible="country_code != 'AR'"/>
+            </field>
+
         </field>
     </record>
 </odoo>

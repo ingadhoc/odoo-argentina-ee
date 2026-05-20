@@ -25,6 +25,7 @@
     ],
     "demo": [
         "demo/res_partner_demo.xml",
+        "demo/res_company_demo.xml",
     ],
     "installable": True,
     "auto_install": True,

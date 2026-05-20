@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-12 15:28+0000\n"
-"PO-Revision-Date: 2026-01-12 15:28+0000\n"
+"POT-Creation-Date: 2026-05-28 00:19+0000\n"
+"PO-Revision-Date: 2026-05-28 00:19+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -86,6 +86,11 @@ msgid "Automatic Update from Padron"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_certificate_certificate__l10n_ar_subject_serial_number
+msgid "Belongs to"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_l10n_ar_boarding_permission
 msgid "Boarding Permission"
 msgstr ""
@@ -111,6 +116,15 @@ msgid "Certificate"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/res_company.py:0
+msgid ""
+"Certificate CUIT differ from Company's doc type and number. You can only use the ARCA certificate if it matches\n"
+" * certificate %s\n"
+" * company %s %s"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_config_settings__arba_cit
 msgid "Clave de Identificación Tributaria de ARBA"
 msgstr ""
@@ -128,6 +142,22 @@ msgstr ""
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__company_id
 msgid "Company"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/res_company.py:0
+msgid ""
+"Company \"%s\" has no ARCA certificate and no ancestor sharing the same CUIT"
+" was found. Please configure a certificate in the accounting settings."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/res_company.py:0
+msgid ""
+"Company \"%s\" has no CUIT configured. A CUIT is required to get "
+"an ARCA connection."
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -414,6 +444,11 @@ msgstr ""
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
 msgid "There are no more partners to update for this request..."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_certificate_certificate__l10n_ar_subject_serial_number
+msgid "This is the CUIT information of the related ARCA Certificate."
 msgstr ""
 
 #. module: l10n_ar_edi_ux
