@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Demo hierarchy for branch / multi-company ARCA connection sharing.
+        Mirrors the hierarchy documented in tests/test_afip_connection_w_branches.py.
+
+            edi_ux_parent_company      CUIT 20313932975  HAS certificate
+              ├─ edi_ux_child_company      CUIT 20313932975  no certificate
+              │    └─ edi_ux_grandchild_company   no CUIT    no certificate
+              ├─ edi_ux_branch_diff_cuit   CUIT 30711017077  no certificate
+              ├─ edi_ux_branch_no_cuit     no CUIT           no certificate
+              └─ edi_ux_branch_with_cert   CUIT 30500010084  HAS certificate
+
+        The parent and the branch hold their own ARCA certificates (test certs
+        from l10n_ar_edi/tests/).  All companies point to the AFIP testing
+        environment so no real AFIP credentials are needed.
+    -->
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         Private key — shared, no company restriction
+         Using the test key from l10n_ar_edi/tests/ avoids company-crossover
+         validation errors that arise when key and certificate are created in
+         different company contexts during demo loading.
+         ═══════════════════════════════════════════════════════════════════ -->
+
+    <record id="edi_ux_demo_key" model="certificate.key">
+        <field name="name">ARCA Demo Key – hierarchy</field>
+        <field name="content" type="base64" file="l10n_ar_edi/tests/private_key.pem"/>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         Certificates — no company restriction (shared demo certs)
+         test_cert1 / test_cert2 both carry serialNumber = CUIT 20313932975.
+         In production each company would hold a cert matching its own CUIT;
+         here we use test certs only to exercise the code paths:
+           • parent_company  → has cert → generates own token
+           • branch_with_cert → has cert → does NOT delegate to parent
+         ═══════════════════════════════════════════════════════════════════ -->
+
+    <record id="edi_ux_parent_cert" model="certificate.certificate">
+        <field name="name">Demo Cert – parent (CUIT 20313932975)</field>
+        <field name="content" type="base64" file="l10n_ar_edi/tests/test_cert1.crt"/>
+        <field name="private_key_id" ref="edi_ux_demo_key"/>
+    </record>
+
+    <record id="edi_ux_branch_cert" model="certificate.certificate">
+        <field name="name">Demo Cert – branch_with_cert (own cert)</field>
+        <field name="content" type="base64" file="l10n_ar_edi/tests/test_cert2.crt"/>
+        <field name="private_key_id" ref="edi_ux_demo_key"/>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         Partners
+         Partners are created first so companies can reference them via
+         partner_id, which lets us set CUIT / fiscal data cleanly.
+         ═══════════════════════════════════════════════════════════════════ -->
+
+    <record id="edi_ux_parent_partner" model="res.partner">
+        <field name="name">AR Parent Company</field>
+        <field name="is_company" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
+        <field name="vat">20313932975</field>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
+    <record id="edi_ux_child_partner" model="res.partner">
+        <field name="name">Branch 1 (same CUIT no Cert)</field>
+        <field name="is_company" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
+        <field name="vat">20313932975</field>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
+    <!-- Grandchild intentionally has no CUIT -->
+    <record id="edi_ux_grandchild_partner" model="res.partner">
+        <field name="name">Grandchild Branch (no CUIT)</field>
+        <field name="is_company" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+
+    <record id="edi_ux_branch_diff_cuit_partner" model="res.partner">
+        <field name="name">Branch 2 (Diff CUIT no Cert)</field>
+        <field name="is_company" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
+        <field name="vat">30711017077</field>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
+    <!-- Branch sibling intentionally has no CUIT -->
+    <record id="edi_ux_branch_no_cuit_partner" model="res.partner">
+        <field name="name">Branch 3 (No CUIT no Cert)</field>
+        <field name="is_company" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+
+    <record id="edi_ux_branch_with_cert_partner" model="res.partner">
+        <field name="name">Branch 4 (Diff CUIT Own Cert)</field>
+        <field name="is_company" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
+        <field name="vat">30500010084</field>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         Companies (first pass — without certificates)
+         Certificates depend on keys which can only reference existing
+         companies, so we create the companies first and add the certs below.
+         ═══════════════════════════════════════════════════════════════════ -->
+
+    <!-- parent: CUIT 20313932975 — will receive certificate below -->
+    <record id="edi_ux_parent_company" model="res.company">
+        <field name="name">AR Parent Company</field>
+        <field name="partner_id" ref="edi_ux_parent_partner"/>
+        <field name="currency_id" ref="base.ARS"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="l10n_ar_afip_ws_environment">testing</field>
+        <field name="l10n_ar_afip_ws_crt_id" ref="edi_ux_parent_cert"/>
+    </record>
+
+    <!-- child: same CUIT as parent, no certificate -->
+    <record id="edi_ux_child_company" model="res.company">
+        <field name="name">Branch 1 (same CUIT no Cert)</field>
+        <field name="partner_id" ref="edi_ux_child_partner"/>
+        <field name="parent_id" ref="edi_ux_parent_company"/>
+        <field name="currency_id" ref="base.ARS"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="l10n_ar_afip_ws_environment">testing</field>
+    </record>
+
+    <!-- grandchild: no CUIT, no certificate -->
+    <record id="edi_ux_grandchild_company" model="res.company">
+        <field name="name">Grandchild Branch (no CUIT)</field>
+        <field name="partner_id" ref="edi_ux_grandchild_partner"/>
+        <field name="parent_id" ref="edi_ux_child_company"/>
+        <field name="currency_id" ref="base.ARS"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="l10n_ar_afip_ws_environment">testing</field>
+    </record>
+
+    <!-- branch_diff_cuit: CUIT 30711017077, no certificate -->
+    <record id="edi_ux_branch_diff_cuit" model="res.company">
+        <field name="name">Branch 2 (Diff CUIT no Cert)</field>
+        <field name="partner_id" ref="edi_ux_branch_diff_cuit_partner"/>
+        <field name="parent_id" ref="edi_ux_parent_company"/>
+        <field name="currency_id" ref="base.ARS"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="l10n_ar_afip_ws_environment">testing</field>
+    </record>
+
+    <!-- branch_no_cuit: no CUIT, no certificate -->
+    <record id="edi_ux_branch_no_cuit" model="res.company">
+        <field name="name">Branch 3 (No CUIT no Cert)</field>
+        <field name="partner_id" ref="edi_ux_branch_no_cuit_partner"/>
+        <field name="parent_id" ref="edi_ux_parent_company"/>
+        <field name="currency_id" ref="base.ARS"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="l10n_ar_afip_ws_environment">testing</field>
+    </record>
+
+    <!-- branch_with_cert: CUIT 30500010084 — will receive certificate below -->
+    <record id="edi_ux_branch_with_cert" model="res.company">
+        <field name="name">Branch 4 (Diff CUIT Own Cert)</field>
+        <field name="partner_id" ref="edi_ux_branch_with_cert_partner"/>
+        <field name="parent_id" ref="edi_ux_parent_company"/>
+        <field name="currency_id" ref="base.ARS"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="l10n_ar_afip_ws_environment">testing</field>
+        <field name="l10n_ar_afip_ws_crt_id" ref="edi_ux_branch_cert"/>
+    </record>
+
+    <!-- Grant admin access to all demo companies -->
+    <record id="base.user_admin" model="res.users">
+        <field name="company_ids" eval="[(4, ref('edi_ux_parent_company')), (4, ref('edi_ux_child_company')), (4, ref('edi_ux_grandchild_company')), (4, ref('edi_ux_branch_diff_cuit')), (4, ref('edi_ux_branch_no_cuit')), (4, ref('edi_ux_branch_with_cert'))]"/>
+    </record>
+
+</odoo>

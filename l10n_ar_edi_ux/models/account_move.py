@@ -37,11 +37,13 @@ class AccountMove(models.Model):
             original_entry = (
                 self.mapped("invoice_line_ids.sale_line_ids.invoice_lines")
                 .filtered(
-                    lambda x: x.move_id.l10n_latam_document_type_id.country_id.code == "AR"
-                    and x.move_id.l10n_latam_document_type_id.internal_type
-                    != self.l10n_latam_document_type_id.internal_type
-                    and x.move_id.l10n_ar_afip_result in ["A", "O"]
-                    and x.move_id.l10n_ar_afip_auth_code
+                    lambda x: (
+                        x.move_id.l10n_latam_document_type_id.country_id.code == "AR"
+                        and x.move_id.l10n_latam_document_type_id.internal_type
+                        != self.l10n_latam_document_type_id.internal_type
+                        and x.move_id.l10n_ar_afip_result in ["A", "O"]
+                        and x.move_id.l10n_ar_afip_auth_code
+                    )
                 )
                 .mapped("move_id")
             )
@@ -197,3 +199,20 @@ class AccountMove(models.Model):
         )
         self.message_post(body=msg)
         return invalid_permissions
+
+    def _is_dummy_afip_validation(self):
+        # EXTENDS l10n_ar_edi
+        """Original method was not compatible with the new branch approarch.
+
+        With this extension we modify that logic: if we have not certificate, but have an ancestor
+        (parent, grandparent, …) that has certificate and shares the same CUIT, we skip the dummy
+        and force to continue with afip validation.  This supports multi-level branch hierarchies."""
+        self.ensure_one()
+        company = self.company_id
+        if (
+            company._get_environment_type() == "testing"
+            and not company.sudo().l10n_ar_afip_ws_crt_id
+            and company._l10n_ar_get_cert_ancestor()
+        ):
+            return False
+        return super()._is_dummy_afip_validation()
