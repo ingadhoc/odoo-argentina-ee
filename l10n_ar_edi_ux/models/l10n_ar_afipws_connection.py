@@ -26,3 +26,9 @@ class L10nArAfipwsConnection(models.Model):
             }
         }
         return ws_data.get(afip_ws, {}).get(environment_type)
+
+    def _l10n_ar_get_token_data(self, company, afip_ws):
+        # EXTEND l10n_ar_edi
+        """We want to check first if the certificate match with the company CUIT before trying to get token data"""
+        company._check_match_between_certificate_and_company()
+        return super()._l10n_ar_get_token_data(company, afip_ws)
