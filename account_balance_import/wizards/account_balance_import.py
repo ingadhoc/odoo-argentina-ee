@@ -357,7 +357,7 @@ class AccountBalanceImport(models.TransientModel):
                 continue
 
             # Check if accounts have the same company
-            if company.id != partner_account.company_ids.id:
+            if company.id not in partner_account.company_ids.ids:
                 errors.append(
                     f"Fila {str(row_no)}: Una de las cuentas asociadas al partner {partner.name} no pertenece a la compañía ({company.name})"
                 )
