@@ -1,3 +1,4 @@
+<<<<<<< f235ca7b9eb52beeae67565baf965c0a1b72e7d1
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
     <record id="certificate_certificate_view_form" model="ir.ui.view">
@@ -32,3 +33,22 @@
         </field>
     </record>
 </odoo>
+||||||| 289e24e5865df0d99ce87dc017f7a2350f730d90
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="certificate_certificate_view_form" model="ir.ui.view">
+        <field name="name">certificate_certificate_view_form.inherit.l10n_cl_edi</field>
+        <field name="model">certificate.certificate</field>
+        <field name="inherit_id" ref="certificate.certificate_certificate_view_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Mostrar el número de serie del sujeto si es un certificado argentino -->
+            <field name="serial_number" position="after">
+                <field name="l10n_ar_subject_serial_number" invisible="country_code != 'AR'"/>
+            </field>
+
+        </field>
+    </record>
+</odoo>
+>>>>>>> 8dd73ee8fbe9eb9c070b310996fc480c386739c4

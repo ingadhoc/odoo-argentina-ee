@@ -250,6 +250,7 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: l10n_ar_edi_ux
+<<<<<<< f235ca7b9eb52beeae67565baf965c0a1b72e7d1
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
 msgid ""
@@ -286,6 +287,26 @@ msgid "Certificates must be in PEM format"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+||||||| 289e24e5865df0d99ce87dc017f7a2350f730d90
+=======
+#: model:ir.model,name:l10n_ar_edi_ux.model_certificate_certificate
+msgid "Certificate"
+msgstr "Certificado"
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/res_company.py:0
+msgid ""
+"Certificate CUIT differ from Company's doc type and number. You can only use the ARCA certificate if it matches\n"
+" * certificate %s\n"
+" * company %s %s"
+msgstr ""
+"El CUIT del certificado difiere del tipo y número de documento de la empresa. Solo puede usar el certificado ARCA si coincide\n"
+" * certificado %s\n"
+" * empresa %s %s"
+
+#. module: l10n_ar_edi_ux
+>>>>>>> 8dd73ee8fbe9eb9c070b310996fc480c386739c4
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_config_settings__arba_cit
 msgid "Clave de Identificación Tributaria de ARBA"
 msgstr ""
@@ -345,6 +366,26 @@ msgid ""
 msgstr ""
 "La empresa \"%s\" no tiene CUIT configurado. Se requiere un CUIT para "
 "obtener una conexión ARCA."
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/res_company.py:0
+msgid ""
+"Company \"%s\" has no ARCA certificate and no ancestor sharing the same CUIT"
+" was found. Please configure a certificate in the accounting settings."
+msgstr ""
+"La empresa \"%s\" no tiene certificado ARCA y no se encontró ningún padre"
+" con el mismo CUIT. Por favor configure un certificado en los ajustes de contabilidad."
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/res_company.py:0
+msgid ""
+"Company \"%s\" has no CUIT configured. A CUIT is required to get "
+"an ARCA connection."
+msgstr ""
+"La empresa \"%s\" no tiene CUIT configurado. Se requiere un CUIT para"
+" obtener una conexión ARCA."
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_res_config_settings
@@ -909,6 +950,11 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
 msgid "There are no more partners to update for this request..."
 msgstr "No hay más contactos para actualizar para esta solicitud..."
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_certificate_certificate__l10n_ar_subject_serial_number
+msgid "This is the CUIT information of the related ARCA Certificate."
+msgstr "Es el CUIT del certificado ARCA asociado."
 
 #. module: l10n_ar_edi_ux
 #. odoo-python

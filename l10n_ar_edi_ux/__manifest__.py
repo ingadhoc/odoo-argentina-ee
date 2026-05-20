@@ -24,6 +24,7 @@
         "views/account_journal_view.xml",
         "views/res_config_settings_view.xml",
         "views/l10n_ar_boarding_permission_view.xml",
+        "views/certificate_certificate_view.xml",
         "security/ir.model.access.csv",
     ],
     "demo": [
