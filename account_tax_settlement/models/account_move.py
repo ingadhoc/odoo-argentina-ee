@@ -1,0 +1,34 @@
+<<<<<<< HEAD
+||||||| MERGE BASE
+=======
+from odoo import fields, models
+
+
+class AccountMove(models.Model):
+    _inherit = "account.move"
+
+    settled_line_ids = fields.One2many(
+        "account.move.line",
+        "tax_settlement_move_id",
+        "Settled Lines",
+        # atencion, si sacamos el readonly por alguna razon, volver a agregarlo
+        # en la vista porque si no da error al querer guardar cambios (probar
+        # con usuario no admin pondiendo apuntes de liquidacion en cero)
+        readonly=True,
+        auto_join=True,
+    )
+
+    def download_tax_settlement_file(self):
+        self.ensure_one()
+        # para los que se liquidan desde reporte, no se encuentra el diario,
+        # pero sabemos que es el diario donde se liquidaron
+        return self.settled_line_ids.get_tax_settlement_file(self.journal_id)
+
+    def unlink(self):
+        """Recompute tax_state on settled lines after deleting settlement moves."""
+        settled_lines = self.mapped("settled_line_ids")
+        res = super().unlink()
+        settled_lines._compute_tax_state()
+        return res
+
+>>>>>>> FORWARD PORTED
