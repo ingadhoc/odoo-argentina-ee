@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="certificate_certificate_view_form" model="ir.ui.view">
+        <field name="name">certificate_certificate_view_form.inherit.l10n_cl_edi</field>
+        <field name="model">certificate.certificate</field>
+        <field name="inherit_id" ref="certificate.certificate_certificate_view_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Mostrar el número de serie del sujeto si es un certificado argentino -->
+            <field name="serial_number" position="after">
+                <field name="l10n_ar_subject_serial_number" invisible="country_code != 'AR'"/>
+            </field>
+
+        </field>
+    </record>
+</odoo>
