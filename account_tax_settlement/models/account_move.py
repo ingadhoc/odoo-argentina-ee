@@ -20,3 +20,10 @@ class AccountMove(models.Model):
         # para los que se liquidan desde reporte, no se encuentra el diario,
         # pero sabemos que es el diario donde se liquidaron
         return self.settled_line_ids.get_tax_settlement_file(self.journal_id)
+
+    def unlink(self):
+        """Recompute tax_state on settled lines after deleting settlement moves."""
+        settled_lines = self.mapped("settled_line_ids")
+        res = super().unlink()
+        settled_lines._compute_tax_state()
+        return res
