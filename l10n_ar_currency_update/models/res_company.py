@@ -33,8 +33,7 @@ class ResCompany(models.Model):
         ar_companies = self.search([]).filtered(lambda company: company.country_id.code == "AR")
         if ar_companies:
             ar_companies.currency_provider = "afip"
-            _logger.log(
-                25,
+            _logger.info(
                 "Currency Provider configured as AFIP for next companies: %s",
                 ", ".join(ar_companies.mapped("name")),
             )
@@ -105,28 +104,28 @@ class ResCompany(models.Model):
         else:
             company = valid_certificate[:1].company_id if valid_certificate else False
         if not company:
-            _logger.log(25, "No pudimos encontrar compañía con certificados de AFIP validos")
+            _logger.info("No pudimos encontrar compañía con certificados de AFIP validos")
             return False
         env_company = self.env.company
         self.env.company = company
         for currency in available_currencies:
             try:
                 # Obtain the currencies to be updated
-                _logger.log(25, "Connecting to AFIP to update the currency rates for %s", currency.name)
+                _logger.info("Connecting to AFIP to update the currency rates for %s", currency.name)
 
                 # Do not pass company since we need to find the one that has certificate
                 afip_date, rate = currency._l10n_ar_get_afip_ws_currency_rate()
                 afip_date = datetime.strptime(afip_date, "%Y%m%d").date() + relativedelta(days=1)
                 if afip_date == rate_date or self.env.context.get("l10n_ar_force_create_rate"):
                     res.update({currency.name: (1.0 / rate, rate_date)})
-                    _logger.log(25, "Currency %s %s %s", currency.name, rate_date, rate)
+                    _logger.info("Currency %s %s %s", currency.name, rate_date, rate)
                 else:
                     raise UserError(
                         "Returned Afip rate is not today's rate (%s, %s vs %s, %s)"
                         % (afip_date.strftime("%A"), afip_date, rate_date.strftime("%A"), rate_date)
                     )
             except Exception as e:
-                _logger.log(25, "Could not get rate for currency %s. This is what we get:\n%s", currency.name, e)
+                _logger.info("Could not get rate for currency %s. This is what we get:\n%s", currency.name, e)
             else:
                 for company in self.filtered(lambda x: x.currency_provider == "afip"):
                     company.l10n_ar_last_currency_sync_date = fields.Date.context_today(
