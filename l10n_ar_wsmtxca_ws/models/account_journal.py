@@ -99,3 +99,32 @@ class AccountJournal(models.Model):
     def _wsmtxca_convert_auth(self, auth):
         res = {"sign": auth.get("Sign"), "token": auth.get("Token"), "cuitRepresentada": auth.get("Cuit")}
         return res
+
+    def l10n_ar_check_afip_doc_types(self):
+        """This method shows the valid document types for each Webservice."""
+        self.ensure_one()
+        if self.l10n_ar_afip_ws != "wsmtxca":
+            return super().l10n_ar_check_afip_doc_types()
+
+        connection = self.company_id._l10n_ar_get_connection(self.l10n_ar_afip_ws)
+        client, auth = connection._get_client()
+        auth = self._wsmtxca_convert_auth(auth)
+        response = client.service.consultarTiposComprobante(auth)
+        msg = self._format_afip_doc_types(self.l10n_ar_afip_ws, response)
+        msg = _("Tipos de Documentos Autorizados en ARCA:\n%s") % msg
+        raise UserError(msg)
+
+    def _format_afip_doc_types(self, ws, response):
+        """Given the response and the Webservice used, returns a more legible message to be shown to the users."""
+        if ws != "wsmtxca":
+            return super()._format_afip_doc_types(ws, response)
+
+        events = False
+        if response["evento"]:
+            events = str(["%s: %s" % (evt.codigo, evt.descripcion) for evt in response["evento"]])
+        msg = ""
+        for document in response["arrayTiposComprobante"]["codigoDescripcion"]:
+            msg += " - [" + str(document["codigo"]) + "] " + document["descripcion"] + "\n"
+        if events:
+            msg += "\n\nAdicional, ARCA devuelve este evento: " + events
+        return msg
