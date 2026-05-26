@@ -221,7 +221,7 @@ class AccountBalanceImport(models.TransientModel):
                 continue
 
             amount_company_currency = (
-                other_currency and other_currency.round(dict_data["amount_company_currency"]) or False
+                other_currency and abs(other_currency.round(dict_data["amount_company_currency"])) or False
             )
 
             check_data = {
