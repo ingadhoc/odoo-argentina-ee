@@ -154,7 +154,6 @@ class AccountMove(models.Model):
                     + msg
                 )
             raise UserError(msg)
-
         return super(AccountMove, self - purchase_ar_edi_invoices)._post(soft=soft)
 
     def _get_permissions(self):
@@ -203,3 +202,9 @@ class AccountMove(models.Model):
         )
         self.message_post(body=msg)
         return invalid_permissions
+
+    def _is_ready_to_be_sent(self):
+        res = super()._is_ready_to_be_sent()
+        if self.journal_id.l10n_ar_afip_ws:
+            return self.l10n_ar_afip_result in ["A", "O"] and self.l10n_ar_afip_auth_code
+        return res
