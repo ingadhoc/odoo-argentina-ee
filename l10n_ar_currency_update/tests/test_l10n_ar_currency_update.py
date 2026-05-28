@@ -199,7 +199,7 @@ class TestL10nArCurrencyUpdate(TransactionCase):
         )
 
     def test_protected_currency_name_cannot_be_changed(self):
-        with self.assertRaisesRegex(UserError, "No se puede cambiar el nombre/código"):
+        with self.assertRaisesRegex(UserError, "Cannot change the name/code"):
             self.USD.write({"name": "USX"})
 
     def test_non_protected_currency_name_can_be_changed(self):

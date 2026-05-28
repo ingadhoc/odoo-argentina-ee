@@ -126,7 +126,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
                 if not tax.l10n_ar_code:
                     raise RedirectWarning(
                         message=_(
-                            "No hay regimen de retencion (ARCA Code 'l10n_ar_code') configurado para el impuesto '%(tax_name)s' del partner '%(partner_name)s'",
+                            "There is no withholding regime (ARCA Code 'l10n_ar_code') configured for tax '%(tax_name)s' of partner '%(partner_name)s'",
                             tax_name=tax.name,
                             partner_name=line.partner_id.name,
                         ),
@@ -140,7 +140,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
                 if not tax.l10n_ar_state_id.jurisdiction_code or not tax.l10n_ar_state_id.jurisdiction_code:
                     raise RedirectWarning(
                         message=_(
-                            'No hay jurisdicción establecida en el impuesto "%(tax_name)s" o no tiene código de jurisdicción.',
+                            'There is no jurisdiction set in the tax "%(tax_name)s" or it does not have a jurisdiction code.',
                             tax_name=tax.name,
                         ),
                         action=tax.get_formview_action(),
@@ -192,7 +192,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
                 elif line.move_id.type == "out_refund":
                     tipo_comprobante = 120
                 else:
-                    raise UserError(_("Tipo de comprobante no reconocido"))
+                    raise UserError(_("Unrecognized document type"))
                 content.append("%03d" % tipo_comprobante)
 
                 # 3 Letra del comprobante
@@ -221,7 +221,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
                 if not tax.l10n_ar_code:
                     raise RedirectWarning(
                         message=_(
-                            "No hay régimen de percepción (ARCA Code 'l10n_ar_code') configurado para el impuesto: '%(tax_name)s'.",
+                            "There is no perception regime (ARCA Code 'l10n_ar_code') configured for tax: '%(tax_name)s'.",
                             tax_name=tax.name,
                         ),
                         action=tax.get_formview_action(),
@@ -234,7 +234,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
                 if not tax.l10n_ar_state_id.jurisdiction_code or not tax.l10n_ar_state_id.jurisdiction_code:
                     raise RedirectWarning(
                         message=_(
-                            'No hay jurisdicción establecida en el impuesto "%(tax_name)s" o no tiene código de jurisdicción.',
+                            'There is no jurisdiction set in the tax "%(tax_name)s" or it does not have a jurisdiction code.',
                             tax_name=tax.name,
                         ),
                         action=tax.get_formview_action(),
@@ -279,7 +279,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
         elif related_invoice.move_type == "out_refund":
             document_type = 120
         else:
-            raise UserError(_("Tipo de comprobante no reconocido"))
+            raise UserError(_("Unrecognized document type"))
         res += str(document_type)[:1]
 
         # 3 Letra del comprobante

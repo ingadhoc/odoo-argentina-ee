@@ -130,7 +130,7 @@ class L10n_ArSifereReportHandler(models.AbstractModel):
 
             if not line.partner_id:
                 raise UserError(
-                    _('La percepción %s (id: %d) del comprobante "%s" (id: %d) no tiene contacto asociado.')
+                    _('The perception %s (id: %d) of the document "%s" (id: %d) has no associated contact.')
                     % (line.withholding_id.name, line.id, line.move_id.name, line.move_id.id)
                 )
             line.partner_id.ensure_vat()
