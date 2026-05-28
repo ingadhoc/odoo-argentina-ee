@@ -298,10 +298,9 @@ class AccountReturn(models.Model):
             )
             ar_checks.append(
                 {
-                    "name": _("Cheques a fecha"),
+                    "name": _("Post-dated Checks"),
                     "message": _(
-                        "Revisar y procesar los cheques de terceros con fecha de pago diferida "
-                        "pendientes al cierre del período."
+                        "Review and process third-party checks with deferred payment dates " "pending at period close."
                     ),
                     "code": "l10n_ar_cheques_a_fecha",
                     "action": action,
@@ -313,8 +312,8 @@ class AccountReturn(models.Model):
             action = self.env["ir.actions.actions"]._for_xml_id("l10n_ar_account_reports.inflation_adjustment_action")
             ar_checks.append(
                 {
-                    "name": _("Asiento de ajuste por inflación"),
-                    "message": _("Generar el asiento de ajuste por inflación para el período fiscal."),
+                    "name": _("Inflation Adjustment Entry"),
+                    "message": _("Generate the inflation adjustment journal entry for the fiscal period."),
                     "code": "l10n_ar_inflation_adjustment",
                     "action": action,
                     "result": "todo",

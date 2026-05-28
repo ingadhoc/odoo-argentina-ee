@@ -107,12 +107,12 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
             if not partner.vat:
                 raise RedirectWarning(
                     message=_(
-                        'El partner "%(partner_name)s" (id %(partner_id)s) no tiene número de identificación establecido',
+                        'The partner "%(partner_name)s" (id %(partner_id)s) does not have an identification number set',
                         partner_name=partner.name,
                         partner_id=partner.id,
                     ),
                     action=partner.get_formview_action(),
-                    button_text=_("Editar contacto"),
+                    button_text=_("Edit contact"),
                 )
             alicuot = tax.amount
 
@@ -196,7 +196,7 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
                     other_taxes_amount = company_currency.round(total_amount - taxable_amount - vat_amount)
                     # other_taxes_amount = line.move_id.cc_other_taxes_amount
                 else:
-                    raise UserError(_("El impuesto no está asociado"))
+                    raise UserError(_("The tax is not associated"))
 
                 # 8 - Monto del comprobante
                 content += format_amount(total_amount, 16, 2, ",")
@@ -213,13 +213,13 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
                 ]:
                     raise RedirectWarning(
                         message=_(
-                            'El contacto "%(partner_name)s" (id %(partner_id)s), debe tener el tipo de identificación'
-                            " CUIT, CUIL, CDI.",
+                            'The contact "%(partner_name)s" (id %(partner_id)s) must have the identification type'
+                            " CUIT, CUIL, or CDI.",
                             partner_name=partner.name,
                             partner_id=partner.id,
                         ),
                         action=partner.get_formview_action(),
-                        button_text=_("Editar contacto"),
+                        button_text=_("Edit contact"),
                     )
                 doc_type_mapping = {"CUIT": "3", "CUIL": "2", "CDI": "1"}
                 content += doc_type_mapping[partner.l10n_latam_identification_type_id.name]
@@ -233,12 +233,12 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
                 if not partner.l10n_ar_gross_income_type:
                     raise RedirectWarning(
                         message=self.env._(
-                            'Debe setear el tipo de inscripción de IIBB del contacto "%(partner_name)s" (id: %(partner_id)s)',
+                            'You must set the IIBB registration type for contact "%(partner_name)s" (id: %(partner_id)s)',
                             partner_name=partner.name,
                             partner_id=partner.id,
                         ),
                         action=partner.get_formview_action(),
-                        button_text=self.env._("Editar contacto"),
+                        button_text=self.env._("Edit contact"),
                     )
 
                 # ahora se reportaria para cualquier inscripto el numero de cuit
@@ -271,7 +271,7 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
                     content += "4"
                 else:
                     raise UserError(
-                        _('La responsabilidad frente a IVA "%s" no está soportada para ret/perc AGIP') % res_iva.name
+                        _('The VAT responsibility "%s" is not supported for AGIP withholding/perception') % res_iva.name
                     )
 
                 # 15 - Razón Social del Retenido
@@ -345,9 +345,9 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
         if not or_inv:
             raise UserError(
                 _(
-                    "No pudimos encontrar el comprobante original para %s "
-                    '(id %s). Verifique que en la nota de crédito "%s", el'
-                    " campo origen es el número de la factura original"
+                    "Could not find the original document for %s "
+                    '(id %s). Please verify that in the credit note "%s", the'
+                    " origin field contains the original invoice number"
                 )
                 % (
                     line.move_id.display_name,
