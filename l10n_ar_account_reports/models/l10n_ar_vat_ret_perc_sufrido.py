@@ -96,7 +96,7 @@ class L10n_ArIvaReportHandler(models.AbstractModel):
                 if not codigo_regimen:
                     raise RedirectWarning(
                         message=_(
-                            'No hay código de régimen en la configuración del impuesto "%(tax_name)s"',
+                            'There is no regime code in the configuration of tax "%(tax_name)s"',
                             tax_name=line_withholding_tax.name,
                         ),
                         action=line_withholding_tax.get_formview_action(),
@@ -105,7 +105,7 @@ class L10n_ArIvaReportHandler(models.AbstractModel):
                 if len(codigo_regimen) < 3:
                     raise RedirectWarning(
                         message=_(
-                            'El código de régimen tiene que tener 3 dígitos en la configuración del impuesto "%(tax_name)s"',
+                            'The regime code must have 3 digits in the configuration of tax "%(tax_name)s"',
                             tax_name=line_withholding_tax.name,
                         ),
                         action=line_withholding_tax.get_formview_action(),
@@ -135,7 +135,7 @@ class L10n_ArIvaReportHandler(models.AbstractModel):
                 if not codigo_regimen:
                     raise RedirectWarning(
                         message=_(
-                            'No hay código de régimen en la configuración del impuesto "%(tax_name)s"',
+                            'There is no regime code in the configuration of tax "%(tax_name)s"',
                             tax_name=tax.name,
                         ),
                         action=tax.get_formview_action(),
@@ -144,7 +144,7 @@ class L10n_ArIvaReportHandler(models.AbstractModel):
                 if len(codigo_regimen) < 3:
                     raise RedirectWarning(
                         message=_(
-                            'El código de régimen tiene que tener 3 dígitos en la configuración del impuesto "%(tax_name)s"',
+                            'The regime code must have 3 digits in the configuration of tax "%(tax_name)s"',
                             tax_name=tax.name,
                         ),
                         action=tax.get_formview_action(),

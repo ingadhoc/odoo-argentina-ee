@@ -43,7 +43,7 @@ class InflationAdjustmentIndex(models.Model):
             if len(repeated) > 1 or repeated.id != rec.id:
                 rec_date = fields.Date.from_string(rec.date)
                 raise ValidationError(
-                    _("Ya existe un índice para el periodo %s %s. Solo puedes tener un índice de inflación por mes")
+                    _("An index already exists for period %s %s. You can only have one inflation index per month")
                     % (rec_date.strftime("%B"), rec_date.year)
                 )
 
@@ -52,7 +52,7 @@ class InflationAdjustmentIndex(models.Model):
         for rec in self:
             date = fields.Date.from_string(rec.date)
             if date.day != 1:
-                raise ValidationError(_("El índice debe comenzar el primer día de cada mes"))
+                raise ValidationError(_("The index must start on the first day of each month"))
 
     @api.constrains("date")
     def check_xml_id(self):

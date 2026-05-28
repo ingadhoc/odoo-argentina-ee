@@ -108,8 +108,8 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
         ):
             raise UserError(
                 _(
-                    "Algunos comprobantes rectificativos no contienen información de que "
-                    "comprobante original están revirtiendo:\n %s"
+                    "Some corrective documents do not contain information about which "
+                    "original document they are reversing:\n %s"
                 )
                 % (", ".join(nc_without_reversed_entry_id.mapped("move_id.name")))
             )
@@ -121,8 +121,8 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
         ):
             raise UserError(
                 _(
-                    "Algunos comprobantes no contienen información acerca de la calle/ciudad/provincia/cod "
-                    "postal del contacto:\n %s"
+                    "Some documents do not contain information about the street/city/province/postal "
+                    "code of the contact:\n %s"
                 )
                 % (", ".join(moves_without_street_city_state.mapped("move_id.name")))
             )
@@ -135,8 +135,8 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
         if move_lines_with_five_digits_pos:
             raise UserError(
                 _(
-                    "Algunos comprobantes tienen punto de venta de 5 dígitos y deben tener de 4 dígitos para "
-                    "poder generar el archivo txt de retenciones y percepciones de Tucuman:\n %s"
+                    "Some documents have a 5-digit point of sale but must have a 4-digit one to "
+                    "generate the Tucuman withholdings and perceptions TXT file:\n %s"
                 )
                 % (", ".join(move_lines_with_five_digits_pos.mapped("move_id.name")))
             )
