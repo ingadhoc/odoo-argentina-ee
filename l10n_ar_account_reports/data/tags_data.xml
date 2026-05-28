@@ -2,141 +2,141 @@
 <odoo>
     <!-- Estado de Resultados Tags -->
     <record id="ar_eerr_ventas" model="account.account.tag">
-        <field name="name">AR EERR: Ventas</field>
+        <field name="name">AR EERR: Sales</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_eerr_costo_ventas" model="account.account.tag">
-        <field name="name">AR EERR: Costo de Ventas</field>
+        <field name="name">AR EERR: Cost of Sales</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_eerr_gastos_comercializacion" model="account.account.tag">
-        <field name="name">AR EERR: Gastos de Comercialización</field>
+        <field name="name">AR EERR: Selling Expenses</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_eerr_gastos_administracion" model="account.account.tag">
-        <field name="name">AR EERR: Gastos de Administración</field>
+        <field name="name">AR EERR: Administrative Expenses</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_eerr_otros_gastos" model="account.account.tag">
-        <field name="name">AR EERR: Otros Gastos</field>
+        <field name="name">AR EERR: Other Expenses</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_eerr_rxt_resultados_financieros" model="account.account.tag">
-        <field name="name">AR EERR: RxT y Resultados Financieros</field>
+        <field name="name">AR EERR: Financial Results and Holding Gains/Losses</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_eerr_otros_ingresos_egresos" model="account.account.tag">
-        <field name="name">AR EERR: Otros ingresos y egresos</field>
+        <field name="name">AR EERR: Other Income and Expenses</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_eerr_impuesto_ganancias" model="account.account.tag">
-        <field name="name">AR EERR: Impuesto a las ganancias</field>
+        <field name="name">AR EERR: Income Tax</field>
         <field name="applicability">accounts</field>
     </record>
 
     <!-- Estado Patrimonial Tags (Balance Sheet) -->
     <record id="ar_esp_caja_y_bancos" model="account.account.tag">
-        <field name="name">AR ESP: Caja y Bancos</field>
+        <field name="name">AR ESP: Cash and Banks</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_inversiones_temporarias" model="account.account.tag">
-        <field name="name">AR ESP: Inversiones Temporarias</field>
+        <field name="name">AR ESP: Short-term Investments</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_creditos_por_ventas" model="account.account.tag">
-        <field name="name">AR ESP: Créditos por Ventas</field>
+        <field name="name">AR ESP: Accounts Receivable</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_otros_creditos" model="account.account.tag">
-        <field name="name">AR ESP: Otros Créditos</field>
+        <field name="name">AR ESP: Other Receivables</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_bienes_de_cambio" model="account.account.tag">
-        <field name="name">AR ESP: Bienes de Cambio</field>
+        <field name="name">AR ESP: Inventories</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_otros_activos" model="account.account.tag">
-        <field name="name">AR ESP: Otros Activos</field>
+        <field name="name">AR ESP: Other Current Assets</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_creditos_por_ventas_nc" model="account.account.tag">
-        <field name="name">AR ESP: Créditos por Ventas NC</field>
+        <field name="name">AR ESP: Long-term Accounts Receivable</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_otros_creditos_nc" model="account.account.tag">
-        <field name="name">AR ESP: Otros Créditos NC</field>
+        <field name="name">AR ESP: Other Long-term Receivables</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_bienes_de_cambio_nc" model="account.account.tag">
-        <field name="name">AR ESP: Bienes de Cambio NC</field>
+        <field name="name">AR ESP: Long-term Inventories</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_bienes_de_uso" model="account.account.tag">
-        <field name="name">AR ESP: Bienes de Uso</field>
+        <field name="name">AR ESP: Fixed Assets</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_participaciones_en_sociedades" model="account.account.tag">
-        <field name="name">AR ESP: Participaciones en Sociedades</field>
+        <field name="name">AR ESP: Investments in Subsidiaries</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_otras_inversiones_nc" model="account.account.tag">
-        <field name="name">AR ESP: Otras Inversiones NC</field>
+        <field name="name">AR ESP: Other Long-term Investments</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_activos_intangibles" model="account.account.tag">
-        <field name="name">AR ESP: Activos Intangibles</field>
+        <field name="name">AR ESP: Intangible Assets</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_otros_activos_nc" model="account.account.tag">
-        <field name="name">AR ESP: Otros Activos NC</field>
+        <field name="name">AR ESP: Other Non-current Assets</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_llave_de_negocio" model="account.account.tag">
-        <field name="name">AR ESP: Llave de Negocio</field>
+        <field name="name">AR ESP: Goodwill</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_deudas_comerciales" model="account.account.tag">
-        <field name="name">AR ESP: Deudas Comerciales</field>
+        <field name="name">AR ESP: Accounts Payable</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_prestamos" model="account.account.tag">
-        <field name="name">AR ESP: Préstamos</field>
+        <field name="name">AR ESP: Loans Payable</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_remun_y_cargas_sociales" model="account.account.tag">
-        <field name="name">AR ESP: Remun. y Cargas Sociales</field>
+        <field name="name">AR ESP: Payroll Liabilities</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_cargas_fiscales" model="account.account.tag">
-        <field name="name">AR ESP: Cargas Fiscales</field>
+        <field name="name">AR ESP: Tax Liabilities</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_anticipos_de_clientes" model="account.account.tag">
-        <field name="name">AR ESP: Anticipos de Clientes</field>
+        <field name="name">AR ESP: Customer Advances</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_dividendos_a_pagar" model="account.account.tag">
-        <field name="name">AR ESP: Dividendos a Pagar</field>
+        <field name="name">AR ESP: Dividends Payable</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_otras_deudas" model="account.account.tag">
-        <field name="name">AR ESP: Otras Deudas</field>
+        <field name="name">AR ESP: Other Liabilities</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_previsiones" model="account.account.tag">
-        <field name="name">AR ESP: Previsiones</field>
+        <field name="name">AR ESP: Provisions</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_deudas_no_corrientes" model="account.account.tag">
-        <field name="name">AR ESP: Deudas No Corrientes</field>
+        <field name="name">AR ESP: Non-current Liabilities</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_previsiones_no_corrientes" model="account.account.tag">
-        <field name="name">AR ESP: Previsiones No Corrientes</field>
+        <field name="name">AR ESP: Non-current Provisions</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_part_terceros_en_soc" model="account.account.tag">
-        <field name="name">AR ESP: Part. Terceros en Soc.</field>
+        <field name="name">AR ESP: Minority Interests</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_capital" model="account.account.tag">
@@ -144,15 +144,15 @@
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_reservas" model="account.account.tag">
-        <field name="name">AR ESP: Reservas</field>
+        <field name="name">AR ESP: Reserves</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_resultados" model="account.account.tag">
-        <field name="name">AR ESP: Resultados</field>
+        <field name="name">AR ESP: Retained Earnings</field>
         <field name="applicability">accounts</field>
     </record>
     <record id="ar_esp_resultado_del_ejercicio" model="account.account.tag">
-        <field name="name">AR ESP: Resultado del Ejercicio</field>
+        <field name="name">AR ESP: Current Year Earnings</field>
         <field name="applicability">accounts</field>
     </record>
 </odoo>

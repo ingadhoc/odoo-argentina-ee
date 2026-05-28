@@ -12,7 +12,6 @@
         <field name="column_ids">
             <record id="l10n_ar_sicore_report_column_total" model="account.report.column">
                 <field name="name">Balance</field>
-                <field name="name@es_419">Balance</field>
                 <field name="expression_label">balance</field>
             </record>
         </field>
@@ -25,7 +24,7 @@
     </record>
 
     <record id="sicore_return_type" model="account.return.type">
-        <field name="name">SICORE Ganancias (Agente)</field>
+        <field name="name">SICORE Income Tax (Agent)</field>
         <field name="report_id" ref="l10n_ar_account_reports.l10n_ar_sicore_report"/>
         <field name="default_deadline_periodicity">fortnightly</field>
         <field name="auto_generate" eval="False"/>

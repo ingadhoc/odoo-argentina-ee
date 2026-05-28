@@ -25,32 +25,27 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_debito_fiscal
-#, fuzzy
-msgid "(+) Débito Fiscal (Ventas)"
+msgid "(+) Fiscal Debit (Sales)"
 msgstr "(+) Débito Fiscal (Ventas)"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_credito_fiscal
-#, fuzzy
-msgid "(-) Crédito Fiscal (Compras)"
+msgid "(-) Input VAT (Purchases)"
 msgstr "(-) Crédito Fiscal (Compras)"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_iva_perceptions_line
-#, fuzzy
-msgid "(-) Percepciones Sufridas"
+msgid "(-) Suffered Perceptions"
 msgstr "(-) Percepciones Sufridas"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_iva_withholdings_line
-#, fuzzy
-msgid "(-) Retenciones Sufridas"
+msgid "(-) Suffered Withholdings"
 msgstr "(-) Retenciones Sufridas"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_saldo_tecnico
-#, fuzzy
-msgid "(=) Saldo Técnico (1er Párrafo)"
+msgid "(=) Technical Balance (1st Paragraph)"
 msgstr "(=) Saldo Técnico (1er Párrafo)"
 
 #. module: l10n_ar_account_reports
@@ -59,241 +54,202 @@ msgid ""
 "<span>\n"
 "                                    %\n"
 "                                </span>"
-msgstr ""
-"<span>\n"
-"                                    %\n"
-"                                </span>"
+msgstr "<span>\\n                                    %\\n                                </span>"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__l10n_ar_account_id
-#, fuzzy
 msgid "AR Closing Account"
 msgstr "AR Closing Account"
 
 #. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_costo_ventas
-#, fuzzy
-msgid "AR EERR: Costo de Ventas"
-msgstr "AR EERR: Costo de Ventas"
-
-#. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_gastos_administracion
-#, fuzzy
-msgid "AR EERR: Gastos de Administración"
+msgid "AR EERR: Administrative Expenses"
 msgstr "AR EERR: Gastos de Administración"
 
 #. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_gastos_comercializacion
-#, fuzzy
-msgid "AR EERR: Gastos de Comercialización"
-msgstr "AR EERR: Gastos de Comercialización"
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_costo_ventas
+msgid "AR EERR: Cost of Sales"
+msgstr "AR EERR: Costo de Ventas"
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_rxt_resultados_financieros
+msgid "AR EERR: Financial Results and Holding Gains/Losses"
+msgstr "AR EERR: RxT y Resultados Financieros"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_impuesto_ganancias
-#, fuzzy
-msgid "AR EERR: Impuesto a las ganancias"
+msgid "AR EERR: Income Tax"
 msgstr "AR EERR: Impuesto a las ganancias"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_otros_gastos
-#, fuzzy
-msgid "AR EERR: Otros Gastos"
+msgid "AR EERR: Other Expenses"
 msgstr "AR EERR: Otros Gastos"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_otros_ingresos_egresos
-#, fuzzy
-msgid "AR EERR: Otros ingresos y egresos"
+msgid "AR EERR: Other Income and Expenses"
 msgstr "AR EERR: Otros ingresos y egresos"
 
 #. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_rxt_resultados_financieros
-#, fuzzy
-msgid "AR EERR: RxT y Resultados Financieros"
-msgstr "AR EERR: RxT y Resultados Financieros"
-
-#. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_ventas
-#, fuzzy
-msgid "AR EERR: Ventas"
+msgid "AR EERR: Sales"
 msgstr "AR EERR: Ventas"
 
 #. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_activos_intangibles
-#, fuzzy
-msgid "AR ESP: Activos Intangibles"
-msgstr "AR ESP: Activos Intangibles"
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_gastos_comercializacion
+msgid "AR EERR: Selling Expenses"
+msgstr "AR EERR: Gastos de Comercialización"
 
 #. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_anticipos_de_clientes
-#, fuzzy
-msgid "AR ESP: Anticipos de Clientes"
-msgstr "AR ESP: Anticipos de Clientes"
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_deudas_comerciales
+msgid "AR ESP: Accounts Payable"
+msgstr "AR ESP: Deudas Comerciales"
 
 #. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_bienes_de_cambio
-#, fuzzy
-msgid "AR ESP: Bienes de Cambio"
-msgstr "AR ESP: Bienes de Cambio"
-
-#. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_bienes_de_cambio_nc
-#, fuzzy
-msgid "AR ESP: Bienes de Cambio NC"
-msgstr "AR ESP: Bienes de Cambio NC"
-
-#. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_bienes_de_uso
-#, fuzzy
-msgid "AR ESP: Bienes de Uso"
-msgstr "AR ESP: Bienes de Uso"
-
-#. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_caja_y_bancos
-#, fuzzy
-msgid "AR ESP: Caja y Bancos"
-msgstr "AR ESP: Caja y Bancos"
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_creditos_por_ventas
+msgid "AR ESP: Accounts Receivable"
+msgstr "AR ESP: Créditos por Ventas"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_capital
-#, fuzzy
 msgid "AR ESP: Capital"
 msgstr "AR ESP: Capital"
 
 #. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_cargas_fiscales
-#, fuzzy
-msgid "AR ESP: Cargas Fiscales"
-msgstr "AR ESP: Cargas Fiscales"
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_caja_y_bancos
+msgid "AR ESP: Cash and Banks"
+msgstr "AR ESP: Caja y Bancos"
 
 #. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_creditos_por_ventas
-#, fuzzy
-msgid "AR ESP: Créditos por Ventas"
-msgstr "AR ESP: Créditos por Ventas"
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_resultado_del_ejercicio
+msgid "AR ESP: Current Year Earnings"
+msgstr "AR ESP: Resultado del Ejercicio"
 
 #. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_creditos_por_ventas_nc
-#, fuzzy
-msgid "AR ESP: Créditos por Ventas NC"
-msgstr "AR ESP: Créditos por Ventas NC"
-
-#. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_deudas_comerciales
-#, fuzzy
-msgid "AR ESP: Deudas Comerciales"
-msgstr "AR ESP: Deudas Comerciales"
-
-#. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_deudas_no_corrientes
-#, fuzzy
-msgid "AR ESP: Deudas No Corrientes"
-msgstr "AR ESP: Deudas No Corrientes"
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_anticipos_de_clientes
+msgid "AR ESP: Customer Advances"
+msgstr "AR ESP: Anticipos de Clientes"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_dividendos_a_pagar
-#, fuzzy
-msgid "AR ESP: Dividendos a Pagar"
+msgid "AR ESP: Dividends Payable"
 msgstr "AR ESP: Dividendos a Pagar"
 
 #. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_inversiones_temporarias
-#, fuzzy
-msgid "AR ESP: Inversiones Temporarias"
-msgstr "AR ESP: Inversiones Temporarias"
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_bienes_de_uso
+msgid "AR ESP: Fixed Assets"
+msgstr "AR ESP: Bienes de Uso"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_llave_de_negocio
-#, fuzzy
-msgid "AR ESP: Llave de Negocio"
+msgid "AR ESP: Goodwill"
 msgstr "AR ESP: Llave de Negocio"
 
 #. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_activos_intangibles
+msgid "AR ESP: Intangible Assets"
+msgstr "AR ESP: Activos Intangibles"
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_bienes_de_cambio
+msgid "AR ESP: Inventories"
+msgstr "AR ESP: Bienes de Cambio"
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_participaciones_en_sociedades
+msgid "AR ESP: Investments in Subsidiaries"
+msgstr "AR ESP: Participaciones en Sociedades"
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_prestamos
+msgid "AR ESP: Loans Payable"
+msgstr "AR ESP: Préstamos"
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_creditos_por_ventas_nc
+msgid "AR ESP: Long-term Accounts Receivable"
+msgstr "AR ESP: Créditos por Ventas NC"
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_bienes_de_cambio_nc
+msgid "AR ESP: Long-term Inventories"
+msgstr "AR ESP: Bienes de Cambio NC"
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_part_terceros_en_soc
+msgid "AR ESP: Minority Interests"
+msgstr "AR ESP: Part. Terceros en Soc."
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_deudas_no_corrientes
+msgid "AR ESP: Non-current Liabilities"
+msgstr "AR ESP: Deudas No Corrientes"
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_previsiones_no_corrientes
+msgid "AR ESP: Non-current Provisions"
+msgstr "AR ESP: Previsiones No Corrientes"
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_otros_activos
+msgid "AR ESP: Other Current Assets"
+msgstr "AR ESP: Otros Activos"
+
+#. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_otras_deudas
-#, fuzzy
-msgid "AR ESP: Otras Deudas"
+msgid "AR ESP: Other Liabilities"
 msgstr "AR ESP: Otras Deudas"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_otras_inversiones_nc
-#, fuzzy
-msgid "AR ESP: Otras Inversiones NC"
+msgid "AR ESP: Other Long-term Investments"
 msgstr "AR ESP: Otras Inversiones NC"
 
 #. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_otros_activos
-#, fuzzy
-msgid "AR ESP: Otros Activos"
-msgstr "AR ESP: Otros Activos"
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_otros_creditos_nc
+msgid "AR ESP: Other Long-term Receivables"
+msgstr "AR ESP: Otros Créditos NC"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_otros_activos_nc
-#, fuzzy
-msgid "AR ESP: Otros Activos NC"
+msgid "AR ESP: Other Non-current Assets"
 msgstr "AR ESP: Otros Activos NC"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_otros_creditos
-#, fuzzy
-msgid "AR ESP: Otros Créditos"
+msgid "AR ESP: Other Receivables"
 msgstr "AR ESP: Otros Créditos"
 
 #. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_otros_creditos_nc
-#, fuzzy
-msgid "AR ESP: Otros Créditos NC"
-msgstr "AR ESP: Otros Créditos NC"
-
-#. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_part_terceros_en_soc
-#, fuzzy
-msgid "AR ESP: Part. Terceros en Soc."
-msgstr "AR ESP: Part. Terceros en Soc."
-
-#. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_participaciones_en_sociedades
-#, fuzzy
-msgid "AR ESP: Participaciones en Sociedades"
-msgstr "AR ESP: Participaciones en Sociedades"
-
-#. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_previsiones
-#, fuzzy
-msgid "AR ESP: Previsiones"
-msgstr "AR ESP: Previsiones"
-
-#. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_previsiones_no_corrientes
-#, fuzzy
-msgid "AR ESP: Previsiones No Corrientes"
-msgstr "AR ESP: Previsiones No Corrientes"
-
-#. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_prestamos
-#, fuzzy
-msgid "AR ESP: Préstamos"
-msgstr "AR ESP: Préstamos"
-
-#. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_remun_y_cargas_sociales
-#, fuzzy
-msgid "AR ESP: Remun. y Cargas Sociales"
+msgid "AR ESP: Payroll Liabilities"
 msgstr "AR ESP: Remun. y Cargas Sociales"
 
 #. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_reservas
-msgid "AR ESP: Reservas"
-msgstr ""
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_previsiones
+msgid "AR ESP: Provisions"
+msgstr "AR ESP: Previsiones"
 
 #. module: l10n_ar_account_reports
-#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_resultado_del_ejercicio
-msgid "AR ESP: Resultado del Ejercicio"
-msgstr ""
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_reservas
+msgid "AR ESP: Reserves"
+msgstr "AR ESP: Reservas"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_resultados
-msgid "AR ESP: Resultados"
-msgstr ""
+msgid "AR ESP: Retained Earnings"
+msgstr "AR ESP: Resultados"
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_inversiones_temporarias
+msgid "AR ESP: Short-term Investments"
+msgstr "AR ESP: Inversiones Temporarias"
+
+#. module: l10n_ar_account_reports
+#: model:account.account.tag,name:l10n_ar_account_reports.ar_esp_cargas_fiscales
+msgid "AR ESP: Tax Liabilities"
+msgstr "AR ESP: Cargas Fiscales"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__l10n_ar_is_simple_closing_return
@@ -315,10 +271,7 @@ msgstr "Plantilla de plan contable"
 msgid ""
 "Account to use for the closing entry of this return type. If not set, the "
 "partner's payable/receivable account will be used."
-msgstr ""
-"Cuenta que se utilizará para el asiento de cierre de este tipo de "
-"declaración. Si no se configura, se utilizará la cuenta de cuentas por pagar "
-"o por cobrar del socio."
+msgstr "Cuenta que se utilizará para el asiento de cierre de este tipo de declaración. Si no se configura, se utilizará la cuenta de cuentas por pagar o por cobrar del socio."
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_return
@@ -331,86 +284,88 @@ msgid "Accounting Return Type"
 msgstr "Tipo de declaración de impuestos"
 
 #. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_activo
-#, fuzzy
-msgid "Activo"
-msgstr "Activo"
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_accounts_payable
+msgid "Accounts Payable"
+msgstr "Deudas Comerciales"
 
 #. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_intangible_assets
-#, fuzzy
-msgid "Activos intangibles"
-msgstr "Activos intangibles"
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_sales_rec
+msgid "Accounts Receivable"
+msgstr "Créditos por ventas"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_sales_rec_noncurrent
+msgid "Accounts Receivable (Non-current)"
+msgstr "Créditos por ventas (No corriente)"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_equity_results_detail
+msgid "Accumulated Earnings"
+msgstr "Resultados Acumulados"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_adm_exp
+msgid "Administrative Expenses"
+msgstr "Gastos de administración"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
-msgid "Inflation Adjustment %s"
+msgid "Ajuste por inflación %s"
 msgstr "Ajuste por inflación %s"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
-msgid "Inflation adjustment %s (%s * %.2f%%)"
-msgstr "Ajuste por inflación %s (%s * %.2f%%)"
+msgid "Ajuste por inflación %s (%s * %.2f%%)"
+msgstr "Ajuste por inflación %s"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
-msgid "Global Inflation Adjustment [%s] / [%s]"
-msgstr "Ajuste por inflación Global [%s] / [%s]"
+msgid "Ajuste por inflación Global [%s] / [%s]"
+msgstr "Ajuste por inflación %s"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
-msgid "Inflation adjustment opening balances (%s * %.2f%%)"
-msgstr "Ajuste por inflación cuentas al inicio (%s * %.2f%%)"
+msgid "Ajuste por inflación cuentas al inicio (%s * %.2f%%)"
+msgstr "Ajuste por inflación %s"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/tucuman_report.py:0
 msgid ""
-"Some documents do not contain information about the street/city/province/"
-"postal code of the contact:\n"
+"Algunos comprobantes no contienen información acerca de la calle/ciudad/provincia/cod postal del contacto:\n"
 " %s"
-msgstr ""
-"Algunos comprobantes no contienen información acerca de la calle/ciudad/"
-"provincia/cod postal del contacto:\n"
-" %s"
+msgstr "Algunos comprobantes no contienen información acerca de la calle/ciudad/provincia/cod postal del contacto:\\n %s"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/tucuman_report.py:0
 msgid ""
-"Some corrective documents do not contain information about which original "
-"document they are reversing:\n"
+"Algunos comprobantes rectificativos no contienen información de que comprobante original están revirtiendo:\n"
 " %s"
-msgstr ""
-"Algunos comprobantes rectificativos no contienen información de que "
-"comprobante original están revirtiendo:\n"
-" %s"
+msgstr "Algunos comprobantes no contienen información acerca de la calle/ciudad/provincia/cod postal del contacto:\\n %s"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/tucuman_report.py:0
 msgid ""
-"Some documents have a 5-digit point of sale but must have a 4-digit one to "
-"generate the Tucuman withholdings and perceptions TXT file:\n"
+"Algunos comprobantes tienen punto de venta de 5 dígitos y deben tener de 4 dígitos para poder generar el archivo txt de retenciones y percepciones de Tucuman:\n"
 " %s"
-msgstr ""
-"Algunos comprobantes tienen punto de venta de 5 dígitos y deben tener de 4 "
-"dígitos para poder generar el archivo txt de retenciones y percepciones de "
-"Tucuman:\n"
-" %s"
+msgstr "Algunos comprobantes no contienen información acerca de la calle/ciudad/provincia/cod postal del contacto:\\n %s"
 
 #. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_advances_from_customers
-msgid "Anticipos de clientes"
-msgstr "Anticipos de clientes"
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/inflation_adjustment_index.py:0
+msgid ""
+"An index already exists for period %s %s. You can only have one inflation "
+"index per month"
+msgstr "Ya existe un índice para el periodo %s %s. Solo puedes tener un índice de inflación por mes"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_caba_report_handler
-#, fuzzy
 msgid "Argentinian CABA Report Custom Handler"
 msgstr "Gestor personalizado de informes de la CABA argentina"
 
@@ -426,8 +381,6 @@ msgstr "Gestor personalizado de informes Argentinos Misiones"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_pba_report_handler
-#, fuzzy
-#| msgid "Partner Ledger Custom Handler"
 msgid "Argentinian PBA Report Custom Handler"
 msgstr "Gestor personalizado de informes Argentinos PBA"
 
@@ -457,57 +410,31 @@ msgid "Argentinian Tucumán Report Custom Handler"
 msgstr "Gestor personalizado de informes Argentinos Tucumán"
 
 #. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
 #: model:ir.actions.act_window,name:l10n_ar_account_reports.inflation_adjustment_action
 #: model:ir.ui.menu,name:l10n_ar_account_reports.inflation_adjustment_menu
 msgid "Asiento de ajuste por inflación"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/account_return.py:0
-msgid "Inflation Adjustment Entry"
-msgstr "Asiento de ajuste por inflación"
-
-#. module: l10n_ar_account_reports
-#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__open_move_id
-msgid "Opening Entry"
-msgstr "Asiento de apertura"
-
-#. module: l10n_ar_account_reports
-#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__closure_move_id
-msgid "Closing Entry"
-msgstr "Asiento de cierre"
-
-#. module: l10n_ar_account_reports
-#: model:account.report,settlement_title:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados
-msgid "Asiento de refundición"
-msgstr ""
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_activo
+msgid "Assets"
+msgstr "Activo"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.column,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_column
 #: model:account.report.column,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_column
+#: model:account.report.column,name:l10n_ar_account_reports.l10n_ar_iva_report_column_total
+#: model:account.report.column,name:l10n_ar_account_reports.l10n_ar_sicore_report_column_total
+#: model:account.report.column,name:l10n_ar_account_reports.l10n_ar_sifere_report_column_total
 msgid "Balance"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_inventory
-msgid "Bienes de cambio"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_inventory_noncurrent
-msgid "Bienes de cambio (No corriente)"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_fixed_assets
-msgid "Bienes de uso"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_bank_cash
-msgid "Caja y Bancos"
-msgstr ""
+#: model:account.report,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial
+msgid "Balance Sheet"
+msgstr "Estado Patrimonial"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -524,9 +451,7 @@ msgstr ""
 msgid ""
 "Can only generate TXT files using posted entries. Please remove Include "
 "unposted entries filter and try again"
-msgstr ""
-"Solo se pueden generar archivos TXT a partir de entradas publicadas. "
-"Desactiva el filtro «Incluir entradas no publicadas» e inténtalo de nuevo"
+msgstr "Solo se pueden generar archivos TXT a partir de entradas publicadas. Desactiva el filtro «Incluir entradas no publicadas» e inténtalo de nuevo"
 
 #. module: l10n_ar_account_reports
 #: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.inflation_adjustment_form
@@ -539,15 +464,20 @@ msgid "Capital"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_tax_liabilities
-msgid "Cargas fiscales"
-msgstr ""
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_bank_cash
+msgid "Cash and Banks"
+msgstr "Caja y Bancos"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
-msgid "Post-dated Checks"
-msgstr "Cheques a fecha"
+msgid "Cheques a fecha"
+msgstr "Asiento de ajuste por inflación"
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__closure_move_id
+msgid "Closing Entry"
+msgstr "Asiento de cierre"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__company_id
@@ -561,8 +491,17 @@ msgstr "Confirmar"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_cogs
-msgid "Costo de venta de bienes y servicios"
-msgstr ""
+msgid "Cost of Goods and Services Sold"
+msgstr "Costo de venta de bienes y servicios"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
+msgid ""
+"Could not find the original document for %s (id %s). Please verify that in "
+"the credit note \"%s\", the origin field contains the original invoice "
+"number"
+msgstr "No pudimos encontrar el comprobante original para %s (id %s). Verifique que en la nota de crédito \\\"%s\\\", el campo origen es el número de la factura original"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__create_uid
@@ -577,14 +516,14 @@ msgid "Created on"
 msgstr "Creado en"
 
 #. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_sales_rec
-msgid "Créditos por ventas"
-msgstr ""
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_ar_curr_year_earnings
+msgid "Current Year Earnings"
+msgstr "Resultado del Ejercicio"
 
 #. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_sales_rec_noncurrent
-msgid "Créditos por ventas (No corriente)"
-msgstr ""
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_advances_from_customers
+msgid "Customer Advances"
+msgstr "Anticipos de clientes"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment_index__date
@@ -605,50 +544,29 @@ msgstr "Fecha Hasta"
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
 msgid ""
-"You must set the IIBB registration type for partner "
-"\"%(partner_name)s\" (id: %(partner_id)s)"
-msgstr ""
 "Debe establecer el tipo de inscripción de IIBB del partner "
 "\"%(partner_name)s\" (id: %(partner_id)s)"
+msgstr "Debe establecer el tipo de inscripción de IIBB del partner \\\"%(partner_name)s\\\" (id: %(partner_id)s)"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
 msgid ""
-"You must set the \"article/section\" information in the configuration of tax "
-"\"%(tax_name)s\" in the \"API\" tab."
-msgstr ""
 "Debe establecer la información de \"artículo/inciso\" en la configuración "
-"del impuesto \"%(tax_name)s\" en la solapa \"API\"."
+"del impuesto \"%(tax_name)s\"en la solapa \"API\"."
+msgstr "Debe establecer el tipo de inscripción de IIBB del partner \\\"%(partner_name)s\\\" (id: %(partner_id)s)"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/caba_report.py:0
 msgid ""
-"You must set the IIBB registration type for contact "
-"\"%(partner_name)s\" (id: %(partner_id)s)"
-msgstr ""
-"Debe setear el tipo de inscripción de IIBB del contacto "
-"\"%(partner_name)s\" (id: %(partner_id)s)"
+"Debe setear el tipo de inscripción de IIBB del contacto \"%(partner_name)s\""
+" (id: %(partner_id)s)"
+msgstr "Debe setear el tipo de inscripción de IIBB del contacto \\\"%(partner_name)s\\\" (id: %(partner_id)s)"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__default_deadline_periodicity
 msgid "Default Periodicity"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sifere_report_sifere_despachos_line
-msgid "Despachos de importación"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_accounts_payable
-msgid "Deudas Comerciales"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_long_term_liabilities
-msgid "Deudas no corrientes"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -677,8 +595,15 @@ msgstr "Nombre para mostrar"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_dividends_payable
-msgid "Dividendos a pagar"
-msgstr ""
+msgid "Dividends Payable"
+msgstr "Dividendos a pagar"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
+#: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
+msgid "Edit contact"
+msgstr "Editar contacto"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -692,75 +617,56 @@ msgstr "Editar impuesto"
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/caba_report.py:0
 #: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
-msgid "Edit contact"
+msgid "Editar contacto"
 msgstr "Editar contacto"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
 msgid ""
-"The inflation adjustment entry cannot be generated because the adjustment "
-"index for period %(month)s %(year)s is missing"
-msgstr ""
 "El asiento de ajuste por inflación no puede ser generado ya que hace falta "
 "el indice de ajuste para el periodo %(month)s %(year)s"
+msgstr "Ajuste por inflación %s"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/caba_report.py:0
 msgid ""
-"The contact \"%(partner_name)s\" (id %(partner_id)s) must have the "
-"identification type CUIT, CUIL, or CDI."
-msgstr ""
 "El contacto \"%(partner_name)s\" (id %(partner_id)s), debe tener el tipo de "
 "identificación CUIT, CUIL, CDI."
+msgstr "Debe setear el tipo de inscripción de IIBB del contacto \\\"%(partner_name)s\\\" (id: %(partner_id)s)"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/l10n_ar_vat_ret_perc_sufrido.py:0
 msgid ""
-"The regime code must have 3 digits in the configuration of tax "
-"\"%(tax_name)s\""
-msgstr ""
 "El código de régimen tiene que tener 3 dígitos en la configuración del "
 "impuesto \"%(tax_name)s\""
+msgstr "El código de régimen tiene que tener 3 dígitos en la configuración del impuesto \\\"%(tax_name)s\\\""
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/caba_report.py:0
-msgid "The tax is not associated"
-msgstr "El impuesto no está asociado"
+msgid "El impuesto no está asociado"
+msgstr "Debe setear el tipo de inscripción de IIBB del contacto \\\"%(partner_name)s\\\" (id: %(partner_id)s)"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/caba_report.py:0
 msgid ""
-"The partner \"%(partner_name)s\" (id %(partner_id)s) does not have an "
-"identification number set"
-msgstr ""
 "El partner \"%(partner_name)s\" (id %(partner_id)s) no tiene número de "
 "identificación establecido"
+msgstr "Debe setear el tipo de inscripción de IIBB del contacto \\\"%(partner_name)s\\\" (id: %(partner_id)s)"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/inflation_adjustment_index.py:0
-msgid "The index must start on the first day of each month"
+msgid "El índice debe comenzar el primer día de cada mes"
 msgstr "El índice debe comenzar el primer día de cada mes"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__end_index
 msgid "End Index"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial
-msgid "Estado Patrimonial"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados
-#: model:ir.actions.client,name:l10n_ar_account_reports.action_account_report_l10n_ar_estado_resultados
-msgid "Estado de Resultados"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -774,36 +680,53 @@ msgid "External ID"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_fin_exp
+msgid "Financial Results and Holding Gains/Losses (includes RECPAM)"
+msgstr "Resultados financieros y por tenencia (incluye RECPAM)"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_fixed_assets
+msgid "Fixed Assets"
+msgstr "Bienes de uso"
+
+#. module: l10n_ar_account_reports
 #: model:ir.model.fields.selection,name:l10n_ar_account_reports.selection__account_return_type__deadline_periodicity__fortnightly
 #: model:ir.model.fields.selection,name:l10n_ar_account_reports.selection__account_return_type__default_deadline_periodicity__fortnightly
 msgid "Fortnightly"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_gross_inc
-msgid "Ganancia (Pérdida) bruta"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_adm_exp
-msgid "Gastos de administración"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_com_exp
-msgid "Gastos de comercialización"
-msgstr ""
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid "Generar el asiento de ajuste por inflación para el período fiscal."
+msgstr "Asiento de ajuste por inflación"
 
 #. module: l10n_ar_account_reports
 #: model:account.report,settlement_title:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial
-msgid "Generar asiento de cierre"
-msgstr ""
+msgid "Generate Closing Entry"
+msgstr "Generar asiento de cierre"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "Generate the inflation adjustment journal entry for the fiscal period."
 msgstr "Generar el asiento de ajuste por inflación para el período fiscal."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid "Global Inflation Adjustment [%s] / [%s]"
+msgstr "Ajuste por inflación Global [%s] / [%s]"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_goodwill
+msgid "Goodwill"
+msgstr "Llave de negocio"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_gross_inc
+msgid "Gross Profit (Loss)"
+msgstr "Ganancia (Pérdida) bruta"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__open_cloure_entry
@@ -877,8 +800,6 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_iva_report_handler
-#, fuzzy
-#| msgid "Partner Ledger Custom Handler"
 msgid "IVA Sufrido Report Custom Handler"
 msgstr "Gestor personalizado del libro mayor del contacto"
 
@@ -887,15 +808,30 @@ msgstr "Gestor personalizado del libro mayor del contacto"
 msgid ""
 "If enabled, this return type uses simplified closing logic: no carryover "
 "mechanism and no automatic tax_lock_date update."
-msgstr ""
-"Si se habilita, este tipo de declaración utiliza una lógica de cierre "
-"simplificada: sin mecanismo de traspaso y sin actualización automática de la "
-"fecha de bloqueo fiscal."
+msgstr "Si se habilita, este tipo de declaración utiliza una lógica de cierre simplificada: sin mecanismo de traspaso y sin actualización automática de la fecha de bloqueo fiscal."
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,help:l10n_ar_account_reports.field_inflation_adjustment__open_cloure_entry
+msgid ""
+"If you have made the closing/opening entries, please indicate them so they "
+"can be excluded from the calculation."
+msgstr "Si usted ha realizado los asientos de cierre/apertura debe indicarnos cuales son para poder excluir los mismos en el cálculo."
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sifere_report_sifere_despachos_line
+msgid "Import Dispatches"
+msgstr "Despachos de importación"
+
+#. module: l10n_ar_account_reports
+#: model:account.report,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados
+#: model:ir.actions.client,name:l10n_ar_account_reports.action_account_report_l10n_ar_estado_resultados
+msgid "Income Statement"
+msgstr "Estado de Resultados"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_tax_inc
-msgid "Impuesto a las ganancias"
-msgstr ""
+msgid "Income Tax"
+msgstr "Impuesto a las ganancias"
 
 #. module: l10n_ar_account_reports
 #: model:ir.actions.act_window,name:l10n_ar_account_reports.inflation_adjustment_index_action
@@ -909,6 +845,18 @@ msgid "Inflation Adjustment"
 msgstr "Ajuste por Inflación"
 
 #. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid "Inflation Adjustment %s"
+msgstr "Ajuste por inflación %s"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid "Inflation Adjustment Entry"
+msgstr "Asiento de ajuste por inflación"
+
+#. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_inflation_adjustment_index
 msgid "Inflation Adjustment Index"
 msgstr "Índice de Ajuste por Inflación"
@@ -919,9 +867,31 @@ msgid "Inflation adjustment"
 msgstr "Ajuste por Inflación"
 
 #. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_temp_investments
-msgid "Inversiones temporarias"
-msgstr ""
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid "Inflation adjustment %s (%s * %.2f%%)"
+msgstr "Ajuste por inflación %s (%s * %.2f%%)"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid "Inflation adjustment opening balances (%s * %.2f%%)"
+msgstr "Ajuste por inflación cuentas al inicio (%s * %.2f%%)"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_intangible_assets
+msgid "Intangible Assets"
+msgstr "Activos intangibles"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_inventory
+msgid "Inventories"
+msgstr "Bienes de cambio"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_inventory_noncurrent
+msgid "Inventories (Non-current)"
+msgstr "Bienes de cambio (No corriente)"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__journal_id
@@ -942,29 +912,24 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/sifere_report.py:0
 msgid ""
-"The perception %s (id: %d) of the document \"%s\" (id: %d) has no associated "
-"contact."
-msgstr ""
 "La percepción %s (id: %d) del comprobante \"%s\" (id: %d) no tiene contacto "
 "asociado."
+msgstr "La percepción %s (id: %d) del comprobante \\\"%s\\\" (id: %d) no tiene contacto asociado."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/caba_report.py:0
 msgid ""
-"The VAT responsibility \"%s\" is not supported for AGIP withholding/perception"
-msgstr ""
 "La responsabilidad frente a IVA \"%s\" no está soportada para ret/perc AGIP"
+msgstr "Debe setear el tipo de inscripción de IIBB del contacto \\\"%(partner_name)s\\\" (id: %(partner_id)s)"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
 msgid ""
-"The VAT responsibility \"%s\" is not supported for Santa Fe "
-"withholding/perception"
-msgstr ""
-"La responsabilidad frente a IVA \"%s\" no está soportada para ret/perc Santa "
-"Fe"
+"La responsabilidad frente a IVA \"%s\" no está soportada para ret/perc Santa"
+" Fe"
+msgstr "Debe establecer el tipo de inscripción de IIBB del partner \\\"%(partner_name)s\\\" (id: %(partner_id)s)"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__write_uid
@@ -979,9 +944,39 @@ msgid "Last Updated on"
 msgstr "Última Actualización en"
 
 #. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_goodwill
-msgid "Llave de negocio"
-msgstr ""
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_pasivo
+msgid "Liabilities"
+msgstr "Pasivo"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_loans_payable
+msgid "Loans Payable"
+msgstr "Préstamos"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_long_term_investments
+msgid "Long-term Investments in Subsidiaries"
+msgstr "Participaciones permanentes en sociedades"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_minority_interest
+msgid "Minority Interest in Controlled Companies"
+msgstr "Participación de terceros en sociedades controladas"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_equity
+msgid "Net Equity"
+msgstr "Patrimonio neto"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_net_inc
+msgid "Net Result for the Period"
+msgstr "Resultado Final del ejercicio"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_sales
+msgid "Net Sales of Goods and Services"
+msgstr "Ventas netas de bienes y servicios"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields.selection,name:l10n_ar_account_reports.selection__inflation_adjustment__open_cloure_entry__no
@@ -991,40 +986,32 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/l10n_ar_vat_ret_perc_sufrido.py:0
-msgid ""
-"There is no regime code in the configuration of tax \"%(tax_name)s\""
-msgstr ""
-"No hay código de régimen en la configuración del impuesto \"%(tax_name)s\""
+msgid "No hay código de régimen en la configuración del impuesto \"%(tax_name)s\""
+msgstr "El código de régimen tiene que tener 3 dígitos en la configuración del impuesto \\\"%(tax_name)s\\\""
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
 msgid ""
-"There is no jurisdiction set in the tax \"%(tax_name)s\" or it does not have "
-"a jurisdiction code."
-msgstr ""
 "No hay jurisdicción establecida en el impuesto \"%(tax_name)s\" o no tiene "
 "código de jurisdicción."
+msgstr "No hay jurisdicción establecida en el impuesto \\\"%(tax_name)s\\\" o no tiene código de jurisdicción."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
 msgid ""
-"There is no withholding regime (ARCA Code 'l10n_ar_code') configured for tax "
-"'%(tax_name)s' of partner '%(partner_name)s'"
-msgstr ""
 "No hay regimen de retencion (ARCA Code 'l10n_ar_code') configurado para el "
 "impuesto '%(tax_name)s' del partner '%(partner_name)s'"
+msgstr "No hay jurisdicción establecida en el impuesto \\\"%(tax_name)s\\\" o no tiene código de jurisdicción."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
 msgid ""
-"There is no perception regime (ARCA Code 'l10n_ar_code') configured for tax: "
-"'%(tax_name)s'."
-msgstr ""
 "No hay régimen de percepción (ARCA Code 'l10n_ar_code') configurado para el "
 "impuesto: '%(tax_name)s'."
+msgstr "No hay jurisdicción establecida en el impuesto \\\"%(tax_name)s\\\" o no tiene código de jurisdicción."
 
 #. module: l10n_ar_account_reports
 #: model_terms:ir.actions.act_window,help:l10n_ar_account_reports.inflation_adjustment_index_action
@@ -1035,85 +1022,99 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
 msgid ""
-"No journal entries to adjust were found for the selected period."
-msgstr ""
-"No hemos encontrado ningún asiento contable para ajustar asociado al periodo "
-"seleccionado."
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
-msgid ""
-"Could not find the original document for %s (id %s). Please verify that in "
-"the credit note \"%s\", the origin field contains the original invoice number"
-msgstr ""
-"No pudimos encontrar el comprobante original para %s (id %s). Verifique que "
-"en la nota de crédito \"%s\", el campo origen es el número de la factura "
-"original"
+"No hemos encontrado ningún asiento contable para ajustar asociado al periodo"
+" seleccionado."
+msgstr "Ajuste por inflación %s"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
 msgid ""
-"No inflation adjustment index was found for the previous date (%s). "
-"Please configure the corresponding index."
-msgstr ""
+"No inflation adjustment index was found for the previous date (%s). Please "
+"configure the corresponding index."
+msgstr "No se encontró un índice de ajuste por inflación para la fecha anterior (%s). Por favor, configure el índice correspondiente."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid "No journal entries to adjust were found for the selected period."
+msgstr "No hemos encontrado ningún asiento contable para ajustar asociado al periodo seleccionado."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
+msgid ""
+"No pudimos encontrar el comprobante original para %s (id %s). Verifique que "
+"en la nota de crédito \"%s\", el campo origen es el número de la factura "
+"original"
+msgstr "Debe setear el tipo de inscripción de IIBB del contacto \\\"%(partner_name)s\\\" (id: %(partner_id)s)"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid ""
 "No se encontró un índice de ajuste por inflación para la fecha anterior "
 "(%s). Por favor, configure el índice correspondiente."
+msgstr "Ajuste por inflación %s"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_long_term_liabilities
+msgid "Non-current Liabilities"
+msgstr "Deudas no corrientes"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_long_term_provisions
+msgid "Non-current Provisions"
+msgstr "Previsiones no corrientes"
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__open_move_id
+msgid "Opening Entry"
+msgstr "Asiento de apertura"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_other_liabilities
-msgid "Otras"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_other_long_term_investments
-msgid "Otras inversiones"
-msgstr ""
+msgid "Other"
+msgstr "Otras"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_other_current_assets
-msgid "Otros activos"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_other_noncurrent_assets
-msgid "Otros activos (No corriente)"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_other_rec
-msgid "Otros créditos"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_other_rec_noncurrent
-msgid "Otros créditos (No corriente)"
-msgstr ""
+msgid "Other Current Assets"
+msgstr "Otros activos"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_other_exp
-msgid "Otros gastos"
-msgstr ""
+msgid "Other Expenses"
+msgstr "Otros gastos"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_other_inc_exp
-msgid "Otros ingresos y egresos"
-msgstr ""
+msgid "Other Income and Expenses"
+msgstr "Otros ingresos y egresos"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_other_long_term_investments
+msgid "Other Long-term Investments"
+msgstr "Otras inversiones"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_other_noncurrent_assets
+msgid "Other Non-current Assets"
+msgstr "Otros activos (No corriente)"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_other_rec
+msgid "Other Receivables"
+msgstr "Otros créditos"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_other_rec_noncurrent
+msgid "Other Receivables (Non-current)"
+msgstr "Otros créditos (No corriente)"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_partial_reconcile
 msgid "Partial Reconcile"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_long_term_investments
-msgid "Participaciones permanentes en sociedades"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_minority_interest
-msgid "Participación de terceros en sociedades controladas"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -1122,19 +1123,14 @@ msgid "Partner Ledger Custom Handler"
 msgstr "Gestor personalizado del libro mayor del contacto"
 
 #. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_pasivo
-msgid "Pasivo"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_equity
-msgid "Patrimonio neto"
-msgstr ""
-
-#. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__payment_partner_id
 msgid "Payment Partner"
 msgstr "Contacto del Pago"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_payroll_liabilities
+msgid "Payroll Liabilities"
+msgstr "Remuneraciones y cargas sociales"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__deadline_periodicity
@@ -1148,19 +1144,21 @@ msgid "Please specify the start and end date range"
 msgstr "Por favor indique el rango de fecha de inicio y fin"
 
 #. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid "Por favor indique el rango de fecha de inicio y fin"
+msgstr "Ajuste por inflación %s"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid "Post-dated Checks"
+msgstr "Cheques a fecha"
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_provisions
-msgid "Previsiones"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_long_term_provisions
-msgid "Previsiones no corrientes"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_loans_payable
-msgid "Préstamos"
-msgstr ""
+msgid "Provisions"
+msgstr "Previsiones"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sifere_report_sifere_perceptions_line
@@ -1184,49 +1182,24 @@ msgid "Purchase Withholdings"
 msgstr "Retenciones de Compra"
 
 #. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_payroll_liabilities
-msgid "Remuneraciones y cargas sociales"
-msgstr ""
+#: model:account.report,settlement_title:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados
+msgid "Refunding Entry"
+msgstr "Asiento de refundición"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_equity_reserves
-msgid "Reservas"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_net_inc
-msgid "Resultado Final del ejercicio"
-msgstr ""
+msgid "Reserves"
+msgstr "Reservas"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_inc_before_tax
-msgid "Resultado antes del impuesto a las ganancias"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_ar_curr_year_earnings
-msgid "Resultado del Ejercicio"
-msgstr ""
+msgid "Result Before Income Tax"
+msgstr "Resultado antes del impuesto a las ganancias"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_equity_results
-msgid "Resultados"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_equity_results_detail
-msgid "Resultados Acumulados"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_fin_exp
-msgid "Resultados financieros y por tenencia (incluye RECPAM)"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_ar_prev_year_earnings
-msgid "Resultados sin asignar de años anteriores"
-msgstr ""
+msgid "Results"
+msgstr "Resultados"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_return_creation_wizard
@@ -1237,16 +1210,22 @@ msgstr "Asistente de creación de Declaración"
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid ""
-"Review and process third-party checks with deferred payment dates "
-"pending at period close."
-msgstr ""
+"Review and process third-party checks with deferred payment dates pending at"
+" period close."
+msgstr "Revisar y procesar los cheques de terceros con fecha de pago diferida pendientes al cierre del período."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid ""
 "Revisar y procesar los cheques de terceros con fecha de pago diferida "
 "pendientes al cierre del período."
+msgstr "Asiento de ajuste por inflación"
 
 #. module: l10n_ar_account_reports
 #: model:account.return.type,name:l10n_ar_account_reports.sicore_return_type
-msgid "SICORE Ganancias (Agente)"
-msgstr ""
+msgid "SICORE Income Tax (Agent)"
+msgstr "SICORE Ganancias (Agente)"
 
 #. module: l10n_ar_account_reports
 #: model:account.report,name:l10n_ar_account_reports.l10n_ar_sicore_report
@@ -1292,18 +1271,14 @@ msgid "Search Description"
 msgstr "Buscar Descripción"
 
 #. module: l10n_ar_account_reports
-#: model:ir.model.fields.selection,name:l10n_ar_account_reports.selection__inflation_adjustment__open_cloure_entry__yes
-msgid "Yes"
-msgstr "Sí"
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_com_exp
+msgid "Selling Expenses"
+msgstr "Gastos de comercialización"
 
 #. module: l10n_ar_account_reports
-#: model:ir.model.fields,help:l10n_ar_account_reports.field_inflation_adjustment__open_cloure_entry
-msgid ""
-"If you have made the closing/opening entries, please indicate them so they "
-"can be excluded from the calculation."
-msgstr ""
-"Si usted ha realizado los asientos de cierre/apertura debe indicarnos cuales "
-"son para poder excluir los mismos en el cálculo."
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_temp_investments
+msgid "Short-term Investments"
+msgstr "Inversiones temporarias"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1312,14 +1287,43 @@ msgid "Sicore Profits Withholdings TXT"
 msgstr "TXT SICORE Retenciones Ganancias"
 
 #. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/tucuman_report.py:0
+msgid ""
+"Some corrective documents do not contain information about which original document they are reversing:\n"
+" %s"
+msgstr "Algunos comprobantes rectificativos no contienen información de que comprobante original están revirtiendo:\\n %s"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/tucuman_report.py:0
+msgid ""
+"Some documents do not contain information about the street/city/province/postal code of the contact:\n"
+" %s"
+msgstr "Algunos comprobantes no contienen información acerca de la calle/ciudad/provincia/cod postal del contacto:\\n %s"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/tucuman_report.py:0
+msgid ""
+"Some documents have a 5-digit point of sale but must have a 4-digit one to generate the Tucuman withholdings and perceptions TXT file:\n"
+" %s"
+msgstr "Algunos comprobantes tienen punto de venta de 5 dígitos y deben tener de 4 dígitos para poder generar el archivo txt de retenciones y percepciones de Tucuman:\\n %s"
+
+#. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__start_index
 msgid "Start Index"
 msgstr "Índice Inicio"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_subtotal_noncurrent_assets
-msgid "Subtotal del activo no corriente"
-msgstr ""
+msgid "Subtotal Non-current Assets"
+msgstr "Subtotal del activo no corriente"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_tax_liabilities
+msgid "Tax Liabilities"
+msgstr "Cargas fiscales"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1335,18 +1339,37 @@ msgstr "Impuesto a pagar"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
+#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
+msgid ""
+"The VAT responsibility \"%s\" is not supported for AGIP "
+"withholding/perception"
+msgstr "La responsabilidad frente a IVA \\\"%s\\\" no está soportada para ret/perc AGIP"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
+msgid ""
+"The VAT responsibility \"%s\" is not supported for Santa Fe "
+"withholding/perception"
+msgstr "La responsabilidad frente a IVA \\\"%s\\\" no está soportada para ret/perc Santa Fe"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
+msgid ""
+"The contact \"%(partner_name)s\" (id %(partner_id)s) must have the "
+"identification type CUIT, CUIL, or CDI."
+msgstr "El contacto \\\"%(partner_name)s\\\" (id %(partner_id)s), debe tener el tipo de identificación CUIT, CUIL, CDI."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_move.py:0
 msgid ""
 "The following document(s) have an invalid document number format.\n"
 "ARCA requires the format XXXXX-XXXXXXXX (e.g.: 00001-00000001).\n"
 "Please correct them before generating the file:\n"
 "%s"
-msgstr ""
-"Los siguientes comprobantes tienen un número de documento con formato "
-"inválido.\n"
-"ARCA requiere el formato XXXXX-XXXXXXXX (ej: 00001-00000001).\n"
-"Por favor corrija los siguientes comprobantes antes de generar el archivo:\n"
-"%s"
+msgstr "Los siguientes comprobantes tienen un número de documento con formato inválido.\\nARCA requiere el formato XXXXX-XXXXXXXX (ej: 00001-00000001).\\nPor favor corrija los siguientes comprobantes antes de generar el archivo:\\n%s"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1354,9 +1377,29 @@ msgstr ""
 msgid ""
 "The identification type \"%(identification_type)s\" does not have ARCA code "
 "set."
-msgstr ""
-"El tipo de identificación «%(identification_type)s» no tiene asignado ningún "
-"código ARCA."
+msgstr "El tipo de identificación «%(identification_type)s» no tiene asignado ningún código ARCA."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/inflation_adjustment_index.py:0
+msgid "The index must start on the first day of each month"
+msgstr "El índice debe comenzar el primer día de cada mes"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid ""
+"The inflation adjustment entry cannot be generated because the adjustment "
+"index for period %(month)s %(year)s is missing"
+msgstr "El asiento de ajuste por inflación no puede ser generado ya que hace falta el indice de ajuste para el periodo %(month)s %(year)s"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
+msgid ""
+"The partner \"%(partner_name)s\" (id %(partner_id)s) does not have an "
+"identification number set"
+msgstr "El partner \\\"%(partner_name)s\\\" (id %(partner_id)s) no tiene número de identificación establecido"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1364,25 +1407,130 @@ msgstr ""
 msgid ""
 "The partner \"%(partner_name)s\" (id %(partner_id)s) does not have the vat "
 "set."
-msgstr ""
-"El socio «%(partner_name)s» (id %(partner_id)s) no tiene configurado el IVA."
+msgstr "El socio «%(partner_name)s» (id %(partner_id)s) no tiene configurado el IVA."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "The partner '%s' has no %s account configured for company '%s'."
-msgstr ""
-"El socio «%s» no tiene ninguna cuenta %s configurada para la empresa «%s»."
+msgstr "El socio «%s» no tiene ninguna cuenta %s configurada para la empresa «%s»."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sifere_report.py:0
+msgid ""
+"The perception %s (id: %d) of the document \"%s\" (id: %d) has no associated"
+" contact."
+msgstr "La percepción %s (id: %d) del comprobante \\\"%s\\\" (id: %d) no tiene contacto asociado."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/l10n_ar_vat_ret_perc_sufrido.py:0
+msgid ""
+"The regime code must have 3 digits in the configuration of tax "
+"\"%(tax_name)s\""
+msgstr "El código de régimen tiene que tener 3 dígitos en la configuración del impuesto \\\"%(tax_name)s\\\""
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid ""
-"The return type '%s' has no payment partner configured. Please set a Payment "
-"Partner on the return type."
-msgstr ""
-"El tipo de devolución «%s» no tiene ningún socio de pago configurado. "
-"Configure un socio de pago para el tipo de devolución."
+"The return type '%s' has no payment partner configured. Please set a Payment"
+" Partner on the return type."
+msgstr "El tipo de devolución «%s» no tiene ningún socio de pago configurado. Configure un socio de pago para el tipo de devolución."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
+msgid "The tax is not associated"
+msgstr "El impuesto no está asociado"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
+msgid ""
+"There is no jurisdiction set in the tax \"%(tax_name)s\" or it does not have"
+" a jurisdiction code."
+msgstr "No hay jurisdicción establecida en el impuesto \\\"%(tax_name)s\\\" o no tiene código de jurisdicción."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
+msgid ""
+"There is no perception regime (ARCA Code 'l10n_ar_code') configured for tax:"
+" '%(tax_name)s'."
+msgstr "No hay régimen de percepción (ARCA Code 'l10n_ar_code') configurado para el impuesto: '%(tax_name)s'."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/l10n_ar_vat_ret_perc_sufrido.py:0
+msgid "There is no regime code in the configuration of tax \"%(tax_name)s\""
+msgstr "No hay código de régimen en la configuración del impuesto \\\"%(tax_name)s\\\""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
+msgid ""
+"There is no withholding regime (ARCA Code 'l10n_ar_code') configured for tax"
+" '%(tax_name)s' of partner '%(partner_name)s'"
+msgstr "No hay regimen de retencion (ARCA Code 'l10n_ar_code') configurado para el impuesto '%(tax_name)s' del partner '%(partner_name)s'"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
+msgid "Tipo de comprobante no reconocido"
+msgstr "No hay jurisdicción establecida en el impuesto \\\"%(tax_name)s\\\" o no tiene código de jurisdicción."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
+msgid "Tipo de impuesto %s equivocado"
+msgstr "Debe establecer el tipo de inscripción de IIBB del partner \\\"%(partner_name)s\\\" (id: %(partner_id)s)"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_assets
+msgid "Total Assets"
+msgstr "Total del activo"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_current_assets
+msgid "Total Current Assets"
+msgstr "Total del activo corriente"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_current_liabilities
+msgid "Total Current Liabilities"
+msgstr "Total pasivo corriente"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_debts
+msgid "Total Debts"
+msgstr "Total deudas"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_liabilities_combined
+msgid "Total Liabilities"
+msgstr "Total del pasivo"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_liabilities_equity
+msgid "Total Liabilities, Minority Interest and Net Equity"
+msgstr "Total del pasivo, participación de terceros y patrimonio neto"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_noncurrent_assets
+msgid "Total Non-current Assets"
+msgstr "Total del activo no corriente"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_noncurrent_liabilities
+msgid "Total Non-current Liabilities"
+msgstr "Total pasivo no corriente"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_ar_prev_year_earnings
+msgid "Unallocated Earnings from Previous Years"
+msgstr "Resultados sin asignar de años anteriores"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1391,70 +1539,52 @@ msgid "Unrecognized document type"
 msgstr "Tipo de comprobante no reconocido"
 
 #. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment_index__value
+msgid "Value"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
 msgid "Wrong tax type %s"
 msgstr "Tipo de impuesto %s equivocado"
 
 #. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_assets
-msgid "Total del activo"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_current_assets
-msgid "Total del activo corriente"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_noncurrent_assets
-msgid "Total del activo no corriente"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_liabilities_combined
-msgid "Total del pasivo"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_liabilities_equity
-msgid "Total del pasivo, participación de terceros y patrimonio neto"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_debts
-msgid "Total deudas"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_current_liabilities
-msgid "Total pasivo corriente"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_noncurrent_liabilities
-msgid "Total pasivo no corriente"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment_index__value
-msgid "Value"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_sales
-msgid "Ventas netas de bienes y servicios"
-msgstr ""
-
-#. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/inflation_adjustment_index.py:0
 msgid ""
-"An index already exists for period %s %s. You can only have one inflation "
-"index per month"
-msgstr ""
 "Ya existe un índice para el periodo %s %s. Solo puedes tener un índice de "
 "inflación por mes"
+msgstr "El índice debe comenzar el primer día de cada mes"
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields.selection,name:l10n_ar_account_reports.selection__inflation_adjustment__open_cloure_entry__yes
+msgid "Yes"
+msgstr "Sí"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
+msgid ""
+"You must set the \"article/section\" information in the configuration of tax"
+" \"%(tax_name)s\" in the \"API\" tab."
+msgstr "Debe establecer la información de \\\"artículo/inciso\\\" en la configuración del impuesto \\\"%(tax_name)s\\\" en la solapa \\\"API\\\"."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
+msgid ""
+"You must set the IIBB registration type for contact \"%(partner_name)s\" "
+"(id: %(partner_id)s)"
+msgstr "Debe setear el tipo de inscripción de IIBB del contacto \\\"%(partner_name)s\\\" (id: %(partner_id)s)"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
+msgid ""
+"You must set the IIBB registration type for partner \"%(partner_name)s\" "
+"(id: %(partner_id)s)"
+msgstr "Debe establecer el tipo de inscripción de IIBB del partner \\\"%(partner_name)s\\\" (id: %(partner_id)s)"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1467,15 +1597,3 @@ msgstr "pagable"
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "receivable"
 msgstr "por cobrar"
-
-#, fuzzy
-#~ msgid "AR ESP: Patrimonio Neto"
-#~ msgstr "AR ESP: Patrimonio Neto"
-
-#, fuzzy
-#~| msgid "Partner Ledger Custom Handler"
-#~ msgid "Argentinian Tax Report Custom Handler"
-#~ msgstr "Gestor personalizado del libro mayor del contacto"
-
-#~ msgid "or"
-#~ msgstr "o"

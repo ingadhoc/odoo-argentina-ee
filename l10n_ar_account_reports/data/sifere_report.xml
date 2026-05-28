@@ -13,7 +13,6 @@
         <field name="column_ids">
             <record id="l10n_ar_sifere_report_column_total" model="account.report.column">
                 <field name="name">Balance</field>
-                <field name="name@es_419">Balance</field>
                 <field name="expression_label">balance</field>
             </record>
         </field>
@@ -28,7 +27,7 @@
                 <field name="domain_formula">sum([("tax_line_id.l10n_ar_state_id", "!=", False), ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"), ("tax_line_id.type_tax_use", "=", "purchase"), ("l10n_latam_document_type_id.code", "not in", ["66", "67"])])</field>
             </record>
             <record id="l10n_ar_sifere_report_sifere_despachos_line" model="account.report.line">
-                <field name="name">Despachos de importación</field>
+                <field name="name">Import Dispatches</field>
                 <field name="domain_formula">sum([("tax_line_id.l10n_ar_state_id", "!=", False), ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"), ("tax_line_id.type_tax_use", "=", "purchase"), ("l10n_latam_document_type_id.code", "in", ["66", "67"])])</field>
             </record>
         </field>

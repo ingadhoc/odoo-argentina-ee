@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="account_financial_report_l10n_ar_estado_patrimonial" model="account.report">
-        <field name="name">Estado Patrimonial</field>
+        <field name="name">Balance Sheet</field>
         <field name="root_report_id" ref="account_reports.balance_sheet"/>
         <field name="filter_analytic_groupby" eval="True"/>
         <field name="filter_unfold_all" eval="True"/>
@@ -17,12 +17,12 @@
         <field name="line_ids">
             <!-- Activo -->
             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_activo" model="account.report.line">
-                <field name="name">Activo</field>
+                <field name="name">Assets</field>
                 <field name="hierarchy_level">0</field>
                 <field name="children_ids">
                     <!-- Caja y Bancos -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_bank_cash" model="account.report.line">
-                        <field name="name">Caja y Bancos</field>
+                        <field name="name">Cash and Banks</field>
                         <field name="code">bank_cash</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -39,7 +39,7 @@
 
                     <!-- Inversiones temporarias -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_temp_investments" model="account.report.line">
-                        <field name="name">Inversiones temporarias</field>
+                        <field name="name">Short-term Investments</field>
                         <field name="code">temp_investments</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -56,7 +56,7 @@
 
                     <!-- Créditos por ventas -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_sales_rec" model="account.report.line">
-                        <field name="name">Créditos por ventas</field>
+                        <field name="name">Accounts Receivable</field>
                         <field name="code">sales_rec</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -73,7 +73,7 @@
 
                     <!-- Otros créditos -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_other_rec" model="account.report.line">
-                        <field name="name">Otros créditos</field>
+                        <field name="name">Other Receivables</field>
                         <field name="code">other_rec</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -90,7 +90,7 @@
 
                     <!-- Bienes de cambio -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_inventory" model="account.report.line">
-                        <field name="name">Bienes de cambio</field>
+                        <field name="name">Inventories</field>
                         <field name="code">inventory</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -107,7 +107,7 @@
 
                     <!-- Otros activos -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_other_current_assets" model="account.report.line">
-                        <field name="name">Otros activos</field>
+                        <field name="name">Other Current Assets</field>
                         <field name="code">other_current_assets</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -124,7 +124,7 @@
 
                     <!-- Total del activo corriente -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_total_current_assets" model="account.report.line">
-                        <field name="name">Total del activo corriente</field>
+                        <field name="name">Total Current Assets</field>
                         <field name="code">total_current_assets</field>
                         <field name="hierarchy_level">1</field>
                         <field name="expression_ids">
@@ -138,7 +138,7 @@
 
                     <!-- Créditos por ventas (No corriente) -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_sales_rec_noncurrent" model="account.report.line">
-                        <field name="name">Créditos por ventas (No corriente)</field>
+                        <field name="name">Accounts Receivable (Non-current)</field>
                         <field name="code">sales_rec_noncurrent</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -155,7 +155,7 @@
 
                     <!-- Otros créditos (No corriente) -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_other_rec_noncurrent" model="account.report.line">
-                        <field name="name">Otros créditos (No corriente)</field>
+                        <field name="name">Other Receivables (Non-current)</field>
                         <field name="code">other_rec_noncurrent</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -172,7 +172,7 @@
 
                     <!-- Bienes de cambio (No corriente) -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_inventory_noncurrent" model="account.report.line">
-                        <field name="name">Bienes de cambio (No corriente)</field>
+                        <field name="name">Inventories (Non-current)</field>
                         <field name="code">inventory_noncurrent</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -189,7 +189,7 @@
 
                     <!-- Bienes de uso -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_fixed_assets" model="account.report.line">
-                        <field name="name">Bienes de uso</field>
+                        <field name="name">Fixed Assets</field>
                         <field name="code">fixed_assets</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -206,7 +206,7 @@
 
                     <!-- Participaciones permanentes en sociedades -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_long_term_investments" model="account.report.line">
-                        <field name="name">Participaciones permanentes en sociedades</field>
+                        <field name="name">Long-term Investments in Subsidiaries</field>
                         <field name="code">long_term_investments</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -223,7 +223,7 @@
 
                     <!-- Otras inversiones -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_other_long_term_investments" model="account.report.line">
-                        <field name="name">Otras inversiones</field>
+                        <field name="name">Other Long-term Investments</field>
                         <field name="code">other_long_term_investments</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -240,7 +240,7 @@
 
                     <!-- Activos intangibles -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_intangible_assets" model="account.report.line">
-                        <field name="name">Activos intangibles</field>
+                        <field name="name">Intangible Assets</field>
                         <field name="code">intangible_assets</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -257,7 +257,7 @@
 
                     <!-- Otros activos (No corriente) -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_other_noncurrent_assets" model="account.report.line">
-                        <field name="name">Otros activos (No corriente)</field>
+                        <field name="name">Other Non-current Assets</field>
                         <field name="code">other_noncurrent_assets</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -274,7 +274,7 @@
 
                     <!-- Subtotal del activo no corriente -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_subtotal_noncurrent_assets" model="account.report.line">
-                        <field name="name">Subtotal del activo no corriente</field>
+                        <field name="name">Subtotal Non-current Assets</field>
                         <field name="code">subtotal_noncurrent_assets</field>
                         <field name="hierarchy_level">1</field>
                         <field name="expression_ids">
@@ -288,7 +288,7 @@
 
                     <!-- Llave de negocio -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_goodwill" model="account.report.line">
-                        <field name="name">Llave de negocio</field>
+                        <field name="name">Goodwill</field>
                         <field name="code">goodwill</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -305,7 +305,7 @@
 
                     <!-- Total del activo no corriente -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_total_noncurrent_assets" model="account.report.line">
-                        <field name="name">Total del activo no corriente</field>
+                        <field name="name">Total Non-current Assets</field>
                         <field name="code">total_noncurrent_assets</field>
                         <field name="hierarchy_level">1</field>
                         <field name="expression_ids">
@@ -319,7 +319,7 @@
 
                     <!-- Total del activo -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_total_assets" model="account.report.line">
-                        <field name="name">Total del activo</field>
+                        <field name="name">Total Assets</field>
                         <field name="code">total_assets</field>
                         <field name="hierarchy_level">0</field>
                         <field name="expression_ids">
@@ -335,12 +335,12 @@
 
             <!-- Pasivo -->
             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_pasivo" model="account.report.line">
-                <field name="name">Pasivo</field>
+                <field name="name">Liabilities</field>
                 <field name="hierarchy_level">0</field>
                 <field name="children_ids">
                     <!-- Deudas Comerciales -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_accounts_payable" model="account.report.line">
-                        <field name="name">Deudas Comerciales</field>
+                        <field name="name">Accounts Payable</field>
                         <field name="code">accounts_payable</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -357,7 +357,7 @@
 
                     <!-- Préstamos -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_loans_payable" model="account.report.line">
-                        <field name="name">Préstamos</field>
+                        <field name="name">Loans Payable</field>
                         <field name="code">loans_payable</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -374,7 +374,7 @@
 
                     <!-- Remuneraciones y cargas sociales -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_payroll_liabilities" model="account.report.line">
-                        <field name="name">Remuneraciones y cargas sociales</field>
+                        <field name="name">Payroll Liabilities</field>
                         <field name="code">payroll_liabilities</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -391,7 +391,7 @@
 
                     <!-- Cargas fiscales -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_tax_liabilities" model="account.report.line">
-                        <field name="name">Cargas fiscales</field>
+                        <field name="name">Tax Liabilities</field>
                         <field name="code">tax_liabilities</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -408,7 +408,7 @@
 
                     <!-- Anticipos de clientes -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_advances_from_customers" model="account.report.line">
-                        <field name="name">Anticipos de clientes</field>
+                        <field name="name">Customer Advances</field>
                         <field name="code">advances_from_customers</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -425,7 +425,7 @@
 
                     <!-- Dividendos a pagar -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_dividends_payable" model="account.report.line">
-                        <field name="name">Dividendos a pagar</field>
+                        <field name="name">Dividends Payable</field>
                         <field name="code">dividends_payable</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -442,7 +442,7 @@
 
                     <!-- Otras -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_other_liabilities" model="account.report.line">
-                        <field name="name">Otras</field>
+                        <field name="name">Other</field>
                         <field name="code">other_liabilities</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -459,7 +459,7 @@
 
                     <!-- Total deudas -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_total_debts" model="account.report.line">
-                        <field name="name">Total deudas</field>
+                        <field name="name">Total Debts</field>
                         <field name="code">total_debts</field>
                         <field name="hierarchy_level">1</field>
                         <field name="expression_ids">
@@ -473,7 +473,7 @@
 
                     <!-- Previsiones -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_provisions" model="account.report.line">
-                        <field name="name">Previsiones</field>
+                        <field name="name">Provisions</field>
                         <field name="code">provisions</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -490,7 +490,7 @@
 
                     <!-- Total pasivo corriente -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_total_current_liabilities" model="account.report.line">
-                        <field name="name">Total pasivo corriente</field>
+                        <field name="name">Total Current Liabilities</field>
                         <field name="code">total_current_liabilities</field>
                         <field name="hierarchy_level">1</field>
                         <field name="expression_ids">
@@ -504,7 +504,7 @@
 
                     <!-- Deudas no corrientes -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_long_term_liabilities" model="account.report.line">
-                        <field name="name">Deudas no corrientes</field>
+                        <field name="name">Non-current Liabilities</field>
                         <field name="code">long_term_liabilities</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -521,7 +521,7 @@
 
                     <!-- Previsiones no corrientes -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_long_term_provisions" model="account.report.line">
-                        <field name="name">Previsiones no corrientes</field>
+                        <field name="name">Non-current Provisions</field>
                         <field name="code">long_term_provisions</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -538,7 +538,7 @@
 
                     <!-- Total pasivo no corriente -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_total_noncurrent_liabilities" model="account.report.line">
-                        <field name="name">Total pasivo no corriente</field>
+                        <field name="name">Total Non-current Liabilities</field>
                         <field name="code">total_noncurrent_liabilities</field>
                         <field name="hierarchy_level">1</field>
                         <field name="expression_ids">
@@ -552,7 +552,7 @@
 
                     <!-- Total del pasivo -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_total_liabilities_combined" model="account.report.line">
-                        <field name="name">Total del pasivo</field>
+                        <field name="name">Total Liabilities</field>
                         <field name="code">total_liabilities_combined</field>
                         <field name="hierarchy_level">0</field>
                         <field name="expression_ids">
@@ -568,7 +568,7 @@
 
             <!-- Participación de terceros en sociedades controladas -->
             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_minority_interest" model="account.report.line">
-                <field name="name">Participación de terceros en sociedades controladas</field>
+                <field name="name">Minority Interest in Controlled Companies</field>
                 <field name="code">minority_interest</field>
                 <field name="hierarchy_level">0</field>
                 <field name="user_groupby">account_id</field>
@@ -585,7 +585,7 @@
 
             <!-- Patrimonio neto -->
             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_equity" model="account.report.line">
-                <field name="name">Patrimonio neto</field>
+                <field name="name">Net Equity</field>
                 <field name="code">equity</field>
                 <field name="hierarchy_level">0</field>
                 <field name="expression_ids">
@@ -620,7 +620,7 @@
                     </record>
                     <!-- Reservas -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_equity_reserves" model="account.report.line">
-                        <field name="name">Reservas</field>
+                        <field name="name">Reserves</field>
                         <field name="code">equity_reserves</field>
                         <field name="hierarchy_level">3</field>
                         <field name="user_groupby">account_id</field>
@@ -636,7 +636,7 @@
                     </record>
                     <!-- Resultados -->
                     <record id="account_financial_report_l10n_ar_estado_patrimonial_line_equity_results" model="account.report.line">
-                        <field name="name">Resultados</field>
+                        <field name="name">Results</field>
                         <field name="code">equity_results</field>
                         <field name="hierarchy_level">2</field>
                         <field name="expression_ids">
@@ -649,7 +649,7 @@
                         <field name="children_ids">
                             <!-- Resultado del Ejercicio -->
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_ar_curr_year_earnings" model="account.report.line">
-                                <field name="name">Resultado del Ejercicio</field>
+                                <field name="name">Current Year Earnings</field>
                                 <field name="code">ar_curr_year_earnings</field>
                                 <field name="hierarchy_level">3</field>
                                 <field name="action_id" ref="action_account_report_l10n_ar_estado_resultados"/>
@@ -677,7 +677,7 @@
                             </record>
                             <!-- Resultados sin asignar de años anteriores -->
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_ar_prev_year_earnings" model="account.report.line">
-                                <field name="name">Resultados sin asignar de años anteriores</field>
+                                <field name="name">Unallocated Earnings from Previous Years</field>
                                 <field name="code">ar_prev_year_earnings</field>
                                 <field name="hierarchy_level">3</field>
                                 <field name="expression_ids">
@@ -704,7 +704,7 @@
                             </record>
                             <!-- Resultados Acumulados -->
                             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_equity_results_detail" model="account.report.line">
-                                <field name="name">Resultados Acumulados</field>
+                                <field name="name">Accumulated Earnings</field>
                                 <field name="code">equity_results_detail</field>
                                 <field name="hierarchy_level">3</field>
                                 <field name="user_groupby">account_id</field>
@@ -725,7 +725,7 @@
 
             <!-- Total del pasivo, participación de terceros y patrimonio neto -->
             <record id="account_financial_report_l10n_ar_estado_patrimonial_line_total_liabilities_equity" model="account.report.line">
-                <field name="name">Total del pasivo, participación de terceros y patrimonio neto</field>
+                <field name="name">Total Liabilities, Minority Interest and Net Equity</field>
                 <field name="code">total_liabilities_equity</field>
                 <field name="hierarchy_level">0</field>
                 <field name="expression_ids">

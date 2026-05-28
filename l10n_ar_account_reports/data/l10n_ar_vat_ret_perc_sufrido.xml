@@ -13,13 +13,12 @@
         <field name="column_ids">
             <record id="l10n_ar_iva_report_column_total" model="account.report.column">
                 <field name="name">Balance</field>
-                <field name="name@es_419">Balance</field>
                 <field name="expression_label">balance</field>
             </record>
         </field>
         <field name="line_ids">
             <record id="l10n_ar_iva_report_debito_fiscal" model="account.report.line">
-                <field name="name">(+) Débito Fiscal (Ventas)</field>
+                <field name="name">(+) Fiscal Debit (Sales)</field>
                 <field name="code">L10N_AR_IVA_DEBITO</field>
                 <field name="expression_ids">
                     <record id="l10n_ar_iva_report_debito_fiscal_balance" model="account.report.expression">
@@ -31,7 +30,7 @@
                 </field>
             </record>
             <record id="l10n_ar_iva_report_credito_fiscal" model="account.report.line">
-                <field name="name">(-) Crédito Fiscal (Compras)</field>
+                <field name="name">(-) Input VAT (Purchases)</field>
                 <field name="code">L10N_AR_IVA_CREDITO</field>
                 <field name="expression_ids">
                     <record id="l10n_ar_iva_report_credito_fiscal_balance" model="account.report.expression">
@@ -43,7 +42,7 @@
                 </field>
             </record>
             <record id="l10n_ar_iva_report_saldo_tecnico" model="account.report.line">
-                <field name="name">(=) Saldo Técnico (1er Párrafo)</field>
+                <field name="name">(=) Technical Balance (1st Paragraph)</field>
                 <field name="code">L10N_AR_IVA_SALDO_TECNICO</field>
                 <field name="expression_ids">
                     <record id="l10n_ar_iva_report_saldo_tecnico_balance" model="account.report.expression">
@@ -54,7 +53,7 @@
                 </field>
             </record>
             <record id="l10n_ar_iva_report_iva_withholdings_line" model="account.report.line">
-                <field name="name">(-) Retenciones Sufridas</field>
+                <field name="name">(-) Suffered Withholdings</field>
                 <field name="code">L10N_AR_IVA_RETENCIONES</field>
                 <field name="expression_ids">
                     <record id="l10n_ar_iva_report_iva_withholdings_line_balance" model="account.report.expression">
@@ -66,7 +65,7 @@
                 </field>
             </record>
             <record id="l10n_ar_iva_report_iva_perceptions_line" model="account.report.line">
-                <field name="name">(-) Percepciones Sufridas</field>
+                <field name="name">(-) Suffered Perceptions</field>
                 <field name="code">L10N_AR_IVA_PERCEPCIONES</field>
                 <field name="expression_ids">
                     <record id="l10n_ar_iva_report_iva_perceptions_line_balance" model="account.report.expression">
