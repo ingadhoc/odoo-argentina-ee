@@ -238,7 +238,7 @@ class AccountBalanceImport(models.TransientModel):
             # Try XLS format
             workbook = xlrd.open_workbook(file_contents=decoded)
             sheet = workbook.sheet_by_index(0)
-            self._validate_column_count(sheet, fields)
+            self._validate_column_count(sheet.ncols, fields)
             for row_no in range(1, sheet.nrows):
                 values = [sheet.row(row_no)[i].value for i in range(len(fields))]
                 sheet_rows.append((row_no + 1, values))
@@ -246,6 +246,7 @@ class AccountBalanceImport(models.TransientModel):
             # Fallback to XLSX format
             workbook = load_workbook(io.BytesIO(decoded), data_only=True)
             sheet = workbook.active
+            self._validate_column_count(sheet.max_column, fields)
             for row_no, row in enumerate(sheet.iter_rows(min_row=2, values_only=True), start=2):
                 values = list(row[: len(fields)])
                 sheet_rows.append((row_no, values))
@@ -459,15 +460,13 @@ class AccountBalanceImport(models.TransientModel):
             domain=[("id", "in", generated_moves.ids)],
         )
 
-    def _validate_column_count(self, sheet, expected_fields):
+    def _validate_column_count(self, num_columns, expected_fields):
         """
-        Validates that the number of columns in the XLS file matches the number of expected fields.
-        :param sheet: sheet of the workbook (xlrd.sheet)
+        Validates that the number of columns in the file matches the number of expected fields.
+        :param num_columns: number of columns in the sheet
         :param expected_fields: list of expected field names
-        :param header_row: header row number (default 0)
         :raises ValidationError: if the number of columns does not match
         """
-        num_columns = sheet.ncols
         expected_columns = len(expected_fields)
 
         if num_columns != expected_columns:
