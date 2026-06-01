@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-28 11:55+0000\n"
-"PO-Revision-Date: 2026-05-28 11:55+0000\n"
+"POT-Creation-Date: 2026-06-01 16:41+0000\n"
+"PO-Revision-Date: 2026-06-01 16:41+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -287,54 +287,6 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #. odoo-python
-#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
-msgid "Ajuste por inflación %s"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
-msgid "Ajuste por inflación %s (%s * %.2f%%)"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
-msgid "Ajuste por inflación Global [%s] / [%s]"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
-msgid "Ajuste por inflación cuentas al inicio (%s * %.2f%%)"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/tucuman_report.py:0
-msgid ""
-"Algunos comprobantes no contienen información acerca de la calle/ciudad/provincia/cod postal del contacto:\n"
-" %s"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/tucuman_report.py:0
-msgid ""
-"Algunos comprobantes rectificativos no contienen información de que comprobante original están revirtiendo:\n"
-" %s"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/tucuman_report.py:0
-msgid ""
-"Algunos comprobantes tienen punto de venta de 5 dígitos y deben tener de 4 dígitos para poder generar el archivo txt de retenciones y percepciones de Tucuman:\n"
-" %s"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
 #: code:addons/l10n_ar_account_reports/models/inflation_adjustment_index.py:0
 msgid ""
 "An index already exists for period %s %s. You can only have one inflation "
@@ -392,8 +344,6 @@ msgid "Argentinian Tucumán Report Custom Handler"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/account_return.py:0
 #: model:ir.actions.act_window,name:l10n_ar_account_reports.inflation_adjustment_action
 #: model:ir.ui.menu,name:l10n_ar_account_reports.inflation_adjustment_menu
 msgid "Asiento de ajuste por inflación"
@@ -463,12 +413,6 @@ msgid "Cargas fiscales"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/account_return.py:0
-msgid "Cheques a fecha"
-msgstr ""
-
-#. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__closure_move_id
 msgid "Closing Entry"
 msgstr ""
@@ -532,30 +476,6 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__date_to
 msgid "Date To"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
-msgid ""
-"Debe establecer el tipo de inscripción de IIBB del partner "
-"\"%(partner_name)s\" (id: %(partner_id)s)"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
-msgid ""
-"Debe establecer la información de \"artículo/inciso\" en la configuración "
-"del impuesto \"%(tax_name)s\"en la solapa \"API\"."
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
-msgid ""
-"Debe setear el tipo de inscripción de IIBB del contacto \"%(partner_name)s\""
-" (id: %(partner_id)s)"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -623,57 +543,6 @@ msgid "Edit tax"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
-#: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
-msgid "Editar contacto"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
-msgid ""
-"El asiento de ajuste por inflación no puede ser generado ya que hace falta "
-"el indice de ajuste para el periodo %(month)s %(year)s"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
-msgid ""
-"El contacto \"%(partner_name)s\" (id %(partner_id)s), debe tener el tipo de "
-"identificación CUIT, CUIL, CDI."
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/l10n_ar_vat_ret_perc_sufrido.py:0
-msgid ""
-"El código de régimen tiene que tener 3 dígitos en la configuración del "
-"impuesto \"%(tax_name)s\""
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
-msgid "El impuesto no está asociado"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
-msgid ""
-"El partner \"%(partner_name)s\" (id %(partner_id)s) no tiene número de "
-"identificación establecido"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/inflation_adjustment_index.py:0
-msgid "El índice debe comenzar el primer día de cada mes"
-msgstr ""
-
-#. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__end_index
 msgid "End Index"
 msgstr ""
@@ -723,12 +592,6 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:account.report,settlement_title:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial
 msgid "Generar asiento de cierre"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/account_return.py:0
-msgid "Generar el asiento de ajuste por inflación para el período fiscal."
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -903,29 +766,6 @@ msgid "Journal Item"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/sifere_report.py:0
-msgid ""
-"La percepción %s (id: %d) del comprobante \"%s\" (id: %d) no tiene contacto "
-"asociado."
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
-msgid ""
-"La responsabilidad frente a IVA \"%s\" no está soportada para ret/perc AGIP"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
-msgid ""
-"La responsabilidad frente a IVA \"%s\" no está soportada para ret/perc Santa"
-" Fe"
-msgstr ""
-
-#. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__write_uid
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment_index__write_uid
 msgid "Last Updated by"
@@ -948,46 +788,8 @@ msgid "No"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/l10n_ar_vat_ret_perc_sufrido.py:0
-msgid "No hay código de régimen en la configuración del impuesto \"%(tax_name)s\""
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
-msgid ""
-"No hay jurisdicción establecida en el impuesto \"%(tax_name)s\" o no tiene "
-"código de jurisdicción."
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
-msgid ""
-"No hay regimen de retencion (ARCA Code 'l10n_ar_code') configurado para el "
-"impuesto '%(tax_name)s' del partner '%(partner_name)s'"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
-msgid ""
-"No hay régimen de percepción (ARCA Code 'l10n_ar_code') configurado para el "
-"impuesto: '%(tax_name)s'."
-msgstr ""
-
-#. module: l10n_ar_account_reports
 #: model_terms:ir.actions.act_window,help:l10n_ar_account_reports.inflation_adjustment_index_action
 msgid "No hay índices de ajuste por inflación aún. Por favor cree uno."
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
-msgid ""
-"No hemos encontrado ningún asiento contable para ajustar asociado al periodo"
-" seleccionado."
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -1002,23 +804,6 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
 msgid "No journal entries to adjust were found for the selected period."
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/caba_report.py:0
-msgid ""
-"No pudimos encontrar el comprobante original para %s (id %s). Verifique que "
-"en la nota de crédito \"%s\", el campo origen es el número de la factura "
-"original"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
-msgid ""
-"No se encontró un índice de ajuste por inflación para la fecha anterior "
-"(%s). Por favor, configure el índice correspondiente."
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -1110,12 +895,6 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
 msgid "Please specify the start and end date range"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
-msgid "Por favor indique el rango de fecha de inicio y fin"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -1216,14 +995,6 @@ msgstr ""
 msgid ""
 "Review and process third-party checks with deferred payment dates pending at"
 " period close."
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/account_return.py:0
-msgid ""
-"Revisar y procesar los cheques de terceros con fecha de pago diferida "
-"pendientes al cierre del período."
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -1465,18 +1236,6 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
-msgid "Tipo de comprobante no reconocido"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
-msgid "Tipo de impuesto %s equivocado"
-msgstr ""
-
-#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_assets
 msgid "Total del activo"
 msgstr ""
@@ -1536,14 +1295,6 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
 msgid "Wrong tax type %s"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/inflation_adjustment_index.py:0
-msgid ""
-"Ya existe un índice para el periodo %s %s. Solo puedes tener un índice de "
-"inflación por mes"
 msgstr ""
 
 #. module: l10n_ar_account_reports
