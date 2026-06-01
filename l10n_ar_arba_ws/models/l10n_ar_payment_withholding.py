@@ -35,5 +35,5 @@ class L10nArPaymentWithholding(models.Model):
 
     def send_to_arba(self):
         """Send the withholding to ARBA webservice and store the certificate number"""
-        for withholding in self.filtered(lambda x: not x.l10n_ar_cert_number):
+        for withholding in self.filtered(lambda x: not x.l10n_ar_cert_number and x.amount > 0):
             withholding.l10n_ar_dj_arba_id._create_withholding(withholding)
