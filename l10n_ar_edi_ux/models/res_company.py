@@ -34,9 +34,9 @@ class ResCompany(models.Model):
         my_vat = self.partner_id.l10n_ar_vat
         if not my_vat:
             return self.env["res.company"]
-        ancestor = self.parent_id
+        ancestor = self.parent_id.sudo()
         while ancestor:
-            if ancestor.partner_id.l10n_ar_vat == my_vat and ancestor.sudo().l10n_ar_afip_ws_crt_id:
+            if ancestor.partner_id.l10n_ar_vat == my_vat and ancestor.l10n_ar_afip_ws_crt_id:
                 return ancestor
             ancestor = ancestor.parent_id
         return self.env["res.company"]
