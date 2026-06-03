@@ -1,6 +1,6 @@
 {
     "name": "Account Balance",
-    "version": "19.0.1.7.0",
+    "version": "19.0.1.8.0",
     "category": "Planner",
     "sequence": 14,
     "author": "ADHOC SA",
