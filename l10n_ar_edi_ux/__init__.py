@@ -4,6 +4,7 @@
 ##############################################################################
 from . import models
 from . import wizards
+from . import demo
 from .monkey_patches import monkey_patches
 
 import logging
