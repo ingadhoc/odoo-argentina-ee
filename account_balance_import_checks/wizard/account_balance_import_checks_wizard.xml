@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="account_balance_import_wizard">
+        <field name="name">account_balance_import_wizard</field>
+        <field name="model">account.balance_import_wizard</field>
+        <field name="inherit_id" ref="account_balance_import.account_balance_import_wizard"/>
+        <field name="arch" type="xml">
+
+            <field name="accounting_date" position="after">
+                <field name="accounting_date" invisible="mode != 'check_balance'"/>
+            </field>
+
+            <field name="mode" position="after">
+                <field name="check_type" required="mode == 'check_balance'" invisible="mode != 'check_balance'"/>
+            </field>
+
+            <!-- Agregar sección de cheques después de la sección de partners -->
+            <div name='files'>
+                <a class="btn btn-link"
+                    invisible="check_type != 'issue_check' or mode != 'check_balance'"
+                    href="/account_balance_import_checks/static/xls/own_check_balance.xls"
+                    role="button">
+                    <span class="fa fa-download" title="download"></span>
+                    Descargar Plantilla de Importación de Cheques Propios
+                </a>
+                <a class="btn btn-link"
+                    invisible="check_type != 'third_check' or mode != 'check_balance'"
+                    href="/account_balance_import_checks/static/xls/third_check_balance.xls"
+                    role="button">
+                    <span class="fa fa-download" title="download"></span>
+                    Descargar Plantilla de Importación de Cheques de Terceros
+                </a>
+            </div>
+
+        </field>
+    </record>
+
+</odoo>

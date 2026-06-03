@@ -1,0 +1,104 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* account_balance_import_checks
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-02 19:13+0000\n"
+"PO-Revision-Date: 2026-04-13 22:41+0000\n"
+"Last-Translator: carla spiaggi <sca@adhoc.inc>\n"
+"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
+"enterprise-extensions-19-0/enterprise-extensions-19-0-"
+"account_balance_import_checks/es/>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.10.4\n"
+
+#. module: account_balance_import_checks
+#: model_terms:ir.ui.view,arch_db:account_balance_import_checks.account_balance_import_wizard
+msgid ""
+"<span class=\"fa fa-download\" title=\"download\"/>\n"
+"                    Descargar Plantilla de Importación de Cheques Propios"
+msgstr ""
+"<span class=\"fa fa-download\" title=\"download\"/>\n"
+"                    Descargar Plantilla de Importación de Cheques Propios"
+
+#. module: account_balance_import_checks
+#: model_terms:ir.ui.view,arch_db:account_balance_import_checks.account_balance_import_wizard
+msgid ""
+"<span class=\"fa fa-download\" title=\"download\"/>\n"
+"                    Descargar Plantilla de Importación de Cheques de Terceros"
+msgstr ""
+"<span class=\"fa fa-download\" title=\"download\"/>\n"
+"                    Descargar Plantilla de Importación de Cheques de Terceros"
+
+#. module: account_balance_import_checks
+#: model:ir.model,name:account_balance_import_checks.model_account_balance_import_wizard
+msgid "Account Initial Balance Wizard"
+msgstr "Asistente de Importación de Saldos Iniciales"
+
+#. module: account_balance_import_checks
+#: model:ir.model,name:account_balance_import_checks.model_account_import_summary
+msgid "Account import summary view"
+msgstr "Vista de resumen de importación de cuenta"
+
+#. module: account_balance_import_checks
+#: model:ir.model.fields.selection,name:account_balance_import_checks.selection__account_balance_import_wizard__mode__check_balance
+msgid "Cheques"
+msgstr "Cheques"
+
+#. module: account_balance_import_checks
+#: model:ir.model.fields.selection,name:account_balance_import_checks.selection__account_balance_import_wizard__check_type__third_check
+msgid "De Terceros"
+msgstr "De Terceros"
+
+#. module: account_balance_import_checks
+#: model:ir.model.fields,field_description:account_balance_import_checks.field_account_balance_import_wizard__display_name
+#: model:ir.model.fields,field_description:account_balance_import_checks.field_account_import_summary__display_name
+#: model:ir.model.fields,field_description:account_balance_import_checks.field_account_payment__display_name
+msgid "Display Name"
+msgstr "Nombre para mostrar"
+
+#. module: account_balance_import_checks
+#: model:ir.model.fields,field_description:account_balance_import_checks.field_account_balance_import_wizard__id
+#: model:ir.model.fields,field_description:account_balance_import_checks.field_account_import_summary__id
+#: model:ir.model.fields,field_description:account_balance_import_checks.field_account_payment__id
+msgid "ID"
+msgstr "ID"
+
+#. module: account_balance_import_checks
+#. odoo-javascript
+#: code:addons/account_balance_import_checks/static/src/xml/account_import_checks.xml:0
+msgid "Import Checks"
+msgstr "Importar Cheques"
+
+#. module: account_balance_import_checks
+#. odoo-javascript
+#: code:addons/account_balance_import_checks/static/src/xml/account_import_checks.xml:0
+msgid "Import initial balances for checks."
+msgstr "Importar saldos iniciales para cheques."
+
+#. module: account_balance_import_checks
+#: model:ir.model.fields,field_description:account_balance_import_checks.field_account_balance_import_wizard__mode
+msgid "Modo de Importación"
+msgstr "Modo de Importación"
+
+#. module: account_balance_import_checks
+#: model:ir.model,name:account_balance_import_checks.model_account_payment
+msgid "Payments"
+msgstr ""
+
+#. module: account_balance_import_checks
+#: model:ir.model.fields.selection,name:account_balance_import_checks.selection__account_balance_import_wizard__check_type__issue_check
+msgid "Propios"
+msgstr "Propios"
+
+#. module: account_balance_import_checks
+#: model:ir.model.fields,field_description:account_balance_import_checks.field_account_balance_import_wizard__check_type
+msgid "Tipo de Cheques"
+msgstr "Tipo de Cheques"

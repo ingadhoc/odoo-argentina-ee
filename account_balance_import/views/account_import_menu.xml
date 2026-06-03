@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem
+        id="menu_account_import_wizard"
+        name="Import Wizard"
+        action="account_base_import.action_open_import_guide"
+        parent="account.account_account_menu"
+        sequence="0"
+        groups="account.group_account_user"/>
+
+</odoo>

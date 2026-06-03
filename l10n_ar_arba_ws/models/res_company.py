@@ -40,6 +40,6 @@ class ResCompany(models.Model):
         help="* Automatic: Withholdings will be automatically reported to ARBA when the payment is confirmed\n* Batch Import: Withholdings must be manually reported to ARBA by clicking the 'Inform to ARBA' button after payment validation",
     )
 
-    def _get_arba_environment_type(self):
+    def _get_arba_ws_environment_type(self):
         """Necesario para agregar luego capa seguridad en bases test/train"""
         return self.l10n_ar_arba_env

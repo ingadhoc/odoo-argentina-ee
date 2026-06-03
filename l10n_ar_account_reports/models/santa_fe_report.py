@@ -100,13 +100,13 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
                 articulo_inciso_calculo = tax.api_articulo_inciso_calculo_retencion
                 articulo_inciso_retiene = tax.api_codigo_articulo_retencion
             else:
-                raise UserError(_("Tipo de impuesto %s equivocado") % (tax.tax_group_id.name))
+                raise UserError(_("Wrong tax type %s") % (tax.tax_group_id.name))
 
             if not articulo_inciso_calculo or not articulo_inciso_retiene:
                 raise RedirectWarning(
                     message=_(
-                        'Debe establecer la información de "artículo/inciso" en la configuración del impuesto "%(tax_name)s"'
-                        'en la solapa "API".',
+                        'You must set the "article/section" information in the configuration of tax "%(tax_name)s"'
+                        ' in the "API" tab.',
                         tax_name=tax.name,
                     ),
                     action=tax.get_formview_action(),
@@ -179,12 +179,12 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
             if not gross_income_type:
                 raise RedirectWarning(
                     message=_(
-                        'Debe establecer el tipo de inscripción de IIBB del partner "%(partner_name)s" (id: %(partner_id)s)',
+                        'You must set the IIBB registration type for partner "%(partner_name)s" (id: %(partner_id)s)',
                         partner_name=partner.name,
                         partner_id=partner.id,
                     ),
                     action=partner.get_formview_action(),
-                    button_text=_("Editar contacto"),
+                    button_text=_("Edit contact"),
                 )
             if gross_income_type in ["multilateral", "local"]:
                 content += "1"
@@ -211,7 +211,7 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
                 content += "4"
             else:
                 raise UserError(
-                    _('La responsabilidad frente a IVA "%s" no está soportada para ret/perc Santa Fe') % res_iva.name
+                    _('The VAT responsibility "%s" is not supported for Santa Fe withholding/perception') % res_iva.name
                 )
 
             # 14 - Marca inscripción Otros Gravámenes

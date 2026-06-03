@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-16 12:14+0000\n"
-"PO-Revision-Date: 2026-04-16 12:14+0000\n"
+"POT-Creation-Date: 2026-06-01 16:41+0000\n"
+"PO-Revision-Date: 2026-06-01 16:41+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -23,6 +23,14 @@ msgstr ""
 #. module: l10n_ar_currency_update
 #: model:ir.model.fields.selection,name:l10n_ar_currency_update.selection__res_company__currency_provider__afip
 msgid "ARCA Web Service (Argentina)"
+msgstr ""
+
+#. module: l10n_ar_currency_update
+#. odoo-python
+#: code:addons/l10n_ar_currency_update/models/res_currency.py:0
+msgid ""
+"Cannot change the name/code of %(currencies)s as it has an ARCA Code defined.\n"
+"Doing so would affect both the automatic currency rate synchronization service and the electronic invoicing service."
 msgstr ""
 
 #. module: l10n_ar_currency_update
@@ -57,14 +65,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_currency_update.field_res_config_settings__id
 #: model:ir.model.fields,field_description:l10n_ar_currency_update.field_res_currency__id
 msgid "ID"
-msgstr ""
-
-#. module: l10n_ar_currency_update
-#. odoo-python
-#: code:addons/l10n_ar_currency_update/models/res_currency.py:0
-msgid ""
-"No se puede cambiar el nombre/código de %(currencies)s ya que tiene un Código ARCA definido. \n"
-"Hacerlo repercutiría tanto en el servicio de sincronización automática de tasa de cambio como en el servicio de facturación electrónica."
 msgstr ""
 
 #. module: l10n_ar_currency_update

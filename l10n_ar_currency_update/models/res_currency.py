@@ -12,8 +12,8 @@ class ResCurrency(models.Model):
             if renamed_protected:
                 raise UserError(
                     _(
-                        "No se puede cambiar el nombre/código de %(currencies)s ya que tiene un Código ARCA definido. \n"
-                        "Hacerlo repercutiría tanto en el servicio de sincronización automática de tasa de cambio como en el servicio de facturación electrónica.",
+                        "Cannot change the name/code of %(currencies)s as it has an ARCA Code defined.\n"
+                        "Doing so would affect both the automatic currency rate synchronization service and the electronic invoicing service.",
                         currencies=", ".join(renamed_protected.mapped("name")),
                     )
                 )

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-29 14:13+0000\n"
+"POT-Creation-Date: 2026-05-21 19:30+0000\n"
 "PO-Revision-Date: 2026-03-20 09:02+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -21,6 +21,25 @@ msgstr ""
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "(DEMO MODE) %s"
 msgstr "(MODO DEMO) %s"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/res_config_settings.py:0
+msgid "* %(webservice)s: Connection failed. %(message)s"
+msgstr "* %(webservice)s: Conexión fallida. %(message)s"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/res_config_settings.py:0
+msgid "* %(webservice)s: Connection failed. This is what we get: %(error)s"
+msgstr ""
+"* %(webservice)s: Conexión fallida. Esto es lo que obtuvimos: %(error)s"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/res_config_settings.py:0
+msgid "* %(webservice)s: Connection is available (ARBA env: %(arba_env)s)"
+msgstr "* %(webservice)s: Conexión disponible (entorno ARBA: %(arba_env)s)"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__l10n_ar_arba_wh_mode
@@ -662,6 +681,17 @@ msgid "Testing"
 msgstr "Pruebas"
 
 #. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
+msgid ""
+"Tests the connection to the ARBA A122R webservice using the selected ARBA "
+"environment (testing or production), regardless of the database's AFIP "
+"environment."
+msgstr ""
+"Prueba la conexión con el webservice A122R de ARBA usando el ambiente ARBA "
+"seleccionado (testing o producción), independientemente del ambiente AFIP de "
+"la base."
+
+#. module: l10n_ar_arba_ws
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "The DDJJ's status has been updated"
@@ -780,7 +810,7 @@ msgstr "Solo puede actualizar el estado de una DDJJ informada"
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "You cannot delete a DDJJ ARBA that has withholding lines."
-msgstr ""
+msgstr "No puede eliminar una DDJJ ARBA que tiene líneas de retención."
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
@@ -791,6 +821,11 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
 msgid "withholding(s)"
 msgstr ""
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
+msgid "⇒ Test WS A122R Connection"
+msgstr "⇒ Probar conexión WS A122R"
 
 #~ msgid "Amount:"
 #~ msgstr "Monto:"

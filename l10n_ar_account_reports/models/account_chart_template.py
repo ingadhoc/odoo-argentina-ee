@@ -284,27 +284,34 @@ class AccountChartTemplate(models.AbstractModel):
 
         return None
 
-    def _l10n_ar_account_reports_setup_account_tags(self, ar_companies):
-        """Set up account tags for Argentine chart templates"""
+    def _l10n_ar_account_reports_setup_account_tags(self, ar_companies, only_missing=False):
+        """Set up account tags for Argentine chart templates.
+
+        :param only_missing: When True, preserves manual tag customizations by only
+            assigning tags to accounts that have none of the module's AR tags.
+            Use only_missing=False (default) exclusively for fresh chart installations.
+            Always pass only_missing=True from migration scripts to avoid overwriting
+            tags that clients configured manually.
+        """
         tags = self._get_ar_account_tags()
         tag_ids = list(tags.values())
-        tag_ids_list = [tag.id for tag in tag_ids]  # Lista de IDs de todas las etiquetas
+        tag_ids_list = [tag.id for tag in tag_ids]
 
         for company in ar_companies:
-            # En Odoo 18, las cuentas usan company_ids (many2many) en lugar de company_id
-            accounts = self.env["account.account"].search([("company_ids", "in", company.id)])
+            domain = [("company_ids", "in", company.id)]
 
-            # Primero limpiar todas las etiquetas específicas de reportes argentinos
-            for account in accounts:
-                # Quitar todas las etiquetas argentinas existentes
-                for tag_id in tag_ids_list:
-                    account.write({"tag_ids": [(3, tag_id)]})
+            if only_missing:
+                domain.append(("tag_ids", "not in", tag_ids_list))
 
-            # Luego asignar las etiquetas correctas
+            accounts = self.env["account.account"].search(domain)
+
+            if not only_missing:
+                for account in accounts:
+                    account.write({"tag_ids": [(3, tag_id) for tag_id in tag_ids_list]})
+
             for account in accounts:
                 tag_id = None
 
-                # Income statement accounts
                 if account.account_type in [
                     "income",
                     "expense",
@@ -314,7 +321,6 @@ class AccountChartTemplate(models.AbstractModel):
                 ]:
                     tag_id = self._get_tag_for_income_account(account, tags, company)
 
-                # Asset accounts
                 elif account.account_type in [
                     "asset_cash",
                     "asset_receivable",
@@ -324,7 +330,6 @@ class AccountChartTemplate(models.AbstractModel):
                 ]:
                     tag_id = self._get_tag_for_asset_account(account, tags, company)
 
-                # Liability and equity accounts
                 elif account.account_type in [
                     "liability_payable",
                     "liability_current",
@@ -334,6 +339,5 @@ class AccountChartTemplate(models.AbstractModel):
                 ]:
                     tag_id = self._get_tag_for_liability_equity_account(account, tags, company)
 
-                # Assign the tag if one was found
                 if tag_id:
                     account.write({"tag_ids": [(4, tag_id)]})

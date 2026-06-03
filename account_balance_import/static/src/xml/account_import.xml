@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates>
+
+    <t t-name="account_base_import.accountImportTemplate" t-inherit="account_base_import.accountImportTemplate" t-inherit-mode="extension">
+        <!-- Replace the entire content div -->
+        <xpath expr="//div[@class='container text-justify overflow-auto h-100']" position="replace">
+            <div class="container text-justify overflow-auto h-100">
+                <div class="d-flex flex-column my-5 pt-4">
+                    <div class="excel-import pt-4">
+                        <h2 class="text-primary">
+                            Initial Setup Options
+                        </h2>
+                        <p>
+                            Complete your accounting setup using these configuration steps.
+                        </p>
+                        <div class="row">
+                            <!-- Left column: first steps -->
+                            <div class="col-lg-6" name="left_column">
+                                <div class="pt-4">
+                                    <div class="row">
+                                        <div class="col-10">
+                                            <h3>Review Company Data</h3>
+                                            <p>Review and confirm your company information.</p>
+                                            <button type="button" class="btn btn-primary" t-on-click="() => this._openCompanyDataSetup()">Review Company Data</button>
+                                        </div>
+                                        <div class="col-2 border-start"/>
+                                    </div>
+                                </div>
+                                <div class="pt-4">
+                                    <div class="row">
+                                        <div class="col-10">
+                                            <h3>Set Periods</h3>
+                                            <p>Configure fiscal years and periods.</p>
+                                            <button type="button" class="btn btn-primary" t-on-click="() => this._openFiscalYearSetup()">Set Periods</button>
+                                        </div>
+                                        <div class="col-2 border-start"/>
+                                    </div>
+                                </div>
+                                <div class="pt-4" name="journals_dashboard">
+                                    <div class="row">
+                                        <div class="col-10">
+                                            <h3>Journals Dashboard</h3>
+                                            <p>Review and manage your accounting journals.</p>
+                                            <button type="button" class="btn btn-primary" t-on-click="() => this._openJournalDashboard()">Review Journals</button>
+                                        </div>
+                                        <div class="col-2 border-start"/>
+                                    </div>
+                                </div>
+                                <!-- Extensions insert here (e.g., Import Sales from ARCA) -->
+                            </div>
+                            <!-- Right column: import and balances -->
+                            <div class="col-lg-6" name="right_column">
+                                <!-- Extensions insert here (e.g., Import Purchases from ARCA, Import Checks) -->
+                                <div class="pt-4" name="partners_balance">
+                                    <div class="row">
+                                        <div class="col-10">
+                                            <h3>Partners Balance</h3>
+                                            <p>Import initial balances for your partners.</p>
+                                            <button type="button" class="btn btn-primary" t-on-click="() => this._openPartnerBalanceImport()">Set your Partners Balance</button>
+                                        </div>
+                                        <div class="col-2 border-start"/>
+                                    </div>
+                                </div>
+                                <div class="pt-4">
+                                    <div class="row">
+                                        <div class="col-10">
+                                            <h3>Chart of Accounts</h3>
+                                            <p>Review your chart and setup end of year balances.</p>
+                                            <button type="button" class="btn btn-primary" t-on-click="() => this._importAccountGuideAction('account_base_import.action_open_coa_setup')">Review your Chart</button>
+
+                                            <!-- Mostrar link al asiento de apertura si existe -->
+                                            <div t-if="accountOpeningMoveId" class="mt-3 alert alert-info" role="alert">
+                                                <strong>Asiento de Apertura:</strong>
+                                                <button type="button" class="btn btn-link p-0 align-baseline" t-on-click="() => this._openAccountOpeningMove()">
+                                                    <t t-esc="accountOpeningMoveId[1]"/>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="col-2 border-start"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </xpath>
+    </t>
+
+</templates>

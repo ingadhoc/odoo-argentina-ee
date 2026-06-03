@@ -33,19 +33,19 @@ class InflationAdjustment(models.TransientModel):
         compute="_compute_index",
     )
     open_cloure_entry = fields.Selection(
-        [("yes", "Si"), ("no", "No")],
-        string="Ha realizado asientos de cierre/apertura?",
+        [("yes", "Yes"), ("no", "No")],
+        string="Has Closing/Opening Entries?",
         default="no",
-        help="Si usted ha realizado los asientos de cierre/apertura debe"
-        " indicarnos cuales son para poder excluir los mismos en el cálculo.",
+        help="If you have made the closing/opening entries, please indicate them"
+        " so they can be excluded from the calculation.",
     )
     closure_move_id = fields.Many2one(
         "account.move",
-        string="Asiento de cierre",
+        string="Closing Entry",
     )
     open_move_id = fields.Many2one(
         "account.move",
-        string="Asiento de apertura",
+        string="Opening Entry",
     )
 
     def get_account_id(self, line):
@@ -95,7 +95,7 @@ class InflationAdjustment(models.TransientModel):
             end_index = self.env["inflation.adjustment.index"].find(end_date).value
 
         if not start_date or not end_date:
-            raise UserError(_("Por favor indique el rango de fecha de inicio y fin"))
+            raise UserError(_("Please specify the start and end date range"))
 
         res = []
 
@@ -109,7 +109,7 @@ class InflationAdjustment(models.TransientModel):
             index = indexes.filtered(lambda x: x.date >= start_date and x.date <= date_to)
             if not index:
                 message = _(
-                    "El asiento de ajuste por inflación no puede ser generado ya que hace falta el indice de ajuste para el periodo %(month)s %(year)s"
+                    "The inflation adjustment entry cannot be generated because the adjustment index for period %(month)s %(year)s is missing"
                 ) % {
                     "month": start_date.strftime("%B"),
                     "year": start_date.year,
@@ -167,8 +167,8 @@ class InflationAdjustment(models.TransientModel):
         if not before_index:
             raise UserError(
                 _(
-                    "No se encontró un índice de ajuste por inflación para la fecha anterior (%s). "
-                    "Por favor, configure el índice correspondiente."
+                    "No inflation adjustment index was found for the previous date (%s). "
+                    "Please configure the corresponding index."
                 )
                 % format_date(self.env, before_date_from)
             )
@@ -183,7 +183,7 @@ class InflationAdjustment(models.TransientModel):
             lines.append(
                 {
                     "account_id": self.get_account_id(line),
-                    "name": _("Ajuste por inflación cuentas al inicio (%s * %.2f%%)")
+                    "name": _("Inflation adjustment opening balances (%s * %.2f%%)")
                     % (FormatAmount(line.get("balance")), initial_factor * 100.0),
                     "date_maturity": before_date_from,
                     "debit" if adjustment > 0 else "credit": abs(adjustment),
@@ -209,7 +209,7 @@ class InflationAdjustment(models.TransientModel):
                 lines.append(
                     {
                         "account_id": self.get_account_id(line),
-                        "name": _("Ajuste por inflación %s (%s * %.2f%%)")
+                        "name": _("Inflation adjustment %s (%s * %.2f%%)")
                         % (
                             format_date(self.env, date_from, date_format="MM/Y"),
                             FormatAmount(line.get("balance")),
@@ -222,16 +222,14 @@ class InflationAdjustment(models.TransientModel):
                 adjustment_total["debit" if adjustment > 0 else "credit"] += abs(adjustment)
 
         if not lines:
-            raise UserError(
-                _("No hemos encontrado ningún asiento contable para ajustar asociado al periodo seleccionado.")
-            )
+            raise UserError(_("No journal entries to adjust were found for the selected period."))
 
         # Generate total amount adjustment line
         adj_diff = adjustment_total.get("debit", 0.0) - adjustment_total.get("credit", 0.0)
         lines.append(
             {
                 "account_id": self.account_id.id,
-                "name": _("Ajuste por inflación Global [%s] / [%s]") % (self.date_from, self.date_to),
+                "name": _("Global Inflation Adjustment [%s] / [%s]") % (self.date_from, self.date_to),
                 "debit" if adj_diff < 0 else "credit": abs(adj_diff),
                 "date_maturity": self.date_to,
             }
@@ -245,7 +243,7 @@ class InflationAdjustment(models.TransientModel):
                 {
                     "journal_id": self.journal_id.id,
                     "date": self.date_to,
-                    "ref": _("Ajuste por inflación %s") % (date_to.year),
+                    "ref": _("Inflation Adjustment %s") % (date_to.year),
                     "line_ids": [(0, 0, line_data) for line_data in lines],
                 }
             )

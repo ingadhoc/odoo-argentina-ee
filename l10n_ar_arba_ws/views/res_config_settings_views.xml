@@ -26,6 +26,9 @@
                         <label for="l10n_ar_arba_client_secret" class="col-lg-3 o_light_label"/>
                         <field name="l10n_ar_arba_client_secret" string="Secret" password="True"/>
                     </div>
+                    <div class="row mt16" invisible="l10n_ar_arba_env == 'demo'">
+                        <button name="l10n_ar_arba_test_ws_connection" type="object" class="oe_link oe_inline" string="⇒ Test WS A122R Connection" help="Tests the connection to the ARBA A122R webservice using the selected ARBA environment (testing or production), regardless of the database's AFIP environment."/>
+                    </div>
                 </div>
                 <!-- </setting> -->
             </setting>

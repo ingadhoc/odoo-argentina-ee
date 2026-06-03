@@ -71,14 +71,16 @@ class L10n_ArSireReportHandler(models.AbstractModel):
         for line in move_lines.sorted(key=lambda r: (r.date, r.id)):
             payment = line.payment_id
             if not payment.withholding_id.tax_id.l10n_ar_code:
+                tax = payment.withholding_id.tax_id
+                field_label = tax._fields["l10n_ar_code"].string
                 raise RedirectWarning(
                     message=_(
-                        "El impuesto '%s' no tiene código de régimen establecido. Es obligatorio para generar el"
-                        " archivo txt Sire. Editar campo 'Codigo de regimen IVA' en solapa 'Opciones avanzadas'"
-                        " en la vista formulario",
-                        payment.withholding_id.tax_id.name,
+                        "El impuesto '%(tax_name)s' no tiene el campo '%(field_label)s' establecido. Es obligatorio para generar el"
+                        " archivo txt Sire.",
+                        tax_name=tax.name,
+                        field_label=field_label,
                     ),
-                    action=payment.withholding_id.tax_id.get_formview_action(),
+                    action=tax.get_formview_action(),
                     button_text=_("Editar impuesto"),
                 )
 
