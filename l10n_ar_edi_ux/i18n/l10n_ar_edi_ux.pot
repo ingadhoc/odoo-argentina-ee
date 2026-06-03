@@ -6,14 +6,41 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-28 17:25+0000\n"
-"PO-Revision-Date: 2026-05-28 17:25+0000\n"
+"POT-Creation-Date: 2026-06-03 15:30+0000\n"
+"PO-Revision-Date: 2026-06-03 15:30+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/account_journal.py:0
+msgid ""
+"\n"
+"\n"
+"Adicionalmente, ARCA devuelve este evento: "
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/account_move.py:0
+msgid " \"%s\" %s. "
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/account_journal.py:0
+msgid " Vigente desde: "
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/account_journal.py:0
+msgid " hasta: "
+msgstr ""
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
@@ -25,6 +52,74 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/account_move.py:0
 msgid ". Invalid boarding permissions: %s"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_journal_wizard_form
+msgid ""
+"<strong>Automatic Journal Creation</strong><br/>\n"
+"                    This wizard will fetch your points of sale from ARCA and create journals automatically."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
+msgid ""
+"<strong>Configure ARCA Web Services Connection</strong><br/>\n"
+"                    Upload your certificate and private key to connect to ARCA electronic invoicing services."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
+msgid "<strong>Need help?</strong>"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_journal_wizard_form
+msgid "<strong>No points of sale loaded yet.</strong>"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner__actividades_padron
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_users__actividades_padron
+msgid "ARCA Activities"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__l10n_ar_afip_ws_crt_id
+msgid "ARCA Certificate"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.actions.act_window,name:l10n_ar_edi_ux.action_l10n_ar_arca_connection_wizard
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
+msgid "ARCA Connection Setup"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_l10n_ar_arca_connection_wizard
+msgid "ARCA Connection Setup Wizard"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_l10n_ar_arca_journal_wizard_line
+msgid "ARCA Journal Wizard Line"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__pos_system
+msgid "ARCA POS System"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_l10n_ar_arca_journal_wizard
+msgid "ARCA Point of Sale Journals Generator"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/l10n_ar_afipws_connection.py:0
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
+msgid "ARCA Registration Certificate Inquiry Service (ex A5)"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -45,9 +140,20 @@ msgid "ARCA Webservice Connection"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner__actividades_padron
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_users__actividades_padron
-msgid "Actividades"
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/res_partner.py:0
+msgid "ARCA did not return a name"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/res_partner_update_from_padron_wizard.py:0
+msgid "ARCA update failed: %s"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model,name:l10n_ar_edi_ux.model_account_import_summary
+msgid "Account import summary view"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -92,7 +198,30 @@ msgstr ""
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_l10n_ar_boarding_permission
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_boarding_permission_ids
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__l10n_ar_boarding_permission_ids
 msgid "Boarding Permission"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__number
+msgid "Boarding Permission Number"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.actions.act_window,name:l10n_ar_edi_ux.action_l10n_ar_boarding_permission
+#: model:ir.ui.menu,name:l10n_ar_edi_ux.menu_action_l10n_ar_boarding_permission
+msgid "Boarding Permissions"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.constraint,message:l10n_ar_edi_ux.constraint_l10n_ar_boarding_permission_permiso_embarque_unique
+msgid "Boarding permission already exists."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__branch_id
+msgid "Branch"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -101,13 +230,18 @@ msgid "CIT ARBA"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__real_name
-msgid "Campo"
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
+msgid "Cancel"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
-msgid "Cancel"
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
+msgid ""
+"Cannot test connections without a valid certificate.\n"
+"\n"
+"Please upload both a private key and a valid ARCA certificate."
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -125,13 +259,32 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
+msgid "Certificates must be in PEM format"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_config_settings__arba_cit
 msgid "Clave de Identificación Tributaria de ARBA"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_journal_wizard_form
+msgid ""
+"Click \"Fetch from ARCA\" to upload your points of sale from ARCA Web "
+"Services. Then configure the default accounts for each one."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_journal_wizard_form
 msgid "Close"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
+msgid "Codificación de producto - RG2904 (WSMTXCA)"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -140,6 +293,9 @@ msgid "Companies"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__company_id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard__company_id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__company_id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__company_id
 msgid "Company"
 msgstr ""
@@ -166,6 +322,29 @@ msgid "Config Settings"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
+msgid "Connected"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__connection_status_html
+msgid "Connection Status"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
+msgid "Connection Test"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
+msgid "Connection status has been updated. Check the status below."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_res_partner
 msgid "Contact"
 msgstr ""
@@ -181,6 +360,57 @@ msgid "Converts retreived text fields to Title Case."
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/res_partner.py:0
+msgid ""
+"Could not update contact %s (%s) from ARCA Padron.\n"
+"We recommend verifying manually on the ARCA website.\n"
+"Error:\n"
+"%s"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__to_create
+msgid "Create"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_journal_wizard.py:0
+msgid "Create Journal"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_journal_wizard_form
+msgid "Create Journals"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.actions.act_window,name:l10n_ar_edi_ux.action_l10n_ar_arca_journal_wizard
+#: model:ir.ui.menu,name:l10n_ar_edi_ux.menu_l10n_ar_arca_journal_wizard
+msgid "Create Journals from ARCA"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_journal_wizard_form
+msgid "Create Journals from ARCA Points of Sale"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_journal_wizard_form
+msgid "Create Manually"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_journal_wizard.py:0
+msgid "Created Journals"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__create_uid
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard__create_uid
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__create_uid
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__create_uid
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__create_uid
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__create_uid
@@ -189,6 +419,9 @@ msgid "Created by"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__create_date
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard__create_date
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__create_date
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__create_date
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__create_date
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__create_date
@@ -197,10 +430,24 @@ msgid "Created on"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__dst_country
+msgid "Destination Country"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__dst_country
+msgid "Destination country of the goods"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_import_summary__display_name
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_journal__display_name
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__display_name
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_certificate_certificate__display_name
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_afipws_connection__display_name
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__display_name
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard__display_name
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__display_name
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__display_name
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_company__display_name
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_config_settings__display_name
@@ -212,13 +459,69 @@ msgid "Display Name"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.constraint,message:l10n_ar_edi_ux.constraint_l10n_ar_boarding_permission_permiso_embarque_unique
-msgid "Error! El permiso de embarque ya existe."
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_journal_wizard.py:0
+msgid "Electronic Fiscal Bond"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
+msgid "Electronic Fiscal Bond (WSBFE)"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_journal_wizard.py:0
+msgid "Electronic Invoice"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
+msgid "Electronic Invoice (WSFE)"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__l10n_ar_afip_ws_environment
+msgid "Environment"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__error_message
+msgid "Error"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_journal_wizard.py:0
+msgid "Export Invoice"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
+msgid "Export Invoice (WSFEX)"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_journal_wizard_form
+msgid "Fetch from ARCA"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__label
 msgid "Field"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__name
+msgid "Field Label"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__real_name
+msgid "Field Name"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -237,6 +540,16 @@ msgid "Finished"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
+msgid "For production, obtain your certificate from the ARCA portal"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
+msgid "For testing, you can use demo certificates from ARCA"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_account_journal_form
 msgid "Get Document Types"
 msgstr ""
@@ -247,10 +560,24 @@ msgid "Get valid document types for this webservice"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard__has_points_of_sale
+msgid "Has Points Of Sale"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__has_valid_certificate
+msgid "Has Valid Certificate"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_import_summary__id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_journal__id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_certificate_certificate__id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_afipws_connection__id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard__id
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_company__id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_config_settings__id
@@ -262,11 +589,27 @@ msgid "ID"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__shared_to_branches
+msgid "If checked, this journal will be shared with all branches."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__has_valid_certificate
+msgid "Indicates if a valid certificate is configured."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/account_move.py:0
 msgid ""
 "Invalid boarding permissions:\n"
 " %s"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
+msgid "Invoices Verification (WSCDC)"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -280,6 +623,20 @@ msgid "Journal Entry"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__name
+msgid "Journal Name"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_journal_wizard.py:0
+msgid "Journal already exists: %s"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__write_uid
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard__write_uid
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__write_uid
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__write_uid
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__write_uid
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__write_uid
@@ -288,6 +645,9 @@ msgid "Last Updated by"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__write_date
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard__write_date
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__write_date
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__write_date
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__write_date
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__write_date
@@ -302,23 +662,43 @@ msgstr ""
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
-#: code:addons/l10n_ar_edi_ux/models/res_partner.py:0
-msgid ""
-"No pudimos actualizar desde el Padron de ARCA al contacto %s (%s).\n"
-"Recomendamos verificar manualmente en la página de ARCA.\n"
-"Obtuvimos este error:\n"
-"%s"
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
+msgid "No certificate configured"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/res_partner_update_from_padron_wizard.py:0
-msgid "No se encontró ningún partner con CUIT para actualizar"
+msgid "No partner with CUIT found to update"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__name
-msgid "Nombre Campo"
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_journal_wizard.py:0
+msgid ""
+"No points of sale found in ARCA.\n"
+"\n"
+"This could mean:\n"
+"- You don't have any points of sale configured in ARCA\n"
+"- The connection failed\n"
+"- You are in testing mode (testing mode doesn't support this query)\n"
+"\n"
+"Please check your ARCA configuration."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_journal_wizard.py:0
+msgid ""
+"No valid ARCA certificate found.\n"
+"\n"
+"Please configure your certificate in the ARCA Connection Setup before fetching points of sale."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
+msgid "Not available"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -344,6 +724,11 @@ msgid "Option"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__pos_number
+msgid "POS Number"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__partner_id
 msgid "Partner"
 msgstr ""
@@ -354,33 +739,6 @@ msgid "Partners"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__dst_country
-msgid "País de destino"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__dst_country
-msgid "País de destino de la mercadería"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_boarding_permission_ids
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__l10n_ar_boarding_permission_ids
-msgid "Permiso de Embarque"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__number
-msgid "Permiso de embarque"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
-#: model:ir.actions.act_window,name:l10n_ar_edi_ux.action_l10n_ar_boarding_permission
-#: model:ir.ui.menu,name:l10n_ar_edi_ux.menu_action_l10n_ar_boarding_permission
-msgid "Permisos de embarque"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/res_partner.py:0
 msgid "Please configure an ARCA Certificate in order to continue"
@@ -388,23 +746,56 @@ msgstr ""
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
-#: code:addons/l10n_ar_edi_ux/models/res_partner.py:0
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_journal_wizard.py:0
+msgid "Please select at least one point of sale to create."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
 msgid ""
-"Posiblemente este contacto tenga declarada alguna actividad dentro del rubro"
-" inmobiliario. En este caso, no podemos actualizar automáticamente el campo "
-"Responsabilidad ARCA. Por favor, consulte el dato correspondiente y "
-"agréguelo manualmente"
+"Please upload a valid private key and ARCA certificate to test connections."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard__pos_line_ids
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_journal_wizard_form
+msgid "Points of Sale"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__l10n_ar_afip_ws_key_id
+msgid "Private Key"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_journal_wizard.py:0
+msgid "Sales %s %05d"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
+msgid "Save & Close"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__branch_id
+msgid ""
+"Select a branch to assign this journal to a specific branch. Leave empty for"
+" the main company."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__l10n_ar_afip_ws_environment
+msgid ""
+"Select the ARCA environment: Testing for homologation, Production for real "
+"invoices."
 msgstr ""
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_partner_update_from_padron_wizard__state__selection
 msgid "Selection"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
-#. odoo-python
-#: code:addons/l10n_ar_edi_ux/models/l10n_ar_afipws_connection.py:0
-msgid "Servicio de Consulta a Padrón Constancia de Inscripción (ex A5)"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -419,16 +810,18 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_edi_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
-msgid "Skip these partner"
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__shared_to_branches
+msgid "Shared to Branches"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_boarding_permission_ids
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_move__l10n_ar_boarding_permission_ids
-msgid ""
-"Solo se envía esta información si la factura es de exportación y el "
-"'Concepto AFIP' es 'Productos / Exportación definitiva de bienes'"
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__connection_status_html
+msgid "Shows the status of connections to different ARCA Web Services."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
+msgid "Skip these partner"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -442,8 +835,39 @@ msgid "Technical Name"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
+msgid "Test Connections"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/account_move.py:0
+msgid ""
+"The partner %s does not have an ARCA Responsibility configured. Please set "
+"the ARCA Responsibility Type in the partner's configuration to validate the "
+"invoice."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
 msgid "There are no more partners to update for this request..."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/res_partner.py:0
+msgid ""
+"This contact might have a real estate activity declared. In this case, we "
+"cannot automatically update the ARCA Responsibility field. Please check the "
+"corresponding data and add it manually."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_boarding_permission_ids
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_move__l10n_ar_boarding_permission_ids
+msgid ""
+"This information is only sent if the invoice is an export invoice and the "
+"'AFIP Concept' is 'Products / Definitive export of goods'."
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -462,8 +886,25 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/account_import_summary.py:0
+msgid "This option is only available for Argentinian companies."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__title_case
 msgid "Title Case"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
+msgid "Token expired"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_journal_wizard_form
+msgid "Type"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -498,6 +939,19 @@ msgid "Update with Manual Check"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__l10n_ar_afip_ws_crt_id
+msgid ""
+"Upload your ARCA certificate in PEM format obtained from the ARCA portal."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__l10n_ar_afip_ws_key_id
+msgid ""
+"Upload your private key in PEM format. If you don't have one, it will be "
+"generated automatically when you create a certificate request."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/account_move.py:0
 msgid "Valid boarding permissions: %s"
@@ -505,7 +959,27 @@ msgstr ""
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_move_form
-msgid "Validar permisos de embarque"
+msgid "Validate Boarding Permissions"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__afip_ws_name
+msgid "WS Type"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__l10n_ar_arca_journal_wizard_line__afip_ws__wsbfe
+msgid "WSBFE"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__l10n_ar_arca_journal_wizard_line__afip_ws__wsfe
+msgid "WSFE"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__l10n_ar_arca_journal_wizard_line__afip_ws__wsfex
+msgid "WSFEX"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -515,6 +989,18 @@ msgid "We could not validate the vendor bill in AFIP"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__afip_ws
+msgid "Web Service"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
+msgid "Web Services Status:"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__wizard_id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__wizard_id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__wizard_id
 msgid "Wizard"
@@ -523,6 +1009,12 @@ msgstr ""
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__wizard_error
 msgid "Wizard Error"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_journal_wizard.py:0
+msgid "id"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -548,4 +1040,41 @@ msgstr ""
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_move_form
 msgid "to"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
+msgid "ws_sr_constancia_inscripcion"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_journal_wizard.py:0
+msgid "wsbfe"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
+msgid "wscdc"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_journal_wizard.py:0
+msgid "wsfex"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
+msgid "wsmtxca"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
+msgid "📚 View ARCA Documentation"
 msgstr ""
