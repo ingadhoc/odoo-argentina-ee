@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-02 19:13+0000\n"
+"POT-Creation-Date: 2026-06-03 15:29+0000\n"
 "PO-Revision-Date: 2026-04-13 22:41+0000\n"
 "Last-Translator: carla spiaggi <sca@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
@@ -43,6 +43,12 @@ msgstr "<span class=\"fa fa-info\" aria-label=\"info\"/>"
 #: model:ir.model.fields.selection,name:account_balance_import.selection__account_balance_import_wizard__partner_balance_type__payable
 msgid "A Pagar"
 msgstr "A Pagar"
+
+#. module: account_balance_import
+#. odoo-javascript
+#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
+msgid "ARCA Connection"
+msgstr "Conexión ARCA"
 
 #. module: account_balance_import
 #: model:ir.model.fields.selection,name:account_balance_import.selection__account_balance_import_wizard__import_type__absolute
@@ -154,8 +160,26 @@ msgstr "Conciliar deuda"
 #. module: account_balance_import
 #. odoo-javascript
 #: code:addons/account_balance_import/static/src/xml/account_import.xml:0
+msgid "Configure Connection"
+msgstr "Configurar Conexión"
+
+#. module: account_balance_import
+#. odoo-javascript
+#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
+msgid "Configure Web Services connection to ARCA."
+msgstr "Configure la conexión de Servicios Web con ARCA."
+
+#. module: account_balance_import
+#. odoo-javascript
+#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
 msgid "Configure fiscal years and periods."
 msgstr "Configurar años y periodos fiscales."
+
+#. module: account_balance_import
+#. odoo-javascript
+#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
+msgid "Create Journals"
+msgstr "Crear Diarios"
 
 #. module: account_balance_import
 #: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__create_uid
@@ -225,6 +249,12 @@ msgstr "Exportar Partners"
 #: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__accounting_date
 msgid "Fecha Contable"
 msgstr "Fecha Contable"
+
+#. module: account_balance_import
+#. odoo-javascript
+#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
+msgid "Fiscal Year"
+msgstr "Año Fiscal"
 
 #. module: account_balance_import
 #: model:ir.model.fields,field_description:account_balance_import.field_account_account__id
@@ -318,30 +348,6 @@ msgstr "Revisar Datos de la Compañía"
 #. module: account_balance_import
 #. odoo-javascript
 #: code:addons/account_balance_import/static/src/xml/account_import.xml:0
-msgid "Create Journals"
-msgstr "Crear Diarios"
-
-#. module: account_balance_import
-#. odoo-javascript
-#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
-msgid "ARCA Connection"
-msgstr "Conexión ARCA"
-
-#. module: account_balance_import
-#. odoo-javascript
-#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
-msgid "Configure Connection"
-msgstr "Configurar Conexión"
-
-#. module: account_balance_import
-#. odoo-javascript
-#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
-msgid "Configure Web Services connection to ARCA."
-msgstr "Configure la conexión de Servicios Web con ARCA."
-
-#. module: account_balance_import
-#. odoo-javascript
-#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
 msgid "Review and confirm your company information."
 msgstr "Revise y confirme la información de su compañía."
 
@@ -371,8 +377,8 @@ msgstr "Saldos de Partners"
 #. module: account_balance_import
 #. odoo-javascript
 #: code:addons/account_balance_import/static/src/xml/account_import.xml:0
-msgid "Fiscal Year"
-msgstr "Año Fiscal"
+msgid "Set Periods"
+msgstr ""
 
 #. module: account_balance_import
 #. odoo-javascript
