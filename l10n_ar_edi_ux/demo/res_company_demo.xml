@@ -128,6 +128,16 @@
         <value name="install_demo" eval="True"/>
     </function>
 
+    <!-- Prevent this demo company from being picked up by test_oba_main_flows searches.
+         use_payment_pro is auto-computed True for all AR companies; explicitly write False
+         so tests filtering on use_payment_pro=True skip this hierarchy.
+         sequence=99 ensures base.company_ri (sequence=10) is returned first on limit=1
+         queries that don't filter on use_payment_pro. -->
+    <record id="edi_ux_parent_company" model="res.company">
+        <field name="use_payment_pro" eval="False"/>
+        <field name="sequence">99</field>
+    </record>
+
     <!-- child: same CUIT as parent, no certificate -->
     <record id="edi_ux_child_company" model="res.company">
         <field name="name">Branch 1 (same CUIT no Cert)</field>
