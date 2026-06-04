@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-19 15:31+0000\n"
-"PO-Revision-Date: 2026-05-19 15:31+0000\n"
+"POT-Creation-Date: 2026-06-04 18:44+0000\n"
+"PO-Revision-Date: 2026-06-04 18:44+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -176,6 +176,14 @@ msgstr ""
 msgid ""
 "The product '%s' does not have a valid Codigo MTX for ARCA. Please set a "
 "valid barcode in the product to continue."
+msgstr ""
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_journal.py:0
+msgid ""
+"Tipos de Documentos Autorizados en ARCA:\n"
+"%s"
 msgstr ""
 
 #. module: l10n_ar_wsmtxca_ws
