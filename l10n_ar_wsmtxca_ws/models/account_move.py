@@ -223,7 +223,7 @@ class AccountMove(models.Model):
                 "precioUnitario": precioUnitario if not is_senia_or_discount else None,
                 "codigoCondicionIVA": vat_tax.tax_group_id.l10n_ar_vat_afip_code,
                 "importeItem": float_repr(importeItem, precision_digits=2),
-                "importeIVA": float_repr(importeIVA, precision_digits=2) if importeIVA else None,
+                "importeIVA": float_repr(importeIVA, precision_digits=2) if importeIVA or not is_letter_b else None,
                 "importeBonificacion": float_repr(discount_amount, precision_digits=6) if discount_amount else None,
             }
             details.append(values)
