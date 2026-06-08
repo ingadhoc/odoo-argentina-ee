@@ -100,7 +100,8 @@ class TestSircipPadron(common.TransactionCase):
 
     def test_cuit_not_in_padron(self):
         """CUIT no presente en el padrón retorna is_in_padron=False."""
-        partner = self._make_partner("11111111111")
+        # CUIT válido del padrón demo que NO está en SAMPLE_PADRON (5 líneas)
+        partner = self._make_partner("20294199153")
         is_in, aliquot, campo7, crc = self.padron._get_sircip_aliquot(partner)
         self.assertFalse(is_in)
         self.assertEqual(aliquot, 0.0)
