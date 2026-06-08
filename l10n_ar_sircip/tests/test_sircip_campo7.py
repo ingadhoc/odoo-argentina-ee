@@ -18,6 +18,14 @@ class TestSircipCampo7(common.TransactionCase):
                         4/5=básica+alícuota propia
     """
 
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        # Los impuestos SIRCIP se crean solo para empresas con plan de cuentas AR.
+        # Cambiamos la compañía activa a company_ri donde existen los datos SIRCIP.
+        company_ri = cls.env.ref("base.company_ri")
+        cls.env = cls.env(context=dict(cls.env.context, allowed_company_ids=[company_ri.id]))
+
     def _get_fiscal_pos_line(self):
         """Crea un registro vacío del modelo para poder llamar los métodos."""
         # Crear posición fiscal de test
@@ -60,7 +68,7 @@ class TestSircipCampo7(common.TransactionCase):
             )
 
     def test_caba_position(self):
-        """CABA (jurisdicción 901) está en índice 23."""
+        """CABA (jurisdicción 901) está en índgitice 23."""
         self.assertEqual(SIRCIP_CAMPO7_POSITION["901"], 23)
 
     def test_tucuman_position(self):

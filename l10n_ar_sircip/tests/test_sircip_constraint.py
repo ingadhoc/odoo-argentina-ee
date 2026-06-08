@@ -13,6 +13,9 @@ class TestSircipConstraint(common.TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        # SIRCIP data only exists for AR-chart companies: switch to company_ri.
+        company_ri = cls.env.ref("base.company_ri")
+        cls.env = cls.env(context=dict(cls.env.context, allowed_company_ids=[company_ri.id]))
         # Buscar impuestos SIRCIP de la compañía demo
         cls.sircip_group = cls.env["account.tax.group"].search(
             [
