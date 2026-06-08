@@ -18,6 +18,9 @@
         "data/res_country_state_data.xml",
         "views/res_country_state_views.xml",
     ],
+    "demo": [
+        "demo/res_company_jurisdiction_padron_demo.xml",
+    ],
     "post_init_hook": "l10n_ar_sircip_post_init_hook",
     "installable": True,
     "auto_install": False,
