@@ -85,9 +85,9 @@ class AccountFiscalPositionL10nArTax(models.Model):
         if not padron_file:
             raise UserError(
                 _(
-                    "No hay padrón SIRCIP cargado para el período %(from)s a %(to)s. "
-                    "Súbalo en 'Contabilidad / Configuración / AFIP / Padrón de Alícuotas por Compañía' "
-                    "usando la jurisdicción 'SIRCIP'."
+                    "No SIRCIP padron loaded for the period %(from)s to %(to)s. "
+                    "Upload it at 'Accounting / Configuration / AFIP / Company Aliquot Padron' "
+                    "using the 'SIRCIP' jurisdiction."
                 )
                 % {"from": date, "to": to_date}
             )
@@ -95,7 +95,7 @@ class AccountFiscalPositionL10nArTax(models.Model):
         is_in_padron, aliquot, campo7, crc = padron_file._get_sircip_aliquot(partner)
 
         if not is_in_padron:
-            return None, "SIRCIP No Inscripto (no figura en padrón)"
+            return None, _("SIRCIP Non-Registered (not found in padron)")
 
         ref = "SIRCIP | crc:%s | campo7:%s" % (crc, campo7)
         return aliquot, ref
@@ -252,18 +252,18 @@ class AccountFiscalPositionL10nArTax(models.Model):
             )
             return fiscal_line._get_missing_taxes(partner, date)
 
-        # 3. No encontrado: error con instrucciones claras
+        # 3. Not found: raise with clear instructions
         raise UserError(
             _(
-                "SIRCIP — doble alícuota (dígito 4/5) para la provincia %(province)s: "
-                "no se encontró la alícuota propia de la provincia.\n\n"
-                "Para resolverlo, alguna de estas opciones:\n"
-                "1) Configure una posición fiscal con percepción de IIBB para %(province)s "
-                "(usando el webservice de %(province)s o padrón) con la misma empresa. "
-                "Al facturar, el sistema la consultará automáticamente.\n"
-                "2) Ingrese manualmente la alícuota del contacto en la pestaña "
-                "Contabilidad → Percepciones/Retenciones para el impuesto "
-                "de %(province)s y el período %(from_date)s–%(to_date)s.",
+                "SIRCIP — double rate (digit 4/5) for province %(province)s: "
+                "the province's own rate was not found.\n\n"
+                "To resolve this, use one of the following options:\n"
+                "1) Set up a fiscal position with an IIBB perception for %(province)s "
+                "(using %(province)s webservice or padron) for the same company. "
+                "The system will query it automatically when invoicing.\n"
+                "2) Enter the rate manually on the contact under "
+                "Accounting → Perceptions/Withholdings for the "
+                "%(province)s tax for period %(from_date)s–%(to_date)s.",
                 province=delivery_state.name,
                 from_date=from_date,
                 to_date=to_date,
