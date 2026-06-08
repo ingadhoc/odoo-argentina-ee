@@ -3,4 +3,4 @@
 # directory
 ##############################################################################
 from . import models
-from . import hooks
+from .hooks import l10n_ar_sircip_post_init_hook
