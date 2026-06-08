@@ -21,14 +21,6 @@ msgstr ""
 
 #. module: l10n_ar_sircip
 #: model:ir.model.fields,field_description:l10n_ar_sircip.field_res_country_state__l10n_ar_is_sircip
-#
-# NOTE: msgid will become "Adhered to SIRCIP" after module update.
-# The entry below covers the updated English string.
-msgid "Adherida a SIRCIP"
-msgstr ""
-
-#. module: l10n_ar_sircip
-#: model:ir.model.fields,field_description:l10n_ar_sircip.field_res_country_state__l10n_ar_is_sircip
 msgid "Adhered to SIRCIP"
 msgstr "Adherida a SIRCIP"
 
@@ -62,17 +54,6 @@ msgstr ""
 #. module: l10n_ar_sircip
 #: model:ir.model.fields,field_description:l10n_ar_sircip.field_account_journal__settlement_tax
 msgid "Impuesto de liquidación"
-msgstr ""
-
-#. module: l10n_ar_sircip
-#: model:ir.model.fields,help:l10n_ar_sircip.field_res_country_state__l10n_ar_is_sircip
-#
-# NOTE: msgid will change to English after module update. Entry below covers both.
-msgid ""
-"Indica que la provincia está adherida al SIRCIP (Sistema de Recaudación del "
-"Control sobre Ingresos Brutos de Convenio Multilateral). Las facturas a "
-"clientes con domicilio de entrega en esta provincia pueden generar "
-"percepciones SIRCIP."
 msgstr ""
 
 #. module: l10n_ar_sircip
