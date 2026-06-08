@@ -12,31 +12,36 @@ _logger = logging.getLogger(__name__)
 
 # Posición de cada jurisdicción en el campo 7 del padrón SIRCIP.
 # El campo 7 tiene 26 posiciones: 25 provincias ordenadas numéricamente + 1 char de control.
-# TODO: verificar el orden exacto con la especificación oficial del SIRCIP.
+# Fuente de jurisdiction_code: l10n_ar_ux/models/res_country_state.py (_compute_jurisdiction_code)
 # Mapa: jurisdiction_code → índice (0-based) en el string de 26 chars
+# TODO: verificar el orden exacto del campo 7 con la especificación oficial del SIRCIP.
 SIRCIP_CAMPO7_POSITION = {
-    "900": 0,   # CABA
-    "901": 1,   # Buenos Aires
-    "903": 2,   # Catamarca
-    "904": 3,   # Córdoba
-    "905": 4,   # Corrientes
-    "906": 5,   # Entre Ríos
-    "907": 6,   # Jujuy
-    "908": 7,   # La Pampa
-    "909": 8,   # La Rioja
-    "910": 9,   # Mendoza
-    "911": 10,  # Misiones
-    "912": 11,  # Neuquén
-    "913": 12,  # Río Negro
-    "914": 13,  # Salta
-    "915": 14,  # San Juan
-    "916": 15,  # San Luis
-    "917": 16,  # Santa Cruz
-    "918": 17,  # Santa Fe
-    "919": 18,  # Santiago del Estero
-    "920": 19,  # Tierra del Fuego
-    "921": 20,  # Tucumán
-    # TODO: verificar si hay más códigos (ej. 902 ARBA, 922, etc.)
+    "901": 0,   # CABA (code C)
+    "902": 1,   # Buenos Aires (code B)
+    "903": 2,   # Catamarca (code K)
+    "904": 3,   # Córdoba (code X)
+    "905": 4,   # Corrientes (code W)
+    "906": 5,   # Chaco (code H)
+    "907": 6,   # Chubut (code U)
+    "908": 7,   # Entre Ríos (code E)
+    "909": 8,   # Formosa (code P)
+    "910": 9,   # Jujuy (code Y)
+    "911": 10,  # La Pampa (code L)
+    "912": 11,  # La Rioja (code F)
+    "913": 12,  # Mendoza (code M)
+    "914": 13,  # Misiones (code N)
+    "915": 14,  # Neuquén (code Q)
+    "916": 15,  # Río Negro (code R)
+    "917": 16,  # Salta (code A)
+    "918": 17,  # San Juan (code J)
+    "919": 18,  # San Luis (code D)
+    "920": 19,  # Santa Cruz (code Z)
+    "921": 20,  # Santa Fe (code S)
+    "922": 21,  # Santiago del Estero (code G)
+    "923": 22,  # Tierra del Fuego (code V)
+    "924": 23,  # Tucumán (code T)
+    # posición 24: posiblemente reservada o futura provincia
+    # posición 25: carácter de control
 }
 
 
