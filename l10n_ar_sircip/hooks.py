@@ -4,8 +4,6 @@
 ##############################################################################
 import logging
 
-from odoo.tools.translate import _
-
 _logger = logging.getLogger(__name__)
 
 SIRCIP_TAXES = [
@@ -124,7 +122,7 @@ def _create_sircip_data_for_company(env, company, sircip_state):
                 "sequence": 9999,
                 "country_id": env.ref("base.ar").id,
                 "company_id": company.id,
-                "note": _(
+                "note": (
                     "Exclusive fiscal position for SIRCIP perception agents "
                     "(Multilateral Agreement). Do not assign individual "
                     "provinces — detection is automatic."
