@@ -141,3 +141,69 @@ class TestSircipCampo7(common.TransactionCase):
         sircip_state = self.env.ref("l10n_ar_sircip.state_ar_sircip")
         digit = fiscal_line._get_sircip_campo7_digit("5225355222512555552512420", sircip_state)
         self.assertEqual(digit, 0)
+
+    # --- _get_sircip_extra_taxes dígitos 4/5 ---
+
+    def test_digit4_with_existing_partner_tax(self):
+        """Dígito 4: usa partner.tax existente para la provincia de entrega."""
+        fiscal_line = self._get_fiscal_pos_line()
+        state_cordoba = self.env.ref("base.state_ar_x")
+        partner = self.env["res.partner"].create(
+            {
+                "name": "Test partner digit4",
+                "vat": "30683021209",
+                "l10n_latam_identification_type_id": self.env.ref("l10n_ar.it_cuit").id,
+            }
+        )
+        # Crear un tax no-SIRCIP para Córdoba y cachearlo en partner.tax
+        cordoba_tax = self.env["account.tax"].create(
+            {
+                "name": "P. IIBB Córdoba Test 1.5%",
+                "amount": 1.5,
+                "type_tax_use": "sale",
+                "company_id": self.env.company.id,
+                "l10n_ar_state_id": state_cordoba.id,
+            }
+        )
+        self.env["l10n_ar.partner.tax"].create(
+            {
+                "partner_id": partner.id,
+                "tax_id": cordoba_tax.id,
+                "from_date": "2026-02-01",
+                "to_date": "2026-02-28",
+            }
+        )
+        from odoo import fields as f
+
+        result = fiscal_line._get_sircip_provincial_tax(state_cordoba, partner, f.Date.from_string("2026-02-15"))
+        self.assertEqual(result, cordoba_tax)
+
+    def test_digit4_no_provincial_rate_raises(self):
+        """Dígito 4 sin alícuota provincial configurada lanza UserError."""
+        from odoo import fields as f
+        from odoo.exceptions import UserError
+
+        fiscal_line = self._get_fiscal_pos_line()
+        state_formosa = self.env.ref("base.state_ar_p")  # Formosa, poco configurada
+        partner = self.env["res.partner"].create(
+            {
+                "name": "Test partner sin tasa provincial",
+                "vat": "30683013184",
+                "l10n_latam_identification_type_id": self.env.ref("l10n_ar.it_cuit").id,
+            }
+        )
+        with self.assertRaises(UserError):
+            fiscal_line._get_sircip_provincial_tax(state_formosa, partner, f.Date.from_string("2026-02-15"))
+
+    def test_extra_taxes_digit1_returns_empty(self):
+        """Dígito 1: sin impuestos extra."""
+        fiscal_line = self._get_fiscal_pos_line()
+        result = fiscal_line._get_sircip_extra_taxes(1, self.env.ref("base.state_ar_c"))
+        self.assertFalse(result)
+
+    def test_extra_taxes_digit2_returns_sobretasa(self):
+        """Dígito 2: retorna el impuesto de sobrealícuota SIRCIP."""
+        fiscal_line = self._get_fiscal_pos_line()
+        result = fiscal_line._get_sircip_extra_taxes(2, self.env.ref("base.state_ar_c"))
+        self.assertTrue(result)
+        self.assertIn("Sobre Alícuota", result.name)
