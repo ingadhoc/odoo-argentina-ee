@@ -2,27 +2,132 @@
 <odoo noupdate="1">
 
     <!-- Provincia ficticia SIRCIP: identificador unívoco del padrón.
-         No debe ser seleccionable por el usuario en formularios de contacto.
-         Se filtra en vistas de res.partner vía domain sobre l10n_ar_is_sircip=False. -->
+         No representa una provincia real. Se usa solo para vincular el archivo de
+         padrón SIRCIP en res.company.jurisdiction.padron y los impuestos SIRCIP.
+         No debe ser seleccionable por el usuario en formularios de contacto. -->
     <record id="state_ar_sircip" model="res.country.state">
         <field name="name">SIRCIP</field>
         <field name="code">SI</field>
         <field name="country_id" ref="base.ar"/>
     </record>
 
-    <!-- Provincias adheridas a SIRCIP — Etapa 1 (implementación desde 01/07/2026).
-         TODO: completar/verificar la lista según la columna "Implementación Etapa 1 (01/07/2026)"
-         del spreadsheet oficial:
-         https://docs.google.com/spreadsheets/d/1yqf8C6ztxJZsmEQRC4-g2RttgMoJCqMi-Y-0_1mlugE
+    <!-- ================================================================
+         Provincias adheridas a SIRCIP — Implementación Etapa 1 (01/07/2026)
+         Fuente: https://docs.google.com/spreadsheets/d/1yqf8C6ztxJZsmEQRC4-g2RttgMoJCqMi-Y-0_1mlugE
+         Columna "Implementación Etapa 1 (01/07/2026)" = X
+         ================================================================ -->
 
-         Activar l10n_ar_is_sircip=True en los records de cada provincia adherida.
-         Ejemplo de cómo hacerlo (descomentar y completar con los XML IDs correctos):
+    <!-- Chaco — RES-2025-22-20-1 / RES-2026-6-20-1 -->
+    <record id="base.state_ar_h" model="res.country.state">
+        <field name="l10n_ar_is_sircip" eval="True"/>
+    </record>
+
+    <!-- Jujuy — Res. Gral. 1712/25 -->
+    <record id="base.state_ar_y" model="res.country.state">
+        <field name="l10n_ar_is_sircip" eval="True"/>
+    </record>
+
+    <!-- Mendoza — Res. 33/2025 / Res. 05/2026 -->
+    <record id="base.state_ar_m" model="res.country.state">
+        <field name="l10n_ar_is_sircip" eval="True"/>
+    </record>
+
+    <!-- Río Negro — Res. 407/2025 / Res. 54/2026 -->
+    <record id="base.state_ar_r" model="res.country.state">
+        <field name="l10n_ar_is_sircip" eval="True"/>
+    </record>
+
+    <!-- Salta — RG 10/2025 -->
+    <record id="base.state_ar_a" model="res.country.state">
+        <field name="l10n_ar_is_sircip" eval="True"/>
+    </record>
+
+    <!-- San Juan — Res. DGR 742/25 -->
+    <record id="base.state_ar_j" model="res.country.state">
+        <field name="l10n_ar_is_sircip" eval="True"/>
+    </record>
+
+    <!-- Santiago del Estero — Res. 11/25 / Res. 11/26 -->
+    <record id="base.state_ar_g" model="res.country.state">
+        <field name="l10n_ar_is_sircip" eval="True"/>
+    </record>
+
+    <!-- Tierra del Fuego — Res. 366/25 / Res. 908/25 -->
+    <record id="base.state_ar_v" model="res.country.state">
+        <field name="l10n_ar_is_sircip" eval="True"/>
+    </record>
+
+    <!-- ================================================================
+         Provincias adheridas al SIRCIP pero AÚN NO en Etapa 1.
+         Descomentar a medida que entren en vigencia.
+         ================================================================ -->
+
+    <!-- CABA — Resol. AGIP 299/2025 (adherida, sin fecha Etapa 1) -->
+    <!--
+    <record id="base.state_ar_c" model="res.country.state">
+        <field name="l10n_ar_is_sircip" eval="True"/>
+    </record>
     -->
+
+    <!-- Buenos Aires — Res. Normativa 16/2025 (adherida, sin fecha Etapa 1) -->
     <!--
     <record id="base.state_ar_b" model="res.country.state">
         <field name="l10n_ar_is_sircip" eval="True"/>
     </record>
-    <record id="base.state_ar_c" model="res.country.state">
+    -->
+
+    <!-- Catamarca — RG ARCAT 10/25 (adherida, sin fecha Etapa 1) -->
+    <!--
+    <record id="base.state_ar_k" model="res.country.state">
+        <field name="l10n_ar_is_sircip" eval="True"/>
+    </record>
+    -->
+
+    <!-- Córdoba — Decreto 795/23 (adherida, sin fecha Etapa 1) -->
+    <!--
+    <record id="base.state_ar_x" model="res.country.state">
+        <field name="l10n_ar_is_sircip" eval="True"/>
+    </record>
+    -->
+
+    <!-- Chubut — Res. DGR 312/24 / Res. 93/2026 (adherida, sin fecha Etapa 1) -->
+    <!--
+    <record id="base.state_ar_u" model="res.country.state">
+        <field name="l10n_ar_is_sircip" eval="True"/>
+    </record>
+    -->
+
+    <!-- La Pampa — Res. 16/2025 (adherida, sin fecha Etapa 1) -->
+    <!--
+    <record id="base.state_ar_l" model="res.country.state">
+        <field name="l10n_ar_is_sircip" eval="True"/>
+    </record>
+    -->
+
+    <!-- La Rioja — Res. 14/2025 (adherida, sin fecha Etapa 1) -->
+    <!--
+    <record id="base.state_ar_f" model="res.country.state">
+        <field name="l10n_ar_is_sircip" eval="True"/>
+    </record>
+    -->
+
+    <!-- Misiones — Res. DGR 739/2025 (adherida, sin fecha Etapa 1) -->
+    <!--
+    <record id="base.state_ar_n" model="res.country.state">
+        <field name="l10n_ar_is_sircip" eval="True"/>
+    </record>
+    -->
+
+    <!-- Neuquén — Res. 170/2025 (adherida, sin fecha Etapa 1) -->
+    <!--
+    <record id="base.state_ar_q" model="res.country.state">
+        <field name="l10n_ar_is_sircip" eval="True"/>
+    </record>
+    -->
+
+    <!-- Santa Cruz — RG ASIP 66/25 (adherida, sin fecha Etapa 1) -->
+    <!--
+    <record id="base.state_ar_z" model="res.country.state">
         <field name="l10n_ar_is_sircip" eval="True"/>
     </record>
     -->
