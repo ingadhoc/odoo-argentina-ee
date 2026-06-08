@@ -75,7 +75,7 @@ Carga del Padrón
 
    * **Jurisdicción:** ``SIRCIP`` (la provincia ficticia creada por el módulo)
    * **Desde / Hasta:** rango del período del padrón (ej. 01/02/2026 - 28/02/2026)
-   * **Archivo:** subir el TXT descargado del `Portal Federal Tributario <https://www.ca.gob.ar/>`_
+   * **Archivo:** subir el TXT descargado del `Portal Federal Tributario — Descargas <https://www.ca.gob.ar/>`_
 
 **Formato del padrón (CSV separado por comas):**
 
@@ -124,7 +124,7 @@ Generación del TXT de DDJJ
 #. Ir al diario **SIRCIP Aplicado**.
 #. Abrir el período de liquidación deseado.
 #. Usar la acción **Descargar TXT** para generar el archivo ``SIRCIP_DDJJ.txt``.
-#. Importar en el menú *Declaración Jurada* del `Portal Federal Tributario <https://www.ca.gob.ar/>`_.
+#. Importar en el menú *Declaración Jurada* del `Portal Federal Tributario — DDJJ <https://www.ca.gob.ar/sistemas/sircip>`_.
 
 **Formato del TXT (CSV 17 campos):** ver ``doc/sircip/Diseno_de_Registros_del_Sistema_SIRCIP.pdf``
 
