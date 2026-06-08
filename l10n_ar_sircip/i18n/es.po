@@ -40,16 +40,6 @@ msgstr "Estado/Provincia"
 msgid "Edit Tax"
 msgstr "Editar Impuesto"
 
-#. module: l10n_ar_sircip
-#. odoo-python
-#: code:addons/l10n_ar_sircip/hooks.py:0
-msgid ""
-"Exclusive fiscal position for SIRCIP perception agents (Multilateral "
-"Agreement). Do not assign individual provinces — detection is automatic."
-msgstr ""
-"Posición fiscal exclusiva para agentes de percepción del SIRCIP (Convenio "
-"Multilateral). No asignar provincias individuales — la detección es "
-"automática."
 
 #. module: l10n_ar_sircip
 #: model:ir.model.fields,field_description:l10n_ar_sircip.field_account_journal__settlement_tax
