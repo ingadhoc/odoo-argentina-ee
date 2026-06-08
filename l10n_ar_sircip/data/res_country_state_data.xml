@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Provincia ficticia SIRCIP: identificador unívoco del padrón.
+         No debe ser seleccionable por el usuario en formularios de contacto.
+         Se filtra en vistas de res.partner vía domain sobre l10n_ar_is_sircip=False. -->
+    <record id="state_ar_sircip" model="res.country.state">
+        <field name="name">SIRCIP</field>
+        <field name="code">SI</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+
+    <!-- Provincias adheridas a SIRCIP — Etapa 1 (implementación desde 01/07/2026).
+         TODO: completar/verificar la lista según la columna "Implementación Etapa 1 (01/07/2026)"
+         del spreadsheet oficial:
+         https://docs.google.com/spreadsheets/d/1yqf8C6ztxJZsmEQRC4-g2RttgMoJCqMi-Y-0_1mlugE
+
+         Activar l10n_ar_is_sircip=True en los records de cada provincia adherida.
+         Ejemplo de cómo hacerlo (descomentar y completar con los XML IDs correctos):
+    -->
+    <!--
+    <record id="base.state_ar_b" model="res.country.state">
+        <field name="l10n_ar_is_sircip" eval="True"/>
+    </record>
+    <record id="base.state_ar_c" model="res.country.state">
+        <field name="l10n_ar_is_sircip" eval="True"/>
+    </record>
+    -->
+
+</odoo>
