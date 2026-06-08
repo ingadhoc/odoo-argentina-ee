@@ -38,6 +38,12 @@ def l10n_ar_sircip_post_init_hook(env):
             ", ".join(ar_companies.mapped("name")),
         )
 
+    # Demo mode: cargar alícuotas de los partners demo desde el padrón.
+    # El hook corre DESPUÉS de que se carga la demo data, por lo que los
+    # partners y el padrón ya existen en la base en este momento.
+    if env.ref("base.user_demo", raise_if_not_found=False):
+        _setup_demo_sircip_aliquots(env, sircip_state)
+
 
 def _create_sircip_data_for_company(env, company, sircip_state):
     """Crea o actualiza los datos SIRCIP para una empresa dada.
@@ -177,3 +183,119 @@ def _create_sircip_data_for_company(env, company, sircip_state):
                     "settlement_account_tag_ids": [(4, sircip_tag.id)] if sircip_tag else [],
                 }
             )
+
+
+# XML IDs de los 5 partners demo SIRCIP
+_DEMO_PARTNER_XMLIDS = [
+    "l10n_ar_sircip.demo_partner_sircip_digit1",
+    "l10n_ar_sircip.demo_partner_sircip_digit2",
+    "l10n_ar_sircip.demo_partner_sircip_digit3",
+    "l10n_ar_sircip.demo_partner_sircip_digit4",
+    "l10n_ar_sircip.demo_partner_sircip_digit5",
+]
+
+
+def _setup_demo_sircip_aliquots(env, sircip_state):
+    """Carga alícuotas SIRCIP para los partners demo desde el padrón demo.
+
+    Se llama desde el post_init_hook solo cuando hay demo data.
+    Simula lo que ocurre al crear la primera factura para cada partner:
+    busca el CUIT en el padrón demo, lee la letra (alícuota) y el campo 7,
+    y crea el registro l10n_ar.partner.tax con la trazabilidad completa.
+
+    El padrón demo tiene un campo 7 diseñado para que idx=18 (Chaco, JC=906)
+    tenga el dígito 1..5 según el caso de cada partner.
+    """
+    from_date = "2026-02-01"
+    to_date = "2026-02-28"
+
+    company_ri = env.ref("base.company_ri", raise_if_not_found=False)
+    if not company_ri:
+        return
+
+    padron = env["res.company.jurisdiction.padron"].search(
+        [
+            ("state_id", "=", sircip_state.id),
+            ("company_id", "=", company_ri.id),
+        ],
+        limit=1,
+    )
+    if not padron:
+        _logger.info("l10n_ar_sircip: padrón demo no encontrado, se omite setup de alícuotas demo.")
+        return
+
+    sircip_group = env["account.tax.group"].search(
+        [("name", "=", "SIRCIP"), ("company_id", "=", company_ri.id)],
+        limit=1,
+    )
+    if not sircip_group:
+        return
+
+    created = 0
+    for xmlid in _DEMO_PARTNER_XMLIDS:
+        partner = env.ref(xmlid, raise_if_not_found=False)
+        if not partner:
+            continue
+
+        # Idempotente: no crear duplicados
+        if env["l10n_ar.partner.tax"].search(
+            [
+                ("partner_id", "=", partner.id),
+                ("tax_id.tax_group_id", "=", sircip_group.id),
+                ("from_date", "=", from_date),
+                ("to_date", "=", to_date),
+            ],
+            limit=1,
+        ):
+            continue
+
+        is_in, aliquot, campo7, crc = padron._get_sircip_aliquot(partner)
+        if not is_in:
+            _logger.warning("l10n_ar_sircip demo: CUIT %s no encontrado en padrón demo.", partner.vat)
+            continue
+
+        # Buscar o crear el impuesto SIRCIP con la alícuota de la letra
+        tax = env["account.tax"].search(
+            [
+                ("amount", "=", aliquot),
+                ("tax_group_id", "=", sircip_group.id),
+                ("company_id", "=", company_ri.id),
+                ("type_tax_use", "=", "sale"),
+            ],
+            limit=1,
+        )
+        if not tax:
+            base_tax = env["account.tax"].search(
+                [
+                    ("tax_group_id", "=", sircip_group.id),
+                    ("company_id", "=", company_ri.id),
+                    ("type_tax_use", "=", "sale"),
+                ],
+                limit=1,
+            )
+            if not base_tax:
+                continue
+            name = "SIRCIP A 0.0" if aliquot == 0.0 else "SIRCIP %.2f%%" % aliquot
+            tax = base_tax.copy(
+                default={
+                    "name": name,
+                    "amount": aliquot,
+                    "sequence": 10,
+                    "active": True,
+                    "l10n_ar_state_id": sircip_state.id,
+                }
+            )
+
+        env["l10n_ar.partner.tax"].create(
+            {
+                "partner_id": partner.id,
+                "tax_id": tax.id,
+                "from_date": from_date,
+                "to_date": to_date,
+                "ref": "SIRCIP | crc:%s | campo7:%s" % (crc, campo7),
+            }
+        )
+        created += 1
+
+    if created:
+        _logger.info("l10n_ar_sircip: %d alícuotas demo creadas para partners SIRCIP.", created)
