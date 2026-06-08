@@ -145,7 +145,7 @@ class AccountFiscalPositionL10nArTax(models.Model):
         if delivery_state and aliquot is not None:
             campo7 = ref.split("campo7:")[-1].strip() if "campo7:" in ref else ""
             digit = self._get_sircip_campo7_digit(campo7, delivery_state)
-            extra_taxes = self._get_sircip_extra_taxes(digit, delivery_state)
+            extra_taxes = self._get_sircip_extra_taxes(digit, delivery_state, partner, date)
 
         # Cachear alícuota base en l10n_ar.partner.tax
         self.env["l10n_ar.partner.tax"].create(
@@ -160,11 +160,11 @@ class AccountFiscalPositionL10nArTax(models.Model):
 
         return base_tax | extra_taxes
 
-    def _get_sircip_extra_taxes(self, digit, delivery_state):
+    def _get_sircip_extra_taxes(self, digit, delivery_state, partner=None, date=None):
         """Impuestos adicionales según el dígito del campo 7.
 
-        Dígito 2: sobrealícuota (1%)
-        Dígito 4/5: alícuota propia de la provincia (TODO: implementar)
+        Dígito 2: sobrealícuota SIRCIP (1%)
+        Dígito 4/5: alícuota propia de la provincia (SIRCIP + tasa provincial)
         Resto: sin impuestos extra
         """
         taxes = self.env["account.tax"]
@@ -180,12 +180,92 @@ class AccountFiscalPositionL10nArTax(models.Model):
             )
             taxes |= sobretasa
         elif digit in (4, 5):
-            # TODO: obtener la alícuota propia de la provincia.
-            # Leer pestaña "Aplicacion Códigos" del spreadsheet oficial:
-            # https://docs.google.com/spreadsheets/d/1MXUlg43Ng-xBIx7xO5epLf21qJCEX7oFWpCzZ2b8PIk/edit?gid=664128533
-            _logger.warning(
-                "SIRCIP campo7 dígito %s para provincia %s: " "lógica de doble alícuota pendiente de implementación.",
-                digit,
+            provincial_tax = self._get_sircip_provincial_tax(delivery_state, partner, date)
+            taxes |= provincial_tax
+        return taxes
+
+    def _get_sircip_provincial_tax(self, delivery_state, partner, date):
+        """Obtiene la alícuota propia de la provincia para dígitos 4/5 del campo 7.
+
+        La "alícuota propia" es la tasa IIBB estándar de la provincia para CM.
+        Se busca en orden:
+
+        1. l10n_ar.partner.tax existente para esa provincia/período (ya cacheado
+           desde ARBA, AGIP, Rentas Córdoba u otro webservice anterior).
+        2. account.fiscal.position.l10n_ar_tax con esa jurisdicción en la misma
+           empresa → llama al webservice correspondiente para obtener la tasa.
+        3. Si no se encuentra: UserError con instrucciones para configurar.
+
+        :param delivery_state: res.country.state del domicilio de entrega
+        :param partner: res.partner
+        :param date: date de la factura
+        :return: account.tax recordset (puede ser vacío si la búsqueda no aplica)
+        """
+        if not delivery_state or not partner or not date:
+            return self.env["account.tax"]
+
+        from_date = date + relativedelta(day=1)
+        to_date = from_date + relativedelta(days=-1, months=+1)
+        company = self.fiscal_position_id.company_id
+
+        # 1. Buscar en partner.tax existente para esa provincia y período
+        existing = self.env["l10n_ar.partner.tax"].search(
+            [
+                ("partner_id", "=", partner.id),
+                ("tax_id.l10n_ar_state_id", "=", delivery_state.id),
+                ("tax_id.tax_group_id.name", "!=", "SIRCIP"),
+                ("tax_id.type_tax_use", "=", "sale"),
+                "|",
+                ("from_date", "=", False),
+                ("from_date", "<=", to_date),
+                "|",
+                ("to_date", "=", False),
+                ("to_date", ">=", from_date),
+            ],
+            limit=1,
+            order="from_date desc",
+        )
+        if existing:
+            _logger.info(
+                "SIRCIP doble alícuota: usando partner.tax existente '%s' para provincia %s",
+                existing.tax_id.name,
                 delivery_state.name,
             )
-        return taxes
+            return existing.tax_id
+
+        # 2. Buscar una línea de posición fiscal con esa jurisdicción y llamar al WS
+        fiscal_line = self.env["account.fiscal.position.l10n_ar_tax"].search(
+            [
+                ("default_tax_id.l10n_ar_state_id", "=", delivery_state.id),
+                ("default_tax_id.tax_group_id.name", "!=", "SIRCIP"),
+                ("tax_type", "=", "perception"),
+                ("fiscal_position_id.company_id", "=", company.id),
+                ("webservice", "!=", False),
+            ],
+            limit=1,
+        )
+        if fiscal_line:
+            _logger.info(
+                "SIRCIP doble alícuota: consultando webservice '%s' para provincia %s",
+                fiscal_line.webservice,
+                delivery_state.name,
+            )
+            return fiscal_line._get_missing_taxes(partner, date)
+
+        # 3. No encontrado: error con instrucciones claras
+        raise UserError(
+            _(
+                "SIRCIP — doble alícuota (dígito 4/5) para la provincia %(province)s: "
+                "no se encontró la alícuota propia de la provincia.\n\n"
+                "Para resolverlo, alguna de estas opciones:\n"
+                "1) Configure una posición fiscal con percepción de IIBB para %(province)s "
+                "(usando el webservice de %(province)s o padrón) con la misma empresa. "
+                "Al facturar, el sistema la consultará automáticamente.\n"
+                "2) Ingrese manualmente la alícuota del contacto en la pestaña "
+                "Contabilidad → Percepciones/Retenciones para el impuesto "
+                "de %(province)s y el período %(from_date)s–%(to_date)s.",
+                province=delivery_state.name,
+                from_date=from_date,
+                to_date=to_date,
+            )
+        )
