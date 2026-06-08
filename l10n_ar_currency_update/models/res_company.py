@@ -93,6 +93,23 @@ class ResCompany(models.Model):
         available_currencies = available_currencies.filtered("l10n_ar_afip_code") - currency_ars
         rate_date = today
 
+        existing_rates = self.env["res.currency.rate"].search(
+            [
+                ("name", "=", today),
+                ("company_id", "in", self.ids),
+                ("currency_id", "in", available_currencies.ids),
+            ]
+        )
+        updated_per_currency = {}
+        for rate_rec in existing_rates:
+            updated_per_currency.setdefault(rate_rec.currency_id.id, set()).add(rate_rec.company_id.id)
+        all_company_ids = set(self.ids)
+        available_currencies = available_currencies.filtered(
+            lambda c: not all_company_ids.issubset(updated_per_currency.get(c.id, set()))
+        )
+        if not available_currencies:
+            return res or False
+
         valid_certificate = (
             self.env["certificate.certificate"]
             .search([("active", "=", True), ("date_end", ">=", today)])
@@ -112,6 +129,7 @@ class ResCompany(models.Model):
         # https://github.com/odoo/enterprise/commit/4fdcf86392f#diff-05c14fb3f27dcc12f22adcfaef217ec6f80ef5ad0b0f37a4bd7b501fdc55461dR499
         original_env = self.env
         self.env = self.env(context=dict(self.env.context, allowed_company_ids=company.ids))
+        any_failed = False
         for currency in available_currencies:
             try:
                 # Obtain the currencies to be updated
@@ -130,11 +148,12 @@ class ResCompany(models.Model):
                     )
             except Exception as e:
                 _logger.info("Could not get rate for currency %s. This is what we get:\n%s", currency.name, e)
-            else:
-                for company in self.filtered(lambda x: x.currency_provider == "afip"):
-                    company.l10n_ar_last_currency_sync_date = fields.Date.context_today(
-                        self.with_context(tz="America/Argentina/Buenos_Aires")
-                    )
+                any_failed = True
+        if not any_failed:
+            for company in self.filtered(lambda x: x.currency_provider == "afip"):
+                company.l10n_ar_last_currency_sync_date = fields.Date.context_today(
+                    self.with_context(tz="America/Argentina/Buenos_Aires")
+                )
         self.env = original_env
         return res or False
 
