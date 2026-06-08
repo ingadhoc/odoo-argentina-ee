@@ -86,12 +86,12 @@ class AccountJournal(models.Model):
             if not tax.l10n_ar_code:
                 raise RedirectWarning(
                     message=_(
-                        "El impuesto '%(tax)s' no tiene Código AFIP (l10n_ar_code) "
-                        "configurado. Es requerido para generar el TXT SIRCIP.",
+                        "Tax '%(tax)s' does not have an AFIP Code (l10n_ar_code) "
+                        "configured. It is required to generate the SIRCIP TXT.",
                         tax=tax.name,
                     ),
                     action=tax.get_formview_action(),
-                    button_text=_("Editar Impuesto"),
+                    button_text=_("Edit Tax"),
                 )
             tipo_regimen = tax.l10n_ar_code
 
@@ -114,8 +114,8 @@ class AccountJournal(models.Model):
             if not state or not state.jurisdiction_code:
                 raise ValidationError(
                     _(
-                        "El impuesto '%(tax)s' no tiene jurisdicción configurada "
-                        "o la provincia no tiene código de jurisdicción.",
+                        "Tax '%(tax)s' does not have a jurisdiction configured, "
+                        "or the province does not have a jurisdiction code.",
                         tax=tax.name,
                     )
                 )
