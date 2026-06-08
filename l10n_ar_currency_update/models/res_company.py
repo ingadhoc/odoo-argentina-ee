@@ -25,6 +25,7 @@ class ResCompany(models.Model):
         digits=(16, 4),
     )
     l10n_ar_last_currency_sync_date = fields.Date(string="ARCA Last Sync Date", readonly=True)
+    l10n_ar_currency_recheck_needed = fields.Boolean(default=False)
 
     @api.model
     def _compute_currency_provider(self):
@@ -71,8 +72,10 @@ class ResCompany(models.Model):
                 ("currency_provider", "=", "afip"),
                 ("currency_interval_unit", "=", currency_interval_unit),
                 "|",
+                "|",
                 ("l10n_ar_last_currency_sync_date", "<", l10n_ar_last_currency_sync_date),
                 ("l10n_ar_last_currency_sync_date", "=", False),
+                ("l10n_ar_currency_recheck_needed", "=", True),
             ]
         ).with_context(l10n_ar_force_create_rate=l10n_ar_force_create_rate).update_currency_rates()
 
@@ -108,6 +111,7 @@ class ResCompany(models.Model):
             lambda c: not all_company_ids.issubset(updated_per_currency.get(c.id, set()))
         )
         if not available_currencies:
+            self.filtered(lambda x: x.currency_provider == "afip").write({"l10n_ar_currency_recheck_needed": False})
             return res or False
 
         valid_certificate = (
@@ -130,6 +134,7 @@ class ResCompany(models.Model):
         original_env = self.env
         self.env = self.env(context=dict(self.env.context, allowed_company_ids=company.ids))
         any_failed = False
+        any_succeeded = False
         for currency in available_currencies:
             try:
                 # Obtain the currencies to be updated
@@ -141,6 +146,7 @@ class ResCompany(models.Model):
                 if afip_date == rate_date or self.env.context.get("l10n_ar_force_create_rate"):
                     res.update({currency.name: (1.0 / rate, rate_date)})
                     _logger.info("Currency %s %s %s", currency.name, rate_date, rate)
+                    any_succeeded = True
                 else:
                     raise UserError(
                         "Returned ARCA rate is not today's rate (%s, %s vs %s, %s)"
@@ -149,11 +155,14 @@ class ResCompany(models.Model):
             except Exception as e:
                 _logger.info("Could not get rate for currency %s. This is what we get:\n%s", currency.name, e)
                 any_failed = True
-        if not any_failed:
-            for company in self.filtered(lambda x: x.currency_provider == "afip"):
-                company.l10n_ar_last_currency_sync_date = fields.Date.context_today(
-                    self.with_context(tz="America/Argentina/Buenos_Aires")
-                )
+        afip_companies = self.filtered(lambda x: x.currency_provider == "afip")
+        if any_succeeded:
+            sync_date = fields.Date.context_today(self.with_context(tz="America/Argentina/Buenos_Aires"))
+            afip_companies.write(
+                {"l10n_ar_last_currency_sync_date": sync_date, "l10n_ar_currency_recheck_needed": any_failed}
+            )
+        elif any_failed:
+            afip_companies.write({"l10n_ar_currency_recheck_needed": True})
         self.env = original_env
         return res or False
 
