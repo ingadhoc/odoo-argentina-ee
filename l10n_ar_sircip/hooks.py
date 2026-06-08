@@ -54,79 +54,100 @@ def _create_sircip_data_for_company(env, company, sircip_state):
     tax_group = TaxGroup.search([("name", "=", "SIRCIP"), ("company_id", "=", company.id)], limit=1)
     if not tax_group:
         tax_group = TaxGroup.create({"name": "SIRCIP", "company_id": company.id})
-        env["ir.model.data"].create({
-            "name": "tax_group_sircip_%s" % company.id,
-            "module": "l10n_ar_sircip",
-            "model": "account.tax.group",
-            "res_id": tax_group.id,
-            "noupdate": True,
-        })
+        env["ir.model.data"].create(
+            {
+                "name": "tax_group_sircip_%s" % company.id,
+                "module": "l10n_ar_sircip",
+                "model": "account.tax.group",
+                "res_id": tax_group.id,
+                "noupdate": True,
+            }
+        )
 
     # 2. Impuestos base
     taxes_by_key = {}
     for xml_key, name, amount, _is_default in SIRCIP_TAXES:
-        tax = Tax.search([
-            ("name", "=", name),
-            ("company_id", "=", company.id),
-            ("type_tax_use", "=", "sale"),
-        ], limit=1)
+        tax = Tax.search(
+            [
+                ("name", "=", name),
+                ("company_id", "=", company.id),
+                ("type_tax_use", "=", "sale"),
+            ],
+            limit=1,
+        )
         if not tax:
-            tax = Tax.create({
-                "name": name,
-                "amount": amount,
-                "amount_type": "percent",
-                "type_tax_use": "sale",
-                "tax_group_id": tax_group.id,
-                "l10n_ar_state_id": sircip_state.id,
-                "company_id": company.id,
-            })
-            env["ir.model.data"].create({
-                "name": "%s_%s" % (xml_key, company.id),
-                "module": "l10n_ar_sircip",
-                "model": "account.tax",
-                "res_id": tax.id,
-                "noupdate": True,
-            })
+            tax = Tax.create(
+                {
+                    "name": name,
+                    "amount": amount,
+                    "amount_type": "percent",
+                    "type_tax_use": "sale",
+                    "tax_group_id": tax_group.id,
+                    "l10n_ar_state_id": sircip_state.id,
+                    "company_id": company.id,
+                }
+            )
+            env["ir.model.data"].create(
+                {
+                    "name": "%s_%s" % (xml_key, company.id),
+                    "module": "l10n_ar_sircip",
+                    "model": "account.tax",
+                    "res_id": tax.id,
+                    "noupdate": True,
+                }
+            )
         taxes_by_key[xml_key] = tax
 
     default_tax = taxes_by_key.get("tax_sircip_no_inscripto")
 
     # 3. Posición fiscal "Percepción - SIRCIP"
-    fiscal_pos = FiscalPos.search([
-        ("name", "=", "Percepción - SIRCIP"),
-        ("company_id", "=", company.id),
-    ], limit=1)
+    fiscal_pos = FiscalPos.search(
+        [
+            ("name", "=", "Percepción - SIRCIP"),
+            ("company_id", "=", company.id),
+        ],
+        limit=1,
+    )
     if not fiscal_pos:
-        fiscal_pos = FiscalPos.create({
-            "name": "Percepción - SIRCIP",
-            "auto_apply": True,
-            "sequence": 9999,
-            "country_id": env.ref("base.ar").id,
-            "company_id": company.id,
-            "note": "Posición fiscal exclusiva para agentes de percepción del SIRCIP (Convenio Multilateral). No asignar provincias individuales — la detección es automática.",
-        })
-        env["ir.model.data"].create({
-            "name": "fiscal_position_sircip_%s" % company.id,
-            "module": "l10n_ar_sircip",
-            "model": "account.fiscal.position",
-            "res_id": fiscal_pos.id,
-            "noupdate": True,
-        })
+        fiscal_pos = FiscalPos.create(
+            {
+                "name": "Percepción - SIRCIP",
+                "auto_apply": True,
+                "sequence": 9999,
+                "country_id": env.ref("base.ar").id,
+                "company_id": company.id,
+                "note": "Posición fiscal exclusiva para agentes de percepción del SIRCIP (Convenio Multilateral). No asignar provincias individuales — la detección es automática.",
+            }
+        )
+        env["ir.model.data"].create(
+            {
+                "name": "fiscal_position_sircip_%s" % company.id,
+                "module": "l10n_ar_sircip",
+                "model": "account.fiscal.position",
+                "res_id": fiscal_pos.id,
+                "noupdate": True,
+            }
+        )
 
     # 4. Línea de posición fiscal con webservice=padron e impuesto No Inscripto
     if default_tax:
-        existing_line = FiscalPosLine.search([
-            ("fiscal_position_id", "=", fiscal_pos.id),
-            ("tax_type", "=", "perception"),
-            ("webservice", "=", "padron"),
-        ], limit=1)
+        existing_line = FiscalPosLine.search(
+            [
+                ("fiscal_position_id", "=", fiscal_pos.id),
+                ("tax_type", "=", "perception"),
+                ("webservice", "=", "padron"),
+            ],
+            limit=1,
+        )
         if not existing_line:
-            FiscalPosLine.create({
-                "fiscal_position_id": fiscal_pos.id,
-                "default_tax_id": default_tax.id,
-                "tax_type": "perception",
-                "webservice": "padron",
-            })
+            FiscalPosLine.create(
+                {
+                    "fiscal_position_id": fiscal_pos.id,
+                    "default_tax_id": default_tax.id,
+                    "tax_type": "perception",
+                    "webservice": "padron",
+                }
+            )
 
     # 5. Diario de liquidación "SIRCIP Aplicado"
     existing_journal = Journal.search([("code", "=", "SIRC"), ("company_id", "=", company.id)], limit=1)
@@ -136,15 +157,17 @@ def _create_sircip_data_for_company(env, company, sircip_state):
         account_xml_id = "account.%s_ri_retencion_iibb_a_pagar" % company.id
         settlement_account = env.ref(account_xml_id, raise_if_not_found=False)
         if settlement_account:
-            Journal.create({
-                "type": "general",
-                "name": "Liquidación SIRCIP Aplicado",
-                "code": "SIRC",
-                "tax_settlement": "allow_per_line",
-                "settlement_tax": "iibb_aplicado_sircip",
-                "settlement_partner_id": partner_iibb.id if partner_iibb else False,
-                "settlement_account_id": settlement_account.id,
-                "company_id": company.id,
-                "show_on_dashboard": False,
-                "settlement_account_tag_ids": [(4, sircip_tag.id)] if sircip_tag else [],
-            })
+            Journal.create(
+                {
+                    "type": "general",
+                    "name": "Liquidación SIRCIP Aplicado",
+                    "code": "SIRC",
+                    "tax_settlement": "allow_per_line",
+                    "settlement_tax": "iibb_aplicado_sircip",
+                    "settlement_partner_id": partner_iibb.id if partner_iibb else False,
+                    "settlement_account_id": settlement_account.id,
+                    "company_id": company.id,
+                    "show_on_dashboard": False,
+                    "settlement_account_tag_ids": [(4, sircip_tag.id)] if sircip_tag else [],
+                }
+            )
