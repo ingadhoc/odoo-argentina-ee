@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================
+         Partners demo SIRCIP — uno por cada caso del campo 7
+
+         Todos tienen como provincia de entrega Chaco (state_ar_h),
+         que está adherida en Etapa 1 (01/07/2026) y ocupa el
+         índice 18 del campo 7 (JC=906, idx=924-906=18).
+
+         El campo 7 de cada CUIT en el padrón demo fue diseñado para
+         tener el dígito correspondiente al caso exactamente en idx=18:
+           - Digit 1: solo tasa básica SIRCIP
+           - Digit 2: tasa básica + sobrealícuota (1%)
+           - Digit 3: excluido (trato como dígito 1 hasta def. formal)
+           - Digit 4: doble alícuota (SIRCIP + alícuota propia de Chaco)
+           - Digit 5: doble alícuota (SIRCIP + alícuota propia de Chaco)
+
+         Los registros l10n_ar.partner.tax se crean en el
+         post_init_hook (corre después de la demo data) llamando
+         a _get_sircip_aliquot() sobre el padrón demo cargado.
+         ============================================================ -->
+
+    <!-- Digit 1 — Solo tasa básica SIRCIP — letra T = 3.00% -->
+    <record id="demo_partner_sircip_digit1" model="res.partner">
+        <field name="name">SIRCIP Demo - Digit 1 Solo Básica (Chaco)</field>
+        <field name="is_company" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="state_id" ref="base.state_ar_h"/>
+        <field name="vat">30708844078</field>
+        <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
+    <!-- Digit 2 — Tasa básica + sobrealícuota — letra V = 4.00% -->
+    <record id="demo_partner_sircip_digit2" model="res.partner">
+        <field name="name">SIRCIP Demo - Digit 2 Sobretasa (Chaco)</field>
+        <field name="is_company" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="state_id" ref="base.state_ar_h"/>
+        <field name="vat">20465753456</field>
+        <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
+    <!-- Digit 3 — Excluido (tratado como dígito 1) — letra W = 4.50% -->
+    <record id="demo_partner_sircip_digit3" model="res.partner">
+        <field name="name">SIRCIP Demo - Digit 3 Excluido (Chaco)</field>
+        <field name="is_company" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="state_id" ref="base.state_ar_h"/>
+        <field name="vat">27250695271</field>
+        <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
+    <!-- Digit 4 — Doble alícuota (SIRCIP + Chaco propio) — letra W = 4.50% -->
+    <record id="demo_partner_sircip_digit4" model="res.partner">
+        <field name="name">SIRCIP Demo - Digit 4 Doble Alícuota (Chaco)</field>
+        <field name="is_company" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="state_id" ref="base.state_ar_h"/>
+        <field name="vat">20042155455</field>
+        <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
+    <!-- Digit 5 — Doble alícuota (SIRCIP + Chaco propio) — letra H = 0.50% -->
+    <record id="demo_partner_sircip_digit5" model="res.partner">
+        <field name="name">SIRCIP Demo - Digit 5 Doble Alícuota (Chaco)</field>
+        <field name="is_company" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="state_id" ref="base.state_ar_h"/>
+        <field name="vat">33686664649</field>
+        <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
+</odoo>
