@@ -4,10 +4,10 @@
     <record id="view_res_country_state_form_sircip" model="ir.ui.view">
         <field name="name">res.country.state.form.sircip</field>
         <field name="model">res.country.state</field>
-        <field name="inherit_id" ref="base.view_state_form"/>
+        <field name="inherit_id" ref="base.view_country_state_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//form" position="inside">
-                <group string="SIRCIP" col="2">
+            <xpath expr="//group" position="after">
+                <group string="SIRCIP">
                     <field name="l10n_ar_is_sircip"/>
                 </group>
             </xpath>
