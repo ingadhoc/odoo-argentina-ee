@@ -139,6 +139,71 @@ Los documentos de referencia se encuentran en la carpeta ``doc/sircip/``:
 * `Recopilación Q&A CESSI <https://docs.google.com/document/d/1Apl-WG06AZZHXB70uVAWbzcg3sw1ncshoaBVcTdw8AE/edit?tab=t.0>`_
 * `Portal Federal Tributario SIRCIP <https://www.ca.gob.ar/sistemas/sircip>`_
 
+Pendientes
+==========
+
+Funcionalidad definida pero aún sin implementar
+------------------------------------------------
+
+**TXT de presentación de DDJJ — validación contra el sistema real**
+  El método ``iibb_aplicado_sircip_files_values()`` genera el CSV de 17 campos
+  según la especificación del PDF oficial. Pendiente validar contra el portal SIRCIP
+  con archivos reales de un período completo y confirmar que las validaciones del
+  sistema aceptan el formato generado.
+
+**Dígito 3 del campo 7 — comportamiento bajo análisis de ARCA**
+  El dígito 3 se define como "Excluido" en la especificación oficial pero su
+  comportamiento exacto está pendiente de definición formal. Actualmente se trata
+  igual que el dígito 1 (solo tasa básica SIRCIP). Ver resolución en el
+  `Q&A CESSI <https://docs.google.com/document/d/1Apl-WG06AZZHXB70uVAWbzcg3sw1ncshoaBVcTdw8AE/edit?tab=t.0>`_
+  y actualizar ``_get_sircip_extra_taxes()`` en
+  ``models/account_fiscal_position_l10n_ar_tax.py``.
+
+**Soporte de archivos comprimidos (ZIP/RAR) en la carga del padrón**
+  Actualmente solo se acepta el archivo TXT plano. El padrón SIRCIP podría
+  venir comprimido en futuras versiones del portal. Implementar en
+  ``_get_sircip_aliquot()`` siguiendo el patrón existente de
+  ``_read_parp_from_binary()`` para Santa Fe.
+
+Configuración que el cliente debe realizar manualmente
+------------------------------------------------------
+
+**Posiciones fiscales provinciales para dígitos 4/5 del campo 7**
+  Para contribuyentes donde el campo 7 indica dígito 4 o 5 (doble alícuota:
+  SIRCIP + alícuota propia de la provincia), el sistema busca en orden:
+
+  1. Un registro ``l10n_ar.partner.tax`` existente del contacto para esa provincia.
+  2. Una posición fiscal con percepción configurada para esa jurisdicción.
+
+  Si no encuentra ninguno, lanza un ``UserError`` explicativo. El cliente debe
+  configurar las posiciones fiscales de las provincias que apliquen dígito 4/5.
+
+**Código de régimen (l10n_ar_code) en los impuestos SIRCIP**
+  Los impuestos SIRCIP creados por el módulo no tienen ``l10n_ar_code`` (Código AFIP)
+  pre-configurado. El campo 4 del TXT DDJJ requiere este código. El cliente debe
+  completarlo en ``Contabilidad → Configuración → Impuestos`` para cada impuesto
+  SIRCIP antes de generar el TXT.
+
+Datos que pueden cambiar antes de la fecha de inicio (01/07/2026)
+------------------------------------------------------------------
+
+**Provincias adheridas — Etapa 1**
+  El archivo ``data/res_country_state_data.xml`` tiene activas 8 provincias de
+  Etapa 1 y comentadas 10 provincias adheridas sin fecha confirmada. Antes del
+  01/07/2026 verificar el
+  `spreadsheet oficial de adhesiones <https://docs.google.com/spreadsheets/d/1yqf8C6ztxJZsmEQRC4-g2RttgMoJCqMi-Y-0_1mlugE/edit?gid=0#gid=0>`_
+  y descomentar las que confirmen fecha de inicio.
+
+  Provincias comentadas (adheridas, pendiente de etapa):
+  CABA, Buenos Aires, Catamarca, Córdoba, Chubut, La Pampa, La Rioja, Misiones,
+  Neuquén, Santa Cruz.
+
+**Posiciones en el campo 7 por jurisdicción**
+  El mapa ``SIRCIP_CAMPO7_POSITION`` en
+  ``models/account_fiscal_position_l10n_ar_tax.py`` está construido a partir del
+  PDF y ejemplos del padrón real. Si ARCA modifica el orden de las jurisdicciones
+  en el campo 7 debe actualizarse.
+
 Créditos
 ========
 
