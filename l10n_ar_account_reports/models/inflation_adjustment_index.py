@@ -38,9 +38,11 @@ class InflationAdjustmentIndex(models.Model):
 
     @api.constrains("date")
     def check_date_unique(self):
+        if self.env.context.get("install_mode"):
+            return
         for rec in self:
-            repeated = self.find(rec.date)
-            if len(repeated) > 1 or repeated.id != rec.id:
+            repeated = rec.find(rec.date)
+            if repeated and repeated.id != rec.id:
                 rec_date = fields.Date.from_string(rec.date)
                 raise ValidationError(
                     _("An index already exists for period %s %s. You can only have one inflation index per month")
