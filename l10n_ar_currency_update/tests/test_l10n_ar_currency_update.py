@@ -157,3 +157,25 @@ class TestL10nArCurrencyUpdate(AccountTestInvoicingCommon):
             rate_record_company_2.rate,
             "Company 1 and Company 2 should have different rates due to the markup applied only to Company 1.",
         )
+
+    def test_zero_rate_from_afip_is_not_stored(self):
+        """If parsed_data contains a zero rate (e.g. AFIP returned False/0), no record should be created."""
+        test_date = datetime.date.today()
+
+        existing_rates = self.env["res.currency.rate"].search(
+            [("currency_id", "=", self.USD.id), ("name", "=", test_date), ("company_id", "=", self.env.company.id)]
+        )
+        existing_rates.unlink()
+
+        mocked_res = {
+            "ARS": (1.0, test_date),
+            "USD": (0.0, test_date),  # simulates False/0 from AFIP slipping through
+        }
+
+        with patch(f"{self.utils_path}._parse_afip_data", return_value=mocked_res):
+            self.env.company.update_currency_rates()
+
+        rate_after = self.env["res.currency.rate"].search(
+            [("currency_id", "=", self.USD.id), ("name", "=", test_date), ("company_id", "=", self.env.company.id)]
+        )
+        self.assertFalse(rate_after, "A rate=0.0 should not have been stored in the database.")
