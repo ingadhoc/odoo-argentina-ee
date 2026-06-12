@@ -61,6 +61,8 @@ Archivos para declaración de impuestos
 
 * TUCUMAN: especificación en doc/Tucuman/MRETPER6R2.pdf a partir de la página 12
 
+* SICORE: la especificación se encuentra en /doc/sicore/ y se obtuvo del aplicativo SICORE v9.0 r22 de SIAP.
+
 Installation
 ============
 
