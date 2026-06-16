@@ -43,9 +43,9 @@ class AfipImportWizard(models.TransientModel):
     @api.depends_context("import_type")
     def _compute_journal_domain(self):
         if self._context.get("import_type") == "sale":
-            domain = [("type", "in", "sale"), ("l10n_ar_is_pos", "=", False)]
+            domain = [("type", "=", "sale"), ("l10n_ar_is_pos", "=", False)]
         elif self._context.get("import_type") == "purchase":
-            domain = [("type", "in", "purchase"), ("l10n_latam_use_documents", "=", True)]
+            domain = [("type", "=", "purchase"), ("l10n_latam_use_documents", "=", True)]
         else:
             domain = []
         self.journal_domain = domain
