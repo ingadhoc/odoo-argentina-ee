@@ -19,6 +19,15 @@ class AccountMoveLine(models.Model):
             self.partner_id.l10n_ar_partner_perception_ids if is_perception else self.partner_id.l10n_ar_partner_tax_ids
         )
         date = date or self.date
+        if self.tax_line_id.l10n_ar_tax_type == "earnings":
+            if partner_tax := partner_field.filtered(
+                lambda x: x.company_id == self.company_id
+                and not x.tax_id.l10n_ar_state_id
+                and x.tax_id.l10n_ar_tax_type in ["earnings", "earnings_scale"]
+                and (x.from_date <= date if x.from_date else True)
+                and (x.to_date >= date if x.to_date else True)
+            ):
+                return partner_tax.tax_id
         if partner_tax := partner_field.filtered(
             lambda x: x.company_id == self.company_id
             and x.tax_id.l10n_ar_state_id == self.tax_line_id.l10n_ar_state_id
