@@ -61,6 +61,24 @@ class AccountMove(models.Model):
                 )
             )
 
+    def _get_vat(self, base_lines=None):
+        res = super()._get_vat(base_lines=base_lines)
+        # Upstream refactor (commit 114cae88b) skips VAT groups where base and tax
+        # both aggregate to zero (e.g. 100% advance deduction netting them out).
+        # Old code iterated individual tax lines and always emitted an entry per group
+        # with BaseImp=0/Importe=0 — AFIP accepted that with the real alícuota Id.
+        # Replicate: when super() returns [], find groups with non-zero individual tax
+        # lines and emit the same zero entries using the actual alícuota code.
+        if not res:
+            seen = {}
+            for line in self.line_ids:
+                code = line.tax_line_id.tax_group_id.l10n_ar_vat_afip_code if line.tax_line_id else False
+                if code and code not in ("0", "1", "2") and line.amount_currency and code not in seen:
+                    seen[code] = line.tax_line_id.tax_group_id
+            if seen:
+                res = [{"Id": code, "BaseImp": 0.0, "Importe": 0.0} for code in seen]
+        return res
+
     @api.model
     def wsfe_get_cae_request(self, client=None):
         res = super().wsfe_get_cae_request(client=client)
