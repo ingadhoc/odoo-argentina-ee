@@ -97,12 +97,13 @@ class L10n_ArSicoreReportHandler(models.AbstractModel):
             issue_date = payment.date
 
             # Importe Comprobante (document amount)           [16]
-            content += f"{abs(payment.amount):016.2f}"
+            content += f"{abs(payment.payment_total):016.2f}"
             # Codigo de Impuesto (tax code)            [ 4]
             # Codigo de Regimen (regime code)             [ 3]
 
             content += "0217"
-            regimen = line.tax_line_id.l10n_ar_code
+            tax = line._get_settlement_tax(date=line.date)
+            regimen = tax.l10n_ar_code
 
             content += f"{''.join(filter(str.isdigit, str(regimen))):0>3}" if regimen else "000"
 
@@ -110,7 +111,7 @@ class L10n_ArSicoreReportHandler(models.AbstractModel):
             content += "1"
 
             # Base de Calculo (base amount)               [14]
-            content += f"{abs(line.tax_base_amount):014.2f}"
+            content += f"{abs(line.withholding_id.base_amount):014.2f}"
 
             # Fecha Emision Retencion (move line date)        [10] (dd/mm/yyyy)
             content += fields.Date.from_string(issue_date).strftime("%d/%m/%Y")
