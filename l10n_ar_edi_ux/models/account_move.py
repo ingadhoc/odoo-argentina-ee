@@ -216,3 +216,25 @@ class AccountMove(models.Model):
         ):
             return False
         return super()._is_dummy_afip_validation()
+
+    def action_post(self):
+        for move in self.filtered(lambda x: x.journal_id.l10n_ar_is_pos and x.journal_id.l10n_ar_afip_ws):
+            # If the related document (e.g., the source invoice of an electronic
+            # credit/debit note) is still in draft state, it does not yet have a
+            # definitive number or date, causing the AFIP related-document payload
+            # generation to fail with a generic error. Validate this condition upfront
+            # and provide a clear message indicating that the related document must be
+            # posted first.
+            related_inv = move._found_related_invoice()
+            if related_inv and related_inv.state != "posted":
+                raise UserError(
+                    _(
+                        "Cannot electronically validate '%(move)s' because the related "
+                        "document '%(related)s' is still in draft state. Please post the "
+                        "related document before issuing the electronic credit/debit note.",
+                        move=move.display_name,
+                        related=related_inv.display_name,
+                    )
+                )
+
+        return super().action_post()
