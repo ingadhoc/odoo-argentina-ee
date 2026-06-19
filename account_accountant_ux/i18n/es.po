@@ -75,7 +75,7 @@ msgstr "Reporte Contable"
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_return
 msgid "Accounting Return"
-msgstr ""
+msgstr "Declaración de impuestos"
 
 #. module: account_accountant_ux
 #: model:ir.actions.server,name:account_accountant_ux.action_aged_payable
@@ -119,7 +119,7 @@ msgstr "Línea de Extracto Bancario"
 #. odoo-javascript
 #: code:addons/account_accountant_ux/static/src/account_report_filters_patch.js:0
 msgid "Calendar Year"
-msgstr ""
+msgstr "Año Calendario"
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_account_tax_settlement_wizard_form
@@ -212,13 +212,13 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/account_accountant_ux/static/src/account_report_filters_patch.js:0
 msgid "End of Month"
-msgstr ""
+msgstr "Fin de Mes"
 
 #. module: account_accountant_ux
 #. odoo-javascript
 #: code:addons/account_accountant_ux/static/src/account_report_filters_patch.js:0
 msgid "End of Quarter"
-msgstr ""
+msgstr "Fin de Trimestre"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,help:account_accountant_ux.field_account_report__allow_settlement
@@ -241,7 +241,7 @@ msgstr "Filtrar Monto"
 #. odoo-javascript
 #: code:addons/account_accountant_ux/static/src/account_report_filters_patch.js:0
 msgid "Fiscal Year"
-msgstr ""
+msgstr "Año Fiscal"
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_followup_report_handler
@@ -333,7 +333,7 @@ msgstr "Última Actualización en"
 #. odoo-javascript
 #: code:addons/account_accountant_ux/static/src/account_report_filters_patch.js:0
 msgid "Month"
-msgstr ""
+msgstr "Mes"
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_account_move_line_search_bank_rec_widget
@@ -397,7 +397,7 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/account_accountant_ux/static/src/account_report_filters_patch.js:0
 msgid "Quarter"
-msgstr ""
+msgstr "Trimestre"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_auto_reconcile_wizard__search_mode
