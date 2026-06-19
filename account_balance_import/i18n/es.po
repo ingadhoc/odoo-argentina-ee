@@ -319,7 +319,7 @@ msgstr "Modo de Importación"
 #. module: account_balance_import
 #: model:ir.model,name:account_balance_import.model_onboarding_onboarding
 msgid "Onboarding"
-msgstr ""
+msgstr "Incorporación"
 
 #. module: account_balance_import
 #: model:ir.model,name:account_balance_import.model_account_financial_year_op
@@ -385,7 +385,7 @@ msgstr "Saldos de Partners"
 #. odoo-javascript
 #: code:addons/account_balance_import/static/src/xml/account_import.xml:0
 msgid "Set Periods"
-msgstr ""
+msgstr "Configurar Periodos"
 
 #. module: account_balance_import
 #. odoo-javascript
