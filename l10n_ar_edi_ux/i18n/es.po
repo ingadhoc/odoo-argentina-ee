@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-03 15:30+0000\n"
+"POT-Creation-Date: 2026-06-19 19:14+0000\n"
 "PO-Revision-Date: 2026-05-28 00:25+0000\n"
 "Last-Translator: julia elizondo <jue@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
@@ -248,6 +248,15 @@ msgstr "Clave CIT ARBA"
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
 msgid "Cancel"
 msgstr "Cancelar"
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/account_move.py:0
+msgid ""
+"Cannot electronically validate '%(move)s' because the related document "
+"'%(related)s' is still in draft state. Please post the related document "
+"before issuing the electronic credit/debit note."
+msgstr ""
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
