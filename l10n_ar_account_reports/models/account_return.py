@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from odoo import Command, _, fields, models
 from odoo.exceptions import UserError
 
@@ -186,6 +188,72 @@ class AccountReturn(models.Model):
         if self.closing_move_ids.filtered(lambda m: m.state == "draft"):
             return self.closing_move_ids._get_records_action()
         return res
+
+    def _generate_tax_closing_entries(self, options):
+        """EXTENDS account_reports.
+
+        Cuando el tipo de retorno tiene activado ``l10n_ar_single_branch_closing_entry`` y el
+        return abarca una compañía padre junto con sus sucursales (branches) —a cualquier nivel de
+        anidamiento— generamos un único asiento de liquidación consolidado en la compañía padre en
+        lugar de uno por cada branch.
+
+        El método nativo recorre ``company_ids`` (padre + branches) y crea un asiento por compañía.
+        Acá computamos las líneas de cada compañía con el mismo helper nativo
+        (``_compute_tax_closing_entry``, que aísla los montos por compañía vía ``forced_domain``),
+        las concatenamos en un solo asiento de la padre y consolidamos los subtotales por grupo de
+        impuesto para una única línea de contrapartida.
+
+        Solo consolidamos cuando ``company_ids`` está formado por una compañía padre —que además
+        es la compañía del return, no asumimos que el asiento siempre se cree en la padre— más
+        sucursales **descendientes** suyas, sin importar la profundidad (sub-sucursales incluidas).
+        Usamos ``parent_path`` para chequear pertenencia al árbol, así una jerarquía multinivel
+        (padre → sucursal → sub-sucursal) consolida igual. Cualquier otro escenario multi-compañía
+        (p. ej. una unidad de impuestos / tax unit con compañías no relacionadas) se delega al
+        comportamiento nativo: un asiento por compañía.
+        """
+        self.ensure_one()
+
+        companies = self.company_ids
+        # Determinamos explícitamente la compañía padre del conjunto: la única cuyo parent no
+        # pertenece al propio conjunto (la raíz de las sucursales involucradas).
+        parent_company = companies.filtered(lambda c: c.parent_id not in companies)
+        branches = companies - parent_company
+        is_branch_consolidation = (
+            self.type_id.l10n_ar_single_branch_closing_entry
+            and parent_company == self.company_id
+            and branches
+            # ``parent_path`` ("1/5/12/") permite verificar descendencia a cualquier nivel: toda
+            # branch del conjunto debe colgar del árbol de la padre (sub-sucursales incluidas).
+            and all(branch.parent_path.startswith(parent_company.parent_path) for branch in branches)
+        )
+        if not is_branch_consolidation:
+            return super()._generate_tax_closing_entries(options)
+
+        self._ensure_tax_group_configuration_for_tax_closing()
+
+        line_ids_vals = []
+        consolidated_subtotal = defaultdict(float)
+        for company in companies:
+            company_lines, tax_group_subtotal = self._compute_tax_closing_entry(company, options)
+            line_ids_vals += company_lines
+            for key, amount in tax_group_subtotal.items():
+                consolidated_subtotal[key] += amount
+
+        line_ids_vals += self._add_tax_group_closing_items(consolidated_subtotal)
+
+        move = self.env["account.move"].create(
+            {
+                "company_id": parent_company.id,
+                "journal_id": parent_company._get_tax_closing_journal().id,
+                "date": self.date_to,
+                "closing_return_id": self.id,
+                "ref": self.name,
+                "line_ids": line_ids_vals,
+            }
+        )
+        # Mantiene el comportamiento AR: action_post queda interceptado y deja el asiento en
+        # borrador para los tipos de cierre argentinos (ver override en account_move.py).
+        move.action_post()
 
     def _run_checks(self, check_codes_to_ignore):
         # if "l10n_ar_account_reports." in self.type_external_id:
