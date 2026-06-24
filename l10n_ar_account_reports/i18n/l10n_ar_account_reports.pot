@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-01 16:41+0000\n"
-"PO-Revision-Date: 2026-06-01 16:41+0000\n"
+"POT-Creation-Date: 2026-06-24 19:29+0000\n"
+"PO-Revision-Date: 2026-06-24 19:29+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -1231,8 +1231,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
 msgid ""
-"There is no withholding regime (ARCA Code 'l10n_ar_code') configured for tax "
-"'%(tax_name)s'"
+"There is no withholding regime (ARCA Code 'l10n_ar_code') configured for tax"
+" '%(tax_name)s'"
 msgstr ""
 
 #. module: l10n_ar_account_reports
