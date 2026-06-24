@@ -90,7 +90,7 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
             "|",
             ("tax_line_id.type_tax_use", "=", "sale"),
             ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
-        ] + get_standard_lines_domain(self.env.company.ids, options)
+        ] + get_standard_lines_domain(self.env["account.report"].get_report_company_ids(options), options)
 
         # lo hacemos igual que está hoy, probablemente tengamos que hacer busqueda negativa para los otros casos?
         if file_type == "ncfact":

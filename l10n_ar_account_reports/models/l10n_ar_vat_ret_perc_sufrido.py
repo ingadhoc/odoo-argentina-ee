@@ -67,7 +67,7 @@ class L10n_ArIvaReportHandler(models.AbstractModel):
             )
         domain = [
             ("tax_line_id.l10n_ar_state_id", "=", False),
-        ] + get_standard_lines_domain(self.env.company.ids, options)
+        ] + get_standard_lines_domain(self.env["account.report"].get_report_company_ids(options), options)
 
         if file_type == "ret":
             # TODO: ver que agregamos en el domain para retenciones iva sufridas

@@ -69,7 +69,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
         domain = [
             ("tax_line_id.l10n_ar_state_id.code", "not in", ["C", "B", "T"]),
             ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
-        ] + get_standard_lines_domain(self.env.company.ids, options)
+        ] + get_standard_lines_domain(self.env["account.report"].get_report_company_ids(options), options)
 
         if file_type == "ret":
             domain += [("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier")]
@@ -126,9 +126,8 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
                 if not tax.l10n_ar_code:
                     raise RedirectWarning(
                         message=_(
-                            "There is no withholding regime (ARCA Code 'l10n_ar_code') configured for tax '%(tax_name)s' of partner '%(partner_name)s'",
+                            "There is no withholding regime (ARCA Code 'l10n_ar_code') configured for tax '%(tax_name)s'",
                             tax_name=tax.name,
-                            partner_name=line.partner_id.name,
                         ),
                         action=tax.get_formview_action(),
                         button_text=_("Edit tax"),

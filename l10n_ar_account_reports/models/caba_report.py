@@ -76,7 +76,7 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
         return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
 
     def _caba_get_lines_domain(self, options, refund=False):
-        domain = get_standard_lines_domain(self.env.company.ids, options)
+        domain = get_standard_lines_domain(self.env["account.report"].get_report_company_ids(options), options)
         if refund:
             domain += [("move_id.move_type", "=", "out_refund")]
         else:

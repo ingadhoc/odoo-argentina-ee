@@ -66,7 +66,7 @@ class L10n_ArMisionesReportHandler(models.AbstractModel):
         domain = [
             ("tax_line_id.l10n_ar_state_id.code", "=", "N"),
             ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
-        ] + get_standard_lines_domain(self.env.company.ids, options)
+        ] + get_standard_lines_domain(self.env["account.report"].get_report_company_ids(options), options)
 
         if file_type == "ret":
             domain += [("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier")]
