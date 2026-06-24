@@ -55,7 +55,7 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
             "|",
             ("tax_line_id.type_tax_use", "=", "sale"),
             ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
-        ] + get_standard_lines_domain(self.env.company.ids, options)
+        ] + get_standard_lines_domain(self.env["account.report"].get_report_company_ids(options), options)
         return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
 
     def _get_santa_fe_txt_content(self, move_lines):

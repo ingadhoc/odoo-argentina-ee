@@ -1231,8 +1231,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
 msgid ""
-"There is no withholding regime (ARCA Code 'l10n_ar_code') configured for tax"
-" '%(tax_name)s' of partner '%(partner_name)s'"
+"There is no withholding regime (ARCA Code 'l10n_ar_code') configured for tax "
+"'%(tax_name)s'"
 msgstr ""
 
 #. module: l10n_ar_account_reports
