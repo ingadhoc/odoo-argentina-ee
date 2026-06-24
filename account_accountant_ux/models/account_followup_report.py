@@ -17,59 +17,51 @@ class FollowupReportCustomHandler(models.AbstractModel):
     def _get_partner_aml_report_lines(
         self, report, options, partner_line_id, aml_results, progress, offset=0, level_shift=0
     ):
-        """Override to add total_due line at the end."""
+        """Append Total Due / Total Overdue lines summed from the report's own aml_results."""
         lines, next_progress, treated_results_count, has_more = super()._get_partner_aml_report_lines(
             report, options, partner_line_id, aml_results, progress, offset, level_shift
         )
 
-        # Get the partner from the line_id
+        # Render the total once, on the partner's last page (has_more=False).
+        if has_more:
+            return lines, next_progress, treated_results_count, has_more
+
         _dummy1, _dummy2, partner_id = report._parse_line_id(partner_line_id)[-1]
-        if partner_id:
-            partner = self.env["res.partner"].browse(partner_id)
+        if not partner_id:
+            return lines, next_progress, treated_results_count, has_more
 
-            # Use partner.total_due which updates automatically when no_followup changes
-            total_due = partner.total_due
+        # Single page (offset 0) → aml_results has every line; paginated → re-query the full set.
+        partner_amls = aml_results if not offset else self._get_aml_values(options, [partner_id]).get(partner_id, [])
 
-            # Create a line for total_due
-            total_due_line = {
-                "id": report._get_generic_line_id(None, None, markup="total_due", parent_line_id=partner_line_id),
-                "name": _("Total Due"),
-                "level": 3 + level_shift,
-                "parent_id": partner_line_id,
-                "columns": [],
-                "class": "total",
-            }
+        followup_amls = [aml for aml in partner_amls if not aml.get("no_followup")]
+        total_due = sum(aml["amount_residual"] for aml in followup_amls)
+        total_overdue = sum(aml["amount_residual"] for aml in self._filter_overdue_amls_from_results(followup_amls))
 
-            # Add empty columns for all except the last one
-            for idx, column in enumerate(options["columns"]):
-                if idx == len(options["columns"]) - 1:
-                    # Last column shows the total_due amount
-                    total_due_line["columns"].append(report._build_column_dict(total_due, column, options=options))
-                else:
-                    # Empty columns
-                    total_due_line["columns"].append({})
-
-            lines.append(total_due_line)
-            # Also add a total_overdue line below total_due
-            total_overdue = partner.total_overdue
-
-            total_overdue_line = {
-                "id": report._get_generic_line_id(None, None, markup="total_overdue", parent_line_id=partner_line_id),
-                "name": _("Total Overdue"),
-                "level": 3 + level_shift,
-                "parent_id": partner_line_id,
-                "columns": [],
-                "class": "total",
-            }
-
-            for idx, column in enumerate(options["columns"]):
-                if idx == len(options["columns"]) - 1:
-                    total_overdue_line["columns"].append(
-                        report._build_column_dict(total_overdue, column, options=options)
-                    )
-                else:
-                    total_overdue_line["columns"].append({})
-
-            lines.append(total_overdue_line)
+        lines.append(
+            self._get_partner_total_line(
+                report, options, partner_line_id, "total_due", _("Total Due"), total_due, level_shift
+            )
+        )
+        lines.append(
+            self._get_partner_total_line(
+                report, options, partner_line_id, "total_overdue", _("Total Overdue"), total_overdue, level_shift
+            )
+        )
 
         return lines, next_progress, treated_results_count, has_more
+
+    def _get_partner_total_line(self, report, options, partner_line_id, markup, name, amount, level_shift):
+        """Build a partner summary line showing ``amount`` in the last column."""
+        last_index = len(options["columns"]) - 1
+        columns = [
+            report._build_column_dict(amount, column, options=options) if idx == last_index else {}
+            for idx, column in enumerate(options["columns"])
+        ]
+        return {
+            "id": report._get_generic_line_id(None, None, markup=markup, parent_line_id=partner_line_id),
+            "name": name,
+            "level": 3 + level_shift,
+            "parent_id": partner_line_id,
+            "columns": columns,
+            "class": "total",
+        }

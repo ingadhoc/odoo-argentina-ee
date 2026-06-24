@@ -14,9 +14,15 @@ class PartnerLedgerCustomHandler(models.AbstractModel):
         return res
 
     def _get_additional_column_aml_values(self):
-        """Add amount_residual to the query."""
+        """Add amount_residual (converted to the report currency) to the query.
+
+        The conversion mirrors the standard debit/credit/balance columns
+        (``_currency_table_apply_rate``) so the followup totals stay consistent
+        with the visible lines in multi-company / multi-currency setups.
+        """
         return SQL(
-            "%s account_move_line.amount_residual AS amount_residual,", super()._get_additional_column_aml_values()
+            "%s account_move_line.amount_residual * COALESCE(account_currency_table.rate, 1) AS amount_residual,",
+            super()._get_additional_column_aml_values(),
         )
 
     def _get_report_line_move_line(
