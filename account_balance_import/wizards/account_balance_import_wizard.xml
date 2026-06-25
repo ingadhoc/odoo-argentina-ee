@@ -14,10 +14,10 @@
                         </h1>
 
                         <p style="margin-bottom: 0px;">
-                            Descargue la plantilla de importación siguiendo el link
-                            y edítelo manteniendo la estructura del archivo.<br/>
-                            Una vez finalizada la edición, suba el archivo modificado
-                            y haga click en el botón "Importar" ubicado más abajo.
+                            Download the import template using the link
+                            and edit it while keeping the file structure.<br/>
+                            Once you finish editing, upload the modified file
+                            and click the "Import" button below.
                         </p>
                     </group>
 
@@ -31,7 +31,7 @@
                             <div name="files" colspan="2">
                                 <button name="action_generate_partner_balance_xls" type="object" class="btn btn-link" invisible="mode != 'partner_balance'" role="button">
                                     <span class="fa fa-download" title="download"></span>
-                                    Descargar Plantilla de Importación de Saldos de Partners
+                                    Download Partner Balances Import Template
                                 </button>
                             </div>
                             <field name="file"/>
@@ -46,8 +46,8 @@
                     </group>
                 </sheet>
                 <footer>
-                    <button type="object" name="action_import" class="btn btn-primary">Importar</button>
-                    <button special="cancel" string="Cancelar"/>
+                    <button type="object" name="action_import" class="btn btn-primary">Import</button>
+                    <button special="cancel" string="Cancel"/>
                 </footer>
             </form>
         </field>

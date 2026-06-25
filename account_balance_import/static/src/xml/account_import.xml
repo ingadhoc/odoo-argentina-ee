@@ -82,9 +82,9 @@
 
                                             <!-- Mostrar link al asiento de apertura si existe -->
                                             <div t-if="accountOpeningMoveId" class="mt-3 alert alert-info" role="alert">
-                                                <strong>Asiento de Apertura:</strong>
+                                                <strong>Opening Entry:</strong>
                                                 <button type="button" class="btn btn-link p-0 align-baseline" t-on-click="() => this._openAccountOpeningMove()">
-                                                    <t t-esc="accountOpeningMoveId[1]"/>
+                                                    <t t-out="accountOpeningMoveId[1]"/>
                                                 </button>
                                             </div>
                                         </div>

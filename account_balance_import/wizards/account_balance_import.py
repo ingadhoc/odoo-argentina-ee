@@ -5,7 +5,7 @@ import logging
 import numbers
 
 import xlrd
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 from openpyxl import load_workbook
 
@@ -21,36 +21,34 @@ class AccountBalanceImport(models.TransientModel):
     # Common Fields
     company_id = fields.Many2one(
         "res.company",
-        string="Compañía",
+        string="Company",
         required=True,
         default=lambda self: self.env.company,
     )
 
     counterpart_account_id = fields.Many2one(
         "account.account",
-        string="Cuenta de Contrapartida",
+        string="Counterpart Account",
         default=lambda self: self.env.company.get_unaffected_earnings_account(),
-        help="Recomendamos utilizar la misma cuenta de contrapartida para todos los asientos iniciales",
+        help="We recommend using the same counterpart account for all initial entries",
         check_company=True,
     )
 
     mode = fields.Selection(
         [
-            ("partner_balance", "Saldos de Partners"),
+            ("partner_balance", "Partner Balances"),
         ],
-        string="Modo de Importación",
+        string="Import Mode",
         required=True,
         default="partner_balance",
         ondelete={"partner_balance": "set default"},
     )
-    accounting_date = fields.Date(
-        "Fecha Contable", required=True, compute="_compute_accounting_date", store=True, readonly=False
-    )
+    accounting_date = fields.Date(required=True, compute="_compute_accounting_date", store=True, readonly=False)
 
     # Company Balance Related Fields
     journal_id = fields.Many2one(
         "account.journal",
-        string="Diario",
+        string="Journal",
         domain="journal_domain",
         check_company=True,
     )
@@ -58,32 +56,29 @@ class AccountBalanceImport(models.TransientModel):
         compute="_compute_journal_domain",
     )
     partner_balance_type = fields.Selection(
-        [("receivable", "Por Cobrar"), ("payable", "A Pagar")],
-        "Tipo de Deuda",
+        [("receivable", "Receivable"), ("payable", "Payable")],
+        "Debt Type",
         default="receivable",
     )
     export_partners = fields.Boolean(
-        string="Exportar Partners",
         default=True,
-        help="Si se activa, la plantilla incluirá los clientes o proveedores existentes según el Tipo de Deuda seleccionado.",
+        help="If enabled, the template will include existing customers or vendors according to the selected Debt Type.",
     )
     import_type = fields.Selection(
         [
-            ("absolute", "Absoluto"),
-            ("adjust", "Ajuste"),
+            ("absolute", "Absolute"),
+            ("adjust", "Adjustment"),
         ],
-        string="Tipo de Importación",
         default="absolute",
         required=True,
-        help="Absoluto: genera asientos directamente con los valores importados.\n"
-        "Ajuste: calcula la diferencia entre el saldo actual del partner y el valor importado.",
+        help="Absolute: generates entries directly with the imported values.\n"
+        "Adjustment: calculates the difference between the partner's current balance and the imported value.",
     )
     reconcile_debt = fields.Boolean(
-        string="Conciliar deuda",
         default=True,
-        help="si marca esta opción se conciliará automáticamente con la deuda más vieja.",
+        help="If you check this option, it will automatically reconcile with the oldest debt.",
     )
-    file = fields.Binary("Archivo de Importación")
+    file = fields.Binary("Import File")
 
     @api.depends("mode")
     def _compute_journal_domain(self):
@@ -142,7 +137,7 @@ class AccountBalanceImport(models.TransientModel):
     def action_import(self):
         self.ensure_one()
         if not self.file:
-            raise ValidationError("Por favor, cargue un archivo Excel para importar.")
+            raise ValidationError(_("Please upload an Excel file to import."))
         if self.mode == "partner_balance":
             return self._partner_balance_import_xls()
 
@@ -275,27 +270,33 @@ class AccountBalanceImport(models.TransientModel):
 
             if other_currency and not dict_data.get("amount_company_currency"):
                 errors.append(
-                    f"Fila {str(row_no)}: Si le establece otra moneda debe indicar el importe en esa otra moneda"
+                    _("Row %s: If you set another currency you must indicate the amount in that other currency")
+                    % str(row_no)
                 )
                 continue
 
             # Skip if partner not found
             if not partner:
                 errors.append(
-                    f"Fila {str(row_no)}: No se encontró ningún partner para el texto ingresado ({dict_data['name']})."
+                    _("Row %(row)s: No partner was found for the entered text (%(text)s).")
+                    % {"row": str(row_no), "text": dict_data["name"]}
                 )
                 continue
 
             # Skip if more than one partner was found
             if len(partner) > 1:
                 errors.append(
-                    f"Fila {str(row_no)}: Se encontraron varios partners para el texto ingresado ({dict_data['name']}). ¡Revise los datos cargados!"
+                    _(
+                        "Row %(row)s: Several partners were found for the entered text (%(text)s). "
+                        "Please review the loaded data!"
+                    )
+                    % {"row": str(row_no), "text": dict_data["name"]}
                 )
                 continue
 
             # Skip if amount isn't numerical
             if not isinstance(dict_data["amount"], numbers.Number):
-                errors.append(f"Fila {str(row_no)}: El monto no es numérico.")
+                errors.append(_("Row %s: The amount is not numeric.") % str(row_no))
                 continue
 
             # Parse due_date
@@ -309,7 +310,7 @@ class AccountBalanceImport(models.TransientModel):
                         ).date()
                 except Exception:
                     errors.append(
-                        f"Fila {str(row_no)}: Formato de fecha de vencimiento desconocido. Asegúrese de que la columna posee formato de fecha."
+                        _("Row %s: Unknown due date format. Make sure the column has a date format.") % str(row_no)
                     )
                     continue
             else:
@@ -353,14 +354,19 @@ class AccountBalanceImport(models.TransientModel):
             # Skip if partner account account is obsolete
             if not partner_account.active:
                 errors.append(
-                    f"Fila {str(row_no)}: La cuenta asociada al partner {partner.name} se encuentra depreciada."
+                    _("Row %(row)s: The account associated with partner %(partner)s is deprecated.")
+                    % {"row": str(row_no), "partner": partner.name}
                 )
                 continue
 
             # Check if accounts have the same company
             if company.id not in partner_account.company_ids.ids:
                 errors.append(
-                    f"Fila {str(row_no)}: Una de las cuentas asociadas al partner {partner.name} no pertenece a la compañía ({company.name})"
+                    _(
+                        "Row %(row)s: One of the accounts associated with partner %(partner)s does not belong "
+                        "to company (%(company)s)"
+                    )
+                    % {"row": str(row_no), "partner": partner.name, "company": company.name}
                 )
                 continue
 
@@ -471,6 +477,13 @@ class AccountBalanceImport(models.TransientModel):
 
         if num_columns != expected_columns:
             raise ValidationError(
-                f"The number of columns ({num_columns}) does not match the expected number ({expected_columns}).\n"
-                f"Expected fields: {', '.join(expected_fields)}"
+                _(
+                    "The number of columns (%(actual)s) does not match the expected number (%(expected)s).\n"
+                    "Expected fields: %(fields)s"
+                )
+                % {
+                    "actual": num_columns,
+                    "expected": expected_columns,
+                    "fields": ", ".join(expected_fields),
+                }
             )
