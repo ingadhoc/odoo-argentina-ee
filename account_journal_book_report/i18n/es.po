@@ -103,6 +103,11 @@ msgid "Journal Book Report"
 msgstr "Reporte de Grupo de Diario"
 
 #. module: account_journal_book_report
+#: code:addons/account_journal_book_report/wizard/account_journal_book_report.py:0
+msgid "Journal Book report sent to background"
+msgstr "Reporte de Libro Diario enviado a segundo plano"
+
+#. module: account_journal_book_report
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal_book_group__write_uid
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal_book_report__write_uid
 msgid "Last Updated by"
@@ -144,6 +149,15 @@ msgstr "Fecha de inicio"
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal_book_report__target_move
 msgid "Target Moves"
 msgstr "Movimientos Objetivos"
+
+#. module: account_journal_book_report
+#: code:addons/account_journal_book_report/wizard/account_journal_book_report.py:0
+msgid ""
+"The Journal Book report is being generated in the background. You will be "
+"notified with a download link when it is ready."
+msgstr ""
+"El reporte de Libro Diario se está generando en segundo plano. Se le "
+"notificará con un enlace de descarga cuando esté listo."
 
 #. module: account_journal_book_report
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal_book_report__last_entry_number

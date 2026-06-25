@@ -5,7 +5,7 @@ import base64
 
 from dateutil.relativedelta import relativedelta
 from markupsafe import Markup
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 from odoo.tools.misc import get_lang
 
 
@@ -105,8 +105,13 @@ class AccountJournalBookReport(models.TransientModel):
         """Este método se llama desde el botón 'Imprimir' del wizard 'Libro Diario'"""
         self.ensure_one()
         if not self._context.get("bg_job"):
-            res, _ = self.bg_enqueue("action_check_report")
-            return res
+            action, _jobs = self.bg_enqueue("action_check_report")
+            action["params"]["title"] = _("Journal Book report sent to background")
+            action["params"]["message"] = _(
+                "The Journal Book report is being generated in the background. "
+                "You will be notified with a download link when it is ready."
+            )
+            return action
         else:
             data = {}
             data["ids"] = self.env.context.get("active_ids", [])
