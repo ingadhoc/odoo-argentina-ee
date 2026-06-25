@@ -105,7 +105,11 @@ class AccountJournalBookReport(models.TransientModel):
         """Este método se llama desde el botón 'Imprimir' del wizard 'Libro Diario'"""
         self.ensure_one()
         if not self._context.get("bg_job"):
-            return self.bg_enqueue("action_check_report")
+            # bg_enqueue devuelve (action, jobs); el botón del wizard espera solo la
+            # acción. Sin desempaquetar, el cliente recibe una lista y no renderiza la
+            # notificación de "se enviará en segundo plano".
+            action, _jobs = self.bg_enqueue("action_check_report")
+            return action
         else:
             data = {}
             data["ids"] = self.env.context.get("active_ids", [])
