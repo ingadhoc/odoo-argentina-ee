@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-25 13:44+0000\n"
-"PO-Revision-Date: 2025-11-25 13:44+0000\n"
+"POT-Creation-Date: 2026-06-25 15:19+0000\n"
+"PO-Revision-Date: 2026-06-25 15:19+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -95,6 +95,12 @@ msgid "Journal Book Report"
 msgstr ""
 
 #. module: account_journal_book_report
+#. odoo-python
+#: code:addons/account_journal_book_report/wizard/account_journal_book_report.py:0
+msgid "Journal Book report sent to background"
+msgstr ""
+
+#. module: account_journal_book_report
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal_book_group__write_uid
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal_book_report__write_uid
 msgid "Last Updated by"
@@ -135,6 +141,14 @@ msgstr ""
 #. module: account_journal_book_report
 #: model:ir.model.fields,field_description:account_journal_book_report.field_account_journal_book_report__target_move
 msgid "Target Moves"
+msgstr ""
+
+#. module: account_journal_book_report
+#. odoo-python
+#: code:addons/account_journal_book_report/wizard/account_journal_book_report.py:0
+msgid ""
+"The Journal Book report is being generated in the background. You will be "
+"notified with a download link when it is ready."
 msgstr ""
 
 #. module: account_journal_book_report
