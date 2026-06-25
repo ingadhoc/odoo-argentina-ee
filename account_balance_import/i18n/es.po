@@ -12,37 +12,27 @@ msgstr ""
 "POT-Creation-Date: 2026-06-12 13:15+0000\n"
 "PO-Revision-Date: 2026-04-13 22:41+0000\n"
 "Last-Translator: carla spiaggi <sca@adhoc.inc>\n"
-"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
-"enterprise-extensions-19-0/enterprise-extensions-19-0-account_balance_import/"
-"es/>\n"
+"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/enterprise-extensions-19-0/enterprise-extensions-19-0-account_balance_import/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == "
-"0) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == 0) ? 1 : 2);\n"
 "X-Generator: Weblate 5.10.4\n"
 
 #. module: account_balance_import
 #: model_terms:ir.ui.view,arch_db:account_balance_import.account_balance_import_wizard
 msgid ""
 "<span class=\"fa fa-download\" title=\"download\"/>\n"
-"                                    Descargar Plantilla de Importación de "
-"Saldos de Partners"
+"                                    Download Partner Balances Import Template"
 msgstr ""
-"<span class=\"fa fa-download\" title=\"download\"/>\n"
-"                                    Descargar Plantilla de Importación de "
-"Saldos de Partners"
+"<span class=\"fa fa-download\" title=\"Descargar\"/>\n"
+"                                    Descargar Plantilla de Importación de Saldos de Partners"
 
 #. module: account_balance_import
 #: model_terms:ir.ui.view,arch_db:account_balance_import.account_balance_import_wizard
 msgid "<span class=\"fa fa-info\" aria-label=\"info\"/>"
 msgstr "<span class=\"fa fa-info\" aria-label=\"info\"/>"
-
-#. module: account_balance_import
-#: model:ir.model.fields.selection,name:account_balance_import.selection__account_balance_import_wizard__partner_balance_type__payable
-msgid "A Pagar"
-msgstr "A Pagar"
 
 #. module: account_balance_import
 #. odoo-javascript
@@ -52,19 +42,17 @@ msgstr "Conexión ARCA"
 
 #. module: account_balance_import
 #: model:ir.model.fields.selection,name:account_balance_import.selection__account_balance_import_wizard__import_type__absolute
-msgid "Absoluto"
+msgid "Absolute"
 msgstr "Absoluto"
 
 #. module: account_balance_import
 #: model:ir.model.fields,help:account_balance_import.field_account_balance_import_wizard__import_type
 msgid ""
-"Absoluto: genera asientos directamente con los valores importados.\n"
-"Ajuste: calcula la diferencia entre el saldo actual del partner y el valor "
-"importado."
+"Absolute: generates entries directly with the imported values.\n"
+"Adjustment: calculates the difference between the partner's current balance and the imported value."
 msgstr ""
 "Absoluto: genera asientos directamente con los valores importados.\n"
-"Ajuste: calcula la diferencia entre el saldo actual del partner y el valor "
-"importado."
+"Ajuste: calcula la diferencia entre el saldo actual del contacto y el valor importado."
 
 #. module: account_balance_import
 #: model:ir.model,name:account_balance_import.model_account_account
@@ -87,8 +75,13 @@ msgid "Account import summary view"
 msgstr "Vista de resumen de importación de cuenta"
 
 #. module: account_balance_import
+#: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__accounting_date
+msgid "Accounting Date"
+msgstr "Fecha Contable"
+
+#. module: account_balance_import
 #: model:ir.model.fields.selection,name:account_balance_import.selection__account_balance_import_wizard__import_type__adjust
-msgid "Ajuste"
+msgid "Adjustment"
 msgstr "Ajuste"
 
 #. module: account_balance_import
@@ -97,31 +90,8 @@ msgid "Amount in Account Currency"
 msgstr "Importe en la moneda de la cuenta"
 
 #. module: account_balance_import
-#: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__file
-msgid "Archivo de Importación"
-msgstr "Archivo de Importación"
-
-#. module: account_balance_import
-#: model:ir.model.fields,field_description:account_balance_import.field_account_import_summary__account_opening_move_id
-msgid "Asiento de Apertura"
-msgstr "Asiento de Apertura"
-
-#. module: account_balance_import
-#. odoo-javascript
-#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
-msgid "Asiento de Apertura:"
-msgstr "Asiento de Apertura:"
-
-#. module: account_balance_import
-#: model:ir.model.fields,help:account_balance_import.field_account_import_summary__account_opening_move_id
-msgid ""
-"Asiento que contiene el balance inicial de todas las cuentas de la compañía"
-msgstr ""
-"Asiento que contiene el balance inicial de todas las cuentas de la compañía"
-
-#. module: account_balance_import
 #: model_terms:ir.ui.view,arch_db:account_balance_import.account_balance_import_wizard
-msgid "Cancelar"
+msgid "Cancel"
 msgstr "Cancelar"
 
 #. module: account_balance_import
@@ -142,8 +112,8 @@ msgstr "Compañias"
 
 #. module: account_balance_import
 #: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__company_id
-msgid "Compañía"
-msgstr "Empresa"
+msgid "Company"
+msgstr "Compañía"
 
 #. module: account_balance_import
 #. odoo-javascript
@@ -151,11 +121,6 @@ msgstr "Empresa"
 msgid "Complete your accounting setup using these configuration steps."
 msgstr ""
 "Complete su configuración contable siguiendo estos pasos de configuración."
-
-#. module: account_balance_import
-#: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__reconcile_debt
-msgid "Conciliar deuda"
-msgstr "Conciliar deuda"
 
 #. module: account_balance_import
 #. odoo-javascript
@@ -174,6 +139,11 @@ msgstr "Configure la conexión de Servicios Web con ARCA."
 #: code:addons/account_balance_import/static/src/xml/account_import.xml:0
 msgid "Configure fiscal years and periods."
 msgstr "Configurar años y periodos fiscales."
+
+#. module: account_balance_import
+#: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__counterpart_account_id
+msgid "Counterpart Account"
+msgstr "Cuenta de Contrapartida"
 
 #. module: account_balance_import
 #. odoo-javascript
@@ -197,38 +167,14 @@ msgid "Credit Card"
 msgstr "Tarjeta de Crédito"
 
 #. module: account_balance_import
-#: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__counterpart_account_id
-msgid "Cuenta de Contrapartida"
-msgstr "Cuenta de Contrapartida"
-
-#. module: account_balance_import
 #: model:ir.model,name:account_balance_import.model_res_currency
 msgid "Currency"
 msgstr "Moneda"
 
 #. module: account_balance_import
-#: model_terms:ir.ui.view,arch_db:account_balance_import.account_balance_import_wizard
-msgid ""
-"Descargue la plantilla de importación siguiendo el link\n"
-"                            y edítelo manteniendo la estructura del archivo."
-"<br/>\n"
-"                            Una vez finalizada la edición, suba el archivo "
-"modificado\n"
-"                            y haga click en el botón \"Importar\" ubicado "
-"más abajo."
-msgstr ""
-"Descargue la plantilla de importación siguiendo el link\n"
-"                            y edítelo manteniendo la estructura del archivo."
-"<br/>\n"
-"                            Una vez finalizada la edición, suba el archivo "
-"modificado\n"
-"                            y haga click en el botón \"Importar\" ubicado "
-"más abajo."
-
-#. module: account_balance_import
-#: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__journal_id
-msgid "Diario"
-msgstr "Diario"
+#: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__partner_balance_type
+msgid "Debt Type"
+msgstr "Tipo de Deuda"
 
 #. module: account_balance_import
 #: model:ir.model.fields,field_description:account_balance_import.field_account_account__display_name
@@ -242,14 +188,28 @@ msgid "Display Name"
 msgstr "Nombre para mostrar"
 
 #. module: account_balance_import
-#: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__export_partners
-msgid "Exportar Partners"
-msgstr "Exportar Partners"
+#: model_terms:ir.ui.view,arch_db:account_balance_import.account_balance_import_wizard
+msgid ""
+"Download the import template using the link\n"
+"                            and edit it while keeping the file structure.<br/>\n"
+"                            Once you finish editing, upload the modified file\n"
+"                            and click the \"Import\" button below."
+msgstr ""
+"Descargue la plantilla de importación siguiendo el enlace\n"
+"                            y edítelo manteniendo la estructura del archivo.<br/>\n"
+"                            Una vez finalizada la edición, suba el archivo modificado\n"
+"                            y haga click en el botón \"Importar\" ubicado más abajo."
 
 #. module: account_balance_import
-#: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__accounting_date
-msgid "Fecha Contable"
-msgstr "Fecha Contable"
+#: model:ir.model.fields,help:account_balance_import.field_account_import_summary__account_opening_move_id
+msgid "Entry containing the opening balance of all the company's accounts"
+msgstr ""
+"Asiento que contiene el balance inicial de todas las cuentas de la compañía"
+
+#. module: account_balance_import
+#: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__export_partners
+msgid "Export Partners"
+msgstr "Exportar Partners"
 
 #. module: account_balance_import
 #. odoo-javascript
@@ -269,6 +229,49 @@ msgid "ID"
 msgstr "ID"
 
 #. module: account_balance_import
+#: model:ir.model.fields,help:account_balance_import.field_account_balance_import_wizard__export_partners
+msgid ""
+"If enabled, the template will include existing customers or vendors "
+"according to the selected Debt Type."
+msgstr ""
+"Si se activa, la plantilla incluirá los clientes o proveedores existentes "
+"según el Tipo de Deuda seleccionado."
+
+#. module: account_balance_import
+#: model:ir.model.fields,help:account_balance_import.field_account_balance_import_wizard__reconcile_debt
+msgid ""
+"If you check this option, it will automatically reconcile with the oldest "
+"debt."
+msgstr ""
+"Si marca esta opción se conciliará automáticamente con la deuda más vieja."
+
+#. module: account_balance_import
+#: model_terms:ir.ui.view,arch_db:account_balance_import.account_balance_import_wizard
+msgid "Import"
+msgstr "Importar"
+
+#. module: account_balance_import
+#: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__file
+msgid "Import File"
+msgstr "Archivo de Importación"
+
+#. module: account_balance_import
+#: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__mode
+msgid "Import Mode"
+msgstr "Modo de Importación"
+
+#. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/models/account_import_summary.py:0
+msgid "Import Partner Balance"
+msgstr "Importar Saldo de Contactos"
+
+#. module: account_balance_import
+#: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__import_type
+msgid "Import Type"
+msgstr "Tipo de Importación"
+
+#. module: account_balance_import
 #: model:ir.ui.menu,name:account_balance_import.menu_account_import_wizard
 msgid "Import Wizard"
 msgstr "Asistente de Importación"
@@ -280,15 +283,15 @@ msgid "Import initial balances for your partners."
 msgstr "Importar saldos iniciales para sus partners."
 
 #. module: account_balance_import
-#: model_terms:ir.ui.view,arch_db:account_balance_import.account_balance_import_wizard
-msgid "Importar"
-msgstr "Importar"
-
-#. module: account_balance_import
 #. odoo-javascript
 #: code:addons/account_balance_import/static/src/xml/account_import.xml:0
 msgid "Initial Setup Options"
 msgstr "Opciones de Configuración Inicial"
+
+#. module: account_balance_import
+#: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__journal_id
+msgid "Journal"
+msgstr "Diario"
 
 #. module: account_balance_import
 #: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__journal_domain
@@ -312,11 +315,6 @@ msgid "Last Updated on"
 msgstr "Última actualización el"
 
 #. module: account_balance_import
-#: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__mode
-msgid "Modo de Importación"
-msgstr "Modo de Importación"
-
-#. module: account_balance_import
 #: model:ir.model,name:account_balance_import.model_onboarding_onboarding
 msgid "Onboarding"
 msgstr "Incorporación"
@@ -327,24 +325,47 @@ msgid "Opening Balance of Financial Year"
 msgstr "Saldo de Apertura del Ejercicio Fiscal"
 
 #. module: account_balance_import
+#: model:ir.model.fields,field_description:account_balance_import.field_account_import_summary__account_opening_move_id
+msgid "Opening Entry"
+msgstr "Asiento de Apertura"
+
+#. module: account_balance_import
+#. odoo-javascript
+#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
+msgid "Opening Entry:"
+msgstr "Asiento de Apertura:"
+
+#. module: account_balance_import
+#: model:ir.model.fields.selection,name:account_balance_import.selection__account_balance_import_wizard__mode__partner_balance
+msgid "Partner Balances"
+msgstr "Saldos de Contactos"
+
+#. module: account_balance_import
 #. odoo-javascript
 #: code:addons/account_balance_import/static/src/xml/account_import.xml:0
 msgid "Partners Balance"
-msgstr "Saldos de Partners"
+msgstr "Saldos de Contactos"
+
+#. module: account_balance_import
+#: model:ir.model.fields.selection,name:account_balance_import.selection__account_balance_import_wizard__partner_balance_type__payable
+msgid "Payable"
+msgstr "A Pagar"
+
+#. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/wizards/account_balance_import.py:0
+msgid "Please upload an Excel file to import."
+msgstr "Por favor, cargue un archivo Excel para importar."
 
 #. module: account_balance_import
 #: model:ir.model.fields.selection,name:account_balance_import.selection__account_balance_import_wizard__partner_balance_type__receivable
-msgid "Por Cobrar"
+msgid "Receivable"
 msgstr "Por Cobrar"
 
 #. module: account_balance_import
-#: model:ir.model.fields,help:account_balance_import.field_account_balance_import_wizard__counterpart_account_id
-msgid ""
-"Recomendamos utilizar la misma cuenta de contrapartida para todos los "
-"asientos iniciales"
-msgstr ""
-"Recomendamos utilizar la misma cuenta de contrapartida para todos los "
-"asientos iniciales"
+#: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__reconcile_debt
+msgid "Reconcile Debt"
+msgstr "Conciliar deuda"
 
 #. module: account_balance_import
 #. odoo-javascript
@@ -377,9 +398,66 @@ msgid "Review your chart and setup end of year balances."
 msgstr "Revise su plan y configure los saldos de cierre de ejercicio."
 
 #. module: account_balance_import
-#: model:ir.model.fields.selection,name:account_balance_import.selection__account_balance_import_wizard__mode__partner_balance
-msgid "Saldos de Partners"
-msgstr "Saldos de Partners"
+#. odoo-python
+#: code:addons/account_balance_import/wizards/account_balance_import.py:0
+msgid "Row %(row)s: No partner was found for the entered text (%(text)s)."
+msgstr ""
+"Fila %(row)s: No se encontró ningún contacto para el texto ingresado "
+"(%(text)s)."
+
+#. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/wizards/account_balance_import.py:0
+msgid ""
+"Row %(row)s: One of the accounts associated with partner %(partner)s does "
+"not belong to company (%(company)s)"
+msgstr ""
+"Fila %(row)s: Una de las cuentas asociadas al contacto %(partner)s no "
+"pertenece a la compañía (%(company)s)"
+
+#. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/wizards/account_balance_import.py:0
+msgid ""
+"Row %(row)s: Several partners were found for the entered text (%(text)s). "
+"Please review the loaded data!"
+msgstr ""
+"Fila %(row)s: Se encontraron varios contactos para el texto ingresado "
+"(%(text)s). ¡Revise los datos cargados!"
+
+#. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/wizards/account_balance_import.py:0
+msgid ""
+"Row %(row)s: The account associated with partner %(partner)s is deprecated."
+msgstr ""
+"Fila %(row)s: La cuenta asociada al contacto %(partner)s se encuentra "
+"depreciada."
+
+#. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/wizards/account_balance_import.py:0
+msgid ""
+"Row %s: If you set another currency you must indicate the amount in that "
+"other currency"
+msgstr ""
+"Fila %s: Si le establece otra moneda debe indicar el importe en esa otra "
+"moneda"
+
+#. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/wizards/account_balance_import.py:0
+msgid "Row %s: The amount is not numeric."
+msgstr "Fila %s: El monto no es numérico."
+
+#. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/wizards/account_balance_import.py:0
+msgid ""
+"Row %s: Unknown due date format. Make sure the column has a date format."
+msgstr ""
+"Fila %s: Formato de fecha de vencimiento desconocido. Asegúrese de que la "
+"columna posee formato de fecha."
 
 #. module: account_balance_import
 #. odoo-javascript
@@ -394,80 +472,79 @@ msgid "Set your Partners Balance"
 msgstr "Establezca sus Saldos de Partners"
 
 #. module: account_balance_import
-#: model:ir.model.fields,help:account_balance_import.field_account_balance_import_wizard__export_partners
+#. odoo-python
+#: code:addons/account_balance_import/models/account_import_summary.py:0
+msgid "Set your company data"
+msgstr "Configure los datos de su empresa"
+
+#. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/wizards/account_balance_import.py:0
 msgid ""
-"Si se activa, la plantilla incluirá los clientes o proveedores existentes "
-"según el Tipo de Deuda seleccionado."
+"The number of columns (%(actual)s) does not match the expected number (%(expected)s).\n"
+"Expected fields: %(fields)s"
 msgstr ""
-"Si se activa, la plantilla incluirá los clientes o proveedores existentes "
-"según el Tipo de Deuda seleccionado."
+"La cantidad de columnas (%(actual)s) no coincide con la cantidad esperada (%(expected)s).\n"
+"Campos esperados: %(fields)s"
 
 #. module: account_balance_import
-#: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__partner_balance_type
-msgid "Tipo de Deuda"
-msgstr "Tipo de Deuda"
-
-#. module: account_balance_import
-#: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__import_type
-msgid "Tipo de Importación"
-msgstr "Tipo de Importación"
+#: model:ir.model.fields,help:account_balance_import.field_account_balance_import_wizard__counterpart_account_id
+msgid ""
+"We recommend using the same counterpart account for all initial entries"
+msgstr ""
+"Recomendamos utilizar la misma cuenta de contrapartida para todos los "
+"asientos iniciales"
 
 #. module: account_balance_import
 #. odoo-python
 #: code:addons/account_balance_import/models/account_account.py:0
 msgid ""
-"You cannot set an amount in currency for accounts that don't have a specific "
-"currency defined or use the same currency as the company."
+"You cannot set an amount in currency for accounts that don't have a specific"
+" currency defined or use the same currency as the company."
 msgstr ""
 "No se puede establecer un importe en una divisa para cuentas que no tengan "
 "definida una divisa específica o que no utilicen la misma divisa que la "
 "empresa."
 
 #. module: account_balance_import
-#: model:ir.model.fields,help:account_balance_import.field_account_balance_import_wizard__reconcile_debt
+#. odoo-python
+#: code:addons/account_balance_import/models/account_import_summary.py:0
 msgid ""
-"si marca esta opción se conciliará automáticamente con la deuda más vieja."
+"You must set fiscal periods before importing partner balances.\n"
+"\n"
+"Please click 'Set Periods' to configure the opening date and the fiscal periods."
 msgstr ""
-"si marca esta opción se conciliará automáticamente con la deuda más vieja."
-
-#~ msgid "Payments"
-#~ msgstr "Pagos"
-
-#~ msgid ""
-#~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
-#~ "                                Descargar Plantilla de Importación de "
-#~ "Cheques Propios"
-#~ msgstr ""
-#~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
-#~ "                                Descargar Plantilla de Importación de "
-#~ "Cheques Propios"
+"Debe configurar los períodos fiscales antes de importar saldos de contactos.\n"
+"\n"
+"Por favor, haga clic en 'Configurar Periodos' para configurar la fecha de apertura y los períodos fiscales."
 
 #~ msgid ""
 #~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
-#~ "                                Descargar Plantilla de Importación de "
-#~ "Cheques de Terceros"
+#~ "                                Descargar Plantilla de Importación de Cheques Propios"
 #~ msgstr ""
 #~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
-#~ "                                Descargar Plantilla de Importación de "
-#~ "Cheques de Terceros"
+#~ "                                Descargar Plantilla de Importación de Cheques Propios"
 
 #~ msgid ""
 #~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
-#~ "                                Descargar Plantilla de Importación de "
-#~ "Saldos Contables"
+#~ "                                Descargar Plantilla de Importación de Cheques de Terceros"
 #~ msgstr ""
 #~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
-#~ "                                Descargar Plantilla de Importación de "
-#~ "Saldos Contables"
+#~ "                                Descargar Plantilla de Importación de Cheques de Terceros"
 
 #~ msgid ""
 #~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
-#~ "                                Descargar Plantilla de Importación de "
-#~ "Saldos de Partners"
+#~ "                                Descargar Plantilla de Importación de Saldos Contables"
 #~ msgstr ""
 #~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
-#~ "                                Descargar Plantilla de Importación de "
-#~ "Saldos de Partners"
+#~ "                                Descargar Plantilla de Importación de Saldos Contables"
+
+#~ msgid ""
+#~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
+#~ "                                Descargar Plantilla de Importación de Saldos de Partners"
+#~ msgstr ""
+#~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
+#~ "                                Descargar Plantilla de Importación de Saldos de Partners"
 
 #~ msgid "Account Balance Import"
 #~ msgstr "Alta Inicial de Saldos de Cuentas"
@@ -520,6 +597,9 @@ msgstr ""
 #~ msgid "Partner Balance Import"
 #~ msgstr "Alta Inicial de Saldos de Contactos"
 
+#~ msgid "Payments"
+#~ msgstr "Pagos"
+
 #~ msgid "Propios"
 #~ msgstr "Propios"
 
@@ -531,27 +611,21 @@ msgstr ""
 
 #~ msgid ""
 #~ "Use this wizard to import your checks from an Excel file.\n"
-#~ "                Download the template, fill it with your data, and upload "
-#~ "it back."
+#~ "                Download the template, fill it with your data, and upload it back."
 #~ msgstr ""
 #~ "Usa este asistente para importar tus cheques desde un archivo de Excel.\n"
 #~ "                Descarga la plantilla, complétala con tus datos y cárgala."
 
 #~ msgid ""
-#~ "Use this wizard to import your initial account balances from an Excel "
-#~ "file.\n"
-#~ "                Download the template, fill it with your data, and upload "
-#~ "it back."
+#~ "Use this wizard to import your initial account balances from an Excel file.\n"
+#~ "                Download the template, fill it with your data, and upload it back."
 #~ msgstr ""
-#~ "Usa este asistente para importar los saldos iniciales de tus cuentas "
-#~ "desde un archivo de Excel.\n"
+#~ "Usa este asistente para importar los saldos iniciales de tus cuentas desde un archivo de Excel.\n"
 #~ "                Descarga la plantilla, complétala con tus datos y cárgala."
 
 #~ msgid ""
 #~ "Use this wizard to import your partner balances from an Excel file.\n"
-#~ "                Download the template, fill it with your data, and upload "
-#~ "it back."
+#~ "                Download the template, fill it with your data, and upload it back."
 #~ msgstr ""
-#~ "Usa este asistente para importar los saldos de tus contactos desde un "
-#~ "archivo de Excel.\n"
+#~ "Usa este asistente para importar los saldos de tus contactos desde un archivo de Excel.\n"
 #~ "                Descarga la plantilla, complétala con tus datos y cárgala."

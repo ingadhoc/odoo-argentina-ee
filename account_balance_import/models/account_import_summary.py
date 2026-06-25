@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import _, fields, models
 from odoo.exceptions import UserError
 
 
@@ -7,15 +7,15 @@ class AccountImportSummary(models.TransientModel):
 
     account_opening_move_id = fields.Many2one(
         "account.move",
-        string="Asiento de Apertura",
+        string="Opening Entry",
         default=lambda self: self.env.company.account_opening_move_id,
         readonly=True,
-        help="Asiento que contiene el balance inicial de todas las cuentas de la compañía",
+        help="Entry containing the opening balance of all the company's accounts",
     )
 
     def action_open_company_data_setup(self):
         return self.env.company._get_records_action(
-            name="Set your company data",
+            name=_("Set your company data"),
             target="new",
         )
 
@@ -32,8 +32,10 @@ class AccountImportSummary(models.TransientModel):
 
         if not self.env.company.account_opening_date:
             raise UserError(
-                "Debe configurar los períodos fiscales antes de importar saldos de partners.\n\n"
-                "Por favor, haga clic en 'Set Periods' para configurar la fecha de apertura y los períodos fiscales."
+                _(
+                    "You must set fiscal periods before importing partner balances.\n\n"
+                    "Please click 'Set Periods' to configure the opening date and the fiscal periods."
+                )
             )
 
         return (
@@ -43,7 +45,7 @@ class AccountImportSummary(models.TransientModel):
                 default_company_id=self.env.company.id,
             )
             ._get_records_action(
-                name="Import Partner Balance",
+                name=_("Import Partner Balance"),
                 target="new",
             )
         )
