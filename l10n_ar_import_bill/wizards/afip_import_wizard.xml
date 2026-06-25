@@ -65,15 +65,15 @@
                         <field name="date_invoice"/>
                         <field name="currency"/>
                         <field name="amount_total"/>
-                        <button name="action_remove" type="object" icon="fa-trash-o" title="Eliminar" class="oe_inline"/>
+                        <button name="action_remove" type="object" icon="fa-trash-o" title="Delete" class="oe_inline"/>
                     </list>
 
                 </field>
 
                 <footer>
 
-                    <button name="action_confirm" type="object" string="Crear Facturas" class="btn-primary"/>
-                    <button string="Cancelar" special="cancel" class="btn-secondary"/>
+                    <button name="action_confirm" type="object" string="Create Invoices" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
 
                 </footer>
             </form>
