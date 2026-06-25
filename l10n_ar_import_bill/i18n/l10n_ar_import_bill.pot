@@ -32,6 +32,11 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__file_data
+msgid "ARCA Excel File"
+msgstr ""
+
+#. module: l10n_ar_import_bill
 #: model:ir.model,name:l10n_ar_import_bill.model_account_import_summary
 msgid "Account import summary view"
 msgstr ""
@@ -42,18 +47,21 @@ msgid "Account used as counterpart when importing from settings"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__file_data
-msgid "Archivo ARCA Excel"
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__exists
+msgid "Already Exists"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model:ir.model.fields,help:l10n_ar_import_bill.field_afip_import_wizard__file_data
-msgid "Archivo Excel exportado desde ARCA"
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/models/account_journal.py:0
+msgid ""
+"An uploaded file does not correspond to either sales or purchases for "
+"importing invoices from ARCA."
 msgstr ""
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__auto_validate
-msgid "Autovalidar Facturas Importadas"
+msgid "Auto-validate Imported Invoices"
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -63,12 +71,17 @@ msgstr ""
 
 #. module: l10n_ar_import_bill
 #: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_file_wizard_form
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
 msgid "Cancel"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
-msgid "Cancelar"
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard.py:0
+msgid ""
+"Cannot import invoice dated %(invoice_date)s because it is after the "
+"accounting start date (%(start_date)s). Only invoices before the accounting "
+"start date can be imported."
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -87,8 +100,16 @@ msgid "Counterpart Account"
 msgstr ""
 
 #. module: l10n_ar_import_bill
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard.py:0
+msgid ""
+"Counterpart account is required when importing sales from ARCA. Please select "
+"an account."
+msgstr ""
+
+#. module: l10n_ar_import_bill
 #: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
-msgid "Crear Facturas"
+msgid "Create Invoices"
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -98,9 +119,25 @@ msgid "Created by"
 msgstr ""
 
 #. module: l10n_ar_import_bill
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard_line.py:0
+msgid "Created by invoice import"
+msgstr ""
+
+#. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__create_date
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__create_date
 msgid "Created on"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__currency
+msgid "Currency"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
+msgid "Delete"
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -112,35 +149,34 @@ msgid "Display Name"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#. odoo-python
-#: code:addons/l10n_ar_import_bill/models/account_journal.py:0
-msgid ""
-"El archivo no contiene las siguientes columnas requeridas: %s.\n"
-"\n"
-"Si no realizó cambios manuales en el archivo Excel, es posible que ARCA haya modificado el formato del archivo. En ese caso, por favor reporte el inconveniente a través de un ticket de soporte."
-msgstr ""
-
-#. module: l10n_ar_import_bill
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
-msgid "Eliminar"
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__document_type
+msgid "Document Type"
 msgstr ""
 
 #. module: l10n_ar_import_bill
 #. odoo-python
 #: code:addons/l10n_ar_import_bill/models/account_journal.py:0
-msgid ""
-"Error al leer el archivo. Por favor verifique que sea un archivo válido de "
-"tipo .xlsx. Error: %s"
+msgid "Error reading the file. Please verify it is a valid .xlsx file. Error: %s"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,help:l10n_ar_import_bill.field_afip_import_wizard__file_data
+msgid "Excel file exported from ARCA"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__currency_rate
+msgid "Exchange Rate"
 msgstr ""
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__exento
-msgid "Exento"
+msgid "Exempt"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__date_invoice
-msgid "Fecha de Factura"
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__file_name
+msgid "File Name"
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -152,33 +188,8 @@ msgid "ID"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva_0
-msgid "IVA 0%"
-msgstr ""
-
-#. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva_10_5
-msgid "IVA 10.5%"
-msgstr ""
-
-#. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva_2_5
-msgid "IVA 2.5%"
-msgstr ""
-
-#. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva_21
-msgid "IVA 21%"
-msgstr ""
-
-#. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva_27
-msgid "IVA 27%"
-msgstr ""
-
-#. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva_5
-msgid "IVA 5%"
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__partner_identification_type
+msgid "Identification Type"
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -187,15 +198,37 @@ msgid "Import AFIP bills from xlsx"
 msgstr ""
 
 #. module: l10n_ar_import_bill
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/models/account_journal.py:0
+msgid "Import Customer Invoices"
+msgstr ""
+
+#. module: l10n_ar_import_bill
 #. odoo-javascript
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/models/account_import_summary.py:0
 #: code:addons/l10n_ar_import_bill/static/src/xml/account_import_arca.xml:0
 msgid "Import Purchases from ARCA"
 msgstr ""
 
 #. module: l10n_ar_import_bill
 #. odoo-javascript
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/models/account_import_summary.py:0
 #: code:addons/l10n_ar_import_bill/static/src/xml/account_import_arca.xml:0
 msgid "Import Sales from ARCA"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/models/account_journal.py:0
+msgid "Import Vendor Bills"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard.py:0
+msgid "Import completed"
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -223,6 +256,43 @@ msgid "Import your sales invoices from ARCA Excel file."
 msgstr ""
 
 #. module: l10n_ar_import_bill
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard.py:0
+msgid "Imported Customer Invoices"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard.py:0
+msgid "Imported Vendor Bills"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__date_invoice
+msgid "Invoice Date"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model,name:l10n_ar_import_bill.model_afip_import_wizard_line
+msgid "Invoice Line Imported from Excel"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__line_ids
+msgid "Invoice Lines"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__invoice_number
+msgid "Invoice Number"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__move_type
+msgid "Invoice Type"
+msgstr ""
+
+#. module: l10n_ar_import_bill
 #: model:ir.model,name:l10n_ar_import_bill.model_account_journal
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__journal_id
 msgid "Journal"
@@ -246,53 +316,71 @@ msgid "Last Updated on"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model:ir.model,name:l10n_ar_import_bill.model_afip_import_wizard_line
-msgid "Línea de Factura Importada desde Excel"
-msgstr ""
-
-#. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__line_ids
-msgid "Líneas de Facturas"
-msgstr ""
-
-#. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__currency
-msgid "Moneda"
-msgstr ""
-
-#. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__neto_grav_iva_0
-msgid "Neto Gravado IVA 0%"
+msgid "Net Taxable VAT 0%"
 msgstr ""
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__neto_grav_iva_10_5
-msgid "Neto Gravado IVA 10.5%"
+msgid "Net Taxable VAT 10.5%"
 msgstr ""
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__neto_grav_iva_2_5
-msgid "Neto Gravado IVA 2.5%"
+msgid "Net Taxable VAT 2.5%"
 msgstr ""
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__neto_grav_iva_21
-msgid "Neto Gravado IVA 21%"
+msgid "Net Taxable VAT 21%"
 msgstr ""
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__neto_grav_iva_27
-msgid "Neto Gravado IVA 27%"
+msgid "Net Taxable VAT 27%"
 msgstr ""
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__neto_grav_iva_5
-msgid "Neto Gravado IVA 5%"
+msgid "Net Taxable VAT 5%"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__no_gravado
-msgid "No Gravado"
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard.py:0
+msgid ""
+"No 'VAT Not Applicable' tax found. You must create a purchase tax with the "
+"'VAT Not Applicable' group."
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard.py:0
+msgid ""
+"No Non-Taxable VAT tax found. You must create a purchase tax with the "
+"'Non-Taxable VAT' group."
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard.py:0
+msgid ""
+"No Other Taxes tax found. You must create a purchase tax with the 'Other "
+"Taxes' tribute group."
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard.py:0
+msgid ""
+"No VAT Exempt tax found. You must create a purchase tax with the 'VAT Exempt' "
+"group."
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard.py:0
+msgid "No VAT tax found for the %s%% rate. Check whether this tax is disabled."
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -314,46 +402,46 @@ msgid "No document type found for code: %s"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__file_name
-msgid "Nombre del Archivo"
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard.py:0
+msgid "No invoices were created: all required invoices already exist."
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__invoice_number
-msgid "Número de Factura"
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__no_gravado
+msgid "Non-Taxable"
 msgstr ""
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__otros_tributos
-msgid "Otros Tributos"
+msgid "Other Taxes"
 msgstr ""
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__partner_name
-msgid "Proveedor"
+msgid "Partner Name"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__partner_vat
+msgid "Partner VAT"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard.py:0
+msgid "Please upload an Excel file to import."
 msgstr ""
 
 #. module: l10n_ar_import_bill
 #. odoo-python
 #: code:addons/l10n_ar_import_bill/models/account_journal.py:0
 msgid ""
-"Se subió un archivo que no se corresponde ni con ventas ni con compras para "
-"importar facturas desde AFIP."
-msgstr ""
-
-#. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__document_type
-msgid "Tipo de Documento"
-msgstr ""
-
-#. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__move_type
-msgid "Tipo de Factura"
-msgstr ""
-
-#. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__partner_identification_type
-msgid "Tipo de Identificación"
+"The file does not contain the following required columns: %s.\n"
+"\n"
+"If you did not make manual changes to the Excel file, ARCA may have changed "
+"the file format. In that case, please report the issue through a support "
+"ticket."
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -363,22 +451,42 @@ msgstr ""
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__total_bills_exists
-msgid "Total de Facturas Existentes"
+msgid "Total Existing Invoices"
 msgstr ""
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__total_bills_to_create
-msgid "Total de Facturas a Crear"
+msgid "Total Invoices to Create"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__partner_vat
-msgid "VAT del Proveedor"
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva_0
+msgid "VAT 0%"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__currency_rate
-msgid "Valor de cambio"
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva_10_5
+msgid "VAT 10.5%"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva_2_5
+msgid "VAT 2.5%"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva_21
+msgid "VAT 21%"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva_27
+msgid "VAT 27%"
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva_5
+msgid "VAT 5%"
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -387,6 +495,17 @@ msgid "Wizard"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__exists
-msgid "Ya Existe"
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/models/account_import_summary.py:0
+msgid ""
+"You must set fiscal periods first before importing purchases from ARCA. "
+"Please use the 'Set Periods' button to configure your fiscal year."
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/models/account_import_summary.py:0
+msgid ""
+"You must set fiscal periods first before importing sales from ARCA. Please "
+"use the 'Set Periods' button to configure your fiscal year."
 msgstr ""

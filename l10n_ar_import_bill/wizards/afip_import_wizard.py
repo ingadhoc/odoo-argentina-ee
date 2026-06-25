@@ -1,6 +1,6 @@
 import math
 
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -10,10 +10,10 @@ class AfipImportWizard(models.TransientModel):
     _check_company_auto = True
     _check_company_domain = models.check_companies_domain_parent_of
 
-    line_ids = fields.One2many("afip.import.wizard.line", "wizard_id", string="Líneas de Facturas")
+    line_ids = fields.One2many("afip.import.wizard.line", "wizard_id", string="Invoice Lines")
     company_id = fields.Many2one("res.company", required=True, default=lambda self: self.env.company)
     journal_id = fields.Many2one("account.journal", required=True, check_company=True, domain="journal_domain")
-    auto_validate = fields.Boolean(string="Autovalidar Facturas Importadas", default=False)
+    auto_validate = fields.Boolean(string="Auto-validate Imported Invoices", default=False)
     counterpart_account_id = fields.Many2one(
         "account.account",
         default=lambda self: self.env.company.get_unaffected_earnings_account(),
@@ -23,19 +23,19 @@ class AfipImportWizard(models.TransientModel):
     )
     total_bills_to_create = fields.Integer(
         compute="_compute_bills_to_create",
-        string="Total de Facturas a Crear",
+        string="Total Invoices to Create",
     )
     total_bills_exists = fields.Integer(
         compute="_compute_bills_exists",
-        string="Total de Facturas Existentes",
+        string="Total Existing Invoices",
     )
 
     #####
     # for initial import from settings
     #####
 
-    file_data = fields.Binary(string="Archivo ARCA Excel", help="Archivo Excel exportado desde ARCA")
-    file_name = fields.Char(string="Nombre del Archivo")
+    file_data = fields.Binary(string="ARCA Excel File", help="Excel file exported from ARCA")
+    file_name = fields.Char()
     journal_domain = fields.Binary(
         compute="_compute_journal_domain",
     )
@@ -53,7 +53,7 @@ class AfipImportWizard(models.TransientModel):
     def action_process_file(self):
         """Process the uploaded file and open the main import wizard"""
         if not self.file_data:
-            raise UserError("Please upload an Excel file to import.")
+            raise UserError(_("Please upload an Excel file to import."))
 
         # Create a temporary attachment
         attachment = self.env["ir.attachment"].create(
@@ -82,7 +82,7 @@ class AfipImportWizard(models.TransientModel):
         if self.env.context.get("initial_setup"):
             if not self.counterpart_account_id:
                 raise UserError(
-                    "Counterpart account is required when importing sales from ARCA. Please select an account."
+                    _("Counterpart account is required when importing sales from ARCA. Please select an account.")
                 )
 
             # Check for invoices after accounting start date
@@ -90,10 +90,15 @@ class AfipImportWizard(models.TransientModel):
                 for line in self.line_ids.filtered(lambda l: not l.exists):
                     if line.date_invoice and line.date_invoice >= self.company_id.account_opening_date:
                         raise UserError(
-                            f"Cannot import invoice dated {line.date_invoice.strftime('%Y-%m-%d')} "
-                            f"because it is after the accounting start date "
-                            f"({self.company_id.account_opening_date.strftime('%Y-%m-%d')}). "
-                            "Only invoices before the accounting start date can be imported."
+                            _(
+                                "Cannot import invoice dated %(invoice_date)s because it is after the accounting "
+                                "start date (%(start_date)s). Only invoices before the accounting start date can "
+                                "be imported."
+                            )
+                            % {
+                                "invoice_date": line.date_invoice.strftime("%Y-%m-%d"),
+                                "start_date": self.company_id.account_opening_date.strftime("%Y-%m-%d"),
+                            }
                         )
 
             counterpart_account_id = self.counterpart_account_id.id
@@ -103,8 +108,8 @@ class AfipImportWizard(models.TransientModel):
                 "type": "ir.actions.client",
                 "tag": "display_notification",
                 "params": {
-                    "title": "Import completed",
-                    "message": "No invoices were created: all required invoices already exist.",
+                    "title": _("Import completed"),
+                    "message": _("No invoices were created: all required invoices already exist."),
                     "type": "warning",
                     "sticky": False,
                 },
@@ -191,16 +196,14 @@ class AfipImportWizard(models.TransientModel):
                         move_vals["line_ids"].append(line._create_line(neto_amount, [iva_tax.id]))
                     else:
                         raise UserError(
-                            f"No se encontró un impuesto de IVA para la alícuota {vat_rate}%. "
-                            "Revise si este impuesto esta deshabilitado."
+                            _("No VAT tax found for the %s%% rate. Check whether this tax is disabled.") % vat_rate
                         )
 
             # Add line for "exento" if it has a value
             if not math.isnan(line.exento) and line.exento > 0:
                 if not tax_iva_exento:
                     raise UserError(
-                        "No se encontró un impuesto de IVA Exento. "
-                        "Debe crear un impuesto de compras con el grupo 'IVA Exento'."
+                        _("No VAT Exempt tax found. You must create a purchase tax with the 'VAT Exempt' group.")
                     )
                 move_vals["line_ids"].append(line._create_line(line.exento, [tax_iva_exento.id]))
 
@@ -208,8 +211,10 @@ class AfipImportWizard(models.TransientModel):
             if not math.isnan(line.no_gravado) and line.no_gravado > 0:
                 if not tax_iva_no_gravado:
                     raise UserError(
-                        "No se encontró un impuesto de IVA No Gravado. "
-                        "Debe crear un impuesto de compras con el grupo 'IVA No Gravado'."
+                        _(
+                            "No Non-Taxable VAT tax found. You must create a purchase tax with the "
+                            "'Non-Taxable VAT' group."
+                        )
                     )
                 move_vals["line_ids"].append(line._create_line(line.no_gravado, [tax_iva_no_gravado.id]))
 
@@ -222,8 +227,10 @@ class AfipImportWizard(models.TransientModel):
 
                 if not tax_iva_no_corresponde:
                     raise UserError(
-                        "No se encontró un impuesto de IVA No Corresponde. "
-                        "Debe crear un impuesto de compras con el grupo 'IVA No Corresponde'"
+                        _(
+                            "No 'VAT Not Applicable' tax found. You must create a purchase tax with the "
+                            "'VAT Not Applicable' group."
+                        )
                     )
                 move_vals["line_ids"].append(line._create_line(base_amount, [tax_iva_no_corresponde.id]))
 
@@ -237,8 +244,10 @@ class AfipImportWizard(models.TransientModel):
             if line.otros_tributos > 0:
                 if not tax_otros_tributos:
                     raise UserError(
-                        "No se encontró un impuesto de Otros Tributos. "
-                        "Debe crear un impuesto de compras con el grupo de tributo 'Otros Tributos'."
+                        _(
+                            "No Other Taxes tax found. You must create a purchase tax with the "
+                            "'Other Taxes' tribute group."
+                        )
                     )
 
                 # Crear el wizard con el contexto correcto
@@ -284,9 +293,7 @@ class AfipImportWizard(models.TransientModel):
             new_moves += move
 
         # Determine title based on journal type
-        title = (
-            "Facturas de Cliente Importadas" if self.journal_id.type == "sale" else "Facturas de Proveedor Importadas"
-        )
+        title = _("Imported Customer Invoices") if self.journal_id.type == "sale" else _("Imported Vendor Bills")
 
         return new_moves._get_records_action(
             name=title,

@@ -4,35 +4,35 @@ from odoo.exceptions import UserError
 
 class AfipImportWizardLine(models.TransientModel):
     _name = "afip.import.wizard.line"
-    _description = "Línea de Factura Importada desde Excel"
+    _description = "Invoice Line Imported from Excel"
 
     wizard_id = fields.Many2one("afip.import.wizard", required=True, ondelete="cascade")
-    invoice_number = fields.Char("Número de Factura")
-    partner_name = fields.Char("Proveedor")
-    partner_vat = fields.Char("VAT del Proveedor")
-    partner_identification_type = fields.Char("Tipo de Identificación")
-    date_invoice = fields.Date("Fecha de Factura")
-    currency = fields.Char("Moneda")
-    currency_rate = fields.Float("Valor de cambio")
+    invoice_number = fields.Char()
+    partner_name = fields.Char()
+    partner_vat = fields.Char("Partner VAT")
+    partner_identification_type = fields.Char("Identification Type")
+    date_invoice = fields.Date("Invoice Date")
+    currency = fields.Char()
+    currency_rate = fields.Float("Exchange Rate")
     amount_total = fields.Float("Total")
-    document_type = fields.Char(string="Tipo de Documento")
-    move_type = fields.Char(string="Tipo de Factura")
-    exists = fields.Boolean("Ya Existe", compute="_compute_exists", store=True)
-    iva_0 = fields.Float("IVA 0%")
-    neto_grav_iva_0 = fields.Float("Neto Gravado IVA 0%")
-    iva_2_5 = fields.Float("IVA 2.5%")
-    neto_grav_iva_2_5 = fields.Float("Neto Gravado IVA 2.5%")
-    iva_5 = fields.Float("IVA 5%")
-    neto_grav_iva_5 = fields.Float("Neto Gravado IVA 5%")
-    iva_10_5 = fields.Float("IVA 10.5%")
-    neto_grav_iva_10_5 = fields.Float("Neto Gravado IVA 10.5%")
-    iva_21 = fields.Float("IVA 21%")
-    neto_grav_iva_21 = fields.Float("Neto Gravado IVA 21%")
-    iva_27 = fields.Float("IVA 27%")
-    neto_grav_iva_27 = fields.Float("Neto Gravado IVA 27%")
-    no_gravado = fields.Float()
-    otros_tributos = fields.Float()
-    exento = fields.Float()
+    document_type = fields.Char()
+    move_type = fields.Char(string="Invoice Type")
+    exists = fields.Boolean("Already Exists", compute="_compute_exists", store=True)
+    iva_0 = fields.Float("VAT 0%")
+    neto_grav_iva_0 = fields.Float("Net Taxable VAT 0%")
+    iva_2_5 = fields.Float("VAT 2.5%")
+    neto_grav_iva_2_5 = fields.Float("Net Taxable VAT 2.5%")
+    iva_5 = fields.Float("VAT 5%")
+    neto_grav_iva_5 = fields.Float("Net Taxable VAT 5%")
+    iva_10_5 = fields.Float("VAT 10.5%")
+    neto_grav_iva_10_5 = fields.Float("Net Taxable VAT 10.5%")
+    iva_21 = fields.Float("VAT 21%")
+    neto_grav_iva_21 = fields.Float("Net Taxable VAT 21%")
+    iva_27 = fields.Float("VAT 27%")
+    neto_grav_iva_27 = fields.Float("Net Taxable VAT 27%")
+    no_gravado = fields.Float(string="Non-Taxable")
+    otros_tributos = fields.Float(string="Other Taxes")
+    exento = fields.Float(string="Exempt")
     cae = fields.Char("CAE")
 
     @api.depends("invoice_number", "partner_vat")
@@ -145,7 +145,7 @@ class AfipImportWizardLine(models.TransientModel):
     def _create_line(self, price_unit, tax_ids):
         partner = self._get_partner_by_vat()
         vals = {
-            "name": "Creado por importación de facturas",
+            "name": _("Created by invoice import"),
             "quantity": 1.0,
             "price_unit": price_unit,
             "tax_ids": [(6, 0, tax_ids)],

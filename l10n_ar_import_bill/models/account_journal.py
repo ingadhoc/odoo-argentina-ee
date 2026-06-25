@@ -35,12 +35,7 @@ class AccountJournal(models.Model):
             try:
                 df = pd.read_excel(BytesIO(file_content), engine="openpyxl")  # use openpyxl for .xlsx
             except Exception as e:
-                raise UserError(
-                    _(
-                        "Error al leer el archivo. Por favor verifique que sea un archivo válido de tipo .xlsx. Error: %s"
-                    )
-                    % e
-                )
+                raise UserError(_("Error reading the file. Please verify it is a valid .xlsx file. Error: %s") % e)
             # El archivo tiene un header en la primera fila, lo eliminamos
             df.columns = df.iloc[0]
             df = df[1:].reset_index(drop=True)
@@ -58,7 +53,8 @@ class AccountJournal(models.Model):
             else:
                 raise UserError(
                     _(
-                        "Se subió un archivo que no se corresponde ni con ventas ni con compras para importar facturas desde AFIP."
+                        "An uploaded file does not correspond to either sales or purchases for importing "
+                        "invoices from ARCA."
                     )
                 )
 
@@ -182,9 +178,7 @@ class AccountJournal(models.Model):
             wizard.write({"line_ids": line_vals})
 
             # Determine wizard name based on journal type
-            wizard_name = (
-                "Importación de Facturas de Cliente" if self.type == "sale" else "Importación de Facturas de Proveedor"
-            )
+            wizard_name = _("Import Customer Invoices") if self.type == "sale" else _("Import Vendor Bills")
 
             return wizard._get_records_action(
                 name=wizard_name,
@@ -203,10 +197,9 @@ class AccountJournal(models.Model):
         if missing_columns:
             raise UserError(
                 _(
-                    "El archivo no contiene las siguientes columnas requeridas: %s.\n\n"
-                    "Si no realizó cambios manuales en el archivo Excel, es posible que ARCA haya "
-                    "modificado el formato del archivo. En ese caso, por favor reporte el inconveniente "
-                    "a través de un ticket de soporte."
+                    "The file does not contain the following required columns: %s.\n\n"
+                    "If you did not make manual changes to the Excel file, ARCA may have changed the "
+                    "file format. In that case, please report the issue through a support ticket."
                 )
                 % ", ".join(missing_columns)
             )
