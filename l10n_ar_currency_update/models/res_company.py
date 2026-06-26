@@ -112,6 +112,7 @@ class ResCompany(models.Model):
         # https://github.com/odoo/enterprise/commit/4fdcf86392f#diff-05c14fb3f27dcc12f22adcfaef217ec6f80ef5ad0b0f37a4bd7b501fdc55461dR499
         original_env = self.env
         self.env = self.env(context=dict(self.env.context, allowed_company_ids=company.ids))
+        error = False
         for currency in available_currencies:
             try:
                 # Obtain the currencies to be updated
@@ -130,11 +131,12 @@ class ResCompany(models.Model):
                     )
             except Exception as e:
                 _logger.info("Could not get rate for currency %s. This is what we get:\n%s", currency.name, e)
-            else:
-                for company in self.filtered(lambda x: x.currency_provider == "afip"):
-                    company.l10n_ar_last_currency_sync_date = fields.Date.context_today(
-                        self.with_context(tz="America/Argentina/Buenos_Aires")
-                    )
+                error = True
+        if available_currencies and not error:
+            for company in self.filtered(lambda x: x.currency_provider == "afip"):
+                company.l10n_ar_last_currency_sync_date = fields.Date.context_today(
+                    self.with_context(tz="America/Argentina/Buenos_Aires")
+                )
         self.env = original_env
         return res or False
 
