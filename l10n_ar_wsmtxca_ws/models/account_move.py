@@ -1,5 +1,7 @@
+import json
+
 from markupsafe import Markup
-from odoo import _, models
+from odoo import _, fields, models
 from odoo.exceptions import UserError
 from odoo.tools import plaintext2html
 from odoo.tools.float_utils import float_repr, float_round
@@ -166,8 +168,15 @@ class AccountMove(models.Model):
             if Pro_umed not in ("97", "99", "00"):
                 if line._get_downpayment_lines():
                     Pro_umed = "97"
-                elif line.price_unit < 0:
+                elif line.price_unit < 0 or quantity < 0:
                     Pro_umed = "99"
+
+            # wsmtxca rejects cantidad/precioUnitario < 0 for ANY codigoUnidadMedida,
+            # including "00" (sin especificar) which bypasses the block above.
+            # Force "99" (bonificacion) so those fields are omitted and only the
+            # negative importeItem is sent.
+            if Pro_umed not in ("97", "99") and (line.price_unit < 0 or quantity < 0):
+                Pro_umed = "99"
 
             is_senia_or_discount = Pro_umed in ("97", "99")
             is_letter_b = self.l10n_latam_document_type_id.code in ("6", "7", "8")
@@ -395,3 +404,36 @@ class AccountMove(models.Model):
             res["cancelaEnMismaMonedaExtranjera"] = {"Yes": "S", "No": "N"}.get(self.l10n_ar_payment_foreign_currency)
 
         return res
+
+    def l10n_ar_action_preview_xml(self):
+        """Override to support wsmtxca webservice in XML preview.
+
+        The base implementation (saas_client_l10n_ar) is hard-wired to wsfe.
+        When the journal uses wsmtxca we build the request with
+        wsmtxca_get_cae_request and display it; for any other webservice we
+        delegate to the parent implementation.
+        """
+        self.ensure_one()
+        if self.journal_id.l10n_ar_afip_ws != "wsmtxca":
+            return super().l10n_ar_action_preview_xml()
+
+        def get_next_invoice_number(inv):
+            last_invoice_num = inv._get_last_sequence()
+            next_invoice_num = str(int(last_invoice_num.split("-")[-1]) + 1).rjust(8, "0")
+            next_invoice_prefix = str(inv.journal_id.l10n_ar_afip_pos_number).rjust(5, "0")
+            return next_invoice_prefix + "-" + next_invoice_num
+
+        self.invoice_date = self.invoice_date or fields.Date.today()
+        self.l10n_latam_document_number = get_next_invoice_number(self)
+        client, auth, _transport = self.company_id._l10n_ar_get_connection(self.journal_id.l10n_ar_afip_ws)._get_client(
+            return_transport=True
+        )
+        auth = self.journal_id._wsmtxca_convert_auth(auth)
+        request_data = self.wsmtxca_get_cae_request(client)
+        ws_method = "autorizarComprobante"
+        self._ws_verify_request_data(client, auth, ws_method, request_data)
+        try:
+            formatted_content = json.dumps(request_data, indent=2, ensure_ascii=False, default=str)
+        except Exception:
+            formatted_content = str(request_data)
+        raise UserError(_("AFIP Request Data (wsmtxca):\n\n%s", formatted_content))
