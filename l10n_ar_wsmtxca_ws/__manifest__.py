@@ -19,7 +19,7 @@
 ##############################################################################
 {
     "name": "Argentinean Electronic Invoicing - WSMTXCA Webservice",
-    "version": "19.0.1.0.0",
+    "version": "19.0.1.1.0",
     "category": "Localization/Argentina",
     "sequence": 14,
     "author": "ADHOC SA",
