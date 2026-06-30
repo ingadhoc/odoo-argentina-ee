@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-04-16 19:40+0000\n"
-"PO-Revision-Date: 2026-04-16 19:40+0000\n"
+"POT-Creation-Date: 2026-06-30 11:22+0000\n"
+"PO-Revision-Date: 2026-06-30 11:22+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -103,8 +103,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard.py:0
 msgid ""
-"Counterpart account is required when importing sales from ARCA. Please select "
-"an account."
+"Counterpart account is required when importing sales from ARCA. Please "
+"select an account."
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -156,7 +156,8 @@ msgstr ""
 #. module: l10n_ar_import_bill
 #. odoo-python
 #: code:addons/l10n_ar_import_bill/models/account_journal.py:0
-msgid "Error reading the file. Please verify it is a valid .xlsx file. Error: %s"
+msgid ""
+"Error reading the file. Please verify it is a valid .xlsx file. Error: %s"
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -357,8 +358,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard.py:0
 msgid ""
-"No Non-Taxable VAT tax found. You must create a purchase tax with the "
-"'Non-Taxable VAT' group."
+"No Non-Taxable VAT tax found. You must create a purchase tax with the 'Non-"
+"Taxable VAT' group."
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -373,14 +374,15 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard.py:0
 msgid ""
-"No VAT Exempt tax found. You must create a purchase tax with the 'VAT Exempt' "
-"group."
+"No VAT Exempt tax found. You must create a purchase tax with the 'VAT "
+"Exempt' group."
 msgstr ""
 
 #. module: l10n_ar_import_bill
 #. odoo-python
 #: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard.py:0
-msgid "No VAT tax found for the %s%% rate. Check whether this tax is disabled."
+msgid ""
+"No VAT tax found for the %s%% rate. Check whether this tax is disabled."
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -439,9 +441,7 @@ msgstr ""
 msgid ""
 "The file does not contain the following required columns: %s.\n"
 "\n"
-"If you did not make manual changes to the Excel file, ARCA may have changed "
-"the file format. In that case, please report the issue through a support "
-"ticket."
+"If you did not make manual changes to the Excel file, ARCA may have changed the file format. In that case, please report the issue through a support ticket."
 msgstr ""
 
 #. module: l10n_ar_import_bill
