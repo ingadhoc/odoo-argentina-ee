@@ -300,7 +300,7 @@ class L10n_ArTaxReportHandler(models.AbstractModel):
                         WHEN operation_type = %(exempt_op_type)s THEN ''
                         WHEN partner_responsibility_code = '1' THEN '1'
                         WHEN partner_responsibility_code IN ('6', '13') THEN '2'
-                        WHEN partner_responsibility_code IN ('4', '5', '7', '8', '9', '10', '16') THEN '3'
+                        WHEN partner_responsibility_code IN ('4', '5', '7', '8', '9', '10', '15', '16') THEN '3'
                         ELSE ''
                     END AS responsibility_type_code,
                     CASE
