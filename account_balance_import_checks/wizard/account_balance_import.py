@@ -88,6 +88,27 @@ class AccountBalanceImport(models.TransientModel):
         rows = [row for row in rows if any(cell is not None and cell != "" for cell in row)]
         return rows, workbook_datemode
 
+    def _parse_check_amount(self, value):
+        """Return a float from a cell value, tolerating es_AR/en_US thousands and
+        decimal separators (e.g. '791.666,00' or '791,666.00' or a native float).
+
+        When both separators are present, the last one is taken as the decimal
+        separator; a lone comma is treated as the decimal separator.
+        """
+        if value is None or value == "":
+            return 0.0
+        if isinstance(value, numbers.Number):
+            return float(value)
+        value = str(value).strip().replace(" ", "")
+        if "," in value and "." in value:
+            if value.rfind(",") > value.rfind("."):  # coma decimal -> AR: 791.666,00
+                value = value.replace(".", "").replace(",", ".")
+            else:  # punto decimal -> US: 791,666.00
+                value = value.replace(",", "")
+        elif "," in value:  # solo coma -> decimal
+            value = value.replace(",", ".")
+        return float(value)
+
     def _parse_check_payment_date(self, date_val, workbook_datemode):
         """Return a date object from a cell value (datetime, date, or xlrd float)."""
         if isinstance(date_val, datetime.datetime):
@@ -153,6 +174,15 @@ class AccountBalanceImport(models.TransientModel):
             # Parse name as string to prevent CUIT being read as float
             if isinstance(dict_data["name"], numbers.Number):
                 dict_data["name"] = str(int(dict_data["name"])).strip()
+
+            # Parse amounts tolerating es_AR/en_US formats (e.g. '791.666,00')
+            try:
+                dict_data["amount"] = self._parse_check_amount(dict_data["amount"])
+                dict_data["amount_company_currency"] = self._parse_check_amount(dict_data["amount_company_currency"])
+            except ValueError:
+                errors.append(f"Fila {str(row_no + 1)}: Importe inválido ({dict_data['amount']}).")
+                continue
+
             # Locate Partner
             domain = [
                 "|",

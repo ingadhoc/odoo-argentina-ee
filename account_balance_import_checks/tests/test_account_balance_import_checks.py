@@ -345,3 +345,61 @@ class TestAccountBalanceImportChecks(TransactionCase):
         self.assertEqual(check_3.amount, 8000.0, "Check amount should be 8000")
         self.assertEqual(check_3.payment_date, datetime.date(2025, 2, 10), "Check payment date should be 02/10/25")
         self.assertEqual(check_3.bank_id, self.bank, "Check bank should be Test Bank")
+
+    def test_parse_check_amount_formats(self):
+        """The amount parser must tolerate es_AR/en_US separators and native numbers."""
+        wizard = self.env["account.balance_import_wizard"].create(
+            {
+                "company_id": self.company.id,
+                "mode": "check_balance",
+                "check_type": "issue_check",
+                "journal_id": self.bank_journal.id,
+                "counterpart_account_id": self.counterpart_account.id,
+                "accounting_date": datetime.date(2025, 1, 1),
+            }
+        )
+        cases = [
+            ("791.666,00", 791666.00),  # es_AR: dot thousands, comma decimal
+            ("1.234.567,89", 1234567.89),
+            ("791,666.00", 791666.00),  # en_US: comma thousands, dot decimal
+            ("1234,56", 1234.56),  # lone comma -> decimal
+            ("791666.00", 791666.00),  # plain dot decimal
+            (10000, 10000.0),  # native int
+            (15000.5, 15000.5),  # native float
+            ("", 0.0),  # empty cell
+            (None, 0.0),
+        ]
+        for raw, expected in cases:
+            self.assertEqual(wizard._parse_check_amount(raw), expected, f"Wrong parse for {raw!r}")
+
+    def test_check_balance_import_ar_string_amount(self):
+        """Importing amounts as es_AR strings (e.g. '791.666,00') must not crash."""
+        data = {
+            "Número": [12345, 67890],
+            "Importe": ["791.666,00", "10.000,50"],
+            "Fecha de Pago": [datetime.date(2025, 2, 1), datetime.date(2025, 2, 15)],
+            "Nombre / CUIT / Referencia Interna": ["Test Partner 1", "Test Partner 2"],
+            "Otra Moneda (Opcional)": ["", ""],
+            "Importe en Otra moneda (Opcional)": ["", ""],
+        }
+        excel_file = base64.b64encode(generate_xls(data))
+        wizard = self.env["account.balance_import_wizard"].create(
+            {
+                "company_id": self.company.id,
+                "mode": "check_balance",
+                "check_type": "issue_check",
+                "journal_id": self.bank_journal.id,
+                "counterpart_account_id": self.counterpart_account.id,
+                "accounting_date": datetime.date(2025, 1, 1),
+                "file": excel_file,
+            }
+        )
+        result = wizard.action_import()
+        payment_ids = result.get("res_id") or result.get("domain")[0][2]
+        generated_payments = self.env["account.payment"].browse(payment_ids)
+        self.assertEqual(len(generated_payments), 2, "Should have created 2 payments")
+
+        payment_1 = generated_payments.filtered(lambda p: p.partner_id == self.partner_1)
+        self.assertEqual(payment_1.l10n_latam_new_check_ids[0].amount, 791666.00)
+        payment_2 = generated_payments.filtered(lambda p: p.partner_id == self.partner_2)
+        self.assertEqual(payment_2.l10n_latam_new_check_ids[0].amount, 10000.50)
