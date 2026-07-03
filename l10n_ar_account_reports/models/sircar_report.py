@@ -202,9 +202,9 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
                     tipo_comprobante = letter == "E" and 106 or 102
                 elif internal_type == "debit_note":
                     tipo_comprobante = letter == "E" and 6 or 2
-                elif line.move_id.type == "out_invoice":
+                elif line.move_id.move_type == "out_invoice":
                     tipo_comprobante = 20
-                elif line.move_id.type == "out_refund":
+                elif line.move_id.move_type == "out_refund":
                     tipo_comprobante = 120
                 else:
                     raise UserError(_("Unrecognized document type"))
