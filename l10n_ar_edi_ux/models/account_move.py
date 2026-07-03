@@ -226,7 +226,7 @@ class AccountMove(models.Model):
             # and provide a clear message indicating that the related document must be
             # posted first.
             related_inv = move._found_related_invoice()
-            if related_inv and related_inv.state != "posted":
+            if related_inv and related_inv.state != "posted" and not self.env.context.get("invoice_gathering"):
                 raise UserError(
                     _(
                         "Cannot electronically validate '%(move)s' because the related "
