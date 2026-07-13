@@ -86,7 +86,7 @@ class L10n_ArIvaReportHandler(models.AbstractModel):
         Implementado segun especificación indicada en ticket 54274.
         """
         lines = []
-        for line in move_lines.filtered("amount_currency").sorted(key=lambda r: (r.date, r.id)):
+        for line in move_lines.filtered("amount_currency").sorted(key=lambda r: (r.date, r.id), reverse=True):
             content = ""
             if file_type == "ret":
                 payment = line.payment_id

@@ -73,14 +73,14 @@ class L10n_ArMisionesReportHandler(models.AbstractModel):
         elif file_type == "perc":
             domain += [("tax_line_id.type_tax_use", "=", "sale")]
 
-        return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
+        return self.env["account.move.line"].search(domain)
 
     def _get_misiones_txt_content(self, move_lines, file_type):
         """Returns the lines to be printed in the txt file.
         Implementado segun especificación indicada en ticket 60295. También se puede ver detalles en readme
         """
         lines = []
-        for line in move_lines.filtered("amount_currency").sorted(key=lambda r: (r.date, r.id)):
+        for line in move_lines.filtered("amount_currency").sorted(key=lambda r: (r.date, r.id), reverse=True):
             content = ""
             payment = line.payment_id
             tax = line._get_settlement_tax()

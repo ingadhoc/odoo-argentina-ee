@@ -68,7 +68,7 @@ class L10n_ArMendozaReportHandler(models.AbstractModel):
     def _get_mendoza_txt_content(self, move_lines):
         """Returns the lines to be printed in the txt file."""
         lines = []
-        for line in move_lines.filtered("amount_currency").sorted(key=lambda r: (r.date, r.id)):
+        for line in move_lines.filtered("amount_currency").sorted(key=lambda r: r.date, reverse=True):
             content = ""
             partner = line.partner_id
             payment = line.payment_id

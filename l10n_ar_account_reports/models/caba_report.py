@@ -73,7 +73,7 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
             ("tax_line_id.type_tax_use", "=", "sale"),
             ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
         ] + self._caba_get_lines_domain(options, refund)
-        return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
+        return self.env["account.move.line"].search(domain)
 
     def _caba_get_lines_domain(self, options, refund=False):
         domain = get_standard_lines_domain(self.env["account.report"].get_report_company_ids(options), options)
