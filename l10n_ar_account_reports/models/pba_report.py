@@ -177,7 +177,11 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
                 or "R"
             )
             # Letra Comprobante (long 1, desde 25 hasta 25. Valores A,B,C, o “ ” (blanco)).
-            content += line.l10n_latam_document_type_id.l10n_ar_letter
+            content += (
+                line.l10n_latam_document_type_id.l10n_ar_letter
+                if line.l10n_latam_document_type_id and line.l10n_latam_document_type_id.l10n_ar_letter
+                else " "
+            )
             document_parts = move._l10n_ar_get_document_number_parts(
                 move.l10n_latam_document_number, move.l10n_latam_document_type_id.code
             )
