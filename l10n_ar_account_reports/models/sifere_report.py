@@ -94,7 +94,7 @@ class L10n_ArSifereReportHandler(models.AbstractModel):
             ]
         elif file_type == "despachos":
             domain += [("l10n_latam_document_type_id.code", "in", ["66", "67"])]
-        return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
+        return self.env["account.move.line"].search(domain)
 
     def _get_sifere_txt_content(self, move_lines, file_type):
         """Returns the lines to be printed in the txt file.
@@ -119,7 +119,7 @@ class L10n_ArSifereReportHandler(models.AbstractModel):
 
         lines = []
         desp_imp = []
-        for line in move_lines.filtered("amount_currency").sorted(key=lambda r: (r.date, r.id)):
+        for line in move_lines.filtered("amount_currency").sorted(key=lambda r: r.date, reverse=True):
             content = ""
 
             if file_type == "despachos":

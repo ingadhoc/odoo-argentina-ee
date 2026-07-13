@@ -75,7 +75,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
             domain += [("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier")]
         elif file_type == "perc":
             domain += [("tax_line_id.type_tax_use", "=", "sale")]
-        return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
+        return self.env["account.move.line"].search(domain)
 
     def _get_sircar_txt_content(self, move_lines, file_type):
         """Returns the lines to be printed in the txt file.
@@ -84,7 +84,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
         lines = []
         line_nbr = 1
         if file_type == "ret":
-            for line in move_lines.filtered("amount_currency").sorted(key=lambda r: (r.date, r.id)):
+            for line in move_lines.filtered("amount_currency").sorted(key=lambda r: r.date, reverse=True):
                 tax = line._get_settlement_tax()
                 alicuot = tax.amount
 
@@ -169,7 +169,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
                 lines.append(",".join(content) + "\r\n")
                 line_nbr += 1
         elif file_type == "perc":
-            for line in move_lines.filtered("amount_currency").sorted(key=lambda r: (r.date, r.id)):
+            for line in move_lines.filtered("amount_currency").sorted(key=lambda r: r.date, reverse=True):
                 tax = line._get_settlement_tax()
                 alicuot = tax.amount
                 # 1 Número de Renglón (único por archivo)

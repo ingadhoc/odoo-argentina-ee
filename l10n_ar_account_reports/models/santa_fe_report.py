@@ -80,7 +80,7 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
         )
         moves_to_validate._validate_document_number_parts()
 
-        for line in move_lines.filtered("amount_currency").sorted(key=lambda r: (r.date, r.id)):
+        for line in move_lines.filtered("amount_currency").sorted(key=lambda r: r.date, reverse=True):
             content = ""
 
             partner = line.partner_id

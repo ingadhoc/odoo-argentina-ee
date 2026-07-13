@@ -125,7 +125,7 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
             domain += [("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier")]
         elif file_type in ["perc", "perc_act_7"]:
             domain += [("tax_line_id.type_tax_use", "=", "sale")]
-        move_lines = self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
+        move_lines = self.env["account.move.line"].search(domain)
         if file_type == "ret_a122r" and self.env["ir.module.module"].search(
             [("name", "=", "l10n_ar_arba_ws"), ("state", "in", ["installed", "to upgrade"])]
         ):
@@ -144,7 +144,7 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
         lines = []
         percepciones_monto_modificado = []
         # TODO implementar
-        for line in move_lines.filtered("amount_currency").sorted(key=lambda r: (r.date, r.id)):
+        for line in move_lines.filtered("amount_currency").sorted(key=lambda r: r.date, reverse=True):
             content = ""
 
             move = line.move_id
