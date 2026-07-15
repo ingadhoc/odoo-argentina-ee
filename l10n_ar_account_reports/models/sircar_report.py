@@ -207,13 +207,13 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
                 content.append(fields.Date.from_string(line.date).strftime("%d/%m/%Y"))
 
                 # 7 Monto sujeto a percepción
-                content.append(format_amount(abs(get_line_tax_base(line)), 12, 2, "."))
+                content.append(format_amount(-get_line_tax_base(line), 12, 2, "."))
 
                 # 8 alicuota de la percepcion
                 content.append(format_amount(alicuot, 6, 2, "."))
 
                 # 9 Monto percibido
-                content.append(format_amount(abs(line.balance), 12, 2, "."))
+                content.append(format_amount(-line.balance, 12, 2, "."))
 
                 # 10 Tipo de Régimen de Percepción
                 # (código correspondiente según tabla definida por la jurisdicción)
