@@ -800,4 +800,14 @@
         <field name="value">11363.0904</field>
     </record>
 
+    <record id="index_05_2026" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2026-05-01')"/>
+        <field name="value">11607.3937</field>
+    </record>
+
+    <record id="index_06_2026" model="inflation.adjustment.index">
+        <field name="date" eval="time.strftime('2026-06-01')"/>
+        <field name="value">11826.4103</field>
+    </record>
+
 </odoo>
