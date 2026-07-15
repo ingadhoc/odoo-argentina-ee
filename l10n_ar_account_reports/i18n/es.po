@@ -66,9 +66,8 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__l10n_ar_account_id
-#, fuzzy
 msgid "AR Closing Account"
-msgstr "AR Closing Account"
+msgstr "Cuenta de cierre (AR)"
 
 #. module: l10n_ar_account_reports
 #: model:account.account.tag,name:l10n_ar_account_reports.ar_eerr_costo_ventas
@@ -547,7 +546,7 @@ msgstr "Fecha Hasta"
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__default_deadline_periodicity
 msgid "Default Periodicity"
-msgstr ""
+msgstr "Periodicidad por defecto"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sifere_report_sifere_despachos_line
@@ -611,7 +610,7 @@ msgstr "Editar impuesto"
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__end_index
 msgid "End Index"
-msgstr ""
+msgstr "Índice final"
 
 #. module: l10n_ar_account_reports
 #: model:account.report,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial
@@ -638,7 +637,7 @@ msgstr ""
 #: model:ir.model.fields.selection,name:l10n_ar_account_reports.selection__account_return_type__deadline_periodicity__fortnightly
 #: model:ir.model.fields.selection,name:l10n_ar_account_reports.selection__account_return_type__default_deadline_periodicity__fortnightly
 msgid "Fortnightly"
-msgstr ""
+msgstr "Quincenal"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_gross_inc
