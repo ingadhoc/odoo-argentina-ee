@@ -18,4 +18,9 @@
             <field name="filter_aml_ir_filters">True</field>
             <field name="filter_show_all_custom">True</field>
         </record>
+
+        <record id="bypass_lock_date_validation" model="ir.config_parameter">
+            <field name="key">account.bypass_lock_date_validation</field>
+            <field name="value">False</field>
+        </record>
 </odoo>
