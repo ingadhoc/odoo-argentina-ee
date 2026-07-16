@@ -1,6 +1,8 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
+import io
 import re
+import zipfile
 
 from odoo import _, api, fields, models
 from odoo.exceptions import RedirectWarning, UserError
@@ -39,23 +41,37 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
         options["buttons"].extend(txt_export_button)
 
     def sircar_ret_txt(self, options):
-        return {
-            "file_name": "Retenciones IIBB SIRCAR Aplicadas.txt",
-            "file_content": self._sircar_get_txt_files(options, file_type="ret"),
-            "file_type": "txt",
-        }
+        return self._sircar_get_zip_files(options, file_type="ret")
 
     def sircar_perc_txt(self, options):
-        return {
-            "file_name": "Percepciones IIBB SIRCAR Aplicadas.txt",
-            "file_content": self._sircar_get_txt_files(options, file_type="perc"),
-            "file_type": "txt",
-        }
+        return self._sircar_get_zip_files(options, file_type="perc")
 
-    def _sircar_get_txt_files(self, options, file_type):
-        """Returns SIRCAR txt content"""
+    def _sircar_get_zip_files(self, options, file_type):
+        """Returns a zip with one SIRCAR txt file per jurisdiction (tax_line_id.l10n_ar_state_id).
+
+        Each txt groups the move lines of a single jurisdiction and its file name carries the
+        jurisdiction name (l10n_ar_state_id) as suffix.
+        """
+        base_name = "Retenciones IIBB SIRCAR Aplicadas" if file_type == "ret" else "Percepciones IIBB SIRCAR Aplicadas"
         move_lines = self._sircar_get_txt_lines(options, file_type)
-        return "".join(self._get_sircar_txt_content(move_lines, file_type)).encode("ISO-8859-1", "ignore")
+        # Group the move lines by jurisdiction in a single pass, then iterate sorted by name.
+        lines_by_state = move_lines.grouped(lambda line: line.tax_line_id.l10n_ar_state_id)
+        stream = io.BytesIO()
+        with zipfile.ZipFile(stream, "w", compression=zipfile.ZIP_DEFLATED) as zip_file:
+            for state in sorted(lines_by_state, key=lambda state: state.name or ""):
+                content = self._get_sircar_txt_content(lines_by_state[state], file_type)
+                if not content:
+                    continue
+                file_content = "".join(content).encode("ISO-8859-1", "ignore")
+                # Sanitize the jurisdiction name used as entry name: it is editable data and
+                # could carry path separators that would create unexpected paths inside the zip.
+                state_name = re.sub(r"[/\\]", "-", state.name or "")
+                zip_file.writestr(f"{base_name} - {state_name}.txt", file_content)
+        return {
+            "file_name": f"{base_name}.zip",
+            "file_content": stream.getvalue(),
+            "file_type": "zip",
+        }
 
     def _sircar_get_txt_lines(self, options, file_type):
         state = options.get("all_entries") and "all" or "posted"
