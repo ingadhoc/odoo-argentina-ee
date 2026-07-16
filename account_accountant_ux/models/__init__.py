@@ -9,6 +9,7 @@ from . import (
     account_move_line,
     account_partner_ledger,
     account_return,
+    res_company,
     res_partner,
     account_report,
     account_followup_report,
