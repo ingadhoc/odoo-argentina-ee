@@ -56,6 +56,7 @@ class ResPartner(models.Model):
             'codPostal': '',
             'descripcionProvincia': '',
             'direccion': '',
+            'idProvincia': '',
             'localidad': '',
             'tipoDomicilio': '',
             'datoAdicional': '',
