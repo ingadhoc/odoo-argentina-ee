@@ -21,6 +21,6 @@ class L10nArAfipwsConnection(models.Model):
         ws_data = {
             'ws_sr_constancia_inscripcion': {
                 'production': 'https://aws.afip.gov.ar/sr-padron/webservices/personaServiceA5?wsdl',
-                'testing': 'https://awshomo.afip.gov.ar/sr-padron/webservices/personaServiceA5?wsdl',
+                'testing': 'https://aws.afip.gov.ar/sr-padron/webservices/personaServiceA5?wsdl',
         }}
         return ws_data.get(afip_ws, {}).get(environment_type)
