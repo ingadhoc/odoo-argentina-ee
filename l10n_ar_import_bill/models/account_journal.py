@@ -14,11 +14,10 @@ class AccountJournal(models.Model):
     def create_document_from_attachment(self, attachment_ids=None):
         # OVERRIDE
         journal = self or self.browse(self.env.context.get("default_journal_id"))
-
         if (
             journal.type == "purchase"
             and journal.company_id.country_code == "AR"
-            and journal.company_id.l10n_ar_afip_responsibility_type_id.code == "1"
+            and journal.company_id.l10n_ar_afip_responsibility_type_id.code in ("1", "4", "6")
         ):
             attachments = self.env["ir.attachment"].browse(attachment_ids or [])
 

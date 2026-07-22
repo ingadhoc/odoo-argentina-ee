@@ -47,18 +47,24 @@ class AfipImportWizard(models.TransientModel):
             ("company_id", "=", self.company_id.id),
             ("type_tax_use", "=", "purchase"),
         ]
-        tax_iva_no_corresponde = self.env["account.tax"].search(
-            base_domain + [("tax_group_id.l10n_ar_vat_afip_code", "=", "0")], limit=1
-        )
-        tax_iva_no_gravado = self.env["account.tax"].search(
-            base_domain + [("tax_group_id.l10n_ar_vat_afip_code", "=", "1")], limit=1
-        )
         tax_otros_tributos = self.env["account.tax"].search(
             base_domain + [("tax_group_id.l10n_ar_tribute_afip_code", "=", "99")], limit=1
         )
-        tax_iva_exento = self.env["account.tax"].search(
-            base_domain + [("tax_group_id.l10n_ar_vat_afip_code", "=", "2")], limit=1
-        )
+
+        # Solo el Responsable Inscripto recibe comprobantes con IVA discriminado y
+        # tiene impuestos de IVA en su plan de cuentas.
+        is_vat_responsible = self.company_id.l10n_ar_afip_responsibility_type_id.code == "1"
+        tax_iva_no_corresponde = tax_iva_no_gravado = tax_iva_exento = self.env["account.tax"]
+        if is_vat_responsible:
+            tax_iva_no_corresponde = self.env["account.tax"].search(
+                base_domain + [("tax_group_id.l10n_ar_vat_afip_code", "=", "0")], limit=1
+            )
+            tax_iva_no_gravado = self.env["account.tax"].search(
+                base_domain + [("tax_group_id.l10n_ar_vat_afip_code", "=", "1")], limit=1
+            )
+            tax_iva_exento = self.env["account.tax"].search(
+                base_domain + [("tax_group_id.l10n_ar_vat_afip_code", "=", "2")], limit=1
+            )
 
         for line in self.line_ids.filtered(lambda l: not l.exists):
             partner = line._get_partner_by_vat()
@@ -82,72 +88,78 @@ class AfipImportWizard(models.TransientModel):
                 "line_ids": [],
             }
 
-            # Agregamos la linea con IVA y otros tributos (si existen).
-            vat_rates = [
-                (0.0, line.iva_0, line.neto_grav_iva_0),
-                (2.5, line.iva_2_5, line.neto_grav_iva_2_5),
-                (5.0, line.iva_5, line.neto_grav_iva_5),
-                (10.5, line.iva_10_5, line.neto_grav_iva_10_5),
-                (21.0, line.iva_21, line.neto_grav_iva_21),
-                (27.0, line.iva_27, line.neto_grav_iva_27),
-            ]
+            if is_vat_responsible:
+                # Agregamos la linea con IVA y otros tributos (si existen).
+                vat_rates = [
+                    (0.0, line.iva_0, line.neto_grav_iva_0),
+                    (2.5, line.iva_2_5, line.neto_grav_iva_2_5),
+                    (5.0, line.iva_5, line.neto_grav_iva_5),
+                    (10.5, line.iva_10_5, line.neto_grav_iva_10_5),
+                    (21.0, line.iva_21, line.neto_grav_iva_21),
+                    (27.0, line.iva_27, line.neto_grav_iva_27),
+                ]
 
-            for vat_rate, vat_amount, neto_amount in vat_rates:
-                if not math.isnan(neto_amount) and neto_amount > 0:
-                    # Search for the specific VAT tax
-                    if vat_rate == 0.0:
-                        # For 0% VAT, search for tax with AFIP code 3 and amount 0
-                        iva_tax = self.env["account.tax"].search(
-                            base_domain + [("amount", "=", 0.0), ("tax_group_id.l10n_ar_vat_afip_code", "=", "3")],
-                            limit=1,
-                        )
-                    else:
-                        iva_tax = self.env["account.tax"].search(
-                            base_domain
-                            + [
-                                ("amount", "=", vat_rate),
-                                ("tax_group_id.l10n_ar_vat_afip_code", "!=", False),
-                            ],
-                            limit=1,
-                        )
+                for vat_rate, vat_amount, neto_amount in vat_rates:
+                    if not math.isnan(neto_amount) and neto_amount > 0:
+                        # Search for the specific VAT tax
+                        if vat_rate == 0.0:
+                            # For 0% VAT, search for tax with AFIP code 3 and amount 0
+                            iva_tax = self.env["account.tax"].search(
+                                base_domain + [("amount", "=", 0.0), ("tax_group_id.l10n_ar_vat_afip_code", "=", "3")],
+                                limit=1,
+                            )
+                        else:
+                            iva_tax = self.env["account.tax"].search(
+                                base_domain
+                                + [
+                                    ("amount", "=", vat_rate),
+                                    ("tax_group_id.l10n_ar_vat_afip_code", "!=", False),
+                                ],
+                                limit=1,
+                            )
 
-                    if iva_tax:
-                        if math.isnan(neto_amount) or neto_amount == 0:
-                            neto_amount = round(vat_amount / (vat_rate / 100), 2)
+                        if iva_tax:
+                            if math.isnan(neto_amount) or neto_amount == 0:
+                                neto_amount = round(vat_amount / (vat_rate / 100), 2)
 
-                        move_vals["line_ids"].append(line._create_line(neto_amount, [iva_tax.id]))
-                    else:
+                            move_vals["line_ids"].append(line._create_line(neto_amount, [iva_tax.id]))
+                        else:
+                            raise UserError(
+                                f"No se encontró un impuesto de IVA para la alícuota {vat_rate}%. "
+                                "Revise si este impuesto está deshabilitado."
+                            )
+
+                # Add line for "exento" if it has a value
+                if not math.isnan(line.exento) and line.exento > 0:
+                    if not tax_iva_exento:
                         raise UserError(
-                            f"No se encontró un impuesto de IVA para la alícuota {vat_rate}%. "
-                            "Revise si este impuesto esta deshabilitado."
+                            "No se encontró un impuesto de IVA Exento. "
+                            "Debe crear un impuesto de compras con el grupo 'IVA Exento'."
                         )
+                    move_vals["line_ids"].append(line._create_line(line.exento, [tax_iva_exento.id]))
 
-            # Add line for "exento" if it has a value
-            if not math.isnan(line.exento) and line.exento > 0:
-                if not tax_iva_exento:
-                    raise UserError(
-                        "No se encontró un impuesto de IVA Exento. "
-                        "Debe crear un impuesto de compras con el grupo 'IVA Exento'."
-                    )
-                move_vals["line_ids"].append(line._create_line(line.exento, [tax_iva_exento.id]))
+                # Add line for "no gravado" if it has a value
+                if not math.isnan(line.no_gravado) and line.no_gravado > 0:
+                    if not tax_iva_no_gravado:
+                        raise UserError(
+                            "No se encontró un impuesto de IVA No Gravado. "
+                            "Debe crear un impuesto de compras con el grupo 'IVA No Gravado'."
+                        )
+                    move_vals["line_ids"].append(line._create_line(line.no_gravado, [tax_iva_no_gravado.id]))
 
-            # Add line for "no gravado" if it has a value
-            if not math.isnan(line.no_gravado) and line.no_gravado > 0:
-                if not tax_iva_no_gravado:
-                    raise UserError(
-                        "No se encontró un impuesto de IVA No Gravado. "
-                        "Debe crear un impuesto de compras con el grupo 'IVA No Gravado'."
-                    )
-                move_vals["line_ids"].append(line._create_line(line.no_gravado, [tax_iva_no_gravado.id]))
-
-            # Handle case when no VAT lines were created
-            if not move_vals["line_ids"]:
-                # Si no encuentra IVA ni importe "No Gravado" agrega la linea como "IVA No Corresponde" o "IVA No Gravado"
-                base_amount = line.amount_total
-                if line.otros_tributos > 0:
-                    base_amount -= line.otros_tributos
-
-                move_vals["line_ids"].append(line._create_line(base_amount, [tax_iva_no_corresponde.id]))
+                # Handle case when no VAT lines were created
+                if not move_vals["line_ids"]:
+                    if not tax_iva_no_corresponde:
+                        raise UserError(
+                            "No se encontró un impuesto de IVA No Corresponde. "
+                            "Debe crear un impuesto de compras con el grupo 'IVA No Corresponde'."
+                        )
+                    # Si no encuentra IVA ni importe "No Gravado" agrega la linea como "IVA No Corresponde" o "IVA No Gravado"
+                    move_vals["line_ids"].append(line._create_line(line._neto_sin_iva(), [tax_iva_no_corresponde.id]))
+            else:
+                # Sujeto Exento / Monotributo: reciben comprobantes B/C sin IVA
+                # discriminado y no tienen impuestos de IVA en su plan de cuentas.
+                move_vals["line_ids"].append(line._create_line(line._neto_sin_iva(), []))
 
             move = self.env["account.move"].create(move_vals)
 

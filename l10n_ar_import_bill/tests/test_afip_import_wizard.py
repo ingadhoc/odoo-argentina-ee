@@ -77,6 +77,58 @@ class TestAfipImportWizard(common.TransactionCase):
 
             self.assertEqual(invoice.l10n_latam_document_type_id.code, expected_code)
 
+    def test_exento_import_without_vat(self):
+        """Un Sujeto Exento importa comprobantes B/C sin ningún impuesto de IVA.
+
+        La base de test trae una company demo (AR) Exento (code 4). Importamos a
+        través de create_document_from_attachment para cubrir además el ruteo del
+        importador para responsabilidades distintas de RI.
+        """
+        company = self.env["res.company"].search([("l10n_ar_afip_responsibility_type_id.code", "=", "4")], limit=1)
+        self.assertTrue(company, "No hay company Exento (code 4) en la base de test")
+        self.env.user.company_ids = [(4, company.id)]
+        self.env.user.company_id = company
+
+        journal = self.env["account.journal"].create(
+            {"name": "Test Purchase Exento", "code": "TPEX", "type": "purchase", "company_id": company.id}
+        )
+
+        with open(path.join(path.dirname(__file__), "fixtures", "Exento.xlsx"), "rb") as f:
+            attachment = self.env["ir.attachment"].create({"name": "Exento.xlsx", "datas": b64encode(f.read())})
+
+        action = journal.create_document_from_attachment(attachment_ids=[attachment.id])
+        self.assertEqual(action.get("res_model"), "afip.import.wizard", "El importador debería dispararse para Exento")
+        wizard = self.env["afip.import.wizard"].browse(action["res_id"])
+
+        # Pre-creamos los proveedores para evitar la consulta externa a AFIP que
+        # dispara _get_partner_by_vat al crear un partner CUIT nuevo.
+        for line in wizard.line_ids:
+            if not self.env["res.partner"].search([("vat", "=", line.partner_vat)], limit=1):
+                id_type = self.env["l10n_latam.identification.type"].search(
+                    [("name", "ilike", line.partner_identification_type)], limit=1
+                )
+                self.env["res.partner"].create(
+                    {
+                        "name": line.partner_name,
+                        "vat": line.partner_vat,
+                        "l10n_latam_identification_type_id": id_type.id,
+                        "company_type": "company",
+                    }
+                )
+
+        expected_total = sum(wizard.line_ids.mapped("amount_total"))
+        view_return = wizard.action_confirm()
+        moves = self.env["account.move"].browse(view_return["domain"][0][2])
+
+        self.assertEqual(len(moves), 24, "Deberían crearse las 24 facturas del archivo")
+
+        for move in moves:
+            iva_taxes = move.invoice_line_ids.tax_ids.filtered(lambda t: t.tax_group_id.l10n_ar_vat_afip_code)
+            self.assertFalse(iva_taxes, f"Un exento no debe llevar impuesto de IVA (factura {move.name})")
+
+        # El total importado debe conservarse (neto sin IVA + Otros Tributos).
+        self.assertAlmostEqual(sum(moves.mapped("amount_total")), expected_total, places=2)
+
     def test_partner_creation_and_search(self):
         """Test correct creation and search of partners based on identification"""
         # Load test file containing partner data
