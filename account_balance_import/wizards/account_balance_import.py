@@ -360,7 +360,10 @@ class AccountBalanceImport(models.TransientModel):
                 continue
 
             # Check if accounts have the same company
-            if company.id not in partner_account.company_ids.ids:
+            if (
+                company.id not in partner_account.company_ids.ids
+                and company.id not in partner_account.company_ids.child_ids.ids
+            ):
                 errors.append(
                     _(
                         "Row %(row)s: One of the accounts associated with partner %(partner)s does not belong "
