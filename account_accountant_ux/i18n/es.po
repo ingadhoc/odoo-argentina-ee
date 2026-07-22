@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-18 18:30+0000\n"
+"POT-Creation-Date: 2026-07-22 12:31+0000\n"
 "PO-Revision-Date: 2026-05-21 16:41+0000\n"
 "Last-Translator: Gonzalo Lenzi <gl@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
@@ -132,6 +132,11 @@ msgid "Change Lock Date"
 msgstr "Cambiar fecha de bloqueo"
 
 #. module: account_accountant_ux
+#: model:ir.model,name:account_accountant_ux.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_auto_reconcile_wizard__company_id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_change_lock_date__company_id
 msgid "Company"
@@ -196,6 +201,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_return__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__display_name
+#: model:ir.model.fields,field_description:account_accountant_ux.field_res_company__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_partner__display_name
 msgid "Display Name"
 msgstr "Nombre para Mostrar"
@@ -262,6 +268,7 @@ msgstr "Manejador personalizado de informes de seguimiento"
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_return__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__id
+#: model:ir.model.fields,field_description:account_accountant_ux.field_res_company__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_partner__id
 msgid "ID"
 msgstr ""
