@@ -20,7 +20,7 @@ class AccountJournal(models.Model):
         if (
             (journal.type == "purchase" or (journal.type == "sale" and not journal.l10n_ar_is_pos))
             and journal.company_id.country_code == "AR"
-            and journal.company_id.l10n_ar_afip_responsibility_type_id.code == "1"
+            and journal.company_id.l10n_ar_afip_responsibility_type_id.code in ("1", "4", "6")
         ):
             attachments = self.env["ir.attachment"].browse(attachment_ids or [])
 
