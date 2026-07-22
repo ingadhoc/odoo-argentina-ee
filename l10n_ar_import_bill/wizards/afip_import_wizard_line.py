@@ -139,6 +139,16 @@ class AfipImportWizardLine(models.TransientModel):
             move_type = "out_refund" if is_sale else "in_refund"
         return move_type
 
+    def _neto_sin_iva(self):
+        """Neto a imputar como costo sin IVA: el total menos "Otros Tributos"
+        (que se agregan aparte con el wizard de impuestos). Se usa tanto en el
+        fallback de RI como en el flujo de Exento / Monotributo."""
+        self.ensure_one()
+        base_amount = self.amount_total
+        if self.otros_tributos > 0:
+            base_amount -= self.otros_tributos
+        return base_amount
+
     # Definimos la funcion que crea las lineas de factura
     # con el precio unitario y los impuestos correspondientes
 
