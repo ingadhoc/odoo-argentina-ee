@@ -120,7 +120,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
                     content.append("2")
 
                 # 4 Número del comprobante
-                content.append("%012d" % int(re.sub("[^0-9]", "", line.payment_id.name or "")))
+                content.append("%012d" % int(re.sub("[^0-9]", "", line.name or "")))
 
                 # 5 Cuit del contribuyene
                 content.append(line.partner_id.ensure_vat())
@@ -152,7 +152,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
 
                 # 11 Jurisdicción: código en Convenio Multilateral de la
                 # jurisdicción a la cual está presentando la DDJJ
-                if not tax.l10n_ar_state_id.jurisdiction_code or not tax.l10n_ar_state_id.jurisdiction_code:
+                if not tax.l10n_ar_state_id or not tax.l10n_ar_state_id.jurisdiction_code:
                     raise RedirectWarning(
                         message=_(
                             'There is no jurisdiction set in the tax "%(tax_name)s" or it does not have a jurisdiction code.',
@@ -246,7 +246,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
 
                 # 11 Jurisdicción: código en Convenio Multilateral de la
                 # jurisdicción a la cual está presentando la DDJJ
-                if not tax.l10n_ar_state_id.jurisdiction_code or not tax.l10n_ar_state_id.jurisdiction_code:
+                if not tax.l10n_ar_state_id or not tax.l10n_ar_state_id.jurisdiction_code:
                     raise RedirectWarning(
                         message=_(
                             'There is no jurisdiction set in the tax "%(tax_name)s" or it does not have a jurisdiction code.',
