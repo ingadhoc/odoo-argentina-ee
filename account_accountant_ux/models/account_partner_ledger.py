@@ -34,3 +34,13 @@ class PartnerLedgerCustomHandler(models.AbstractModel):
         )
         line["amount_residual"] = aml_query_result.get("amount_residual", 0.0)
         return line
+
+    def _get_aml_values(self, options, partner_ids, offset=0, limit=None):
+        # Core pops options['partner_ids'] before querying here, so our
+        # require_custom_filter override sees no partner filter and blanks the
+        # domain, returning zero lines. We already know the partners, so
+        # bypass the gate like "Show All" would.
+        report = self.env["account.report"].browse(options.get("report_id"))
+        if report.require_custom_filter and partner_ids:
+            options = {**options, "show_all_custom": True}
+        return super()._get_aml_values(options, partner_ids, offset=offset, limit=limit)
