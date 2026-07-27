@@ -67,16 +67,16 @@ class L10n_ArIvaReportHandler(models.AbstractModel):
             )
         domain = [
             ("tax_line_id.l10n_ar_state_id", "=", False),
+            ("tax_line_id.l10n_ar_tribute_afip_code", "=", "06"),
         ] + get_standard_lines_domain(self.env["account.report"].get_report_company_ids(options), options)
 
         if file_type == "ret":
-            # TODO: ver que agregamos en el domain para retenciones iva sufridas
-            # las identificamos por tax group?
-            domain += [("tax_line_id.l10n_ar_withholding_payment_type", "=", "customer")]
+            domain += [
+                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "customer"),
+            ]
         elif file_type == "perc":
             domain += [
                 ("tax_line_id.type_tax_use", "=", "purchase"),
-                ("tax_line_id.tax_group_id.l10n_ar_tribute_afip_code", "=", "06"),
             ]
 
         return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
