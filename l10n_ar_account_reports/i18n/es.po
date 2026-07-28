@@ -317,7 +317,7 @@ msgid ""
 msgstr ""
 "Cuenta que se utilizará para el asiento de cierre de este tipo de "
 "declaración. Si no se configura, se utilizará la cuenta de cuentas por pagar "
-"o por cobrar del socio."
+"o por cobrar del contacto."
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_return
@@ -596,8 +596,15 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/caba_report.py:0
 #: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
+#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
 msgid "Edit contact"
 msgstr "Editar contacto"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
+msgid "Edit identification type"
+msgstr "Editar tipo de identificación"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1005,6 +1012,11 @@ msgid "Purchase Profits Withholdings"
 msgstr "Retenciones sobre las ganancias por compra"
 
 #. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sicore_report_vat_withholding_line
+msgid "Purchase VAT Withholdings"
+msgstr "Retenciones de IVA por compra"
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_caba_report_caba_withholdings_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_mendoza_report_mendoza_withholdings_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_misiones_report_misiones_withholdings_line
@@ -1076,20 +1088,22 @@ msgstr ""
 "pendientes al cierre del período."
 
 #. module: l10n_ar_account_reports
-#: model:account.return.type,name:l10n_ar_account_reports.sicore_return_type
-msgid "SICORE Ganancias (Agente)"
-msgstr ""
-
-#. module: l10n_ar_account_reports
 #: model:account.report,name:l10n_ar_account_reports.l10n_ar_sicore_report
-msgid "SICORE Profits"
-msgstr "SICORE Ganancias"
+#: model:account.return.type,name:l10n_ar_account_reports.sicore_return_type
+msgid "SICORE (Agente)"
+msgstr ""
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
-msgid "SICORE_profits_withholdings.txt"
-msgstr "SICORE_ganancias_retenciones.txt"
+msgid "SICORE Aplicado.txt"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
+msgid "SICORE TXT"
+msgstr "TXT SICORE"
 
 #. module: l10n_ar_account_reports
 #: model:account.report,name:l10n_ar_account_reports.l10n_ar_sifere_report
@@ -1114,6 +1128,11 @@ msgid "Sale Perceptions"
 msgstr "Percepciones de Venta"
 
 #. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sicore_report_vat_perception_line
+msgid "Sale VAT Perceptions"
+msgstr "Percepciones de IVA por venta"
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sifere_report_sifere_withholdings_line
 msgid "Sale Withholdings"
 msgstr "Retenciones de Venta"
@@ -1122,12 +1141,6 @@ msgstr "Retenciones de Venta"
 #: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.inflation_adjustment_index_search
 msgid "Search Description"
 msgstr "Buscar Descripción"
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
-msgid "Sicore Profits Withholdings TXT"
-msgstr "TXT SICORE Retenciones Ganancias"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1275,14 +1288,25 @@ msgid ""
 "The partner \"%(partner_name)s\" (id %(partner_id)s) does not have the vat "
 "set."
 msgstr ""
-"El socio «%(partner_name)s» (id %(partner_id)s) no tiene configurado el IVA."
+"El contacto «%(partner_name)s» (id %(partner_id)s) no tiene configurado el número de identificación."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "The partner '%s' has no %s account configured for company '%s'."
 msgstr ""
-"El socio «%s» no tiene ninguna cuenta %s configurada para la empresa «%s»."
+"El contacto «%s» no tiene ninguna cuenta %s configurada para la empresa «%s»."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
+msgid ""
+"The payment \"%(payment_name)s\" (id %(payment_id)s) has a withholding tax "
+"that is not linked to a withholding, so its base amount cannot be reported."
+msgstr ""
+"El pago «%(payment_name)s» (id %(payment_id)s) tiene un impuesto de "
+"retención que no está vinculado a una retención, así que no se puede "
+"informar su base de cálculo."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1311,8 +1335,8 @@ msgid ""
 "The return type '%s' has no payment partner configured. Please set a Payment "
 "Partner on the return type."
 msgstr ""
-"El tipo de devolución «%s» no tiene ningún socio de pago configurado. "
-"Configure un socio de pago para el tipo de devolución."
+"El tipo de devolución «%s» no tiene ningún contacto de pago configurado. "
+"Configure un contacto de pago para el tipo de devolución."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1412,6 +1436,12 @@ msgstr ""
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_sales
 msgid "Ventas netas de bienes y servicios"
 msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
+msgid "View payment"
+msgstr "Ver pago"
 
 #. module: l10n_ar_account_reports
 #. odoo-python

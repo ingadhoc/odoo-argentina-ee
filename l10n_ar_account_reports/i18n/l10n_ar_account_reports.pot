@@ -531,7 +531,14 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/caba_report.py:0
 #: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
+#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
 msgid "Edit contact"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
+msgid "Edit identification type"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -929,6 +936,11 @@ msgid "Purchase Profits Withholdings"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sicore_report_vat_withholding_line
+msgid "Purchase VAT Withholdings"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_caba_report_caba_withholdings_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_mendoza_report_mendoza_withholdings_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_misiones_report_misiones_withholdings_line
@@ -998,19 +1010,21 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#: model:account.return.type,name:l10n_ar_account_reports.sicore_return_type
-msgid "SICORE Ganancias (Agente)"
-msgstr ""
-
-#. module: l10n_ar_account_reports
 #: model:account.report,name:l10n_ar_account_reports.l10n_ar_sicore_report
-msgid "SICORE Profits"
+#: model:account.return.type,name:l10n_ar_account_reports.sicore_return_type
+msgid "SICORE (Agente)"
 msgstr ""
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
-msgid "SICORE_profits_withholdings.txt"
+msgid "SICORE Aplicado.txt"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
+msgid "SICORE TXT"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -1036,6 +1050,11 @@ msgid "Sale Perceptions"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sicore_report_vat_perception_line
+msgid "Sale VAT Perceptions"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sifere_report_sifere_withholdings_line
 msgid "Sale Withholdings"
 msgstr ""
@@ -1043,12 +1062,6 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.inflation_adjustment_index_search
 msgid "Search Description"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
-msgid "Sicore Profits Withholdings TXT"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -1177,6 +1190,14 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
+msgid ""
+"The payment \"%(payment_name)s\" (id %(payment_id)s) has a withholding tax "
+"that is not linked to a withholding, so its base amount cannot be reported."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
 #: code:addons/l10n_ar_account_reports/models/sifere_report.py:0
 msgid ""
 "The perception %s (id: %d) of the document \"%s\" (id: %d) has no associated"
@@ -1289,6 +1310,12 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_resultados_line_sales
 msgid "Ventas netas de bienes y servicios"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
+msgid "View payment"
 msgstr ""
 
 #. module: l10n_ar_account_reports

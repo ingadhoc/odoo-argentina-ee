@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="l10n_ar_sicore_report" model="account.report">
-        <field name="name">SICORE Profits</field>
+        <field name="name">SICORE (Agente)</field>
         <field name="root_report_id" ref="account.generic_tax_report"/>
         <field name="country_id" ref="base.ar"/>
         <field name="filter_hierarchy">never</field>
@@ -19,13 +19,23 @@
         <field name="line_ids">
             <record id="l10n_ar_sicore_report_profits_line" model="account.report.line">
                 <field name="name">Purchase Profits Withholdings</field>
-                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_tax_type", "in", ["earnings", "earnings_scale"]), ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"), ("tax_line_id.country_code", "=", "AR")])</field>
+                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_tax_type", "in", ["earnings", "earnings_scale"]), ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"), ("tax_line_id.l10n_ar_state_id", "=", False), ("tax_line_id.country_code", "=", "AR"), ("balance", "!=", 0)])</field>
+            </record>
+            <record id="l10n_ar_sicore_report_vat_withholding_line" model="account.report.line">
+                <field name="name">Purchase VAT Withholdings</field>
+                <field name="hide_if_zero" eval="True"/>
+                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_tribute_afip_code", "=", "06"), ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"), ("tax_line_id.l10n_ar_state_id", "=", False), ("tax_line_id.country_code", "=", "AR"), ("balance", "!=", 0)])</field>
+            </record>
+            <record id="l10n_ar_sicore_report_vat_perception_line" model="account.report.line">
+                <field name="name">Sale VAT Perceptions</field>
+                <field name="hide_if_zero" eval="True"/>
+                <field name="domain_formula">-sum([("tax_line_id.type_tax_use", "=", "sale"), ("tax_line_id.l10n_ar_state_id", "=", False), ("tax_line_id.l10n_ar_tribute_afip_code", "=", "06"), ("tax_line_id.country_code", "=", "AR"), ("balance", "!=", 0)])</field>
             </record>
         </field>
     </record>
 
     <record id="sicore_return_type" model="account.return.type">
-        <field name="name">SICORE Ganancias (Agente)</field>
+        <field name="name">SICORE (Agente)</field>
         <field name="report_id" ref="l10n_ar_account_reports.l10n_ar_sicore_report"/>
         <field name="default_deadline_periodicity">fortnightly</field>
         <field name="auto_generate" eval="False"/>

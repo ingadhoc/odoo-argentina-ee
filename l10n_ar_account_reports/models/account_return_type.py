@@ -283,10 +283,24 @@ class AccountReturnType(models.Model):
                 ("tax_line_id.type_tax_use", "=", "purchase"),
             ]
         if external_id == "l10n_ar_account_reports.sicore_return_type":
+            # Unión de las tres líneas del reporte SICORE. Sin jurisdicción, que
+            # excluye IIBB (esas van a sus propias liquidaciones).
             return [
+                ("tax_line_id.country_code", "=", "AR"),
+                ("tax_line_id.l10n_ar_state_id", "=", False),
+                "|",
+                # Retenciones de ganancias practicadas en pagos a proveedores.
+                "&",
                 ("tax_line_id.l10n_ar_tax_type", "in", ["earnings", "earnings_scale"]),
                 ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
-                ("tax_line_id.country_code", "=", "AR"),
+                # IVA, identificado por el código de tributo ARCA "06" del grupo de
+                # impuestos: retenciones practicadas en pagos a proveedores y
+                # percepciones aplicadas en ventas.
+                "&",
+                ("tax_line_id.l10n_ar_tribute_afip_code", "=", "06"),
+                "|",
+                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+                ("tax_line_id.type_tax_use", "=", "sale"),
             ]
         return []
 
