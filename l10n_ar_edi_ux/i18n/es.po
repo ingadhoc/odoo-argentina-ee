@@ -905,6 +905,20 @@ msgstr "Probar Conexiones"
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
+#: code:addons/l10n_ar_edi_ux/models/account_journal.py:0
+msgid ""
+"The ARCA POS number %(pos_number)s is already used by the electronic "
+"journal \"%(journal)s\". Two electronic journals cannot share the same POS "
+"number because they would share the invoice numbering and ARCA would reject"
+" the documents (error 10016)."
+msgstr ""
+"El número de punto de venta ARCA %(pos_number)s ya está siendo usado por el"
+" diario electrónico \"%(journal)s\". Dos diarios electrónicos no pueden "
+"compartir el mismo número de punto de venta porque compartirían la "
+"numeración de los comprobantes y ARCA los rechazaría (error 10016)."
+
+#. module: l10n_ar_edi_ux
+#. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/account_move.py:0
 msgid ""
 "The partner %s does not have an ARCA Responsibility configured. Please set "

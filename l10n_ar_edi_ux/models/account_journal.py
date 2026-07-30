@@ -1,12 +1,62 @@
 import datetime
 
-from odoo import _, models
-from odoo.exceptions import UserError
+from odoo import _, api, models
+from odoo.exceptions import UserError, ValidationError
 from odoo.tools import format_date
 
 
 class AccountJournal(models.Model):
     _inherit = "account.journal"
+
+    def copy_data(self, default=None):
+        """Duplicating creates the record right away (there is no edit step before saving),
+        so a copied electronic journal would always collide with the original's POS number.
+        Assign the next free POS number instead; the user must review it afterwards."""
+        vals_list = super().copy_data(default=default)
+        assigned = set()
+        for journal, vals in zip(self, vals_list):
+            if "l10n_ar_afip_pos_number" in (default or {}) or not (journal.l10n_ar_is_pos and journal.l10n_ar_afip_ws):
+                continue
+            used = (
+                set(
+                    self.search(
+                        [
+                            ("company_id", "=", vals.get("company_id", journal.company_id.id)),
+                            ("l10n_ar_is_pos", "=", True),
+                        ]
+                    ).mapped("l10n_ar_afip_pos_number")
+                )
+                | assigned
+            )
+            vals["l10n_ar_afip_pos_number"] = next(n for n in range(1, 100000) if n not in used)
+            assigned.add(vals["l10n_ar_afip_pos_number"])
+        return vals_list
+
+    @api.constrains(
+        "l10n_ar_afip_pos_number", "l10n_ar_afip_pos_system", "company_id", "type", "l10n_latam_use_documents"
+    )
+    def _check_l10n_ar_afip_pos_number_unique(self):
+        """Two electronic journals sharing the ARCA POS number would share the same
+        document numbering and ARCA would reject the documents (error 10016)."""
+        for journal in self.filtered(lambda j: j.l10n_ar_is_pos and j.l10n_ar_afip_ws and j.l10n_ar_afip_pos_number):
+            duplicate = self.search(
+                [
+                    ("id", "!=", journal.id),
+                    ("company_id", "=", journal.company_id.id),
+                    ("l10n_ar_is_pos", "=", True),
+                    ("l10n_ar_afip_pos_number", "=", journal.l10n_ar_afip_pos_number),
+                ]
+            ).filtered("l10n_ar_afip_ws")[:1]
+            if duplicate:
+                raise ValidationError(
+                    _(
+                        'The ARCA POS number %(pos_number)s is already used by the electronic journal "%(journal)s". '
+                        "Two electronic journals cannot share the same POS number because they would share the "
+                        "invoice numbering and ARCA would reject the documents (error 10016).",
+                        pos_number=journal.l10n_ar_afip_pos_number,
+                        journal=duplicate.display_name,
+                    )
+                )
 
     def l10n_ar_check_afip_doc_types(self):
         """This method shows the valid document types for each Webservice."""
