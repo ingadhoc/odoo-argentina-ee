@@ -97,6 +97,13 @@ class AccountReport(models.Model):
                     "action": "action_closure_journal_entry",
                 }
             )
+            # Sin esto, el botón (al no declarar branch_allowed) exige tener
+            # seleccionada TODA la jerarquía de branches del árbol para habilitarse.
+            # Con esto, account.report lo habilita ya con solo el grupo de compañías
+            # que comparten CUIT (ver res.company._get_branches_with_same_vat), que es
+            # el mismo criterio que usamos abajo en action_closure_journal_entry — así
+            # ambos gates (el nativo y el nuestro) piden lo mismo.
+            options["enable_export_buttons_for_common_vat_in_branches"] = True
 
     def action_closure_journal_entry(self, options):
         """Abre el wizard de liquidación para que el usuario elija el diario."""
@@ -115,8 +122,27 @@ class AccountReport(models.Model):
             )
             .mapped("company_id")
         )
-        if len(companies) != 1:
-            raise ValidationError(_("La liquidación se debe realizar filtrando por 1 y solo 1 compañía en el reporte"))
+        if not companies:
+            raise ValidationError(_("No se encontraron diarios para liquidar en este reporte."))
+
+        # La liquidación es por grupo de CUIT, no por una sola compañía ni por todo el
+        # árbol de branches: "ser hija en el árbol de parent_id" y "compartir CUIT" son
+        # cosas distintas (ver res.company._get_branches_with_same_vat). Antes de este
+        # fix, exigir "exactamente 1 compañía" acá contradecía al gate nativo de arriba,
+        # que (al no declarar branch_allowed) exige seleccionar TODA la jerarquía de
+        # branches — no había ninguna selección que satisficiera a los dos a la vez.
+        same_vat_companies = companies[:1]._get_branches_with_same_vat()
+        if companies - same_vat_companies:
+            raise ValidationError(
+                _(
+                    "La liquidación se debe realizar filtrando por compañías que compartan "
+                    "el mismo CUIT (no se puede mezclar entidades fiscales distintas en un "
+                    "mismo asiento de liquidación)."
+                )
+            )
+        # Compañía "principal" del grupo de CUIT: la más cercana a la raíz del árbol,
+        # análoga a is_main_branch en account.return._can_return_exist.
+        main_company = min(companies, key=lambda company: len(company.parent_path.split("/")))
 
         action_name = "%s (BETA)" % self.settlement_title
         entry_ref = self.settlement_title
@@ -127,7 +153,7 @@ class AccountReport(models.Model):
             "default_report_id": self.id,
             "entry_ref": entry_ref,
             "skip_invoice_sync": True,
-            "default_company_id": companies.id,
+            "default_company_id": main_company.id,
         }
         view_id = self.env.ref("account_accountant_ux.view_account_tax_settlement_wizard_form").id
 
