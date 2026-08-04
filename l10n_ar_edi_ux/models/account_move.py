@@ -56,6 +56,13 @@ class AccountMove(models.Model):
             return original_entry and original_entry[0] or res
         return res
 
+    def _get_partner_code_id(self, partner):
+        # Odoo 19.0 returns an implicit None when the partner's identification type
+        # has no ARCA code (e.g. generic "VAT" on foreign partners of export invoices),
+        # crashing int() in _compute_l10n_ar_afip_qr_code. Restore the 17.0/18.0
+        # behavior of returning a falsy value that int() accepts.
+        return super()._get_partner_code_id(partner) or False
+
     def _check_vat_condition(self):
         """Return the AFIP code of the VAT condition of the partner"""
         self.ensure_one()
