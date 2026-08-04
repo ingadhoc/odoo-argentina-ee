@@ -908,13 +908,14 @@ msgstr "Probar Conexiones"
 #: code:addons/l10n_ar_edi_ux/models/account_journal.py:0
 msgid ""
 "The ARCA POS number %(pos_number)s is already used by the journal "
-"\"%(journal)s\". Two sale journals cannot share the same POS number because"
-" they would share the document numbering."
+"\"%(journal)s\", which has the same POS system. Two sale journals cannot "
+"share the POS number and POS system because they would share the document "
+"numbering."
 msgstr ""
 "El número de punto de venta ARCA %(pos_number)s ya está siendo usado por el"
-" diario \"%(journal)s\". Dos diarios de venta no pueden compartir el mismo "
-"número de punto de venta porque compartirían la numeración de los "
-"comprobantes."
+" diario \"%(journal)s\", que tiene el mismo sistema de punto de venta. Dos "
+"diarios de venta no pueden compartir el número y el sistema de punto de "
+"venta porque compartirían la numeración de los comprobantes."
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
