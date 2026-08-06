@@ -12,6 +12,23 @@ from odoo.exceptions import ValidationError
 class AccountMove(models.Model):
     _inherit = "account.move"
 
+    def _get_vat(self, base_lines=None):
+        """Reuse the VAT breakdown when the caller provides a cache in the context.
+
+        Building it means going through `_get_rounded_base_and_tax_lines()`, which
+        rebuilds the base lines of the invoice and is the most expensive part of the VAT
+        book export. The export needs the same breakdown more than once per invoice, so
+        a caller can pass an empty dict in `l10n_ar_vat_book_vat_cache` to compute it
+        only once. We hand out copies so that no caller can alter what the next one gets.
+        """
+        cache = self.env.context.get("l10n_ar_vat_book_vat_cache")
+        if cache is None or base_lines is not None:
+            return super()._get_vat(base_lines=base_lines)
+        self.ensure_one()
+        if self.id not in cache:
+            cache[self.id] = super()._get_vat()
+        return [dict(vat_tax) for vat_tax in cache[self.id]]
+
     def _get_document_number_parts(self):
         """Wrapper around _l10n_ar_get_document_number_parts for single-record use.
         Callers should invoke _validate_document_number_parts() on the full recordset
