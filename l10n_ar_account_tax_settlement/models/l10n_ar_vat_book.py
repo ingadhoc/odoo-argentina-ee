@@ -48,7 +48,34 @@ class ArgentinianReportCustomHandler(models.AbstractModel):
                     )
         return res
 
+    def _vat_book_prefetch_invoice_lines(self, invoices):
+        """Warm up the ORM cache for every invoice line in a couple of queries.
+
+        The txt generation walks the invoices one by one and rebuilds the base lines of
+        each of them (`_get_rounded_base_and_tax_lines()`). Odoo prefetches per invoice,
+        so without this each invoice triggers its own SELECTs, and a whole month of
+        invoices adds up to thousands of round trips to the database. That is what makes
+        the export time out (the request dies before returning the zip).
+        """
+        lines = invoices.line_ids
+        if not lines:
+            return
+        # every stored column of every line, in a single SELECT
+        lines.fetch(
+            [name for name, field in lines._fields.items() if field.store and field.column_type and field.prefetch]
+        )
+        # x2many fields are not columns, so `fetch()` does not cover them. We read the ones
+        # the tax computation walks: `tax_ids` on the base lines, and `sale_line_ids`, which
+        # `sale_loyalty` reads on every line to detect discount lines.
+        lines.mapped("tax_ids")
+        if "sale_line_ids" in lines._fields:
+            lines.mapped("sale_line_ids")
+
     def _vat_book_get_REGINFO_CV_ALICUOTAS(self, options, tax_type, invoices):
+        self._vat_book_prefetch_invoice_lines(invoices)
+        # our check and the standard implementation below both need the VAT breakdown of
+        # every invoice. Sharing a cache computes it once instead of twice.
+        invoices = invoices.with_context(l10n_ar_vat_book_vat_cache={})
         error = self._check_invoices(invoices)
 
         # Download the file only id: 1) if there not error, 2) We a are saas support user with active dev mode
