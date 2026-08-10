@@ -54,6 +54,8 @@ class L10n_ArSicoreReportHandler(models.AbstractModel):
             ("tax_line_id.l10n_ar_tax_type", "in", ["earnings", "earnings_scale"]),
             ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
             ("tax_line_id.country_code", "=", "AR"),
+            ("name", "!=", "/"),
+            ("balance", "<", 0),
         ] + get_standard_lines_domain(self.env["account.report"].get_report_company_ids(options), options)
         return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
 

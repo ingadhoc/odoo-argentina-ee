@@ -19,7 +19,7 @@
         <field name="line_ids">
             <record id="l10n_ar_sicore_report_profits_line" model="account.report.line">
                 <field name="name">Purchase Profits Withholdings</field>
-                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_tax_type", "in", ["earnings", "earnings_scale"]), ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"), ("tax_line_id.country_code", "=", "AR")])</field>
+                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_tax_type", "in", ["earnings", "earnings_scale"]), ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"), ("tax_line_id.country_code", "=", "AR"), ("name", "!=", "/"), ("balance", "&lt;", 0)])</field>
             </record>
         </field>
     </record>
