@@ -300,6 +300,21 @@ msgid "AR Simple Closing"
 msgstr "AR Cierre Simple"
 
 #. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__l10n_ar_single_branch_closing_entry
+msgid "Single Closing Entry for Branches"
+msgstr "Asiento de liquidación único para sucursales"
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,help:l10n_ar_account_reports.field_account_return_type__l10n_ar_single_branch_closing_entry
+msgid ""
+"If enabled, when the company has branches a single consolidated closing "
+"entry is created in the parent company instead of one entry per branch."
+msgstr ""
+"Si se habilita, cuando la compañía tiene sucursales se genera un único "
+"asiento de liquidación consolidado en la compañía padre en lugar de un "
+"asiento por cada sucursal."
+
+#. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__account_id
 msgid "Account"
 msgstr "Cuenta"

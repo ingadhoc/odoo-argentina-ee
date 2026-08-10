@@ -48,6 +48,14 @@ class AccountReturnType(models.Model):
         help="If enabled, this return type uses simplified closing logic: "
         "no carryover mechanism and no automatic tax_lock_date update.",
     )
+    l10n_ar_single_branch_closing_entry = fields.Boolean(
+        string="Single Closing Entry for Branches",
+        help="If enabled, when the company has branches a single consolidated closing entry "
+        "is created in the parent company instead of one entry per branch.",
+    )
+    # Helper para mostrar campos exclusivos de AR solo en tipos de retorno argentinos
+    # (no debe ofrecerse esta funcionalidad para otras localizaciones).
+    l10n_ar_country_code = fields.Char(related="country_id.code")
 
     @api.depends("country_id")
     def _compute_l10n_ar_is_simple_closing_return(self):
