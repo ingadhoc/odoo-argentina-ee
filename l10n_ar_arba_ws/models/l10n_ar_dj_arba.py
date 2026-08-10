@@ -35,6 +35,7 @@ class L10nArDjArba(models.Model):
             ("draft", "Draft"),
             ("open", "Open"),
             ("close", "Closed"),
+            ("cancel", "Cancelled"),
         ],
         default="draft",
         tracking=True,
@@ -70,6 +71,7 @@ class L10nArDjArba(models.Model):
                     ("company_id", "=", ddjj.company_id.id),
                     # We need to also have the state because we can a have valid open, close and draft one for the same period.
                     ("state", "=", ddjj.state),
+                    ("state", "!=", "cancel"),
                     ("date", ">=", from_date),
                     ("date", "<=", to_date),
                     ("id", "!=", ddjj.id),
@@ -182,7 +184,7 @@ class L10nArDjArba(models.Model):
         )
 
         if error:
-            self._process_arba_error(error, error_prefix, wh_line.payment_id)
+            self._post_message_arba_error(error, error_prefix, wh_line.payment_id)
             return
 
         # Adjuntamos el numero de certificado al nombre de la retencion solo cuando realmente lo obtuvimos
@@ -196,7 +198,12 @@ class L10nArDjArba(models.Model):
             self.message_post(body=ok_msg)
             wh_line.payment_id.message_post(body=ok_msg)
         else:
-            self._process_arba_error(response, error_prefix, wh_line.payment_id)
+            # TODO KZ revisar. creo que no lo necesito, ya se procesa antes
+            import pdb
+
+            pdb.set_trace()
+            raise UserError("No deberia de llegar aca create withholding")
+            self._post_message_arba_error(error, error_prefix, wh_line.payment_id)
 
     @api.model
     def _find_dates(self, wh_date):
@@ -263,18 +270,13 @@ class L10nArDjArba(models.Model):
         if estado := response.get("estado"):
             self.state = "open" if estado == "Abierto" else "close"
 
-    def _process_arba_error(self, error_obj, msg_prefix, record=None):
-        """It Will process the response with a error code, will create a pretty html message and
-        post it in the given record. If not record given will publish the message in the
-        DDJJ ARBA chatter
+    def _process_arba_error(self, error_obj):
+        """It will process errores given by arba. Could be a connection error or also
+        and error code within the response, will create a pretty html message,
 
         :param error_obj: could be a dictionary with the response or and string with an error
-        :param msg_prefix: string to show as prefix before the processed ARBA info.
-        :parma record: recordset where the message will be posted, if not set then will be posted
-                        on the DDJJ"""
-        record = record or self
-        record.ensure_one()
-
+        :return: string already formated to be posted in the chatter with the details of the error
+        """
         if isinstance(error_obj, dict):
             response = error_obj
             error_msg = self.env._(
@@ -287,14 +289,27 @@ class L10nArDjArba(models.Model):
             error_msg = self.env._("<br>Response: %s", str(html_escape(error_obj)))
         else:
             error_msg = self.env._("<br>Unknown: %s", str(html_escape(str(error_obj))))
-        prefix_text = self.env._("ARBA ERROR") + (" " + msg_prefix if msg_prefix else " ")
-        record.message_post(body=Markup(prefix_text + error_msg))
-        _logger.error("ARBA WS ERROR: %s", prefix_text + error_msg)
+        return error_msg
+
+    def _post_message_arba_error(self, error_msg, extra_info, record=None):
+        """It Will make a post the error info in the given record.
+        If not record given will publish the message in the DDJJ ARBA chatter
+
+        :param error_msg: message already prepare to print the related info
+        :param extra_info: string to show as extra information before the processed ARBA info.
+        :parma record: recordset where the message will be posted, if not set then will be posted
+                        on the DDJJ
+        """
+        record = record or self
+        record.ensure_one()
+        final_msg = error_msg + "<br>" + extra_info
+        record.message_post(body=Markup(final_msg))
+        return final_msg
 
     def _process_arba_response(self, method, url, env_type, msg, data=None):
         """Let us to have both clean response dictionary and string of errors if exists
         :return: tuple (response, error) -- type (dict, string)"""
-        error = False
+        error = []
         connection = self.company_id._l10n_ar_get_connection(WS_NAME)
         url = connection._l10n_ar_get_afip_ws_url(WS_NAME, env_type) + url
         headers = {
@@ -307,17 +322,26 @@ class L10nArDjArba(models.Model):
         try:
             response = requests.request(method, url, headers=headers, data=data, timeout=(45, 60))
         except Exception as exp:
-            error = str(exp)
+            error.append(self._process_arba_error(str(exp)))
 
-        if response and not HTTPStatus(response.status_code).is_success:
+        if response:
             res = response.json()
-            error = f"{response.status_code} - {res.get('error')} {res.get('message')}"
-        if error:
-            self.message_post(body=self.env._("ERROR - %s:\n\n%s", msg, error))
-            _logger.error("ARBA WS ERROR - %s: %s", msg, error)
+            if not HTTPStatus(response.status_code).is_success:
+                print(" ---- not sucessss ---- ")
+                error.append(f"{response.status_code} - {res.get('error')} {res.get('message')}")
+            if res.get("status") != 200 or res.get("error"):
+                print(" ---- status != 200 ---- ")
+                error.append(self._process_arba_error(res))
         else:
-            response = response.json()
+            error.append(self._process_arba_error(self.env._("We did not receive any response")))
 
+        if error:
+            error = "ARBA WS ERROR: %s\n%s" % (msg, "<br>".join(error))
+
+            # Si la DDJJ no fue encontrada dejamos detalle de la DJJJ
+            if "DDJJ_NO_ENCONTRADA" in error:
+                error += "<br>" + self.env._("The DDJJ was not found in ARBA (idDJ %s) (id %s)" % (self.name, self.id))
+        _logger.error(error)
         return response, error
 
     @api.ondelete(at_uninstall=False)
@@ -404,7 +428,7 @@ class L10nArDjArba(models.Model):
         )
         error_prefix = self.env._("Error opening the declaration: DDJJ ID number was not generated")
         if error:
-            self._process_arba_error(error, error_prefix)
+            self._post_message_arba_error(error, error_prefix)
             return
 
         if response.get("id"):
@@ -412,6 +436,11 @@ class L10nArDjArba(models.Model):
             self.state = "open"
             self.message_post(body=ok_msg)
         else:
+            # TODO KZ should not get here
+            import pdb
+
+            pdb.set_trace()
+            raise UserError("No deberia de llegar aca - action open")
             self._process_arba_error(response, error_prefix)
 
     def action_find_existing(self):
@@ -451,11 +480,7 @@ class L10nArDjArba(models.Model):
         )
         error_prefix = self.env._("Linking existing DDJJ:")
         if error:
-            self._process_arba_error(error, error_prefix)
-            return
-
-        if not response:
-            self._process_arba_error(self.env._("We did not receive any response"), error_prefix)
+            self._post_message_arba_error(error, error_prefix)
             return
 
         if isinstance(response, list):
@@ -466,6 +491,8 @@ class L10nArDjArba(models.Model):
             self._process_arba_ddjj_data(response)
             self.message_post(body=ok_msg)
         else:
+            # TODO KZ no deberia de llegar aca
+            raise UserError("No deberia de llegar aca - action find existing")
             self._process_arba_error(response, error_prefix)
 
     def action_update_status(self):
@@ -513,12 +540,19 @@ class L10nArDjArba(models.Model):
             self.env._("Update Declaration"),
         )
         prefix_error = self.env._("Updating status:")
-        if error:
-            self._process_arba_error(error, prefix_error)
-            return
 
-        if not response:
-            self._process_arba_error(self.env._("We did not receive any response"), prefix_error)
+        if error:
+            self._post_message_arba_error(error, prefix_error)
+            if "DDJJ_NO_ENCONTRADA" in error:
+                # Si la DDJJ no fue encontrada entonces pasamos la declaracion a cancelada, ya que seguramente la
+                # borraron an la interfaz de usuario de portal arba y no vamos a poder actualizarla.
+                self.message_post(
+                    body=self.env._(
+                        "DDJJ Probably was deleted in the portal, since we can not update it, we are moving it to"
+                        "cancelled state."
+                    )
+                )
+                self.state = "cancel"
             return
 
         if isinstance(response, list):
@@ -530,4 +564,5 @@ class L10nArDjArba(models.Model):
             self.state = "open" if dj_state == "Abierto" else "close"
             self.message_post(body=ok_msg)
         else:
+            raise UserError("No deberia de llegar aca - update states")
             self._process_arba_error(response, prefix_error)
