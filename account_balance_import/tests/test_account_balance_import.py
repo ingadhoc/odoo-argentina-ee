@@ -3,6 +3,7 @@ import datetime
 import io
 
 import xlwt
+from odoo.exceptions import UserError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
@@ -91,6 +92,117 @@ class TestAccountBalanceImport(TransactionCase):
                 "company_ids": [(6, 0, [cls.company.id])],
             }
         )
+
+        # Account in a currency other than the company one, to load opening balances at a
+        # rate the user types instead of the one the system holds. The currency is taken by
+        # xml id and activated: a database can perfectly hold the company currency as the
+        # only active one, and searching among the active ones came back empty there, which
+        # left the account without currency and made every test below fail on the
+        # amount_in_currency constraint.
+        cls.foreign_currency = cls.env.ref("base.USD")
+        if cls.foreign_currency == cls.company.currency_id:
+            cls.foreign_currency = cls.env.ref("base.EUR")
+        cls.foreign_currency.active = True
+        cls.account_fx = cls.env["account.account"].create(
+            {
+                "code": "TESTFX",
+                "name": "Test Account Foreign Currency",
+                "account_type": "asset_current",
+                "currency_id": cls.foreign_currency.id,
+                "company_ids": [(6, 0, [cls.company.id])],
+            }
+        )
+        # A bank account in the same currency: its lines carry a residual
+        # (`_compute_amount_residual` only runs on reconcilable and cash accounts), which is
+        # what the opening amount is reconciled against later on.
+        cls.account_fx_bank = cls.env["account.account"].create(
+            {
+                "code": "TESTFXB",
+                "name": "Test Bank Account Foreign Currency",
+                "account_type": "asset_cash",
+                "currency_id": cls.foreign_currency.id,
+                "company_ids": [(6, 0, [cls.company.id])],
+            }
+        )
+
+    def _save_opening(self, account, values):
+        """Write on the opening columns the way the chart of accounts list does, and let the
+        precommit callbacks that build the opening move run, as they do at the end of the
+        request."""
+        account.write(values)
+        self.env.cr.precommit.run()
+        self.env.invalidate_all()
+
+    def _opening_lines(self, account):
+        return self.company.account_opening_move_id.line_ids.filtered(lambda l: l.account_id == account)
+
+    def test_opening_debit_keeps_typed_amount_in_currency(self):
+        """The amount typed in the account currency is kept on a debit opening balance"""
+        self._save_opening(self.account_fx, {"amount_in_currency": 100.0, "opening_debit": 4000.0})
+
+        self.assertEqual(self.account_fx.opening_debit, 4000.0)
+        self.assertAlmostEqual(self.account_fx.amount_in_currency, 100.0, places=2)
+
+        line = self._opening_lines(self.account_fx)
+        self.assertEqual(len(line), 1, "Should have exactly one opening line")
+        self.assertAlmostEqual(line.amount_currency, 100.0, places=2)
+
+    def test_both_sides_are_rejected_on_an_account_with_its_own_currency(self):
+        """One amount per account describes one side: loading both is rejected, not guessed"""
+        self._save_opening(self.account_fx, {"amount_in_currency": 100.0, "opening_debit": 4000.0})
+
+        # The savepoint rolls the failed save back the way the request does.
+        with self.assertRaises(UserError), self.env.cr.savepoint():
+            self._save_opening(self.account_fx, {"amount_in_currency": 50.0, "opening_credit": 1000.0})
+
+    def test_the_side_already_loaded_is_kept_after_the_rejection(self):
+        """The amount loaded on one side survives an attempt to load the other one"""
+        self._save_opening(self.account_fx, {"amount_in_currency": 100.0, "opening_debit": 4000.0})
+
+        with self.assertRaises(UserError), self.env.cr.savepoint():
+            self._save_opening(self.account_fx, {"amount_in_currency": 50.0, "opening_credit": 1000.0})
+
+        self.assertEqual(self.account_fx.opening_debit, 4000.0)
+        self.assertEqual(self.account_fx.opening_credit, 0.0)
+        line = self._opening_lines(self.account_fx)
+        self.assertEqual(len(line), 1, "Should have exactly one opening line")
+        self.assertAlmostEqual(line.amount_currency, 100.0, places=2)
+
+    def test_opening_residual_follows_the_typed_amount_in_currency(self):
+        """The residual stored on the line must follow the amount the SQL update forced"""
+        self._save_opening(self.account_fx_bank, {"amount_in_currency": 100.0, "opening_debit": 4000.0})
+        # Second save: the line is updated instead of created, which is where the amount used
+        # to be lost.
+        self._save_opening(self.account_fx_bank, {"amount_in_currency": 250.0, "opening_debit": 10000.0})
+
+        line = self._opening_lines(self.account_fx_bank)
+        self.assertAlmostEqual(line.amount_currency, 250.0, places=2)
+        self.assertAlmostEqual(
+            line.amount_residual_currency,
+            250.0,
+            places=2,
+            msg="The residual is stored and computed from amount_currency, so the raw UPDATE "
+            "has to mark it for recompute: otherwise the opening line of an account in a "
+            "foreign currency is left with a residual that does not match its amount, and "
+            "that is dragged into the reconciliation against the payments",
+        )
+        self.assertAlmostEqual(line.amount_residual, 10000.0, places=2)
+
+    def test_opening_amount_in_currency_alone_is_applied(self):
+        """Editing only the amount in the account currency also updates the opening move"""
+        self._save_opening(self.account_fx, {"amount_in_currency": 100.0, "opening_debit": 4000.0})
+        self._save_opening(self.account_fx, {"amount_in_currency": 250.0})
+
+        self.assertEqual(self.account_fx.opening_debit, 4000.0, "The balance must not be touched")
+        self.assertAlmostEqual(self.account_fx.amount_in_currency, 250.0, places=2)
+        self.assertAlmostEqual(self._opening_lines(self.account_fx).amount_currency, 250.0, places=2)
+
+    def test_opening_move_stays_balanced(self):
+        """Forcing the amount in currency must not unbalance the opening entry"""
+        self._save_opening(self.account_fx, {"amount_in_currency": 100.0, "opening_credit": 4000.0})
+
+        move = self.company.account_opening_move_id
+        self.assertAlmostEqual(sum(move.line_ids.mapped("balance")), 0.0, places=2)
 
     def _generate_partner_balance_excel(self):
         """Generate Excel file with test partner balance data"""
