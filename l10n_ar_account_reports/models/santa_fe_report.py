@@ -159,9 +159,9 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
 
             # 8 - monto comprobante
             content += (
-                format_amount(abs(line.move_id.amount_total_signed), 11, 2)
+                format_amount(abs(line.move_id.amount_total_signed), 12, 2)
                 if line.move_id.is_invoice()
-                else format_amount(abs(-line.balance), 11, 2)
+                else format_amount(abs(-line.balance), 12, 2)
             )
 
             # 9 - tipo de documento
@@ -231,7 +231,7 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
 
             # 16 - Importe Otros Gravámenes
             # TODO implementar
-            content += format_amount(0.0, 9, 2)
+            content += format_amount(0.0, 10, 2)
 
             # 17 - Importe IVA (solo si factura)
             if line.move_id.is_invoice():
@@ -242,19 +242,19 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
             else:
                 vat_amount = 0.0
                 base_amount = line.payment_id and line.withholding_id.base_amount or 0.0
-            content += format_amount(vat_amount, 9, 2)
+            content += format_amount(vat_amount, 10, 2)
 
             # 18 - Base Imponible para el cálculo
             # tal vez la base deberiamos calcularlo asi, en pagos no porque
             # los asientos estan separados
             # content += format_amount(-get_line_tax_base(line), 12, 2, ',')
-            content += format_amount(base_amount, 11, 2)
+            content += format_amount(base_amount, 12, 2)
 
             # 19 - Alícuota / alicuota
             content += format_amount(tax.amount, 2, 2)
 
             # 20 - Impuesto Determinado
-            content += format_amount(abs(-line.balance), 11, 2)
+            content += format_amount(abs(-line.balance), 12, 2)
 
             # 21 - Derecho Registro e Inspección
             # TODO implementar
@@ -264,7 +264,7 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
             # 22 - Monto Retenido
             # TODO por ahora es igual a impuesto determinado pero, podria ser
             # distinto en algún caso?
-            content += format_amount(abs(-line.balance), 11, 2)
+            content += format_amount(abs(-line.balance), 12, 2)
 
             # 23 - Artículo/Inciso para el cálculo
             content += articulo_inciso_calculo
