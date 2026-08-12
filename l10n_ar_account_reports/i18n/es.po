@@ -1288,7 +1288,8 @@ msgid ""
 "The partner \"%(partner_name)s\" (id %(partner_id)s) does not have the vat "
 "set."
 msgstr ""
-"El contacto «%(partner_name)s» (id %(partner_id)s) no tiene configurado el número de identificación."
+"El contacto «%(partner_name)s» (id %(partner_id)s) no tiene configurado el "
+"número de identificación."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
