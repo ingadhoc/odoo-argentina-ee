@@ -1,5 +1,5 @@
 from odoo import Command, _, fields, models
-from odoo.exceptions import UserError
+from odoo.exceptions import RedirectWarning, UserError
 
 
 class AccountReturn(models.Model):
@@ -46,15 +46,46 @@ class AccountReturn(models.Model):
         return domain
 
     def _ensure_tax_group_configuration_for_tax_closing(self):
+        """EXTENDS account_reports
+
+        Para las liquidaciones argentinas hacemos una validación propia y NO corremos la nativa de Odoo, porque
+        esa exige las cuentas en TODOS los grupos de impuestos de las compañías del return, participen o no de
+        la liquidación. En bases migradas eso obliga a configurar grupos duplicados y grupos de impuestos ajenos
+        a la declaración que se está liquidando. Acá pedimos las cuentas solo en los grupos de impuestos que
+        realmente se usan en la liquidación, es decir los de los apuntes que entran al asiento de este período.
+        Si no lo hiciéramos, el asiento de liquidación saldría en cero (0.0).
+
+        Para más detalle ver el mensaje del pull request / commit que introdujo este método.
         """
-        Skip tax group account validation for AR simple closing returns,
-        since we use the partner's AP/AR accounts instead of tax group accounts.
-        NOTA: esto de acá no suma tanto porque si se quiere liquidar el informde "vat" u otro igual se van a chequear
-        todas las cuentas
-        """
-        if self.type_id.l10n_ar_is_simple_closing_return:
-            return
-        return super()._ensure_tax_group_configuration_for_tax_closing()
+        if not self.type_id.l10n_ar_is_simple_closing_return:
+            return super()._ensure_tax_group_configuration_for_tax_closing()
+
+        self.ensure_one()
+        # Usamos el tax_group_id del apunte (related stored) y no el catálogo de impuestos: así entran los
+        # impuestos archivados que arrastran los pagos migrados de la versión anterior, que son justamente los
+        # que suelen tener el grupo sin configurar.
+        domain = [
+            ("company_id", "in", self.company_ids.ids),
+            ("date", ">=", self.date_from),
+            ("date", "<=", self.date_to),
+            ("parent_state", "=", "posted"),
+            ("tax_repartition_line_id.use_in_tax_closing", "=", True),
+            "|",
+            ("tax_group_id.tax_payable_account_id", "=", False),
+            ("tax_group_id.tax_receivable_account_id", "=", False),
+        ] + self._get_vat_closing_entry_additional_domain()
+        groups_read = self.env["account.move.line"].sudo()._read_group(domain, groupby=["tax_group_id"])
+        incomplete_tax_groups = self.env["account.tax.group"].union(*(group for (group,) in groups_read))
+        if incomplete_tax_groups:
+            raise RedirectWarning(
+                message=_(
+                    "The following tax groups, used by the taxes of this period, are missing the accounts needed "
+                    "for the tax closing entry: %(tax_groups)s",
+                    tax_groups=", ".join(f"{group.name} ({group.company_id.name})" for group in incomplete_tax_groups),
+                ),
+                action=incomplete_tax_groups._get_records_action(name=_("Tax groups")),
+                button_text=_("Configure accounts"),
+            )
 
     def _get_tax_closing_payable_and_receivable_accounts(self):
         """Para simple closing returns argentinos, usamos la cuenta configurada en el return type
