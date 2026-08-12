@@ -486,6 +486,12 @@ msgid "Company"
 msgstr "Companía"
 
 #. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid "Configure accounts"
+msgstr "Configurar cuentas"
+
+#. module: l10n_ar_account_reports
 #: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.inflation_adjustment_form
 msgid "Confirm"
 msgstr "Confirmar"
@@ -1198,6 +1204,12 @@ msgstr "Crédito impositivo"
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid "Tax groups"
+msgstr "Grupos de impuestos"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "Tax to pay"
 msgstr "Impuesto a pagar"
 
@@ -1254,6 +1266,17 @@ msgid ""
 msgstr ""
 "El tipo de identificación «%(identification_type)s» no tiene asignado ningún "
 "código ARCA."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid ""
+"The following tax groups, used by the taxes of this period, are missing the "
+"accounts needed for the tax closing entry: %(tax_groups)s"
+msgstr ""
+"A los siguientes grupos de impuestos, utilizados por los impuestos de este "
+"período, les faltan las cuentas necesarias para el asiento de cierre: "
+"%(tax_groups)s"
 
 #. module: l10n_ar_account_reports
 #. odoo-python

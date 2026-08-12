@@ -423,6 +423,12 @@ msgid "Company"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid "Configure accounts"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.inflation_adjustment_form
 msgid "Confirm"
 msgstr ""
@@ -1107,6 +1113,12 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid "Tax groups"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "Tax to pay"
 msgstr ""
 
@@ -1150,6 +1162,14 @@ msgstr ""
 msgid ""
 "The identification type \"%(identification_type)s\" does not have ARCA code "
 "set."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid ""
+"The following tax groups, used by the taxes of this period, are missing the "
+"accounts needed for the tax closing entry: %(tax_groups)s"
 msgstr ""
 
 #. module: l10n_ar_account_reports
