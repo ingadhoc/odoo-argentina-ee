@@ -24,6 +24,7 @@ This module extends the functionality of the Argentinian Electronic Invoicing (E
 * **Journal Web Services:** Adds functionality to electronic journals to get valid document types for selected web services with user-friendly response messages
 * **Export Documentation:** Support for boarding permissions (Permisos de embarque) in Argentinian electronic export invoices
 * **Partner Data Synchronization:** Automated partner data updates from ARCA Padron with configurable title case formatting
+* **ARCA WSDL Caching:** Caches the ARCA WSDL instead of downloading it on every web service call. Odoo builds the zeep client with no cache, so the WSDL (~77 KB) is downloaded again for each invoice when requesting CAE, adding around 0.65 seconds per document
 
 ARCA Padron Integration
 =======================
@@ -80,6 +81,13 @@ Configuration
    * Value: `False` to disable title case formatting (default: `True`)
 
 2. **Foreign Currency Policy:** The module automatically sets the default foreign currency payment policy for Argentine companies during installation
+
+3. **ARCA WSDL Cache:** Go to Settings > Technical > Parameters > System Parameters
+
+   * Create parameter: `l10n_ar_edi_ux.wsdl_cache_ttl`
+   * Value: cache lifetime in seconds (default: `300`)
+   * Value `0` disables the cache and restores the native l10n_ar_edi behaviour, downloading the WSDL on every call. No restart is needed
+   * The WSDL is cached per worker process. Only the WSDL document is cached, never the credentials: the ARCA token and sign are read from the connection record on every call
 
 **Boarding Permissions Setup:**
 
