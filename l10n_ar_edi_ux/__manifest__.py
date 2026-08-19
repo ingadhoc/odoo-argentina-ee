@@ -8,6 +8,7 @@
     "license": "AGPL-3",
     "summary": "",
     "depends": [
+        "account_ux",  # shared_to_branches, que este asistente escribe en el diario que crea
         "l10n_ar_ux",
         "l10n_ar_edi",
         "l10n_ar_reports_simple",
