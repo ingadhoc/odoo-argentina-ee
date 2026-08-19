@@ -1,5 +1,6 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 from odoo import fields, models
+from odoo.addons.account_ux.models.shared_to_branches_mixin import SHARED_TO_BRANCHES_SELECTION
 
 
 class L10nArArcaJournalWizardLine(models.TransientModel):
@@ -36,8 +37,14 @@ class L10nArArcaJournalWizardLine(models.TransientModel):
         help="Select a branch to assign this journal to a specific branch. Leave empty for the main company.",
     )
 
-    shared_to_branches = fields.Boolean(
-        string="Shared to Branches", help="If checked, this journal will be shared with all branches."
+    # Se pasa tal cual al diario que se crea, así que tiene que ser el mismo scope y no un
+    # booleano. El default es "no compartir", que es lo que hacía el booleano sin tildar y lo
+    # que computa el diario para los de tipo venta, que son los que crea este asistente.
+    shared_to_branches = fields.Selection(
+        SHARED_TO_BRANCHES_SELECTION,
+        string="Shared to Branches",
+        default="none",
+        help="Which branches of the company can use the journal that gets created.",
     )
 
     company_id = fields.Many2one(related="wizard_id.company_id", store=True)
