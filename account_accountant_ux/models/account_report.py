@@ -306,3 +306,41 @@ class AccountReport(models.Model):
             new_date_to = datetime.date(new_date_from.year, 12, 31)
             return self._get_dates_period(new_date_from, new_date_to, mode, period_type="calendar_year")
         return super()._get_shifted_dates_period(options, period_vals, periods, return_period=return_period)
+
+    def _expand_unfoldable_line(
+        self,
+        expand_function_name,
+        line_dict_id,
+        groupby,
+        options,
+        progress,
+        offset,
+        horizontal_split_side,
+        unfold_all_batch_data=None,
+    ):
+        """Agregamos sufijo de compañía en reportes financieros si hay más de
+        una compañía seleccionada en el método _compute_display_name de
+        account.account pero necesitamos agregar por contexto el id del reporte
+        porque si no lo hacemos al momento de hacer un unfold de algún rubro
+        en el reporte las cuentas se muestran sin dicho sufijo. Ver ticket
+        43453 para ver más info acerca de la funcionalidad que necesitamos.
+
+        La otra mitad (el sufijo en sí) vive en
+        ``account_multicompany_ux.account_account._compute_display_name``, que se
+        activa justamente con este ``report_id`` de contexto. Están separados porque
+        ese lado necesita ``get_company_sufix()`` de multicompañía y este lado
+        necesita ``account.report`` de Enterprise: sin este módulo la clave de
+        contexto nunca aparece y aquel override queda inerte.
+        """
+        self = self.with_context(report_id=self.id)
+
+        return super()._expand_unfoldable_line(
+            expand_function_name,
+            line_dict_id,
+            groupby,
+            options,
+            progress,
+            offset,
+            horizontal_split_side,
+            unfold_all_batch_data,
+        )

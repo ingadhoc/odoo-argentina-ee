@@ -3,6 +3,7 @@
 # directory
 ##############################################################################
 from odoo import api, fields, models
+from odoo.exceptions import UserError
 
 
 class AccountReconcileWizard(models.TransientModel):
@@ -43,3 +44,21 @@ class AccountReconcileWizard(models.TransientModel):
                 partner_ids = self.env["account.move.line"].browse(active_ids).mapped("move_id.partner_id")
                 if len(set(partner_ids)) > 1:
                     wizard.multiple_partners = True
+
+    def reconcile(self):
+        """Bloquea la conciliación entre compañías distintas cuando la compañía lo pide.
+
+        El flag ``block_intercompany_conciliation`` se define en este mismo módulo: el
+        único lugar donde se aplica es este wizard, que es de Enterprise
+        (``account_accountant``), así que la opción y su enforcement viven juntos y
+        ``account_multicompany_ux`` no necesita depender de Enterprise para ofrecerla.
+        """
+        for wizard in self:
+            companies = wizard.move_line_ids.mapped("company_id")
+            if len(companies) > 1 and companies.filtered(lambda c: c.child_ids and c.block_intercompany_conciliation):
+                raise UserError(
+                    "Cannot reconcile journal items from different companies. "
+                    "Please verify that the 'Block inter-company reconciliation' option "
+                    "is not enabled in the settings of the companies involved."
+                )
+        return super().reconcile()

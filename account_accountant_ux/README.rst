@@ -24,6 +24,9 @@ Account Accountant UX
 #. Modifica el botón "Due" de los partners para que sea siempre visible y modifica su nombre a "Libro Mayor de Empresa".
 #. Agrega campo booleano "Requerir Filtro Custom" en la configuración de reportes. Si está activo y no hay filtros de partners o filtros personalizados aplicados, el reporte no cargará datos y mostrará un mensaje de advertencia.
 #. Los reportes contables de partner (Partner Ledger, Aged Receivable, Aged payable) vienen configurados por defecto con el campo "Requerir Filtro Custom" activo (True), forzando al usuario a aplicar filtros antes de cargar los datos.
+#. Responde "qué sucursales son la misma entidad fiscal" con el criterio propio definido en ``account_ux`` (``legal_entity_root_id``) en lugar del nativo, que toma el CUIT vacío como el del padre. De ahí cuelgan los reportes fiscales que ignoran el selector de compañías, el gate de los botones de export y las declaraciones.
+#. Agrega el sufijo de compañía a las cuentas al expandir una línea de un reporte financiero con más de una compañía seleccionada (la otra mitad está en ``account_multicompany_ux``).
+#. Agrega la opción de compañía "Bloquear conciliación entre diferentes compañías", que impide conciliar apuntes de compañías o sucursales distintas.
 
 Installation
 ============
