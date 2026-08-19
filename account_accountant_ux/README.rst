@@ -27,6 +27,8 @@ Account Accountant UX
 #. Responde "qué sucursales son la misma entidad fiscal" con el criterio propio definido en ``account_ux`` (``legal_entity_root_id``) en lugar del nativo, que toma el CUIT vacío como el del padre. De ahí cuelgan los reportes fiscales que ignoran el selector de compañías, el gate de los botones de export y las declaraciones.
 #. Agrega el sufijo de compañía a las cuentas al expandir una línea de un reporte financiero con más de una compañía seleccionada (la otra mitad está en ``account_multicompany_ux``).
 #. Agrega la opción de compañía "Bloquear conciliación entre diferentes compañías", que impide conciliar apuntes de compañías o sucursales distintas.
+#. Avisa en cualquier reporte cuando quedaron afuera compañías de la misma entidad fiscal por no estar tildadas en el selector de compañías, por ejemplo al sacar el Libro de IVA. Nativamente esas compañías se descartan en silencio y el reporte sale parcial sin avisar.
+#. Habilita los botones de export de los reportes cuando está seleccionado el grupo de misma entidad fiscal, en lugar de exigir todas las sucursales del árbol como pide el nativo (que en un árbol con más de una entidad fiscal obliga a meter en el reporte compañías que no corresponden).
 
 Installation
 ============

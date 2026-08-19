@@ -89,6 +89,15 @@ class AccountReport(models.Model):
         # OVERRIDE: llamamos al super primero para inicializar los botones base
         # (PDF, XLSX, etc.) y luego agregamos el botón de liquidación.
         super()._init_options_buttons(options, previous_options)
+
+        # The native gate for the buttons is "every branch in the tree is selected"
+        # (``res.company._all_branches_selected``). In a tree holding more than one
+        # legal entity that can only be satisfied by selecting companies that do not
+        # belong in this report. This native hook replaces it with "the selection is
+        # exactly the group of companies that are the same legal entity", which is the
+        # criterion everything else already answers with. See "Legal entity scope".
+        options["enable_export_buttons_for_common_vat_in_branches"] = True
+
         if self.allow_settlement and self.settlement_title:
             options.setdefault("buttons", []).append(
                 {
@@ -344,3 +353,31 @@ class AccountReport(models.Model):
             horizontal_split_side,
             unfold_all_batch_data,
         )
+
+    # -------------------------------------------------------------------------
+    # Legal entity scope
+    # -------------------------------------------------------------------------
+
+    def _generate_common_warnings(self, options, warnings):
+        """Warn when the report is being run with only part of the legal entity.
+
+        Whatever the report is, the scope is the legal entity: the companies answering
+        ``_get_branches_with_same_vat`` with our criterion are the ones the report is
+        about. Any of them left unticked in the company selector silently stays out
+        —the reports that resolve their companies do it with ``accessible_only=True``,
+        which intersects the group with what is ticked—, so the report comes out
+        partial with no error and no warning.
+
+        The native warning (``tax_report_warning_tax_id_selected_companies``) covers
+        the opposite case only: a company that was ticked and got dropped because its
+        Tax ID is a different one.
+        """
+        super()._generate_common_warnings(options, warnings)
+
+        report_companies = self.env["res.company"].browse(self.get_report_company_ids(options))
+        missing = self.env.company._get_branches_with_same_vat().sudo() - report_companies
+        if missing:
+            warnings["account_accountant_ux.warning_missing_legal_entity_companies"] = {
+                "alert_type": "warning",
+                "args": ", ".join(missing.mapped("display_name")),
+            }
