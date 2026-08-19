@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+
+    <t t-name="account_accountant_ux.warning_missing_legal_entity_companies">
+        <span>
+            This report is filed by legal entity, and there are companies of the same legal entity
+            that are not selected: <t t-out="warningParams.args"/>.
+            The report is leaving them out: select them in the company selector.
+        </span>
+    </t>
+
+</templates>
