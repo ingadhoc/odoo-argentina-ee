@@ -26,6 +26,26 @@ class ResCompany(models.Model):
             return
         return super()._validate_locks(values)
 
+    def compute_fiscalyear_dates(self, current_date):
+        """Answer with the fiscal year of the legal entity, not of each branch on its own.
+
+        ``account_accountant`` looks for an ``account.fiscal.year`` record of ``self`` and
+        only falls back to ``fiscalyear_last_day`` / ``fiscalyear_last_month`` when it
+        finds none. Those records only exist on the head of the legal entity
+        (``account.fiscal.year._check_dates``), so a branch would never find one and would
+        answer from the fields alone — a different answer than its own entity gives for
+        the same date, every time the entity declares an irregular year. Asking the head
+        makes the whole entity answer the same thing, which is the point of the fiscal
+        year being delegated to it
+        (``res.company._get_legal_entity_delegated_field_names`` in ``account_ux``).
+
+        For a company that heads its own entity this is a no-op, and the fields are
+        already forced to be equal inside an entity, so nothing changes for a database
+        that does not use explicit fiscal years.
+        """
+        self.ensure_one()
+        return super(ResCompany, self.legal_entity_root_id).compute_fiscalyear_dates(current_date)
+
     def _get_branches_with_same_vat(self, accessible_only=False):
         """Answer "which branches are the same legal entity" with our own criterion.
 

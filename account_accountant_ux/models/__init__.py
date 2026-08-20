@@ -4,6 +4,7 @@
 ##############################################################################
 from . import (
     account_bank_statement_line,
+    account_fiscal_year,
     account_journal_dashboard,
     account_move,
     account_move_line,
