@@ -3,9 +3,9 @@
 
     <t t-name="account_accountant_ux.warning_missing_legal_entity_companies">
         <span>
-            This report is filed by legal entity, and there are companies of the same legal entity
-            that are not selected: <t t-out="warningParams.args"/>.
-            The report is leaving them out: select them in the company selector.
+            This report is filed by legal entity, and these companies of the same legal entity are
+            not selected, so their operations are not in these numbers: <t t-out="warningParams.args"/>.
+            Select them in the company selector if you meant to file the whole entity.
         </span>
     </t>
 

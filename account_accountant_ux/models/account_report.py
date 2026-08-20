@@ -90,53 +90,112 @@ class AccountReport(models.Model):
         # (PDF, XLSX, etc.) y luego agregamos el botón de liquidación.
         super()._init_options_buttons(options, previous_options)
 
-        # The native gate for the buttons is "every branch in the tree is selected"
-        # (``res.company._all_branches_selected``). In a tree holding more than one
-        # legal entity that can only be satisfied by selecting companies that do not
-        # belong in this report. This native hook replaces it with "the selection is
-        # exactly the group of companies that are the same legal entity", which is the
-        # criterion everything else already answers with. See "Legal entity scope".
-        options["enable_export_buttons_for_common_vat_in_branches"] = True
+        if not (self.allow_settlement and self.settlement_title):
+            return
 
-        if self.allow_settlement and self.settlement_title:
-            options.setdefault("buttons", []).append(
-                {
-                    "name": "%s (BETA)" % self.settlement_title,
-                    "sequence": 150,
-                    "action": "action_closure_journal_entry",
-                }
-            )
+        # ``branch_allowed`` on purpose, and it is the whole of the button-side gate.
+        #
+        # Without it the native one applies —"every branch in the tree is selected",
+        # ``res.company._all_branches_selected``— and that is a different question than
+        # the one the settlement asks: in a tree holding more than one legal entity it can
+        # only be satisfied by ticking companies that do not belong in this report, and it
+        # refuses every selection narrower than the tree, which is most of what
+        # ``_get_settlement_company`` accepts. Two gates on one button, disagreeing, is the
+        # bug this replaces.
+        #
+        # So the criterion is answered in exactly one place, ``action_closure_journal_entry``,
+        # which knows *why* a selection is refused and says so. Enterprise offers a hook to
+        # soften the native gate instead (``enable_export_buttons_for_common_vat_in_branches``,
+        # "the selection is the whole group sharing a Tax ID"), and it is deliberately not
+        # used: it would still gate out the per-company mode, and every other export button
+        # this module and Enterprise add is already born with ``branch_allowed``, so it has
+        # nothing left to allow.
+        options.setdefault("buttons", []).append(
+            {
+                "name": "%s (BETA)" % self.settlement_title,
+                "sequence": 150,
+                "action": "action_closure_journal_entry",
+                "branch_allowed": True,
+            }
+        )
+
+    def _get_settlement_company(self, companies):
+        """The company that files the settlement for ``companies``, empty if none can.
+
+        The gate does not impose a mode. Selecting the whole legal entity and getting one
+        entry that reads like the return is the suggestion, but managing it company by
+        company is allowed: the accountant is the one who knows whether they need the truth
+        per branch or the consolidated one. Two conditions, both about the company selector
+        and nothing else:
+
+        1. every selected company shares ``legal_entity_root_id`` — a settlement never
+           mixes Tax IDs;
+        2. one of the selected companies is an ancestor of all the others. That one files,
+           and the entry is built there.
+
+        The second condition is not bureaucracy. It says without ambiguity where the entry
+        lands, and it rejects the one selection that cannot work: two sisters without their
+        parent. ``account.account._check_company_domain`` is
+        ``check_companies_domain_parent_of`` (``account/models/account_account.py``), so a
+        parent reaches its branches' selections but an account living only in one branch is
+        not reachable from its sister — the entry would not come out with a strange number,
+        it would fail the company check. A single company, the whole entity, and a parent
+        with any subset of its branches all pass for free.
+
+        ``parent_ids`` holds the company itself and comes ordered from the root
+        (``res_company._compute_parent_ids``), so "ancestor of all the others" is a
+        membership test. At most one company can satisfy it.
+        """
+        if len(companies.legal_entity_root_id) != 1:
+            return self.env["res.company"]
+        return companies.filtered(lambda company: all(company in other.parent_ids for other in companies))
 
     def action_closure_journal_entry(self, options):
-        """Abre el wizard de liquidación para que el usuario elija el diario."""
+        """Abre el wizard de liquidación para que el usuario elija el diario.
+
+        The gate is the company selector and nothing else, and it is the only one: see
+        ``_get_settlement_company`` for what it accepts and why, and
+        ``_init_options_buttons`` for why the button does not gate too.
+
+        It used to demand "one and only one company", read from the companies owning the
+        journals picked in the report — a different question, and a weaker one: whenever
+        every selected journal happened to belong to the parent, a selection spanning
+        half the entity (or another entity altogether) went through unnoticed.
+        """
         self.ensure_one()
 
-        # En v19, options['journals'] puede incluir divisores y grupos;
-        # filtramos para obtener sólo diarios reales (account.journal).
-        companies = (
-            self.env["account.journal"]
-            .browse(
-                [
-                    journal["id"]
-                    for journal in options.get("journals", [])
-                    if journal["id"] != "divider" and journal.get("model") != "account.journal.group"
-                ]
+        companies = self.env.companies
+        company = self._get_settlement_company(companies)
+        if not company:
+            entities = companies.legal_entity_root_id
+            if len(entities) != 1:
+                raise ValidationError(
+                    _(
+                        "A settlement is never filed across Tax IDs, and the selected companies belong to "
+                        "%(entities)s. Select companies of a single legal entity in the company selector.",
+                        entities=", ".join(entities.sudo().mapped("display_name")),
+                    )
+                )
+            raise ValidationError(
+                _(
+                    "None of the selected companies is a parent of the others, so there is no company the "
+                    "entry can be built in: an account that lives only in one branch cannot be used by "
+                    "another one. Add %(head)s to the selection to settle them together, or select one "
+                    "company at a time and settle each on its own.",
+                    head=entities.sudo().display_name,
+                )
             )
-            .mapped("company_id")
-        )
-        if len(companies) != 1:
-            raise ValidationError(_("La liquidación se debe realizar filtrando por 1 y solo 1 compañía en el reporte"))
 
         action_name = "%s (BETA)" % self.settlement_title
         entry_ref = self.settlement_title
 
         new_context = {
-            **self._context,
+            **self.env.context,
             "account_report_generation_options": options,
             "default_report_id": self.id,
             "entry_ref": entry_ref,
             "skip_invoice_sync": True,
-            "default_company_id": companies.id,
+            "default_company_id": company.id,
         }
         view_id = self.env.ref("account_accountant_ux.view_account_tax_settlement_wizard_form").id
 
@@ -197,6 +256,11 @@ class AccountReport(models.Model):
             ["account_id", "debit:sum", "credit:sum"],
             ["account_id"],
         )
+        self._check_settlement_accounts_are_reachable(
+            self.env["account.account"].browse([group["account_id"][0] for group in groups if group.get("account_id")]),
+            journal.company_id,
+        )
+
         # Generamos las líneas del asiento como contrapartida de cada cuenta
         # (invertimos el saldo para dejarla en cero)
         currency = journal.company_id.currency_id
@@ -251,6 +315,58 @@ class AccountReport(models.Model):
         }
         move = self.env["account.move"].create(vals)
         return move
+
+    def _check_settlement_accounts_are_reachable(self, accounts, company):
+        """Refuse before the ORM does, naming the account and what to do about it.
+
+        ``account.account._check_company_domain`` is ``check_companies_domain_parent_of``
+        (``account/models/account_account.py``): the company filing the settlement reaches
+        the accounts of its ancestors and its own, but **not** an account that lives only in
+        one of its branches. A branch with a result account of its own is a supported
+        configuration —that is the whole point of the gate accepting a subset— so the entry
+        it cannot be part of has to say so, instead of blowing up in the company consistency
+        check with the account nowhere in the message.
+        """
+        unreachable = accounts.filtered(lambda account: not (account.company_ids & company.parent_ids))
+        if not unreachable:
+            return
+        raise ValidationError(
+            _(
+                "These accounts belong only to a branch, so the entry cannot be built in %(company)s with "
+                "them in it: %(accounts)s.\n"
+                "Settle %(owners)s on their own —select each of them alone in the company selector— or "
+                "move those accounts up to the company that files.",
+                company=company.display_name,
+                accounts=", ".join(unreachable.mapped("display_name")),
+                owners=", ".join(unreachable.company_ids.sudo().mapped("display_name")),
+            )
+        )
+
+    def _get_period_settlement_entries(self, options, company):
+        """The settlement entries this report already produced for ``company`` in the period.
+
+        A gate that accepts any subset of the entity widens the surface for settling the
+        same balances twice —the whole entity one month and branch by branch the next, or
+        the entity and then one of its branches again—, so the wizard says what is already
+        there before creating another one. It warns and does not block: nothing here can
+        tell a correction from a duplicate. The complete validation belongs to the return
+        object, which is in the ROADMAP and not in this module.
+
+        The marker is the ``ref`` the entry is created with, which is the report's own
+        ``settlement_title``.
+        """
+        self.ensure_one()
+        date = options.get("date") or {}
+        if not (self.settlement_title and date.get("date_from") and date.get("date_to")):
+            return self.env["account.move"]
+        return self.env["account.move"].search(
+            [
+                ("company_id", "=", company.id),
+                ("ref", "=", self.settlement_title),
+                ("date", ">=", date["date_from"]),
+                ("date", "<=", date["date_to"]),
+            ]
+        )
 
     def _init_options_date(self, options, previous_options):
         """Override to:
@@ -359,25 +475,37 @@ class AccountReport(models.Model):
     # -------------------------------------------------------------------------
 
     def _generate_common_warnings(self, options, warnings):
-        """Warn when the report is being run with only part of the legal entity.
+        """Suggest the companies of the legal entity that were left out of a return.
 
-        Whatever the report is, the scope is the legal entity: the companies answering
-        ``_get_branches_with_same_vat`` with our criterion are the ones the report is
-        about. Any of them left unticked in the company selector silently stays out
-        —the reports that resolve their companies do it with ``accessible_only=True``,
-        which intersects the group with what is ticked—, so the report comes out
-        partial with no error and no warning.
+        Only on the reports that do **not** take their companies from the company selector.
+        Those resolve them with ``_get_branches_with_same_vat(accessible_only=True)`` —which
+        this module answers with our own legal entity criterion— and that intersects the
+        entity with what is ticked, so a company of the entity left unticked silently stays
+        out and the return comes out partial, with no error and no warning. The native
+        warning next to this one
+        (``account_reports.tax_report_warning_tax_id_selected_companies``) covers the
+        opposite case only: a company that was ticked and got dropped for declaring a
+        different Tax ID.
 
-        The native warning (``tax_report_warning_tax_id_selected_companies``) covers
-        the opposite case only: a company that was ticked and got dropped because its
-        Tax ID is a different one.
+        On a report driven by the selector —the General Ledger, our Balance— the claim is
+        simply false: the user picked those companies on purpose, and warning there was a
+        false positive by design. Guarded with the same field the native warning uses, and
+        read as "companies from the selector or not"; the ``account.tax.unit`` feature is
+        not in play here and this module never uses it.
+
+        Worded as a suggestion and not as an error, because filing part of an entity is
+        allowed: what the settlement gate refuses is mixing Tax IDs, not filing branch by
+        branch.
         """
         super()._generate_common_warnings(options, warnings)
+
+        if self.filter_multi_company == "selector":
+            return
 
         report_companies = self.env["res.company"].browse(self.get_report_company_ids(options))
         missing = self.env.company._get_branches_with_same_vat().sudo() - report_companies
         if missing:
             warnings["account_accountant_ux.warning_missing_legal_entity_companies"] = {
-                "alert_type": "warning",
+                "alert_type": "info",
                 "args": ", ".join(missing.mapped("display_name")),
             }
