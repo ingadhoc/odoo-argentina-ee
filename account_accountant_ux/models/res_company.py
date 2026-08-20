@@ -45,5 +45,15 @@ class ResCompany(models.Model):
         dependency, because it is also needed for record rules of records shared to
         branches. The bridge lives here, and not in ``account_multicompany_ux``, so that
         module keeps no dependency on Enterprise at all.
+
+        There is a second divergence besides the empty Tax ID, and it is deliberate:
+        Enterprise's traversal is **directional** —standing on a company it answers with
+        that company and the branches below it— while ours answers with the whole legal
+        entity, ancestors included. What is filed from a branch belongs to the entity, not
+        to the branch. It matters most in ``account_return._can_return_exist``, which
+        calls the shallowest company of the group the "main branch": with the ancestors in,
+        a branch sharing its parent's Tax ID is no longer its own main branch, so the
+        return belongs to the head of the entity and is filed there. Both halves of the
+        divergence are pinned in ``tests/test_legal_entity_branches.py``.
         """
         return self._get_legal_entity_companies(accessible_only=accessible_only)
