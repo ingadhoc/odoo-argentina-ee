@@ -21,6 +21,7 @@ Módulo que implementa las siguientes funcionalidades:
 * incorpora posibilidad de liquidar apuntes
 * incorpora lógica genérica para generar archivos de liquidación (se requiere extender en módulos que terminen de implementarlo). Al principió los formateabamos con qweb pero vimos que quedan feos y, además, que no tiene tanto sentido ya que no es algo que sea necesario estar actualizando desde interfaz.
 * Implementa funcionalidad para poder hacer liquidaciones sobre informes contables de odoo e implementa el caso específico de "Asiento de refundición" y "Asiento de cierre" utilizando esta funcionalidad
+* No permite eliminar un asiento cuyos apuntes de impuestos ya fueron liquidados. Si se elimina, esos apuntes salen de la liquidación (que conserva su importe pero pierde el detalle) y los que se creen después vuelven a quedar pendientes, con lo cual se liquidan y se declaran dos veces. Para liberarlos hay que eliminar primero el asiento de liquidación
 
 
 Installation
