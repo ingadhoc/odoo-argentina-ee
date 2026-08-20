@@ -49,6 +49,12 @@ class AccountTaxSettlementWizard(models.TransientModel):
         related="report_id.settlement_allow_unbalanced",
         string="Permite desbalance",
     )
+    already_settled_warning = fields.Char(
+        string="Ya liquidado",
+        readonly=True,
+        help="Advertencia si la compañía que liquida ya tiene un asiento de liquidación de este "
+        "reporte en el período. No bloquea: puede ser una corrección.",
+    )
 
     @api.model
     def default_get(self, fields_list):
@@ -62,7 +68,35 @@ class AccountTaxSettlementWizard(models.TransientModel):
             )
             if journal:
                 res["settlement_journal_id"] = journal.id
+        if company_id and "already_settled_warning" in fields_list:
+            res["already_settled_warning"] = self._get_already_settled_warning(company_id)
         return res
+
+    @api.model
+    def _get_already_settled_warning(self, company_id):
+        """Say it if this company already settled this report for this period.
+
+        The settlement gate accepts any subset of the legal entity, so the same balances can
+        be settled twice —the whole entity one month and branch by branch the next, or the
+        entity and then one of its branches again— and nothing downstream notices. It is not
+        a new risk (the gate used to be "one and only one company", and repeating was just as
+        possible), so this is the cheap cover for it and not a validation: a second entry may
+        well be a correction. The real one arrives with the return object, in the ROADMAP.
+        """
+        report = self.env["account.report"].browse(self._context.get("default_report_id"))
+        if not report:
+            return False
+        options = self._context.get("account_report_generation_options") or {}
+        company = self.env["res.company"].browse(company_id)
+        existing = report._get_period_settlement_entries(options, company)
+        if not existing:
+            return False
+        return _(
+            "%(company)s already has a settlement entry of this report for this period: %(entries)s. "
+            "Creating another one settles the same balances twice.",
+            company=company.display_name,
+            entries=", ".join(existing.mapped("display_name")),
+        )
 
     def confirm(self):
         """Crea el asiento de liquidación y redirige al usuario al asiento creado."""

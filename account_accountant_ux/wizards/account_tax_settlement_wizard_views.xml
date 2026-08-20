@@ -11,6 +11,14 @@
                 <field name="report_id" invisible="1" />
                 <field name="report_settlement_allow_unbalanced" invisible="1" />
 
+                <div
+                    class="alert alert-warning"
+                    role="alert"
+                    invisible="not already_settled_warning"
+                >
+                    <field name="already_settled_warning" nolabel="1" readonly="1" />
+                </div>
+
                 <p>
                     Se va a crear un asiento de liquidación con la información del
                     reporte. ¿Desea continuar?
