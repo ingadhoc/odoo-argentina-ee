@@ -42,7 +42,10 @@ class GenerateXLS(http.Controller):
         sheet.col(5).width = 256 * 25  # Importe en Otra moneda
 
         # Write headers
-        sheet.write(0, 0, "Nombre / CUIT / Referencia Interna", style)
+        identifier_header = "Nombre / CUIT / Referencia Interna"
+        if "internal_code" in request.env["res.partner"]._fields:
+            identifier_header += " / Código Interno"
+        sheet.write(0, 0, identifier_header, style)
         sheet.write(0, 1, "Referencia / Documento", style)
         sheet.write(0, 2, "Importe", style)
         if import_type != "adjust":

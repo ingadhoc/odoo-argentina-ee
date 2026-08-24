@@ -127,6 +127,20 @@ class AccountBalanceImport(models.TransientModel):
         }
 
     @api.model
+    def _get_partner_domain(self, identifier):
+        """Domain used to locate the partner from the first column of the template.
+
+        Besides the name, the VAT and the internal reference, we also match the
+        partner internal code when `partner_internal_code` is installed: databases
+        using that module identify their partners by that code, which is a
+        different field than the internal reference.
+        """
+        fnames = ["name", "vat", "ref"]
+        if "internal_code" in self.env["res.partner"]._fields:
+            fnames.append("internal_code")
+        return ["|"] * (len(fnames) - 1) + [(fname, "=", identifier) for fname in fnames]
+
+    @api.model
     def locate_currency(self, currency):
         """This method return the currency, if wasn't find any currency that match with the name in xls we return empty recordset"""
         other_currency = self.env["res.currency"]
@@ -255,15 +269,7 @@ class AccountBalanceImport(models.TransientModel):
                 dict_data["name"] = str(int(dict_data["name"]))
 
             # Locate Partner
-            domain = [
-                "|",
-                "|",
-                ("name", "=", dict_data["name"]),
-                ("vat", "=", dict_data["name"]),
-                ("ref", "=", dict_data["name"]),
-            ]
-
-            partner = self.env["res.partner"].search(domain)
+            partner = self.env["res.partner"].search(self._get_partner_domain(dict_data["name"]))
 
             # Locate Currency
             other_currency = self.locate_currency(dict_data.get("currency"))
