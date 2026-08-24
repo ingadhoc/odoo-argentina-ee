@@ -184,15 +184,7 @@ class AccountBalanceImport(models.TransientModel):
                 continue
 
             # Locate Partner
-            domain = [
-                "|",
-                "|",
-                ("name", "=", dict_data["name"]),
-                ("vat", "=", dict_data["name"]),
-                ("ref", "=", dict_data["name"]),
-            ]
-
-            partner = self.env["res.partner"].search(domain)
+            partner = self.env["res.partner"].search(self._get_partner_domain(dict_data["name"]))
 
             # Locate Currency
             other_currency = self.locate_currency(dict_data["currency"])

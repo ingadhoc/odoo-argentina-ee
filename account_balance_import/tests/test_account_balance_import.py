@@ -236,6 +236,26 @@ class TestAccountBalanceImport(TransactionCase):
 
         return base64.b64encode(generate_xls(data))
 
+    def test_partner_is_located_by_every_supported_identifier(self):
+        """The first column of the template accepts several identifiers.
+
+        Every one of them must resolve to the same partner, including the internal
+        code when `partner_internal_code` is installed: it is a different field than
+        the internal reference and used to be ignored, so those rows failed with
+        "No partner was found for the entered text" even though the partner existed.
+        """
+        partner = self.partner_1
+        partner.ref = "REF-001"
+        identifiers = [partner.name, partner.ref]
+        if "internal_code" in self.env["res.partner"]._fields:
+            partner.internal_code = "IC-001"
+            identifiers.append(partner.internal_code)
+
+        wizard = self.env["account.balance_import_wizard"]
+        for identifier in identifiers:
+            found = self.env["res.partner"].search(wizard._get_partner_domain(identifier))
+            self.assertEqual(found, partner, f"The partner should be located by '{identifier}'")
+
     def test_partner_balance_import_basic(self):
         """
         Basic partner balance import test
