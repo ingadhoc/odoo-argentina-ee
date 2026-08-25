@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-02 19:13+0000\n"
+"POT-Creation-Date: 2026-08-25 17:27+0000\n"
 "PO-Revision-Date: 2026-04-13 22:41+0000\n"
 "Last-Translator: carla spiaggi <sca@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
@@ -78,15 +78,15 @@ msgid "Import Checks"
 msgstr "Importar Cheques"
 
 #. module: account_balance_import_checks
+#: model:ir.model.fields,field_description:account_balance_import_checks.field_account_balance_import_wizard__mode
+msgid "Import Mode"
+msgstr ""
+
+#. module: account_balance_import_checks
 #. odoo-javascript
 #: code:addons/account_balance_import_checks/static/src/xml/account_import_checks.xml:0
 msgid "Import initial balances for checks."
 msgstr "Importar saldos iniciales para cheques."
-
-#. module: account_balance_import_checks
-#: model:ir.model.fields,field_description:account_balance_import_checks.field_account_balance_import_wizard__mode
-msgid "Modo de Importación"
-msgstr "Modo de Importación"
 
 #. module: account_balance_import_checks
 #: model:ir.model,name:account_balance_import_checks.model_account_payment
@@ -102,3 +102,6 @@ msgstr "Propios"
 #: model:ir.model.fields,field_description:account_balance_import_checks.field_account_balance_import_wizard__check_type
 msgid "Tipo de Cheques"
 msgstr "Tipo de Cheques"
+
+#~ msgid "Modo de Importación"
+#~ msgstr "Modo de Importación"
