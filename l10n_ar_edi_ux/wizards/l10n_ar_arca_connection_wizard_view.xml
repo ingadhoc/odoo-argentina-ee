@@ -14,9 +14,6 @@
                     <group>
                         <field name="company_id" invisible="1"/>
                         <field name="has_valid_certificate" invisible="1"/>
-                        <field name="l10n_ar_afip_ws_environment" widget="radio" options="{'horizontal': true}"/>
-                    </group>
-                    <group>
                         <field name="l10n_ar_afip_ws_key_id"
                                context="{'default_public': False}"
                                options="{'no_create': False, 'no_open': False}"/>
@@ -32,7 +29,6 @@
                 <div class="alert alert-secondary mt-3" role="alert">
                     <p><strong>Need help?</strong></p>
                     <ul>
-                        <li>For testing, you can use demo certificates from ARCA</li>
                         <li>For production, obtain your certificate from the ARCA portal</li>
                         <li>Certificates must be in PEM format</li>
                     </ul>
