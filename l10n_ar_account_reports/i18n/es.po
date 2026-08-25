@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-24 19:29+0000\n"
+"POT-Creation-Date: 2026-08-25 19:46+0000\n"
 "PO-Revision-Date: 2026-04-20 15:41+0000\n"
 "Last-Translator: julia elizondo <jue@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
@@ -1259,16 +1259,6 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #. odoo-python
-#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
-msgid ""
-"The identification type \"%(identification_type)s\" does not have ARCA code "
-"set."
-msgstr ""
-"El tipo de identificación «%(identification_type)s» no tiene asignado ningún "
-"código ARCA."
-
-#. module: l10n_ar_account_reports
-#. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid ""
 "The following tax groups, used by the taxes of this period, are missing the "
@@ -1277,6 +1267,16 @@ msgstr ""
 "A los siguientes grupos de impuestos, utilizados por los impuestos de este "
 "período, les faltan las cuentas necesarias para el asiento de cierre: "
 "%(tax_groups)s"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
+msgid ""
+"The identification type \"%(identification_type)s\" does not have ARCA code "
+"set."
+msgstr ""
+"El tipo de identificación «%(identification_type)s» no tiene asignado ningún "
+"código ARCA."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
