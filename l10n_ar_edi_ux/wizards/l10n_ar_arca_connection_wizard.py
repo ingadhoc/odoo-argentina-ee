@@ -26,13 +26,6 @@ class L10nArArcaConnectionWizard(models.TransientModel):
         help="Upload your ARCA certificate in PEM format obtained from the ARCA portal.",
     )
 
-    l10n_ar_afip_ws_environment = fields.Selection(
-        related="company_id.l10n_ar_afip_ws_environment",
-        string="Environment",
-        readonly=False,
-        help="Select the ARCA environment: Testing for homologation, Production for real invoices.",
-    )
-
     connection_status_html = fields.Html(
         string="Connection Status",
         compute="_compute_connection_status_html",
