@@ -5,6 +5,20 @@ from odoo.exceptions import UserError
 class AccountBankStatementLine(models.Model):
     _inherit = "account.bank.statement.line"
 
+    def action_button_draft(self):
+        """Only let a real action through, never the boolean ``button_draft`` returns.
+
+        The server action ``account_accountant.model_account_statement_line_button_draft``
+        assigns this method's return value to its ``action`` variable, and
+        ``/web/action/run`` passes it to ``clean_action()`` without checking it is a
+        dict, so a truthy non-dict raises ``AttributeError: 'bool' object has no
+        attribute 'setdefault'``. Odoo's ``button_draft`` started returning ``True`` in
+        odoo/odoo 712718d9d. ``/web/dataset/call_button`` already applies a similar
+        guard, which is why the form-button path never broke. Ticket 125915.
+        """
+        res = super().action_button_draft()
+        return res if isinstance(res, dict) else False
+
     def _add_move_line_to_statement_line_move(self, vals_list):
         """If reconcile on company_currency is disabled → keep Odoo's native behavior, including
         the creation of exchange difference entries if applicable.
