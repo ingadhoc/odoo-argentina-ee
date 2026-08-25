@@ -5,6 +5,7 @@
 from . import (
     account_bank_statement_line,
     account_fiscal_year,
+    account_general_ledger,
     account_journal_dashboard,
     account_move,
     account_move_line,
