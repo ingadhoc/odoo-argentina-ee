@@ -1205,6 +1205,22 @@ class AccountJournal(models.Model):
 
         # build txt file
         content = ""
+        # códigos de los regímenes de ganancias de la compañía (incluidos los archivados), los usamos
+        # para validar el régimen que tomamos del memo del pago en las retenciones migradas (ver abajo)
+        earnings_taxes = (
+            self.env["account.tax"]
+            .with_context(active_test=False)
+            .search(
+                [
+                    *self.env["account.tax"]._check_company_domain(self.company_id),
+                    ("l10n_ar_tax_type", "in", ["earnings", "earnings_scale"]),
+                    ("l10n_ar_code", "!=", False),
+                ]
+            )
+        )
+        earnings_codes = {
+            int(digits) for x in earnings_taxes.mapped("l10n_ar_code") if (digits := "".join(filter(str.isdigit, x)))
+        }
 
         for line in move_lines.filtered("amount_currency").sorted(key=lambda r: (r.date, r.id)):
             partner = line.partner_id
@@ -1290,6 +1306,16 @@ class AccountJournal(models.Model):
                 if tax.l10n_ar_tax_type in ["earnings", "earnings_scale"]:
                     content += "0217"
                     regimen = tax.l10n_ar_code
+                    # en v15 el régimen se cargaba en el grupo de pagos y el txt informaba ese código sin
+                    # tener en cuenta si el contacto tenía o no cargado el régimen de retención. Esas
+                    # retenciones migran con un impuesto backward inactivo y sin código de régimen (con lo
+                    # cual informábamos 000 y arca rechazaba el archivo), así que lo tomamos del memo del
+                    # pago, donde quedó como "94 - Locaciones de obra y/o ...".
+                    # el getattr es porque is_backward_tax lo agrega l10n_ar_tax_settlement_backward_comp
+                    if not regimen and not tax.active and getattr(tax, "is_backward_tax", False):
+                        regimen_memo = re.match(r"\s*(\d{1,3})(?!\d)\s*-", payment.memo or "")
+                        if regimen_memo and int(regimen_memo.group(1)) in earnings_codes:
+                            regimen = regimen_memo.group(1)
                     # necesitamos lo de filter porque hay dos regimenes que le
                     # agregamos caracteres
                     content += regimen and "%03d" % int("".join(filter(str.isdigit, str(regimen)))) or "000"
