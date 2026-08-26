@@ -149,7 +149,7 @@ class L10n_ArSifereReportHandler(models.AbstractModel):
                     continue
 
                 # el numero de la retencion
-                pos, number = get_pos_and_number(line.withholding_id.name)
+                pos, number = get_pos_and_number(line.name)
                 content += f"{pos:>04s}"
                 content += f"{number:>016s}"
             else:
