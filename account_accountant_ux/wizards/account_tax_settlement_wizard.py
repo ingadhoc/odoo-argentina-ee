@@ -60,7 +60,7 @@ class AccountTaxSettlementWizard(models.TransientModel):
     def default_get(self, fields_list):
         res = super().default_get(fields_list)
         # Precargamos el diario filtrando por la compañía del contexto
-        company_id = self._context.get("default_company_id")
+        company_id = self.env.context.get("default_company_id")
         if company_id and "settlement_journal_id" in fields_list:
             journal = self.env["account.journal"].search(
                 [("company_id", "=", company_id), ("type", "=", "general")],
@@ -83,10 +83,10 @@ class AccountTaxSettlementWizard(models.TransientModel):
         possible), so this is the cheap cover for it and not a validation: a second entry may
         well be a correction. The real one arrives with the return object, in the ROADMAP.
         """
-        report = self.env["account.report"].browse(self._context.get("default_report_id"))
+        report = self.env["account.report"].browse(self.env.context.get("default_report_id"))
         if not report:
             return False
-        options = self._context.get("account_report_generation_options") or {}
+        options = self.env.context.get("account_report_generation_options") or {}
         company = self.env["res.company"].browse(company_id)
         existing = report._get_period_settlement_entries(options, company)
         if not existing:
@@ -101,7 +101,7 @@ class AccountTaxSettlementWizard(models.TransientModel):
     def confirm(self):
         """Crea el asiento de liquidación y redirige al usuario al asiento creado."""
         self.ensure_one()
-        options = self._context.get("account_report_generation_options", {})
+        options = self.env.context.get("account_report_generation_options", {})
         move = self.report_id.with_context(
             skip_invoice_sync=True,
             entry_date=self.date,
