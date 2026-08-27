@@ -45,7 +45,7 @@ class AccountReturn(models.Model):
             domain += l10n_ar_domain
         return domain
 
-    def _ensure_tax_group_configuration_for_tax_closing(self):
+    def _ensure_tax_group_configuration_for_tax_closing(self, tax_group_ids=None):
         """EXTENDS account_reports
 
         Para las liquidaciones argentinas hacemos una validación propia y NO corremos la nativa de Odoo, porque
@@ -58,7 +58,7 @@ class AccountReturn(models.Model):
         Para más detalle ver el mensaje del pull request / commit que introdujo este método.
         """
         if not self.type_id.l10n_ar_is_simple_closing_return:
-            return super()._ensure_tax_group_configuration_for_tax_closing()
+            return super()._ensure_tax_group_configuration_for_tax_closing(tax_group_ids)
 
         self.ensure_one()
         # Usamos el tax_group_id del apunte (related stored) y no el catálogo de impuestos: así entran los
