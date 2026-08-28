@@ -144,14 +144,29 @@ class AccountMove(models.Model):
 
     def _get_line_details(self, base_lines=None):
         """Override to add wsmtxca specific format for line details."""
+        if self.journal_id.l10n_ar_afip_ws != "wsmtxca":
+            return super()._get_line_details(base_lines=base_lines)
+
         base_lines = base_lines or []
-        details = super()._get_line_details(base_lines=base_lines)
-
-        if (afip_ws := self.journal_id.l10n_ar_afip_ws) and afip_ws != "wsmtxca":
-            return details
-
         details = []
         price_precision_digits = min(self.env["decimal.precision"].precision_get("Product Price"), 3)
+
+        # RG2904 informa códigos de producto: una línea sin producto no tiene
+        # código que informar. Las juntamos todas para no corregir de a una.
+        lines_without_product = [
+            base_line["record"].name
+            for base_line in base_lines
+            if base_line["record"].display_type not in ("line_section", "line_note")
+            and not base_line["record"].product_id
+        ]
+        if lines_without_product:
+            raise UserError(
+                _(
+                    "The product coding webservice (RG2904) requires a product on every invoice line."
+                    " These lines have none:\n%s",
+                    "\n".join("* %s" % name for name in lines_without_product),
+                )
+            )
 
         for base_line in base_lines:
             line = base_line["record"]
@@ -326,7 +341,8 @@ class AccountMove(models.Model):
 
         # Post process vat_data
         # Step 1: modify the keys of the dictionary to make it work with wsmtxca
-        vat_needed = ["4", "5", "6"]
+        # 4: 10,5% - 5: 21% - 6: 27% - 8: 5% - 9: 2,5%
+        vat_needed = ["4", "5", "6", "8", "9"]
         for item in vat_data:
             if "Id" in item and "Importe" in item and item.get("Id") in vat_needed:
                 temp.append(

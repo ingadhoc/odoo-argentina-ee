@@ -207,6 +207,18 @@ msgstr ""
 
 #. module: l10n_ar_wsmtxca_ws
 #. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/account_move.py:0
+msgid ""
+"The product coding webservice (RG2904) requires a product on every invoice "
+"line. These lines have none:\n"
+"%s"
+msgstr ""
+"El webservice de codificación de producto (RG2904) requiere un producto en "
+"cada línea de la factura. Estas líneas no lo tienen:\n"
+"%s"
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
 #: code:addons/l10n_ar_wsmtxca_ws/models/account_journal.py:0
 msgid ""
 "Tipos de Documentos Autorizados en ARCA:\n"
