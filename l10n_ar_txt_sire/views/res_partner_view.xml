@@ -9,8 +9,8 @@
                 <field name="sire_aplica_cdi"/>
                 <field name="sire_aplica_acrecentamiento"/>
                 <field name="sire_codigo_alicuota"/>
-                <field name="sire_born_country_id" invisible="company_type != 'person'" required="company_type == 'person'"/>
-                <field name="sire_birthdate" invisible="company_type != 'person'" required="company_type == 'person'"/>
+                <field name="sire_born_country_id" invisible="company_type != 'person'"/>
+                <field name="sire_birthdate" invisible="company_type != 'person'"/>
             </field>
         </field>
     </record>

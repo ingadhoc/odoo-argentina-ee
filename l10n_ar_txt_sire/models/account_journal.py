@@ -187,6 +187,23 @@ class AccountJournal(models.Model):
                     button_text=_("Editar País"),
                 )
 
+            # Validamos los datos de nacimiento cuando el retenido es persona física. Según la seccion
+            # "3.2. F2003 - Validaciones", página 5 del pdf de la especificación, los campos 28 (país de
+            # nacimiento) y 29 (fecha de nacimiento) son obligatorios cuando el campo 27 (tipo de persona)
+            # es "F". Lo validamos acá, al generar el archivo, y no como requerido en la vista del contacto,
+            # porque esos campos viven en una solapa que no siempre está visible.
+            if es_persona and not (line.partner_id.sire_born_country_id and line.partner_id.sire_birthdate):
+                raise RedirectWarning(
+                    message=_(
+                        "El contacto '%(name)s' (id: %(id)s) es persona física, por lo que debe tener país de"
+                        " nacimiento y fecha de nacimiento establecidos para generar el archivo txt SIRE.",
+                        name=line.partner_id.name,
+                        id=line.partner_id.id,
+                    ),
+                    action=line.partner_id.get_formview_action(),
+                    button_text=_("Editar contacto"),
+                )
+
             # Validamos que el código de alícuota se encuentre entre 1 y 83 si no aplica CDI
             if not line.payment_id.sire_aplica_cdi and int(line.payment_id.sire_codigo_alicuota) > 83:
                 raise UserError(
