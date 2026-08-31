@@ -38,7 +38,7 @@ To configure this module, you need to:
 
    1. Crear diario de liquidación con la etiqueta para liquidación "Sire" y elegir "TXT Retenciones SIRE" en el campo "Impuesto de liquidación".
    2. Crear impuesto de sire y agregar la etiqueta "Sire" en cuadrículas de impuesto en vista formulario del impuesto y agregar codigo de regimen en el campo "Codigo de regimen IVA" en la solapa "Opciones avanzadas" del impuesto.
-   3. El contacto debe tener país y si es tipo 'individual' entonces tendrá que establecer el país de nacimiento y la fecha de nacimiento en la solapa "Datos Fiscales" de la vista formulario del contacto.
+   3. El contacto debe tener país y si es tipo 'individual' entonces tendrá que establecer el país de nacimiento y la fecha de nacimiento en la solapa "Datos Fiscales" de la vista formulario del contacto. Estos dos datos no se piden al guardar el contacto sino al momento de generar el archivo txt, que es cuando la especificación SIRE los exige (campos 28 y 29, obligatorios cuando el retenido es persona física).
    4. Establecer "Sire Codigo Alicuota" en la solapa "Datos Fiscales" de la vista formulario del contacto. Si no lo establece entonces en el pago será requerido que lo establezca.
 
 Usage
