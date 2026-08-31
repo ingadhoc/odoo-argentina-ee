@@ -4,8 +4,8 @@
         Demo hierarchy for branch / multi-company ARCA connection sharing.
         Mirrors the hierarchy documented in tests/test_afip_connection_w_branches.py.
 
-            edi_ux_parent_company      CUIT 20313932975  HAS certificate
-              ├─ edi_ux_child_company      CUIT 20313932975  no certificate
+            edi_ux_parent_company      CUIT 30111111118  HAS certificate
+              ├─ edi_ux_child_company      CUIT 30111111118  no certificate
               │    └─ edi_ux_grandchild_company   no CUIT    no certificate
               ├─ edi_ux_branch_diff_cuit   CUIT 30711017077  no certificate
               ├─ edi_ux_branch_no_cuit     no CUIT           no certificate
@@ -18,19 +18,19 @@
 
     <!-- ═══════════════════════════════════════════════════════════════════
          Private key — shared, no company restriction
-         Using the test key from l10n_ar_edi/tests/ avoids company-crossover
+         Using the test key from l10n_ar_edi/demo/ avoids company-crossover
          validation errors that arise when key and certificate are created in
          different company contexts during demo loading.
          ═══════════════════════════════════════════════════════════════════ -->
 
     <record id="edi_ux_demo_key" model="certificate.key">
-        <field name="name">ARCA Demo Key – hierarchy</field>
-        <field name="content" type="base64" file="l10n_ar_edi/tests/private_key.pem"/>
+        <field name="name">ARCA key (AR Parent Company)</field>
+        <field name="content" type="base64" file="l10n_ar_edi/demo/private_key.pem"/>
     </record>
 
     <!-- ═══════════════════════════════════════════════════════════════════
          Certificates — no company restriction (shared demo certs)
-         test_cert1 / test_cert2 both carry serialNumber = CUIT 20313932975.
+         test_cert1 / test_cert2 both carry serialNumber = CUIT 30111111118.
          In production each company would hold a cert matching its own CUIT;
          here we use test certs only to exercise the code paths:
            • parent_company  → has cert → generates own token
@@ -39,13 +39,13 @@
 
     <record id="edi_ux_parent_cert" model="certificate.certificate">
         <field name="name">Demo Cert – parent (CUIT 20313932975)</field>
-        <field name="content" type="base64" file="l10n_ar_edi/tests/test_cert1.crt"/>
+        <field name="content" type="base64" file="l10n_ar_edi/demo/cert1.crt"/>
         <field name="private_key_id" ref="edi_ux_demo_key"/>
     </record>
 
     <record id="edi_ux_branch_cert" model="certificate.certificate">
         <field name="name">Demo Cert – branch_with_cert (own cert)</field>
-        <field name="content" type="base64" file="l10n_ar_edi/tests/test_cert2.crt"/>
+        <field name="content" type="base64" file="l10n_ar_edi/demo/cert2.crt"/>
         <field name="private_key_id" ref="edi_ux_demo_key"/>
     </record>
 
@@ -60,7 +60,7 @@
         <field name="is_company" eval="True"/>
         <field name="country_id" ref="base.ar"/>
         <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
-        <field name="vat">20313932975</field>
+        <field name="vat">30111111118</field>
         <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
     </record>
 
@@ -69,7 +69,7 @@
         <field name="is_company" eval="True"/>
         <field name="country_id" ref="base.ar"/>
         <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
-        <field name="vat">20313932975</field>
+        <field name="vat">30111111118</field>
         <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
     </record>
 
@@ -111,7 +111,7 @@
          companies, so we create the companies first and add the certs below.
          ═══════════════════════════════════════════════════════════════════ -->
 
-    <!-- parent: CUIT 20313932975 — will receive certificate below -->
+    <!-- parent: CUIT 30111111118 — will receive certificate below -->
     <record id="edi_ux_parent_company" model="res.company">
         <field name="name">AR Parent Company</field>
         <field name="partner_id" ref="edi_ux_parent_partner"/>
@@ -119,6 +119,23 @@
         <field name="country_id" ref="base.ar"/>
         <field name="l10n_ar_afip_ws_environment">testing</field>
         <field name="l10n_ar_afip_ws_crt_id" ref="edi_ux_parent_cert"/>
+    </record>
+
+    <function model="account.chart.template" name="try_loading">
+        <value eval="[]"/>
+        <value>ar_ri</value>
+        <value model="res.company" eval="obj().env.ref('l10n_ar_edi_ux.edi_ux_parent_company')"/>
+        <value name="install_demo" eval="True"/>
+    </function>
+
+    <!-- Prevent this demo company from being picked up by test_oba_main_flows searches.
+         use_payment_pro is auto-computed True for all AR companies; explicitly write False
+         so tests filtering on use_payment_pro=True skip this hierarchy.
+         sequence=99 ensures base.company_ri (sequence=10) is returned first on limit=1
+         queries that don't filter on use_payment_pro. -->
+    <record id="edi_ux_parent_company" model="res.company">
+        <field name="use_payment_pro" eval="False"/>
+        <field name="sequence">99</field>
     </record>
 
     <!-- child: same CUIT as parent, no certificate -->
@@ -129,6 +146,30 @@
         <field name="currency_id" ref="base.ARS"/>
         <field name="country_id" ref="base.ar"/>
         <field name="l10n_ar_afip_ws_environment">testing</field>
+    </record>
+
+    <record id="ws_fe_journal_b1" model="account.journal">
+        <field name='name'>B1 - Electronic Invoice (FE)</field>
+        <field name="name@es_419">B1 - Factura Electrónica (FE)</field>
+        <field name='company_id' ref="l10n_ar_edi_ux.edi_ux_child_company"/>
+        <field name='type'>sale</field>
+        <field name='l10n_latam_use_documents' eval="True"/>
+        <field name='code'>2</field>
+        <field name='l10n_ar_afip_pos_number'>2</field>
+        <field name='l10n_ar_afip_pos_partner_id' ref="l10n_ar_edi_ux.edi_ux_child_partner"/>
+        <field name='l10n_ar_afip_pos_system'>RAW_MAW</field>
+    </record>
+
+    <record id="user_b1" model="res.users" context="{'no_reset_password': True}">
+        <field name="name">user_branch_1</field>
+        <field name="login">user_branch_1</field>
+        <field name="password">user_branch_1</field>
+        <field name="group_ids" eval="[
+                (4, ref('base.group_user')),
+                (4, ref('account.group_account_invoice')),
+            ]"/>
+        <field name="company_id" ref="l10n_ar_edi_ux.edi_ux_child_company"/>
+        <field name="company_ids" eval="[(4, ref('edi_ux_child_company'))]"/>
     </record>
 
     <!-- grandchild: no CUIT, no certificate -->
@@ -159,6 +200,18 @@
         <field name="currency_id" ref="base.ARS"/>
         <field name="country_id" ref="base.ar"/>
         <field name="l10n_ar_afip_ws_environment">testing</field>
+    </record>
+
+    <record id="ws_fe_journal_b3" model="account.journal">
+        <field name='name'>B3 - Electronic Invoice (FE)</field>
+        <field name="name@es_419">B3 - Factura Electrónica (FE)</field>
+        <field name='company_id' ref="l10n_ar_edi_ux.edi_ux_branch_no_cuit"/>
+        <field name='type'>sale</field>
+        <field name='l10n_latam_use_documents' eval="True"/>
+        <field name='code'>2</field>
+        <field name='l10n_ar_afip_pos_number'>2</field>
+        <field name='l10n_ar_afip_pos_partner_id' ref="l10n_ar_edi_ux.edi_ux_branch_no_cuit_partner"/>
+        <field name='l10n_ar_afip_pos_system'>RAW_MAW</field>
     </record>
 
     <!-- branch_with_cert: CUIT 30500010084 — will receive certificate below -->
