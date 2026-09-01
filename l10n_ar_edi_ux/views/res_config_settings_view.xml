@@ -12,6 +12,22 @@
                 <attribute name="options">{'no_quick_create': True}</attribute>
             </field>
 
+            <!-- TODO 20.0: MANDATORY on the update, not an optional cleanup: this
+                 xpath replaces a checkbox that 20.0 removes, and that fails the module
+                 load. See res_company.py.
+                 The selector supersedes l10n_ar_edi's l10n_ar_show_withholding_legend,
+                 whose checkbox is dropped here so that the legend is configured in a
+                 single place. company_dependent="1" only asks the UI for the "value set
+                 per company" indicator its siblings have; the field is not
+                 company_dependent, it is stored on res.company. -->
+            <xpath expr="//div[field[@name='l10n_ar_show_withholding_legend']]" position="replace"/>
+            <xpath expr="//block[@id='argentina_localization']" position="inside">
+                <setting string="Add Legend to Invoice PDF" company_dependent="1" help="The selected legend is printed below the Document Type letter on the Invoice PDF of documents with letter A and M. It is set per company: branches do not inherit the legend of their parent company, they only start from its value when they are created. It supersedes the l10n_ar_edi 'Add Withholding Legend to Invoice PDF' setting, whose value is left as it was and stops being read, so uninstalling this module restores it." invisible="country_code != 'AR'">
+                    <label for="l10n_ar_invoice_pdf_legend_ux" string="Legend" class="o_light_label col-lg-3"/>
+                    <field name="l10n_ar_invoice_pdf_legend_ux"/>
+                </setting>
+            </xpath>
+
         </field>
     </record>
 

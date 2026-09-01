@@ -12,6 +12,8 @@ logger = logging.getLogger(__name__)
 
 
 def post_init_hook(env):
+    env["res.company"]._l10n_ar_migrate_withholding_legend()  # TODO 20.0: drop.
+
     ar_companies = env["res.company"].search([]).filtered(lambda x: x.country_id.code == "AR")
     for company in ar_companies:
         logger.info("Set default foreign currency payment policy for AR companies on install")

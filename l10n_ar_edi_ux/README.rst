@@ -25,6 +25,7 @@ This module extends the functionality of the Argentinian Electronic Invoicing (E
 * **Export Documentation:** Support for boarding permissions (Permisos de embarque) in Argentinian electronic export invoices
 * **Partner Data Synchronization:** Automated partner data updates from ARCA Padron with configurable title case formatting
 * **ARCA WSDL Caching:** Caches the ARCA WSDL instead of downloading it on every web service call. Odoo builds the zeep client with no cache, so the WSDL (~77 KB) is downloaded again for each invoice when requesting CAE, adding around 0.65 seconds per document
+* **Invoice PDF Legend:** Allows configuring, from the accounting settings, a legend to be printed below the Document Type letter on the Invoice PDF of documents with letter A and M: "Payment on Informed CBU" or "Operation Subject to Withholding" (ARCA RG 5762/2025). It supersedes the *Add Withholding Legend to Invoice PDF* checkbox of l10n_ar_edi: that checkbox is dropped from the settings, its report block is replaced by this module's one, and its value is copied into the new selector on install/upgrade, so the legend is configured in a single place and printed once. The l10n_ar_edi field itself (*l10n_ar_show_withholding_legend*) is left untouched and stops being read, so uninstalling this module restores the previous behaviour. The legend is set per company: branches do not inherit the one of their parent company, they only start from its value when they are created. Backport of odoo/enterprise#102032, incorporated upstream in l10n_ar_edi from 20.0 on: to be reverted when migrating to that version
 
 ARCA Padron Integration
 =======================
@@ -88,6 +89,12 @@ Configuration
    * Value: cache lifetime in seconds (default: `300`)
    * Value `0` disables the cache and restores the native l10n_ar_edi behaviour, downloading the WSDL on every call. No restart is needed
    * The WSDL is cached per worker process. Only the WSDL document is cached, never the credentials: the ARCA token and sign are read from the connection record on every call
+
+4. **Invoice PDF Legend:** Go to Accounting > Settings > Argentinian Localization
+
+   * Set *Legend* to "Payment on Informed CBU" or "Operation Subject to Withholding"
+   * Leave it empty to print the invoice PDF as before
+   * On branches it has to be set on each branch; a new branch starts from the value of its parent company
 
 **Boarding Permissions Setup:**
 
