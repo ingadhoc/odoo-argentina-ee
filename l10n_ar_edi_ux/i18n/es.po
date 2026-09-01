@@ -173,6 +173,11 @@ msgid "Account import summary view"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
+msgid "Add Legend to Invoice PDF"
+msgstr "Agregar leyenda al PDF de la factura"
+
+#. module: l10n_ar_edi_ux
 #: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__l10n_ar_arca_journal_wizard_line__shared_to_branches__all
 msgid "All branches"
 msgstr ""
@@ -659,6 +664,12 @@ msgstr ""
 " %s"
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_company__l10n_ar_invoice_pdf_legend_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_config_settings__l10n_ar_invoice_pdf_legend_ux
+msgid "Invoice PDF Legend"
+msgstr "Leyenda del PDF de la factura"
+
+#. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
 msgid "Invoices Verification (WSCDC)"
@@ -706,6 +717,11 @@ msgstr "Última Actualización Por"
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__write_date
 msgid "Last Updated on"
 msgstr "Última Actualización en"
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
+msgid "Legend"
+msgstr "Leyenda"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__new_value
@@ -791,9 +807,19 @@ msgid "Only this fields are going to be retrived and updated"
 msgstr "Sólo estos campos serán recuperados y actualizados."
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_company__l10n_ar_invoice_pdf_legend_ux__operation_subject_to_withholding
+msgid "Operation Subject to Withholding"
+msgstr "Operación sujeta a retención"
+
+#. module: l10n_ar_edi_ux
 #: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_partner_update_from_padron_wizard__state__option
 msgid "Option"
 msgstr "Opción"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_company__l10n_ar_invoice_pdf_legend_ux__payment_on_informed_cbu
+msgid "Payment on Informed CBU"
+msgstr "Pago en CBU informado"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__pos_number
@@ -929,6 +955,25 @@ msgid ""
 "the ARCA Responsibility Type in the partner's configuration to validate the "
 "invoice."
 msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_company__l10n_ar_invoice_pdf_legend_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_config_settings__l10n_ar_invoice_pdf_legend_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
+msgid ""
+"The selected legend is printed below the Document Type letter on the Invoice"
+" PDF of documents with letter A and M. It is set per company: branches do "
+"not inherit the legend of their parent company, they only start from its "
+"value when they are created. It supersedes the l10n_ar_edi 'Add Withholding "
+"Legend to Invoice PDF' setting, whose value is left as it was and stops "
+"being read, so uninstalling this module restores it."
+msgstr ""
+"La leyenda seleccionada se imprime debajo de la letra del comprobante en el "
+"PDF de los documentos con letra A y M. Se configura por compañía: las "
+"sucursales no heredan la leyenda de su compañía padre, solo parten de su "
+"valor cuando se crean. Reemplaza al ajuste \"Agregar leyenda de retención al "
+"PDF de la factura\" de l10n_ar_edi, cuyo valor queda como estaba y deja de "
+"leerse, así desinstalar este módulo lo restaura."
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-03 16:07+0000\n"
-"PO-Revision-Date: 2026-09-03 16:07+0000\n"
+"POT-Creation-Date: 2026-09-08 12:17+0000\n"
+"PO-Revision-Date: 2026-09-08 12:17+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -154,6 +154,11 @@ msgstr ""
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_account_import_summary
 msgid "Account import summary view"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
+msgid "Add Legend to Invoice PDF"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -616,6 +621,12 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_company__l10n_ar_invoice_pdf_legend_ux
+#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_config_settings__l10n_ar_invoice_pdf_legend_ux
+msgid "Invoice PDF Legend"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
 msgid "Invoices Verification (WSCDC)"
@@ -662,6 +673,11 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__write_date
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__write_date
 msgid "Last Updated on"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
+msgid "Legend"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -733,6 +749,11 @@ msgid "Only this fields are going to be retrived and updated"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_company__l10n_ar_invoice_pdf_legend_ux__operation_subject_to_withholding
+msgid "Operation Subject to Withholding"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_partner_update_from_padron_wizard__state__option
 msgid "Option"
 msgstr ""
@@ -750,6 +771,11 @@ msgstr ""
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__partner_ids
 msgid "Partners"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_company__l10n_ar_invoice_pdf_legend_ux__payment_on_informed_cbu
+msgid "Payment on Informed CBU"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -865,6 +891,19 @@ msgid ""
 "The partner %s does not have an ARCA Responsibility configured. Please set "
 "the ARCA Responsibility Type in the partner's configuration to validate the "
 "invoice."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_company__l10n_ar_invoice_pdf_legend_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_config_settings__l10n_ar_invoice_pdf_legend_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
+msgid ""
+"The selected legend is printed below the Document Type letter on the Invoice"
+" PDF of documents with letter A and M. It is set per company: branches do "
+"not inherit the legend of their parent company, they only start from its "
+"value when they are created. It supersedes the l10n_ar_edi 'Add Withholding "
+"Legend to Invoice PDF' setting, whose value is left as it was and stops "
+"being read, so uninstalling this module restores it."
 msgstr ""
 
 #. module: l10n_ar_edi_ux

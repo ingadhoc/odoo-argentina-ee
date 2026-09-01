@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- TODO 20.0: MANDATORY on the 19.0 -> 20.0 update, not an optional cleanup: this
+         template inherits l10n_ar_edi.custom_header_inherit and replaces the block
+         inside it, both of which 20.0 removes, and each of them fails the module load
+         instead of degrading. See res_company.py.
+         Backport of odoo/enterprise#102032, already shipped in l10n_ar_edi 20.0. It
+         inherits l10n_ar_edi's own extension of l10n_ar.custom_header so that its
+         block, which prints the legend out of the boolean this selector supersedes, is
+         replaced by this one instead of coexisting with it: printing the legend once
+         does not depend on the value left in that boolean. The condition diverges from
+         upstream because l10n_ar.custom_header is shared by reports whose record is not
+         an account.move (l10n_ar_stock_ux delivery slip, l10n_ar_sale order,
+         l10n_ar_purchase order, l10n_ar_tax payment receipt and withholding
+         certificate, l10n_ar_ux internal transfer), and because pre-printed stationery
+         prints no document letter to hang the legend from. The wording comes from
+         res.company instead of being written here so that it is not exported as a
+         translatable term of this view: it has to be printed in Spanish whatever the
+         language the report is rendered in. The xpath matches the block of l10n_ar_edi
+         by its condition and not by position: _apply_inheritance_specs() takes the
+         first node the expression matches, so a plain /t would replace the wrong one
+         (leaving the l10n_ar_edi block in place, printing the legend twice) if any
+         other module ever inserted a t into that span before this view. -->
+    <template id="custom_header_inherit" inherit_id="l10n_ar_edi.custom_header_inherit">
+        <xpath expr="//span[@id='withholding_legend']/t[contains(@t-if, 'l10n_ar_show_withholding_legend')]" position="replace">
+            <t t-if="o._name == 'account.move' and not pre_printed_report and document_type_code in ['1', '2', '3', '51', '52', '53']">
+                <t t-set="l10n_ar_pdf_legend" t-value="o.company_id._l10n_ar_get_invoice_pdf_legend_text()"/>
+                <t t-if="l10n_ar_pdf_legend">
+                    <br/>
+                    <span class="d-block small mt-1 lh-1" t-out="l10n_ar_pdf_legend"/>
+                </t>
+            </t>
+        </xpath>
+    </template>
+
+</odoo>
