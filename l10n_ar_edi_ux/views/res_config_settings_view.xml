@@ -12,6 +12,18 @@
                 <attribute name="options">{'no_quick_create': True}</attribute>
             </field>
 
+            <!-- TODO 20.0: drop. Backport of odoo/enterprise#102032, already shipped in
+                 l10n_ar_edi 20.0. The selector supersedes l10n_ar_edi's
+                 l10n_ar_show_withholding_legend checkbox, which is dropped here so that
+                 the legend is configured in a single place (see res_company.py). -->
+            <xpath expr="//div[field[@name='l10n_ar_show_withholding_legend']]" position="replace"/>
+            <xpath expr="//block[@id='argentina_localization']" position="inside">
+                <setting string="Add Legend to Invoice PDF" help="The selected legend is printed below the Document Type letter on the Invoice PDF of documents with letter A and M. Branches with no legend of their own print the one configured on the closest parent company." invisible="country_code != 'AR'">
+                    <label for="l10n_ar_invoice_pdf_legend" string="Legend" class="o_light_label col-lg-3"/>
+                    <field name="l10n_ar_invoice_pdf_legend"/>
+                </setting>
+            </xpath>
+
         </field>
     </record>
 
