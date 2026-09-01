@@ -570,3 +570,44 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_move_form
 msgid "to"
 msgstr "a"
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
+msgid "Add Legend to Invoice PDF"
+msgstr "Agregar leyenda al PDF de la factura"
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
+msgid "Legend"
+msgstr "Leyenda"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_company__l10n_ar_invoice_pdf_legend__operation_subject_to_withholding
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_config_settings__l10n_ar_invoice_pdf_legend__operation_subject_to_withholding
+msgid "Operation Subject to Withholding"
+msgstr "Operación sujeta a retención"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_company__l10n_ar_invoice_pdf_legend__payment_on_informed_cbu
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_config_settings__l10n_ar_invoice_pdf_legend__payment_on_informed_cbu
+msgid "Payment on Informed CBU"
+msgstr "Pago en CBU informado"
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_company__l10n_ar_invoice_pdf_legend
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_config_settings__l10n_ar_invoice_pdf_legend
+msgid ""
+"Selected legend value will be added below the Document Type letter on the "
+"Invoice PDF."
+msgstr ""
+"La leyenda seleccionada se agregará debajo de la letra del comprobante en el "
+"PDF de la factura."
+
+#. module: l10n_ar_edi_ux
+#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
+msgid ""
+"If this option is selected, the selected legend string will be added below "
+"the Document Type letter on the Invoice PDF."
+msgstr ""
+"Si se selecciona esta opción, la leyenda elegida se agregará debajo de la "
+"letra del comprobante en el PDF de la factura."

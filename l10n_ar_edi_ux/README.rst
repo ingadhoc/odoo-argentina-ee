@@ -19,6 +19,7 @@ Argentinian Electronic Invoicing UX
 * Logic to connect to AFIP Padron using connection approach in enterprise module l10n_ar_edi
 * Add button on electronic journals to get valid document types for the selected webservice. When is given the response and the Webservice used, returns a more legible message to be shown to the users.
 * Allow to set boarding permission (Permisos de embarque) in argentinian electronic exportation invoices.
+* Allow to configure, from the accounting settings, a legend to be printed below the Document Type letter on the Invoice PDF of documents with letter A and M: "Payment on Informed CBU" or "Operation Subject to Withholding" (ARCA RG 5762/2025). Backport of odoo/enterprise#102032, incorporated upstream in l10n_ar_edi from 20.0 on: to be reverted when migrating to that version.
 
 About Padron:
 
