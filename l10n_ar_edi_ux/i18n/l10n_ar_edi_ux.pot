@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-19 19:14+0000\n"
-"PO-Revision-Date: 2026-06-19 19:14+0000\n"
+"POT-Creation-Date: 2026-09-03 16:07+0000\n"
+"PO-Revision-Date: 2026-09-03 16:07+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -154,6 +154,11 @@ msgstr ""
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_account_import_summary
 msgid "Account import summary view"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__l10n_ar_arca_journal_wizard_line__shared_to_branches__all
+msgid "All branches"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -598,11 +603,6 @@ msgid "ID"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__shared_to_branches
-msgid "If checked, this journal will be shared with all branches."
-msgstr ""
-
-#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__has_valid_certificate
 msgid "Indicates if a valid certificate is configured."
 msgstr ""
@@ -711,6 +711,11 @@ msgid "Not available"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__l10n_ar_arca_journal_wizard_line__shared_to_branches__none
+msgid "Not shared"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__old_value
 msgid "Old Value"
 msgstr ""
@@ -781,6 +786,11 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_journal_wizard.py:0
 msgid "Sales %s %05d"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__l10n_ar_arca_journal_wizard_line__shared_to_branches__legal_entity
+msgid "Same legal entity"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -1006,6 +1016,11 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
 msgid "Web Services Status:"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__shared_to_branches
+msgid "Which branches of the company can use the journal that gets created."
 msgstr ""
 
 #. module: l10n_ar_edi_ux
