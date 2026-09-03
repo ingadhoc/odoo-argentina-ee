@@ -9,15 +9,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-19 19:14+0000\n"
+"POT-Creation-Date: 2026-09-03 16:07+0000\n"
 "PO-Revision-Date: 2026-05-28 00:25+0000\n"
 "Last-Translator: julia elizondo <jue@adhoc.inc>\n"
-"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_edi_ux/es/>\n"
+"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
+"argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_edi_ux/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == 0) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == "
+"0) ? 1 : 2);\n"
 "X-Generator: Weblate 5.10.4\n"
 
 #. module: l10n_ar_edi_ux
@@ -64,19 +66,23 @@ msgstr ". Permiso de embarque inválidos: %s"
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_journal_wizard_form
 msgid ""
 "<strong>Automatic Journal Creation</strong><br/>\n"
-"                    This wizard will fetch your points of sale from ARCA and create journals automatically."
+"                    This wizard will fetch your points of sale from ARCA and "
+"create journals automatically."
 msgstr ""
 "<strong>Creación Automática de Diarios</strong><br/>\n"
-"                    Este asistente obtendrá sus puntos de venta desde ARCA y creará los diarios automáticamente."
+"                    Este asistente obtendrá sus puntos de venta desde ARCA y "
+"creará los diarios automáticamente."
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
 msgid ""
 "<strong>Configure ARCA Web Services Connection</strong><br/>\n"
-"                    Upload your certificate and private key to connect to ARCA electronic invoicing services."
+"                    Upload your certificate and private key to connect to "
+"ARCA electronic invoicing services."
 msgstr ""
 "<strong>Configurar Conexión a los Servicios Web de ARCA</strong><br/>\n"
-"                    Suba su certificado y clave privada para conectarse a los servicios de facturación electrónica de ARCA."
+"                    Suba su certificado y clave privada para conectarse a "
+"los servicios de facturación electrónica de ARCA."
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
@@ -164,6 +170,11 @@ msgstr ""
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_account_import_summary
 msgid "Account import summary view"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__l10n_ar_arca_journal_wizard_line__shared_to_branches__all
+msgid "All branches"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -279,11 +290,13 @@ msgstr "Certificado"
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/res_company.py:0
 msgid ""
-"Certificate CUIT differ from Company's doc type and number. You can only use the ARCA certificate if it matches\n"
+"Certificate CUIT differ from Company's doc type and number. You can only use "
+"the ARCA certificate if it matches\n"
 " * certificate %s\n"
 " * company %s %s"
 msgstr ""
-"El CUIT del certificado difiere del tipo y número de documento de la empresa. Solo puede usar el certificado ARCA si coincide\n"
+"El CUIT del certificado difiere del tipo y número de documento de la "
+"empresa. Solo puede usar el certificado ARCA si coincide\n"
 " * certificado %s\n"
 " * empresa %s %s"
 
@@ -336,8 +349,8 @@ msgstr "Companía"
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/res_company.py:0
 msgid ""
-"Company \"%s\" has no ARCA certificate and no ancestor sharing the same CUIT"
-" was found. Please configure a certificate in the accounting settings."
+"Company \"%s\" has no ARCA certificate and no ancestor sharing the same CUIT "
+"was found. Please configure a certificate in the accounting settings."
 msgstr ""
 "La empresa \"%s\" no tiene certificado ARCA y no se encontró ningún padre "
 "con el mismo CUIT. Por favor configure un certificado en los ajustes de "
@@ -380,8 +393,7 @@ msgstr "Prueba de Conexión"
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
 msgid "Connection status has been updated. Check the status below."
 msgstr ""
-"El estado de la conexión fue actualizado. Verifique el estado a "
-"continuación."
+"El estado de la conexión fue actualizado. Verifique el estado a continuación."
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_res_partner
@@ -632,12 +644,6 @@ msgid "ID"
 msgstr "ID (identificación)"
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__shared_to_branches
-msgid "If checked, this journal will be shared with all branches."
-msgstr ""
-"Si está marcado, este diario será compartido con todas las sucursales."
-
-#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__has_valid_certificate
 msgid "Indicates if a valid certificate is configured."
 msgstr "Indica si hay un certificado válido configurado."
@@ -746,16 +752,23 @@ msgstr ""
 msgid ""
 "No valid ARCA certificate found.\n"
 "\n"
-"Please configure your certificate in the ARCA Connection Setup before fetching points of sale."
+"Please configure your certificate in the ARCA Connection Setup before "
+"fetching points of sale."
 msgstr ""
 "No se encontró un certificado ARCA válido.\n"
 "\n"
-"Por favor configure su certificado en la Configuración de Conexión ARCA antes de obtener los puntos de venta."
+"Por favor configure su certificado en la Configuración de Conexión ARCA "
+"antes de obtener los puntos de venta."
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
 msgid "Not available"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__l10n_ar_arca_journal_wizard_line__shared_to_branches__none
+msgid "Not shared"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -834,6 +847,11 @@ msgid "Sales %s %05d"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__l10n_ar_arca_journal_wizard_line__shared_to_branches__legal_entity
+msgid "Same legal entity"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
 msgid "Save & Close"
 msgstr "Guardar y Cerrar"
@@ -841,8 +859,8 @@ msgstr "Guardar y Cerrar"
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__branch_id
 msgid ""
-"Select a branch to assign this journal to a specific branch. Leave empty for"
-" the main company."
+"Select a branch to assign this journal to a specific branch. Leave empty for "
+"the main company."
 msgstr ""
 "Seleccione una sucursal para asignar este diario. Deje vacío para la "
 "compañía principal."
@@ -925,8 +943,8 @@ msgid ""
 "cannot automatically update the ARCA Responsibility field. Please check the "
 "corresponding data and add it manually."
 msgstr ""
-"Posiblemente este contacto tenga declarada alguna actividad dentro del rubro"
-" inmobiliario. En este caso, no podemos actualizar automáticamente el campo "
+"Posiblemente este contacto tenga declarada alguna actividad dentro del rubro "
+"inmobiliario. En este caso, no podemos actualizar automáticamente el campo "
 "Responsabilidad ARCA. Por favor, consulte el dato correspondiente y "
 "agréguelo manualmente"
 
@@ -1074,6 +1092,11 @@ msgid "Web Services Status:"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
+#: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__shared_to_branches
+msgid "Which branches of the company can use the journal that gets created."
+msgstr ""
+
+#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__wizard_id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__wizard_id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__wizard_id
@@ -1153,6 +1176,10 @@ msgstr ""
 msgid "📚 View ARCA Documentation"
 msgstr "📚 Ver Documentación de ARCA"
 
+#~ msgid "If checked, this journal will be shared with all branches."
+#~ msgstr ""
+#~ "Si está marcado, este diario será compartido con todas las sucursales."
+
 #~ msgid "Automatic Journal Creation"
 #~ msgstr "Creación Automática de Diarios"
 
@@ -1160,8 +1187,8 @@ msgstr "📚 Ver Documentación de ARCA"
 #~ "This wizard will fetch your points of sale from ARCA and create journals "
 #~ "automatically."
 #~ msgstr ""
-#~ "Este asistente obtendrá sus puntos de venta desde ARCA y creará los diarios "
-#~ "automáticamente."
+#~ "Este asistente obtendrá sus puntos de venta desde ARCA y creará los "
+#~ "diarios automáticamente."
 
 #~ msgid "No points of sale loaded yet."
 #~ msgstr "No hay puntos de venta cargados aún."
