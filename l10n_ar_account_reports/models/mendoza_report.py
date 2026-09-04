@@ -94,12 +94,10 @@ class L10n_ArMendozaReportHandler(models.AbstractModel):
             # Campo 4: Comprobante char(12)- Número de Comprobante de Retención/Percepción según Res.40/2012.
             # Formato: 999999999999 (rellenar con ceros (0) a la izquierda) Ejemplo: 000000001521
             # Example "000000027860"
-            if len(line.name) > 12:
-                prefix, rest = line.name.split("-", 1)
-                exceso = len(line.name) - 12
-                rest = rest[exceso:]  # quitamos solo los ceros necesarios
-                name = prefix + "-" + rest
-            content += (name or "").rjust(12, "0")[:12]  # we are forcing 12 first numbers always.
+            # We drop the dash and keep the last 12 characters of the name, so a number longer than the field
+            # loses the receiptbook prefix instead of the voucher sequence, and zero pad on the left when it
+            # is shorter.
+            content += (line.name or "").replace("-", "")[-12:].rjust(12, "0")
 
             # Campo 5: Fecha Ret./Perc. char(8)- Fecha de efectuada la retención / percepción (ddmmaaaa)
             # Example "16052020"
