@@ -8,7 +8,7 @@ from odoo import _, fields, models
 from odoo.exceptions import UserError
 from odoo.tools.float_utils import float_round
 
-from .helpers import format_amount, get_line_tax_base, get_standard_lines_domain
+from .helpers import format_amount, get_line_tax_base, get_standard_lines_domain, validate_document_numbers
 
 _logger = logging.getLogger(__name__)
 
@@ -141,6 +141,8 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
         DDJJ Periódicas Web IIBB
         Implementado:
         - 1.2 Percepciones Act. 7 método Percibido (quincenal)"""
+        validate_document_numbers(move_lines)
+
         lines = []
         percepciones_monto_modificado = []
         # TODO implementar
