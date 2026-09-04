@@ -4,7 +4,7 @@ import re
 from odoo import _, fields, models
 from odoo.exceptions import RedirectWarning, UserError
 
-from .helpers import get_pos_and_number, get_standard_lines_domain
+from .helpers import get_pos_and_number, get_standard_lines_domain, validate_document_numbers
 
 
 class L10n_ArSantaFeReportHandler(models.AbstractModel):
@@ -70,15 +70,7 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
             # "{0:>16.2f}".format(12.1)
             return template % f"{round(amount, decimals):.2f}".replace(".", ",")
 
-        moves_to_validate = (
-            move_lines.filtered(
-                lambda line: line.move_id.l10n_latam_document_type_id.internal_type
-                in ("invoice", "credit_note", "debit_note")
-            )
-            .mapped("move_id")
-            .filtered(lambda m: m.l10n_latam_document_type_id and m.l10n_latam_document_number)
-        )
-        moves_to_validate._validate_document_number_parts()
+        validate_document_numbers(move_lines)
 
         for line in move_lines.filtered("amount_currency").sorted(key=lambda r: r.date, reverse=True):
             content = ""
@@ -122,9 +114,7 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
             # 4 - tipo de comprobante y
             # 5 - letra de comprobante
             internal_type = line.l10n_latam_document_type_id.internal_type
-            # No se si esto es correcto en 17: si no tiene internal type entonces es pago
-            if internal_type:
-                move = line.move_id
+            move = line.move_id
 
             if internal_type and internal_type == "invoice":
                 # factura
@@ -144,7 +134,12 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
                 content += "03 "
 
             # 6 - numero comprobante Texto(16)
-            if internal_type and internal_type in ("invoice", "credit_note", "debit_note"):
+            # `is_invoice()` cubre el comprobante cargado en un diario que no usa
+            # documentos, que se queda sin `internal_type`; el `internal_type`
+            # cubre el asiento con tipo de documento de comprobante, que no es
+            # `is_invoice()`. Sin los dos, alguno de los dos casos informa el
+            # campo en blanco sin que salte ningún error.
+            if move.is_invoice() or internal_type in ("invoice", "credit_note", "debit_note"):
                 # TODO el aplicativo deberia empezar a aceptar 5 digitos
                 pos, number = get_pos_and_number(move.l10n_latam_document_number)
                 # versión 4.0 de siprib release 0 no acepta 5 dígitos aún

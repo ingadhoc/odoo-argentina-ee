@@ -1,5 +1,5 @@
 from odoo import _, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import UserError, ValidationError
 
 
 class AccountMove(models.Model):
@@ -57,14 +57,18 @@ class AccountMove(models.Model):
     def _validate_document_number_parts(self):
         """Validate document number format for all records in self.
         Collects every invalid document and raises a single ValidationError
-        listing them all, instead of stopping at the first failure."""
+        listing them all, instead of stopping at the first failure.
+
+        UserError is part of the expected failures: l10n_ar_ux wraps the
+        ValueError raised by the core parser into one, so leaving it out would
+        make this method stop at the first invalid document."""
         invalid = []
         for move in self:
             try:
                 move._l10n_ar_get_document_number_parts(
                     move.l10n_latam_document_number, move.l10n_latam_document_type_id.code
                 )
-            except (ValueError, AttributeError):
+            except (ValueError, AttributeError, UserError):
                 invalid.append(move)
         if invalid:
             doc_list = "\n".join(
