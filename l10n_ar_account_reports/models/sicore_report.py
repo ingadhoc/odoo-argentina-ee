@@ -4,7 +4,7 @@ import re
 from odoo import _, fields, models
 from odoo.exceptions import RedirectWarning, UserError
 
-from .helpers import get_standard_lines_domain
+from .helpers import get_standard_lines_domain, validate_document_numbers
 
 
 class L10n_ArSicoreReportHandler(models.AbstractModel):
@@ -267,6 +267,8 @@ class L10n_ArSicoreReportHandler(models.AbstractModel):
 
     def _get_sicore_perception_content(self, move_lines):
         """Returns (date, line id, content) tuples for the perception lines (percepciones)."""
+        validate_document_numbers(move_lines)
+
         lines = []
         for line in move_lines.filtered("balance"):
             content = ""

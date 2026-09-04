@@ -3,7 +3,7 @@
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
-from .helpers import get_standard_lines_domain, remove_accents_and_dieresis
+from .helpers import get_standard_lines_domain, remove_accents_and_dieresis, validate_document_numbers
 
 
 class L10n_ArTucumanReportHandler(models.AbstractModel):
@@ -126,6 +126,8 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
                 )
                 % (", ".join(moves_without_street_city_state.mapped("move_id.name")))
             )
+        validate_document_numbers(move_lines)
+
         move_lines_with_five_digits_pos = move_lines.filtered(
             lambda x: x.move_id._l10n_ar_get_document_number_parts(
                 x.move_id.l10n_latam_document_number, x.l10n_latam_document_type_id.code
@@ -220,6 +222,14 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
 
     def _get_tucuman_ncfact_txt_file(self, move_lines):
         """Genera el contenido del archivo NCFACT.txt para Tucumán."""
+        # Este archivo es el único que informa el número del comprobante que la
+        # nota de crédito revierte, así que ese también tiene que estar bien
+        # cargado. Se valida acá y no en las validaciones generales para no
+        # bloquear los otros dos archivos, que no lo informan.
+        move_lines.filtered(lambda x: x.move_id.reversed_entry_id).mapped(
+            "move_id.reversed_entry_id"
+        )._validate_document_number_parts()
+
         lines = []
         for line in move_lines:
             content = ""
