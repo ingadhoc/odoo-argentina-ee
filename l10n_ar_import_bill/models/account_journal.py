@@ -7,6 +7,16 @@ import pandas as pd
 from odoo import _, models
 from odoo.exceptions import UserError
 
+# Los formatos de planilla que puede tener un listado de ARCA. Cualquier otro
+# adjunto sigue el flujo normal de creación de facturas: enumerar lo que este
+# módulo sabe leer evita tener que saber qué lee el resto.
+SPREADSHEET_MIMETYPES = (
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",  # .xlsx
+    "application/vnd.ms-excel",  # .xls
+    "application/vnd.oasis.opendocument.spreadsheet",  # .ods
+    "text/csv",
+)
+
 
 class AccountJournal(models.Model):
     _inherit = "account.journal"
@@ -26,7 +36,13 @@ class AccountJournal(models.Model):
 
             if not attachments:
                 raise UserError(_("No attachment was provided"))
-            return journal.import_bills_from_xls(attachments)
+            # Sin este filtro se manda cualquier adjunto al parser de planillas:
+            # arrastrar un PDF o una foto de factura sobre el diario de compras
+            # moria con "File is not a zip file" en vez de crear la factura.
+            # Se reclama solo si TODO lo soltado son planillas, para no quedarnos
+            # en silencio con la mitad de un arrastre mixto.
+            if attachments.filtered(lambda a: a.mimetype in SPREADSHEET_MIMETYPES) == attachments:
+                return journal.import_bills_from_xls(attachments)
         return super().create_document_from_attachment(attachment_ids)
 
     def import_bills_from_xls(self, attachments):
