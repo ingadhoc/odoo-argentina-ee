@@ -1,9 +1,32 @@
-from odoo import _, api, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 
 class ResCompany(models.Model):
     _inherit = "res.company"
+
+    # TODO 20.0: drop this field, its compute and its views. It is a backport of
+    # odoo/enterprise#102032, which l10n_ar_edi already ships in 20.0. Copied from
+    # upstream except for its company_dependent=True: on res.company that keys the
+    # value by env.company instead of by the record, so the report would print the
+    # active company's legend instead of the one of the company that issued the
+    # invoice.
+    l10n_ar_invoice_pdf_legend = fields.Selection(
+        selection=[
+            ("payment_on_informed_cbu", "Payment on Informed CBU"),
+            ("operation_subject_to_withholding", "Operation Subject to Withholding"),
+        ],
+        compute="_compute_l10n_ar_invoice_pdf_legend",
+        store=True,
+        readonly=False,
+        help="Selected legend value will be added below the Document Type letter on the Invoice PDF.",
+    )
+
+    @api.depends("country_code")
+    def _compute_l10n_ar_invoice_pdf_legend(self):
+        for company in self:
+            if company.country_code != "AR":
+                company.l10n_ar_invoice_pdf_legend = False
 
     @api.model_create_multi
     def create(self, vals_list):
