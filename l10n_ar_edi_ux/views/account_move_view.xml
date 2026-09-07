@@ -20,6 +20,17 @@
                 <field name="l10n_ar_afip_result" position="move"/>
             </xpath>
 
+            <!-- Sacamos el widget "code" (editor ace) de los campos XML de ARCA. Con
+                 account_invoice_extract instalado, hacer foco en el editor rompe el
+                 formulario de la factura con un error de cliente. Reportado a Odoo en
+                 https://github.com/odoo/odoo/issues/286871; revertir cuando esté resuelto. -->
+            <xpath expr="//page[@name='afip']//field[@name='l10n_ar_afip_xml_request']" position="attributes">
+                <attribute name="widget"/>
+            </xpath>
+            <xpath expr="//page[@name='afip']//field[@name='l10n_ar_afip_xml_response']" position="attributes">
+                <attribute name="widget"/>
+            </xpath>
+
             <!-- Mostrar datos relacionados a la verificacion de CAE solo si es compras y no es WS ARCA -->
             <label for="l10n_ar_afip_auth_code" position="attributes">
                 <attribute name="invisible" separator=" or " add="l10n_ar_afip_ws"/>
