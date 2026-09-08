@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-03 16:07+0000\n"
+"POT-Creation-Date: 2026-09-08 12:05+0000\n"
 "PO-Revision-Date: 2026-05-28 00:25+0000\n"
 "Last-Translator: julia elizondo <jue@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
@@ -538,11 +538,6 @@ msgid "Electronic Invoice (WSFE)"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__l10n_ar_afip_ws_environment
-msgid "Environment"
-msgstr "Entorno"
-
-#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__error_message
 msgid "Error"
 msgstr "Error"
@@ -598,11 +593,6 @@ msgstr "Finalizado"
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
 msgid "For production, obtain your certificate from the ARCA portal"
 msgstr "Para producción, obtenga su certificado desde el portal de ARCA"
-
-#. module: l10n_ar_edi_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
-msgid "For testing, you can use demo certificates from ARCA"
-msgstr "Para pruebas, puede usar certificados de demo de ARCA"
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_account_journal_form
@@ -864,13 +854,6 @@ msgid ""
 msgstr ""
 "Seleccione una sucursal para asignar este diario. Deje vacío para la "
 "compañía principal."
-
-#. module: l10n_ar_edi_ux
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__l10n_ar_afip_ws_environment
-msgid ""
-"Select the ARCA environment: Testing for homologation, Production for real "
-"invoices."
-msgstr ""
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_partner_update_from_padron_wizard__state__selection
@@ -1175,6 +1158,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
 msgid "📚 View ARCA Documentation"
 msgstr "📚 Ver Documentación de ARCA"
+
+#~ msgid "Environment"
+#~ msgstr "Entorno"
+
+#~ msgid "For testing, you can use demo certificates from ARCA"
+#~ msgstr "Para pruebas, puede usar certificados de demo de ARCA"
 
 #~ msgid "If checked, this journal will be shared with all branches."
 #~ msgstr ""
