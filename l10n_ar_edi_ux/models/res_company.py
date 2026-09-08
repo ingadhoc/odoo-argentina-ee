@@ -1,9 +1,67 @@
-from odoo import _, api, models
+import logging
+
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+
+_logger = logging.getLogger(__name__)
 
 
 class ResCompany(models.Model):
     _inherit = "res.company"
+
+    # TODO 20.0: drop this field, _l10n_ar_get_invoice_pdf_legend_company(),
+    # _l10n_ar_migrate_withholding_legend(), its call from the post_init_hook, the
+    # migration script and the views. Backport of odoo/enterprise#102032, which
+    # l10n_ar_edi ships from 20.0 on with this very field name and selection keys, so
+    # the stored value carries over on migration. Divergences from the upstream patch:
+    # * upstream declares the field company_dependent=True; on res.company that keys
+    #   the value by env.company instead of by the record, so the report would print
+    #   the active company's legend instead of the one of the company that issued the
+    #   invoice (and the country guard could be bypassed the same way). Stored per
+    #   company record instead, branch fallback resolved when printing.
+    # * l10n_ar_edi 19.0 already prints "Operation Subject to Withholding" out of its
+    #   l10n_ar_show_withholding_legend boolean. This selector supersedes that boolean:
+    #   its checkbox is removed from the settings view and its value is moved into this
+    #   field, so the legend is configured in one place and printed once.
+    l10n_ar_invoice_pdf_legend = fields.Selection(
+        selection=[
+            ("payment_on_informed_cbu", "Payment on Informed CBU"),
+            ("operation_subject_to_withholding", "Operation Subject to Withholding"),
+        ],
+        string="Invoice PDF Legend",
+        help="The selected legend is printed below the Document Type letter on the Invoice PDF of documents with"
+        " letter A and M. Branches with no legend of their own print the one configured on the closest parent"
+        " company.",
+    )
+
+    def _l10n_ar_get_invoice_pdf_legend_company(self):
+        """Return the closest company of the parent chain (self included) that has an
+        invoice PDF legend configured, so that branches fall back to their parent's
+        legend the same way they fall back to its ARCA certificate
+        (_l10n_ar_get_cert_ancestor). Returns an empty recordset when no company of the
+        chain has one. TODO 20.0: drop."""
+        self.ensure_one()
+        company = self.sudo()
+        while company and not company.l10n_ar_invoice_pdf_legend:
+            company = company.parent_id
+        return company
+
+    @api.model
+    def _l10n_ar_migrate_withholding_legend(self):
+        """Move l10n_ar_edi's l10n_ar_show_withholding_legend into
+        l10n_ar_invoice_pdf_legend, which supersedes it (see the field comment above).
+        Called from the module post_init_hook and from its migration script so that
+        companies already printing the withholding legend keep printing it, and it is
+        printed only once. TODO 20.0: drop."""
+        companies = self.sudo().search([("l10n_ar_show_withholding_legend", "=", True)])
+        if not companies:
+            return
+        to_set = companies.filtered(lambda company: not company.l10n_ar_invoice_pdf_legend)
+        to_set.l10n_ar_invoice_pdf_legend = "operation_subject_to_withholding"
+        companies.l10n_ar_show_withholding_legend = False
+        _logger.info(
+            "Moved l10n_ar_show_withholding_legend into l10n_ar_invoice_pdf_legend on companies %s", companies.ids
+        )
 
     @api.model_create_multi
     def create(self, vals_list):
