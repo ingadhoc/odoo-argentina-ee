@@ -632,6 +632,7 @@ msgstr ""
 #: code:addons/account_accountant_ux/wizards/account_change_lock_date.py:0
 msgid "You cannot set a lock date in the future."
 msgstr "No puedes elegir una fecha futura como fecha de bloqueo"
+<<<<<<< 6229da1e225ae8a42f99bff3261287a7cb2f0058
 
 #. module: account_accountant_ux
 #. odoo-javascript
@@ -712,3 +713,18 @@ msgstr ""
 
 #~ msgid "Use Search Filter Amount"
 #~ msgstr "Utilizar Filtro \"Igual Monto\" por defecto"
+||||||| 6af3ece90159c88c3c09168f77550f812c4549ea
+=======
+
+#. module: account_accountant_ux
+#. odoo-javascript
+#: code:addons/account_accountant_ux/static/src/account_report_filters_patch.js:0
+msgid "Fiscal Year"
+msgstr "Año Fiscal"
+
+#. module: account_accountant_ux
+#. odoo-javascript
+#: code:addons/account_accountant_ux/static/src/account_report_filters_patch.js:0
+msgid "Calendar Year"
+msgstr "Año Calendario"
+>>>>>>> 85462fdaf8bf4e21f9b434fd1c6754d823ef4ae7
