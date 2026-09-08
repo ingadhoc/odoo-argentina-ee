@@ -230,3 +230,15 @@ msgstr "Utilizar Filtro \"Igual Monto\" por defecto"
 #: code:addons/account_accountant_ux/wizards/account_change_lock_date.py:0
 msgid "You cannot set a lock date in the future."
 msgstr "No puedes elegir una fecha futura como fecha de bloqueo"
+
+#. module: account_accountant_ux
+#. odoo-javascript
+#: code:addons/account_accountant_ux/static/src/account_report_filters_patch.js:0
+msgid "Fiscal Year"
+msgstr "Año Fiscal"
+
+#. module: account_accountant_ux
+#. odoo-javascript
+#: code:addons/account_accountant_ux/static/src/account_report_filters_patch.js:0
+msgid "Calendar Year"
+msgstr "Año Calendario"
