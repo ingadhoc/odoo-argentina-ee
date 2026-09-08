@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-03 16:07+0000\n"
-"PO-Revision-Date: 2026-09-03 16:07+0000\n"
+"POT-Creation-Date: 2026-09-08 12:05+0000\n"
+"PO-Revision-Date: 2026-09-08 12:05+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -497,11 +497,6 @@ msgid "Electronic Invoice (WSFE)"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__l10n_ar_afip_ws_environment
-msgid "Environment"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__error_message
 msgid "Error"
 msgstr ""
@@ -556,11 +551,6 @@ msgstr ""
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
 msgid "For production, obtain your certificate from the ARCA portal"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
-msgid "For testing, you can use demo certificates from ARCA"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -803,13 +793,6 @@ msgstr ""
 msgid ""
 "Select a branch to assign this journal to a specific branch. Leave empty for"
 " the main company."
-msgstr ""
-
-#. module: l10n_ar_edi_ux
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__l10n_ar_afip_ws_environment
-msgid ""
-"Select the ARCA environment: Testing for homologation, Production for real "
-"invoices."
 msgstr ""
 
 #. module: l10n_ar_edi_ux
