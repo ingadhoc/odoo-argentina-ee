@@ -15,26 +15,31 @@ class AccountJournal(models.Model):
             lambda journal: journal.type in ("bank", "cash", "credit") and journal.default_account_id
         )
         if account_ids := journals.mapped("default_account_id").ids:
-            query = """SELECT account_id, sum(balance) as balance, sum(amount_currency) as amount_currency
+            query = """SELECT account_id, company_id, sum(balance) as balance, sum(amount_currency) as amount_currency
                             FROM account_move_line
-                            WHERE account_id in %(ids)s
+                            WHERE account_id in %(ids)s AND company_id in %(company_ids)s
                             AND date <= %(date)s AND parent_state = 'posted'
-                            GROUP BY account_id"""
+                            GROUP BY account_id, company_id"""
             self.env.cr.execute(
                 query,
                 {
                     "ids": tuple(account_ids),
+                    "company_ids": tuple(journals.company_id.ids),
                     "date": fields.Date.context_today(self),
                 },
             )
-            query_results = {x["account_id"]: (x["balance"], x["amount_currency"]) for x in self.env.cr.dictfetchall()}
+            query_results = {
+                (x["account_id"], x["company_id"]): (x["balance"], x["amount_currency"])
+                for x in self.env.cr.dictfetchall()
+            }
 
             for journal in journals:
-                if query_results and journal.default_account_id.id in query_results:
+                key = (journal.default_account_id.id, journal.company_id.id)
+                if key in query_results:
                     if not journal.currency_id or journal.currency_id == journal.company_id.currency_id:
-                        account_sum = query_results[journal.default_account_id.id][0]
+                        account_sum = query_results[key][0]
                     else:
-                        account_sum = query_results[journal.default_account_id.id][1]
+                        account_sum = query_results[key][1]
                     currency = journal.currency_id or journal.company_id.currency_id
                     dashboard_data[journal.id].update(
                         {
