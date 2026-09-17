@@ -5,12 +5,19 @@
 import csv
 from io import StringIO
 
-from odoo import _, models
+from odoo import _, fields, models
 from odoo.exceptions import ValidationError
 
 
 class AccountMove(models.Model):
     _inherit = "account.move"
+
+    unlinked_tax_settlement_ids = fields.One2many(
+        "l10n_ar.unlinked.tax.settlement",
+        "move_id",
+        "Withholdings Pending Reassignment",
+        readonly=True,
+    )
 
     def _get_vat(self, base_lines=None):
         """Reuse the VAT breakdown when the caller provides a cache in the context.

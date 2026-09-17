@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_account_payment_form" model="ir.ui.view">
+        <field name="name">account.payment.form.tax.settlement</field>
+        <field name="model">account.payment</field>
+        <field name="inherit_id" ref="account.view_account_payment_form"/>
+        <field name="arch" type="xml">
+            <sheet position="before">
+                <field name="unlinked_tax_settlement_count" invisible="1"/>
+                <div class="alert alert-warning" role="alert" invisible="not unlinked_tax_settlement_count">
+                    <span invisible="unlinked_tax_settlement_count > 1">
+                        This payment has a withholding that was already declared in a tax settlement and is no longer
+                        linked to it. If it is not reassigned, it will show up as pending to settle again.
+                    </span>
+                    <span invisible="unlinked_tax_settlement_count &lt;= 1">
+                        This payment has withholdings that were already declared in a tax settlement and are no longer
+                        linked to them. If they are not reassigned, they will show up as pending to settle again.
+                    </span>
+                    <div class="mt-2">
+                        <button name="action_reassign_tax_settlement" type="object" string="Reassign Settlement"
+                                class="btn-primary btn-sm"/>
+                        <button name="action_view_unlinked_tax_settlement_lines" type="object"
+                                string="See affected withholdings" class="btn-link btn-sm"
+                                invisible="unlinked_tax_settlement_count &lt;= 1"/>
+                    </div>
+                </div>
+            </sheet>
+        </field>
+    </record>
+
+</odoo>
