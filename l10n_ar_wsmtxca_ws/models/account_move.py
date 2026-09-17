@@ -181,8 +181,15 @@ class AccountMove(models.Model):
             is_senia_or_discount = Pro_umed in ("97", "99")
             is_letter_b = self.l10n_latam_document_type_id.code in ("6", "7", "8")
 
-            unit_price_net = float_repr(line.price_unit, precision_digits=price_precision_digits)
             vat_tax = line.tax_ids.filtered(lambda x: x.tax_group_id.l10n_ar_vat_afip_code)
+            vat_rate = vat_tax.amount / 100.0 if vat_tax else 0.0
+            # price_unit puede venir con el IVA incluido (impuesto "tax_included"): en ese caso hay que
+            # desarmarlo para el neto de la letra A y no volver a sumarlo para el precio final de la letra B
+            price_include = bool(vat_tax) and all(vat_tax.mapped("price_include"))
+            price_unit_excluded = line.price_unit / (1 + vat_rate) if price_include else line.price_unit
+            price_unit_included = line.price_unit if price_include else line.price_unit * (1 + vat_rate)
+
+            unit_price_net = float_repr(price_unit_excluded, precision_digits=price_precision_digits)
 
             # IVA amount from tax details
             importeIVA_taxes = sum(
@@ -193,11 +200,7 @@ class AccountMove(models.Model):
 
             if is_letter_b:
                 # Letter B: precioUnitario includes IVA, importeIVA is not reported separately
-                vat_rate = vat_tax.amount / 100.0 if vat_tax else 0.0
-                precioUnitario = float_repr(
-                    line.price_unit * (1 + vat_rate),
-                    precision_digits=price_precision_digits,
-                )
+                precioUnitario = float_repr(price_unit_included, precision_digits=price_precision_digits)
                 total_with_iva = base_line["tax_details"]["raw_total_included_currency"]
                 discount_amount = base_line["discount"] and (float(precioUnitario) * quantity - total_with_iva) or 0.0
                 importeIVA = 0.0
