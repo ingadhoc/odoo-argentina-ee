@@ -19,6 +19,18 @@ Este módulo imlementa:
 * Archivos para declaración de distintos impuestos (principalmente percepciones y retenciones)
 * Funcionalidad y datos para auste por inflación (The index are extracted from https://www.facpce.org.ar/indices-facpce/)
 * Al momento de instalar el módulo o crear nuevas compañías argentinas con plan de cuentas establecido se crean los diarios de liquidación de impuestos correspondientes.
+* Aviso y reasignación de la liquidación cuando se edita un pago con retenciones ya declaradas.
+
+Reasignación de liquidaciones de retenciones
+============================================
+
+Al pasar a borrador un pago con retenciones ya liquidadas y modificar cualquier dato, el apunte de la
+retención se borra y se vuelve a crear sin el vínculo a la liquidación donde había sido declarado, por lo
+que la retención vuelve a ofrecerse como pendiente de liquidar. El módulo guarda esa liquidación en el
+asiento del pago, avisa en el formulario del pago y ofrece un botón que vuelve a vincular el apunte, sin
+tocar importes, cuentas, fechas ni estados. Si no se puede identificar la liquidación de origen -por
+ejemplo, en pagos que se rompieron antes de instalar esta versión- se ofrece elegirla, priorizando las
+liquidaciones que quedaron con un faltante por ese importe.
 
 Archivos para declaración de impuestos
 ======================================
