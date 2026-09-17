@@ -28,6 +28,36 @@
     "depends": [
         "l10n_ar_tax_backward_compatibility",
         "l10n_ar_account_reports",
+<<<<<<< 7c65563e40d7c7c5a5a451f1148643e07e4f3aa9:l10n_ar_account_reports_backward_comp/__manifest__.py
+||||||| c3ca3929e55e1c32adb31dc23f1e50003c2d6c45:l10n_ar_account_tax_settlement/__manifest__.py
+        "l10n_ar_ux",
+        "l10n_ar_tax",
+        "account_payment_pro_receiptbook",
+    ],
+    "data": [
+        "data/inflation_adjustment_index.xml",
+        "data/ir_actions_server.xml",
+        "data/account_report_data.xml",
+        "views/inflation_adjustmen_index_view.xml",
+        "views/account_tax_view.xml",
+        "wizards/inflation_adjustment_view.xml",
+        "security/ir.model.access.csv",
+=======
+        "l10n_ar_ux",
+        "l10n_ar_tax",
+        "account_payment_pro_receiptbook",
+    ],
+    "data": [
+        "data/inflation_adjustment_index.xml",
+        "data/ir_actions_server.xml",
+        "data/account_report_data.xml",
+        "views/inflation_adjustmen_index_view.xml",
+        "views/account_tax_view.xml",
+        "views/account_payment_view.xml",
+        "wizards/inflation_adjustment_view.xml",
+        "wizards/tax_settlement_reassign_view.xml",
+        "security/ir.model.access.csv",
+>>>>>>> 912a09d0ba54adf12c24c92aa065fab6cf102687:l10n_ar_account_tax_settlement/__manifest__.py
     ],
     "data": [],
     "demo": [],

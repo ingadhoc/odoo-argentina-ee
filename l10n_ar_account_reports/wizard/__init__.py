@@ -4,3 +4,4 @@
 ##############################################################################
 from . import return_creation_wizard
 from . import inflation_adjustment
+from . import tax_settlement_reassign
