@@ -1,3 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_inflation_adjustment_index_user,inflation.adjustment.index.user,model_inflation_adjustment_index,base.group_user,1,1,1,1
 access_inflation_adjustment,access_inflation_adjustment,model_inflation_adjustment,base.group_user,1,1,1,1
+access_l10n_ar_tax_settlement_reassign,l10n_ar.tax.settlement.reassign,model_l10n_ar_tax_settlement_reassign,account.group_account_invoice,1,1,1,1
+access_l10n_ar_unlinked_tax_settlement,l10n_ar.unlinked.tax.settlement,model_l10n_ar_unlinked_tax_settlement,account.group_account_invoice,1,1,1,1
+access_l10n_ar_unlinked_tax_settlement_readonly,l10n_ar.unlinked.tax.settlement.readonly,model_l10n_ar_unlinked_tax_settlement,account.group_account_readonly,1,0,0,0
