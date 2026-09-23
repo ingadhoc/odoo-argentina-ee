@@ -11,6 +11,7 @@ from odoo.exceptions import UserError, ValidationError
 from odoo.tools import format_date, html_escape
 
 WS_NAME = "A122R"
+ARBA_CONNECTION_ATTEMPTS = 3
 
 _logger = logging.getLogger(__name__)
 
@@ -311,10 +312,21 @@ class L10nArDjArba(models.Model):
         data = data or {}
         data = json.dumps(data)
         response = None
-        try:
-            response = requests.request(method, url, headers=headers, data=data, timeout=(45, 60))
-        except Exception as exp:
-            error = str(exp)
+        for attempt in range(1, ARBA_CONNECTION_ATTEMPTS + 1):
+            try:
+                response = requests.request(method, url, headers=headers, data=data, timeout=(15, 60))
+                error = False
+                break
+            except requests.exceptions.ConnectionError as exp:
+                # ARBA can hold a new connection for 20s or more, while a new one goes through at once.
+                # ConnectionError includes ConnectTimeout but not ReadTimeout, which is not retried.
+                error = str(exp)
+                _logger.warning(
+                    "ARBA WS - %s: connection error (attempt %s/%s): %s", msg, attempt, ARBA_CONNECTION_ATTEMPTS, exp
+                )
+            except Exception as exp:
+                error = str(exp)
+                break
 
         if response and not HTTPStatus(response.status_code).is_success:
             res = response.json()
