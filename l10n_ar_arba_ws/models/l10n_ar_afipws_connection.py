@@ -1,11 +1,14 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 import logging
+import time
 
 import requests
 from dateutil.relativedelta import relativedelta
 from odoo import api, fields, models
 
 _logger = logging.getLogger(__name__)
+
+ARBA_TOKEN_WAIT_SECONDS = 2
 
 
 class L10nArAfipwsConnection(models.Model):
@@ -96,6 +99,8 @@ class L10nArAfipwsConnection(models.Model):
             return self._l10n_ar_process_connection_error(error, environment_type, afip_ws)
 
         response = response.json()
+        # ARBA drops a new connection opened right after the token request
+        time.sleep(ARBA_TOKEN_WAIT_SECONDS)
         return {
             "token": response.get("access_token"),
             "expiration_time": generation_time + relativedelta(seconds=response.get("expires_in")),
