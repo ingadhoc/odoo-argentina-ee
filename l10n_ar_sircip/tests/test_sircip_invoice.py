@@ -2,6 +2,7 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
+from odoo import Command
 from odoo.tests import tagged
 
 from .common import TestSircipCommon
@@ -78,3 +79,34 @@ class TestSircipInvoice(TestSircipCommon):
             self.assertEqual(len(cache), 1)
             self.assertIn("crc:%s" % self.crc["digit2"], cache.ref)
             self.assertIn("letra:F", cache.ref)
+
+    def test_sale_order_delivery(self):
+        """En el pedido de venta la percepción SIRCIP también sale de la dirección de entrega del pedido, y la factura
+        que se genera la conserva (l10n_ar_sale pasa la entrega con l10n_ar_delivery_partner_id)."""
+        if self.env["ir.module.module"]._get("l10n_ar_sale").state != "installed":
+            self.skipTest("l10n_ar_sale no está instalado: las percepciones del pedido las calcula ese módulo")
+        partner = self.partners["digit2"]
+        salta = self._delivery(partner, self.salta)
+        order = self.env["sale.order"].create(
+            {
+                "partner_id": partner.id,
+                "partner_shipping_id": salta.id,
+                "fiscal_position_id": self.fiscal_position.id,
+                "company_id": self.company_ri.id,
+                "order_line": [Command.create({"product_id": self.product_iva_21.id, "price_unit": 1000.0})],
+            }
+        )
+        sircip_names = lambda taxes: sorted(taxes.filtered("l10n_ar_sircip_record_type").mapped("name"))  # noqa: E731
+        both = ["Percepción SIRCIP 0.30%", "Percepción SIRCIP por falta de alta en Chaco"]
+        with self.subTest("entrega en Salta: se lee el dígito de Salta, sin sobretasa"):
+            self.assertEqual(sircip_names(order.order_line.tax_id), ["Percepción SIRCIP 0.30%"])
+        with self.subTest("cambiar la entrega a Chaco recalcula las percepciones del pedido"):
+            order.partner_shipping_id = partner
+            order._l10n_ar_recompute_fiscal_position_taxes()
+            self.assertEqual(sircip_names(order.order_line.tax_id), both)
+        with self.subTest("la factura del pedido conserva la entrega y las percepciones"):
+            order.action_confirm()
+            invoice = order._create_invoices()
+            self.assertEqual(invoice.partner_shipping_id, partner)
+            self.assertEqual(self._sircip_tax_names(invoice), both)
+            self.assert_sircip_invariants(invoice)
