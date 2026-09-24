@@ -19,6 +19,7 @@
         "views/res_country_state_views.xml",
     ],
     "demo": [
+        "demo/res_country_state_demo.xml",
         "demo/res_company_jurisdiction_padron_demo.xml",
         "demo/res_partner_demo.xml",
     ],

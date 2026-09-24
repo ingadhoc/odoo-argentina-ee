@@ -71,42 +71,28 @@ class ResCompanyJurisdictionPadron(models.Model):
         """
         self.ensure_one()
         cuit_clean = (partner.vat or "").replace("-", "").strip()
+        not_found = (False, 0.0, "", "", "")
+        if not cuit_clean:
+            return not_found
 
         file_content = base64.b64decode(self.file_padron)
         try:
             text = file_content.decode("latin-1")
-        except Exception:
+        except UnicodeDecodeError:
             text = file_content.decode("utf-8", errors="replace")
 
-        lines = text.splitlines()
-        for i, line in enumerate(lines):
-            line = line.strip()
-            if not line:
-                continue
-            # Saltar encabezado
-            if i == 0 and "cuit" in line.lower():
-                continue
-            values = [v.strip() for v in line.split(",")]
-            if len(values) < 7:
-                continue
-            # Columnas: [0]=periodo, [1]=cuit, [2]=razon_social, [3]=jurisdiccion,
-            #           [4]=crc, [5]=letra, [6]=campo7
-            line_cuit = values[1].replace("-", "").strip()
-            if line_cuit != cuit_clean:
-                continue
-
-            letra = values[5].upper()
-            crc_str = values[4].strip()
-            campo7 = values[6].strip()
-            aliquot = SIRCIP_LETTER_ALIQUOT.get(letra, 0.0)
-
-            _logger.info(
-                "SIRCIP padrón: CUIT %s → letra %s (%.2f%%), campo7=%s...",
-                cuit_clean,
-                letra,
-                aliquot,
-                campo7[:8],
-            )
-            return True, aliquot, campo7, crc_str, letra
-
-        return False, 0.0, "", "", ""
+        # El padrón trae a todos los contribuyentes de Convenio Multilateral: en vez de partir el archivo
+        # en líneas, buscamos el CUIT (columna 2) y leemos solo esa línea.
+        pos = text.find(",%s," % cuit_clean)
+        while pos != -1:
+            start = text.rfind("\n", 0, pos) + 1
+            end = text.find("\n", pos)
+            values = [v.strip() for v in text[start : end if end != -1 else None].split(",")]
+            # Columnas: [0]=periodo, [1]=cuit, [2]=razon_social, [3]=jurisdiccion, [4]=crc, [5]=letra, [6]=campo7
+            if len(values) >= 7 and values[1].replace("-", "") == cuit_clean:
+                letra = values[5].upper()
+                aliquot = SIRCIP_LETTER_ALIQUOT.get(letra, 0.0)
+                _logger.debug("SIRCIP padrón: CUIT ...%s → letra %s (%.2f%%)", cuit_clean[-4:], letra, aliquot)
+                return True, aliquot, values[6], values[4], letra
+            pos = text.find(",%s," % cuit_clean, pos + 1)
+        return not_found
