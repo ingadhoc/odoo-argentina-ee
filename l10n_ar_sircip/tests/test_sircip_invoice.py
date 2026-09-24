@@ -81,14 +81,13 @@ class TestSircipInvoice(TestSircipCommon):
             self.assertIn("letra:F", cache.ref)
 
     def test_sale_order_delivery(self):
-        """En el pedido de venta la percepción SIRCIP también sale de la dirección de entrega del pedido, y la factura
-        que se genera la conserva (l10n_ar_sale pasa la entrega con l10n_ar_delivery_partner_id)."""
+        """En el pedido de venta la percepción SIRCIP también sale de la dirección de entrega del pedido
+        (l10n_ar_sale pasa la entrega con l10n_ar_delivery_partner_id). Que la factura del pedido herede la entrega
+        lo hace sale (_prepare_invoice); la factura calcula con su propia entrega (test_same_month_and_delivery_changes)."""
         if self.env["ir.module.module"]._get("l10n_ar_sale").state != "installed":
             self.skipTest("l10n_ar_sale no está instalado: las percepciones del pedido las calcula ese módulo")
         partner = self.partners["digit2"]
         salta = self._delivery(partner, self.salta)
-        # Facturar lo pedido: el default depende de los módulos instalados (con stock es lo entregado)
-        self.product_iva_21.invoice_policy = "order"
         order = self.env["sale.order"].create(
             {
                 "partner_id": partner.id,
@@ -106,9 +105,3 @@ class TestSircipInvoice(TestSircipCommon):
             order.partner_shipping_id = partner
             order._l10n_ar_recompute_fiscal_position_taxes()
             self.assertEqual(sircip_names(order.order_line.tax_id), both)
-        with self.subTest("la factura del pedido conserva la entrega y las percepciones"):
-            order.action_confirm()
-            invoice = order._create_invoices()
-            self.assertEqual(invoice.partner_shipping_id, partner)
-            self.assertEqual(self._sircip_tax_names(invoice), both)
-            self.assert_sircip_invariants(invoice)
