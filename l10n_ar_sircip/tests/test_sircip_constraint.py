@@ -24,12 +24,16 @@ class TestSircipConstraint(common.TransactionCase):
             ],
             limit=1,
         )
-        cls.sircip_taxes = cls.env["account.tax"].search(
-            [
-                ("tax_group_id", "=", cls.sircip_group.id),
-                ("company_id", "=", cls.env.company.id),
-                ("type_tax_use", "=", "sale"),
-            ]
+        cls.sircip_taxes = (
+            cls.env["account.tax"]
+            .with_context(active_test=False)
+            .search(
+                [
+                    ("tax_group_id", "=", cls.sircip_group.id),
+                    ("company_id", "=", cls.env.company.id),
+                    ("type_tax_use", "=", "sale"),
+                ]
+            )
         )
         cls.partner = cls.env["res.partner"].create(
             {
@@ -47,8 +51,8 @@ class TestSircipConstraint(common.TransactionCase):
     def test_multiple_sircip_perceptions_same_period_allowed(self):
         """Se permite crear múltiples registros del grupo SIRCIP para el mismo
         partner y período (necesario para un contacto con entregas en varias provincias)."""
-        from_date = fields.Date.from_string("2026-02-01")
-        to_date = fields.Date.from_string("2026-02-28")
+        from_date = fields.Date.today().replace(day=1)
+        to_date = fields.Date.end_of(from_date, "month")
         # Usar dos impuestos SIRCIP distintos (ambos del mismo tax_group)
         taxes = self.sircip_taxes[:2]
         if len(taxes) < 2:
@@ -92,8 +96,8 @@ class TestSircipConstraint(common.TransactionCase):
         if not non_sircip_tax:
             self.skipTest("No hay impuestos no-SIRCIP con tax_group para testear")
 
-        from_date = fields.Date.from_string("2026-03-01")
-        to_date = fields.Date.from_string("2026-03-31")
+        from_date = fields.Date.today().replace(day=1)
+        to_date = fields.Date.end_of(from_date, "month")
         partner2 = self.env["res.partner"].create(
             {
                 "name": "Partner Non-SIRCIP Test",
