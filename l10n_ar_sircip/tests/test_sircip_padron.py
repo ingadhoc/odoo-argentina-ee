@@ -27,12 +27,14 @@ class TestSircipPadron(common.TransactionCase):
         company_ri = cls.env.ref("base.company_ri")
         cls.env = cls.env(context=dict(cls.env.context, allowed_company_ids=[company_ri.id]))
         cls.sircip_state = cls.env.ref("l10n_ar_sircip.state_ar_sircip")
+        cls.month_start = fields.Date.today().replace(day=1)
+        cls.month_end = fields.Date.end_of(cls.month_start, "month")
         cls.padron = cls.env["res.company.jurisdiction.padron"].create(
             {
                 "company_id": cls.env.company.id,
                 "state_id": cls.sircip_state.id,
-                "l10n_ar_padron_from_date": fields.Date.from_string("2026-02-01"),
-                "l10n_ar_padron_to_date": fields.Date.from_string("2026-02-28"),
+                "l10n_ar_padron_from_date": cls.month_start,
+                "l10n_ar_padron_to_date": cls.month_end,
                 "filename": "test_padron.txt",
                 "file_padron": base64.b64encode(SAMPLE_PADRON.encode("latin-1")).decode(),
             }
@@ -53,8 +55,8 @@ class TestSircipPadron(common.TransactionCase):
                 {
                     "company_id": self.env.company.id,
                     "state_id": state_cordoba.id,
-                    "l10n_ar_padron_from_date": fields.Date.from_string("2026-02-01"),
-                    "l10n_ar_padron_to_date": fields.Date.from_string("2026-02-28"),
+                    "l10n_ar_padron_from_date": self.month_start,
+                    "l10n_ar_padron_to_date": self.month_end,
                     "filename": "test.txt",
                     "file_padron": base64.b64encode(b"dummy").decode(),
                 }
@@ -122,31 +124,6 @@ class TestSircipPadron(common.TransactionCase):
         _, _, campo7, _, _ = self.padron._get_sircip_aliquot(partner)
         self.assertEqual(campo7[-1], "0", "El primer char (rightmost) del campo 7 debe ser '0'")
 
-    # --- Provincias adheridas etapa 1 ---
-
-    def test_etapa1_provinces_have_is_sircip_true(self):
-        """Las 8 provincias de Etapa 1 tienen l10n_ar_is_sircip=True."""
-        # Chaco=H, Jujuy=Y, Mendoza=M, Río Negro=R, Salta=A, San Juan=J,
-        # Santiago del Estero=G, Tierra del Fuego=V
-        etapa1_codes = ["H", "Y", "M", "R", "A", "J", "G", "V"]
-        states = self.env["res.country.state"].search(
-            [
-                ("country_id.code", "=", "AR"),
-                ("code", "in", etapa1_codes),
-            ]
-        )
-        self.assertEqual(len(states), len(etapa1_codes))
-        for state in states:
-            self.assertTrue(
-                state.l10n_ar_is_sircip,
-                "Provincia %s (code=%s) debe tener l10n_ar_is_sircip=True" % (state.name, state.code),
-            )
-
-    def test_non_etapa1_provinces_have_is_sircip_false(self):
-        """Provincias no adheridas (ej. Corrientes) tienen l10n_ar_is_sircip=False."""
-        state_corrientes = self.env.ref("base.state_ar_w")  # Corrientes, no adherida
-        self.assertFalse(state_corrientes.l10n_ar_is_sircip)
-
     # --- Auto-selección de la posición fiscal ---
 
     def test_fiscal_position_has_correct_configuration(self):
@@ -181,73 +158,20 @@ class TestSircipPadron(common.TransactionCase):
             "sin esto la posición no se auto-selecciona en facturas de clientes RI",
         )
 
-    # --- Tipo de registro DDJJ (validación de impuestos base) ---
+    # --- Plantillas de impuestos del post_init_hook ---
 
-    def test_tipo_registro_excluido_tax_setup(self):
-        """El impuesto 'SIRCIP Excluido' existe y tiene las propiedades para activar Tipo 3 en TXT.
-
-        En el TXT DDJJ, la condición es: tax.name == _SIRCIP_EXCLUIDO_TAX_NAME → Tipo 3.
-        """
-        from odoo.addons.l10n_ar_sircip.models.account_fiscal_position_l10n_ar_tax import (
-            _SIRCIP_EXCLUIDO_TAX_NAME,
+    def test_hook_tax_templates(self):
+        """El hook deja una plantilla por tipo de registro de la DDJJ, con la cuenta y la etiqueta que usa el
+        diario de liquidación, y el grupo con el código de tributo AFIP de percepción IIBB (07)."""
+        templates = (
+            self.env["account.tax"]
+            .with_context(active_test=False)
+            .search([("company_id", "=", self.env.company.id), ("l10n_ar_sircip_record_type", "!=", False)])
         )
-
-        tax = self.env["account.tax"].search(
-            [
-                ("name", "=", _SIRCIP_EXCLUIDO_TAX_NAME),
-                ("tax_group_id.name", "=", "SIRCIP"),
-                ("company_id", "=", self.env.company.id),
-            ],
-            limit=1,
-        )
-        self.assertTrue(tax, "Debe existir impuesto '%s' — creado en el post_init_hook" % _SIRCIP_EXCLUIDO_TAX_NAME)
-        self.assertEqual(tax.name, _SIRCIP_EXCLUIDO_TAX_NAME, "Nombre exacto requerido para detección en TXT")
-        self.assertEqual(tax.amount, 0.0, "Excluido es un marcador a $0")
-        self.assertEqual(tax.tax_group_id.name, "SIRCIP")
-
-    def test_tipo_registro_informativo_tax_setup(self):
-        """Existe un impuesto SIRCIP con alícuota 0% (distinto de Excluido) para Tipo 2 Informativo.
-
-        En el TXT DDJJ, la condición es:
-        tax.amount == 0.0 AND tax.tax_group_id.name == 'SIRCIP' AND tax.name != 'SIRCIP Excluido'
-        → Tipo 2 Informativo (padrón devolvió letra A = 0%).
-        """
-        from odoo.addons.l10n_ar_sircip.models.account_fiscal_position_l10n_ar_tax import (
-            _SIRCIP_EXCLUIDO_TAX_NAME,
-        )
-
-        tax = self.env["account.tax"].search(
-            [
-                ("amount", "=", 0.0),
-                ("tax_group_id.name", "=", "SIRCIP"),
-                ("name", "!=", _SIRCIP_EXCLUIDO_TAX_NAME),
-                ("company_id", "=", self.env.company.id),
-            ],
-            limit=1,
-        )
-        self.assertTrue(
-            tax,
-            "Debe existir impuesto SIRCIP con alícuota 0% distinto de Excluido — "
-            "es el marcador para Tipo 2 Informativo en el TXT",
-        )
-        self.assertEqual(tax.amount, 0.0)
-        self.assertEqual(tax.tax_group_id.name, "SIRCIP")
-        self.assertNotEqual(tax.name, _SIRCIP_EXCLUIDO_TAX_NAME)
-
-    def test_tipo_registro_no_inscripto_tax_setup(self):
-        """Existe impuesto 'SIRCIP No Inscripto' con 'No Inscripto' en el nombre para Tipo 4.
-
-        En el TXT DDJJ, la condición es: 'No Inscripto' in tax.name → Tipo 4.
-        Este impuesto también es el default_tax_id de la línea de posición fiscal.
-        """
-        tax = self.env["account.tax"].search(
-            [
-                ("name", "ilike", "No Inscripto"),
-                ("tax_group_id.name", "=", "SIRCIP"),
-                ("company_id", "=", self.env.company.id),
-            ],
-            limit=1,
-        )
-        self.assertTrue(tax, "Debe existir impuesto SIRCIP No Inscripto — creado en el post_init_hook")
-        self.assertIn("No Inscripto", tax.name, "El nombre debe contener 'No Inscripto' para la detección en TXT")
-        self.assertGreater(tax.amount, 0.0, "No Inscripto cobra percepción (amount > 0)")
+        self.assertEqual(set(templates.mapped("l10n_ar_sircip_record_type")), {"1", "4", "5"})
+        tag = self.env.ref("l10n_ar_sircip.tag_perc_iibb_sircip_aplicada")
+        for tax in templates:
+            tax_line = tax.invoice_repartition_line_ids.filtered(lambda r: r.repartition_type == "tax")
+            self.assertTrue(tax_line.account_id, "%s sin cuenta" % tax.name)
+            self.assertIn(tag, tax_line.tag_ids)
+        self.assertEqual(templates.tax_group_id.l10n_ar_tribute_afip_code, "07")

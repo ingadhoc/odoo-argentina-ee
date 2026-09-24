@@ -5,3 +5,5 @@
 from . import test_sircip_padron
 from . import test_sircip_campo7
 from . import test_sircip_constraint
+from . import test_sircip_invoice
+from . import test_sircip_ddjj
