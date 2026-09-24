@@ -11,7 +11,7 @@ class AccountMove(models.Model):
     def _l10n_ar_sircip_context(self):
         """La percepción SIRCIP depende de la provincia de entrega, que l10n_ar_tax no transmite."""
         self.ensure_one()
-        return self.with_context(l10n_ar_sircip_delivery_partner_id=self.partner_shipping_id.id)
+        return self.with_context(l10n_ar_delivery_partner_id=self.partner_shipping_id.id)
 
     def _l10n_ar_recompute_fiscal_position_taxes(self):
         # EXTEND l10n_ar_tax
@@ -35,5 +35,5 @@ class AccountMoveLine(models.Model):
 
     def _get_computed_taxes(self):
         # EXTEND l10n_ar_tax
-        line = self.with_context(l10n_ar_sircip_delivery_partner_id=self.move_id.partner_shipping_id.id)
+        line = self.with_context(l10n_ar_delivery_partner_id=self.move_id.partner_shipping_id.id)
         return super(AccountMoveLine, line)._get_computed_taxes()

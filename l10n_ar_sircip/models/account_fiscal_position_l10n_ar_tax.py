@@ -79,12 +79,12 @@ class AccountFiscalPositionL10nArTax(models.Model):
           posición fiscal, no SIRCIP.
         - Fuera del padrón: 2% "por no inscripto" solo si la entrega es en una provincia adherida.
 
-        La provincia de entrega llega por contexto desde la factura (``l10n_ar_sircip_delivery_partner_id``);
+        La provincia de entrega llega por contexto desde la factura o el pedido (``l10n_ar_delivery_partner_id``);
         sin ella se usa la del partner.
         """
         self.ensure_one()
         partner = partner.commercial_partner_id
-        delivery_id = self.env.context.get("l10n_ar_sircip_delivery_partner_id")
+        delivery_id = self.env.context.get("l10n_ar_delivery_partner_id")
         delivery = self.env["res.partner"].browse(delivery_id) if delivery_id else partner
         delivery_state = delivery.state_id or partner.state_id
 
