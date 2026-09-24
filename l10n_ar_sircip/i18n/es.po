@@ -45,9 +45,31 @@ msgid "Argentinean Partner Taxes"
 msgstr "Impuestos de Contacto Argentino"
 
 #. module: l10n_ar_sircip
+#: model:ir.model,name:l10n_ar_sircip.model_res_company
+msgid "Companies"
+msgstr "Compañías"
+
+#. module: l10n_ar_sircip
+#: model:ir.model,name:l10n_ar_sircip.model_res_config_settings
+msgid "Config Settings"
+msgstr "Opciones de configuración"
+
+#. module: l10n_ar_sircip
 #: model:ir.model,name:l10n_ar_sircip.model_res_country_state
 msgid "Country state"
 msgstr "Estado/Provincia"
+
+#. module: l10n_ar_sircip
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sircip.res_config_settings_view_form_sircip
+msgid ""
+"Creates the SIRCIP taxes, account, fiscal position and settlement journal, "
+"and adds the SIRCIP line to the fiscal positions with perceptions. Save "
+"again to update fiscal positions created later."
+msgstr ""
+"Crea los impuestos, la cuenta, la posición fiscal y el diario de liquidación"
+" SIRCIP, y agrega la línea SIRCIP a las posiciones fiscales con "
+"percepciones. Guardar de nuevo actualiza las posiciones fiscales creadas "
+"después."
 
 #. module: l10n_ar_sircip
 #. odoo-python
@@ -149,6 +171,16 @@ msgid "Percepción SIRCIP por no inscripto"
 msgstr ""
 
 #. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
+msgid ""
+"Perceptions of provinces adhered to SIRCIP: %(states)s. They are now "
+"collected through SIRCIP, remove those lines."
+msgstr ""
+"Percepciones de provincias adheridas a SIRCIP: %(states)s. Ahora se perciben"
+" por SIRCIP: eliminar esas líneas."
+
+#. module: l10n_ar_sircip
 #: model:ir.model.fields,help:l10n_ar_sircip.field_account_tax__l10n_ar_sircip_record_type
 msgid ""
 "Record type (field 5) with which this tax is reported in the SIRCIP DDJJ "
@@ -166,9 +198,21 @@ msgid "SIRCIP"
 msgstr ""
 
 #. module: l10n_ar_sircip
+#: model:ir.model.fields,field_description:l10n_ar_sircip.field_res_company__l10n_ar_sircip_agent
+#: model:ir.model.fields,field_description:l10n_ar_sircip.field_res_config_settings__l10n_ar_sircip_agent
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sircip.res_config_settings_view_form_sircip
+msgid "SIRCIP Perception Agent"
+msgstr "Agente de percepción SIRCIP"
+
+#. module: l10n_ar_sircip
 #: model:ir.model.fields,field_description:l10n_ar_sircip.field_account_tax__l10n_ar_sircip_record_type
 msgid "SIRCIP Record Type"
 msgstr "Tipo de registro SIRCIP"
+
+#. module: l10n_ar_sircip
+#: model:ir.model.fields,field_description:l10n_ar_sircip.field_account_fiscal_position__l10n_ar_sircip_warning
+msgid "SIRCIP Warning"
+msgstr "Aviso SIRCIP"
 
 #. module: l10n_ar_sircip
 #. odoo-python
@@ -195,6 +239,19 @@ msgid "Tax"
 msgstr "Impuesto"
 
 #. module: l10n_ar_sircip
+#: model:ir.model.fields,help:l10n_ar_sircip.field_res_company__l10n_ar_sircip_agent
+#: model:ir.model.fields,help:l10n_ar_sircip.field_res_config_settings__l10n_ar_sircip_agent
+msgid ""
+"The company is a SIRCIP perception agent. Saving the settings with this "
+"option creates the SIRCIP taxes, account, fiscal position and settlement "
+"journal, and adds the SIRCIP line to the fiscal positions with perceptions."
+msgstr ""
+"La compañía es agente de percepción SIRCIP. Guardar los ajustes con esta "
+"opción crea los impuestos, la cuenta, la posición fiscal y el diario de "
+"liquidación SIRCIP, y agrega la línea SIRCIP a las posiciones fiscales con "
+"percepciones."
+
+#. module: l10n_ar_sircip
 #. odoo-python
 #: code:addons/l10n_ar_sircip/models/account_journal.py:0
 msgid ""
@@ -203,6 +260,17 @@ msgid ""
 msgstr ""
 "La provincia de entrega de %(move)s no tiene código de jurisdicción, "
 "obligatorio en la DDJJ de SIRCIP."
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
+msgid ""
+"This fiscal position has perceptions but not the SIRCIP line. Save the "
+"Accounting settings with 'SIRCIP Perception Agent' checked to add it."
+msgstr ""
+"Esta posición fiscal tiene percepciones pero no la línea SIRCIP. Para "
+"agregarla, guardar los ajustes de Contabilidad con 'Agente de percepción "
+"SIRCIP' marcado."
 
 #. module: l10n_ar_sircip
 #: model:ir.model,name:l10n_ar_sircip.model_account_fiscal_position_l10n_ar_tax

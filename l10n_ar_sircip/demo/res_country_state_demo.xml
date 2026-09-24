@@ -2,7 +2,8 @@
 <odoo>
 
     <!-- ================================================================
-         Demo: provincias de la Etapa 1 original (01/07/2026), prorrogada sin fecha
+         Demo: provincias de la Etapa 1 original (01/07/2026). La vigencia pasó al 01/12/2026
+         (Disposición de Presidencia 7/2026) con jurisdicciones a definir
          Fuente: https://docs.google.com/spreadsheets/d/1yqf8C6ztxJZsmEQRC4-g2RttgMoJCqMi-Y-0_1mlugE
          Columna "Implementación Etapa 1 (01/07/2026)" = X
          ================================================================ -->
