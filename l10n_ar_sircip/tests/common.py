@@ -6,7 +6,6 @@ import base64
 
 from odoo import Command, fields
 from odoo.addons.l10n_ar.tests.common import TestArCommon
-from odoo.addons.l10n_ar_sircip.hooks import _create_sircip_data_for_company
 from odoo.addons.l10n_ar_sircip.models.account_fiscal_position_l10n_ar_tax import SIRCIP_CAMPO7_POSITION
 
 
@@ -48,7 +47,8 @@ class TestSircipCommon(TestArCommon):
         (cls.chaco | cls.salta).l10n_ar_is_sircip = True
         cls.corrientes.l10n_ar_is_sircip = False
 
-        _create_sircip_data_for_company(cls.env, cls.company_ri, cls.sircip_state)
+        cls.company_ri.l10n_ar_sircip_agent = True
+        cls.company_ri._l10n_ar_sircip_setup()
         cls.fiscal_position = cls.env.ref("l10n_ar_sircip.fiscal_position_sircip_%s" % cls.company_ri.id)
         cls.sircip_account = cls.env.ref("l10n_ar_sircip.account_sircip_%s" % cls.company_ri.id)
         cls.sircip_tag = cls.env.ref("l10n_ar_sircip.tag_perc_iibb_sircip_aplicada")

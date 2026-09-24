@@ -17,6 +17,8 @@
         "security/ir.model.access.csv",
         "data/res_country_state_data.xml",
         "views/res_country_state_views.xml",
+        "views/account_fiscal_position_views.xml",
+        "views/res_config_settings_views.xml",
     ],
     "demo": [
         "demo/res_country_state_demo.xml",
