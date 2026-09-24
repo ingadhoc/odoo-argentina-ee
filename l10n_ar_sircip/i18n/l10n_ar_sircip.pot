@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-08 21:19+0000\n"
-"PO-Revision-Date: 2026-06-08 21:19+0000\n"
+"POT-Creation-Date: 2026-09-24 16:35+0000\n"
+"PO-Revision-Date: 2026-09-24 16:35+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,8 +16,23 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: l10n_ar_sircip
+#: model:ir.model.fields.selection,name:l10n_ar_sircip.selection__account_tax__l10n_ar_sircip_record_type__1
+msgid "1 - Percepción"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#: model:ir.model.fields.selection,name:l10n_ar_sircip.selection__account_tax__l10n_ar_sircip_record_type__4
+msgid "4 - No inscripto"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#: model:ir.model.fields.selection,name:l10n_ar_sircip.selection__account_tax__l10n_ar_sircip_record_type__5
+msgid "5 - Sobretasa"
+msgstr ""
+
+#. module: l10n_ar_sircip
 #: model:ir.model.fields,field_description:l10n_ar_sircip.field_res_country_state__l10n_ar_is_sircip
-msgid "Adherida a SIRCIP"
+msgid "Adhered to SIRCIP"
 msgstr ""
 
 #. module: l10n_ar_sircip
@@ -33,15 +48,14 @@ msgstr ""
 #. module: l10n_ar_sircip
 #. odoo-python
 #: code:addons/l10n_ar_sircip/models/account_journal.py:0
-msgid "Edit Tax"
+msgid ""
+"Credit note %(move)s has no original invoice. It is mandatory in the SIRCIP "
+"DDJJ."
 msgstr ""
 
 #. module: l10n_ar_sircip
-#. odoo-python
-#: code:addons/l10n_ar_sircip/hooks.py:0
-msgid ""
-"Exclusive fiscal position for SIRCIP perception agents (Multilateral "
-"Agreement). Do not assign individual provinces — detection is automatic."
+#: model:ir.model,name:l10n_ar_sircip.model_account_fiscal_position
+msgid "Fiscal Position"
 msgstr ""
 
 #. module: l10n_ar_sircip
@@ -52,15 +66,25 @@ msgstr ""
 #. module: l10n_ar_sircip
 #: model:ir.model.fields,help:l10n_ar_sircip.field_res_country_state__l10n_ar_is_sircip
 msgid ""
-"Indica que la provincia está adherida al SIRCIP (Sistema de Recaudación del "
-"Control sobre Ingresos Brutos de Convenio Multilateral). Las facturas a "
-"clientes con domicilio de entrega en esta provincia pueden generar "
-"percepciones SIRCIP."
+"Indicates that the province adheres to the SIRCIP (Sistema de Recaudación "
+"del Control sobre Ingresos Brutos de Convenio Multilateral). Invoices to "
+"customers with a delivery address in this province may generate SIRCIP "
+"perceptions."
 msgstr ""
 
 #. module: l10n_ar_sircip
 #: model:ir.model,name:l10n_ar_sircip.model_account_journal
 msgid "Journal"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#: model:ir.model,name:l10n_ar_sircip.model_account_move
+msgid "Journal Entry"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#: model:ir.model,name:l10n_ar_sircip.model_account_move_line
+msgid "Journal Item"
 msgstr ""
 
 #. module: l10n_ar_sircip
@@ -73,6 +97,11 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_sircip
+#: model:account.account.tag,name:l10n_ar_sircip.tag_perc_iibb_sircip_aplicada
+msgid "Perc IIBB SIRCIP Aplicada"
+msgstr ""
+
+#. module: l10n_ar_sircip
 #: model:account.fiscal.position,name:l10n_ar_sircip.fiscal_position_sircip_2
 #: model:account.fiscal.position,name:l10n_ar_sircip.fiscal_position_sircip_3
 #: model:account.fiscal.position,name:l10n_ar_sircip.fiscal_position_sircip_4
@@ -80,13 +109,37 @@ msgid "Percepción - SIRCIP"
 msgstr ""
 
 #. module: l10n_ar_sircip
-#: model_terms:account.fiscal.position,note:l10n_ar_sircip.fiscal_position_sircip_2
-#: model_terms:account.fiscal.position,note:l10n_ar_sircip.fiscal_position_sircip_3
-#: model_terms:account.fiscal.position,note:l10n_ar_sircip.fiscal_position_sircip_4
+#: model:account.account,name:l10n_ar_sircip.account_sircip_2
+#: model:account.account,name:l10n_ar_sircip.account_sircip_4
+msgid "Percepción IIBB SIRCIP aplicada"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#: model:account.tax,name:l10n_ar_sircip.tax_sircip_percepcion_2
+#: model:account.tax,name:l10n_ar_sircip.tax_sircip_percepcion_3
+#: model:account.tax,name:l10n_ar_sircip.tax_sircip_percepcion_4
+msgid "Percepción SIRCIP"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#: model:account.tax,name:l10n_ar_sircip.tax_sircip_sobretasa_2
+#: model:account.tax,name:l10n_ar_sircip.tax_sircip_sobretasa_3
+#: model:account.tax,name:l10n_ar_sircip.tax_sircip_sobretasa_4
+msgid "Percepción SIRCIP por falta de alta"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#: model:account.tax,name:l10n_ar_sircip.tax_sircip_no_inscripto_2
+#: model:account.tax,name:l10n_ar_sircip.tax_sircip_no_inscripto_3
+#: model:account.tax,name:l10n_ar_sircip.tax_sircip_no_inscripto_4
+msgid "Percepción SIRCIP por no inscripto"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#: model:ir.model.fields,help:l10n_ar_sircip.field_account_tax__l10n_ar_sircip_record_type
 msgid ""
-"Posición fiscal exclusiva para agentes de percepción del SIRCIP (Convenio "
-"Multilateral). No asignar provincias individuales — la detección es "
-"automática."
+"Record type (field 5) with which this tax is reported in the SIRCIP DDJJ "
+"file."
 msgstr ""
 
 #. module: l10n_ar_sircip
@@ -98,41 +151,14 @@ msgid "SIRCIP"
 msgstr ""
 
 #. module: l10n_ar_sircip
-#: model:account.tax,name:l10n_ar_sircip.tax_sircip_base_2
-#: model:account.tax,name:l10n_ar_sircip.tax_sircip_base_3
-#: model:account.tax,name:l10n_ar_sircip.tax_sircip_base_4
-msgid "SIRCIP A 0.0"
-msgstr ""
-
-#. module: l10n_ar_sircip
-#: model:account.tax,name:l10n_ar_sircip.tax_sircip_no_inscripto_2
-#: model:account.tax,name:l10n_ar_sircip.tax_sircip_no_inscripto_3
-#: model:account.tax,name:l10n_ar_sircip.tax_sircip_no_inscripto_4
-msgid "SIRCIP No Inscripto 2%"
+#: model:ir.model.fields,field_description:l10n_ar_sircip.field_account_tax__l10n_ar_sircip_record_type
+msgid "SIRCIP Record Type"
 msgstr ""
 
 #. module: l10n_ar_sircip
 #. odoo-python
 #: code:addons/l10n_ar_sircip/models/account_fiscal_position_l10n_ar_tax.py:0
-msgid "SIRCIP Non-Registered (not found in padron)"
-msgstr ""
-
-#. module: l10n_ar_sircip
-#: model:account.tax,name:l10n_ar_sircip.tax_sircip_sobretasa_2
-#: model:account.tax,name:l10n_ar_sircip.tax_sircip_sobretasa_3
-#: model:account.tax,name:l10n_ar_sircip.tax_sircip_sobretasa_4
-msgid "SIRCIP Sobre Alícuota 1%"
-msgstr ""
-
-#. module: l10n_ar_sircip
-#. odoo-python
-#: code:addons/l10n_ar_sircip/models/account_fiscal_position_l10n_ar_tax.py:0
-msgid ""
-"SIRCIP — double rate (digit 4/5) for province %(province)s: the province's own rate was not found.\n"
-"\n"
-"To resolve this, use one of the following options:\n"
-"1) Set up a fiscal position with an IIBB perception for %(province)s (using %(province)s webservice or padron) for the same company. The system will query it automatically when invoicing.\n"
-"2) Enter the rate manually on the contact under Accounting → Perceptions/Withholdings for the %(province)s tax for period %(from_date)s–%(to_date)s."
+msgid "SIRCIP tax template not found for company %(company)s."
 msgstr ""
 
 #. module: l10n_ar_sircip
@@ -148,19 +174,16 @@ msgid "TXT Perc IIBB SIRCIP aplicadas"
 msgstr ""
 
 #. module: l10n_ar_sircip
-#. odoo-python
-#: code:addons/l10n_ar_sircip/models/account_journal.py:0
-msgid ""
-"Tax '%(tax)s' does not have a jurisdiction configured, or the province does "
-"not have a jurisdiction code."
+#: model:ir.model,name:l10n_ar_sircip.model_account_tax
+msgid "Tax"
 msgstr ""
 
 #. module: l10n_ar_sircip
 #. odoo-python
 #: code:addons/l10n_ar_sircip/models/account_journal.py:0
 msgid ""
-"Tax '%(tax)s' does not have an AFIP Code (l10n_ar_code) configured. It is "
-"required to generate the SIRCIP TXT."
+"The delivery province of %(move)s has no jurisdiction code, required by the "
+"SIRCIP DDJJ."
 msgstr ""
 
 #. module: l10n_ar_sircip

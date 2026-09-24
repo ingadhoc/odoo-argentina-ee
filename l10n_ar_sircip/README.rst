@@ -30,12 +30,18 @@ Instalación
 
 #. Instalar el módulo ``l10n_ar_account_tax_settlement`` (dependencia obligatoria).
 #. Instalar este módulo ``l10n_ar_sircip``.
-#. El ``post_init_hook`` crea automáticamente por empresa:
+#. El ``post_init_hook`` crea automáticamente por empresa argentina:
 
-   * Grupo de impuestos **SIRCIP**
-   * Impuestos base: ``SIRCIP A 0.0``, ``SIRCIP Sobre Alícuota 1%``, ``SIRCIP No Inscripto 2%``
-   * Posición fiscal **Percepción - SIRCIP** (auto-detectable, secuencia 9999)
-   * Diario de liquidación **SIRCIP Aplicado**
+   * Grupo de impuestos **SIRCIP**, con el código de tributo AFIP de percepción IIBB (``07``).
+   * Cuenta **Percepción IIBB SIRCIP aplicada**, junto a las percepciones provinciales del plan de cuentas.
+   * Impuestos plantilla, uno por tipo de registro de la DDJJ: ``Percepción SIRCIP`` (1),
+     ``Percepción SIRCIP por no inscripto`` 2% (4) y ``Percepción SIRCIP por falta de alta`` 1% (5).
+     Al facturar se crean copias por alícuota y por provincia de entrega.
+   * Posición fiscal **Percepción - SIRCIP** (auto-detectable, secuencia 9999), para los clientes que
+     no caen en ninguna otra posición fiscal.
+   * La línea SIRCIP (percepción, ``Percepción SIRCIP por no inscripto``, archivo de padrón) en cada
+     posición fiscal que ya tenga líneas de percepción: una factura toma una sola posición fiscal.
+   * Diario de liquidación **Liquidación SIRCIP Aplicado**, con la etiqueta ``Perc IIBB SIRCIP Aplicada``.
 
 Configuración
 =============
@@ -43,26 +49,19 @@ Configuración
 Provincias adheridas
 --------------------
 
-El módulo marca automáticamente con ``l10n_ar_is_sircip = True`` las provincias de la
-**Etapa 1 (01/07/2026)**:
-
-* ✅ Chaco, Jujuy, Mendoza, Río Negro, Salta, San Juan, Santiago del Estero, Tierra del Fuego
-
-Las provincias adheridas sin fecha de Etapa 1 confirmada están comentadas en
-``data/res_country_state_data.xml``. Descomentar a medida que entren en vigencia.
+El módulo se instala **sin provincias marcadas**. Cada jurisdicción informa desde cuándo implementa
+SIRCIP y, hasta entonces, se siguen usando los regímenes actuales. A medida que eso ocurra, marcar
+**Adherida a SIRCIP** (``l10n_ar_is_sircip``) en ``Contactos → Configuración → Provincias``.
 
 **Fuente oficial de adhesiones:** `Spreadsheet de provincias SIRCIP <https://docs.google.com/spreadsheets/d/1yqf8C6ztxJZsmEQRC4-g2RttgMoJCqMi-Y-0_1mlugE/edit?gid=0#gid=0>`_
 
-Impuestos y posición fiscal
----------------------------
+Posiciones fiscales provinciales
+--------------------------------
 
-La posición fiscal ``Percepción - SIRCIP`` usa ``webservice = "padron"`` y detecta
-automáticamente que corresponde al SIRCIP porque el impuesto apunta a la provincia
-ficticia ``SIRCIP`` (``state_ar_sircip``).
-
-Para configurar el código de régimen de percepción en cada impuesto SIRCIP, ir a
-``Contabilidad → Configuración → Impuestos`` y completar el campo **Código AFIP**
-(``l10n_ar_code``) con el código de régimen que corresponde a cada jurisdicción.
+Cuando una provincia pasa a SIRCIP, eliminar la línea de percepción de esa provincia en las posiciones
+fiscales: desde ese momento la percepción se practica por SIRCIP. Las líneas de las provincias **no
+adheridas** se mantienen: para un cliente con alta en una provincia no adherida (dígito 4 del campo 7),
+esa línea calcula la percepción propia de la provincia y SIRCIP agrega la suya.
 
 Uso
 ===
@@ -74,8 +73,11 @@ Carga del Padrón
 #. Crear un nuevo registro con:
 
    * **Jurisdicción:** ``SIRCIP`` (la provincia ficticia creada por el módulo)
-   * **Desde / Hasta:** rango del período del padrón (ej. 01/02/2026 - 28/02/2026)
-   * **Archivo:** subir el TXT descargado del `Portal Federal Tributario — Descargas <https://www.ca.gob.ar/>`_
+   * **Desde / Hasta:** el mes del padrón
+   * **Archivo:** el TXT descargado del `Portal Federal Tributario — Descargas <https://www.ca.gob.ar/>`_
+
+El padrón es mensual: sin padrón cargado para el mes no se pueden facturar ventas con la posición
+fiscal SIRCIP.
 
 **Formato del padrón (CSV separado por comas):**
 
@@ -97,36 +99,56 @@ Tabla de alícuotas (letras A–X):
 +-------+-------+-------+-------+-------+-------+
 
 Cálculo de percepciones en facturas
--------------------------------------
+-----------------------------------
 
-Cuando se crea una factura de venta para un cliente con domicilio de entrega en una
-provincia adherida al SIRCIP, el sistema:
+La percepción se calcula en cada factura con la **provincia de entrega** (dirección de entrega de la
+factura o, si no tiene, la del cliente). El campo 7 del padrón se lee solo para esa provincia. Según la
+planilla oficial *Aplicación Códigos* de la Comisión Arbitral:
 
-#. Aplica la posición fiscal ``Percepción - SIRCIP``.
-#. Busca el padrón SIRCIP vigente para el período.
-#. Lee la letra del cliente y determina la alícuota base.
-#. Verifica el **Campo 7** para la provincia de entrega y determina si aplica:
++-------------------------------------+-------------------------------------------------------------+
+| Caso                                | En la factura                                               |
++=====================================+=============================================================+
+| Dígito 1, 3, 4 o 5                  | ``Percepción SIRCIP`` con la alícuota de la letra           |
++-------------------------------------+-------------------------------------------------------------+
+| Dígito 2 (adherida, sin alta)       | ``Percepción SIRCIP`` y, en otra línea,                     |
+|                                     | ``Percepción SIRCIP por falta de alta en (provincia)`` 1%   |
++-------------------------------------+-------------------------------------------------------------+
+| Letra A (0%)                        | Nada (con dígito 2, solo la sobretasa). Se declara como     |
+|                                     | informativo en la DDJJ                                      |
++-------------------------------------+-------------------------------------------------------------+
+| Fuera del padrón, entrega adherida  | ``Percepción SIRCIP por no inscripto`` 2%                   |
++-------------------------------------+-------------------------------------------------------------+
+| Fuera del padrón, entrega no        | Nada                                                        |
+| adherida                            |                                                             |
++-------------------------------------+-------------------------------------------------------------+
 
-   * Dígito 1: Solo tasa básica SIRCIP
-   * Dígito 2: Tasa básica + sobrealícuota (1%)
-   * Dígito 3: Excluido
-   * Dígito 4/5: Tasa básica SIRCIP + alícuota propia de la provincia
+El dígito 3 (adherida, sin alta y **sin** sobrealícuota) no es el tipo de registro 3 *Excluido* de la
+DDJJ: los excluidos llegan por los *ajustes al padrón* (ver Pendientes). Con dígito 4, la percepción
+propia de la provincia no adherida la calcula su línea de posición fiscal.
 
-#. Si el CUIT no está en el padrón, aplica ``SIRCIP No Inscripto 2%``.
-
-La alícuota por cliente queda cacheada en la pestaña **Contabilidad** del contacto
-(``l10n_ar.partner.tax``). El campo **Referencia** almacena el CRC y el Campo 7 para
-trazabilidad: ``SIRCIP | crc:XX | campo7:YYYYY...``
+El padrón se consulta una vez por cliente y por mes, y queda en la pestaña **Contabilidad** del
+contacto (``l10n_ar.partner.tax``). El campo **Referencia** guarda lo que usa la DDJJ:
+``SIRCIP | crc:XX | letra:F | campo7:YYYYY...`` (o ``SIRCIP | no inscripto``).
 
 Generación del TXT de DDJJ
----------------------------
+--------------------------
 
-#. Ir al diario **SIRCIP Aplicado**.
-#. Abrir el período de liquidación deseado.
+#. Ir al diario **Liquidación SIRCIP Aplicado**.
+#. Seleccionar las percepciones del período a liquidar.
 #. Usar la acción **Descargar TXT** para generar el archivo ``SIRCIP_DDJJ.txt``.
 #. Importar en el menú *Declaración Jurada* del `Portal Federal Tributario — DDJJ <https://www.ca.gob.ar/sistemas/sircip>`_.
 
-**Formato del TXT (CSV 17 campos):** ver ``doc/sircip/Diseno_de_Registros_del_Sistema_SIRCIP.pdf``
+Registros que genera (campo 5, *tipo de registro*):
+
+* **1 Percepción**, **4 No inscripto** y **5 Sobretasa**: uno por percepción, según el impuesto.
+* **6 Anulada**: las notas de crédito, con el número y el CRC de la factura original. Una nota de crédito
+  sin factura original frena la generación, porque el portal la rechaza.
+* **2 Informativo**: las facturas de los meses liquidados a clientes con letra A y entrega en provincia
+  adherida. No llevan percepción: salen de cruzar las facturas del mes.
+
+Campos fijos: régimen (4) siempre ``1`` (Régimen General), ABM (17) siempre ``A``, jurisdicción (7) la de
+entrega y monto (14) igual a base × alícuota / 100 redondeado a 2 decimales, que es como lo valida el
+portal. Formato completo: ``doc/sircip/Diseno_de_Registros_del_Sistema_SIRCIP.pdf``.
 
 Referencias Oficiales
 =====================
@@ -142,67 +164,24 @@ Los documentos de referencia se encuentran en la carpeta ``doc/sircip/``:
 Pendientes
 ==========
 
-Funcionalidad definida pero aún sin implementar
-------------------------------------------------
+**Excluidos (tipo de registro 3) — ajustes al padrón**
+  La Comisión Arbitral publica durante el mes un archivo de *ajustes al padrón* (mismo diseño que el
+  padrón) con contribuyentes excluidos: no se percibe y se declara con tipo 3. Todavía no se procesa.
 
-**TXT de presentación de DDJJ — validación contra el sistema real**
-  El método ``iibb_aplicado_sircip_files_values()`` genera el CSV de 17 campos
-  según la especificación del PDF oficial. Pendiente validar contra el portal SIRCIP
-  con archivos reales de un período completo y confirmar que las validaciones del
-  sistema aceptan el formato generado.
+**Una sola entrega por factura**
+  Si una factura tiene artículos entregados en distintas jurisdicciones, la Comisión Arbitral indica
+  tratar cada entrega como una factura separada. Se toma una sola provincia de entrega por factura.
 
-**Dígito 3 del campo 7 — comportamiento bajo análisis de ARCA**
-  El dígito 3 se define como "Excluido" en la especificación oficial pero su
-  comportamiento exacto está pendiente de definición formal. Actualmente se trata
-  igual que el dígito 1 (solo tasa básica SIRCIP). Ver resolución en el
-  `Q&A CESSI <https://docs.google.com/document/d/1Apl-WG06AZZHXB70uVAWbzcg3sw1ncshoaBVcTdw8AE/edit?tab=t.0>`_
-  y actualizar ``_get_sircip_extra_taxes()`` en
-  ``models/account_fiscal_position_l10n_ar_tax.py``.
+**TXT de DDJJ — validación contra el portal**
+  Pendiente validar un período completo contra el portal SIRCIP con archivos reales.
 
 **Soporte de archivos comprimidos (ZIP/RAR) en la carga del padrón**
-  Actualmente solo se acepta el archivo TXT plano. El padrón SIRCIP podría
-  venir comprimido en futuras versiones del portal. Implementar en
-  ``_get_sircip_aliquot()`` siguiendo el patrón existente de
-  ``_read_parp_from_binary()`` para Santa Fe.
-
-Configuración que el cliente debe realizar manualmente
-------------------------------------------------------
-
-**Posiciones fiscales provinciales para dígitos 4/5 del campo 7**
-  Para contribuyentes donde el campo 7 indica dígito 4 o 5 (doble alícuota:
-  SIRCIP + alícuota propia de la provincia), el sistema busca en orden:
-
-  1. Un registro ``l10n_ar.partner.tax`` existente del contacto para esa provincia.
-  2. Una posición fiscal con percepción configurada para esa jurisdicción.
-
-  Si no encuentra ninguno, lanza un ``UserError`` explicativo. El cliente debe
-  configurar las posiciones fiscales de las provincias que apliquen dígito 4/5.
-
-**Código de régimen (l10n_ar_code) en los impuestos SIRCIP**
-  Los impuestos SIRCIP creados por el módulo no tienen ``l10n_ar_code`` (Código AFIP)
-  pre-configurado. El campo 4 del TXT DDJJ requiere este código. El cliente debe
-  completarlo en ``Contabilidad → Configuración → Impuestos`` para cada impuesto
-  SIRCIP antes de generar el TXT.
-
-Datos que pueden cambiar antes de la fecha de inicio (01/07/2026)
-------------------------------------------------------------------
-
-**Provincias adheridas — Etapa 1**
-  El archivo ``data/res_country_state_data.xml`` tiene activas 8 provincias de
-  Etapa 1 y comentadas 10 provincias adheridas sin fecha confirmada. Antes del
-  01/07/2026 verificar el
-  `spreadsheet oficial de adhesiones <https://docs.google.com/spreadsheets/d/1yqf8C6ztxJZsmEQRC4-g2RttgMoJCqMi-Y-0_1mlugE/edit?gid=0#gid=0>`_
-  y descomentar las que confirmen fecha de inicio.
-
-  Provincias comentadas (adheridas, pendiente de etapa):
-  CABA, Buenos Aires, Catamarca, Córdoba, Chubut, La Pampa, La Rioja, Misiones,
-  Neuquén, Santa Cruz.
+  Solo se acepta el TXT plano. Implementar en ``_get_sircip_aliquot()`` siguiendo el patrón de
+  ``_read_parp_from_binary()`` para Santa Fe si el portal lo empieza a publicar comprimido.
 
 **Posiciones en el campo 7 por jurisdicción**
-  El mapa ``SIRCIP_CAMPO7_POSITION`` en
-  ``models/account_fiscal_position_l10n_ar_tax.py`` está construido a partir del
-  PDF y ejemplos del padrón real. Si ARCA modifica el orden de las jurisdicciones
-  en el campo 7 debe actualizarse.
+  El mapa ``SIRCIP_CAMPO7_POSITION`` en ``models/account_fiscal_position_l10n_ar_tax.py`` sale del PDF y
+  de los ejemplos del padrón. Si ARCA cambia el orden de las jurisdicciones, hay que actualizarlo.
 
 Créditos
 ========
