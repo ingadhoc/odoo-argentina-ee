@@ -3,6 +3,8 @@
 # directory
 ##############################################################################
 from . import res_country_state
+from . import res_company
+from . import res_config_settings
 from . import account_tax
 from . import l10n_ar_partner_tax
 from . import res_company_jurisdiction_padron

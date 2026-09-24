@@ -30,13 +30,13 @@ _AFIP_TRIBUTE_IIBB = "07"
 
 
 def l10n_ar_sircip_post_init_hook(env):
-    """Crea por empresa argentina: grupo de impuestos, cuenta, impuestos plantilla, la posición fiscal
-    "Percepción - SIRCIP", la línea SIRCIP en las posiciones fiscales con percepciones y el diario de
-    liquidación."""
+    """Marca como agentes SIRCIP a las empresas argentinas y les crea: grupo de impuestos, cuenta, impuestos
+    plantilla, la posición fiscal "Percepción - SIRCIP", la línea SIRCIP en las posiciones fiscales con
+    percepciones y el diario de liquidación."""
+    # Las compañías que se creen después se configuran desde Ajustes (res.company.l10n_ar_sircip_agent)
     ar_companies = env["res.company"].search([("chart_template", "in", ("ar_base", "ar_ri", "ar_ex"))])
-    sircip_state = env.ref("l10n_ar_sircip.state_ar_sircip")
-    for company in ar_companies:
-        _create_sircip_data_for_company(env, company, sircip_state)
+    ar_companies.l10n_ar_sircip_agent = True
+    ar_companies._l10n_ar_sircip_setup()
     if env.ref("base.user_demo", raise_if_not_found=False):
         _setup_demo_sircip_padron_data(env)
 
