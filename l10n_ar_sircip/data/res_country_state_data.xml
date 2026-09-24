@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- Provincia ficticia SIRCIP: identificador unívoco del padrón.
+         No representa una provincia real. Se usa solo para vincular el archivo de
+         padrón SIRCIP en res.company.jurisdiction.padron y los impuestos SIRCIP.
+         No debe ser seleccionable por el usuario en formularios de contacto. -->
+    <record id="state_ar_sircip" model="res.country.state">
+        <field name="name">SIRCIP</field>
+        <field name="code">SI</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+
+    <!-- Las provincias adheridas (l10n_ar_is_sircip) las marca cada cliente a medida que cada jurisdicción
+         informa desde cuándo implementa SIRCIP: hasta entonces siguen los regímenes actuales (Q&A CESSI).
+         La demo marca las de la Etapa 1 original. Fuente de adhesiones:
+         https://docs.google.com/spreadsheets/d/1yqf8C6ztxJZsmEQRC4-g2RttgMoJCqMi-Y-0_1mlugE -->
+
+    <record id="tag_perc_iibb_sircip_aplicada" model="account.account.tag">
+        <field name="name">Perc IIBB SIRCIP Aplicada</field>
+        <field name="applicability">taxes</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+
+</odoo>

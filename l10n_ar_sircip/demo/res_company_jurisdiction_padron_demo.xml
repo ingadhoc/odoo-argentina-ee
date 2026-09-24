@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Padrón SIRCIP demo, vigente en el mes en curso para que se pueda facturar en runbot
+         (el archivo dice período 202602: el período del archivo no se valida).
+         Cargado para la compañía demo base (company_ri).
+         El archivo contiene 30 CUITs de ejemplo con distintas letras de alícuota
+         y valores de campo 7 que cubren todos los casos de dígito (1-5).
+
+         Para usar en tests: crear facturas con los partners de demo que tengan
+         CUITs del padrón (ej: 30684401250, 30683021209, etc.). -->
+    <record id="padron_sircip_demo_202602" model="res.company.jurisdiction.padron">
+        <field name="company_id" ref="base.company_ri"/>
+        <field name="state_id" ref="l10n_ar_sircip.state_ar_sircip"/>
+        <field name="l10n_ar_padron_from_date" eval="DateTime.today().strftime('%Y-%m-01')"/>
+        <field name="l10n_ar_padron_to_date" eval="(DateTime.today() + relativedelta(day=31)).strftime('%Y-%m-%d')"/>
+        <field name="filename">padron_sircip_202602.txt</field>
+        <field name="file_padron" type="base64" file="l10n_ar_sircip/demo/padron_sircip_202602.txt"/>
+    </record>
+
+</odoo>
