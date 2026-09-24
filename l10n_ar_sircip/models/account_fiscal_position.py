@@ -16,15 +16,10 @@ class AccountFiscalPosition(models.Model):
             return
         super()._check_tax_group_overlap_fp(fp_tax, partner, partner_tax, company, date)
 
-    def needs_clean_up_0_taxes(self, partner_tax):
+    def _needs_clean_up_0_taxes(self, partner_tax):
         # EXTEND l10n_ar_tax
-        """Checks that the conditions were we do not need to clean up 0 amount taxes
-
-        - case 2: SIRCIP. We do not want it to remove the 0 taxes
-
-        NOTE: We leave it as a separete method in case we want to add more cases
-        in the future and make it inheritable by other modules"""
-        sircip_state = self.env["account.fiscal.position.l10n_ar_tax"]._get_sircip_state()
-        if len(partner_tax) > 1 and partner_tax[0].l10n_ar_state_id == sircip_state:
+        """Los impuestos SIRCIP en 0% no se descartan: aunque no se cobren, la operación se declara
+        en la DDJJ (tipo de registro 2, informativo)."""
+        if partner_tax and all(tax.tax_group_id.name == "SIRCIP" for tax in partner_tax):
             return False
-        super().needs_clean_up_0_taxes(partner_tax)
+        return super()._needs_clean_up_0_taxes(partner_tax)
