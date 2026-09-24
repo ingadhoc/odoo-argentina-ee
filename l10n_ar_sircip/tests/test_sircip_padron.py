@@ -23,6 +23,9 @@ class TestSircipPadron(common.TransactionCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
+        # Switch to company_ri (plan AR) so SIRCIP data exists.
+        company_ri = cls.env.ref("base.company_ri")
+        cls.env = cls.env(context=dict(cls.env.context, allowed_company_ids=[company_ri.id]))
         cls.sircip_state = cls.env.ref("l10n_ar_sircip.state_ar_sircip")
         cls.padron = cls.env["res.company.jurisdiction.padron"].create(
             {
@@ -71,7 +74,7 @@ class TestSircipPadron(common.TransactionCase):
     def test_aliquot_letra_f(self):
         """Letra F → 0.30%."""
         partner = self._make_partner("30684401250")
-        is_in, aliquot, campo7, crc = self.padron._get_sircip_aliquot(partner)
+        is_in, aliquot, campo7, crc, letra = self.padron._get_sircip_aliquot(partner)
         self.assertTrue(is_in)
         self.assertAlmostEqual(aliquot, 0.30)
         self.assertEqual(crc, "25")
@@ -80,21 +83,21 @@ class TestSircipPadron(common.TransactionCase):
     def test_aliquot_letra_a(self):
         """Letra A → 0.00%."""
         partner = self._make_partner("20181117533")
-        is_in, aliquot, campo7, crc = self.padron._get_sircip_aliquot(partner)
+        is_in, aliquot, campo7, crc, letra = self.padron._get_sircip_aliquot(partner)
         self.assertTrue(is_in)
         self.assertAlmostEqual(aliquot, 0.00)
 
     def test_aliquot_letra_x(self):
         """Letra X → 5.00%."""
         partner = self._make_partner("30712330216")
-        is_in, aliquot, campo7, crc = self.padron._get_sircip_aliquot(partner)
+        is_in, aliquot, campo7, crc, letra = self.padron._get_sircip_aliquot(partner)
         self.assertTrue(is_in)
         self.assertAlmostEqual(aliquot, 5.00)
 
     def test_aliquot_letra_b(self):
         """Letra B → 0.01%."""
         partner = self._make_partner("20076105139")
-        is_in, aliquot, campo7, crc = self.padron._get_sircip_aliquot(partner)
+        is_in, aliquot, campo7, crc, letra = self.padron._get_sircip_aliquot(partner)
         self.assertTrue(is_in)
         self.assertAlmostEqual(aliquot, 0.01)
 
@@ -102,7 +105,7 @@ class TestSircipPadron(common.TransactionCase):
         """CUIT no presente en el padrón retorna is_in_padron=False."""
         # CUIT válido del padrón demo que NO está en SAMPLE_PADRON (5 líneas)
         partner = self._make_partner("20294199153")
-        is_in, aliquot, campo7, crc = self.padron._get_sircip_aliquot(partner)
+        is_in, aliquot, campo7, crc, letra = self.padron._get_sircip_aliquot(partner)
         self.assertFalse(is_in)
         self.assertEqual(aliquot, 0.0)
         self.assertEqual(campo7, "")
@@ -110,13 +113,13 @@ class TestSircipPadron(common.TransactionCase):
     def test_campo7_length(self):
         """El campo 7 extraído del padrón tiene exactamente 25 caracteres."""
         partner = self._make_partner("30684401250")
-        _, _, campo7, _ = self.padron._get_sircip_aliquot(partner)
+        _, _, campo7, _, _ = self.padron._get_sircip_aliquot(partner)
         self.assertEqual(len(campo7), 25, "El campo 7 debe tener 25 chars")
 
     def test_campo7_rightmost_is_zero(self):
         """El carácter más a la derecha del campo 7 es siempre '0'."""
         partner = self._make_partner("30684401250")
-        _, _, campo7, _ = self.padron._get_sircip_aliquot(partner)
+        _, _, campo7, _, _ = self.padron._get_sircip_aliquot(partner)
         self.assertEqual(campo7[-1], "0", "El primer char (rightmost) del campo 7 debe ser '0'")
 
     # --- Provincias adheridas etapa 1 ---
@@ -143,3 +146,108 @@ class TestSircipPadron(common.TransactionCase):
         """Provincias no adheridas (ej. Corrientes) tienen l10n_ar_is_sircip=False."""
         state_corrientes = self.env.ref("base.state_ar_w")  # Corrientes, no adherida
         self.assertFalse(state_corrientes.l10n_ar_is_sircip)
+
+    # --- Auto-selección de la posición fiscal ---
+
+    def test_fiscal_position_has_correct_configuration(self):
+        """La posición fiscal SIRCIP tiene la configuración correcta para auto-selección.
+
+        Para que se auto-seleccione en facturas necesita:
+        - auto_apply=True
+        - country_id=AR (aplica a todos los partners argentinos)
+        - sequence=9999 (última, no compite con posiciones provinciales específicas)
+        - l10n_ar_afip_responsibility_type_ids contiene IVA RI
+        """
+        ivari = self.env.ref("l10n_ar.res_IVARI", raise_if_not_found=False)
+        self.assertTrue(ivari, "l10n_ar.res_IVARI no encontrado — verificar que l10n_ar esté instalado")
+
+        fp = self.env["account.fiscal.position"].search(
+            [("name", "=", "Percepción - SIRCIP"), ("company_id", "=", self.env.company.id)],
+            limit=1,
+        )
+        self.assertTrue(
+            fp,
+            "Posición fiscal 'Percepción - SIRCIP' no encontrada — "
+            "debe crearse en el post_init_hook al instalar el módulo con empresa de plan AR",
+        )
+
+        self.assertTrue(fp.auto_apply, "auto_apply debe ser True para que se aplique automáticamente en facturas")
+        self.assertEqual(fp.sequence, 9999, "sequence debe ser 9999 (última en ejecutarse)")
+        self.assertEqual(fp.country_id, self.env.ref("base.ar"), "country_id debe ser AR")
+        self.assertIn(
+            ivari,
+            fp.l10n_ar_afip_responsibility_type_ids,
+            "l10n_ar_afip_responsibility_type_ids debe incluir IVA RI — "
+            "sin esto la posición no se auto-selecciona en facturas de clientes RI",
+        )
+
+    # --- Tipo de registro DDJJ (validación de impuestos base) ---
+
+    def test_tipo_registro_excluido_tax_setup(self):
+        """El impuesto 'SIRCIP Excluido' existe y tiene las propiedades para activar Tipo 3 en TXT.
+
+        En el TXT DDJJ, la condición es: tax.name == _SIRCIP_EXCLUIDO_TAX_NAME → Tipo 3.
+        """
+        from odoo.addons.l10n_ar_sircip.models.account_fiscal_position_l10n_ar_tax import (
+            _SIRCIP_EXCLUIDO_TAX_NAME,
+        )
+
+        tax = self.env["account.tax"].search(
+            [
+                ("name", "=", _SIRCIP_EXCLUIDO_TAX_NAME),
+                ("tax_group_id.name", "=", "SIRCIP"),
+                ("company_id", "=", self.env.company.id),
+            ],
+            limit=1,
+        )
+        self.assertTrue(tax, "Debe existir impuesto '%s' — creado en el post_init_hook" % _SIRCIP_EXCLUIDO_TAX_NAME)
+        self.assertEqual(tax.name, _SIRCIP_EXCLUIDO_TAX_NAME, "Nombre exacto requerido para detección en TXT")
+        self.assertEqual(tax.amount, 0.0, "Excluido es un marcador a $0")
+        self.assertEqual(tax.tax_group_id.name, "SIRCIP")
+
+    def test_tipo_registro_informativo_tax_setup(self):
+        """Existe un impuesto SIRCIP con alícuota 0% (distinto de Excluido) para Tipo 2 Informativo.
+
+        En el TXT DDJJ, la condición es:
+        tax.amount == 0.0 AND tax.tax_group_id.name == 'SIRCIP' AND tax.name != 'SIRCIP Excluido'
+        → Tipo 2 Informativo (padrón devolvió letra A = 0%).
+        """
+        from odoo.addons.l10n_ar_sircip.models.account_fiscal_position_l10n_ar_tax import (
+            _SIRCIP_EXCLUIDO_TAX_NAME,
+        )
+
+        tax = self.env["account.tax"].search(
+            [
+                ("amount", "=", 0.0),
+                ("tax_group_id.name", "=", "SIRCIP"),
+                ("name", "!=", _SIRCIP_EXCLUIDO_TAX_NAME),
+                ("company_id", "=", self.env.company.id),
+            ],
+            limit=1,
+        )
+        self.assertTrue(
+            tax,
+            "Debe existir impuesto SIRCIP con alícuota 0% distinto de Excluido — "
+            "es el marcador para Tipo 2 Informativo en el TXT",
+        )
+        self.assertEqual(tax.amount, 0.0)
+        self.assertEqual(tax.tax_group_id.name, "SIRCIP")
+        self.assertNotEqual(tax.name, _SIRCIP_EXCLUIDO_TAX_NAME)
+
+    def test_tipo_registro_no_inscripto_tax_setup(self):
+        """Existe impuesto 'SIRCIP No Inscripto' con 'No Inscripto' en el nombre para Tipo 4.
+
+        En el TXT DDJJ, la condición es: 'No Inscripto' in tax.name → Tipo 4.
+        Este impuesto también es el default_tax_id de la línea de posición fiscal.
+        """
+        tax = self.env["account.tax"].search(
+            [
+                ("name", "ilike", "No Inscripto"),
+                ("tax_group_id.name", "=", "SIRCIP"),
+                ("company_id", "=", self.env.company.id),
+            ],
+            limit=1,
+        )
+        self.assertTrue(tax, "Debe existir impuesto SIRCIP No Inscripto — creado en el post_init_hook")
+        self.assertIn("No Inscripto", tax.name, "El nombre debe contener 'No Inscripto' para la detección en TXT")
+        self.assertGreater(tax.amount, 0.0, "No Inscripto cobra percepción (amount > 0)")

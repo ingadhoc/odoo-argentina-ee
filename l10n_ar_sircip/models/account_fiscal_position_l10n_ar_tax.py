@@ -45,6 +45,10 @@ SIRCIP_CAMPO7_POSITION = {
     # índice 24 = siempre '0', se descarta
 }
 
+# Nombre del impuesto marcador para operaciones excluidas (dígito 3 del campo 7).
+# Fuente: CESSI Q&A — "Tipo de Registro 3: Excluido, no figura en factura pero sí en DJ"
+_SIRCIP_EXCLUIDO_TAX_NAME = "SIRCIP Excluido"
+
 
 class AccountFiscalPositionL10nArTax(models.Model):
     _inherit = "account.fiscal.position.l10n_ar_tax"
@@ -78,6 +82,7 @@ class AccountFiscalPositionL10nArTax(models.Model):
         :return: (aliquot_or_None, ref_string)
                  - aliquot_or_None: float o None (None → usar default_tax_id = No Inscripto)
                  - ref_string: trazabilidad almacenada en l10n_ar.partner.tax.ref
+                   Formato: "SIRCIP | crc:XX | letra:F | campo7:YYY"
         """
         self.ensure_one()
         sircip_state = self._get_sircip_state()
@@ -92,13 +97,44 @@ class AccountFiscalPositionL10nArTax(models.Model):
                 % {"from": date, "to": to_date}
             )
 
-        is_in_padron, aliquot, campo7, crc = padron_file._get_sircip_aliquot(partner)
+        is_in_padron, aliquot, campo7, crc, letra = padron_file._get_sircip_aliquot(partner)
 
         if not is_in_padron:
             return None, _("SIRCIP Non-Registered (not found in padron)")
 
-        ref = "SIRCIP | crc:%s | campo7:%s" % (crc, campo7)
+        ref = "SIRCIP | crc:%s | letra:%s | campo7:%s" % (crc, letra, campo7)
         return aliquot, ref
+
+    def _get_delivery_state(self, partner):
+        """Obtiene la provincia de entrega para el cálculo del campo 7.
+
+        Prioridad:
+        1. partner_shipping_id de la factura activa en el contexto
+        2. partner_shipping_id pasado explícitamente en el contexto
+        3. state_id del propio partner
+
+        Solo retorna la provincia si está adherida a SIRCIP (l10n_ar_is_sircip=True).
+        """
+        delivery_partner = None
+
+        # Buscar la factura activa en el contexto para obtener partner_shipping_id
+        ctx = self.env.context
+        if ctx.get("partner_shipping_id"):
+            delivery_partner = self.env["res.partner"].browse(ctx["partner_shipping_id"])
+        elif ctx.get("active_model") == "account.move" and ctx.get("active_id"):
+            move = self.env["account.move"].browse(ctx["active_id"])
+            if move.exists() and move.partner_shipping_id:
+                delivery_partner = move.partner_shipping_id
+
+        # Usar la provincia del delivery partner si está adherida a SIRCIP
+        if delivery_partner and delivery_partner.state_id and delivery_partner.state_id.l10n_ar_is_sircip:
+            return delivery_partner.state_id
+
+        # Fallback al state_id del propio partner
+        if partner.state_id and partner.state_id.l10n_ar_is_sircip:
+            return partner.state_id
+
+        return False
 
     def _get_sircip_campo7_digit(self, campo7, delivery_state):
         """Obtiene el dígito del campo 7 para la provincia de entrega dada.
@@ -118,9 +154,91 @@ class AccountFiscalPositionL10nArTax(models.Model):
         except (ValueError, IndexError):
             return 0
 
+    def _sircip_tax_name(self, aliquot, letra, delivery_state):
+        """Genera el nombre del impuesto SIRCIP dinámico.
+
+        Formato: 'SIRCIP [Provincia] X.XX% (Letra)'
+        Ejemplo: 'SIRCIP Chaco 3.00% (T)'
+        """
+        province = delivery_state.name if delivery_state else ""
+        if province:
+            return "SIRCIP %s %.2f%% (%s)" % (province, aliquot, letra)
+        return "SIRCIP %.2f%% (%s)" % (aliquot, letra)
+
+    def _ensure_sircip_tax(self, aliquot, letra, delivery_state):
+        """Busca o crea un impuesto SIRCIP con el nombre que incluye provincia y letra.
+
+        Busca primero por nombre exacto (con provincia). Si no encuentra,
+        busca por monto (compatibilidad con impuestos creados con nombre anterior).
+        Excluye el impuesto 'SIRCIP Excluido' (es un marcador, no una alícuota real).
+        """
+        name = self._sircip_tax_name(aliquot, letra, delivery_state)
+        domain = self._get_tax_domain()
+        # Filtrar siempre por grupo SIRCIP para no mezclar con impuestos provinciales estándar.
+        amount_domain = domain + [
+            ("amount", "=", aliquot),
+            ("name", "!=", _SIRCIP_EXCLUIDO_TAX_NAME),
+            ("tax_group_id.name", "=", "SIRCIP"),
+        ]
+
+        # 1. Buscar por nombre exacto (con provincia y letra)
+        tax = (
+            self.env["account.tax"]
+            .with_context(active_test=False)
+            .search(amount_domain + [("name", "=", name)], limit=1)
+        )
+        # 2. Fallback por monto (impuestos SIRCIP con nombre anterior o sin provincia)
+        if not tax:
+            tax = self.env["account.tax"].with_context(active_test=False).search(amount_domain, limit=1)
+
+        if tax:
+            if not tax.active:
+                tax.active = True
+            return tax
+
+        # 3. Crear con el nuevo nombre y la jurisdicción de entrega como estado fiscal.
+        # Usamos copy() para heredar repartition_line_ids del impuesto base, y luego
+        # write() explícito para garantizar que la jurisdicción queda correctamente asignada.
+        sircip_state = self._get_sircip_state()
+        new_tax = self.default_tax_id.copy(
+            default={
+                "sequence": 10,
+                "amount": aliquot,
+                "active": True,
+                "name": name,
+            }
+        )
+        state_id = delivery_state.id if delivery_state else (sircip_state.id if sircip_state else False)
+        if state_id:
+            new_tax.write({"l10n_ar_state_id": state_id})
+        return new_tax
+
+    def _get_sircip_excluido_tax(self):
+        """Retorna el impuesto marcador 'SIRCIP Excluido' (0%, dígito 3 del campo 7).
+
+        Este impuesto se agrega a la factura a $0 para que el TXT de DDJJ lo detecte
+        y lo reporte como Tipo de Registro = 3 (Excluido).
+        Fuente: CESSI Q&A — la operación no impacta la factura pero sí debe declararse en DJ.
+        """
+        return self.env["account.tax"].search(
+            [
+                ("name", "=", _SIRCIP_EXCLUIDO_TAX_NAME),
+                ("tax_group_id.name", "=", "SIRCIP"),
+                ("company_id", "=", self.fiscal_position_id.company_id.id),
+                ("type_tax_use", "=", "sale"),
+            ],
+            limit=1,
+        )
+
     def _get_tax_from_ws(self, partner, date):
-        """Override para SIRCIP: cuando el dígito del campo 7 lo requiere,
-        retorna múltiples impuestos (base + sobrealícuota)."""
+        """Override para SIRCIP: aplica los impuestos correctos según el dígito del campo 7.
+
+        Dígitos del campo 7 (leídos para la provincia de entrega):
+        - 1: solo tasa básica SIRCIP
+        - 2: tasa básica + sobrealícuota 1% ("falta de alta en jurisdicción")
+        - 3: operación excluida — agrega impuesto marcador a $0, declarar en DJ tipo 3
+        - 4/5: tasa básica + alícuota propia de la provincia (no adherida al SIRCIP)
+        """
         sircip_state = self._get_sircip_state()
         if not (sircip_state and self.default_tax_id.l10n_ar_state_id == sircip_state):
             return super()._get_tax_from_ws(partner, date)
@@ -130,42 +248,57 @@ class AccountFiscalPositionL10nArTax(models.Model):
 
         aliquot, ref = self._get_sircip_padron_data(partner, from_date, to_date)
 
-        if aliquot is None:
-            base_tax = self.default_tax_id
-        else:
-            base_tax = self._ensure_tax(aliquot)
+        # Extraer letra del ref para el naming del impuesto
+        letra = ""
+        if ref and "letra:" in ref:
+            letra = ref.split("letra:")[-1].split("|")[0].strip()
 
-        # Buscar provincia de entrega del partner
-        delivery_state = False
-        if partner.state_id and partner.state_id.l10n_ar_is_sircip:
-            delivery_state = partner.state_id
-
-        # Determinar impuestos adicionales según campo 7
-        extra_taxes = self.env["account.tax"]
+        # Determinar la provincia de entrega y el dígito del campo 7
+        delivery_state = self._get_delivery_state(partner)
+        digit = 0
         if delivery_state and aliquot is not None:
             campo7 = ref.split("campo7:")[-1].strip() if "campo7:" in ref else ""
             digit = self._get_sircip_campo7_digit(campo7, delivery_state)
+
+        if digit == 3:
+            # Excluido: agrega impuesto marcador a $0 en la factura.
+            # Nada se cobra al cliente pero la operación debe declararse en DJ tipo 3.
+            # Fuente: CESSI Q&A — "no es necesario incorporar nada en la factura,
+            # declarar con Tipo de Registro = 3-Excluido"
+            tax_to_cache = self._get_sircip_excluido_tax()
+            taxes_to_return = tax_to_cache
+        else:
+            # Flujo normal: calcular impuesto base + extras
+            if aliquot is None:
+                tax_to_cache = self.default_tax_id
+            else:
+                tax_to_cache = self._ensure_sircip_tax(aliquot, letra, delivery_state)
             extra_taxes = self._get_sircip_extra_taxes(digit, delivery_state, partner, date)
+            taxes_to_return = tax_to_cache | extra_taxes
 
-        # Cachear alícuota base en l10n_ar.partner.tax
-        self.env["l10n_ar.partner.tax"].create(
-            {
-                "partner_id": partner.id,
-                "tax_id": base_tax.id,
-                "from_date": from_date,
-                "to_date": to_date,
-                "ref": ref,
-            }
-        )
+        # Cachear en l10n_ar.partner.tax para evitar re-consultar el padrón
+        if tax_to_cache:
+            self.env["l10n_ar.partner.tax"].create(
+                {
+                    "partner_id": partner.id,
+                    "tax_id": tax_to_cache.id,
+                    "from_date": from_date,
+                    "to_date": to_date,
+                    "ref": ref,
+                }
+            )
 
-        return base_tax | extra_taxes
+        return taxes_to_return
 
     def _get_sircip_extra_taxes(self, digit, delivery_state, partner=None, date=None):
         """Impuestos adicionales según el dígito del campo 7.
 
-        Dígito 2: sobrealícuota SIRCIP (1%)
-        Dígito 4/5: alícuota propia de la provincia (SIRCIP + tasa provincial)
-        Resto: sin impuestos extra
+        | Dígito | Significado              | Extra tax                        |
+        |--------|--------------------------|----------------------------------|
+        |   1    | Adherida, inscripto      | Ninguno                          |
+        |   2    | Adherida, sin alta       | Sobrealícuota 1% (falta de alta) |
+        |   4/5  | No adherida, con/sin alta| Alícuota provincial propia       |
+        Nota: dígito 3 (Excluido) es manejado directamente en _get_tax_from_ws.
         """
         taxes = self.env["account.tax"]
         if digit == 2:

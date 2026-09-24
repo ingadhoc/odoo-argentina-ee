@@ -9,7 +9,9 @@ from odoo.addons.l10n_ar_account_tax_settlement.models.account_journal import (
     get_line_tax_base,
     get_pos_and_number,
 )
-from odoo.exceptions import RedirectWarning, ValidationError
+from odoo.exceptions import ValidationError
+
+from .account_fiscal_position_l10n_ar_tax import _SIRCIP_EXCLUIDO_TAX_NAME
 
 _logger = logging.getLogger(__name__)
 
@@ -22,7 +24,10 @@ _TIPO_COMPROBANTE_SIRCIP = {
 }
 
 # Tipo de Registro SIRCIP (campo 5 del DDJJ)
+# Fuente: doc/sircip/Diseno_de_Registros_del_Sistema_SIRCIP.pdf
 _TIPO_REGISTRO_PERCEPCION = "1"
+_TIPO_REGISTRO_INFORMATIVO = "2"  # Alícuota 0% en padrón: declarar pero no cobrar
+_TIPO_REGISTRO_EXCLUIDO = "3"  # Operación excluida: declarar con $0, sin factura
 _TIPO_REGISTRO_NO_INSCRIPTO = "4"
 _TIPO_REGISTRO_SOBRETASA = "5"
 _TIPO_REGISTRO_ANULADA = "6"
@@ -44,10 +49,10 @@ class AccountJournal(models.Model):
         1.  CUIT del contribuyente  Numérico(11)
         2.  CRC del contribuyente   Numérico(2)
         3.  Fecha de percepción     dd/mm/aaaa
-        4.  Tipo de régimen         Numérico(3)  (l10n_ar_code del impuesto)
-        5.  Tipo de registro        Numérico(2)  1=Perc,4=NoInscripto,5=Sobretasa,6=Anulada
-        6.  Código op. exceptuada   Numérico(2)  (solo tipo 3=Excluido, vacío para el resto)
-        7.  Jurisdicción            Numérico(3)
+        4.  Tipo de régimen         Numérico(3)  Siempre "1" = Régimen General
+        5.  Tipo de registro        Numérico(2)  1=Perc,2=Inform,3=Excluido,4=NoInscr,5=Sobretasa,6=Anulada
+        6.  Código op. exceptuada   Numérico(2)  (solo tipo 3=Excluido)
+        7.  Jurisdicción            Numérico(3)  Provincia de entrega
         8.  Tipo de comprobante     Numérico(3)  1=Fact,2=ND,102=NC,...
         9.  Letra del comprobante   Char(1)
         10. Punto de venta          Numérico(5)
@@ -59,7 +64,7 @@ class AccountJournal(models.Model):
         16. CRC devolución          Numérico(2)  (solo devoluciones)
         17. ABM                     Alfanumérico(1) A=Alta,M=Modificación,B=Baja
 
-        Ejemplo: 30100100106,34,03/03/2026,11,1,,904,1,A,00002,03431222,12342.03,2.00,246.84,,,A
+        Ejemplo: 30100100106,34,03/03/2026,1,1,,906,1,A,00002,03431222,12342.03,0.30,37.03,,,A
 
         Fuente: doc/sircip/Diseno_de_Registros_del_Sistema_SIRCIP.pdf
         """
@@ -75,30 +80,33 @@ class AccountJournal(models.Model):
             cuit = partner.ensure_vat()
 
             # --- Campo 2: CRC ---
-            # El CRC proviene del registro l10n_ar.partner.tax cuyo ref tiene
-            # formato "SIRCIP | crc:XX | campo7:YYY..."
             crc = self._sircip_crc_from_line(line)
 
             # --- Campo 3: Fecha de percepción ---
             fecha = fields.Date.from_string(line.date).strftime("%d/%m/%Y")
 
             # --- Campo 4: Tipo de régimen de percepción ---
-            if not tax.l10n_ar_code:
-                raise RedirectWarning(
-                    message=_(
-                        "Tax '%(tax)s' does not have an AFIP Code (l10n_ar_code) "
-                        "configured. It is required to generate the SIRCIP TXT.",
-                        tax=tax.name,
-                    ),
-                    action=tax.get_formview_action(),
-                    button_text=_("Edit Tax"),
-                )
-            tipo_regimen = tax.l10n_ar_code
+            # Siempre "1" = Régimen General. Por el momento es el único régimen
+            # implementado en SIRCIP.
+            # Fuente: CESSI Q&A — "En el campo 4 se deberá cargar el valor
+            # 1 = Régimen General, que por el momento es el único régimen
+            # que implementará el SIRCIP."
+            tipo_regimen = "1"
 
             # --- Campo 5: Tipo de registro ---
             internal_type = move.move_type
             if internal_type == "out_refund":
                 tipo_registro = _TIPO_REGISTRO_ANULADA
+            elif tax.name == _SIRCIP_EXCLUIDO_TAX_NAME:
+                # Dígito 3 del campo 7: operación excluida.
+                # Fuente: CESSI Q&A — "declarar en DJ con Tipo de Registro = 3-Excluido,
+                # no es necesario incorporar nada en la factura."
+                tipo_registro = _TIPO_REGISTRO_EXCLUIDO
+            elif tax.amount == 0.0 and tax.tax_group_id.name == "SIRCIP":
+                # Alícuota 0% (letra A del padrón): informativo.
+                # Fuente: CESSI Q&A — "Si la alícuota del padrón sea 0%, se debe declarar
+                # la operación con Tipo de Registro = 2 - Informativo."
+                tipo_registro = _TIPO_REGISTRO_INFORMATIVO
             elif "No Inscripto" in tax.name:
                 tipo_registro = _TIPO_REGISTRO_NO_INSCRIPTO
             elif "Sobre Alícuota" in tax.name:
@@ -109,17 +117,28 @@ class AccountJournal(models.Model):
             # --- Campo 6: Código de operación exceptuada (solo tipo 3=Excluido) ---
             cod_op_exceptuada = ""
 
-            # --- Campo 7: Jurisdicción ---
-            state = tax.l10n_ar_state_id
-            if not state or not state.jurisdiction_code:
-                raise ValidationError(
-                    _(
-                        "Tax '%(tax)s' does not have a jurisdiction configured, "
-                        "or the province does not have a jurisdiction code.",
-                        tax=tax.name,
+            # --- Campo 7: Jurisdicción — provincia de entrega de la operación ---
+            # Para SIRCIP se usa la provincia de entrega (partner_shipping_id o
+            # domicilio del partner), no tax.l10n_ar_state_id (que apunta a la
+            # provincia ficticia SIRCIP).
+            # Fuente: CESSI Q&A — "el campo 7 Jurisdicción es donde se realizó la entrega."
+            shipping = move.partner_shipping_id or partner
+            delivery_state = shipping.state_id if shipping else None
+            if delivery_state and delivery_state.jurisdiction_code:
+                jurisdiccion = delivery_state.jurisdiction_code
+            else:
+                # Fallback: verificar si el impuesto tiene jurisdicción real
+                state = tax.l10n_ar_state_id
+                sircip_state = self.env.ref("l10n_ar_sircip.state_ar_sircip", raise_if_not_found=False)
+                if not state or not state.jurisdiction_code or state == sircip_state:
+                    raise ValidationError(
+                        _(
+                            "Tax '%(tax)s' does not have a jurisdiction configured, "
+                            "or the province does not have a jurisdiction code.",
+                            tax=tax.name,
+                        )
                     )
-                )
-            jurisdiccion = state.jurisdiction_code
+                jurisdiccion = state.jurisdiction_code
 
             # --- Campo 8: Tipo de comprobante ---
             doc_type = line.l10n_latam_document_type_id
@@ -127,7 +146,7 @@ class AccountJournal(models.Model):
             tipo_comprobante = _TIPO_COMPROBANTE_SIRCIP.get(doc_internal_type, 1)
 
             # --- Campo 9: Letra del comprobante ---
-            letra = doc_type.l10n_ar_letter if doc_type else ""
+            letra_comp = doc_type.l10n_ar_letter if doc_type else ""
 
             # --- Campos 10 y 11: Punto de venta y número de comprobante ---
             pos, number = get_pos_and_number(move.l10n_latam_document_number or "")
@@ -142,17 +161,19 @@ class AccountJournal(models.Model):
             monto = abs(line.balance)
 
             # --- Campos 15 y 16: nro. comprobante original y CRC devolución ---
-            # Solo para anulaciones/devoluciones (nota de crédito)
             nro_original = ""
             crc_devolucion = ""
             if tipo_registro == _TIPO_REGISTRO_ANULADA:
                 original = move._found_related_invoice() if hasattr(move, "_found_related_invoice") else None
                 if original:
                     nro_original = original.l10n_latam_document_number or ""
-                    crc_devolucion = crc  # mismo CRC del contribuyente
+                    crc_devolucion = crc
 
             # --- Campo 17: ABM ---
-            abm = "A"  # Alta — Modificación y Baja se gestionan desde el portal
+            # Por ahora siempre "A" (Alta). Los valores "M" y "B" están en desarrollo
+            # por parte de ARCA/CA.
+            # Fuente: CESSI Q&A — "En el campo 17 ABM siempre se deberá colocar una 'A'."
+            abm = "A"
 
             row = [
                 cuit,
@@ -163,7 +184,7 @@ class AccountJournal(models.Model):
                 cod_op_exceptuada,
                 jurisdiccion,
                 str(tipo_comprobante),
-                letra,
+                letra_comp,
                 "%05d" % int(pos or 0),
                 "%08d" % int(number or 0),
                 "%.2f" % base,
@@ -180,7 +201,7 @@ class AccountJournal(models.Model):
     def _sircip_crc_from_line(self, line):
         """Extrae el CRC del registro l10n_ar.partner.tax cacheado para este partner.
 
-        El ref tiene formato: 'SIRCIP | crc:XX | campo7:YYY...'
+        El ref tiene formato: 'SIRCIP | crc:XX | letra:F | campo7:YYY...'
         """
         partner = line.move_id.partner_id.commercial_partner_id
         partner_tax = self.env["l10n_ar.partner.tax"].search(

@@ -76,4 +76,27 @@
         <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
     </record>
 
+    <!-- 0% Informativo — en padrón con letra A (0%), dígito 1 en Chaco → Tipo 2 en TXT -->
+    <!-- CUIT 30500923837 en padrón: letra A, campo7[18]='1' (Chaco) -->
+    <record id="demo_partner_sircip_informativo" model="res.partner">
+        <field name="name">SIRCIP Demo - 0% Informativo (Chaco)</field>
+        <field name="is_company" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="state_id" ref="base.state_ar_h"/>
+        <field name="vat">30500923837</field>
+        <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
+    <!-- No Inscripto — CUIT no presente en el padrón → tax default "No Inscripto 2%" → Tipo 4 en TXT -->
+    <record id="demo_partner_sircip_no_inscripto" model="res.partner">
+        <field name="name">SIRCIP Demo - No Inscripto</field>
+        <field name="is_company" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="state_id" ref="base.state_ar_h"/>
+        <field name="vat">30123456781</field>
+        <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
 </odoo>
