@@ -87,6 +87,8 @@ class TestSircipInvoice(TestSircipCommon):
             self.skipTest("l10n_ar_sale no está instalado: las percepciones del pedido las calcula ese módulo")
         partner = self.partners["digit2"]
         salta = self._delivery(partner, self.salta)
+        # Facturar lo pedido: el default depende de los módulos instalados (con stock es lo entregado)
+        self.product_iva_21.invoice_policy = "order"
         order = self.env["sale.order"].create(
             {
                 "partner_id": partner.id,
