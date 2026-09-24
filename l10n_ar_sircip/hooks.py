@@ -7,9 +7,15 @@ import logging
 _logger = logging.getLogger(__name__)
 
 SIRCIP_TAXES = [
-    ("tax_sircip_base", "SIRCIP A 0.0", 0.0, False),
+    # Base 0% — declarar como Tipo 2 "Informativo" en DDJJ (alícuota A del padrón)
+    ("tax_sircip_base", "SIRCIP 0.0 (A)", 0.0, False),
+    # Sobrealícuota — Tipo 5 en DDJJ (falta de alta en jurisdicción adherida)
     ("tax_sircip_sobretasa", "SIRCIP Sobre Alícuota 1%", 1.0, False),
+    # No Inscripto — Tipo 4 en DDJJ (CUIT no encontrado en el padrón)
     ("tax_sircip_no_inscripto", "SIRCIP No Inscripto 2%", 2.0, True),
+    # Excluido — Tipo 3 en DDJJ (dígito 3 del campo 7: excluido, $0 en factura)
+    # Fuente: CESSI Q&A — "Tipo de Registro 3: no figura en factura pero sí en DJ"
+    ("tax_sircip_excluido", "SIRCIP Excluido", 0.0, False),
 ]
 
 
@@ -114,6 +120,8 @@ def _create_sircip_data_for_company(env, company, sircip_state):
         ],
         limit=1,
     )
+    ivari = env.ref("l10n_ar.res_IVARI", raise_if_not_found=False)
+
     if not fiscal_pos:
         fiscal_pos = FiscalPos.create(
             {
@@ -127,6 +135,10 @@ def _create_sircip_data_for_company(env, company, sircip_state):
                     "(Multilateral Agreement). Do not assign individual "
                     "provinces — detection is automatic."
                 ),
+                # IVA RI required for auto-selection on invoices.
+                # Without this the fiscal position won't match partners
+                # automatically in the invoice form.
+                "l10n_ar_afip_responsibility_type_ids": ([(6, 0, [ivari.id])] if ivari else []),
             }
         )
         env["ir.model.data"].create(
@@ -138,6 +150,10 @@ def _create_sircip_data_for_company(env, company, sircip_state):
                 "noupdate": True,
             }
         )
+    else:
+        # Ensure IVA RI is set on existing fiscal positions (idempotent update).
+        if ivari and ivari not in fiscal_pos.l10n_ar_afip_responsibility_type_ids:
+            fiscal_pos.l10n_ar_afip_responsibility_type_ids = [(4, ivari.id)]
 
     # 4. Línea de posición fiscal con webservice=padron e impuesto No Inscripto
     if default_tax:
@@ -183,13 +199,18 @@ def _create_sircip_data_for_company(env, company, sircip_state):
             )
 
 
-# XML IDs de los 5 partners demo SIRCIP
+# XML IDs de los 7 partners demo SIRCIP
 _DEMO_PARTNER_XMLIDS = [
     "l10n_ar_sircip.demo_partner_sircip_digit1",
     "l10n_ar_sircip.demo_partner_sircip_digit2",
     "l10n_ar_sircip.demo_partner_sircip_digit3",
     "l10n_ar_sircip.demo_partner_sircip_digit4",
     "l10n_ar_sircip.demo_partner_sircip_digit5",
+    # 0% informativo: en padrón con letra A (alícuota 0%), dígito 1 en Chaco → Tipo 2 en TXT
+    "l10n_ar_sircip.demo_partner_sircip_informativo",
+    # No inscripto: CUIT no está en el padrón → el hook logea warning y no crea partner.tax
+    # Al facturar se aplicará el impuesto default "SIRCIP No Inscripto 2%" → Tipo 4 en TXT
+    "l10n_ar_sircip.demo_partner_sircip_no_inscripto",
 ]
 
 
@@ -247,18 +268,28 @@ def _setup_demo_sircip_aliquots(env, sircip_state):
         ):
             continue
 
-        is_in, aliquot, campo7, crc = padron._get_sircip_aliquot(partner)
+        is_in, aliquot, campo7, crc, letra = padron._get_sircip_aliquot(partner)
         if not is_in:
             _logger.warning("l10n_ar_sircip demo: CUIT %s no encontrado en padrón demo.", partner.vat)
             continue
 
-        # Buscar o crear el impuesto SIRCIP con la alícuota de la letra
+        # Buscar o crear el impuesto SIRCIP con la alícuota + letra en el nombre.
+        # Para el demo usamos Chaco (state_ar_h) como provincia de entrega.
+        chaco_state = env.ref("base.state_ar_h", raise_if_not_found=False)
+        if chaco_state and aliquot > 0.0:
+            name = "SIRCIP %s %.2f%% (%s)" % (chaco_state.name, aliquot, letra)
+        elif aliquot == 0.0:
+            name = "SIRCIP 0.0 (A)"
+        else:
+            name = "SIRCIP %.2f%% (%s)" % (aliquot, letra)
+
         tax = env["account.tax"].search(
             [
                 ("amount", "=", aliquot),
                 ("tax_group_id", "=", sircip_group.id),
                 ("company_id", "=", company_ri.id),
                 ("type_tax_use", "=", "sale"),
+                ("name", "!=", "SIRCIP Excluido"),
             ],
             limit=1,
         )
@@ -268,12 +299,12 @@ def _setup_demo_sircip_aliquots(env, sircip_state):
                     ("tax_group_id", "=", sircip_group.id),
                     ("company_id", "=", company_ri.id),
                     ("type_tax_use", "=", "sale"),
+                    ("name", "!=", "SIRCIP Excluido"),
                 ],
                 limit=1,
             )
             if not base_tax:
                 continue
-            name = "SIRCIP A 0.0" if aliquot == 0.0 else "SIRCIP %.2f%%" % aliquot
             tax = base_tax.copy(
                 default={
                     "name": name,
@@ -290,7 +321,7 @@ def _setup_demo_sircip_aliquots(env, sircip_state):
                 "tax_id": tax.id,
                 "from_date": from_date,
                 "to_date": to_date,
-                "ref": "SIRCIP | crc:%s | campo7:%s" % (crc, campo7),
+                "ref": "SIRCIP | crc:%s | letra:%s | campo7:%s" % (crc, letra, campo7),
             }
         )
         created += 1

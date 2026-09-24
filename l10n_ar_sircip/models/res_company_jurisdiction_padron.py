@@ -67,7 +67,7 @@ class ResCompanyJurisdictionPadron(models.Model):
         - valores 1-5: tipo de percepción a aplicar en esa provincia
 
         :param partner: res.partner con el CUIT a buscar
-        :return: tuple (is_in_padron, aliquot_per, campo7_string, crc_str)
+        :return: tuple (is_in_padron, aliquot_per, campo7_string, crc_str, letra)
         """
         self.ensure_one()
         cuit_clean = (partner.vat or "").replace("-", "").strip()
@@ -107,6 +107,6 @@ class ResCompanyJurisdictionPadron(models.Model):
                 aliquot,
                 campo7[:8],
             )
-            return True, aliquot, campo7, crc_str
+            return True, aliquot, campo7, crc_str, letra
 
-        return False, 0.0, "", ""
+        return False, 0.0, "", "", ""
