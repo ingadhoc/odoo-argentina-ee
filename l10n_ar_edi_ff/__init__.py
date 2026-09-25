@@ -1,4 +1,2 @@
 from . import models
-from . import patch
-
-patch.apply()
+from . import wizards
