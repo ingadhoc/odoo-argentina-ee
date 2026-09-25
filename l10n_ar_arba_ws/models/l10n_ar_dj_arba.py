@@ -35,6 +35,7 @@ class L10nArDjArba(models.Model):
             ("draft", "Draft"),
             ("open", "Open"),
             ("close", "Closed"),
+            ("cancel", "Cancelled"),
         ],
         default="draft",
         tracking=True,
@@ -61,9 +62,12 @@ class L10nArDjArba(models.Model):
 
     # Constrains
 
-    @api.constrains("display_name", "company_id", "state")
+    @api.constrains("date", "company_id", "state")
     def unique_by_company_period_state(self):
         for ddjj in self:
+            # A cancelled DDJJ no longer represents the period, several of them may coexist
+            if ddjj.state == "cancel":
+                continue
             from_date, to_date = ddjj._find_dates(ddjj.date)
             other_ddjj_arba = self.search(
                 [
@@ -216,11 +220,14 @@ class L10nArDjArba(models.Model):
         un intento previo de abrir contra ARBA falló (ej. caída intermitente del webservice), lo que dejaba
         al usuario bloqueado para informar cualquier retención de ese período.
 
+        Las canceladas quedan afuera: ya no existen en ARBA y reusarlas bloquearía el período para siempre.
+
         :return: DDJJ ARBA recordset of the matching DDJJ for the given period"""
         from_date, to_date = self._find_dates(wh_date)
         dj_arba = self.search(
             [
                 ("company_id", "=", company.id),
+                ("state", "!=", "cancel"),
                 ("date", ">=", from_date),
                 ("date", "<=", to_date),
             ],
@@ -298,6 +305,26 @@ class L10nArDjArba(models.Model):
         record.message_post(body=Markup(prefix_text + error_msg))
         _logger.error("ARBA WS ERROR: %s", prefix_text + error_msg)
 
+    def _cancel_if_ddjj_not_found(self, error_obj):
+        """Cancel the DDJJ when ARBA answers that it no longer knows it.
+
+        ARBA reports this business error both ways: as a non 2xx status, which
+        arrives here as the formatted string, and inside a 2xx payload, which
+        arrives as the response dict. The declaration was deleted from the portal,
+        so it is cancelled to stop the cron from retrying it and to free the period.
+
+        :param error_obj: could be the response dictionary or the error string"""
+        code = error_obj.get("error") if isinstance(error_obj, dict) else error_obj
+        if "DDJJ_NO_ENCONTRADA" not in (code or ""):
+            return
+        self.state = "cancel"
+        self.message_post(
+            body=self.env._(
+                "The DDJJ no longer exists in ARBA, it was probably deleted from the portal. "
+                "It is moved to cancelled state so it is no longer updated."
+            )
+        )
+
     def _process_arba_response(self, method, url, env_type, msg, data=None):
         """Let us to have both clean response dictionary and string of errors if exists
         :return: tuple (response, error) -- type (dict, string)"""
@@ -329,9 +356,9 @@ class L10nArDjArba(models.Model):
 
     @api.ondelete(at_uninstall=False)
     def _unlink_only_draft_without_withholdings(self):
-        non_draft_records = self.filtered(lambda record: record.state != "draft")
-        if non_draft_records:
-            raise UserError(self.env._("You can only delete DDJJ ARBA records in draft state."))
+        non_deletable_records = self.filtered(lambda record: record.state not in ("draft", "cancel"))
+        if non_deletable_records:
+            raise UserError(self.env._("You can only delete DDJJ ARBA records in draft or cancelled state."))
 
         records_with_withholdings = self.filtered("l10n_ar_withholding_ids")
         if records_with_withholdings:
@@ -527,6 +554,7 @@ class L10nArDjArba(models.Model):
         prefix_error = self.env._("Updating status:")
         if error:
             self._process_arba_error(error, prefix_error)
+            self._cancel_if_ddjj_not_found(error)
             return
 
         if not response:
@@ -543,3 +571,4 @@ class L10nArDjArba(models.Model):
             self.message_post(body=ok_msg)
         else:
             self._process_arba_error(response, prefix_error)
+            self._cancel_if_ddjj_not_found(response)
