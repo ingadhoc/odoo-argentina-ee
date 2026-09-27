@@ -38,7 +38,7 @@ class TestSircipConstraint(common.TransactionCase):
         cls.partner = cls.env["res.partner"].create(
             {
                 "name": "Partner Test SIRCIP Constraint",
-                "vat": "30683021209",  # CUIT válido del padron demo
+                "vat": "30888888884",
                 "l10n_latam_identification_type_id": cls.env.ref("l10n_ar.it_cuit").id,
             }
         )
@@ -101,7 +101,7 @@ class TestSircipConstraint(common.TransactionCase):
         partner2 = self.env["res.partner"].create(
             {
                 "name": "Partner Non-SIRCIP Test",
-                "vat": "30683013184",  # CUIT válido del padron demo
+                "vat": "33222222228",
                 "l10n_latam_identification_type_id": self.env.ref("l10n_ar.it_cuit").id,
             }
         )

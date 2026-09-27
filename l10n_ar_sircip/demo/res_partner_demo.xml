@@ -27,7 +27,7 @@
         <field name="is_company" eval="True"/>
         <field name="country_id" ref="base.ar"/>
         <field name="state_id" ref="base.state_ar_h"/>
-        <field name="vat">30708844078</field>
+        <field name="vat">30111111118</field>
         <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
         <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
     </record>
@@ -38,7 +38,7 @@
         <field name="is_company" eval="True"/>
         <field name="country_id" ref="base.ar"/>
         <field name="state_id" ref="base.state_ar_h"/>
-        <field name="vat">20465753456</field>
+        <field name="vat">30444444440</field>
         <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
         <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
     </record>
@@ -49,7 +49,7 @@
         <field name="is_company" eval="True"/>
         <field name="country_id" ref="base.ar"/>
         <field name="state_id" ref="base.state_ar_h"/>
-        <field name="vat">27250695271</field>
+        <field name="vat">30555555551</field>
         <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
         <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
     </record>
@@ -60,7 +60,7 @@
         <field name="is_company" eval="True"/>
         <field name="country_id" ref="base.ar"/>
         <field name="state_id" ref="base.state_ar_h"/>
-        <field name="vat">20042155455</field>
+        <field name="vat">30666666662</field>
         <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
         <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
     </record>
@@ -71,19 +71,19 @@
         <field name="is_company" eval="True"/>
         <field name="country_id" ref="base.ar"/>
         <field name="state_id" ref="base.state_ar_h"/>
-        <field name="vat">33686664649</field>
+        <field name="vat">33111111117</field>
         <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
         <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
     </record>
 
     <!-- 0% Informativo — en padrón con letra A (0%), dígito 1 en Chaco → Tipo 2 en TXT -->
-    <!-- CUIT 30500923837 en padrón: letra A, campo7[18]='1' (Chaco) -->
+    <!-- CUIT 30777777773 en padrón: letra A, campo7[18]='1' (Chaco) -->
     <record id="demo_partner_sircip_informativo" model="res.partner">
         <field name="name">SIRCIP Demo - 0% Informativo (Chaco)</field>
         <field name="is_company" eval="True"/>
         <field name="country_id" ref="base.ar"/>
         <field name="state_id" ref="base.state_ar_h"/>
-        <field name="vat">30500923837</field>
+        <field name="vat">30777777773</field>
         <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
         <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
     </record>
