@@ -10,7 +10,7 @@ from odoo.addons.l10n_ar_sircip.models.account_fiscal_position_l10n_ar_tax impor
 
 
 def valid_cuit(prefix, number):
-    """CUIT válido (con dígito verificador) a partir de un prefijo de 2 y un número de 8 dígitos."""
+    """Valid CUIT (with check digit) from a 2-digit prefix and an 8-digit number."""
     while True:
         base = "%s%08d" % (prefix, number)
         dv = 11 - sum(int(d) * w for d, w in zip(base, (5, 4, 3, 2, 7, 6, 5, 4, 3, 2))) % 11
@@ -20,9 +20,9 @@ def valid_cuit(prefix, number):
 
 
 def campo7(digits):
-    """Campo 7 del padrón: 24 jurisdicciones en '5' (no adherida, sin alta) salvo las indicadas, más el control.
+    """Padron field 7: the 24 jurisdictions at '5' (not adhered, not registered) except ``digits``, plus '0'.
 
-    :param digits: dict {jurisdiction_code: dígito}
+    :param digits: dict {jurisdiction_code: digit}
     """
     chars = ["5"] * 24 + ["0"]
     for jcode, digit in digits.items():
@@ -31,9 +31,9 @@ def campo7(digits):
 
 
 class TestSircipCommon(TestArCommon):
-    """Compañía RI con los datos SIRCIP del post_init_hook, un padrón del mes en curso y un cliente por caso.
+    """RI company with the SIRCIP setup, a current-month padron and one customer per case.
 
-    Provincias: Chaco (906) y Salta (917) adheridas; Corrientes (905) no adherida.
+    Chaco (906) and Salta (917) are adhered; Corrientes (905) is not.
     """
 
     @classmethod
@@ -57,7 +57,7 @@ class TestSircipCommon(TestArCommon):
             [("code", "=", "SIRC"), ("company_id", "=", cls.company_ri.id)], limit=1
         )
 
-        # (clave, letra, provincia del domicilio, dígitos del campo 7). None en la letra = fuera del padrón.
+        # (key, letter, partner province, field 7 digits); letter None means not in the padron
         cases = [
             ("digit1", "T", cls.chaco, {"906": 1, "917": 1}),
             ("digit2", "F", cls.chaco, {"906": 2, "917": 1}),
@@ -130,16 +130,15 @@ class TestSircipCommon(TestArCommon):
         return sorted(taxes.mapped("name"))
 
     def assert_sircip_invariants(self, move):
-        """Lo que vale después de cualquier cálculo SIRCIP: el asiento cierra, ninguna línea de percepción
-        queda en cero ni sin la cuenta y la etiqueta que usa el diario de liquidación."""
+        """Balanced entry, and every SIRCIP line is non-zero with the settlement journal account and tag."""
         self.assertAlmostEqual(sum(move.line_ids.mapped("balance")), 0.0, places=2)
         sircip_lines = move.line_ids.filtered("tax_line_id.l10n_ar_sircip_record_type")
         self.assertEqual(
             sorted(sircip_lines.tax_line_id.mapped("name")),
             self._sircip_tax_names(move),
-            "cada percepción SIRCIP de las líneas genera su línea de impuesto",
+            "each SIRCIP perception on the lines creates its tax line",
         )
         for line in sircip_lines:
-            self.assertTrue(line.balance, "línea de percepción en cero: %s" % line.name)
+            self.assertTrue(line.balance, "zero perception line: %s" % line.name)
             self.assertEqual(line.account_id, self.sircip_account)
             self.assertIn(self.sircip_tag, line.tax_tag_ids)

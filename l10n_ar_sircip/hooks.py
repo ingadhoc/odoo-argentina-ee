@@ -19,23 +19,21 @@ from .models.account_tax import (
 
 _logger = logging.getLogger(__name__)
 
-# Plantillas por compañía: (clave del xmlid, nombre, alícuota, tipo de registro de la DDJJ, activa).
-# De "Percepción SIRCIP" y de la sobretasa se crea una copia por alícuota y por provincia al facturar;
-# "por no inscripto" es el impuesto por defecto de la línea de posición fiscal.
-# Los nombres son la denominación que exige la Comisión Arbitral en la factura.
+# Per-company templates: (xmlid key, name, amount, DDJJ record type, active).
+# Perception and surcharge templates are copied per aliquot/province at invoice time.
+# Names are the legal wording the Comisión Arbitral requires on the invoice.
 SIRCIP_TAXES = [
     ("tax_sircip_percepcion", "Percepción SIRCIP", 0.0, SIRCIP_RECORD_PERCEPTION, False),
     ("tax_sircip_no_inscripto", "Percepción SIRCIP por no inscripto", 2.0, SIRCIP_RECORD_NOT_REGISTERED, True),
     ("tax_sircip_sobretasa", "Percepción SIRCIP por falta de alta", 1.0, SIRCIP_RECORD_SURCHARGE, False),
 ]
 
-# Código de tributo AFIP de las percepciones de IIBB, el que usan los grupos provinciales de l10n_ar
+# AFIP tribute code of IIBB perceptions, same as the l10n_ar provincial groups
 _AFIP_TRIBUTE_IIBB = "07"
 
 
 def l10n_ar_sircip_post_init_hook(env):
-    """Sin demo no se configura ninguna compañía: cada agente se activa desde Ajustes
-    (res.company.l10n_ar_sircip_agent). Con demo, la compañía RI demo queda como agente con su padrón."""
+    """With demo data, set the demo RI company as SIRCIP agent with its padron; otherwise do nothing."""
     company = env.ref("base.company_ri", raise_if_not_found=False)
     if not company or not env.ref("base.user_demo", raise_if_not_found=False):
         return
@@ -51,9 +49,7 @@ def _xmlid(env, name, record):
 
 
 def _get_or_create_account(env, company):
-    """Cuenta de las percepciones SIRCIP: la de Ajustes o, si no hay, una "Percepción IIBB SIRCIP aplicada" nueva al
-    lado de las percepciones provinciales del plan. Los planes sin esa cuenta (monotributo, custom) la piden en
-    Ajustes."""
+    """Return the settings account, or create one next to the chart's applied IIBB perception account."""
     if company.l10n_ar_sircip_account_id:
         return company.l10n_ar_sircip_account_id
     account = env.ref("l10n_ar_sircip.account_sircip_%s" % company.id, raise_if_not_found=False)
@@ -86,7 +82,6 @@ def _create_sircip_data_for_company(env, company, sircip_state):
     FiscalPos = env["account.fiscal.position"].with_company(company)
     FiscalPosLine = env["account.fiscal.position.l10n_ar_tax"].with_company(company)
 
-    # 1. Grupo de impuestos
     tax_group = env.ref("l10n_ar_sircip.tax_group_sircip_%s" % company.id, raise_if_not_found=False)
     if not tax_group:
         tax_group = (
@@ -96,7 +91,7 @@ def _create_sircip_data_for_company(env, company, sircip_state):
         )
         _xmlid(env, "tax_group_sircip_%s" % company.id, tax_group)
 
-    # 2. Impuestos plantilla, con la cuenta y la etiqueta que usa el diario de liquidación
+    # Templates share the account and tag the settlement journal relies on
     account = _get_or_create_account(env, company)
     tag = env.ref("l10n_ar_sircip.tag_perc_iibb_sircip_aplicada")
     repartition = [
@@ -128,8 +123,7 @@ def _create_sircip_data_for_company(env, company, sircip_state):
     default_tax = taxes["tax_sircip_no_inscripto"]
     sircip_line_vals = {"default_tax_id": default_tax.id, "tax_type": "perception", "webservice": "padron"}
 
-    # 3. Posición fiscal "Percepción - SIRCIP": al final de las de percepción, para los clientes que no caen
-    # en ninguna otra
+    # Catch-all fiscal position, last among the perception ones
     fiscal_pos = env.ref("l10n_ar_sircip.fiscal_position_sircip_%s" % company.id, raise_if_not_found=False)
     if not fiscal_pos:
         ivari = env.ref("l10n_ar.res_IVARI", raise_if_not_found=False)
@@ -140,22 +134,19 @@ def _create_sircip_data_for_company(env, company, sircip_state):
                 "sequence": 9999,
                 "country_id": env.ref("base.ar").id,
                 "company_id": company.id,
-                # Sin responsabilidad AFIP la posición no se autoselecciona en las facturas
+                # Without an AFIP responsibility the position is never auto-applied
                 "l10n_ar_afip_responsibility_type_ids": [Command.set(ivari.ids)] if ivari else [],
                 "l10n_ar_tax_ids": [Command.create(sircip_line_vals)],
             }
         )
         _xmlid(env, "fiscal_position_sircip_%s" % company.id, fiscal_pos)
 
-    # 4. Línea SIRCIP en las posiciones fiscales que ya tienen percepciones: una factura toma una sola
-    # posición fiscal, y el cliente que cae en una provincial también tiene que percibir SIRCIP. Las líneas
-    # de las provincias que se van adhiriendo las saca el usuario a mano (ver README).
+    # An invoice takes a single fiscal position, so every one with perceptions also needs the SIRCIP line
     for other in FiscalPos.search([("company_id", "=", company.id), ("id", "!=", fiscal_pos.id)]):
         perception_lines = other.l10n_ar_tax_ids.filtered(lambda x: x.tax_type == "perception")
         if perception_lines and not perception_lines.filtered(lambda x: x.default_tax_id.tax_group_id == tax_group):
             FiscalPosLine.create(dict(sircip_line_vals, fiscal_position_id=other.id))
 
-    # 5. Diario de liquidación "SIRCIP Aplicado"
     if not env["account.journal"].search([("code", "=", "SIRC"), ("company_id", "=", company.id)], limit=1):
         settlement_account = env.ref("account.%s_ri_retencion_iibb_a_pagar" % company.id, raise_if_not_found=False)
         if settlement_account:
@@ -177,9 +168,8 @@ def _create_sircip_data_for_company(env, company, sircip_state):
 
 
 def _setup_demo_sircip_padron_data(env):
-    """Carga el padrón demo para el mes en curso (con ese período en el archivo, que se valida) y guarda en los
-    partners demo sus datos del padrón, como pasa al facturarles por primera vez, para que se vean en la solapa
-    Contabilidad del contacto."""
+    """Load the demo padron for the current month and store the demo partners' padron data, as a first invoice
+    would."""
     company = env.ref("base.company_ri")
     today = fields.Date.context_today(env["res.company.jurisdiction.padron"])
     month_start = today + relativedelta(day=1)
@@ -200,4 +190,4 @@ def _setup_demo_sircip_padron_data(env):
     fp_line = env.ref("l10n_ar_sircip.fiscal_position_sircip_%s" % company.id).l10n_ar_tax_ids[:1]
     for partner in env["res.partner"].search([("name", "=like", "SIRCIP Demo%")]):
         fp_line._sircip_get_padron_data(partner, today)
-    _logger.info("l10n_ar_sircip: padrón demo cargado para %s.", period.decode())
+    _logger.info("l10n_ar_sircip: demo padron loaded for period %s.", period.decode())

@@ -9,13 +9,9 @@ from odoo.exceptions import UserError, ValidationError
 from .account_tax import SIRCIP_RECORD_PERCEPTION, SIRCIP_RECORD_SURCHARGE
 from .res_company_jurisdiction_padron import SIRCIP_LETTER_ALIQUOT
 
-# Posición de cada jurisdicción en el campo 7 del padrón SIRCIP.
-# El campo 7 tiene 25 chars numéricos. Se lee de DERECHA a IZQUIERDA:
-#   - índice 24 (rightmost) = siempre '0', descartar
-#   - las posiciones 1-24 (de derecha a izquierda) corresponden a
-#     jurisdicciones 901-924 en orden numérico ascendente
-# Fórmula: índice (0-based) = 924 - jurisdiction_code
-# Fuente: doc/sircip/Diseno_de_Registros_del_Sistema_SIRCIP.pdf
+# Index of each jurisdiction in padron field 7 (campo 7): 25 digits read right to left, where the
+# rightmost char (index 24) is always '0' and index = 924 - jurisdiction_code.
+# Source: doc/sircip/Diseno_de_Registros_del_Sistema_SIRCIP.pdf
 SIRCIP_CAMPO7_POSITION = {
     "901": 23,  # CABA (code C)
     "902": 22,  # Buenos Aires (code B)
@@ -41,7 +37,6 @@ SIRCIP_CAMPO7_POSITION = {
     "922": 2,  # Santiago del Estero (code G)
     "923": 1,  # Tierra del Fuego (code V)
     "924": 0,  # Tucumán (code T)
-    # índice 24 = siempre '0', se descarta
 }
 
 
@@ -58,13 +53,13 @@ class AccountFiscalPositionL10nArTax(models.Model):
 
     @api.constrains("webservice", "default_tax_id")
     def _check_webservice_available(self):
-        """Extendemos para permitir webservice='padron' con la provincia ficticia SIRCIP."""
+        """Allow the 'padron' webservice on the SIRCIP pseudo-province line."""
         non_sircip_padron = self.filtered(lambda r: not (r.webservice == "padron" and r._l10n_ar_is_sircip()))
         return super(AccountFiscalPositionL10nArTax, non_sircip_padron)._check_webservice_available()
 
     @api.constrains("tax_type", "webservice", "default_tax_id")
     def _check_sircip_line(self):
-        """La línea SIRCIP es una percepción y su alícuota sale del padrón SIRCIP."""
+        """The SIRCIP line must be a perception read from the padron file."""
         for rec in self.filtered(lambda x: x._l10n_ar_is_sircip()):
             if rec.tax_type != "perception" or rec.webservice != "padron":
                 raise ValidationError(
@@ -81,19 +76,13 @@ class AccountFiscalPositionL10nArTax(models.Model):
         return self._sircip_get_taxes(partner, date)
 
     def _sircip_get_taxes(self, partner, date):
-        """Impuestos SIRCIP de una factura, según el padrón y la provincia de entrega.
+        """SIRCIP taxes of an invoice, from the padron and the delivery province.
 
-        Reglas (planilla oficial "Aplicación Códigos" y Q&A CESSI de la Comisión Arbitral):
-        - En el padrón: siempre "Percepción SIRCIP" con la alícuota de la letra, para cualquier dígito
-          del campo 7. Con letra A (0%) no va nada en la factura: se declara como informativo en la DDJJ.
-        - Dígito 2 en la provincia de entrega (adherida, sin alta): además, "Percepción SIRCIP por falta
-          de alta en (provincia)" en una línea aparte.
-        - Dígito 4 (no adherida, con alta): la percepción propia de la provincia la calcula su línea de
-          posición fiscal, no SIRCIP.
-        - Fuera del padrón: 2% "por no inscripto" solo si la entrega es en una provincia adherida.
+        - In the padron: "Percepción SIRCIP" at the letter aliquot for any field 7 digit; letter A (0%) adds none.
+        - Digit 2 in the delivery province: also the "falta de alta" surcharge, on a separate line.
+        - Not in the padron: 2% "no inscripto" only if the delivery is in an adhered province.
 
-        La provincia de entrega llega por contexto desde la factura o el pedido (``l10n_ar_delivery_partner_id``);
-        sin ella se usa la del partner.
+        The delivery partner comes from context (``l10n_ar_delivery_partner_id``), falling back to the partner.
         """
         self.ensure_one()
         partner = partner.commercial_partner_id
@@ -112,11 +101,10 @@ class AccountFiscalPositionL10nArTax(models.Model):
         return taxes
 
     def _sircip_get_padron_data(self, partner, date):
-        """Datos del padrón SIRCIP del partner para el mes de ``date``.
+        """Padron data of the partner for the month of ``date``.
 
-        Se consulta el padrón una vez por partner y mes, y se guarda en ``l10n_ar.partner.tax``
-        (un solo registro por mes) con el CRC, la letra y el campo 7 en el ref. Los impuestos de cada
-        factura se calculan a partir de ese registro, porque dependen de la provincia de entrega.
+        Cached once per partner and month in ``l10n_ar.partner.tax``, with CRC, letter and field 7 in the ref,
+        because the taxes depend on each invoice's delivery province.
         """
         partner = partner.commercial_partner_id
         from_date = date + relativedelta(day=1)
@@ -161,7 +149,7 @@ class AccountFiscalPositionL10nArTax(models.Model):
 
     @api.model
     def _sircip_parse_ref(self, ref):
-        """Lee el ref guardado por _sircip_get_padron_data: 'SIRCIP | crc:XX | letra:F | campo7:YYY'."""
+        """Parse the ref stored by _sircip_get_padron_data: 'SIRCIP | crc:XX | letra:F | campo7:YYY'."""
         values = {}
         for part in (ref or "").split("|"):
             key, sep, value = part.partition(":")
@@ -177,7 +165,7 @@ class AccountFiscalPositionL10nArTax(models.Model):
         }
 
     def _get_sircip_campo7_digit(self, campo7, delivery_state):
-        """Dígito (1-5) del campo 7 para la provincia de entrega, o 0 si no se puede leer."""
+        """Field 7 digit (1-5) for the delivery province, or 0 if it cannot be read."""
         if not campo7 or not delivery_state:
             return 0
         pos = SIRCIP_CAMPO7_POSITION.get(delivery_state.jurisdiction_code or "")
@@ -189,8 +177,7 @@ class AccountFiscalPositionL10nArTax(models.Model):
             return 0
 
     def _sircip_find_or_copy_tax(self, record_type, domain, values):
-        """Busca un impuesto SIRCIP del tipo y compañía de la línea; si no existe, lo crea copiando la
-        plantilla de ese tipo (creada por el post_init_hook), que trae cuentas y grupo."""
+        """Find the SIRCIP tax of this type and company, or copy it from the post_init_hook template."""
         company = self.fiscal_position_id.company_id
         Tax = self.env["account.tax"].with_context(active_test=False)
         base_domain = [
@@ -209,7 +196,7 @@ class AccountFiscalPositionL10nArTax(models.Model):
             raise UserError(_("SIRCIP tax template not found for company %(company)s.", company=company.display_name))
         return template.copy(default=dict(values, active=True))
 
-    # Los nombres son la denominación que exige la Comisión Arbitral en la factura: no se traducen.
+    # Tax names are the legal wording required on the invoice: do not translate them.
     def _sircip_get_perception_tax(self, aliquot):
         return self._sircip_find_or_copy_tax(
             SIRCIP_RECORD_PERCEPTION,
