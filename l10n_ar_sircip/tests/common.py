@@ -120,12 +120,15 @@ class TestSircipCommon(TestArCommon):
         return invoice
 
     @classmethod
-    def _corrientes_fiscal_position(cls, partner, **values):
-        """Fiscal position for deliveries in Corrientes with its perception, manual at 3% on ``partner``; the SIRCIP
-        line is added on create."""
+    def _corrientes_tax(cls, amount):
+        """Corrientes IIBB perception at ``amount``%, copied from the chart one."""
         tax = cls.env.ref("account.%s_ri_tax_percepcion_iibb_rr_aplicada" % cls.company_ri.id)
-        tax.write({"active": True, "amount": 3.0, "name": "P. IIBB CTS 3%"})
-        cls.env["l10n_ar.partner.tax"].create(
+        return tax.copy({"name": "P. IIBB CTS %s%%" % amount, "amount": amount, "active": True})
+
+    @classmethod
+    def _corrientes_aliquot(cls, partner, tax):
+        """Corrientes aliquot loaded on the contact for the current month."""
+        return cls.env["l10n_ar.partner.tax"].create(
             {
                 "partner_id": partner.id,
                 "tax_id": tax.id,
@@ -133,6 +136,11 @@ class TestSircipCommon(TestArCommon):
                 "to_date": fields.Date.end_of(cls.today, "month"),
             }
         )
+
+    @classmethod
+    def _corrientes_fiscal_position(cls, tax, **values):
+        """Fiscal position for deliveries in Corrientes with its perception, manual with ``tax`` by default; the
+        SIRCIP line is added on create."""
         return cls.env["account.fiscal.position"].create(
             dict(
                 {

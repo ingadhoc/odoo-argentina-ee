@@ -2,7 +2,7 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from odoo import api, fields, models
+from odoo import api, models
 
 
 class AccountMove(models.Model):
@@ -21,13 +21,6 @@ class AccountMove(models.Model):
     @api.onchange("partner_shipping_id")
     def _onchange_l10n_ar_sircip_partner_shipping(self):
         self._l10n_ar_recompute_fiscal_position_taxes()
-
-    def action_post(self):
-        for move in self.filtered(lambda x: x.move_type == "out_invoice" and x.fiscal_position_id):
-            move.fiscal_position_id.with_context(
-                l10n_ar_delivery_partner_id=move.partner_shipping_id.id
-            )._l10n_ar_check_perceptions(move.partner_id, move.invoice_date or fields.Date.context_today(move))
-        return super().action_post()
 
     def write(self, vals):
         res = super().write(vals)

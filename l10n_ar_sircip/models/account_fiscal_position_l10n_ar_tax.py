@@ -80,6 +80,8 @@ class AccountFiscalPositionL10nArTax(models.Model):
 
         - In the padron: "Percepción SIRCIP" at the letter aliquot for any field 7 digit; letter A (0%) adds none.
         - Digit 2 in the delivery province: also the "falta de alta" surcharge, on a separate line.
+        - Digit 4 in the delivery province: if the fiscal position has no line of that province, its aliquot loaded
+          on the contact.
         - Not in the padron: 2% "no inscripto" only if the delivery is in an adhered province.
 
         The delivery partner comes from context (``l10n_ar_delivery_partner_id``), falling back to the partner.
@@ -96,8 +98,17 @@ class AccountFiscalPositionL10nArTax(models.Model):
             return self.default_tax_id if delivery_state.l10n_ar_is_sircip else taxes
         if data["aliquot"]:
             taxes |= self._sircip_get_perception_tax(data["aliquot"])
-        if self._get_sircip_campo7_digit(data["campo7"], delivery_state) == 2:
+        digit = self._get_sircip_campo7_digit(data["campo7"], delivery_state)
+        if digit == 2:
             taxes |= self._sircip_get_surcharge_tax(delivery_state)
+        elif digit == 4:
+            # The province perceives too: with no line of its own in the fiscal position, the aliquot of the contact
+            fiscal_position = self.fiscal_position_id
+            if not fiscal_position.l10n_ar_tax_ids.filtered(
+                lambda x: x.tax_type == "perception" and x.default_tax_id.l10n_ar_state_id == delivery_state
+            ):
+                aliquots = fiscal_position._l10n_ar_sircip_partner_aliquots(partner, date, state=delivery_state)
+                taxes |= aliquots.tax_id.filtered("amount")
         return taxes
 
     def _sircip_get_padron_data(self, partner, date):

@@ -90,15 +90,36 @@ automática y la responsabilidad AFIP del cliente), no en **Percepción - SIRCIP
 fiscal se aplican a toda factura que la use, cualquiera sea la entrega. **Percepción - SIRCIP** tiene secuencia
 9999 y no tiene provincias, así que cualquier posición fiscal de la provincia de entrega le gana.
 
-Si un cliente tiene dígito 4 en la provincia de entrega y la posición fiscal de la factura o del pedido no
-tiene percepción de esa provincia, Odoo **no deja validar la factura ni confirmar el pedido**: la alícuota
-provincial no la puede adivinar. El botón *Buscar/Crear posición fiscal* abre la posición fiscal de esa
-provincia si existe, con el motivo por el que no se aplicó (sin detección automática, sin la provincia, sin la
-responsabilidad del cliente o con una posición fiscal fija en el contacto), o una nueva ya armada con la
-percepción de la provincia (cálculo manual) y la línea SIRCIP, para ajustar la alícuota o el webservice.
-También frena si la línea de la provincia es manual (sin webservice), su impuesto por defecto es 0% y el
-contacto no tiene alícuota cargada para esa provincia y período: el botón *Abrir contacto* lleva a cargarla.
-Vale para cualquier provincia de entrega, no solo para las del ejemplo.
+Con **dígito 4** en la provincia de entrega también percibe la provincia, y Odoo no puede adivinar su
+alícuota. Al validar la factura o confirmar el pedido, según la posición fiscal del documento y el contacto
+(vale para cualquier provincia de entrega):
+
++-------------------------------------+---------------------------+--------------------------------------------+
+| Posición fiscal del documento       | Alícuota en el contacto   | Qué hace Odoo                              |
++=====================================+===========================+============================================+
+| Sin línea de la provincia           | No                        | **Frena**: botón *Buscar/Crear posición    |
+|                                     |                           | fiscal*                                    |
++-------------------------------------+---------------------------+--------------------------------------------+
+| Sin línea de la provincia           | Sí                        | Aplica la alícuota del contacto            |
++-------------------------------------+---------------------------+--------------------------------------------+
+| Línea con webservice o padrón       | —                         | La calcula la línea, como siempre          |
++-------------------------------------+---------------------------+--------------------------------------------+
+| Línea manual, impuesto por defecto  | —                         | Aplica el impuesto por defecto             |
+| distinto de 0%                      |                           |                                            |
++-------------------------------------+---------------------------+--------------------------------------------+
+| Línea manual, impuesto por defecto  | Sí (aunque sea 0%)        | Aplica la alícuota del contacto            |
+| 0%                                  |                           |                                            |
++-------------------------------------+---------------------------+--------------------------------------------+
+| Línea manual, impuesto por defecto  | No                        | **Pide confirmación**: sale sin la         |
+| 0%                                  |                           | percepción provincial si se confirma       |
++-------------------------------------+---------------------------+--------------------------------------------+
+
+La alícuota del contacto es la de la pestaña **Contabilidad** (percepciones) para el período del documento.
+*Buscar/Crear posición fiscal* abre la posición fiscal de la provincia si existe, con el motivo por el que no
+se aplicó (sin detección automática, sin la provincia, sin la responsabilidad del cliente o con una posición
+fiscal fija en el contacto), o una nueva ya armada con la percepción de la provincia (cálculo manual) y la
+línea SIRCIP. La confirmación solo aparece al usar el botón: la facturación automática y el portal validan
+como siempre.
 
 Uso
 ===
