@@ -11,11 +11,11 @@ from odoo.tests import common
 # 5 líneas del padrón de demo: letras A, B, F, X y un CUIT no presente
 SAMPLE_PADRON = (
     "periodo,cuit,razon_social_contri,jurisdiccion_sede,crc,alicuota_unica_letra,campo7\n"
-    "202602,30684401250,EMPRESA F,922,25,F,5214252222222225522522550\n"
-    "202602,20181117533,EMPRESA A,904,84,A,5224252222222225522512550\n"
-    "202602,30712330216,EMPRESA X,901,34,X,5225252122222225522522540\n"
-    "202602,20076105139,EMPRESA B,902,14,B,5224242222222125522512440\n"
-    "202602,30710125909,EMPRESA V SOBRETASA,921,78,V,4214241111111114411411440\n"
+    "202602,34111111113,EMPRESA F,922,25,F,5214252222222225522522550\n"
+    "202602,34222222224,EMPRESA A,904,84,A,5224252222222225522512550\n"
+    "202602,34333333335,EMPRESA X,901,34,X,5225252122222225522522540\n"
+    "202602,34444444446,EMPRESA B,902,14,B,5224242222222125522512440\n"
+    "202602,34555555557,EMPRESA V SOBRETASA,921,78,V,4214241111111114411411440\n"
 )
 
 
@@ -75,7 +75,7 @@ class TestSircipPadron(common.TransactionCase):
 
     def test_aliquot_letra_f(self):
         """Letra F → 0.30%."""
-        partner = self._make_partner("30684401250")
+        partner = self._make_partner("34111111113")
         is_in, aliquot, campo7, crc, letra = self.padron._get_sircip_aliquot(partner)
         self.assertTrue(is_in)
         self.assertAlmostEqual(aliquot, 0.30)
@@ -84,29 +84,29 @@ class TestSircipPadron(common.TransactionCase):
 
     def test_aliquot_letra_a(self):
         """Letra A → 0.00%."""
-        partner = self._make_partner("20181117533")
+        partner = self._make_partner("34222222224")
         is_in, aliquot, campo7, crc, letra = self.padron._get_sircip_aliquot(partner)
         self.assertTrue(is_in)
         self.assertAlmostEqual(aliquot, 0.00)
 
     def test_aliquot_letra_x(self):
         """Letra X → 5.00%."""
-        partner = self._make_partner("30712330216")
+        partner = self._make_partner("34333333335")
         is_in, aliquot, campo7, crc, letra = self.padron._get_sircip_aliquot(partner)
         self.assertTrue(is_in)
         self.assertAlmostEqual(aliquot, 5.00)
 
     def test_aliquot_letra_b(self):
         """Letra B → 0.01%."""
-        partner = self._make_partner("20076105139")
+        partner = self._make_partner("34444444446")
         is_in, aliquot, campo7, crc, letra = self.padron._get_sircip_aliquot(partner)
         self.assertTrue(is_in)
         self.assertAlmostEqual(aliquot, 0.01)
 
     def test_cuit_not_in_padron(self):
         """CUIT no presente en el padrón retorna is_in_padron=False."""
-        # CUIT válido del padrón demo que NO está en SAMPLE_PADRON (5 líneas)
-        partner = self._make_partner("20294199153")
+        # CUIT que no está en SAMPLE_PADRON
+        partner = self._make_partner("34666666668")
         is_in, aliquot, campo7, crc, letra = self.padron._get_sircip_aliquot(partner)
         self.assertFalse(is_in)
         self.assertEqual(aliquot, 0.0)
@@ -114,13 +114,13 @@ class TestSircipPadron(common.TransactionCase):
 
     def test_campo7_length(self):
         """El campo 7 extraído del padrón tiene exactamente 25 caracteres."""
-        partner = self._make_partner("30684401250")
+        partner = self._make_partner("34111111113")
         _, _, campo7, _, _ = self.padron._get_sircip_aliquot(partner)
         self.assertEqual(len(campo7), 25, "El campo 7 debe tener 25 chars")
 
     def test_campo7_rightmost_is_zero(self):
         """El carácter más a la derecha del campo 7 es siempre '0'."""
-        partner = self._make_partner("30684401250")
+        partner = self._make_partner("34111111113")
         _, _, campo7, _, _ = self.padron._get_sircip_aliquot(partner)
         self.assertEqual(campo7[-1], "0", "El primer char (rightmost) del campo 7 debe ser '0'")
 
