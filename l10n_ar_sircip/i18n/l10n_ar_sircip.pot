@@ -307,3 +307,74 @@ msgstr ""
 #: model:ir.model,name:l10n_ar_sircip.model_res_company_jurisdiction_padron
 msgid "res.company.jurisdiction.padron"
 msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
+msgid ""
+"According to the SIRCIP padron, %(partner)s also has the %(state)s perception (digit 4, delivery in %(state)s), but the fiscal position %(fiscal_position)s cannot compute it.\n"
+"\n"
+"To continue, use a fiscal position for deliveries in %(state)s with the %(state)s perception, with the aliquot loaded manually on the contact or obtained through its webservice or padron file."
+msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
+msgid ""
+"%(fiscal_position)s perceives %(state)s but was not applied: %(reasons)s."
+msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
+msgid "Fix it and select the fiscal position again on the document."
+msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
+msgid "Fiscal Positions"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
+msgid "Find/Create fiscal position"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
+msgid "it is not detected automatically"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
+msgid "its provinces do not include %(state)s"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
+msgid "it lacks the customer's AFIP responsibility (%(resp)s)"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
+msgid "the contact has the fiscal position %(fixed)s set"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
+msgid ""
+"the document fiscal position was set manually or before this one existed"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
+msgid "Perception %(state)s + SIRCIP"
+msgstr ""
