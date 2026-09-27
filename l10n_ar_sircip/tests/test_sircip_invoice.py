@@ -100,6 +100,22 @@ class TestSircipInvoice(TestSircipCommon):
                 ["Corrientes", "SIRCIP"],
             )
             new_fp.unlink()
+        with self.subTest("its fiscal position is manual and the contact has no aliquot: it asks to load it"):
+            zero_tax = self.env.ref("account.%s_ri_tax_percepcion_iibb_rr_aplicada" % self.company_ri.id)
+            manual_fp = self.env["account.fiscal.position"].create(
+                {
+                    "name": "Percepción Corrientes sin alícuota",
+                    "company_id": self.company_ri.id,
+                    "l10n_ar_tax_ids": [Command.create({"default_tax_id": zero_tax.id, "tax_type": "perception"})],
+                }
+            )
+            invoice = self._sircip_invoice(partner, fiscal_position=manual_fp)
+            with self.assertRaises(RedirectWarning) as error:
+                invoice.action_post()
+            message, action = error.exception.args[:2]
+            self.assertIn("manual aliquot", message)
+            self.assertEqual((action["res_model"], action["res_id"]), ("res.partner", partner.id))
+            manual_fp.active = False
         corrientes_fp = self._corrientes_fiscal_position(partner, auto_apply=False)
         with self.subTest("one exists but was not applied: it points to it and says why"):
             invoice = self._sircip_invoice(partner)
