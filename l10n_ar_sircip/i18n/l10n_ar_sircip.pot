@@ -378,3 +378,18 @@ msgstr ""
 #: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
 msgid "Perception %(state)s + SIRCIP"
 msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
+msgid ""
+"According to the SIRCIP padron, %(partner)s also has the %(state)s perception (digit 4, delivery in %(state)s), but the fiscal position %(fiscal_position)s computes it with a manual aliquot and the contact has no %(state)s aliquot for %(date)s.\n"
+"\n"
+"To continue, load the aliquot on the Accounting tab of the contact, or set a webservice or padron file for %(state)s on the fiscal position."
+msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
+msgid "Open contact"
+msgstr ""
