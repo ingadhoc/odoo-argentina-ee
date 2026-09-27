@@ -193,6 +193,7 @@ Los documentos de referencia se encuentran en la carpeta ``doc/sircip/``:
 * `Provincias adheridas al SIRCIP <https://docs.google.com/spreadsheets/d/1yqf8C6ztxJZsmEQRC4-g2RttgMoJCqMi-Y-0_1mlugE/edit?gid=0#gid=0>`_
 * `Matriz de Aplicación de Códigos (Campo 7) <https://docs.google.com/spreadsheets/d/1MXUlg43Ng-xBIx7xO5epLf21qJCEX7oFWpCzZ2b8PIk/edit?gid=664128533#gid=664128533>`_
 * `Recopilación Q&A CESSI <https://docs.google.com/document/d/1Apl-WG06AZZHXB70uVAWbzcg3sw1ncshoaBVcTdw8AE/edit?tab=t.0>`_
+* `Guía Operativa SIRCIP <https://drive.google.com/file/d/1AOYTXom1U-lmyJSqSCxfyHxHUWASUX-x/view>`_
 * `Portal Federal Tributario SIRCIP <https://www.ca.gob.ar/sistemas/sircip>`_
 
 Pendientes
@@ -215,7 +216,9 @@ la subtarea de la DDJJ, que además decide cómo unificar las dos implementacion
 **Normativa y padrón:**
 
 - ``[x]`` 7. Vigencia al 01/12/2026 (Disposición de Presidencia 7/2026).
-- ``[ ]`` 8. Padrón de devoluciones (lo nombra la Guía de implementación): averiguar qué es y si cambia las NC.
+- ``[x]`` 8. Padrón de devoluciones: son las devoluciones que aprueba el Comité SURA después del vencimiento de la DDJJ
+  (RG 9/2025, Anexo I, B.4). No aplica por ahora: el campo 16 de la DDJJ no se usa hasta que la Comisión Arbitral
+  lo habilite.
 - ``[x]`` 9. El período del archivo del padrón tiene que ser el mes del padrón (se publica el día 22 del mes anterior).
 
 **Configuración y cálculo:**
@@ -228,9 +231,10 @@ la subtarea de la DDJJ, que además decide cómo unificar las dos implementacion
 - ``[x]`` 14. Pedidos de venta con la dirección de entrega del pedido.
 - ``[x]`` 15. Cuenta SIRCIP en planes sin la cuenta de percepciones IIBB aplicadas (monotributo,
   personalizados): se elige en Ajustes, y guardar sin ella da un error claro.
-- ``[ ]`` 16. Excluidos (tipo 3) por los *ajustes al padrón*. Hoy: no se procesan.
-- ``[ ]`` 17. Varias entregas por factura (una factura por entrega, según la Comisión Arbitral) y la leyenda del
-  no inscripto por jurisdicción. Hoy: una sola provincia de entrega por factura.
+- ``[x]`` 16. Excluidos (tipo 3). No aplica por ahora: el campo 6 (código de operación exceptuada) solo admite
+  ``0 - Inexistente`` en el diseño vigente, y los *ajustes al padrón* no figuran en la documentación oficial.
+- ``[ ]`` 17. Varias entregas por factura y la leyenda del no inscripto por jurisdicción. La normativa no lo trata;
+  según el Q&A CESSI va una factura por entrega. Hoy: una sola provincia de entrega por factura.
 - ``[x]`` 18. Padrón comprimido en ZIP. RAR no: necesita una librería y el binario ``unrar`` en el servidor.
 - ``[ ]`` 19. Validar un período completo contra el portal SIRCIP.
 - ``[ ]`` 20. Revisar los CUITs del padrón demo y los comentarios del módulo (en inglés y mínimos).

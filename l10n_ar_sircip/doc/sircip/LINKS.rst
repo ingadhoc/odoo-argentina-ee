@@ -5,7 +5,8 @@ Documentos incluidos en esta carpeta
 --------------------------------------
 
 * ``Diseno_de_Registros_del_Sistema_SIRCIP.pdf``
-  Especificación oficial del diseño de registros para el padrón y la DDJJ.
+  Especificación oficial del diseño de registros para el padrón y la DDJJ (versión publicada al 27/09/2026:
+  régimen siempre 1, tipos de registro 1 a 5, campo 6 siempre 0, campo 16 sin uso por el momento).
   Fuente: https://www.ca.gob.ar/descargas/sircip/registros/Diseno_de_Registros_del_Sistema_SIRCIP.pdf
 
 Links externos (pueden actualizarse)
@@ -23,8 +24,11 @@ Links externos (pueden actualizarse)
 * **Recopilación de Q&A CESSI sobre SIRCIP**
   https://docs.google.com/document/d/1Apl-WG06AZZHXB70uVAWbzcg3sw1ncshoaBVcTdw8AE/edit?tab=t.0
 
-* **Flujo de implementación en Odoo (presentación)**
-  https://docs.google.com/presentation/d/1ciYJWrTBlt4gbxkt2J-BnJ2j5TvtU7lB/edit?slide=id.g354e669c7ff_0_12
+* **Guía de Implementación para Agentes (Comisión Arbitral)**
+  https://docs.google.com/presentation/d/1ciYJWrTBlt4gbxkt2J-BnJ2j5TvtU7lB/edit?slide=id.p1
+
+* **Guía Operativa SIRCIP (Comisión Arbitral)**
+  https://drive.google.com/file/d/1AOYTXom1U-lmyJSqSCxfyHxHUWASUX-x/view
 
 Notas sobre el diseño de registros
 ------------------------------------
@@ -42,4 +46,5 @@ Campo 7 (25 chars numéricos):
   - Posición 24 (rightmost, índice = len-1) es siempre '0' y se descarta
   - Posición de cada jurisdicción: índice = 924 - jurisdiction_code
     (ej: CABA=901 → índice 23; Tucumán=924 → índice 0)
-  - Valores: 1=solo básica, 2=básica+sobretasa, 3=excluido, 4/5=básica+alícuota propia
+  - Valores según la planilla "Aplicación Códigos": 1, 3 y 5 = solo básica; 2 = básica + sobretasa;
+    4 = básica, y la alícuota propia de la provincia la calcula su línea de posición fiscal
