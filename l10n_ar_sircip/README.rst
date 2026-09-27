@@ -30,11 +30,13 @@ Instalación
 
 #. Instalar el módulo ``l10n_ar_account_tax_settlement`` (dependencia obligatoria).
 #. Instalar este módulo ``l10n_ar_sircip``.
-#. El ``post_init_hook`` marca como **Agente de percepción SIRCIP** a las empresas argentinas que existen al
-   instalar y crea automáticamente para cada una:
+#. Instalar no configura ninguna compañía: cada agente se activa desde Ajustes (ver Configuración). Solo con
+   datos de demostración la compañía RI demo queda como agente, con un padrón del mes.
+#. Al activar una compañía como agente, el módulo le crea:
 
    * Grupo de impuestos **SIRCIP**, con el código de tributo AFIP de percepción IIBB (``07``).
-   * Cuenta **Percepción IIBB SIRCIP aplicada**, junto a las percepciones provinciales del plan de cuentas.
+   * Cuenta **Percepción IIBB SIRCIP aplicada**, junto a las percepciones provinciales del plan de cuentas. Si
+     el plan no trae esa cuenta (monotributo, planes personalizados), se elige en Ajustes.
    * Impuestos plantilla, uno por tipo de registro de la DDJJ: ``Percepción SIRCIP`` (1),
      ``Percepción SIRCIP por no inscripto`` 2% (4) y ``Percepción SIRCIP por falta de alta`` 1% (5).
      Al facturar se crean copias por alícuota y por provincia de entrega.
@@ -50,9 +52,18 @@ Configuración
 Compañías agentes de percepción
 -------------------------------
 
-Las compañías creadas después de instalar el módulo se configuran en ``Contabilidad → Configuración → Ajustes →
-Localización argentina``, marcando **Agente de percepción SIRCIP** y guardando. Guardar de nuevo con la opción
-marcada agrega la línea SIRCIP a las posiciones fiscales con percepciones que se crearon después; no duplica nada.
+Para cada compañía que sea agente de percepción SIRCIP:
+
+#. En ``Contabilidad → Configuración → Ajustes → Localización argentina``, marcar **Agente de percepción
+   SIRCIP**. Si el plan de cuentas no trae la cuenta de percepciones IIBB aplicadas, elegir la **Cuenta de
+   percepción SIRCIP**; si no, se crea sola. Guardar.
+#. Marcar las provincias adheridas (ver abajo).
+#. Cargar el padrón del mes (ver *Carga del Padrón*).
+#. Revisar las posiciones fiscales: el formulario avisa si a alguna le falta la línea SIRCIP o tiene percepciones
+   de provincias adheridas.
+
+Guardar de nuevo con la opción marcada agrega la línea SIRCIP a las posiciones fiscales con percepciones que se
+crearon después; no duplica nada. La línea SIRCIP solo puede ser una percepción que lee el archivo de padrón.
 
 Provincias adheridas
 --------------------
@@ -82,7 +93,8 @@ Carga del Padrón
 #. Ir a ``Contabilidad → Configuración → AFIP → Padrón de Alícuotas por Compañía``.
 #. Crear un nuevo registro con:
 
-   * **Jurisdicción:** ``SIRCIP`` (la provincia ficticia creada por el módulo)
+   * **Jurisdicción:** ``SIRCIP`` (la provincia ficticia creada por el módulo; solo se ofrece acá y en los
+     impuestos, no en los contactos)
    * **Desde / Hasta:** el mes del padrón
    * **Archivo:** el TXT descargado del `Portal Federal Tributario — Descargas <https://www.ca.gob.ar/>`_
 
@@ -146,8 +158,17 @@ Generación del TXT de DDJJ
 
 #. Ir al diario **Liquidación SIRCIP Aplicado**.
 #. Seleccionar las percepciones del período a liquidar.
-#. Usar la acción **Descargar TXT** para generar el archivo ``SIRCIP_DDJJ.txt``.
+#. Usar la acción **Descargar TXT** para generar el archivo ``SIRCIP_DDJJ.txt``. En el diario, el tipo de
+   liquidación es **TXT DDJJ SIRCIP (módulo SIRCIP)**.
 #. Importar en el menú *Declaración Jurada* del `Portal Federal Tributario — DDJJ <https://www.ca.gob.ar/sistemas/sircip>`_.
+
+.. note::
+
+   Hay otra implementación del TXT de SIRCIP en ``l10n_ar_account_tax_settlement``
+   (`PR #896 <https://github.com/ingadhoc/odoo-argentina-ee/pull/896>`_, sin mezclar), que en el diario aparece
+   como **TXT Percepciones Aplicadas SIRCIP** y genera ``Percepciones_sircip.txt``. Se va a unificar en una sola
+   (ver Pendientes); mientras tanto, la de este módulo es la que usa el tipo de registro, el CRC y la provincia
+   de entrega.
 
 Registros que genera (campo 5, *tipo de registro*):
 
@@ -178,7 +199,7 @@ Pendientes
 Se tachan (``[x]``) a medida que se resuelven. La numeración es la de la actividad de la tarea.
 
 **TXT de DDJJ** (según el diseño de registros vigente y la Guía Operativa de la Comisión Arbitral; lo trabaja
-la subtarea de la DDJJ):
+la subtarea de la DDJJ, que además decide cómo unificar las dos implementaciones del TXT):
 
 - ``[ ]`` 1. NC: mismo tipo de registro que la percepción original (1, 4 o 5), comprobante 102, campos 12 y 14
   negativos, campo 15 con tipo + letra + punto de venta + número (``001A0002311312221``), campo 16 vacío y CRC
@@ -200,11 +221,11 @@ la subtarea de la DDJJ):
 - ``[x]`` 10. Compañías creadas después de instalar: se configuran desde Ajustes (*Agente de percepción SIRCIP*).
 - ``[x]`` 11. Posiciones fiscales creadas después: guardar los Ajustes les agrega la línea SIRCIP, y el formulario
   avisa si falta o si tienen percepciones de provincias adheridas.
-- ``[ ]`` 12. Restringir la posición fiscal SIRCIP a percepción + archivo de padrón.
-- ``[ ]`` 13. Que la provincia ficticia SIRCIP no se pueda elegir en los contactos. Hoy: se puede.
+- ``[x]`` 12. La línea SIRCIP de una posición fiscal solo puede ser percepción + archivo de padrón.
+- ``[x]`` 13. La provincia ficticia SIRCIP no se ofrece en los contactos ni se les puede asignar.
 - ``[x]`` 14. Pedidos de venta con la dirección de entrega del pedido.
-- ``[ ]`` 15. Cuenta SIRCIP en planes sin la cuenta de percepciones IIBB aplicadas del plan RI (exento, base,
-  personalizados). Hoy: el impuesto queda sin cuenta.
+- ``[x]`` 15. Cuenta SIRCIP en planes sin la cuenta de percepciones IIBB aplicadas (monotributo,
+  personalizados): se elige en Ajustes, y guardar sin ella da un error claro.
 - ``[ ]`` 16. Excluidos (tipo 3) por los *ajustes al padrón*. Hoy: no se procesan.
 - ``[ ]`` 17. Varias entregas por factura (una factura por entrega, según la Comisión Arbitral) y la leyenda del
   no inscripto por jurisdicción. Hoy: una sola provincia de entrega por factura.

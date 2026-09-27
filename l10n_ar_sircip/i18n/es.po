@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-08 21:19+0000\n"
+"POT-Creation-Date: 2026-09-27 17:31+0000\n"
 "PO-Revision-Date: 2026-06-08 00:00+0000\n"
 "Last-Translator: ADHOC SA <info@adhoc.com.ar>\n"
 "Language-Team: Spanish (Latin America)\n"
@@ -35,6 +35,16 @@ msgid "5 - Sobretasa"
 msgstr "5 - Sobretasa"
 
 #. module: l10n_ar_sircip
+#: model:ir.model.fields,help:l10n_ar_sircip.field_res_company__l10n_ar_sircip_account_id
+#: model:ir.model.fields,help:l10n_ar_sircip.field_res_config_settings__l10n_ar_sircip_account_id
+msgid ""
+"Account of the SIRCIP perceptions. If empty, it is created next to the "
+"applied IIBB perceptions of the chart of accounts."
+msgstr ""
+"Cuenta de las percepciones SIRCIP. Si está vacía, se crea junto a las "
+"percepciones IIBB aplicadas del plan de cuentas."
+
+#. module: l10n_ar_sircip
 #: model:ir.model.fields,field_description:l10n_ar_sircip.field_res_country_state__l10n_ar_is_sircip
 msgid "Adhered to SIRCIP"
 msgstr "Adherida a SIRCIP"
@@ -55,6 +65,11 @@ msgid "Config Settings"
 msgstr "Opciones de configuración"
 
 #. module: l10n_ar_sircip
+#: model:ir.model,name:l10n_ar_sircip.model_res_partner
+msgid "Contact"
+msgstr "Contacto"
+
+#. module: l10n_ar_sircip
 #: model:ir.model,name:l10n_ar_sircip.model_res_country_state
 msgid "Country state"
 msgstr "Estado/Provincia"
@@ -66,10 +81,9 @@ msgid ""
 "and adds the SIRCIP line to the fiscal positions with perceptions. Save "
 "again to update fiscal positions created later."
 msgstr ""
-"Crea los impuestos, la cuenta, la posición fiscal y el diario de liquidación"
-" SIRCIP, y agrega la línea SIRCIP a las posiciones fiscales con "
-"percepciones. Guardar de nuevo actualiza las posiciones fiscales creadas "
-"después."
+"Crea los impuestos, la cuenta, la posición fiscal y el diario de liquidación "
+"SIRCIP, y agrega la línea SIRCIP a las posiciones fiscales con percepciones. "
+"Guardar de nuevo actualiza las posiciones fiscales creadas después."
 
 #. module: l10n_ar_sircip
 #. odoo-python
@@ -177,8 +191,8 @@ msgid ""
 "Perceptions of provinces adhered to SIRCIP: %(states)s. They are now "
 "collected through SIRCIP, remove those lines."
 msgstr ""
-"Percepciones de provincias adheridas a SIRCIP: %(states)s. Ahora se perciben"
-" por SIRCIP: eliminar esas líneas."
+"Percepciones de provincias adheridas a SIRCIP: %(states)s. Ahora se perciben "
+"por SIRCIP: eliminar esas líneas."
 
 #. module: l10n_ar_sircip
 #: model:ir.model.fields,help:l10n_ar_sircip.field_account_tax__l10n_ar_sircip_record_type
@@ -196,6 +210,12 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sircip.view_res_country_state_form_sircip
 msgid "SIRCIP"
 msgstr ""
+
+#. module: l10n_ar_sircip
+#: model:ir.model.fields,field_description:l10n_ar_sircip.field_res_company__l10n_ar_sircip_account_id
+#: model:ir.model.fields,field_description:l10n_ar_sircip.field_res_config_settings__l10n_ar_sircip_account_id
+msgid "SIRCIP Perception Account"
+msgstr "Cuenta de percepción SIRCIP"
 
 #. module: l10n_ar_sircip
 #: model:ir.model.fields,field_description:l10n_ar_sircip.field_res_company__l10n_ar_sircip_agent
@@ -216,6 +236,14 @@ msgstr "Aviso SIRCIP"
 
 #. module: l10n_ar_sircip
 #. odoo-python
+#: code:addons/l10n_ar_sircip/models/res_partner.py:0
+msgid ""
+"SIRCIP is not a province: it only identifies the SIRCIP padron and taxes."
+msgstr ""
+"SIRCIP no es una provincia: solo identifica el padrón y los impuestos SIRCIP."
+
+#. module: l10n_ar_sircip
+#. odoo-python
 #: code:addons/l10n_ar_sircip/models/account_fiscal_position_l10n_ar_tax.py:0
 msgid "SIRCIP tax template not found for company %(company)s."
 msgstr ""
@@ -230,13 +258,34 @@ msgstr ""
 
 #. module: l10n_ar_sircip
 #: model:ir.model.fields.selection,name:l10n_ar_sircip.selection__account_journal__settlement_tax__iibb_aplicado_sircip
-msgid "TXT Perc IIBB SIRCIP aplicadas"
+msgid "TXT DDJJ SIRCIP (módulo SIRCIP)"
 msgstr ""
 
 #. module: l10n_ar_sircip
 #: model:ir.model,name:l10n_ar_sircip.model_account_tax
 msgid "Tax"
 msgstr "Impuesto"
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_fiscal_position_l10n_ar_tax.py:0
+msgid ""
+"The SIRCIP line of fiscal position %(fiscal_position)s must be a perception "
+"with the 'Padron file' webservice."
+msgstr ""
+"La línea SIRCIP de la posición fiscal %(fiscal_position)s tiene que ser una "
+"percepción con el webservice 'Archivo de padrón'."
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/hooks.py:0
+msgid ""
+"The chart of accounts of %(company)s has no account for applied IIBB "
+"perceptions. Set the 'SIRCIP Perception Account' in the Accounting settings."
+msgstr ""
+"El plan de cuentas de %(company)s no tiene cuenta de percepciones IIBB "
+"aplicadas. Elegir la 'Cuenta de percepción SIRCIP' en los ajustes de "
+"Contabilidad."
 
 #. module: l10n_ar_sircip
 #: model:ir.model.fields,help:l10n_ar_sircip.field_res_company__l10n_ar_sircip_agent

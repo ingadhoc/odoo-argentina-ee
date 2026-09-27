@@ -30,7 +30,7 @@ class AccountJournal(models.Model):
 
     settlement_tax = fields.Selection(
         selection_add=[
-            ("iibb_aplicado_sircip", "TXT Perc IIBB SIRCIP aplicadas"),
+            ("iibb_aplicado_sircip", "TXT DDJJ SIRCIP (módulo SIRCIP)"),
         ]
     )
 

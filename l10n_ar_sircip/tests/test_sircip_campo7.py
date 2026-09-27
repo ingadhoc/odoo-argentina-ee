@@ -49,6 +49,7 @@ class TestSircipCampo7(common.TransactionCase):
                 "fiscal_position_id": fiscal_pos.id,
                 "default_tax_id": sircip_tax.id,
                 "tax_type": "perception",
+                "webservice": "padron",
             }
         )
 

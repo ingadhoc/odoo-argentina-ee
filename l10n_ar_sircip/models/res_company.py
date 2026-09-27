@@ -14,6 +14,13 @@ class ResCompany(models.Model):
         "taxes, account, fiscal position and settlement journal, and adds the SIRCIP line to the fiscal positions "
         "with perceptions.",
     )
+    l10n_ar_sircip_account_id = fields.Many2one(
+        "account.account",
+        string="SIRCIP Perception Account",
+        check_company=True,
+        help="Account of the SIRCIP perceptions. If empty, it is created next to the applied IIBB perceptions of the "
+        "chart of accounts.",
+    )
 
     def _l10n_ar_sircip_setup(self):
         """Crea o completa los datos SIRCIP de las compañías agentes. Se puede correr las veces que haga falta."""

@@ -6,6 +6,7 @@ import logging
 
 from dateutil.relativedelta import relativedelta
 from odoo import Command, fields
+from odoo.exceptions import UserError
 
 from .models.account_tax import (
     SIRCIP_RECORD_NOT_REGISTERED,
@@ -30,15 +31,14 @@ _AFIP_TRIBUTE_IIBB = "07"
 
 
 def l10n_ar_sircip_post_init_hook(env):
-    """Marca como agentes SIRCIP a las empresas argentinas y les crea: grupo de impuestos, cuenta, impuestos
-    plantilla, la posición fiscal "Percepción - SIRCIP", la línea SIRCIP en las posiciones fiscales con
-    percepciones y el diario de liquidación."""
-    # Las compañías que se creen después se configuran desde Ajustes (res.company.l10n_ar_sircip_agent)
-    ar_companies = env["res.company"].search([("chart_template", "in", ("ar_base", "ar_ri", "ar_ex"))])
-    ar_companies.l10n_ar_sircip_agent = True
-    ar_companies._l10n_ar_sircip_setup()
-    if env.ref("base.user_demo", raise_if_not_found=False):
-        _setup_demo_sircip_padron_data(env)
+    """Sin demo no se configura ninguna compañía: cada agente se activa desde Ajustes
+    (res.company.l10n_ar_sircip_agent). Con demo, la compañía RI demo queda como agente con su padrón."""
+    company = env.ref("base.company_ri", raise_if_not_found=False)
+    if not company or not env.ref("base.user_demo", raise_if_not_found=False):
+        return
+    company.l10n_ar_sircip_agent = True
+    company._l10n_ar_sircip_setup()
+    _setup_demo_sircip_padron_data(env)
 
 
 def _xmlid(env, name, record):
@@ -48,24 +48,33 @@ def _xmlid(env, name, record):
 
 
 def _get_or_create_account(env, company):
-    """Cuenta de pasivo "Percepción IIBB SIRCIP aplicada", al lado de las percepciones provinciales del plan."""
+    """Cuenta de las percepciones SIRCIP: la de Ajustes o, si no hay, una "Percepción IIBB SIRCIP aplicada" nueva al
+    lado de las percepciones provinciales del plan. Los planes sin esa cuenta (monotributo, custom) la piden en
+    Ajustes."""
+    if company.l10n_ar_sircip_account_id:
+        return company.l10n_ar_sircip_account_id
     account = env.ref("l10n_ar_sircip.account_sircip_%s" % company.id, raise_if_not_found=False)
-    if account:
-        return account
-    Account = env["account.account"].with_company(company)
-    sibling = env.ref("account.%s_ri_percepcion_iibb_tf_aplicada" % company.id, raise_if_not_found=False)
-    if not sibling:
-        _logger.info("l10n_ar_sircip: %s sin cuenta de percepciones IIBB aplicadas del plan AR.", company.name)
-        return Account
-    account = Account.create(
-        {
-            "name": "Percepción IIBB SIRCIP aplicada",
-            "code": Account._search_new_account_code(sibling.with_company(company).code),
-            "account_type": sibling.account_type,
-            "company_ids": [Command.link(company.id)],
-        }
-    )
-    _xmlid(env, "account_sircip_%s" % company.id, account)
+    if not account:
+        sibling = env.ref("account.%s_ri_percepcion_iibb_tf_aplicada" % company.id, raise_if_not_found=False)
+        if not sibling:
+            raise UserError(
+                env._(
+                    "The chart of accounts of %(company)s has no account for applied IIBB perceptions. Set the "
+                    "'SIRCIP Perception Account' in the Accounting settings.",
+                    company=company.name,
+                )
+            )
+        Account = env["account.account"].with_company(company)
+        account = Account.create(
+            {
+                "name": "Percepción IIBB SIRCIP aplicada",
+                "code": Account._search_new_account_code(sibling.with_company(company).code),
+                "account_type": sibling.account_type,
+                "company_ids": [Command.link(company.id)],
+            }
+        )
+        _xmlid(env, "account_sircip_%s" % company.id, account)
+    company.l10n_ar_sircip_account_id = account
     return account
 
 
