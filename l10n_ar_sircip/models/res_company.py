@@ -23,7 +23,7 @@ class ResCompany(models.Model):
     )
 
     def _l10n_ar_sircip_setup(self):
-        """Crea o completa los datos SIRCIP de las compañías agentes. Se puede correr las veces que haga falta."""
+        """Create or complete the SIRCIP data of agent companies. Safe to run repeatedly."""
         from ..hooks import _create_sircip_data_for_company
 
         sircip_state = self.env.ref("l10n_ar_sircip.state_ar_sircip")

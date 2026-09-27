@@ -8,7 +8,7 @@ from odoo.tests import common
 
 
 class TestSircipConstraint(common.TransactionCase):
-    """Tests para el override del constraint de unicidad en l10n_ar.partner.tax."""
+    """Override of the l10n_ar.partner.tax overlap constraint."""
 
     @classmethod
     def setUpClass(cls):
@@ -16,7 +16,6 @@ class TestSircipConstraint(common.TransactionCase):
         # SIRCIP data only exists for AR-chart companies: switch to company_ri.
         company_ri = cls.env.ref("base.company_ri")
         cls.env = cls.env(context=dict(cls.env.context, allowed_company_ids=[company_ri.id]))
-        # Buscar impuestos SIRCIP de la compañía demo
         cls.sircip_group = cls.env["account.tax.group"].search(
             [
                 ("name", "=", "SIRCIP"),
@@ -46,19 +45,16 @@ class TestSircipConstraint(common.TransactionCase):
     def setUp(self):
         super().setUp()
         if not self.sircip_group or not self.sircip_taxes:
-            self.skipTest("No hay datos SIRCIP en la compañía. Instalar el módulo primero.")
+            self.skipTest("No SIRCIP data in the company: install the module first.")
 
     def test_multiple_sircip_perceptions_same_period_allowed(self):
-        """Se permite crear múltiples registros del grupo SIRCIP para el mismo
-        partner y período (necesario para un contacto con entregas en varias provincias)."""
+        """Several SIRCIP records for the same partner and period are allowed."""
         from_date = fields.Date.today().replace(day=1)
         to_date = fields.Date.end_of(from_date, "month")
-        # Usar dos impuestos SIRCIP distintos (ambos del mismo tax_group)
         taxes = self.sircip_taxes[:2]
         if len(taxes) < 2:
-            self.skipTest("Se necesitan al menos 2 impuestos SIRCIP para este test")
+            self.skipTest("At least 2 SIRCIP taxes are needed")
 
-        # Crear primer registro — no debe lanzar error
         rec1 = self.env["l10n_ar.partner.tax"].create(
             {
                 "partner_id": self.partner.id,
@@ -68,7 +64,6 @@ class TestSircipConstraint(common.TransactionCase):
                 "ref": "SIRCIP | crc:25 | campo7:5214252222222225522522550",
             }
         )
-        # Crear segundo registro con el mismo grupo/período — no debe lanzar error
         rec2 = self.env["l10n_ar.partner.tax"].create(
             {
                 "partner_id": self.partner.id,
@@ -82,8 +77,7 @@ class TestSircipConstraint(common.TransactionCase):
         self.assertTrue(rec2.id)
 
     def test_non_sircip_duplicate_still_blocked(self):
-        """El constraint original sigue bloqueando duplicados para impuestos no-SIRCIP."""
-        # Buscar un impuesto no-SIRCIP con tax_group definido
+        """The original constraint still blocks duplicates of non-SIRCIP taxes."""
         non_sircip_tax = self.env["account.tax"].search(
             [
                 ("tax_group_id.name", "!=", "SIRCIP"),
@@ -94,7 +88,7 @@ class TestSircipConstraint(common.TransactionCase):
             limit=1,
         )
         if not non_sircip_tax:
-            self.skipTest("No hay impuestos no-SIRCIP con tax_group para testear")
+            self.skipTest("No non-SIRCIP tax with a tax group to test")
 
         from_date = fields.Date.today().replace(day=1)
         to_date = fields.Date.end_of(from_date, "month")
@@ -113,7 +107,6 @@ class TestSircipConstraint(common.TransactionCase):
                 "to_date": to_date,
             }
         )
-        # El segundo registro con el mismo grupo/período debe fallar
         with self.assertRaises(ValidationError):
             self.env["l10n_ar.partner.tax"].create(
                 {

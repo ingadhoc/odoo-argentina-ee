@@ -21,7 +21,7 @@ class ResCountryState(models.Model):
 
     @api.model
     def name_search(self, name="", args=None, operator="ilike", limit=100):
-        """La provincia ficticia SIRCIP solo se ofrece donde se usa: el padrón y el impuesto."""
+        """Offer the SIRCIP pseudo-province only where it is used: the padron and the tax."""
         sircip_state = self.env.ref("l10n_ar_sircip.state_ar_sircip", raise_if_not_found=False)
         if sircip_state and not self.env.context.get("l10n_ar_sircip_show_state"):
             args = expression.AND([args or [], [("id", "!=", sircip_state.id)]])

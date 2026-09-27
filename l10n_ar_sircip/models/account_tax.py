@@ -4,9 +4,8 @@
 ##############################################################################
 from odoo import fields, models
 
-# Tipo de Registro del TXT de DDJJ (campo 5) que declara cada impuesto SIRCIP.
-# Los tipos 2 (informativo), 3 (excluido) y 6 (anulada) no tienen impuesto propio:
-# el 2 sale de cruzar las facturas del período, el 6 de las notas de crédito.
+# DDJJ TXT record type (field 5) declared by each SIRCIP tax. Types 2 (informative), 3 (excluded) and
+# 6 (cancelled) have no tax: 2 comes from the period invoices, 6 from credit notes.
 SIRCIP_RECORD_PERCEPTION = "1"
 SIRCIP_RECORD_NOT_REGISTERED = "4"
 SIRCIP_RECORD_SURCHARGE = "5"

@@ -9,7 +9,7 @@ class AccountMove(models.Model):
     _inherit = "account.move"
 
     def _l10n_ar_sircip_context(self):
-        """La percepción SIRCIP depende de la provincia de entrega, que l10n_ar_tax no transmite."""
+        """SIRCIP depends on the delivery province, which l10n_ar_tax does not pass along."""
         self.ensure_one()
         return self.with_context(l10n_ar_delivery_partner_id=self.partner_shipping_id.id)
 
@@ -24,7 +24,7 @@ class AccountMove(models.Model):
 
     def write(self, vals):
         res = super().write(vals)
-        # Igual que l10n_ar_tax con la fecha: si cambia la entrega desde código, recalculamos las percepciones.
+        # Like l10n_ar_tax does with the date: recompute perceptions when the delivery changes from code
         if "partner_shipping_id" in vals and "invoice_line_ids" not in vals:
             self._l10n_ar_recompute_fiscal_position_taxes()
         return res

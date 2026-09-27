@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- La provincia ficticia SIRCIP no sale en el autocompletado salvo en el padrón y en el impuesto -->
+    <!-- Offer the SIRCIP pseudo-province in the padron and tax autocomplete -->
     <record id="view_res_company_jurisdiction_padron_form_sircip" model="ir.ui.view">
         <field name="name">res.company.jurisdiction.padron.form.sircip</field>
         <field name="model">res.company.jurisdiction.padron</field>

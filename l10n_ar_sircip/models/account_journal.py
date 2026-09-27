@@ -12,15 +12,14 @@ from odoo.exceptions import ValidationError
 from odoo.osv import expression
 from odoo.tools import float_round
 
-# Mapping tipo de comprobante Odoo → código SIRCIP DDJJ
-# Fuente: doc/sircip/Diseno_de_Registros_del_Sistema_SIRCIP.pdf campo 8
+# Odoo document type -> SIRCIP DDJJ document code (field 8)
 _DOCUMENT_TYPES = {
-    "invoice": 1,  # Factura
-    "debit_note": 2,  # Nota de Débito
-    "credit_note": 102,  # Nota de Crédito
+    "invoice": 1,
+    "debit_note": 2,
+    "credit_note": 102,
 }
 
-# Tipos de registro sin impuesto propio (campo 5); el resto viene de account.tax.l10n_ar_sircip_record_type
+# Record types (field 5) with no tax of their own; the rest come from account.tax.l10n_ar_sircip_record_type
 _RECORD_INFORMATIVE = "2"
 _RECORD_CANCELLED = "6"
 
@@ -35,18 +34,15 @@ class AccountJournal(models.Model):
     )
 
     def iibb_aplicado_sircip_files_values(self, move_lines):
-        """TXT de presentación de DDJJ del SIRCIP: CSV de 17 campos, un registro por percepción.
+        """SIRCIP DDJJ TXT: 17-field CSV, one record per perception.
 
-        1. CUIT · 2. CRC del período · 3. Fecha · 4. Régimen (siempre 1, Régimen General) · 5. Tipo de
-        registro · 6. Cód. op. exceptuada · 7. Jurisdicción de entrega · 8. Tipo de comprobante · 9. Letra ·
-        10. Punto de venta · 11. Número · 12. Base · 13. Alícuota · 14. Monto (12 x 13 / 100, redondeado a
-        2) · 15. Comprobante original (NC) · 16. CRC de la devolución · 17. ABM (siempre A)
+        Fields: 1 CUIT, 2 period CRC, 3 date, 4 regime (always 1), 5 record type, 6 exempt operation code,
+        7 delivery jurisdiction, 8 document type, 9 letter, 10 point of sale, 11 number, 12 base, 13 aliquot,
+        14 amount (12 x 13 / 100, rounded to 2), 15 original document (credit notes), 16 refund CRC, 17 ABM (A).
 
-        Tipos de registro: 1, 4 y 5 salen del impuesto de la línea; 6 (anulada) de las notas de crédito;
-        2 (informativo, letra A del padrón) de las facturas del período a esos clientes, que no llevan
-        percepción. El 3 (excluido) depende de los "ajustes al padrón", que todavía no se procesan.
-
-        Fuentes: doc/sircip/Diseno_de_Registros_del_Sistema_SIRCIP.pdf y Q&A CESSI de la Comisión Arbitral.
+        Record types 1, 4 and 5 come from the line tax, 6 from credit notes and 2 (informative, letter A) from
+        the period invoices to those customers. Type 3 (excluded) is not supported yet.
+        Source: doc/sircip/Diseno_de_Registros_del_Sistema_SIRCIP.pdf
         """
         self.ensure_one()
         rows = []
@@ -80,7 +76,6 @@ class AccountJournal(models.Model):
                 move._found_related_invoice() if hasattr(move, "_found_related_invoice") else move.browse()
             )
             if not original:
-                # La Comisión Arbitral rechaza la DDJJ si la NC no informa el comprobante original.
                 raise ValidationError(
                     _(
                         "Credit note %(move)s has no original invoice. It is mandatory in the SIRCIP DDJJ.",
@@ -110,7 +105,7 @@ class AccountJournal(models.Model):
         ]
 
     def _sircip_padron_data(self, move):
-        """Datos del padrón SIRCIP guardados en el partner para el mes del comprobante."""
+        """SIRCIP padron data stored on the partner for the month of the move."""
         cache = self.env["l10n_ar.partner.tax"].search(
             [
                 ("partner_id", "=", move.commercial_partner_id.id),
@@ -126,8 +121,8 @@ class AccountJournal(models.Model):
         return self._sircip_padron_data(move)["crc"]
 
     def _sircip_informative_rows(self, move_lines):
-        """Registros tipo 2: facturas de los meses liquidados a clientes con letra A (0%) y entrega en una
-        provincia adherida. No llevan percepción, pero la Comisión Arbitral pide declararlas."""
+        """Type 2 records: invoices of the settled months to letter A (0%) customers delivered in an adhered
+        province, which carry no perception but must be declared."""
         if not move_lines:
             return []
         months = {date + relativedelta(day=1) for date in move_lines.mapped("date")}

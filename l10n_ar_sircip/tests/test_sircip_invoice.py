@@ -11,38 +11,33 @@ from .common import TestSircipCommon
 @tagged("post_install", "-at_install")
 class TestSircipInvoice(TestSircipCommon):
     def test_perceptions_by_campo7_digit(self):
-        """Qué percepción SIRCIP lleva la factura según el padrón y la provincia de entrega.
+        """SIRCIP perceptions of an invoice by padron data and delivery province.
 
-        Fuente: planilla oficial "Aplicación Códigos" y Q&A CESSI de la Comisión Arbitral.
-        - En el padrón: siempre "Percepción SIRCIP" con la alícuota de la letra, cualquiera sea el dígito
-          del campo 7 (3 = adherida sin alta y sin sobretasa; 4 y 5 = no adherida, la provincial va por su
-          propia línea de posición fiscal).
-        - Dígito 2: además, "por falta de alta en (provincia)" en una línea aparte.
-        - Letra A (0%): nada en la factura; con dígito 2, solo la sobretasa.
-        - Fuera del padrón: 2% "por no inscripto" solo si la entrega es en una provincia adherida.
+        In the padron, "Percepción SIRCIP" at the letter aliquot for any digit, plus the surcharge on digit 2;
+        letter A adds only the surcharge. Not in the padron, 2% "no inscripto" only for adhered deliveries.
         """
         cases = [
-            ("dígito 1: solo Percepción SIRCIP", "digit1", ["Percepción SIRCIP 3.00%"]),
+            ("digit 1: only Percepción SIRCIP", "digit1", ["Percepción SIRCIP 3.00%"]),
             (
-                "dígito 2: Percepción SIRCIP y falta de alta en Chaco, en líneas separadas",
+                "digit 2: Percepción SIRCIP and falta de alta en Chaco, on separate lines",
                 "digit2",
                 ["Percepción SIRCIP 0.30%", "Percepción SIRCIP por falta de alta en Chaco"],
             ),
-            ("dígito 3: Percepción SIRCIP, sin sobretasa", "digit3", ["Percepción SIRCIP 0.30%"]),
-            ("dígito 4: Percepción SIRCIP, sin la provincial", "digit4", ["Percepción SIRCIP 0.30%"]),
-            ("dígito 5: Percepción SIRCIP", "digit5", ["Percepción SIRCIP 0.30%"]),
-            ("letra A: nada en la factura", "letter_a", []),
+            ("digit 3: Percepción SIRCIP, no surcharge", "digit3", ["Percepción SIRCIP 0.30%"]),
+            ("digit 4: Percepción SIRCIP, without the provincial one", "digit4", ["Percepción SIRCIP 0.30%"]),
+            ("digit 5: Percepción SIRCIP", "digit5", ["Percepción SIRCIP 0.30%"]),
+            ("letter A: nothing on the invoice", "letter_a", []),
             (
-                "letra A con dígito 2: solo la sobretasa",
+                "letter A with digit 2: only the surcharge",
                 "letter_a_digit2",
                 ["Percepción SIRCIP por falta de alta en Chaco"],
             ),
             (
-                "fuera del padrón, entrega adherida: 2% por no inscripto",
+                "not in padron, adhered delivery: 2% no inscripto",
                 "not_registered",
                 ["Percepción SIRCIP por no inscripto"],
             ),
-            ("fuera del padrón, entrega no adherida: nada", "not_registered_not_adhered", []),
+            ("not in padron, non-adhered delivery: nothing", "not_registered_not_adhered", []),
         ]
         for label, key, expected in cases:
             with self.subTest(label):
@@ -53,39 +48,38 @@ class TestSircipInvoice(TestSircipCommon):
                 self.assert_sircip_invariants(invoice)
 
     def test_same_month_and_delivery_changes(self):
-        """El padrón se consulta una vez por mes, pero la percepción se calcula en cada factura con la
-        provincia de entrega de esa factura (el campo 7 se lee solo para la jurisdicción de entrega)."""
+        """The padron is read once a month, but each invoice computes its perceptions with its own delivery
+        province."""
         partner = self.partners["digit2"]
         both = ["Percepción SIRCIP 0.30%", "Percepción SIRCIP por falta de alta en Chaco"]
-        with self.subTest("la primera factura del mes lleva SIRCIP y sobretasa"):
+        with self.subTest("the first invoice of the month has SIRCIP and surcharge"):
             first = self._sircip_invoice(partner, post=True)
             self.assertEqual(self._sircip_tax_names(first), both)
             self.assert_sircip_invariants(first)
-        with self.subTest("la segunda factura del mes mantiene la sobretasa"):
+        with self.subTest("the second invoice of the month keeps the surcharge"):
             second = self._sircip_invoice(partner)
             self.assertEqual(self._sircip_tax_names(second), both)
             self.assert_sircip_invariants(second)
-        with self.subTest("con entrega en Salta se lee el dígito de Salta: sin sobretasa"):
+        with self.subTest("delivery in Salta reads the Salta digit: no surcharge"):
             salta = self._delivery(partner, self.salta)
             third = self._sircip_invoice(partner, shipping=salta)
             self.assertEqual(self._sircip_tax_names(third), ["Percepción SIRCIP 0.30%"])
             self.assert_sircip_invariants(third)
-        with self.subTest("cambiar la entrega de la factura recalcula las percepciones"):
+        with self.subTest("changing the invoice delivery recomputes the perceptions"):
             third.partner_shipping_id = partner
             self.assertEqual(self._sircip_tax_names(third), both)
             self.assert_sircip_invariants(third)
-        with self.subTest("un solo registro del padrón por mes en el contacto, con CRC, letra y campo 7"):
+        with self.subTest("a single padron record per month on the contact, with CRC, letter and field 7"):
             cache = partner.l10n_ar_partner_perception_ids.filtered("tax_id.l10n_ar_sircip_record_type")
             self.assertEqual(len(cache), 1)
             self.assertIn("crc:%s" % self.crc["digit2"], cache.ref)
             self.assertIn("letra:F", cache.ref)
 
     def test_sale_order_delivery(self):
-        """En el pedido de venta la percepción SIRCIP también sale de la dirección de entrega del pedido
-        (l10n_ar_sale pasa la entrega con l10n_ar_delivery_partner_id). Que la factura del pedido herede la entrega
-        lo hace sale (_prepare_invoice); la factura calcula con su propia entrega (test_same_month_and_delivery_changes)."""
+        """On the sale order, the SIRCIP perception also follows the order delivery address (passed by
+        l10n_ar_sale)."""
         if self.env["ir.module.module"]._get("l10n_ar_sale").state != "installed":
-            self.skipTest("l10n_ar_sale no está instalado: las percepciones del pedido las calcula ese módulo")
+            self.skipTest("l10n_ar_sale is not installed: it computes the order perceptions")
         partner = self.partners["digit2"]
         salta = self._delivery(partner, self.salta)
         order = self.env["sale.order"].create(
@@ -99,9 +93,9 @@ class TestSircipInvoice(TestSircipCommon):
         )
         sircip_names = lambda taxes: sorted(taxes.filtered("l10n_ar_sircip_record_type").mapped("name"))  # noqa: E731
         both = ["Percepción SIRCIP 0.30%", "Percepción SIRCIP por falta de alta en Chaco"]
-        with self.subTest("entrega en Salta: se lee el dígito de Salta, sin sobretasa"):
+        with self.subTest("delivery in Salta: reads the Salta digit, no surcharge"):
             self.assertEqual(sircip_names(order.order_line.tax_id), ["Percepción SIRCIP 0.30%"])
-        with self.subTest("cambiar la entrega a Chaco recalcula las percepciones del pedido"):
+        with self.subTest("changing the delivery to Chaco recomputes the order perceptions"):
             order.partner_shipping_id = partner
             order._l10n_ar_recompute_fiscal_position_taxes()
             self.assertEqual(sircip_names(order.order_line.tax_id), both)
