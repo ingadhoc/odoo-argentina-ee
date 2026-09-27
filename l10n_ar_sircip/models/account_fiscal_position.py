@@ -36,6 +36,12 @@ class AccountFiscalPosition(models.Model):
                     )
             rec.l10n_ar_sircip_warning = "\n".join(messages)
 
+    def _l10n_ar_is_sircip_fp(self):
+        self.ensure_one()
+        return self == self.env.ref(
+            "l10n_ar_sircip.fiscal_position_sircip_%s" % self.company_id.id, raise_if_not_found=False
+        )
+
     def _l10n_ar_get_fp_tax_taxes(self, fp_tax, partner, company, date, tax_type, payment=None):
         # EXTEND l10n_ar_tax
         """Compute the SIRCIP line per invoice: it depends on the delivery province and may add a surcharge."""

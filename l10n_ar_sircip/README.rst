@@ -63,7 +63,8 @@ Para cada compañía que sea agente de percepción SIRCIP:
    de provincias adheridas.
 
 Guardar de nuevo con la opción marcada agrega la línea SIRCIP a las posiciones fiscales con percepciones que se
-crearon después; no duplica nada. La línea SIRCIP solo puede ser una percepción que lee el archivo de padrón.
+crearon después; no duplica nada. La línea SIRCIP, y toda línea de la posición fiscal **Percepción - SIRCIP**, solo
+puede ser una percepción que lee el archivo de padrón.
 
 Provincias adheridas
 --------------------
@@ -226,7 +227,7 @@ la subtarea de la DDJJ, que además decide cómo unificar las dos implementacion
 - ``[x]`` 10. Compañías creadas después de instalar: se configuran desde Ajustes (*Agente de percepción SIRCIP*).
 - ``[x]`` 11. Posiciones fiscales creadas después: guardar los Ajustes les agrega la línea SIRCIP, y el formulario
   avisa si falta o si tienen percepciones de provincias adheridas.
-- ``[x]`` 12. La línea SIRCIP de una posición fiscal solo puede ser percepción + archivo de padrón.
+- ``[x]`` 12. La línea SIRCIP, y toda línea de la posición fiscal SIRCIP, solo puede ser percepción + archivo de padrón.
 - ``[x]`` 13. La provincia ficticia SIRCIP no se ofrece en los contactos ni se les puede asignar.
 - ``[x]`` 14. Pedidos de venta con la dirección de entrega del pedido.
 - ``[x]`` 15. Cuenta SIRCIP en planes sin la cuenta de percepciones IIBB aplicadas (monotributo,

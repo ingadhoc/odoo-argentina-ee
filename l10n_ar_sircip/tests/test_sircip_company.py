@@ -65,11 +65,16 @@ class TestSircipCompany(TestSircipCommon):
             self.assertEqual(self.company_ri.l10n_ar_sircip_account_id, self.sircip_account)
 
     def test_sircip_line_is_a_padron_perception(self):
-        """The SIRCIP line of a fiscal position can only be a perception read from the padron file."""
+        """SIRCIP lines, and every line of the SIRCIP fiscal position, can only be perceptions read from the padron file."""
         line = self.fiscal_position.l10n_ar_tax_ids.filtered(lambda x: x._l10n_ar_is_sircip())
         for values in ({"tax_type": "withholding"}, {"webservice": False}):
             with self.subTest(values=values), self.assertRaises(ValidationError):
                 line.write(values)
+        with self.subTest("the SIRCIP fiscal position only accepts padron perceptions"):
+            with self.assertRaises(ValidationError):
+                self.fiscal_position.l10n_ar_tax_ids = [
+                    Command.create({"default_tax_id": self.tax_perc_iibb.id, "tax_type": "perception"})
+                ]
 
     def test_sircip_state_is_not_a_province(self):
         """The SIRCIP pseudo-province is neither offered nor assignable on contacts, but it is on the padron
