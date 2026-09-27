@@ -39,10 +39,10 @@
 
     <!-- Digit 4: basic rate; the province's own perception comes from its fiscal position line, letter W = 4.50% -->
     <record id="demo_partner_sircip_digit4" model="res.partner">
-        <field name="name">SIRCIP Demo - Digit 4 Doble Alícuota (Chaco)</field>
+        <field name="name">SIRCIP Demo - Digit 4 Doble Alícuota (Corrientes)</field>
         <field name="is_company" eval="True"/>
         <field name="country_id" ref="base.ar"/>
-        <field name="state_id" ref="base.state_ar_h"/>
+        <field name="state_id" ref="base.state_ar_w"/>
         <field name="vat">30666666662</field>
         <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
         <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>

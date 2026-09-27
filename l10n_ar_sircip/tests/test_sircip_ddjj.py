@@ -2,7 +2,7 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from odoo import Command, fields
+from odoo import Command
 from odoo.exceptions import ValidationError
 from odoo.tests import tagged
 from odoo.tools import float_round
@@ -90,27 +90,14 @@ class TestSircipDdjj(TestSircipCommon):
             )
             (row,) = (row for row in self._ddjj_rows(salta) if row[CUIT] == digit2_cuit)
             self.assertEqual((row[RECORD], row[JURISDICTION]), ("1", "917"))
-        with self.subTest("digit 4: the provincial line of the fiscal position perceives too, SIRCIP declares its own"):
-            partner = self.partners["digit4_buenos_aires"]
-            ba_tax = self.env.ref("account.%s_ri_tax_percepcion_iibb_ba_aplicada" % self.company_ri.id)
-            ba_tax.write({"active": True, "amount": 3.0})
-            self.fiscal_position.l10n_ar_tax_ids = [
-                Command.create({"default_tax_id": ba_tax.id, "tax_type": "perception", "webservice": "padron"})
-            ]
-            self.env["l10n_ar.partner.tax"].create(
-                {
-                    "partner_id": partner.id,
-                    "tax_id": ba_tax.id,
-                    "from_date": self.today.replace(day=1),
-                    "to_date": fields.Date.end_of(self.today, "month"),
-                }
+        with self.subTest("digit 4: its provincial perception is not declared, only the SIRCIP one"):
+            partner = self.partners["digit4"]
+            invoice = self._sircip_invoice(
+                partner, post=True, fiscal_position=self._corrientes_fiscal_position(partner)
             )
-            invoice = self._sircip_invoice(partner, post=True)
-            self.assertEqual(self._sircip_tax_names(invoice), ["Percepción SIRCIP 0.30%"])
-            self.assertIn(ba_tax, invoice.invoice_line_ids.tax_ids)
             self.assertEqual(
                 [(row[RECORD], row[JURISDICTION]) for row in self._ddjj_rows(invoice) if row[CUIT] == partner.vat],
-                [("1", "902")],
+                [("1", "905")],
             )
 
     def test_ddjj_credit_note_without_original(self):

@@ -3,7 +3,8 @@
 # directory
 ##############################################################################
 from odoo import Command
-from odoo.tests import tagged
+from odoo.exceptions import RedirectWarning
+from odoo.tests import Form, tagged
 
 from .common import TestSircipCommon
 
@@ -78,6 +79,55 @@ class TestSircipInvoice(TestSircipCommon):
             self.assertIn("crc:%s" % self.crc["digit2"], cache.ref)
             self.assertIn("letra:F", cache.ref)
             self.assertFalse(salta.l10n_ar_partner_perception_ids, "delivery addresses store no padron record")
+
+    def test_digit4_needs_the_provincial_perception(self):
+        """Digit 4 in the delivery province: that province perceives too, through its own fiscal position. Without
+        it the invoice and the sale order are stopped, pointing to the fiscal position to create or fix."""
+        partner = self.partners["digit4"]
+        with self.subTest("no fiscal position perceives Corrientes: it offers a new one, ready to adjust"):
+            invoice = self._sircip_invoice(partner)
+            with self.assertRaises(RedirectWarning) as error:
+                invoice.action_post()
+            message, action = error.exception.args[:2]
+            self.assertIn("Corrientes", message)
+            self.assertNotIn("res_id", action)
+            defaults = action["context"]
+            self.assertEqual(defaults["default_state_ids"], [Command.set(self.corrientes.ids)])
+            new_fp = Form(self.env["account.fiscal.position"].with_context(**defaults)).save()
+            self.assertEqual(new_fp.state_ids, self.corrientes, "the country onchange keeps the preset province")
+            self.assertEqual(
+                sorted(new_fp.l10n_ar_tax_ids.default_tax_id.mapped("l10n_ar_state_id.name")),
+                ["Corrientes", "SIRCIP"],
+            )
+            new_fp.unlink()
+        corrientes_fp = self._corrientes_fiscal_position(partner, auto_apply=False)
+        with self.subTest("one exists but was not applied: it points to it and says why"):
+            invoice = self._sircip_invoice(partner)
+            with self.assertRaises(RedirectWarning) as error:
+                invoice.action_post()
+            message, action = error.exception.args[:2]
+            self.assertEqual(action["res_id"], corrientes_fp.id)
+            self.assertIn("not detected automatically", message)
+        with self.subTest("with its fiscal position the invoice has both perceptions"):
+            self.assertTrue(corrientes_fp.l10n_ar_tax_ids.filtered(lambda x: x._l10n_ar_is_sircip()))
+            invoice = self._sircip_invoice(partner, post=True, fiscal_position=corrientes_fp)
+            self.assertEqual(
+                sorted(invoice.invoice_line_ids.tax_ids.filtered("l10n_ar_state_id").mapped("name")),
+                ["P. IIBB CTS 3%", "Percepción SIRCIP 0.30%"],
+            )
+        with self.subTest("the sale order is stopped when confirmed"):
+            if self.env["ir.module.module"]._get("l10n_ar_sale").state != "installed":
+                self.skipTest("l10n_ar_sale is not installed: it checks the order perceptions")
+            order = self.env["sale.order"].create(
+                {
+                    "partner_id": partner.id,
+                    "fiscal_position_id": self.fiscal_position.id,
+                    "company_id": self.company_ri.id,
+                    "order_line": [Command.create({"product_id": self.product_iva_21.id, "price_unit": 1000.0})],
+                }
+            )
+            with self.assertRaises(RedirectWarning):
+                order.action_confirm()
 
     def test_sale_order_delivery(self):
         """On the sale order, the SIRCIP perception also follows the order delivery address (passed by

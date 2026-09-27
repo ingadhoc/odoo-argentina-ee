@@ -89,24 +89,28 @@ class TestSircipCompany(TestSircipCommon):
             self.partners["digit1"].state_id = self.sircip_state
 
     def test_fiscal_positions_created_later(self):
-        """Perception fiscal positions created later get the SIRCIP line when Settings are saved, and warn while
-        they lack it or hold perceptions of adhered provinces."""
+        """On agent companies, perception fiscal positions created or edited later get the SIRCIP line, and warn
+        while they hold perceptions of adhered provinces."""
         buenos_aires = self.tax_perc_iibb.l10n_ar_state_id
+        perception = [Command.create({"default_tax_id": self.tax_perc_iibb.id, "tax_type": "perception"})]
         fiscal_position = self.env["account.fiscal.position"].create(
             {
                 "name": "Percepciones %s" % buenos_aires.name,
                 "company_id": self.company_ri.id,
-                "l10n_ar_tax_ids": [
-                    Command.create({"default_tax_id": self.tax_perc_iibb.id, "tax_type": "perception"})
-                ],
+                "state_ids": [Command.set(buenos_aires.ids)],
+                "l10n_ar_tax_ids": perception,
             }
         )
-        with self.subTest("a new perception fiscal position warns that it lacks the SIRCIP line"):
-            self.assertIn("SIRCIP line", fiscal_position.l10n_ar_sircip_warning)
-        with self.subTest("saving Settings adds the SIRCIP line and clears the warning"):
-            self._save_settings(self.company_ri)
+        with self.subTest("a new perception fiscal position gets the SIRCIP line"):
             self.assertEqual(len(fiscal_position.l10n_ar_tax_ids.filtered(lambda x: x._l10n_ar_is_sircip())), 1)
             self.assertFalse(fiscal_position.l10n_ar_sircip_warning)
+        with self.subTest("adding a perception to an existing fiscal position also adds it"):
+            other = self.env["account.fiscal.position"].create(
+                {"name": "Sin percepciones", "company_id": self.company_ri.id}
+            )
+            self.assertFalse(other.l10n_ar_tax_ids, "without perceptions there is nothing to add")
+            other.l10n_ar_tax_ids = perception
+            self.assertEqual(len(other.l10n_ar_tax_ids.filtered(lambda x: x._l10n_ar_is_sircip())), 1)
         with self.subTest("if the province of a perception adheres, it warns to remove that line"):
             buenos_aires.l10n_ar_is_sircip = True
             fiscal_position.invalidate_recordset(["l10n_ar_sircip_warning"])

@@ -33,7 +33,7 @@ def campo7(digits):
 class TestSircipCommon(TestArCommon):
     """RI company with the SIRCIP setup, a current-month padron and one customer per case.
 
-    Chaco (906) and Salta (917) are adhered; Corrientes (905) and Buenos Aires (902) are not.
+    Chaco (906) and Salta (917) are adhered; Corrientes (905) is not.
     """
 
     @classmethod
@@ -44,9 +44,8 @@ class TestSircipCommon(TestArCommon):
         cls.chaco = cls.env.ref("base.state_ar_h")
         cls.salta = cls.env.ref("base.state_ar_a")
         cls.corrientes = cls.env.ref("base.state_ar_w")
-        cls.buenos_aires = cls.env.ref("base.state_ar_b")
         (cls.chaco | cls.salta).l10n_ar_is_sircip = True
-        (cls.corrientes | cls.buenos_aires).l10n_ar_is_sircip = False
+        cls.corrientes.l10n_ar_is_sircip = False
 
         cls.company_ri.l10n_ar_sircip_agent = True
         cls.company_ri._l10n_ar_sircip_setup()
@@ -65,7 +64,6 @@ class TestSircipCommon(TestArCommon):
             ("digit3", "F", cls.chaco, {"906": 3}),
             ("digit4", "F", cls.corrientes, {"905": 4}),
             ("digit5", "F", cls.corrientes, {"905": 5}),
-            ("digit4_buenos_aires", "F", cls.buenos_aires, {"902": 4}),
             ("letter_a", "A", cls.chaco, {"906": 1}),
             ("letter_a_digit2", "A", cls.chaco, {"906": 2}),
             ("not_registered", None, cls.chaco, {}),
@@ -105,7 +103,7 @@ class TestSircipCommon(TestArCommon):
         )
 
     @classmethod
-    def _sircip_invoice(cls, partner, shipping=None, price_unit=1000.0, post=False):
+    def _sircip_invoice(cls, partner, shipping=None, price_unit=1000.0, post=False, fiscal_position=None):
         invoice = cls.env["account.move"].create(
             {
                 "move_type": "out_invoice",
@@ -113,13 +111,42 @@ class TestSircipCommon(TestArCommon):
                 "partner_shipping_id": (shipping or partner).id,
                 "journal_id": cls.sale_journal.id,
                 "invoice_date": cls.today,
-                "fiscal_position_id": cls.fiscal_position.id,
+                "fiscal_position_id": (fiscal_position or cls.fiscal_position).id,
                 "invoice_line_ids": [Command.create({"product_id": cls.product_iva_21.id, "price_unit": price_unit})],
             }
         )
         if post:
             invoice.action_post()
         return invoice
+
+    @classmethod
+    def _corrientes_fiscal_position(cls, partner, **values):
+        """Fiscal position for deliveries in Corrientes with its perception, manual at 3% on ``partner``; the SIRCIP
+        line is added on create."""
+        tax = cls.env.ref("account.%s_ri_tax_percepcion_iibb_rr_aplicada" % cls.company_ri.id)
+        tax.write({"active": True, "amount": 3.0, "name": "P. IIBB CTS 3%"})
+        cls.env["l10n_ar.partner.tax"].create(
+            {
+                "partner_id": partner.id,
+                "tax_id": tax.id,
+                "from_date": cls.today.replace(day=1),
+                "to_date": fields.Date.end_of(cls.today, "month"),
+            }
+        )
+        return cls.env["account.fiscal.position"].create(
+            dict(
+                {
+                    "name": "Percepción Corrientes",
+                    "company_id": cls.company_ri.id,
+                    "auto_apply": True,
+                    "country_id": cls.env.ref("base.ar").id,
+                    "state_ids": [Command.set(cls.corrientes.ids)],
+                    "l10n_ar_afip_responsibility_type_ids": [Command.set(cls.env.ref("l10n_ar.res_IVARI").ids)],
+                    "l10n_ar_tax_ids": [Command.create({"default_tax_id": tax.id, "tax_type": "perception"})],
+                },
+                **values,
+            )
+        )
 
     @classmethod
     def _delivery(cls, partner, state):

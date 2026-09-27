@@ -80,7 +80,6 @@ def _get_or_create_account(env, company):
 def _create_sircip_data_for_company(env, company, sircip_state):
     Tax = env["account.tax"].with_company(company)
     FiscalPos = env["account.fiscal.position"].with_company(company)
-    FiscalPosLine = env["account.fiscal.position.l10n_ar_tax"].with_company(company)
 
     tax_group = env.ref("l10n_ar_sircip.tax_group_sircip_%s" % company.id, raise_if_not_found=False)
     if not tax_group:
@@ -141,11 +140,7 @@ def _create_sircip_data_for_company(env, company, sircip_state):
         )
         _xmlid(env, "fiscal_position_sircip_%s" % company.id, fiscal_pos)
 
-    # An invoice takes a single fiscal position, so every one with perceptions also needs the SIRCIP line
-    for other in FiscalPos.search([("company_id", "=", company.id), ("id", "!=", fiscal_pos.id)]):
-        perception_lines = other.l10n_ar_tax_ids.filtered(lambda x: x.tax_type == "perception")
-        if perception_lines and not perception_lines.filtered(lambda x: x.default_tax_id.tax_group_id == tax_group):
-            FiscalPosLine.create(dict(sircip_line_vals, fiscal_position_id=other.id))
+    FiscalPos.search([("company_id", "=", company.id), ("id", "!=", fiscal_pos.id)])._l10n_ar_sircip_ensure_line()
 
     if not env["account.journal"].search([("code", "=", "SIRC"), ("company_id", "=", company.id)], limit=1):
         settlement_account = env.ref("account.%s_ri_retencion_iibb_a_pagar" % company.id, raise_if_not_found=False)
