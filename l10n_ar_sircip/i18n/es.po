@@ -81,9 +81,9 @@ msgid ""
 "and adds the SIRCIP line to the fiscal positions with perceptions, also to "
 "the ones created later."
 msgstr ""
-"Crea los impuestos, la cuenta, la posición fiscal y el diario de liquidación "
-"SIRCIP, y agrega la línea SIRCIP a las posiciones fiscales con percepciones, "
-"también a las que se creen después."
+"Crea los impuestos, la cuenta, la posición fiscal y el diario de liquidación"
+" SIRCIP, y agrega la línea SIRCIP a las posiciones fiscales con "
+"percepciones, también a las que se creen después."
 
 #. module: l10n_ar_sircip
 #. odoo-python
@@ -191,8 +191,8 @@ msgid ""
 "Perceptions of provinces adhered to SIRCIP: %(states)s. They are now "
 "collected through SIRCIP, remove those lines."
 msgstr ""
-"Percepciones de provincias adheridas a SIRCIP: %(states)s. Ahora se perciben "
-"por SIRCIP: eliminar esas líneas."
+"Percepciones de provincias adheridas a SIRCIP: %(states)s. Ahora se perciben"
+" por SIRCIP: eliminar esas líneas."
 
 #. module: l10n_ar_sircip
 #: model:ir.model.fields,help:l10n_ar_sircip.field_account_tax__l10n_ar_sircip_record_type
@@ -240,7 +240,8 @@ msgstr "Aviso SIRCIP"
 msgid ""
 "SIRCIP is not a province: it only identifies the SIRCIP padron and taxes."
 msgstr ""
-"SIRCIP no es una provincia: solo identifica el padrón y los impuestos SIRCIP."
+"SIRCIP no es una provincia: solo identifica el padrón y los impuestos "
+"SIRCIP."
 
 #. module: l10n_ar_sircip
 #. odoo-python
@@ -352,18 +353,6 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
 msgid ""
-"According to the SIRCIP padron, %(partner)s also has the %(state)s perception (digit 4, delivery in %(state)s), but the fiscal position %(fiscal_position)s cannot compute it.\n"
-"\n"
-"To continue, use a fiscal position for deliveries in %(state)s with the %(state)s perception, with the aliquot loaded manually on the contact or obtained through its webservice or padron file."
-msgstr ""
-"Según el padrón SIRCIP, a %(partner)s también le corresponde la percepción de %(state)s (dígito 4, entrega en %(state)s), pero la posición fiscal %(fiscal_position)s no tiene cómo calcularla.\n"
-"\n"
-"Para continuar, use una posición fiscal para entregas en %(state)s con la percepción de %(state)s, con la alícuota cargada manualmente en el contacto u obtenida por su webservice o archivo de padrón."
-
-#. module: l10n_ar_sircip
-#. odoo-python
-#: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
-msgid ""
 "%(fiscal_position)s perceives %(state)s but was not applied: %(reasons)s."
 msgstr "%(fiscal_position)s percibe %(state)s pero no se aplicó: %(reasons)s."
 
@@ -415,7 +404,8 @@ msgstr "el contacto tiene fija la posición fiscal %(fixed)s"
 msgid ""
 "the document fiscal position was set manually or before this one existed"
 msgstr ""
-"la posición fiscal del documento se eligió a mano o antes de que esta existiera"
+"la posición fiscal del documento se eligió a mano o antes de que esta "
+"existiera"
 
 #. module: l10n_ar_sircip
 #. odoo-python
@@ -427,16 +417,26 @@ msgstr "Percepción %(state)s + SIRCIP"
 #. odoo-python
 #: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
 msgid ""
-"According to the SIRCIP padron, %(partner)s also has the %(state)s perception (digit 4, delivery in %(state)s), but the fiscal position %(fiscal_position)s computes it with a manual aliquot and the contact has no %(state)s aliquot for %(date)s.\n"
+"According to the SIRCIP padron, %(partner)s also has the %(state)s perception (digit 4, delivery in %(state)s), but Odoo does not know its aliquot.\n"
 "\n"
-"To continue, load the aliquot on the Accounting tab of the contact, or set a webservice or padron file for %(state)s on the fiscal position."
+"To continue, load the %(state)s aliquot manually on the Accounting tab of the contact for the period %(period)s or, if applicable, set the %(state)s fiscal position with its webservice, its padron file or its default aliquot."
 msgstr ""
-"Según el padrón SIRCIP, a %(partner)s también le corresponde la percepción de %(state)s (dígito 4, entrega en %(state)s), pero la posición fiscal %(fiscal_position)s la calcula con alícuota manual y el contacto no tiene alícuota de %(state)s para el %(date)s.\n"
+"Según el padrón SIRCIP, a %(partner)s también le corresponde la percepción de %(state)s (dígito 4, entrega en %(state)s), pero Odoo no sabe cuál es su alícuota.\n"
 "\n"
-"Para continuar, cargue la alícuota en la pestaña Contabilidad del contacto, o configure en la posición fiscal un webservice o archivo de padrón para %(state)s."
+"Para continuar, cargue la alícuota de %(state)s a mano en la pestaña Contabilidad del contacto para el período %(period)s o, si corresponde, configure la posición fiscal de %(state)s con su webservice, su archivo de padrón o su alícuota por defecto."
 
 #. module: l10n_ar_sircip
 #. odoo-python
 #: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
-msgid "Open contact"
-msgstr "Abrir contacto"
+msgid ""
+"According to the SIRCIP padron, %(partner)s also has the %(state)s "
+"perception (digit 4, delivery in %(state)s), but the %(state)s line of the "
+"fiscal position %(fiscal_position)s is manual with a zero default tax, and "
+"the contact has no %(state)s aliquot for the period %(period)s: the document"
+" goes without the %(state)s perception."
+msgstr ""
+"Según el padrón SIRCIP, a %(partner)s también le corresponde la percepción "
+"de %(state)s (dígito 4, entrega en %(state)s), pero la línea de %(state)s de"
+" la posición fiscal %(fiscal_position)s es manual con impuesto por defecto "
+"en cero, y el contacto no tiene alícuota de %(state)s para el período "
+"%(period)s: el documento sale sin la percepción de %(state)s."

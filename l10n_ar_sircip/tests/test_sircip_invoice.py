@@ -81,15 +81,17 @@ class TestSircipInvoice(TestSircipCommon):
             self.assertFalse(salta.l10n_ar_partner_perception_ids, "delivery addresses store no padron record")
 
     def test_digit4_needs_the_provincial_perception(self):
-        """Digit 4 in the delivery province: that province perceives too, through its own fiscal position. Without
-        it the invoice and the sale order are stopped, pointing to the fiscal position to create or fix."""
+        """Digit 4 in the delivery province: that province perceives too, through its own fiscal position or the
+        aliquot of the contact. Without either the invoice and the sale order are stopped; with a manual line at 0%
+        and no aliquot on the contact, they ask to confirm."""
         partner = self.partners["digit4"]
-        with self.subTest("no fiscal position perceives Corrientes: it offers a new one, ready to adjust"):
+        provincial = lambda move: sorted(move.invoice_line_ids.tax_ids.filtered("l10n_ar_state_id").mapped("name"))  # noqa: E731
+        with self.subTest("no fiscal position nor aliquot for Corrientes: it offers a new fiscal position"):
             invoice = self._sircip_invoice(partner)
             with self.assertRaises(RedirectWarning) as error:
                 invoice.action_post()
             message, action = error.exception.args[:2]
-            self.assertIn("Corrientes", message)
+            self.assertIn("Accounting tab of the contact", message)
             self.assertNotIn("res_id", action)
             defaults = action["context"]
             self.assertEqual(defaults["default_state_ids"], [Command.set(self.corrientes.ids)])
@@ -100,23 +102,27 @@ class TestSircipInvoice(TestSircipCommon):
                 ["Corrientes", "SIRCIP"],
             )
             new_fp.unlink()
-        with self.subTest("its fiscal position is manual and the contact has no aliquot: it asks to load it"):
-            zero_tax = self.env.ref("account.%s_ri_tax_percepcion_iibb_rr_aplicada" % self.company_ri.id)
-            manual_fp = self.env["account.fiscal.position"].create(
-                {
-                    "name": "Percepción Corrientes sin alícuota",
-                    "company_id": self.company_ri.id,
-                    "l10n_ar_tax_ids": [Command.create({"default_tax_id": zero_tax.id, "tax_type": "perception"})],
-                }
-            )
-            invoice = self._sircip_invoice(partner, fiscal_position=manual_fp)
-            with self.assertRaises(RedirectWarning) as error:
+        tax_3 = self._corrientes_tax(3.0)
+        with self.subTest(
+            "no fiscal position, aliquot on the contact: SIRCIP adds it, and removes it on delivery change"
+        ):
+            aliquot = self._corrientes_aliquot(partner, tax_3)
+            try:
+                invoice = self._sircip_invoice(partner)
+                self.assertEqual(provincial(invoice), ["P. IIBB CTS 3.0%", "Percepción SIRCIP 0.30%"])
+                chaco = self._delivery(partner, self.chaco)
+                invoice.partner_shipping_id = chaco
+                invoice.fiscal_position_id = self.fiscal_position
+                invoice._l10n_ar_recompute_fiscal_position_taxes()
+                self.assertEqual(provincial(invoice), ["Percepción SIRCIP 0.30%"], "digit 5 in Chaco: no provincial")
+                invoice.partner_shipping_id = partner
+                invoice.fiscal_position_id = self.fiscal_position
+                invoice._l10n_ar_recompute_fiscal_position_taxes()
                 invoice.action_post()
-            message, action = error.exception.args[:2]
-            self.assertIn("manual aliquot", message)
-            self.assertEqual((action["res_model"], action["res_id"]), ("res.partner", partner.id))
-            manual_fp.active = False
-        corrientes_fp = self._corrientes_fiscal_position(partner, auto_apply=False)
+                self.assertEqual(invoice.state, "posted")
+            finally:
+                aliquot.unlink()
+        corrientes_fp = self._corrientes_fiscal_position(tax_3, auto_apply=False)
         with self.subTest("one exists but was not applied: it points to it and says why"):
             invoice = self._sircip_invoice(partner)
             with self.assertRaises(RedirectWarning) as error:
@@ -127,16 +133,30 @@ class TestSircipInvoice(TestSircipCommon):
         with self.subTest("with its fiscal position the invoice has both perceptions"):
             self.assertTrue(corrientes_fp.l10n_ar_tax_ids.filtered(lambda x: x._l10n_ar_is_sircip()))
             invoice = self._sircip_invoice(partner, post=True, fiscal_position=corrientes_fp)
-            self.assertEqual(
-                sorted(invoice.invoice_line_ids.tax_ids.filtered("l10n_ar_state_id").mapped("name")),
-                ["P. IIBB CTS 3%", "Percepción SIRCIP 0.30%"],
-            )
+            self.assertEqual(provincial(invoice), ["P. IIBB CTS 3.0%", "Percepción SIRCIP 0.30%"])
+        corrientes_fp.active = False
+        with self.subTest("manual line at 0% and no aliquot on the contact: it asks to confirm"):
+            tax_0 = self._corrientes_tax(0.0)
+            manual_fp = self._corrientes_fiscal_position(tax_0, name="Corrientes manual 0%")
+            invoice = self._sircip_invoice(partner, fiscal_position=manual_fp)
+            messages = manual_fp._l10n_ar_check_perceptions(partner, self.today)
+            self.assertEqual(len(messages), 1)
+            self.assertIn("goes without the Corrientes perception", messages[0])
+            wizard = self.env["l10n_ar.perceptions.confirm"]._action_open(invoice, "action_post", messages)
+            self.env["l10n_ar.perceptions.confirm"].browse(wizard["res_id"]).action_confirm()
+            self.assertEqual(invoice.state, "posted", "confirm anyway validates it")
+        with self.subTest("the same with an aliquot on the contact, even 0%: nothing to confirm"):
+            self._corrientes_aliquot(partner, tax_0)
+            self.assertFalse(manual_fp._l10n_ar_check_perceptions(partner, self.today))
+        manual_fp.active = False
         with self.subTest("the sale order is stopped when confirmed"):
             if self.env["ir.module.module"]._get("l10n_ar_sale").state != "installed":
                 self.skipTest("l10n_ar_sale is not installed: it checks the order perceptions")
+            partner.l10n_ar_partner_perception_ids.filtered(lambda x: "CTS" in x.tax_id.name).unlink()
             order = self.env["sale.order"].create(
                 {
                     "partner_id": partner.id,
+                    "partner_shipping_id": partner.id,
                     "fiscal_position_id": self.fiscal_position.id,
                     "company_id": self.company_ri.id,
                     "order_line": [Command.create({"product_id": self.product_iva_21.id, "price_unit": 1000.0})],

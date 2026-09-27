@@ -93,7 +93,7 @@ class TestSircipDdjj(TestSircipCommon):
         with self.subTest("digit 4: its provincial perception is not declared, only the SIRCIP one"):
             partner = self.partners["digit4"]
             invoice = self._sircip_invoice(
-                partner, post=True, fiscal_position=self._corrientes_fiscal_position(partner)
+                partner, post=True, fiscal_position=self._corrientes_fiscal_position(self._corrientes_tax(3.0))
             )
             self.assertEqual(
                 [(row[RECORD], row[JURISDICTION]) for row in self._ddjj_rows(invoice) if row[CUIT] == partner.vat],
