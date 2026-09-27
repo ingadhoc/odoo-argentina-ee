@@ -12,8 +12,6 @@ class L10nArPartnerTax(models.Model):
 
     @api.constrains("partner_id", "tax_id", "from_date", "to_date")
     def _check_tax_group_overlap(self):
-        # Allow multiple SIRCIP records per partner/period: one per delivery province.
-        # The sobrealicuota is computed at invoice time from campo7 in the ref field,
-        # not stored as a separate partner.tax record.
+        # Several SIRCIP records per partner and period are allowed
         non_sircip = self.filtered(lambda r: r.tax_id.tax_group_id.name != _SIRCIP_TAX_GROUP_NAME)
         return super(L10nArPartnerTax, non_sircip)._check_tax_group_overlap()

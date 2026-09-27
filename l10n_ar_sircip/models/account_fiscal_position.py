@@ -12,8 +12,7 @@ class AccountFiscalPosition(models.Model):
 
     @api.depends("company_id.l10n_ar_sircip_agent", "l10n_ar_tax_ids.default_tax_id", "l10n_ar_tax_ids.tax_type")
     def _compute_l10n_ar_sircip_warning(self):
-        """Avisos para compañías agentes: posición fiscal con percepciones pero sin la línea SIRCIP, o con percepciones
-        de provincias que ya pasaron a SIRCIP (esas líneas hay que sacarlas)."""
+        """Warn agent companies of perception positions lacking the SIRCIP line or holding adhered provinces."""
         for rec in self:
             messages = []
             perceptions = rec.l10n_ar_tax_ids.filtered(lambda x: x.tax_type == "perception")
@@ -39,8 +38,7 @@ class AccountFiscalPosition(models.Model):
 
     def _l10n_ar_get_fp_tax_taxes(self, fp_tax, partner, company, date, tax_type, payment=None):
         # EXTEND l10n_ar_tax
-        """La línea SIRCIP se calcula en cada factura y no desde los impuestos guardados en el partner:
-        el resultado depende de la provincia de entrega y puede ser más de un impuesto (sobretasa)."""
+        """Compute the SIRCIP line per invoice: it depends on the delivery province and may add a surcharge."""
         if tax_type == "perception" and fp_tax._l10n_ar_is_sircip():
             return fp_tax._sircip_get_taxes(partner, date)
         return super()._l10n_ar_get_fp_tax_taxes(fp_tax, partner, company, date, tax_type, payment=payment)

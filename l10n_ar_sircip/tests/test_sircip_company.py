@@ -24,17 +24,17 @@ class TestSircipCompany(TestSircipCommon):
         )
 
     def test_new_company_from_settings(self):
-        """Una compañía creada después de instalar el módulo se configura desde Ajustes. Si su plan no trae la
-        cuenta de percepciones IIBB aplicadas (monotributo, custom), la cuenta SIRCIP se pide en Ajustes."""
+        """A company created after install is set up from Settings; if its chart lacks the applied IIBB
+        perception account, Settings asks for the SIRCIP account."""
         company = self.company_mono
-        # Plan sin la cuenta de percepciones IIBB aplicadas
+        # Chart without the applied IIBB perception account
         self.env["ir.model.data"].search(
             [("module", "=", "account"), ("name", "=", "%s_ri_percepcion_iibb_tf_aplicada" % company.id)]
         ).unlink()
-        with self.subTest("sin la opción, la compañía no tiene datos SIRCIP"):
+        with self.subTest("without the option, the company has no SIRCIP data"):
             self.assertFalse(company.l10n_ar_sircip_agent)
             self.assertFalse(self._sircip_lines(company))
-        with self.subTest("sin cuenta en el plan ni en Ajustes, guardar pide la cuenta"):
+        with self.subTest("with no account in the chart nor in Settings, saving asks for it"):
             with self.assertRaisesRegex(UserError, "SIRCIP Perception Account"):
                 self._save_settings(company)
         account = self.env["account.account"].create(
@@ -46,7 +46,7 @@ class TestSircipCompany(TestSircipCommon):
             }
         )
         company.l10n_ar_sircip_account_id = account
-        with self.subTest("con la cuenta en Ajustes, crea impuestos con esa cuenta, posición fiscal y grupo"):
+        with self.subTest("with the Settings account, it creates taxes on that account, fiscal position and group"):
             self._save_settings(company)
             self.assertTrue(company.l10n_ar_sircip_agent)
             templates = (
@@ -61,31 +61,31 @@ class TestSircipCompany(TestSircipCommon):
             )
             self.assertTrue(self.env.ref("l10n_ar_sircip.fiscal_position_sircip_%s" % company.id))
             self.assertEqual(templates.tax_group_id.l10n_ar_tribute_afip_code, "07")
-        with self.subTest("con cuenta hermana en el plan (RI), la cuenta creada queda a la vista en Ajustes"):
+        with self.subTest("with a sibling account in the chart (RI), the created account shows in Settings"):
             self.assertEqual(self.company_ri.l10n_ar_sircip_account_id, self.sircip_account)
 
     def test_sircip_line_is_a_padron_perception(self):
-        """La línea SIRCIP de una posición fiscal solo puede ser una percepción que lee el archivo de padrón."""
+        """The SIRCIP line of a fiscal position can only be a perception read from the padron file."""
         line = self.fiscal_position.l10n_ar_tax_ids.filtered(lambda x: x._l10n_ar_is_sircip())
         for values in ({"tax_type": "withholding"}, {"webservice": False}):
             with self.subTest(values=values), self.assertRaises(ValidationError):
                 line.write(values)
 
     def test_sircip_state_is_not_a_province(self):
-        """La provincia ficticia SIRCIP no se ofrece en los contactos ni se les puede asignar; en el padrón y el
-        impuesto sí se ofrece."""
+        """The SIRCIP pseudo-province is neither offered nor assignable on contacts, but it is on the padron
+        and the tax."""
         State = self.env["res.country.state"]
-        with self.subTest("el autocompletado no la ofrece"):
+        with self.subTest("autocomplete does not offer it"):
             self.assertNotIn(self.sircip_state.id, [x[0] for x in State.name_search("SIRCIP")])
-        with self.subTest("en el padrón y el impuesto sí"):
+        with self.subTest("the padron and the tax do"):
             found = State.with_context(l10n_ar_sircip_show_state=True).name_search("SIRCIP")
             self.assertIn(self.sircip_state.id, [x[0] for x in found])
-        with self.subTest("un contacto no puede tenerla como provincia"), self.assertRaises(ValidationError):
+        with self.subTest("a contact cannot have it as province"), self.assertRaises(ValidationError):
             self.partners["digit1"].state_id = self.sircip_state
 
     def test_fiscal_positions_created_later(self):
-        """Las posiciones fiscales con percepciones creadas después reciben la línea SIRCIP al guardar los Ajustes,
-        y avisan mientras no la tengan o si tienen percepciones de provincias que ya pasaron a SIRCIP."""
+        """Perception fiscal positions created later get the SIRCIP line when Settings are saved, and warn while
+        they lack it or hold perceptions of adhered provinces."""
         buenos_aires = self.tax_perc_iibb.l10n_ar_state_id
         fiscal_position = self.env["account.fiscal.position"].create(
             {
@@ -96,17 +96,17 @@ class TestSircipCompany(TestSircipCommon):
                 ],
             }
         )
-        with self.subTest("una posición fiscal nueva con percepciones avisa que le falta la línea SIRCIP"):
+        with self.subTest("a new perception fiscal position warns that it lacks the SIRCIP line"):
             self.assertIn("SIRCIP line", fiscal_position.l10n_ar_sircip_warning)
-        with self.subTest("guardar los Ajustes agrega la línea SIRCIP y el aviso desaparece"):
+        with self.subTest("saving Settings adds the SIRCIP line and clears the warning"):
             self._save_settings(self.company_ri)
             self.assertEqual(len(fiscal_position.l10n_ar_tax_ids.filtered(lambda x: x._l10n_ar_is_sircip())), 1)
             self.assertFalse(fiscal_position.l10n_ar_sircip_warning)
-        with self.subTest("si la provincia de una percepción se adhiere, avisa que hay que sacar esa línea"):
+        with self.subTest("if the province of a perception adheres, it warns to remove that line"):
             buenos_aires.l10n_ar_is_sircip = True
             fiscal_position.invalidate_recordset(["l10n_ar_sircip_warning"])
             self.assertIn(buenos_aires.name, fiscal_position.l10n_ar_sircip_warning)
-        with self.subTest("guardar de nuevo no duplica nada"):
+        with self.subTest("saving again duplicates nothing"):
             lines_before = self._sircip_lines(self.company_ri)
             self._save_settings(self.company_ri)
             self.assertEqual(self._sircip_lines(self.company_ri), lines_before)

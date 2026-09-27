@@ -13,5 +13,5 @@ class ResConfigSettings(models.TransientModel):
 
     def set_values(self):
         super().set_values()
-        # Guardar con la opción activa completa lo que falte: compañías nuevas y posiciones fiscales nuevas
+        # Saving with the option on completes new companies and new fiscal positions
         self.company_id._l10n_ar_sircip_setup()
