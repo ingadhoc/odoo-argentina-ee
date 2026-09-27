@@ -8,7 +8,7 @@
         <field name="arch" type="xml">
             <xpath expr="//block[@id='argentina_localization']" position="inside">
                 <setting id="l10n_ar_sircip_agent" string="SIRCIP Perception Agent"
-                    help="Creates the SIRCIP taxes, account, fiscal position and settlement journal, and adds the SIRCIP line to the fiscal positions with perceptions. Save again to update fiscal positions created later.">
+                    help="Creates the SIRCIP taxes, account, fiscal position and settlement journal, and adds the SIRCIP line to the fiscal positions with perceptions, also to the ones created later.">
                     <field name="l10n_ar_sircip_agent"/>
                     <div class="content-group mt-2" invisible="not l10n_ar_sircip_agent">
                         <div class="row">
