@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-24 17:29+0000\n"
-"PO-Revision-Date: 2026-09-24 17:29+0000\n"
+"POT-Creation-Date: 2026-09-27 17:31+0000\n"
+"PO-Revision-Date: 2026-09-27 17:31+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -31,6 +31,14 @@ msgid "5 - Sobretasa"
 msgstr ""
 
 #. module: l10n_ar_sircip
+#: model:ir.model.fields,help:l10n_ar_sircip.field_res_company__l10n_ar_sircip_account_id
+#: model:ir.model.fields,help:l10n_ar_sircip.field_res_config_settings__l10n_ar_sircip_account_id
+msgid ""
+"Account of the SIRCIP perceptions. If empty, it is created next to the "
+"applied IIBB perceptions of the chart of accounts."
+msgstr ""
+
+#. module: l10n_ar_sircip
 #: model:ir.model.fields,field_description:l10n_ar_sircip.field_res_country_state__l10n_ar_is_sircip
 msgid "Adhered to SIRCIP"
 msgstr ""
@@ -48,6 +56,11 @@ msgstr ""
 #. module: l10n_ar_sircip
 #: model:ir.model,name:l10n_ar_sircip.model_res_config_settings
 msgid "Config Settings"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#: model:ir.model,name:l10n_ar_sircip.model_res_partner
+msgid "Contact"
 msgstr ""
 
 #. module: l10n_ar_sircip
@@ -177,6 +190,12 @@ msgid "SIRCIP"
 msgstr ""
 
 #. module: l10n_ar_sircip
+#: model:ir.model.fields,field_description:l10n_ar_sircip.field_res_company__l10n_ar_sircip_account_id
+#: model:ir.model.fields,field_description:l10n_ar_sircip.field_res_config_settings__l10n_ar_sircip_account_id
+msgid "SIRCIP Perception Account"
+msgstr ""
+
+#. module: l10n_ar_sircip
 #: model:ir.model.fields,field_description:l10n_ar_sircip.field_res_company__l10n_ar_sircip_agent
 #: model:ir.model.fields,field_description:l10n_ar_sircip.field_res_config_settings__l10n_ar_sircip_agent
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sircip.res_config_settings_view_form_sircip
@@ -195,6 +214,13 @@ msgstr ""
 
 #. module: l10n_ar_sircip
 #. odoo-python
+#: code:addons/l10n_ar_sircip/models/res_partner.py:0
+msgid ""
+"SIRCIP is not a province: it only identifies the SIRCIP padron and taxes."
+msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
 #: code:addons/l10n_ar_sircip/models/account_fiscal_position_l10n_ar_tax.py:0
 msgid "SIRCIP tax template not found for company %(company)s."
 msgstr ""
@@ -208,12 +234,28 @@ msgstr ""
 
 #. module: l10n_ar_sircip
 #: model:ir.model.fields.selection,name:l10n_ar_sircip.selection__account_journal__settlement_tax__iibb_aplicado_sircip
-msgid "TXT Perc IIBB SIRCIP aplicadas"
+msgid "TXT DDJJ SIRCIP (módulo SIRCIP)"
 msgstr ""
 
 #. module: l10n_ar_sircip
 #: model:ir.model,name:l10n_ar_sircip.model_account_tax
 msgid "Tax"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_fiscal_position_l10n_ar_tax.py:0
+msgid ""
+"The SIRCIP line of fiscal position %(fiscal_position)s must be a perception "
+"with the 'Padron file' webservice."
+msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/hooks.py:0
+msgid ""
+"The chart of accounts of %(company)s has no account for applied IIBB "
+"perceptions. Set the 'SIRCIP Perception Account' in the Accounting settings."
 msgstr ""
 
 #. module: l10n_ar_sircip

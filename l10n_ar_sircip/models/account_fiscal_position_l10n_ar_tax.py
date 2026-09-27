@@ -4,7 +4,7 @@
 ##############################################################################
 from dateutil.relativedelta import relativedelta
 from odoo import _, api, models
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 
 from .account_tax import SIRCIP_RECORD_PERCEPTION, SIRCIP_RECORD_SURCHARGE
 from .res_company_jurisdiction_padron import SIRCIP_LETTER_ALIQUOT
@@ -61,6 +61,19 @@ class AccountFiscalPositionL10nArTax(models.Model):
         """Extendemos para permitir webservice='padron' con la provincia ficticia SIRCIP."""
         non_sircip_padron = self.filtered(lambda r: not (r.webservice == "padron" and r._l10n_ar_is_sircip()))
         return super(AccountFiscalPositionL10nArTax, non_sircip_padron)._check_webservice_available()
+
+    @api.constrains("tax_type", "webservice", "default_tax_id")
+    def _check_sircip_line(self):
+        """La línea SIRCIP es una percepción y su alícuota sale del padrón SIRCIP."""
+        for rec in self.filtered(lambda x: x._l10n_ar_is_sircip()):
+            if rec.tax_type != "perception" or rec.webservice != "padron":
+                raise ValidationError(
+                    self.env._(
+                        "The SIRCIP line of fiscal position %(fiscal_position)s must be a perception with the "
+                        "'Padron file' webservice.",
+                        fiscal_position=rec.fiscal_position_id.display_name,
+                    )
+                )
 
     def _get_tax_from_ws(self, partner, date):
         if not self._l10n_ar_is_sircip():

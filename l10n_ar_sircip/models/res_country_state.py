@@ -2,7 +2,8 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from odoo import fields, models
+from odoo import api, fields, models
+from odoo.osv import expression
 
 
 class ResCountryState(models.Model):
@@ -17,3 +18,11 @@ class ResCountryState(models.Model):
             "this province may generate SIRCIP perceptions."
         ),
     )
+
+    @api.model
+    def name_search(self, name="", args=None, operator="ilike", limit=100):
+        """La provincia ficticia SIRCIP solo se ofrece donde se usa: el padrón y el impuesto."""
+        sircip_state = self.env.ref("l10n_ar_sircip.state_ar_sircip", raise_if_not_found=False)
+        if sircip_state and not self.env.context.get("l10n_ar_sircip_show_state"):
+            args = expression.AND([args or [], [("id", "!=", sircip_state.id)]])
+        return super().name_search(name, args, operator, limit)
