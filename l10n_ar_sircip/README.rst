@@ -238,7 +238,7 @@ la subtarea de la DDJJ, que además decide cómo unificar las dos implementacion
   según el Q&A CESSI va una factura por entrega. Hoy: una sola provincia de entrega por factura.
 - ``[x]`` 18. Padrón comprimido en ZIP. RAR no: necesita una librería y el binario ``unrar`` en el servidor.
 - ``[ ]`` 19. Validar un período completo contra el portal SIRCIP.
-- ``[ ]`` 20. Revisar los CUITs del padrón demo y los comentarios del módulo (en inglés y mínimos).
+- ``[x]`` 20. CUITs del padrón demo ficticios y comentarios del módulo en inglés y mínimos.
 - ``[ ]`` 21. Forward-port a 19.
 
 **Posiciones en el campo 7 por jurisdicción**
