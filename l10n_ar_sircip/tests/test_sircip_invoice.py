@@ -52,11 +52,14 @@ class TestSircipInvoice(TestSircipCommon):
         province."""
         partner = self.partners["digit2"]
         both = ["Percepción SIRCIP 0.30%", "Percepción SIRCIP por falta de alta en Chaco"]
-        with self.subTest("the first invoice of the month has SIRCIP and surcharge"):
+        with self.subTest("the first invoice of the month has SIRCIP and the surcharge of the delivery province"):
             first = self._sircip_invoice(partner, post=True)
             self.assertEqual(self._sircip_tax_names(first), both)
+            surcharge = first.invoice_line_ids.tax_ids.filtered(lambda x: "falta de alta" in x.name)
+            self.assertEqual(surcharge.l10n_ar_state_id, self.chaco)
             self.assert_sircip_invariants(first)
-        with self.subTest("the second invoice of the month keeps the surcharge"):
+        with self.subTest("the second invoice of the month uses the stored record, even without the padron file"):
+            self.env["res.company.jurisdiction.padron"].search([("state_id", "=", self.sircip_state.id)]).unlink()
             second = self._sircip_invoice(partner)
             self.assertEqual(self._sircip_tax_names(second), both)
             self.assert_sircip_invariants(second)
@@ -74,6 +77,7 @@ class TestSircipInvoice(TestSircipCommon):
             self.assertEqual(len(cache), 1)
             self.assertIn("crc:%s" % self.crc["digit2"], cache.ref)
             self.assertIn("letra:F", cache.ref)
+            self.assertFalse(salta.l10n_ar_partner_perception_ids, "delivery addresses store no padron record")
 
     def test_sale_order_delivery(self):
         """On the sale order, the SIRCIP perception also follows the order delivery address (passed by
