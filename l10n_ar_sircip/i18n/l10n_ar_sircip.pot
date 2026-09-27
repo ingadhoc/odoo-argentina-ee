@@ -72,8 +72,8 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sircip.res_config_settings_view_form_sircip
 msgid ""
 "Creates the SIRCIP taxes, account, fiscal position and settlement journal, "
-"and adds the SIRCIP line to the fiscal positions with perceptions. Save "
-"again to update fiscal positions created later."
+"and adds the SIRCIP line to the fiscal positions with perceptions, also to "
+"the ones created later."
 msgstr ""
 
 #. module: l10n_ar_sircip
@@ -294,8 +294,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
 msgid ""
-"This fiscal position has perceptions but not the SIRCIP line. Save the "
-"Accounting settings with 'SIRCIP Perception Agent' checked to add it."
+"This fiscal position has perceptions but not the SIRCIP line: it is added "
+"when saving."
 msgstr ""
 
 #. module: l10n_ar_sircip

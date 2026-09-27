@@ -22,8 +22,7 @@ class AccountFiscalPosition(models.Model):
                 if not sircip:
                     messages.append(
                         self.env._(
-                            "This fiscal position has perceptions but not the SIRCIP line. Save the Accounting "
-                            "settings with 'SIRCIP Perception Agent' checked to add it."
+                            "This fiscal position has perceptions but not the SIRCIP line: it is added when saving."
                         )
                     )
                 adhered = (perceptions - sircip).default_tax_id.l10n_ar_state_id.filtered("l10n_ar_is_sircip")
