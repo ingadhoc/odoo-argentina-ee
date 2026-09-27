@@ -23,7 +23,6 @@
     ],
     "demo": [
         "demo/res_country_state_demo.xml",
-        "demo/res_company_jurisdiction_padron_demo.xml",
         "demo/res_partner_demo.xml",
     ],
     "post_init_hook": "l10n_ar_sircip_post_init_hook",
