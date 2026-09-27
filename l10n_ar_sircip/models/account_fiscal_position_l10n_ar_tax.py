@@ -57,15 +57,15 @@ class AccountFiscalPositionL10nArTax(models.Model):
         non_sircip_padron = self.filtered(lambda r: not (r.webservice == "padron" and r._l10n_ar_is_sircip()))
         return super(AccountFiscalPositionL10nArTax, non_sircip_padron)._check_webservice_available()
 
-    @api.constrains("tax_type", "webservice", "default_tax_id")
+    @api.constrains("fiscal_position_id", "tax_type", "webservice", "default_tax_id")
     def _check_sircip_line(self):
-        """The SIRCIP line must be a perception read from the padron file."""
-        for rec in self.filtered(lambda x: x._l10n_ar_is_sircip()):
+        """SIRCIP lines, and every line of the SIRCIP fiscal position, must be perceptions read from the padron file."""
+        for rec in self.filtered(lambda x: x._l10n_ar_is_sircip() or x.fiscal_position_id._l10n_ar_is_sircip_fp()):
             if rec.tax_type != "perception" or rec.webservice != "padron":
                 raise ValidationError(
                     self.env._(
-                        "The SIRCIP line of fiscal position %(fiscal_position)s must be a perception with the "
-                        "'Padron file' webservice.",
+                        "The SIRCIP lines, and every line of the SIRCIP fiscal position, must be perceptions with "
+                        "the 'Padron file' webservice (fiscal position %(fiscal_position)s).",
                         fiscal_position=rec.fiscal_position_id.display_name,
                     )
                 )
