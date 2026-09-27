@@ -95,9 +95,43 @@ class AccountFiscalPosition(models.Model):
             data = sircip_line._sircip_get_padron_data(partner, date)
             if not data["in_padron"] or sircip_line._get_sircip_campo7_digit(data["campo7"], state) != 4:
                 continue
-            if not perceptions.filtered(lambda x: x.default_tax_id.l10n_ar_state_id == state):
+            province_lines = perceptions.filtered(lambda x: x.default_tax_id.l10n_ar_state_id == state)
+            if not province_lines:
                 raise rec._l10n_ar_sircip_missing_province_error(partner, delivery, state)
+            for line in province_lines.filtered(lambda x: not x.webservice and not x.default_tax_id.amount):
+                if not rec._l10n_ar_sircip_partner_aliquot(line, partner, date):
+                    raise rec._l10n_ar_sircip_missing_aliquot_error(partner, state, date)
         return res
+
+    def _l10n_ar_sircip_partner_aliquot(self, line, partner, date):
+        """Aliquot loaded on the contact for the group of a manual line, even 0% (someone decided it)."""
+        return partner.l10n_ar_partner_perception_ids.filtered_domain(
+            [
+                ("tax_id.tax_group_id", "=", line.default_tax_id.tax_group_id.id),
+                "|",
+                ("from_date", "<=", date),
+                ("from_date", "=", False),
+                "|",
+                ("to_date", ">=", date),
+                ("to_date", "=", False),
+            ]
+        )
+
+    def _l10n_ar_sircip_missing_aliquot_error(self, partner, state, date):
+        """RedirectWarning to the contact: the manual provincial line has no aliquot to apply."""
+        self.ensure_one()
+        message = self.env._(
+            "According to the SIRCIP padron, %(partner)s also has the %(state)s perception (digit 4, delivery in "
+            "%(state)s), but the fiscal position %(fiscal_position)s computes it with a manual aliquot and the "
+            "contact has no %(state)s aliquot for %(date)s.\n\n"
+            "To continue, load the aliquot on the Accounting tab of the contact, or set a webservice or padron file "
+            "for %(state)s on the fiscal position.",
+            partner=partner.display_name,
+            state=state.name,
+            fiscal_position=self.display_name,
+            date=date,
+        )
+        return RedirectWarning(message, partner.get_formview_action(), self.env._("Open contact"))
 
     def _l10n_ar_sircip_missing_province_error(self, partner, delivery, state):
         """RedirectWarning to the fiscal positions that perceive the province, or to a new one ready to adjust."""

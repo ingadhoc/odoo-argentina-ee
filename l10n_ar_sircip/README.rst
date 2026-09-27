@@ -96,6 +96,9 @@ provincial no la puede adivinar. El botón *Buscar/Crear posición fiscal* abre 
 provincia si existe, con el motivo por el que no se aplicó (sin detección automática, sin la provincia, sin la
 responsabilidad del cliente o con una posición fiscal fija en el contacto), o una nueva ya armada con la
 percepción de la provincia (cálculo manual) y la línea SIRCIP, para ajustar la alícuota o el webservice.
+También frena si la línea de la provincia es manual (sin webservice), su impuesto por defecto es 0% y el
+contacto no tiene alícuota cargada para esa provincia y período: el botón *Abrir contacto* lleva a cargarla.
+Vale para cualquier provincia de entrega, no solo para las del ejemplo.
 
 Uso
 ===
