@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-27 18:09+0000\n"
+"POT-Creation-Date: 2026-09-27 18:20+0000\n"
 "PO-Revision-Date: 2026-06-08 00:00+0000\n"
 "Last-Translator: ADHOC SA <info@adhoc.com.ar>\n"
 "Language-Team: Spanish (Latin America)\n"
@@ -270,11 +270,13 @@ msgstr "Impuesto"
 #. odoo-python
 #: code:addons/l10n_ar_sircip/models/account_fiscal_position_l10n_ar_tax.py:0
 msgid ""
-"The SIRCIP line of fiscal position %(fiscal_position)s must be a perception "
-"with the 'Padron file' webservice."
+"The SIRCIP lines, and every line of the SIRCIP fiscal position, must be "
+"perceptions with the 'Padron file' webservice (fiscal position "
+"%(fiscal_position)s)."
 msgstr ""
-"La línea SIRCIP de la posición fiscal %(fiscal_position)s tiene que ser una "
-"percepción con el webservice 'Archivo de padrón'."
+"La línea SIRCIP, y toda línea de la posición fiscal SIRCIP, tiene que ser "
+"una percepción con el webservice 'Archivo de padrón' (posición fiscal "
+"%(fiscal_position)s)."
 
 #. module: l10n_ar_sircip
 #. odoo-python
