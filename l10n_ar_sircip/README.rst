@@ -62,8 +62,8 @@ Para cada compañía que sea agente de percepción SIRCIP:
 #. Revisar las posiciones fiscales: el formulario avisa si a alguna le falta la línea SIRCIP o tiene percepciones
    de provincias adheridas.
 
-Guardar de nuevo con la opción marcada agrega la línea SIRCIP a las posiciones fiscales con percepciones que se
-crearon después; no duplica nada. La línea SIRCIP, y toda línea de la posición fiscal **Percepción - SIRCIP**, solo
+En las compañías agentes, toda posición fiscal con percepciones que se crea o se edita después recibe sola la
+línea SIRCIP; guardar de nuevo los Ajustes tampoco duplica nada. La línea SIRCIP, y toda línea de la posición fiscal **Percepción - SIRCIP**, solo
 puede ser una percepción que lee el archivo de padrón.
 
 Provincias adheridas
@@ -84,6 +84,18 @@ Cuando una provincia pasa a SIRCIP, eliminar la línea de percepción de esa pro
 fiscales (el formulario de la posición fiscal lo avisa): desde ese momento la percepción se practica por SIRCIP. Las líneas de las provincias **no
 adheridas** se mantienen: para un cliente con alta en una provincia no adherida (dígito 4 del campo 7),
 esa línea calcula la percepción propia de la provincia y SIRCIP agrega la suya.
+
+Cada provincia no adherida con percepción va en **su propia posición fiscal** (provincia de entrega, detección
+automática y la responsabilidad AFIP del cliente), no en **Percepción - SIRCIP**: las líneas de una posición
+fiscal se aplican a toda factura que la use, cualquiera sea la entrega. **Percepción - SIRCIP** tiene secuencia
+9999 y no tiene provincias, así que cualquier posición fiscal de la provincia de entrega le gana.
+
+Si un cliente tiene dígito 4 en la provincia de entrega y la posición fiscal de la factura o del pedido no
+tiene percepción de esa provincia, Odoo **no deja validar la factura ni confirmar el pedido**: la alícuota
+provincial no la puede adivinar. El botón *Buscar/Crear posición fiscal* abre la posición fiscal de esa
+provincia si existe, con el motivo por el que no se aplicó (sin detección automática, sin la provincia, sin la
+responsabilidad del cliente o con una posición fiscal fija en el contacto), o una nueva ya armada con la
+percepción de la provincia (cálculo manual) y la línea SIRCIP, para ajustar la alícuota o el webservice.
 
 Uso
 ===
@@ -225,8 +237,9 @@ la subtarea de la DDJJ, que además decide cómo unificar las dos implementacion
 **Configuración y cálculo:**
 
 - ``[x]`` 10. Compañías creadas después de instalar: se configuran desde Ajustes (*Agente de percepción SIRCIP*).
-- ``[x]`` 11. Posiciones fiscales creadas después: guardar los Ajustes les agrega la línea SIRCIP, y el formulario
-  avisa si falta o si tienen percepciones de provincias adheridas.
+- ``[x]`` 11. Posiciones fiscales creadas o editadas después: reciben sola la línea SIRCIP, y el formulario avisa si
+  tienen percepciones de provincias adheridas. Con dígito 4 y sin percepción de la provincia de entrega, no se
+  puede validar la factura ni confirmar el pedido.
 - ``[x]`` 12. La línea SIRCIP, y toda línea de la posición fiscal SIRCIP, solo puede ser percepción + archivo de padrón.
 - ``[x]`` 13. La provincia ficticia SIRCIP no se ofrece en los contactos ni se les puede asignar.
 - ``[x]`` 14. Pedidos de venta con la dirección de entrega del pedido.
