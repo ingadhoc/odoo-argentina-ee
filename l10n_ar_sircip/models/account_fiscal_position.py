@@ -78,72 +78,95 @@ class AccountFiscalPosition(models.Model):
             if perceptions and sircip_line and not perceptions.filtered(lambda x: x._l10n_ar_is_sircip()):
                 sircip_line.copy({"fiscal_position_id": rec.id})
 
+    def _l10n_ar_perception_tax_groups(self):
+        # EXTEND l10n_ar_tax
+        """With the SIRCIP line, the provincial perception of digit 4 may come from the contact (see
+        ``_sircip_get_taxes``): recompute every provincial perception group, so it goes away if the delivery changes."""
+        groups = super()._l10n_ar_perception_tax_groups()
+        if self.l10n_ar_tax_ids.filtered(lambda x: x.tax_type == "perception" and x._l10n_ar_is_sircip()):
+            groups |= self._l10n_ar_sircip_provincial_taxes().tax_group_id
+        return groups
+
+    def _l10n_ar_sircip_provincial_taxes(self, state=None):
+        """Provincial IIBB perception taxes (not SIRCIP) of the company."""
+        domain = [
+            ("company_id", "=", self.company_id.id),
+            ("type_tax_use", "=", "sale"),
+            ("amount_type", "=", "percent"),
+            ("l10n_ar_sircip_record_type", "=", False),
+            ("tax_group_id.l10n_ar_tribute_afip_code", "=", "07"),
+        ]
+        domain.append(("l10n_ar_state_id", "=", state.id) if state else ("l10n_ar_state_id", "!=", False))
+        return self.env["account.tax"].with_context(active_test=False).search(domain)
+
+    def _l10n_ar_sircip_partner_aliquots(self, partner, date, state=None, tax_group=None):
+        """Perception aliquots loaded on the contact for the date, of a province or a tax group, even 0% (someone
+        decided them)."""
+        domain = [
+            "|",
+            ("from_date", "<=", date),
+            ("from_date", "=", False),
+            "|",
+            ("to_date", ">=", date),
+            ("to_date", "=", False),
+        ]
+        if state:
+            domain.append(("tax_id", "in", self._l10n_ar_sircip_provincial_taxes(state).ids))
+        if tax_group:
+            domain.append(("tax_id.tax_group_id", "=", tax_group.id))
+        return partner.commercial_partner_id.l10n_ar_partner_perception_ids.filtered_domain(domain)
+
     def _l10n_ar_check_perceptions(self, partner, date):
         # EXTEND l10n_ar_tax
-        """Digit 4 in the delivery province: that province perceives too, through its own line of the fiscal
-        position. Without that line Odoo cannot know its aliquot, so the document is stopped."""
-        res = super()._l10n_ar_check_perceptions(partner, date)
+        """Digit 4 in the delivery province: that province perceives too. Without its line in the fiscal position nor
+        an aliquot on the contact, Odoo cannot know it and the document is stopped; with a manual line at 0% and no
+        aliquot on the contact, it goes without it, so it asks to confirm."""
+        messages = super()._l10n_ar_check_perceptions(partner, date)
+        partner = partner.commercial_partner_id
+        delivery_id = self.env.context.get("l10n_ar_delivery_partner_id")
+        delivery = self.env["res.partner"].browse(delivery_id) if delivery_id else partner
+        state = delivery.state_id or partner.state_id
         for rec in self:
             perceptions = rec.l10n_ar_tax_ids.filtered(lambda x: x.tax_type == "perception")
             sircip_line = perceptions.filtered(lambda x: x._l10n_ar_is_sircip())[:1]
             if not sircip_line:
                 continue
-            partner = partner.commercial_partner_id
-            delivery_id = self.env.context.get("l10n_ar_delivery_partner_id")
-            delivery = self.env["res.partner"].browse(delivery_id) if delivery_id else partner
-            state = delivery.state_id or partner.state_id
             data = sircip_line._sircip_get_padron_data(partner, date)
             if not data["in_padron"] or sircip_line._get_sircip_campo7_digit(data["campo7"], state) != 4:
                 continue
             province_lines = perceptions.filtered(lambda x: x.default_tax_id.l10n_ar_state_id == state)
             if not province_lines:
-                raise rec._l10n_ar_sircip_missing_province_error(partner, delivery, state)
+                if not rec._l10n_ar_sircip_partner_aliquots(partner, date, state=state):
+                    raise rec._l10n_ar_sircip_missing_province_error(partner, delivery, state, date)
+                continue
             for line in province_lines.filtered(lambda x: not x.webservice and not x.default_tax_id.amount):
-                if not rec._l10n_ar_sircip_partner_aliquot(line, partner, date):
-                    raise rec._l10n_ar_sircip_missing_aliquot_error(partner, state, date)
-        return res
+                if not rec._l10n_ar_sircip_partner_aliquots(partner, date, tax_group=line.default_tax_id.tax_group_id):
+                    messages.append(
+                        self.env._(
+                            "According to the SIRCIP padron, %(partner)s also has the %(state)s perception (digit 4, "
+                            "delivery in %(state)s), but the %(state)s line of the fiscal position "
+                            "%(fiscal_position)s is manual with a zero default tax, and the contact has no %(state)s "
+                            "aliquot for the period %(period)s: the document goes without the %(state)s perception.",
+                            partner=partner.display_name,
+                            state=state.name,
+                            fiscal_position=rec.display_name,
+                            period=date.strftime("%m/%Y"),
+                        )
+                    )
+        return messages
 
-    def _l10n_ar_sircip_partner_aliquot(self, line, partner, date):
-        """Aliquot loaded on the contact for the group of a manual line, even 0% (someone decided it)."""
-        return partner.l10n_ar_partner_perception_ids.filtered_domain(
-            [
-                ("tax_id.tax_group_id", "=", line.default_tax_id.tax_group_id.id),
-                "|",
-                ("from_date", "<=", date),
-                ("from_date", "=", False),
-                "|",
-                ("to_date", ">=", date),
-                ("to_date", "=", False),
-            ]
-        )
-
-    def _l10n_ar_sircip_missing_aliquot_error(self, partner, state, date):
-        """RedirectWarning to the contact: the manual provincial line has no aliquot to apply."""
-        self.ensure_one()
-        message = self.env._(
-            "According to the SIRCIP padron, %(partner)s also has the %(state)s perception (digit 4, delivery in "
-            "%(state)s), but the fiscal position %(fiscal_position)s computes it with a manual aliquot and the "
-            "contact has no %(state)s aliquot for %(date)s.\n\n"
-            "To continue, load the aliquot on the Accounting tab of the contact, or set a webservice or padron file "
-            "for %(state)s on the fiscal position.",
-            partner=partner.display_name,
-            state=state.name,
-            fiscal_position=self.display_name,
-            date=date,
-        )
-        return RedirectWarning(message, partner.get_formview_action(), self.env._("Open contact"))
-
-    def _l10n_ar_sircip_missing_province_error(self, partner, delivery, state):
+    def _l10n_ar_sircip_missing_province_error(self, partner, delivery, state, date):
         """RedirectWarning to the fiscal positions that perceive the province, or to a new one ready to adjust."""
         self.ensure_one()
         message = self.env._(
             "According to the SIRCIP padron, %(partner)s also has the %(state)s perception (digit 4, delivery in "
-            "%(state)s), but the fiscal position %(fiscal_position)s cannot compute it.\n\n"
-            "To continue, use a fiscal position for deliveries in %(state)s with the %(state)s perception, with the "
-            "aliquot loaded manually on the contact or obtained through its webservice or padron file.",
+            "%(state)s), but Odoo does not know its aliquot.\n\n"
+            "To continue, load the %(state)s aliquot manually on the Accounting tab of the contact for the period "
+            "%(period)s or, if applicable, set the %(state)s fiscal position with its webservice, its padron file or "
+            "its default aliquot.",
             partner=partner.display_name,
             state=state.name,
-            fiscal_position=self.display_name,
+            period=date.strftime("%m/%Y"),
         )
         candidates = self.search(
             [
