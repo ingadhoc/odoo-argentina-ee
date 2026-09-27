@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-27 17:31+0000\n"
+"POT-Creation-Date: 2026-09-27 18:09+0000\n"
 "PO-Revision-Date: 2026-06-08 00:00+0000\n"
 "Last-Translator: ADHOC SA <info@adhoc.com.ar>\n"
 "Language-Team: Spanish (Latin America)\n"
@@ -275,6 +275,22 @@ msgid ""
 msgstr ""
 "La línea SIRCIP de la posición fiscal %(fiscal_position)s tiene que ser una "
 "percepción con el webservice 'Archivo de padrón'."
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/res_company_jurisdiction_padron.py:0
+msgid "The SIRCIP padron ZIP file must contain a single file."
+msgstr "El ZIP del padrón SIRCIP tiene que tener un solo archivo."
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/res_company_jurisdiction_padron.py:0
+msgid ""
+"The SIRCIP padron file is for period %(period)s, but it is loaded from "
+"%(date)s. Load it for the month of its period."
+msgstr ""
+"El archivo del padrón SIRCIP es del período %(period)s, pero se carga desde "
+"%(date)s. Cargarlo en el mes de su período."
 
 #. module: l10n_ar_sircip
 #. odoo-python
