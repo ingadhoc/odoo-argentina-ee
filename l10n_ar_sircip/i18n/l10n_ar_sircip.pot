@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-27 17:31+0000\n"
-"PO-Revision-Date: 2026-09-27 17:31+0000\n"
+"POT-Creation-Date: 2026-09-27 18:09+0000\n"
+"PO-Revision-Date: 2026-09-27 18:09+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -248,6 +248,20 @@ msgstr ""
 msgid ""
 "The SIRCIP line of fiscal position %(fiscal_position)s must be a perception "
 "with the 'Padron file' webservice."
+msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/res_company_jurisdiction_padron.py:0
+msgid "The SIRCIP padron ZIP file must contain a single file."
+msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/res_company_jurisdiction_padron.py:0
+msgid ""
+"The SIRCIP padron file is for period %(period)s, but it is loaded from "
+"%(date)s. Load it for the month of its period."
 msgstr ""
 
 #. module: l10n_ar_sircip

@@ -2,11 +2,14 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
+import base64
 import logging
+import re
 
 from dateutil.relativedelta import relativedelta
 from odoo import Command, fields
 from odoo.exceptions import UserError
+from odoo.tools import file_open
 
 from .models.account_tax import (
     SIRCIP_RECORD_NOT_REGISTERED,
@@ -174,16 +177,27 @@ def _create_sircip_data_for_company(env, company, sircip_state):
 
 
 def _setup_demo_sircip_padron_data(env):
-    """Guarda en los partners demo los datos del padrón demo del mes, como pasa al facturarles por primera
-    vez, para que se vean en la solapa Contabilidad del contacto."""
-    fiscal_pos = env.ref("l10n_ar_sircip.fiscal_position_sircip_%s" % env.ref("base.company_ri").id)
-    fp_line = fiscal_pos.l10n_ar_tax_ids[:1]
-    today = fields.Date.context_today(fp_line)
-    padron = fp_line._search_padron_file(fp_line._get_sircip_state(), today)
-    if not padron:
-        return
+    """Carga el padrón demo para el mes en curso (con ese período en el archivo, que se valida) y guarda en los
+    partners demo sus datos del padrón, como pasa al facturarles por primera vez, para que se vean en la solapa
+    Contabilidad del contacto."""
+    company = env.ref("base.company_ri")
+    today = fields.Date.context_today(env["res.company.jurisdiction.padron"])
+    month_start = today + relativedelta(day=1)
+    period = month_start.strftime("%Y%m").encode()
+    with file_open("l10n_ar_sircip/demo/padron_sircip_demo.txt", "rb") as demo_file:
+        content = re.sub(rb"^\d{6},", period + b",", demo_file.read(), flags=re.M)
+    padron = env["res.company.jurisdiction.padron"].create(
+        {
+            "company_id": company.id,
+            "state_id": env.ref("l10n_ar_sircip.state_ar_sircip").id,
+            "l10n_ar_padron_from_date": month_start,
+            "l10n_ar_padron_to_date": month_start + relativedelta(months=1, days=-1),
+            "filename": "padron_sircip_%s.txt" % period.decode(),
+            "file_padron": base64.b64encode(content),
+        }
+    )
+    _xmlid(env, "padron_sircip_demo", padron)
+    fp_line = env.ref("l10n_ar_sircip.fiscal_position_sircip_%s" % company.id).l10n_ar_tax_ids[:1]
     for partner in env["res.partner"].search([("name", "=like", "SIRCIP Demo%")]):
         fp_line._sircip_get_padron_data(partner, today)
-    _logger.info(
-        "l10n_ar_sircip: datos del padrón demo cargados en los partners demo (%s).", today + relativedelta(day=1)
-    )
+    _logger.info("l10n_ar_sircip: padrón demo cargado para %s.", period.decode())

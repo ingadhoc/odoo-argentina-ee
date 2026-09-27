@@ -96,10 +96,12 @@ Carga del Padrón
    * **Jurisdicción:** ``SIRCIP`` (la provincia ficticia creada por el módulo; solo se ofrece acá y en los
      impuestos, no en los contactos)
    * **Desde / Hasta:** el mes del padrón
-   * **Archivo:** el TXT descargado del `Portal Federal Tributario — Descargas <https://www.ca.gob.ar/>`_
+   * **Archivo:** el TXT descargado del `Portal Federal Tributario — Descargas <https://www.ca.gob.ar/>`_, suelto o
+     comprimido en ZIP (con un solo archivo adentro). RAR no se acepta: descomprimirlo antes.
 
 El padrón es mensual: sin padrón cargado para el mes no se pueden facturar ventas con la posición
-fiscal SIRCIP.
+fiscal SIRCIP. El período del archivo (primera columna) tiene que ser el mes de **Desde**: la Comisión Arbitral
+publica el del mes siguiente el día 22, y cargarlo en el mes equivocado da error.
 
 **Formato del padrón (CSV separado por comas):**
 
@@ -214,7 +216,7 @@ la subtarea de la DDJJ, que además decide cómo unificar las dos implementacion
 
 - ``[x]`` 7. Vigencia al 01/12/2026 (Disposición de Presidencia 7/2026).
 - ``[ ]`` 8. Padrón de devoluciones (lo nombra la Guía de implementación): averiguar qué es y si cambia las NC.
-- ``[ ]`` 9. Validar el período del archivo del padrón (se publica el día 22 del mes anterior). Hoy: no se valida.
+- ``[x]`` 9. El período del archivo del padrón tiene que ser el mes del padrón (se publica el día 22 del mes anterior).
 
 **Configuración y cálculo:**
 
@@ -229,7 +231,7 @@ la subtarea de la DDJJ, que además decide cómo unificar las dos implementacion
 - ``[ ]`` 16. Excluidos (tipo 3) por los *ajustes al padrón*. Hoy: no se procesan.
 - ``[ ]`` 17. Varias entregas por factura (una factura por entrega, según la Comisión Arbitral) y la leyenda del
   no inscripto por jurisdicción. Hoy: una sola provincia de entrega por factura.
-- ``[ ]`` 18. Padrón comprimido (ZIP/RAR). Hoy: solo TXT.
+- ``[x]`` 18. Padrón comprimido en ZIP. RAR no: necesita una librería y el binario ``unrar`` en el servidor.
 - ``[ ]`` 19. Validar un período completo contra el portal SIRCIP.
 - ``[ ]`` 20. Revisar los CUITs del padrón demo y los comentarios del módulo (en inglés y mínimos).
 - ``[ ]`` 21. Forward-port a 19.

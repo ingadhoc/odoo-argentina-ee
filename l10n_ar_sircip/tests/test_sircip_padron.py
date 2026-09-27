@@ -3,19 +3,22 @@
 # directory
 ##############################################################################
 import base64
+import io
+import zipfile
 
+from dateutil.relativedelta import relativedelta
 from odoo import fields
 from odoo.exceptions import ValidationError
 from odoo.tests import common
 
-# 5 líneas del padrón de demo: letras A, B, F, X y un CUIT no presente
+# 5 líneas de padrón (letras A, B, F, V y X); el período se completa con el mes del padrón
 SAMPLE_PADRON = (
     "periodo,cuit,razon_social_contri,jurisdiccion_sede,crc,alicuota_unica_letra,campo7\n"
-    "202602,34111111113,EMPRESA F,922,25,F,5214252222222225522522550\n"
-    "202602,34222222224,EMPRESA A,904,84,A,5224252222222225522512550\n"
-    "202602,34333333335,EMPRESA X,901,34,X,5225252122222225522522540\n"
-    "202602,34444444446,EMPRESA B,902,14,B,5224242222222125522512440\n"
-    "202602,34555555557,EMPRESA V SOBRETASA,921,78,V,4214241111111114411411440\n"
+    "{period},34111111113,EMPRESA F,922,25,F,5214252222222225522522550\n"
+    "{period},34222222224,EMPRESA A,904,84,A,5224252222222225522512550\n"
+    "{period},34333333335,EMPRESA X,901,34,X,5225252122222225522522540\n"
+    "{period},34444444446,EMPRESA B,902,14,B,5224242222222125522512440\n"
+    "{period},34555555557,EMPRESA V SOBRETASA,921,78,V,4214241111111114411411440\n"
 )
 
 
@@ -36,9 +39,45 @@ class TestSircipPadron(common.TransactionCase):
                 "l10n_ar_padron_from_date": cls.month_start,
                 "l10n_ar_padron_to_date": cls.month_end,
                 "filename": "test_padron.txt",
-                "file_padron": base64.b64encode(SAMPLE_PADRON.encode("latin-1")).decode(),
+                "file_padron": cls._padron_file(cls.month_start),
             }
         )
+
+    @classmethod
+    def _padron_file(cls, date, zipped=False):
+        content = SAMPLE_PADRON.format(period=date.strftime("%Y%m")).encode("latin-1")
+        if zipped:
+            buffer = io.BytesIO()
+            with zipfile.ZipFile(buffer, "w") as zip_file:
+                for name in zipped:
+                    zip_file.writestr(name, content)
+            content = buffer.getvalue()
+        return base64.b64encode(content).decode()
+
+    def _new_padron(self, file_padron):
+        return self.env["res.company.jurisdiction.padron"].create(
+            {
+                "company_id": self.env.company.id,
+                "state_id": self.sircip_state.id,
+                "l10n_ar_padron_from_date": self.month_start,
+                "l10n_ar_padron_to_date": self.month_end,
+                "filename": "padron.txt",
+                "file_padron": file_padron,
+            }
+        )
+
+    def test_padron_period_is_the_padron_month(self):
+        """El período del archivo tiene que ser el mes del padrón: el del mes siguiente se publica antes."""
+        next_month = self.month_start + relativedelta(months=1)
+        with self.assertRaisesRegex(ValidationError, next_month.strftime("%Y%m")):
+            self._new_padron(self._padron_file(next_month))
+
+    def test_padron_zip(self):
+        """El padrón se puede cargar comprimido en ZIP, con un solo archivo adentro."""
+        padron = self._new_padron(self._padron_file(self.month_start, zipped=["padron.txt"]))
+        self.assertEqual(padron._get_sircip_aliquot(self._make_partner("34333333335"))[1], 5.0)
+        with self.assertRaises(ValidationError):
+            self._new_padron(self._padron_file(self.month_start, zipped=["a.txt", "b.txt"]))
 
     # --- check_state_id ---
 

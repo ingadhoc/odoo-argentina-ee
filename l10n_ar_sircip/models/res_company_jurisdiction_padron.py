@@ -3,9 +3,12 @@
 # directory
 ##############################################################################
 import base64
+import io
 import logging
+import zipfile
 
 from odoo import api, models
+from odoo.exceptions import ValidationError
 
 _logger = logging.getLogger(__name__)
 
@@ -52,6 +55,44 @@ class ResCompanyJurisdictionPadron(models.Model):
         non_sircip = self.filtered(lambda r: r.state_id != sircip_state)
         return super(ResCompanyJurisdictionPadron, non_sircip).check_state_id()
 
+    @api.constrains("state_id", "file_padron", "l10n_ar_padron_from_date")
+    def _check_sircip_period(self):
+        """El período del archivo (primera columna) tiene que ser el mes del padrón: la Comisión Arbitral publica el
+        del mes siguiente el día 22, y cargarlo en el mes equivocado cambia las percepciones de todo el mes."""
+        sircip_state = self._get_sircip_state()
+        for rec in self.filtered(lambda r: r.state_id == sircip_state and r.file_padron and r.l10n_ar_padron_from_date):
+            period = rec._get_sircip_period()
+            expected = rec.l10n_ar_padron_from_date.strftime("%Y%m")
+            if period != expected:
+                raise ValidationError(
+                    self.env._(
+                        "The SIRCIP padron file is for period %(period)s, but it is loaded from %(date)s. Load it "
+                        "for the month of its period.",
+                        period=period or "?",
+                        date=rec.l10n_ar_padron_from_date,
+                    )
+                )
+
+    def _get_sircip_text(self):
+        """Contenido del padrón SIRCIP. Acepta el TXT o un ZIP con un solo archivo adentro."""
+        self.ensure_one()
+        content = base64.b64decode(self.file_padron or b"")
+        if zipfile.is_zipfile(io.BytesIO(content)):
+            with zipfile.ZipFile(io.BytesIO(content)) as zip_file:
+                names = [name for name in zip_file.namelist() if not name.endswith("/")]
+                if len(names) != 1:
+                    raise ValidationError(self.env._("The SIRCIP padron ZIP file must contain a single file."))
+                content = zip_file.read(names[0])
+        return content.decode("latin-1")
+
+    def _get_sircip_period(self):
+        """Período (AAAAMM) de la primera línea de datos del padrón, salteando el encabezado."""
+        for line in io.StringIO(self._get_sircip_text()):
+            value = line.split(",", 1)[0].strip()
+            if value.isdigit():
+                return value
+        return ""
+
     def _get_sircip_aliquot(self, partner):
         """Parsea el archivo TXT del padrón SIRCIP para un CUIT dado.
 
@@ -75,11 +116,7 @@ class ResCompanyJurisdictionPadron(models.Model):
         if not cuit_clean:
             return not_found
 
-        file_content = base64.b64decode(self.file_padron)
-        try:
-            text = file_content.decode("latin-1")
-        except UnicodeDecodeError:
-            text = file_content.decode("utf-8", errors="replace")
+        text = self._get_sircip_text()
 
         # El padrón trae a todos los contribuyentes de Convenio Multilateral: en vez de partir el archivo
         # en líneas, buscamos el CUIT (columna 2) y leemos solo esa línea.
