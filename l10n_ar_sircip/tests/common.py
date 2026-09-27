@@ -33,7 +33,7 @@ def campo7(digits):
 class TestSircipCommon(TestArCommon):
     """RI company with the SIRCIP setup, a current-month padron and one customer per case.
 
-    Chaco (906) and Salta (917) are adhered; Corrientes (905) is not.
+    Chaco (906) and Salta (917) are adhered; Corrientes (905) and Buenos Aires (902) are not.
     """
 
     @classmethod
@@ -44,8 +44,9 @@ class TestSircipCommon(TestArCommon):
         cls.chaco = cls.env.ref("base.state_ar_h")
         cls.salta = cls.env.ref("base.state_ar_a")
         cls.corrientes = cls.env.ref("base.state_ar_w")
+        cls.buenos_aires = cls.env.ref("base.state_ar_b")
         (cls.chaco | cls.salta).l10n_ar_is_sircip = True
-        cls.corrientes.l10n_ar_is_sircip = False
+        (cls.corrientes | cls.buenos_aires).l10n_ar_is_sircip = False
 
         cls.company_ri.l10n_ar_sircip_agent = True
         cls.company_ri._l10n_ar_sircip_setup()
@@ -64,6 +65,7 @@ class TestSircipCommon(TestArCommon):
             ("digit3", "F", cls.chaco, {"906": 3}),
             ("digit4", "F", cls.corrientes, {"905": 4}),
             ("digit5", "F", cls.corrientes, {"905": 5}),
+            ("digit4_buenos_aires", "F", cls.buenos_aires, {"902": 4}),
             ("letter_a", "A", cls.chaco, {"906": 1}),
             ("letter_a_digit2", "A", cls.chaco, {"906": 2}),
             ("not_registered", None, cls.chaco, {}),
