@@ -19,7 +19,7 @@
 ##############################################################################
 {
     "name": "Accounting Reports Customized for Argentina",
-    "version": "19.0.1.20.1",
+    "version": "19.0.1.21.0",
     "category": "Accounting",
     "sequence": 14,
     "summary": "",
