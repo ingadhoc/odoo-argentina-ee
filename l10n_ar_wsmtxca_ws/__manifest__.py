@@ -28,7 +28,6 @@
     "summary": "",
     "depends": [
         "l10n_ar_edi",
-        "saas_client_l10n_ar",
     ],
     "data": [],
     "installable": True,
