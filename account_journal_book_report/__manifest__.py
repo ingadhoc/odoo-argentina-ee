@@ -16,5 +16,5 @@
         "views/account_journal_views.xml",
         "views/account_journal_book_group_views.xml",
     ],
-    "installable": True,
+    "installable": False,
 }

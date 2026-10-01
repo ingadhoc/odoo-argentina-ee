@@ -20,6 +20,6 @@
             "account_balance_import_checks/static/src/xml/**/*",
         ],
     },
-    "installable": True,
+    "installable": False,
     "auto_install": True,
 }

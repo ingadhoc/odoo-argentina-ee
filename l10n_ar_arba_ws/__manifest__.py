@@ -39,7 +39,7 @@
         "views/l10n_ar_payment_withholding_views.xml",
         "wizard/arba_withholding_draft_warning_views.xml",
     ],
-    "installable": True,
+    "installable": False,
     "auto_install": False,
     "application": False,
 }

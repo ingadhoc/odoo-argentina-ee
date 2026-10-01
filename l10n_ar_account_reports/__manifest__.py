@@ -72,7 +72,7 @@
         ],
     },
     "test": [],
-    "installable": True,
+    "installable": False,
     "auto_install": ["l10n_ar"],
     "application": False,
     "post_init_hook": "_post_init_hook_configure_ar_account_tags",

@@ -26,5 +26,5 @@
             "account_balance_import/static/src/xml/**/*",
         ],
     },
-    "installable": True,
+    "installable": False,
 }

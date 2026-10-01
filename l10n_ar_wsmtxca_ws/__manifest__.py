@@ -31,7 +31,7 @@
         "saas_client_l10n_ar",
     ],
     "data": [],
-    "installable": True,
+    "installable": False,
     "auto_install": False,
     "application": False,
 }

@@ -18,7 +18,7 @@
             "l10n_ar_import_bill/static/src/xml/**/*",
         ],
     },
-    "installable": True,
+    "installable": False,
     "auto_install": False,
     "application": False,
 }
