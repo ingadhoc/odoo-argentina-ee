@@ -9,4 +9,11 @@
         </span>
     </t>
 
+    <t t-name="account_accountant_ux.warning_other_legal_entity_companies">
+        <span>
+            These numbers are from Tax ID <t t-out="warningParams.vat"/> (<t t-out="warningParams.entity"/>).
+            These selected companies declare a different Tax ID and are not included: <t t-out="warningParams.excluded"/>.
+        </span>
+    </t>
+
 </templates>
