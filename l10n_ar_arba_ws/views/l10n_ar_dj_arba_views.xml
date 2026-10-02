@@ -5,13 +5,13 @@
         <field name="name">l10n_ar.dj.arba.view.list</field>
         <field name="model">l10n_ar.dj.arba</field>
         <field name="arch" type="xml">
-            <list decoration-danger="state == 'close'" decoration-warning="state == 'open'">
+            <list decoration-danger="state == 'close'" decoration-warning="state == 'open'" decoration-muted="state == 'cancel'">
                 <field name="display_name"/>
                 <field name="name"/>
                 <field name="state"/>
                 <field name="is_refund"/>
                 <field name="company_id" groups="base.group_multi_company"/>
-                <button name="action_update_status" type="object" title="Update" help="Update the status via ws" icon="fa-refresh"/>
+                <button name="action_update_status" type="object" title="Update" help="Update the status via ws" icon="fa-refresh" invisible="state in ('draft', 'cancel')"/>
             </list>
         </field>
     </record>
@@ -24,8 +24,8 @@
                 <header>
                     <button name="action_open" type="object" string="Open" help="Connect to webservice" invisible="state != 'draft'"/>
                     <button name="action_find_existing" type="object" string="Find" help="Find open DDJJ and load info" invisible="state != 'draft'" groups="base.group_no_one"/>
-                    <button name="action_update_status" type="object" string="Update Status" help="Update the status via ws" invisible="state == 'draft'"/>
-                    <field name="state" widget="statusbar"/>
+                    <button name="action_update_status" type="object" string="Update Status" help="Update the status via ws" invisible="state in ('draft', 'cancel')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,open,close"/>
                 </header>
                 <sheet>
                     <group>
