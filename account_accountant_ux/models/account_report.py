@@ -503,6 +503,20 @@ class AccountReport(models.Model):
             return
 
         report_companies = self.env["res.company"].browse(self.get_report_company_ids(options))
+        if self.filter_multi_company == "tax_units" and self.env.company.account_fiscal_country_id.code == "AR":
+            # The native warning only looks at the branches below the active company, so it never
+            # fires from a branch, and it does not say which companies were left out.
+            warnings.pop("account_reports.tax_report_warning_tax_id_selected_companies", None)
+            excluded = self.env.companies - report_companies
+            if excluded:
+                entity = self.env.company.sudo().legal_entity_root_id
+                warnings["account_accountant_ux.warning_other_legal_entity_companies"] = {
+                    "alert_type": "warning",
+                    "entity": entity.display_name,
+                    "vat": entity.vat or "-",
+                    "excluded": ", ".join(excluded.sudo().mapped("display_name")),
+                }
+
         missing = self.env.company._get_branches_with_same_vat().sudo() - report_companies
         if missing:
             warnings["account_accountant_ux.warning_missing_legal_entity_companies"] = {
