@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates>
+
+    <t t-name="l10n_ar_account_reports.warning_other_legal_entity_companies">
+        <span>These numbers are from Tax ID <t t-out="warningParams.vat"/> (<t t-out="warningParams.entity"/>).</span>
+        <span> These selected companies belong to another legal entity and are not included: <t t-out="warningParams.excluded"/>.</span>
+    </t>
+
+</templates>

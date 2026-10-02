@@ -1277,6 +1277,20 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#. odoo-javascript
+#: code:addons/l10n_ar_account_reports/static/src/components/account_report/warnings.xml:0
+msgid "These numbers are from Tax ID"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-javascript
+#: code:addons/l10n_ar_account_reports/static/src/components/account_report/warnings.xml:0
+msgid ""
+"These selected companies belong to another legal entity and are not "
+"included:"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_total_assets
 msgid "Total del activo"
 msgstr ""
