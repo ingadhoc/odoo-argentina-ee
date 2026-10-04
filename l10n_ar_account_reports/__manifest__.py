@@ -44,6 +44,7 @@
     "data": [
         "security/ir.model.access.csv",
         "views/account_return_type_views.xml",
+        "views/account_return_views.xml",
         "views/inflation_adjustment_index_view.xml",
         "data/tags_data.xml",
         "data/estado_resultados.xml",
