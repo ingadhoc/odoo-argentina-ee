@@ -1117,6 +1117,14 @@ msgid "Tax groups"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model.fields,help:l10n_ar_account_reports.field_res_company__vat
+msgid ""
+"Tax ID of the company. If the company is not subject to tax (for example, "
+"an auxiliary parent company), leave it empty: a company without Tax ID is "
+"its own legal entity and is left out of the returns of its parent."
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "Tax to pay"
