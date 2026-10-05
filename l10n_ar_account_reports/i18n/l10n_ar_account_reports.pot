@@ -1118,6 +1118,12 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #. odoo-python
+#: code:addons/l10n_ar_account_reports/models/res_company.py:0
+msgid "For Argentina: if the company is not subject to tax, leave the Tax ID empty."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "Tax to pay"
 msgstr ""
