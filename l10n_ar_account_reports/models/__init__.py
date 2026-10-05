@@ -22,3 +22,4 @@ from . import sicore_report
 from . import account_partial_reconcile
 from . import inflation_adjustment_index
 from . import account_report
+from . import res_company
