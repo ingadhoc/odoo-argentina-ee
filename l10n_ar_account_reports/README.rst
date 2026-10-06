@@ -74,10 +74,25 @@ To install this module, you need to:
 Configuration
 =============
 
-This module doesn't require specific configuration. It automatically:
+This module automatically:
 
 #. Enhances the Partner Ledger report with CUIT information
 #. Adds the "Cheques a fecha" menu under Accounting → Reporting → Legal Statements
+
+Some tax returns need configuration, described below.
+
+**SUSS (Agente) tax return:**
+
+The "SUSS (Agente)" return only includes vendor payment withholdings ("Tipo de Impuesto" = "Retención Pago de Proveedor") whose tax group name contains "SUSS" (in upper or lower case), such as "Retención de SUSS" from the Argentinian chart of accounts or a "Retenciones SUSS" group created by hand.
+
+If a SUSS withholding tax is in a tax group whose name doesn't contain "SUSS", go to Accounting → Configuration → Taxes, open the tax and, in "Opciones avanzadas", set a "Grupo de impuestos" whose name contains "SUSS".
+
+The "SUSS (Agente)" returns are created only when there are SUSS withholdings, and not right after changing the tax group. To create them, use one of these options:
+
+#. Open the "SUSS (Agente)" report on a period with SUSS withholdings and click "Returns". This creates the returns of the whole fiscal year at once.
+#. Wait for the daily scheduled action that creates the tax returns.
+
+The Argentinian chart of accounts has no "SUSS withholdings to pay" account, so by default the closing entry uses the payable account of the ARCA contact. To use another account, set it in "AR Closing Account" on the "SUSS (Agente)" return type.
 
 Usage
 =====

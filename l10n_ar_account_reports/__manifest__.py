@@ -58,6 +58,7 @@
         "data/santa_fe_report.xml",
         "data/tucuman_report.xml",
         "data/sicore_report.xml",
+        "data/suss_report.xml",
         "data/inflation_adjustment_index.xml",
         "data/account_report_settlement.xml",
         "wizard/inflation_adjustment_view.xml",
