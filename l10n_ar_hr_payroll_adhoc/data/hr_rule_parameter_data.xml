@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="rule_parameter_contribution_cap" model="hr.rule.parameter">
+        <field name="name">Tope de la base de aportes del empleado</field>
+        <field name="code">l10n_ar_contribution_cap</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="rule_parameter_contribution_cap_202601" model="hr.rule.parameter.value">
+        <field name="rule_parameter_id" ref="rule_parameter_contribution_cap"/>
+        <field name="date_from" eval="datetime(2026, 1, 1).date()"/>
+        <field name="parameter_value">3823372.95</field>
+    </record>
+    <record id="rule_parameter_jub" model="hr.rule.parameter">
+        <field name="name">Aporte jubilación (%)</field>
+        <field name="code">l10n_ar_jub</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="rule_parameter_jub_202501" model="hr.rule.parameter.value">
+        <field name="rule_parameter_id" ref="rule_parameter_jub"/>
+        <field name="date_from" eval="datetime(2025, 1, 1).date()"/>
+        <field name="parameter_value">11</field>
+    </record>
+    <record id="rule_parameter_law19032" model="hr.rule.parameter">
+        <field name="name">Aporte ley 19.032 INSSJP (%)</field>
+        <field name="code">l10n_ar_law19032</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="rule_parameter_law19032_202501" model="hr.rule.parameter.value">
+        <field name="rule_parameter_id" ref="rule_parameter_law19032"/>
+        <field name="date_from" eval="datetime(2025, 1, 1).date()"/>
+        <field name="parameter_value">3</field>
+    </record>
+    <record id="rule_parameter_health" model="hr.rule.parameter">
+        <field name="name">Aporte obra social (%)</field>
+        <field name="code">l10n_ar_health</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="rule_parameter_health_202501" model="hr.rule.parameter.value">
+        <field name="rule_parameter_id" ref="rule_parameter_health"/>
+        <field name="date_from" eval="datetime(2025, 1, 1).date()"/>
+        <field name="parameter_value">3</field>
+    </record>
+    <record id="rule_parameter_er_jub" model="hr.rule.parameter">
+        <field name="name">Contribución jubilación (%)</field>
+        <field name="code">l10n_ar_er_jub</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="rule_parameter_er_jub_202608" model="hr.rule.parameter.value">
+        <field name="rule_parameter_id" ref="rule_parameter_er_jub"/>
+        <field name="date_from" eval="datetime(2026, 8, 1).date()"/>
+        <field name="parameter_value">10.77</field>
+    </record>
+    <record id="rule_parameter_er_law19032" model="hr.rule.parameter">
+        <field name="name">Contribución ley 19.032 INSSJP (%)</field>
+        <field name="code">l10n_ar_er_law19032</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="rule_parameter_er_law19032_202608" model="hr.rule.parameter.value">
+        <field name="rule_parameter_id" ref="rule_parameter_er_law19032"/>
+        <field name="date_from" eval="datetime(2026, 8, 1).date()"/>
+        <field name="parameter_value">1.59</field>
+    </record>
+    <record id="rule_parameter_er_fne" model="hr.rule.parameter">
+        <field name="name">Contribución Fondo Nacional de Empleo (%)</field>
+        <field name="code">l10n_ar_er_fne</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="rule_parameter_er_fne_202608" model="hr.rule.parameter.value">
+        <field name="rule_parameter_id" ref="rule_parameter_er_fne"/>
+        <field name="date_from" eval="datetime(2026, 8, 1).date()"/>
+        <field name="parameter_value">0.94</field>
+    </record>
+    <record id="rule_parameter_er_anssal" model="hr.rule.parameter">
+        <field name="name">Contribución ANSSAL (%)</field>
+        <field name="code">l10n_ar_er_anssal</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="rule_parameter_er_anssal_202608" model="hr.rule.parameter.value">
+        <field name="rule_parameter_id" ref="rule_parameter_er_anssal"/>
+        <field name="date_from" eval="datetime(2026, 8, 1).date()"/>
+        <field name="parameter_value">0.90</field>
+    </record>
+    <record id="rule_parameter_er_family" model="hr.rule.parameter">
+        <field name="name">Contribución asignaciones familiares (%)</field>
+        <field name="code">l10n_ar_er_family</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="rule_parameter_er_family_202608" model="hr.rule.parameter.value">
+        <field name="rule_parameter_id" ref="rule_parameter_er_family"/>
+        <field name="date_from" eval="datetime(2026, 8, 1).date()"/>
+        <field name="parameter_value">4.70</field>
+    </record>
+    <record id="rule_parameter_er_health" model="hr.rule.parameter">
+        <field name="name">Contribución obra social (%)</field>
+        <field name="code">l10n_ar_er_health</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="rule_parameter_er_health_202608" model="hr.rule.parameter.value">
+        <field name="rule_parameter_id" ref="rule_parameter_er_health"/>
+        <field name="date_from" eval="datetime(2026, 8, 1).date()"/>
+        <field name="parameter_value">5.10</field>
+    </record>
+    <record id="rule_parameter_art" model="hr.rule.parameter">
+        <field name="name">ART (%)</field>
+        <field name="code">l10n_ar_art</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="rule_parameter_art_202608" model="hr.rule.parameter.value">
+        <field name="rule_parameter_id" ref="rule_parameter_art"/>
+        <field name="date_from" eval="datetime(2026, 8, 1).date()"/>
+        <field name="parameter_value">0.60</field>
+    </record>
+    <record id="rule_parameter_art_fixed" model="hr.rule.parameter">
+        <field name="name">ART cuota fija</field>
+        <field name="code">l10n_ar_art_fixed</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="rule_parameter_art_fixed_202608" model="hr.rule.parameter.value">
+        <field name="rule_parameter_id" ref="rule_parameter_art_fixed"/>
+        <field name="date_from" eval="datetime(2026, 8, 1).date()"/>
+        <field name="parameter_value">1839</field>
+    </record>
+    <record id="rule_parameter_life_insurance" model="hr.rule.parameter">
+        <field name="name">Seguro de vida obligatorio</field>
+        <field name="code">l10n_ar_life_insurance</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="rule_parameter_life_insurance_202608" model="hr.rule.parameter.value">
+        <field name="rule_parameter_id" ref="rule_parameter_life_insurance"/>
+        <field name="date_from" eval="datetime(2026, 8, 1).date()"/>
+        <field name="parameter_value">424.62</field>
+    </record>
+</odoo>
