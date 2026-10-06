@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_payslip_view_form" model="ir.ui.view">
+        <field name="name">hr.payslip.form.l10n_ar_payroll</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+        <field name="arch" type="xml">
+            <field name="paid_date" position="after">
+                <field name="l10n_ar_kind" invisible="1"/>
+                <field name="l10n_ar_dismissal" invisible="l10n_ar_kind != 'final'" readonly="state != 'draft'"/>
+                <field name="l10n_ar_notice_given" invisible="l10n_ar_kind != 'final' or not l10n_ar_dismissal" readonly="state != 'draft'"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="hr_payslip_run_view_form" model="ir.ui.view">
+        <field name="name">hr.payslip.run.form.l10n_ar_payroll</field>
+        <field name="model">hr.payslip.run</field>
+        <field name="inherit_id" ref="hr_payroll.hr_payslip_run_form"/>
+        <field name="arch" type="xml">
+            <field name="schedule_pay" position="after">
+                <field name="l10n_ar_payment_date" invisible="country_code != 'AR'"/>
+                <field name="l10n_ar_contribution_date" invisible="country_code != 'AR'"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="hr_salary_rule_view_form" model="ir.ui.view">
+        <field name="name">hr.salary.rule.form.l10n_ar_payroll</field>
+        <field name="model">hr.salary.rule</field>
+        <field name="inherit_id" ref="hr_payroll.hr_salary_rule_form"/>
+        <field name="arch" type="xml">
+            <field name="appears_on_payslip" position="after">
+                <field name="l10n_ar_lsd_code"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="l10n_ar_payroll_afip_code_view_list" model="ir.ui.view">
+        <field name="name">l10n_ar.payroll.afip.code.list</field>
+        <field name="model">l10n_ar.payroll.afip.code</field>
+        <field name="arch" type="xml">
+            <list editable="bottom">
+                <field name="type"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="l10n_ar_payroll_afip_code_view_search" model="ir.ui.view">
+        <field name="name">l10n_ar.payroll.afip.code.search</field>
+        <field name="model">l10n_ar.payroll.afip.code</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="code"/>
+                <group>
+                    <filter name="group_type" string="Type" context="{'group_by': 'type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_l10n_ar_payroll_afip_code" model="ir.actions.act_window">
+        <field name="name">ARCA Codes</field>
+        <field name="res_model">l10n_ar.payroll.afip.code</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'search_default_group_type': 1}</field>
+    </record>
+
+    <menuitem id="menu_l10n_ar_payroll_afip_code" action="action_l10n_ar_payroll_afip_code"
+              parent="hr_payroll.menu_hr_salary_configuration" sequence="90"/>
+</odoo>
