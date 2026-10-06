@@ -302,6 +302,17 @@ class AccountReturnType(models.Model):
                 ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
                 ("tax_line_id.type_tax_use", "=", "sale"),
             ]
+        if external_id == "l10n_ar_account_reports.suss_return_type":
+            # SUSS withholdings applied on vendor payments, by tax group name. Lines
+            # taken by the IIBB or SICORE returns are excluded to avoid settling them twice.
+            return [
+                ("tax_line_id.country_code", "=", "AR"),
+                ("tax_line_id.tax_group_id.name", "ilike", "SUSS"),
+                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+                ("tax_line_id.l10n_ar_state_id", "=", False),
+                ("tax_line_id.l10n_ar_tax_type", "not in", ["earnings", "earnings_scale"]),
+                ("tax_line_id.l10n_ar_tribute_afip_code", "!=", "06"),
+            ]
         return []
 
     def _can_return_exist(self, company, tax_unit=False):
@@ -358,6 +369,7 @@ class AccountReturnType(models.Model):
             "l10n_ar_account_reports.ar_santa_fe_iibb_return_type",
             "l10n_ar_account_reports.ar_tucuman_iibb_return_type",
             "l10n_ar_account_reports.sicore_return_type",
+            "l10n_ar_account_reports.suss_return_type",
             "l10n_ar_account_reports.ar_sifere_iibb_return_type",
             "l10n_ar_account_reports.ar_sircar_iibb_return_type",
             # Nota: ar_tax_return_type (IVA) NO está en esta lista porque tiene auto_generate=True
