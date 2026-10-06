@@ -324,6 +324,11 @@ msgid "Argentinian SICORE Report Custom Handler"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_suss_report_handler
+msgid "Argentinian SUSS Report Custom Handler"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_sifere_report_handler
 msgid "Argentinian SIFERE Report Custom Handler"
 msgstr ""
@@ -942,6 +947,11 @@ msgid "Purchase Profits Withholdings"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_suss_report_withholdings_line
+msgid "Purchase SUSS Withholdings"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sicore_report_vat_withholding_line
 msgid "Purchase VAT Withholdings"
 msgstr ""
@@ -1019,6 +1029,12 @@ msgstr ""
 #: model:account.report,name:l10n_ar_account_reports.l10n_ar_sicore_report
 #: model:account.return.type,name:l10n_ar_account_reports.sicore_return_type
 msgid "SICORE (Agente)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report,name:l10n_ar_account_reports.l10n_ar_suss_report
+#: model:account.return.type,name:l10n_ar_account_reports.suss_return_type
+msgid "SUSS (Agente)"
 msgstr ""
 
 #. module: l10n_ar_account_reports

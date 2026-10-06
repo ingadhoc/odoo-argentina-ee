@@ -8,6 +8,8 @@ from dateutil.relativedelta import relativedelta
 from odoo import api, fields, models
 from odoo.tools.misc import format_date
 
+from .helpers import get_suss_tax_group_ids
+
 # Extended periods to include fortnightly (quincenal) for Argentina
 L10N_AR_PERIODS = [
     ("fortnightly", "Fortnightly"),  # Quincenal
@@ -302,6 +304,13 @@ class AccountReturnType(models.Model):
                 ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
                 ("tax_line_id.type_tax_use", "=", "sale"),
             ]
+        if external_id == "l10n_ar_account_reports.suss_return_type":
+            # SUSS withholdings applied on vendor payments, by the chart template tax group.
+            return [
+                ("tax_line_id.country_code", "=", "AR"),
+                ("tax_line_id.tax_group_id", "in", get_suss_tax_group_ids(self.env)),
+                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+            ]
         return []
 
     def _can_return_exist(self, company, tax_unit=False):
@@ -358,6 +367,7 @@ class AccountReturnType(models.Model):
             "l10n_ar_account_reports.ar_santa_fe_iibb_return_type",
             "l10n_ar_account_reports.ar_tucuman_iibb_return_type",
             "l10n_ar_account_reports.sicore_return_type",
+            "l10n_ar_account_reports.suss_return_type",
             "l10n_ar_account_reports.ar_sifere_iibb_return_type",
             "l10n_ar_account_reports.ar_sircar_iibb_return_type",
             # Nota: ar_tax_return_type (IVA) NO está en esta lista porque tiene auto_generate=True
