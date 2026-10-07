@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-25 19:46+0000\n"
+"POT-Creation-Date: 2026-10-07 16:03+0000\n"
 "PO-Revision-Date: 2026-04-20 15:41+0000\n"
 "Last-Translator: julia elizondo <jue@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
@@ -320,6 +320,11 @@ msgstr ""
 "o por cobrar del contacto."
 
 #. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_account_report
+msgid "Accounting Report"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_return
 msgid "Accounting Return"
 msgstr "Declaración de impuestos"
@@ -575,6 +580,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_move_line__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partial_reconcile__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partner_ledger_report_handler__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_report__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_creation_wizard__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__display_name
@@ -695,6 +701,7 @@ msgstr "¿Ha realizado asientos de cierre/apertura?"
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_move_line__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partial_reconcile__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partner_ledger_report_handler__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_report__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_creation_wizard__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__id
