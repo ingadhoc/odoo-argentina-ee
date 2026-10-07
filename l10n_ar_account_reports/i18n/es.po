@@ -1415,8 +1415,7 @@ msgstr "Estos números son del CUIT"
 #. odoo-javascript
 #: code:addons/l10n_ar_account_reports/static/src/components/account_report/warnings.xml:0
 msgid ""
-"These selected companies belong to another legal entity and are not "
-"included:"
+"These selected companies belong to another legal entity and are not included:"
 msgstr ""
 "Estas empresas seleccionadas pertenecen a otra entidad legal y no están "
 "incluidas:"
