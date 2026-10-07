@@ -81,3 +81,13 @@ def get_standard_lines_domain(company_ids, options):
     if options.get("date").get("date_from"):
         domain += [("date", ">=", options["date"]["date_from"])]
     return domain
+
+
+def get_suss_tax_group_ids(env):
+    """Ids of the SUSS withholding tax groups, matched by the end of their external id."""
+    return (
+        env["ir.model.data"]
+        .sudo()
+        .search([("model", "=", "account.tax.group"), ("name", "=like", "%\\_tax_group_withholding_suss")])
+        .mapped("res_id")
+    )
