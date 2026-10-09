@@ -4,6 +4,11 @@ from odoo import _, models
 class FollowupReportCustomHandler(models.AbstractModel):
     _inherit = "account.followup.report.handler"
 
+    def _custom_options_initializer(self, report, options, previous_options):
+        super()._custom_options_initializer(report, options, previous_options)
+        # Lines left in a partial reconciliation chain have no full_reconcile_id even when fully paid.
+        options["forced_domain"] = options.get("forced_domain", []) + [("amount_residual", "!=", 0)]
+
     def _get_report_line_move_line(
         self, options, aml_query_result, partner_line_id, init_bal_by_col_group, level_shift=0
     ):
