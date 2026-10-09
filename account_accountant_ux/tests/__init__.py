@@ -5,3 +5,4 @@ from . import test_legal_entity_fiscalyear
 from . import test_legal_entity_reports
 from . import test_general_ledger_csv_export
 from . import test_partner_ledger_csv_export
+from . import test_followup_report
