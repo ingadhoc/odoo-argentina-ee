@@ -109,20 +109,28 @@ class ResPartner(models.Model):
         self.ensure_one()
         vat = self.ensure_vat()
 
-        # if there is certificate for current company use that one, if not use the company with first certificate found
-        today = fields.Date.context_today(self.with_context(tz="America/Argentina/Buenos_Aires"))
-        valid_certificate = (
-            self.env["certificate.certificate"]
-            .sudo()
-            .search([("active", "=", True), ("date_end", ">=", today)])
-            .filtered(lambda c: c.country_code == "AR")
-        )
-        if self.env.company.sudo().l10n_ar_afip_ws_crt_id in valid_certificate:
-            company = self.env.company
-        else:
-            company = valid_certificate[:1].company_id if valid_certificate else False
+        # We use the certificate of the active company and, when it is not usable, the one of another
+        # company of the user, companies with the same CUIT first. A branch without a CUIT of its own
+        # stands on its parent company; one with a CUIT of its own only borrows the certificate of an
+        # ancestor that shares it. We never take any certificate of the database: ARCA only answers this
+        # web service to the certificates that have it delegated, and its error says nothing about the
+        # actual problem, usually an expired certificate.
+        company = self.env.company
+        while not company.partner_id.l10n_ar_vat and company.parent_id:
+            company = company.parent_id.sudo()
+        company_vat = company.partner_id.l10n_ar_vat
+        companies = company + company._l10n_ar_get_cert_ancestor() + self.env.companies
+        company = companies.filtered(
+            lambda x: x.country_code == "AR" and x.sudo().l10n_ar_afip_ws_crt_id.filtered("active").is_valid
+        ).sorted(lambda x: x.partner_id.l10n_ar_vat != company_vat)[:1]
         if not company:
-            raise UserError(_("Please configure an ARCA Certificate in order to continue"))
+            raise UserError(
+                _(
+                    'There is no valid ARCA certificate available for company "%s". Please check the certificate'
+                    " configured in the accounting settings.",
+                    self.env.company.name,
+                )
+            )
         client, auth = company._l10n_ar_get_connection("ws_sr_constancia_inscripcion")._get_client()
 
         error_msg = _(
