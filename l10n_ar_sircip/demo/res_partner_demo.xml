@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- One partner per field 7 case, all delivering to Chaco (JC 906, field 7 index 18) as set in the demo
+         padron. Their l10n_ar.partner.tax records are created by the post_init_hook. -->
+
+    <!-- Digit 1: SIRCIP basic rate only, letter T = 3.00% -->
+    <record id="demo_partner_sircip_digit1" model="res.partner">
+        <field name="name">SIRCIP Demo - Digit 1 Solo Básica (Chaco)</field>
+        <field name="is_company" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="state_id" ref="base.state_ar_h"/>
+        <field name="vat">30111111118</field>
+        <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
+    <!-- Digit 2: basic rate + surcharge, letter V = 4.00% -->
+    <record id="demo_partner_sircip_digit2" model="res.partner">
+        <field name="name">SIRCIP Demo - Digit 2 Sobretasa (Chaco)</field>
+        <field name="is_company" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="state_id" ref="base.state_ar_h"/>
+        <field name="vat">30444444440</field>
+        <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
+    <!-- Digit 3: basic rate only, no surcharge (not the DDJJ "excluded" type), letter W = 4.50% -->
+    <record id="demo_partner_sircip_digit3" model="res.partner">
+        <field name="name">SIRCIP Demo - Digit 3 Excluido (Chaco)</field>
+        <field name="is_company" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="state_id" ref="base.state_ar_h"/>
+        <field name="vat">30555555551</field>
+        <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
+    <!-- Digit 4: basic rate; the province's own perception comes from its fiscal position line, letter W = 4.50% -->
+    <record id="demo_partner_sircip_digit4" model="res.partner">
+        <field name="name">SIRCIP Demo - Digit 4 Doble Alícuota (Corrientes)</field>
+        <field name="is_company" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="state_id" ref="base.state_ar_w"/>
+        <field name="vat">30666666662</field>
+        <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
+    <!-- Digit 5: basic rate only, letter H = 0.50% -->
+    <record id="demo_partner_sircip_digit5" model="res.partner">
+        <field name="name">SIRCIP Demo - Digit 5 Doble Alícuota (Chaco)</field>
+        <field name="is_company" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="state_id" ref="base.state_ar_h"/>
+        <field name="vat">33111111117</field>
+        <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
+    <!-- Informative: letter A (0%), digit 1 in Chaco -> type 2 in the DDJJ TXT -->
+    <record id="demo_partner_sircip_informativo" model="res.partner">
+        <field name="name">SIRCIP Demo - 0% Informativo (Chaco)</field>
+        <field name="is_company" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="state_id" ref="base.state_ar_h"/>
+        <field name="vat">30777777773</field>
+        <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
+    <!-- Not registered: CUIT not in the padron -> 2% "no inscripto" default tax -> type 4 in the DDJJ TXT -->
+    <record id="demo_partner_sircip_no_inscripto" model="res.partner">
+        <field name="name">SIRCIP Demo - No Inscripto</field>
+        <field name="is_company" eval="True"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="state_id" ref="base.state_ar_h"/>
+        <field name="vat">30123456781</field>
+        <field name="l10n_latam_identification_type_id" ref="l10n_ar.it_cuit"/>
+        <field name="l10n_ar_afip_responsibility_type_id" ref="l10n_ar.res_IVARI"/>
+    </record>
+
+</odoo>
