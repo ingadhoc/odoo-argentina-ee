@@ -115,6 +115,13 @@ class ResCompany(models.Model):
 
                 # Do not pass company since we need to find the one that has certificate
                 afip_date, rate = currency._l10n_ar_get_afip_ws_currency_rate()
+                if not rate:
+                    _logger.info(
+                        "AFIP returned an invalid rate for %s: %r. Skipping to avoid storing zero.",
+                        currency.name,
+                        rate,
+                    )
+                    continue
                 afip_date = datetime.strptime(afip_date, "%Y%m%d").date() + relativedelta(days=1)
                 if afip_date == rate_date or self.env.context.get("l10n_ar_force_create_rate"):
                     res.update({currency.name: (1.0 / rate, rate_date)})
@@ -150,6 +157,9 @@ class ResCompany(models.Model):
         for company in ar_companies:
             new_parsed_data = parsed_data.copy()
             for currency, (rate, date_rate) in parsed_data.items():
+                if not rate:
+                    new_parsed_data.pop(currency, None)
+                    continue
                 already_existing_rate = currency_rate.search(
                     [
                         ("currency_id", "=", currency_object.search([("name", "=", currency)]).id),
