@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_sac_sac" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_sac"/>
+        <field name="name">Thirteenth Salary (SAC)</field>
+        <field name="code">SAC</field>
+        <field name="sequence">20</field>
+        <field name="category_id" ref="category_sac"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">best, semester_days, worked_days = payslip._l10n_ar_sac()
+result = best / 2 / semester_days
+result_qty = worked_days</field>
+    </record>
+    <record id="rule_sac_jub" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_sac"/>
+        <field name="name">Retirement</field>
+        <field name="code">JUB</field>
+        <field name="sequence">30</field>
+        <field name="category_id" ref="hr_payroll.DED"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = payslip._l10n_ar_contribution_base(categories)
+result_rate = -payslip._rule_parameter('l10n_ar_jub')</field>
+    </record>
+    <record id="rule_sac_ley19032" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_sac"/>
+        <field name="name">Law 19.032</field>
+        <field name="code">LEY19032</field>
+        <field name="sequence">31</field>
+        <field name="category_id" ref="hr_payroll.DED"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = payslip._l10n_ar_contribution_base(categories)
+result_rate = -payslip._rule_parameter('l10n_ar_law19032')</field>
+    </record>
+    <record id="rule_sac_os" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_sac"/>
+        <field name="name">Health Insurance</field>
+        <field name="code">OS</field>
+        <field name="sequence">32</field>
+        <field name="category_id" ref="hr_payroll.DED"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = payslip._l10n_ar_contribution_base(categories)
+result_rate = -payslip._rule_parameter('l10n_ar_health')</field>
+    </record>
+    <record id="rule_sac_gross" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_sac"/>
+        <field name="name">Remunerative Gross</field>
+        <field name="code">GROSS</field>
+        <field name="sequence">90</field>
+        <field name="category_id" ref="hr_payroll.GROSS"/>
+        <field name="appears_on_payslip" eval="False"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = categories['REM']</field>
+    </record>
+    <record id="rule_sac_deduction" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_sac"/>
+        <field name="name">Deduction</field>
+        <field name="code">DEDUCTION</field>
+        <field name="sequence">170</field>
+        <field name="category_id" ref="hr_payroll.DED"/>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = 'DEDUCTION' in inputs</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = -inputs['DEDUCTION'].amount
+result_name = inputs['DEDUCTION'].name</field>
+    </record>
+    <record id="rule_sac_attach_salary" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_sac"/>
+        <field name="name">Wage Garnishment</field>
+        <field name="code">ATTACH_SALARY</field>
+        <field name="sequence">171</field>
+        <field name="category_id" ref="hr_payroll.DED"/>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = 'ATTACH_SALARY' in inputs</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = -inputs['ATTACH_SALARY'].amount
+result_name = inputs['ATTACH_SALARY'].name</field>
+    </record>
+    <record id="rule_sac_net" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_sac"/>
+        <field name="name">Net Salary</field>
+        <field name="code">NET</field>
+        <field name="sequence">200</field>
+        <field name="category_id" ref="hr_payroll.NET"/>
+        <field name="employee_move_line" eval="True"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = categories['REM'] + categories['NOREM'] + categories['INDEM'] + categories['DED']</field>
+    </record>
+    <record id="rule_sac_cjub" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_sac"/>
+        <field name="name">Employer Retirement</field>
+        <field name="code">CJUB</field>
+        <field name="sequence">300</field>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = categories['REM']
+result_rate = payslip._rule_parameter('l10n_ar_er_jub')</field>
+    </record>
+    <record id="rule_sac_cley19032" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_sac"/>
+        <field name="name">Employer Law 19.032</field>
+        <field name="code">CLEY19032</field>
+        <field name="sequence">301</field>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = categories['REM']
+result_rate = payslip._rule_parameter('l10n_ar_er_law19032')</field>
+    </record>
+    <record id="rule_sac_cfne" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_sac"/>
+        <field name="name">National Employment Fund</field>
+        <field name="code">CFNE</field>
+        <field name="sequence">302</field>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = categories['REM']
+result_rate = payslip._rule_parameter('l10n_ar_er_fne')</field>
+    </record>
+    <record id="rule_sac_canssal" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_sac"/>
+        <field name="name">ANSSAL</field>
+        <field name="code">CANSSAL</field>
+        <field name="sequence">303</field>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = categories['REM']
+result_rate = payslip._rule_parameter('l10n_ar_er_anssal')</field>
+    </record>
+    <record id="rule_sac_cfam" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_sac"/>
+        <field name="name">Family Allowances</field>
+        <field name="code">CFAM</field>
+        <field name="sequence">304</field>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = categories['REM']
+result_rate = payslip._rule_parameter('l10n_ar_er_family')</field>
+    </record>
+    <record id="rule_sac_cos" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_sac"/>
+        <field name="name">Employer Health Insurance</field>
+        <field name="code">COS</field>
+        <field name="sequence">305</field>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = categories['REM']
+result_rate = payslip._rule_parameter('l10n_ar_er_health')</field>
+    </record>
+    <record id="rule_sac_art" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_sac"/>
+        <field name="name">ART</field>
+        <field name="code">ART</field>
+        <field name="sequence">306</field>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = categories['REM']
+result_rate = payslip._rule_parameter('l10n_ar_art')</field>
+    </record>
+</odoo>
