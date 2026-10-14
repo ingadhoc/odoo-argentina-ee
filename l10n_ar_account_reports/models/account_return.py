@@ -1,9 +1,13 @@
+from collections import defaultdict
+
 from odoo import Command, _, fields, models
 from odoo.exceptions import RedirectWarning, UserError
 
 
 class AccountReturn(models.Model):
     _inherit = "account.return"
+
+    l10n_ar_is_simple_closing_return = fields.Boolean(related="type_id.l10n_ar_is_simple_closing_return")
 
     def _get_closing_report_options(self):
         """Avoid custom_return_period for sub-monthly return types.
@@ -59,6 +63,9 @@ class AccountReturn(models.Model):
         """
         if not self.type_id.l10n_ar_is_simple_closing_return:
             return super()._ensure_tax_group_configuration_for_tax_closing(tax_group_ids)
+        # Already checked for every company of the return (_generate_tax_closing_entries_create_values).
+        if self.env.context.get("l10n_ar_tax_groups_checked"):
+            return
 
         self.ensure_one()
         # Usamos el tax_group_id del apunte (related stored) y no el catálogo de impuestos: así entran los
@@ -86,6 +93,72 @@ class AccountReturn(models.Model):
                 action=incomplete_tax_groups._get_records_action(name=_("Tax groups")),
                 button_text=_("Configure accounts"),
             )
+
+    def _generate_tax_closing_entries_create_values(self, options):
+        """One closing entry for the whole legal entity, built in the company of the return.
+
+        Natively there is one entry per company of the return, each one in its own company,
+        so a parent with two branches of the same Tax ID gets three entries, and the ones of
+        the branches are hidden when they are not ticked in the company selector.
+
+        The companies of a return hang from the company of the return, so its accounts reach
+        all of them. Only for simple closing returns: they have no carryover, so there are no
+        previous balances of the branches to bring.
+        """
+        if self.tax_unit_id or not self.type_id.l10n_ar_is_simple_closing_return:
+            return super()._generate_tax_closing_entries_create_values(options)
+
+        self.ensure_one()
+        if self.company_id not in self.env.companies:
+            raise UserError(
+                _(
+                    "Select %(company)s in the company selector to validate this return: the closing entry "
+                    "of the whole legal entity is built there.",
+                    company=self.company_id.display_name,
+                )
+            )
+
+        self._ensure_tax_group_configuration_for_tax_closing()
+        closing = self.sudo().with_context(l10n_ar_tax_groups_checked=True)
+        lines_vals = []
+        tax_group_subtotal = defaultdict(float)
+        for company in self.company_ids:
+            company_lines, company_subtotal = closing._compute_tax_closing_entry(company, options)
+            lines_vals += company_lines
+            for key, amount in company_subtotal.items():
+                tax_group_subtotal[key] += amount
+        # Drop zero lines (e.g. the adjustment pair native adds for a company without taxes).
+        # If nothing else is closed, keep one of each instead of one pair per company.
+        currency = self.company_id.currency_id
+        lines_vals = [
+            line
+            for line in lines_vals
+            if not (currency.is_zero(line[2]["debit"]) and currency.is_zero(line[2]["credit"]))
+        ] or list({(line[2]["name"], line[2]["account_id"]): line for line in lines_vals}.values())
+        lines_vals += closing._add_tax_group_closing_items(tax_group_subtotal)
+        # A company reaches its own accounts and its ancestors', never one that lives only in a branch.
+        accounts = self.env["account.account"].sudo().browse({line[2]["account_id"] for line in lines_vals})
+        unreachable = accounts.filtered(lambda account: not (account.company_ids & self.company_id.parent_ids))
+        if unreachable:
+            raise UserError(
+                _(
+                    "The closing entry of this return is built in %(company)s for the whole legal entity, and "
+                    "these accounts belong only to a branch: %(accounts)s. Share them with %(company)s or move "
+                    "them up to it.",
+                    company=self.company_id.display_name,
+                    accounts=", ".join(unreachable.mapped("display_name")),
+                )
+            )
+        return [
+            {
+                "company_id": self.company_id.id,
+                "journal_id": self.company_id._get_tax_closing_journal().id,
+                "date": self.date_to,
+                "closing_return_id": self.id,
+                "ref": self.name,
+                "line_ids": lines_vals,
+            }
+        ]
 
     def _get_tax_closing_payable_and_receivable_accounts(self):
         """Para simple closing returns argentinos, usamos la cuenta configurada en el return type
