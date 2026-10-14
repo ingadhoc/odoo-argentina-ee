@@ -9,7 +9,7 @@
         <field name="arch" type="xml">
             <filter name="assetsacc" position="after">
                 <filter string="Cash &amp; Bank" name="asset_cash" domain="[('account_type', '=', 'asset_cash')]"/>
-                <filter string="Credit Card" name="credit_card" domain="[('account_type', '=', 'asset_credit_card')]"/>
+                <filter string="Credit Card" name="credit_card" domain="[('account_type', '=', 'liability_credit_card')]"/>
             </filter>
         </field>
     </record>
