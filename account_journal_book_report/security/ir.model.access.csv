@@ -1,4 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_account_journal_book_group,access_account_journal_book_group,model_account_journal_book_group,base.group_user,1,0,0,0
-access_account_journal_book_group_manager,access_account_journal_book_group_manager,model_account_journal_book_group,account.group_account_manager,1,1,1,1
-access_account_journal_book_report,access_account_journal_book_report,model_account_journal_book_report,base.group_user,1,1,1,0
