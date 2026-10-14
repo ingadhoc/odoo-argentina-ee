@@ -38,7 +38,7 @@
                                     </div>
                                 </div>
                                 <!-- ARCA Connection for Argentinian companies -->
-                                <div class="pt-4" name="arca_connection" t-if="companyCountryCode === 'AR'">
+                                <div class="pt-4" name="arca_connection" t-if="this.companyCountryCode === 'AR'">
                                     <div class="row">
                                         <div class="col-10">
                                             <h3>ARCA Connection</h3>
@@ -81,10 +81,10 @@
                                             <button type="button" class="btn btn-primary" t-on-click="() => this._importAccountGuideAction('account_base_import.action_open_coa_setup')">Review your Chart</button>
 
                                             <!-- Mostrar link al asiento de apertura si existe -->
-                                            <div t-if="accountOpeningMoveId" class="mt-3 alert alert-info" role="alert">
+                                            <div t-if="this.accountOpeningMoveId" class="mt-3 alert alert-info" role="alert">
                                                 <strong>Opening Entry:</strong>
                                                 <button type="button" class="btn btn-link p-0 align-baseline" t-on-click="() => this._openAccountOpeningMove()">
-                                                    <t t-out="accountOpeningMoveId[1]"/>
+                                                    <t t-out="this.accountOpeningMoveId[1]"/>
                                                 </button>
                                             </div>
                                         </div>

@@ -1,4 +1,3 @@
-import base64
 import datetime
 import io
 import logging
@@ -52,7 +51,7 @@ class AccountBalanceImport(models.TransientModel):
         domain="journal_domain",
         check_company=True,
     )
-    journal_domain = fields.Binary(
+    journal_domain = fields.Json(
         compute="_compute_journal_domain",
     )
     partner_balance_type = fields.Selection(
@@ -241,7 +240,7 @@ class AccountBalanceImport(models.TransientModel):
         journal = self.journal_id
 
         # Parse XLS or XLSX file
-        decoded = base64.decodebytes(self.file)
+        decoded = self.file.content
         sheet_rows = []
         try:
             # Try XLS format
@@ -471,7 +470,11 @@ class AccountBalanceImport(models.TransientModel):
 
         # mandamos views para que tome la vista de menu asientos, si no por defecto toma follow up o alguna otra, hay varias primary con 16 de secuencia
         return generated_moves._get_records_action(
-            views=[(self.env.ref("account.view_move_tree").id, "list")],
+            name=_("Imported Journal Entries"),
+            views=[
+                (self.env.ref("account.view_move_tree").id, "list"),
+                (self.env.ref("account.view_move_form").id, "form"),
+            ],
             domain=[("id", "in", generated_moves.ids)],
         )
 

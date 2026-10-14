@@ -50,7 +50,7 @@ Usage
 Para utilizar este módulo:
 
 1. Vaya a Contabilidad > Configuración > Ajustes
-2. En la sección "Accounting Import" encontrará las opciones organizadas:
+2. En la sección "Initial Setup", ajuste "Accounting import", encontrará las opciones organizadas:
 
    **Initial Setup:**
 

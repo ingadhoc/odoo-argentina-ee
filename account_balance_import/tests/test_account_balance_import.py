@@ -1,46 +1,41 @@
-import base64
 import datetime
 import io
 
-import xlwt
+import xlsxwriter
 from odoo.exceptions import UserError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
+from odoo.tools import BinaryBytes
 
 
-def generate_xls(data):
+def generate_xlsx(data):
     """
-    Generates an XLS file from the given data dictionary. Each key in the `data` dictionary represents a column header,
-    and its corresponding values are written as rows under that column.
+    Generates an XLSX file from the given data dictionary. Each key in the `data` dictionary represents a column
+    header, and its corresponding values are written as rows under that column.
 
     Date and datetime objects in the values will automatically set the style of the cell to a date/datetime.
 
     :param dict data: keys are column headers, values are rows.
-    :return bytes: the xls file as bytes.
+    :return bytes: the xlsx file as bytes.
     """
-    wb = xlwt.Workbook()
-    ws = wb.add_sheet("Sheet1")
+    output = io.BytesIO()
+    wb = xlsxwriter.Workbook(output, {"in_memory": True})
+    ws = wb.add_worksheet("Sheet1")
 
-    default_style = xlwt.XFStyle()
-
-    date_style = xlwt.XFStyle()
-    date_style.num_format_str = "yyyy-mm-dd"
-
-    datetime_style = xlwt.XFStyle()
-    datetime_style.num_format_str = "yyyy-mm-dd hh:mm:ss"
+    date_style = wb.add_format({"num_format": "yyyy-mm-dd"})
+    datetime_style = wb.add_format({"num_format": "yyyy-mm-dd hh:mm:ss"})
 
     for column, (key, values) in enumerate(data.items()):
-        ws.write(0, column, key, default_style)
+        ws.write(0, column, key)
         for row, value in enumerate(values, 1):
-            style = default_style
             if isinstance(value, datetime.datetime):
-                style = datetime_style
+                ws.write_datetime(row, column, value, datetime_style)
             elif isinstance(value, datetime.date):
-                style = date_style
-            ws.write(row, column, value, style)
+                ws.write_datetime(row, column, value, date_style)
+            else:
+                ws.write(row, column, value)
 
-    output = io.BytesIO()
-    wb.save(output)
+    wb.close()
     return output.getvalue()
 
 
@@ -234,7 +229,7 @@ class TestAccountBalanceImport(TransactionCase):
             "Importe en Otra moneda (Opcional)": [1000000, 2000000, 3000000, -2000000, -4000000],
         }
 
-        return base64.b64encode(generate_xls(data))
+        return BinaryBytes(generate_xlsx(data))
 
     def test_partner_is_located_by_every_supported_identifier(self):
         """The first column of the template accepts several identifiers.
@@ -420,7 +415,7 @@ class TestAccountBalanceImport(TransactionCase):
             "Referencia": ["Adjustment 1"],
             "Importe": [600.0],
         }
-        excel_file = base64.b64encode(generate_xls(data))
+        excel_file = BinaryBytes(generate_xlsx(data))
 
         wizard = self.env["account.balance_import_wizard"].create(
             {

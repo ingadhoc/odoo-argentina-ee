@@ -1,15 +1,16 @@
 import io
 from datetime import datetime
 
-import xlwt
+import xlsxwriter
 from odoo import http
-from odoo.http import content_disposition, request
+from odoo.http import request
+from odoo.http.stream import content_disposition
 
 
 class GenerateXLS(http.Controller):
     @http.route("/account_balance_import/partner_balance_xls", type="http", auth="user")
     def generate_partner_balance_xls(self, company_id, date, balance_type, export_partners, import_type="absolute"):
-        """Generate a XLS file with partner balances.
+        """Generate a XLSX file with partner balances.
 
         Args:
             company_id: Company ID
@@ -28,18 +29,19 @@ class GenerateXLS(http.Controller):
             accounting_date = datetime.today().date()
 
         # Create workbook
-        workbook = xlwt.Workbook(encoding="utf8")
-        style = xlwt.easyxf("pattern: pattern solid, fore_colour light_yellow")
-        date_style = xlwt.easyxf(num_format_str="YYYY-MM-DD")
-        sheet = workbook.add_sheet("Partner Balance Import")
+        f = io.BytesIO()
+        workbook = xlsxwriter.Workbook(f, {"in_memory": True})
+        style = workbook.add_format({"pattern": 1, "bg_color": "#FFFF99"})
+        date_style = workbook.add_format({"num_format": "YYYY-MM-DD"})
+        sheet = workbook.add_worksheet("Partner Balance Import")
 
         # Adjust column width
-        sheet.col(0).width = 256 * 40  # Nombre / CUIT / Referencia Interna
-        sheet.col(1).width = 256 * 30  # Referencia / Documento
-        sheet.col(2).width = 256 * 15  # Importe
-        sheet.col(3).width = 256 * 25  # Fecha de Vencimiento
-        sheet.col(4).width = 256 * 20  # Otra Moneda
-        sheet.col(5).width = 256 * 25  # Importe en Otra moneda
+        sheet.set_column(0, 0, 40)  # Nombre / CUIT / Referencia Interna
+        sheet.set_column(1, 1, 30)  # Referencia / Documento
+        sheet.set_column(2, 2, 15)  # Importe
+        sheet.set_column(3, 3, 25)  # Fecha de Vencimiento
+        sheet.set_column(4, 4, 20)  # Otra Moneda
+        sheet.set_column(5, 5, 25)  # Importe en Otra moneda
 
         # Write headers
         identifier_header = "Nombre / CUIT / Referencia Interna"
@@ -95,15 +97,13 @@ class GenerateXLS(http.Controller):
                     sheet.write(row_idx, 5, "")  # No amount in other currency
                 row_idx += 1
 
-        # Create a bytes stream
-        f = io.BytesIO()
-        workbook.save(f)
-        f.seek(0)
+        workbook.close()
+        suffix = "receivable" if balance_type == "receivable" else "payable"
 
         return request.make_response(
             f.getvalue(),
             [
                 ("Content-Type", "application/octet-stream"),
-                ("Content-Disposition", content_disposition("partner_balance.xls")),
+                ("Content-Disposition", content_disposition(f"partner_balance_{suffix}.xlsx")),
             ],
         )
