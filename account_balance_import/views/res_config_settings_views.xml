@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="account_base_import.res_config_settings_import_view_form"/>
         <field name="arch" type="xml">
             <!-- Remove help text from Initial Setup setting -->
-            <xpath expr="//block[@name='accounting_import_setting_container']/setting" position="attributes">
+            <xpath expr="//setting[.//button[@name='%(account_base_import.action_open_coa_setup)d']]" position="attributes">
                 <attribute name="help"></attribute>
             </xpath>
 

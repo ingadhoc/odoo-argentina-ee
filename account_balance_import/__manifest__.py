@@ -1,6 +1,6 @@
 {
     "name": "Account Balance",
-    "version": "19.0.1.9.0",
+    "version": "20.0.1.0.0",
     "category": "Planner",
     "sequence": 14,
     "author": "ADHOC SA",
@@ -12,7 +12,7 @@
         "account_base_import",
     ],
     "data": [
-        "security/ir.model.access.csv",
+        "security/ir.access.csv",
         "views/account_onboarding_views.xml",
         "wizards/account_balance_import_wizard.xml",
         "views/account_account_views.xml",
@@ -26,5 +26,5 @@
             "account_balance_import/static/src/xml/**/*",
         ],
     },
-    "installable": False,
+    "installable": True,
 }
