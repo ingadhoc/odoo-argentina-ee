@@ -11,6 +11,9 @@ from openpyxl import load_workbook
 
 _logger = logging.getLogger(__name__)
 
+XLS_SIGNATURE = b"\xd0\xcf\x11\xe0\xa1\xb1\x1a\xe1"
+XLSX_SIGNATURE = b"PK\x03\x04"
+
 
 class AccountBalanceImport(models.TransientModel):
     _name = "account.balance_import_wizard"
@@ -148,6 +151,14 @@ class AccountBalanceImport(models.TransientModel):
             other_currency = self.env["res.currency"]._search_by_name(currency)
         return other_currency
 
+    @api.model
+    def _check_excel_file(self, decoded):
+        """Raise a readable error when the file is neither an XLS nor an XLSX file."""
+        if not decoded.startswith((XLS_SIGNATURE, XLSX_SIGNATURE)):
+            raise ValidationError(
+                _("Unsupported file format. Please upload the import template as an Excel file (.xls or .xlsx).")
+            )
+
     def action_import(self):
         self.ensure_one()
         if not self.file:
@@ -242,6 +253,7 @@ class AccountBalanceImport(models.TransientModel):
 
         # Parse XLS or XLSX file
         decoded = base64.decodebytes(self.file)
+        self._check_excel_file(decoded)
         sheet_rows = []
         try:
             # Try XLS format
