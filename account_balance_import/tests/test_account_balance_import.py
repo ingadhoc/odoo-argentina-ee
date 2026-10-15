@@ -199,6 +199,75 @@ class TestAccountBalanceImport(TransactionCase):
         move = self.company.account_opening_move_id
         self.assertAlmostEqual(sum(move.line_ids.mapped("balance")), 0.0, places=2)
 
+    def test_credit_amount_in_currency_takes_the_sign_of_the_balance(self):
+        """A credit amount in currency typed negative, as the template shows it, is loaded too"""
+        self._save_opening(self.account_fx, {"amount_in_currency": -100.0, "opening_credit": 4000.0})
+
+        self.assertAlmostEqual(self._opening_lines(self.account_fx).amount_currency, -100.0, places=2)
+
+    def test_accounting_manager_loads_opening_balances(self):
+        """An accounting manager without Settings rights can create the opening move"""
+        self.company.account_opening_move_id = False
+        manager = self.env["res.users"].create(
+            {
+                "name": "Accounting Manager",
+                "login": "balance_import_manager",
+                "group_ids": [(6, 0, [self.env.ref("account.group_account_manager").id])],
+                "company_id": self.company.id,
+                "company_ids": [(6, 0, [self.company.id])],
+            }
+        )
+
+        self._save_opening(self.account_1.with_user(manager), {"opening_balance": 500.0})
+
+        self.assertEqual(self._opening_lines(self.account_1).balance, 500.0)
+
+    def _import_balances(self, import_wizard, dryrun=False):
+        preview = import_wizard.parse_preview({"has_headers": True, "quoting": '"'})
+        result = import_wizard.with_context(account_balance_import=True).execute_import(
+            preview["headers"], preview["headers"], preview["options"], dryrun=dryrun
+        )
+        self.env.invalidate_all()
+        return result
+
+    def test_new_accounts_are_announced_before_being_created(self):
+        """Given a balances file from the guide with an existing account (TEST001) and a code
+        that does not exist (TEST999, e.g. mistyped):
+        - importing it straight away imports nothing and lists only the new account;
+        - the test run lists the new account without creating it;
+        - importing after that notice creates the account and loads every balance."""
+        file_values = {
+            "res_model": "account.account",
+            "file": BinaryBytes(
+                b"code,name,opening_balance\nTEST001,Test Account 1,100\nTEST999,Mistyped Account,50\n"
+            ),
+            "file_type": "text/csv",
+        }
+        new_account_domain = [("code", "=", "TEST999")]
+
+        with self.subTest("importing straight away imports nothing and lists only the new account"):
+            held = self._import_balances(self.env["base_import.import"].create(file_values))
+            self.assertFalse(held["ids"])
+            self.assertIn("TEST999", held["messages"][0]["message"])
+            self.assertNotIn("TEST001", held["messages"][0]["message"])
+            self.assertFalse(self.env["account.account"].search(new_account_domain))
+            self.assertFalse(self._opening_lines(self.account_1))
+
+        import_wizard = self.env["base_import.import"].create(file_values)
+        with self.subTest("the test run lists the new account without creating it"):
+            test_run = self._import_balances(import_wizard, dryrun=True)
+            self.assertEqual(test_run["messages"][0]["type"], "warning")
+            self.assertIn("TEST999", test_run["messages"][0]["message"])
+            self.assertFalse(self.env["account.account"].search(new_account_domain))
+
+        with self.subTest("importing after the notice creates the account and loads the balances"):
+            done = self._import_balances(import_wizard)
+            self.assertEqual(len(done["ids"]), 2)
+            self.assertTrue(self.env["account.account"].search(new_account_domain))
+            self.assertEqual(self._opening_lines(self.account_1).balance, 100.0)
+            move = self.company.account_opening_move_id
+            self.assertAlmostEqual(sum(move.line_ids.mapped("balance")), 0.0, places=2)
+
     def _generate_partner_balance_excel(self):
         """Generate Excel file with test partner balance data"""
         # According to wizard code, fields are: name, reference, amount, due_date, currency, amount_company_currency

@@ -9,6 +9,7 @@ patch(AccountImportGuide.prototype, {
 
     setup() {
         super.setup();
+        this.activeCompanyId = user.activeCompany.id;
         onWillStart(async () => {
             // Cargar el asiento de apertura de la compañía
             const companyId = user.activeCompany.id;
@@ -98,6 +99,20 @@ patch(AccountImportGuide.prototype, {
         const result = await this.orm.call(
             "account.import.summary",
             "action_open_partner_balance_import",
+            [config]
+        );
+        this.actionService.doAction(result);
+    },
+
+    async _openAccountBalanceImport() {
+        const config = await this.orm.call(
+            "account.import.summary",
+            "create",
+            [{}]
+        );
+        const result = await this.orm.call(
+            "account.import.summary",
+            "action_open_account_balance_import",
             [config]
         );
         this.actionService.doAction(result);
