@@ -16,10 +16,14 @@ class AccountChangeLockDate(models.TransientModel):
 
     @api.onchange("company_id")
     def onchange_company_id(self):
-        self.sale_lock_date = self.company_id.sale_lock_date
-        self.purchase_lock_date = self.company_id.purchase_lock_date
-        self.fiscalyear_lock_date = self.company_id.fiscalyear_lock_date
-        self.tax_lock_date = self.company_id.tax_lock_date
+        for field in LOCK_DATE_FIELDS:
+            self[field] = self.company_id[field]
+
+    # The enterprise wizard compares, validates and writes the lock dates against env.company. Since the company
+    # can be picked in the wizard (e.g. a branch), we run that logic on the selected company instead.
+
+    def _get_changes_needing_exception(self):
+        return super(AccountChangeLockDate, self.with_company(self.company_id))._get_changes_needing_exception()
 
     def _prepare_lock_date_values(self, exception_vals_list=None):
         bypass = (
@@ -35,17 +39,10 @@ class AccountChangeLockDate(models.TransientModel):
         return {field: self[field] for field in LOCK_DATE_FIELDS if self[field] != self.env.company[field]}
 
     def change_lock_date(self):
-        if self.env.user.has_group("account.group_account_manager"):
-            if any(
-                lock_date > fields.Date.context_today(self)
-                for lock_date in (
-                    self.fiscalyear_lock_date,
-                    self.tax_lock_date,
-                )
-                if lock_date
-            ):
-                raise UserError(_("You cannot set a lock date in the future."))
-            self.company_id.sudo().write(self._prepare_lock_date_values())
-        else:
-            raise UserError(_("Only Billing Administrators are allowed to change lock dates!"))
-        return {"type": "ir.actions.act_window_close"}
+        if self.env.user.has_group("account.group_account_manager") and any(
+            lock_date > fields.Date.context_today(self)
+            for lock_date in (self.fiscalyear_lock_date, self.tax_lock_date)
+            if lock_date
+        ):
+            raise UserError(_("You cannot set a lock date in the future."))
+        return super(AccountChangeLockDate, self.with_company(self.company_id)).change_lock_date()
