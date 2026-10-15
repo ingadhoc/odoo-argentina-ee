@@ -107,3 +107,60 @@ class GenerateXLS(http.Controller):
                 ("Content-Disposition", content_disposition(f"partner_balance_{suffix}.xlsx")),
             ],
         )
+
+    @http.route("/account_balance_import/account_balance_xls", type="http", auth="user")
+    def generate_account_balance_xls(self, company_id):
+        """Generate a XLSX with the company chart, ready for the native records import.
+
+        Args:
+            company_id: Company ID, the active one in the web client
+        """
+        company = request.env["res.company"].browse(int(company_id))
+        if company not in request.env.user.company_ids:
+            raise request.not_found()
+        accounts = (
+            request.env["account.account"]
+            .with_company(company)
+            .search(
+                [
+                    ("company_ids", "in", company.id),
+                    ("account_type", "not in", ("asset_receivable", "liability_payable")),
+                ],
+                order="code",
+            )
+        )
+        multi_currency = request.env.user.has_group("base.group_multi_currency")
+
+        f = io.BytesIO()
+        workbook = xlsxwriter.Workbook(f, {"in_memory": True})
+        style = workbook.add_format({"pattern": 1, "bg_color": "#FFFF99"})
+        sheet = workbook.add_worksheet("Account Balance Import")
+        sheet.set_column(0, 0, 10)
+        sheet.set_column(1, 1, 15)
+        sheet.set_column(2, 2, 50)
+        sheet.set_column(3, 4, 22)
+
+        # Accounts are matched by database id on import, or by code when the id is empty.
+        headers = [".id", "code", "name", "opening_balance"]
+        if multi_currency:
+            headers.append("amount_in_currency")
+        for col, header in enumerate(headers):
+            sheet.write(0, col, header, style)
+
+        for row, account in enumerate(accounts, 1):
+            sheet.write(row, 0, account.id)
+            sheet.write(row, 1, account.code or "")
+            sheet.write(row, 2, account.name)
+            sheet.write(row, 3, account.opening_balance)
+            # Only accounts in another currency take it: on the others the import rejects it.
+            if multi_currency and account.currency_id and account.currency_id != company.currency_id:
+                sheet.write(row, 4, account.amount_in_currency)
+        workbook.close()
+
+        return request.make_response(
+            f.getvalue(),
+            [
+                ("Content-Type", "application/octet-stream"),
+                ("Content-Disposition", content_disposition("account_balance.xlsx")),
+            ],
+        )

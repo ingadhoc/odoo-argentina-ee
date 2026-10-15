@@ -199,6 +199,152 @@ class TestAccountBalanceImport(TransactionCase):
         move = self.company.account_opening_move_id
         self.assertAlmostEqual(sum(move.line_ids.mapped("balance")), 0.0, places=2)
 
+    def test_credit_amount_in_currency_takes_the_sign_of_the_balance(self):
+        """A credit amount in currency typed negative, as the template shows it, is loaded too"""
+        self._save_opening(self.account_fx, {"amount_in_currency": -100.0, "opening_credit": 4000.0})
+
+        self.assertAlmostEqual(self._opening_lines(self.account_fx).amount_currency, -100.0, places=2)
+
+    def test_accounting_manager_loads_opening_balances(self):
+        """An accounting manager without Settings rights can create the opening move"""
+        self.company.account_opening_move_id = False
+        manager = self.env["res.users"].create(
+            {
+                "name": "Accounting Manager",
+                "login": "balance_import_manager",
+                "group_ids": [(6, 0, [self.env.ref("account.group_account_manager").id])],
+                "company_id": self.company.id,
+                "company_ids": [(6, 0, [self.company.id])],
+            }
+        )
+
+        self._save_opening(self.account_1.with_user(manager), {"opening_balance": 500.0})
+
+        self.assertEqual(self._opening_lines(self.account_1).balance, 500.0)
+
+    def _import_balances(self, import_wizard, dryrun=False):
+        preview = import_wizard.parse_preview({"has_headers": True, "quoting": '"'})
+        # The columns the import screen maps by itself: an unmatched one is not imported.
+        fields = ["/".join(preview["matches"].get(index, [])) for index in range(len(preview["headers"]))]
+        result = import_wizard.with_context(account_balance_import=True).execute_import(
+            fields, preview["headers"], preview["options"], dryrun=dryrun
+        )
+        self.env.invalidate_all()
+        return result
+
+    def test_new_accounts_are_announced_before_being_created(self):
+        """Given a balances file from the guide with an existing account (TEST001) and a code
+        that does not exist (TEST999, e.g. mistyped):
+        - importing it straight away imports nothing and lists only the new account;
+        - the test run lists the new account without creating it;
+        - importing after that notice creates the account and loads every balance."""
+        file_values = {
+            "res_model": "account.account",
+            "file": BinaryBytes(
+                b"code,name,opening_balance\nTEST001,Test Account 1,100\nTEST999,Mistyped Account,50\n"
+            ),
+            "file_type": "text/csv",
+        }
+        new_account_domain = [("code", "=", "TEST999")]
+
+        with self.subTest("importing straight away imports nothing and lists only the new account"):
+            held = self._import_balances(self.env["base_import.import"].create(file_values))
+            self.assertFalse(held["ids"])
+            self.assertIn("TEST999", held["messages"][0]["message"])
+            self.assertNotIn("TEST001", held["messages"][0]["message"])
+            self.assertFalse(self.env["account.account"].search(new_account_domain))
+            self.assertFalse(self._opening_lines(self.account_1))
+
+        import_wizard = self.env["base_import.import"].create(file_values)
+        with self.subTest("the test run lists the new account without creating it"):
+            test_run = self._import_balances(import_wizard, dryrun=True)
+            self.assertEqual(test_run["messages"][0]["type"], "warning")
+            self.assertIn("TEST999", test_run["messages"][0]["message"])
+            self.assertFalse(self.env["account.account"].search(new_account_domain))
+
+        with self.subTest("importing after the notice creates the account and loads the balances"):
+            done = self._import_balances(import_wizard)
+            self.assertEqual(len(done["ids"]), 2)
+            self.assertTrue(self.env["account.account"].search(new_account_domain))
+            self.assertEqual(self._opening_lines(self.account_1).balance, 100.0)
+            move = self.company.account_opening_move_id
+            self.assertAlmostEqual(sum(move.line_ids.mapped("balance")), 0.0, places=2)
+
+    def test_accounts_are_matched_by_id_and_renames_are_announced(self):
+        """Given a balances file that points an account by its id with another code and name,
+        and another row without id that has the code of an existing account:
+        - the test run lists the rename and changes nothing;
+        - importing straight away imports nothing;
+        - importing after the notice renames the account and loads both balances;
+        - the row without id is loaded on the account that has its code, not as a new one."""
+        csv = (
+            ".id,code,name,opening_balance\n"
+            f"{self.account_1.id},TEST101,Renamed Account,100\n"
+            f",{self.account_2.code},{self.account_2.name},50\n"
+        ).encode()
+        file_values = {
+            "res_model": "account.account",
+            "file": BinaryBytes(csv),
+            "file_type": "text/csv",
+        }
+        old_code, old_name = self.account_1.code, self.account_1.name
+        account_count = self.env["account.account"].search_count([])
+
+        with self.subTest("importing straight away imports nothing"):
+            held = self._import_balances(self.env["base_import.import"].create(file_values))
+            self.assertFalse(held["ids"])
+            self.assertIn("renamed accounts", held["messages"][0]["message"])
+            self.assertIn(f"{old_code} {old_name}", held["messages"][0]["message"])
+            self.assertNotIn(self.account_2.name, held["messages"][0]["message"])
+            self.assertEqual(self.account_1.code, old_code)
+            self.assertFalse(self._opening_lines(self.account_1))
+
+        import_wizard = self.env["base_import.import"].create(file_values)
+        with self.subTest("the test run lists the rename without applying it"):
+            test_run = self._import_balances(import_wizard, dryrun=True)
+            self.assertEqual(test_run["messages"][0]["type"], "warning")
+            self.assertEqual(self.account_1.name, old_name)
+
+        with self.subTest("importing after the notice renames and loads the balances"):
+            done = self._import_balances(import_wizard)
+            self.assertEqual(len(done["ids"]), 2)
+            self.assertEqual(self.account_1.name, "Renamed Account")
+            self.assertEqual(self.account_1.code, "TEST101")
+            self.assertEqual(self._opening_lines(self.account_1).balance, 100.0)
+            self.assertEqual(self._opening_lines(self.account_2).balance, 50.0)
+            self.assertEqual(self.env["account.account"].search_count([]), account_count)
+
+    def test_account_without_code_is_matched_by_id(self):
+        """Given an account without code and a file like the template, that points it by its id
+        with the code empty, plus two new accounts, one of them without code (a new account
+        without code takes its type from the file, there is no code to derive it from):
+        - the row with id loads the balance on that account, without creating another one;
+        - the new accounts are announced, with and without code, and then created."""
+        no_code = self.env["account.account"].create(
+            {"name": "No Code Account", "account_type": "asset_current", "company_ids": [self.company.id]}
+        )
+        csv = (
+            ".id,code,name,account_type,opening_balance\n"
+            f"{no_code.id},,No Code Account,asset_current,100\n"
+            ",,New Without Code,asset_current,10\n"
+            ",TEST998,New With Code,asset_current,-110\n"
+        ).encode()
+        import_wizard = self.env["base_import.import"].create(
+            {"res_model": "account.account", "file": BinaryBytes(csv), "file_type": "text/csv"}
+        )
+
+        test_run = self._import_balances(import_wizard, dryrun=True)
+        message = test_run["messages"][0]["message"]
+        self.assertIn("New Without Code", message)
+        self.assertIn("TEST998", message)
+        self.assertNotIn("No Code Account", message)
+
+        done = self._import_balances(import_wizard)
+        self.assertEqual(len(done["ids"]), 3)
+        self.assertFalse(no_code.code)
+        self.assertEqual(self._opening_lines(no_code).balance, 100.0)
+        self.assertFalse(self.env["account.account"].search([("code", "=ilike", "false")]))
+
     def _generate_partner_balance_excel(self):
         """Generate Excel file with test partner balance data"""
         # According to wizard code, fields are: name, reference, amount, due_date, currency, amount_company_currency

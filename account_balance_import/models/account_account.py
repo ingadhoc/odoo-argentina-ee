@@ -65,6 +65,86 @@ class AccountAccount(models.Model):
                     if account.opening_credit:
                         account._set_opening_debit_credit(account.opening_credit, "credit")
 
+    @api.model
+    def _balance_import_link_by_code(self, fields, data, id_by_code):
+        """Give the rows without a database id the one of the account with that code."""
+        if "code" not in fields:
+            return
+        if ".id" not in fields:
+            fields.append(".id")
+            for row in data:
+                row.append(False)
+        id_index = fields.index(".id")
+        code_index = fields.index("code")
+        for row in data:
+            if not row[id_index]:
+                row[id_index] = id_by_code.get(row[code_index], False)
+
+    @api.model
+    def load(self, fields, data):
+        """On the balances import from the guide, list the accounts the file would create or
+        rename before doing it. The test run shows them; the import is held back until the
+        same changes were shown once."""
+        if not self.env.context.get("account_balance_import"):
+            return super().load(fields, data)
+
+        accounts = self.with_context(active_test=False).search([])
+        old_values = {account.id: (account.code, account.name) for account in accounts}
+        self._balance_import_link_by_code(
+            fields, data, {account.code: account.id for account in accounts if account.code}
+        )
+        with self.env.cr.savepoint() as savepoint:
+            result = super().load(fields, data)
+            imported = self.browse(result["ids"] or [])
+            new_accounts = imported.filtered(lambda account: account.id not in old_values)
+            renamed = imported.filtered(
+                lambda account: account.id in old_values and old_values[account.id] != (account.code, account.name)
+            )
+            keys = sorted(
+                {f"new:{account.code or ''}:{account.name}" for account in new_accounts}
+                | {f"rename:{account.id}:{account.code}:{account.name}" for account in renamed}
+            )
+            if not keys:
+                return result
+
+            changes = []
+            if new_accounts:
+                changes.append(_("new accounts: %(accounts)s", accounts=", ".join(new_accounts.mapped("display_name"))))
+            if renamed:
+                changes.append(
+                    _(
+                        "renamed accounts: %(accounts)s",
+                        accounts=", ".join(
+                            "%s %s → %s" % (*old_values[account.id], account.display_name) for account in renamed
+                        ),
+                    )
+                )
+            changes = "; ".join(changes)
+            if self.env.context.get("account_balance_import_dryrun"):
+                message = _(
+                    "The import will create or rename accounts (%(changes)s). "
+                    "Check that the file is right; if it is, click Import.",
+                    changes=changes,
+                )
+                result["messages"] = result["messages"] + [
+                    {"type": "warning", "message": message, "account_keys": keys}
+                ]
+                return result
+            if set(keys) <= set(self.env.context.get("account_balance_announced") or []):
+                return result
+
+            savepoint.close(rollback=True)
+            message = _(
+                "Nothing was imported: the file would create or rename accounts (%(changes)s). "
+                "Check that the file is right; if it is, click Import again.",
+                changes=changes,
+            )
+            return {
+                "ids": False,
+                "messages": [{"type": "error", "message": message, "account_keys": keys}],
+                "nextrow": 0,
+            }
+
     @api.constrains("amount_in_currency")
     def _check_amount_in_currency(self):
         for account in self:
