@@ -79,6 +79,12 @@
                                             <h3>Chart of Accounts</h3>
                                             <p>Review your chart and setup end of year balances.</p>
                                             <button type="button" class="btn btn-primary" t-on-click="() => this._importAccountGuideAction('account_base_import.action_open_coa_setup')">Review your Chart</button>
+                                            <p class="mt-3 mb-1">
+                                                Import the initial balances of your accounts using the
+                                                <a class="fw-bold" href="/account_balance_import/account_balance_xls" aria-label="Download" title="Download">template</a>
+                                                with your chart already loaded.
+                                            </p>
+                                            <button type="button" class="btn btn-primary" t-on-click="() => this._openAccountBalanceImport()">Import Account Balances</button>
 
                                             <!-- Mostrar link al asiento de apertura si existe -->
                                             <div t-if="this.accountOpeningMoveId" class="mt-3 alert alert-info" role="alert">

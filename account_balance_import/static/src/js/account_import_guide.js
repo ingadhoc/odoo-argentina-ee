@@ -103,6 +103,20 @@ patch(AccountImportGuide.prototype, {
         this.actionService.doAction(result);
     },
 
+    async _openAccountBalanceImport() {
+        const config = await this.orm.call(
+            "account.import.summary",
+            "create",
+            [{}]
+        );
+        const result = await this.orm.call(
+            "account.import.summary",
+            "action_open_account_balance_import",
+            [config]
+        );
+        this.actionService.doAction(result);
+    },
+
     async _openAccountOpeningMove() {
         if (this.accountOpeningMoveId) {
             this.actionService.doAction({

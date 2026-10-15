@@ -53,3 +53,14 @@ class AccountImportSummary(models.TransientModel):
     def action_open_journal_dashboard(self):
         """Open the journal dashboard to review journals."""
         return self.env["ir.actions.act_window"]._for_xml_id("account.open_account_journal_dashboard_kanban")
+
+    def action_open_account_balance_import(self):
+        """Open the native records import on the chart of accounts."""
+        return {
+            "type": "ir.actions.client",
+            "tag": "import",
+            "params": {
+                "model": "account.account",
+                "context": {"allowed_company_ids": self.env.companies.ids},
+            },
+        }
