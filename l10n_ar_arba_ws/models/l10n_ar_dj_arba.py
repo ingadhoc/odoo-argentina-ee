@@ -386,6 +386,36 @@ class L10nArDjArba(models.Model):
 
     # Buttons
 
+    def action_draft(self):
+        """Reset to draft a DDJJ without withholdings, from any state, so it can be deleted.
+
+        The ARBA data is cleared: with the ID kept, action_open would only update the status and
+        _ensure_dj would reuse this draft for the next payment of the period.
+        """
+        records_with_withholdings = self.filtered("l10n_ar_withholding_ids")
+        if records_with_withholdings:
+            raise UserError(
+                self.env._(
+                    "You cannot reset to draft a DDJJ ARBA that has withholding lines: %s",
+                    ", ".join(records_with_withholdings.mapped("display_name")),
+                )
+            )
+        for ddjj in self.filtered(lambda record: record.state != "draft"):
+            if ddjj.name:
+                ddjj.message_post(
+                    body=self.env._("Reset to draft. The ARBA DDJJ ID %s was removed from this record.", ddjj.name)
+                )
+            ddjj.write(
+                {
+                    "state": "draft",
+                    "name": False,
+                    "is_refund": False,
+                    "open_date": False,
+                    "due_date": False,
+                    "close_date": False,
+                }
+            )
+
     def action_open(self):
         """Se conecta a ARBA y cera una la declaración jurada que quedan en estado abierto para que la
         podemos usar. Si todo va bien tendremos de respuesta un ID de declaracion y varios datos
