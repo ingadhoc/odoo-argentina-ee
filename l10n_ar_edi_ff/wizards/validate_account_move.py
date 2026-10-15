@@ -6,9 +6,11 @@ class ValidateAccountMove(models.TransientModel):
 
     def validate_move(self):
         """account_background_post validates the selected invoices one by one, so a batch never gets more than
-        one invoice. Validate the invoices of batch journals with a single action_post; the rest keeps the
+        one invoice. Validate the invoices that can be batched with a single action_post; the rest keeps the
         one-by-one loop."""
-        batch = self.move_ids.filtered(lambda m: m.state == "draft" and m.journal_id.l10n_ar_batch_cae)
+        if not self.env["account.move"]._move_batch_enabled():
+            return super().validate_move()
+        batch = self.move_ids.filtered(lambda m: m.state == "draft" and m._move_batch_eligible())
         if not self.count_inv or not batch or self.count_inv > self.batch_size:
             return super().validate_move()
         batch.action_post()

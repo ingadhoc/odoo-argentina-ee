@@ -1,4 +1,5 @@
 import logging
+import os
 import time
 from datetime import datetime
 
@@ -12,6 +13,8 @@ _logger = logging.getLogger(__name__)
 
 PARAM = "l10n_ar_edi_ff"
 ERRORS_KEY = f"{PARAM}.errors"
+FLAG_ENV = "ODOO_FLAG_L10N_AR_BATCH_CAE"
+FLAG_PARAM = f"{PARAM}.batch_cae"
 
 
 class AccountMove(models.Model):
@@ -21,11 +24,19 @@ class AccountMove(models.Model):
     # Posting
     # -------------------------------------------------------------------------
 
-    def _ff_is_batchable(self):
+    @api.model
+    def _move_batch_enabled(self):
+        """Batch CAE requests are on for every wsfe journal or for none. The environment variable, when set,
+        wins over the system parameter."""
+        value = os.environ.get(FLAG_ENV)
+        if value is None:
+            value = self.env["ir.config_parameter"].sudo().get_param(FLAG_PARAM, "")
+        return value.strip().lower() in ("1", "true", "yes")
+
+    def _move_batch_eligible(self):
         self.ensure_one()
         return (
-            self.journal_id.l10n_ar_batch_cae
-            and self.journal_id.l10n_ar_afip_ws == "wsfe"
+            self.journal_id.l10n_ar_afip_ws == "wsfe"
             and self.is_invoice()
             and self.country_code == "AR"
             and self.move_type in ("out_invoice", "out_refund")
@@ -35,9 +46,14 @@ class AccountMove(models.Model):
 
     def _post(self, soft=True):
         # Inside a batch every invoice goes through the regular chain one by one: do not batch again.
-        if self.env.context.get("l10n_ar_batch_ids"):
+        # force_background_post defers the invoices: the background post cron batches them later.
+        if (
+            self.env.context.get("l10n_ar_batch_ids")
+            or self.env.context.get("force_background_post")
+            or not self._move_batch_enabled()
+        ):
             return super()._post(soft=soft)
-        batchable = self.filtered(lambda m: m._ff_is_batchable())
+        batchable = self.filtered(lambda m: m._move_batch_eligible())
         if not batchable:
             return super()._post(soft=soft)
 
@@ -53,7 +69,7 @@ class AccountMove(models.Model):
         for queue in groups.values():
             while queue:
                 chunk = self.browse(queue[:size])
-                done, chunk_failed, pending = chunk._ff_post_chunk(soft)
+                done, chunk_failed, pending = chunk._move_batch_post_chunk(soft)
                 validated |= done
                 failed.update(chunk_failed)
                 queue = pending.ids + queue[size:]
@@ -90,7 +106,7 @@ class AccountMove(models.Model):
     # Batch
     # -------------------------------------------------------------------------
 
-    def _ff_lock(self):
+    def _move_batch_lock(self):
         """Serialize CAE requests per (company, journal, document type).
 
         The transaction lock is released by the commit at the end of each chunk.
@@ -114,11 +130,11 @@ class AccountMove(models.Model):
         finally:
             cr.execute("SET LOCAL lock_timeout = DEFAULT")
 
-    def _ff_send(self, client, auth, request):
+    def _move_batch_send(self, client, auth, request):
         """Isolated so tests can simulate a lost response."""
         return client.service.FECAESolicitar(auth, request)
 
-    def _ff_recover(self, details, client, auth):
+    def _move_batch_recover(self, details, client, auth):
         """Find out which documents of the chunk ARCA registered although we got no usable answer.
 
         Returns (values to write for the registered prefix of the chunk, last number authorized in ARCA).
@@ -150,7 +166,9 @@ class AccountMove(models.Model):
                     or int(got.DocNro) != int(detail["DocNro"])
                 )
             ):
-                _logger.warning("ff: %s number %s in ARCA does not match, stop recovery", inv.id, detail["CbteDesde"])
+                _logger.warning(
+                    "batch CAE: %s number %s in ARCA does not match, stop recovery", inv.id, detail["CbteDesde"]
+                )
                 break
             recovered.append(
                 {
@@ -160,10 +178,10 @@ class AccountMove(models.Model):
                     "l10n_ar_afip_result": got.Resultado,
                 }
             )
-        _logger.info("ff: recovered %s of %s documents from ARCA (last %s)", len(recovered), len(self), last)
+        _logger.info("batch CAE: recovered %s of %s documents from ARCA (last %s)", len(recovered), len(self), last)
         return recovered, last
 
-    def _ff_unrecovered_msg(self, lost, response, codes, number, last):
+    def _move_batch_unrecovered_msg(self, lost, response, codes, number, last):
         """Error for a document that ARCA did not register: what ARCA said (or that it did not answer),
         plus both numbers, so a numbering mismatch is obvious."""
         self.ensure_one()
@@ -182,7 +200,7 @@ class AccountMove(models.Model):
             )
         )
 
-    def _ff_reject_from(self, index, msg, retry, numbering, xml_values):
+    def _move_batch_reject_from(self, index, msg, retry, numbering, xml_values):
         """The document at `index` of this posted chunk was rejected (its posting is already rolled back).
 
         Returns ({invoice: error message}, pending): ARCA only evaluated the rejected one, so the rest are
@@ -205,7 +223,68 @@ class AccountMove(models.Model):
             rejected.sudo().write(xml_values)
         return failed, pending
 
-    def _ff_post_chunk(self, soft):
+    def _move_batch_evaluate(self, details, response, lost, client, auth):
+        """Read what ARCA did with this posted chunk.
+
+        Returns (values for the approved prefix, index of the first document not approved or None, its error
+        message, whether the documents after it can be retried, the error that kept us from checking ARCA or
+        None, the header error codes)."""
+        values_list, first_bad, bad_msg, retry, unconfirmed = [], None, "", True, None
+        header_codes = [str(err.Code) for err in response.Errors.Err] if response and response.Errors else []
+        if lost is not None or "10016" in header_codes:
+            # A numbering mismatch rejects the rest too: do not retry them.
+            retry = False
+            try:
+                values_list, last = self._move_batch_recover(details, client, auth)
+            except Exception as error:  # noqa: BLE001
+                # ARCA is most likely still down. Nothing is confirmed: the whole chunk goes back to draft and
+                # the next attempt reconciles it through the 10016 path.
+                unconfirmed = error
+                _logger.warning("batch CAE: could not check %s documents in ARCA: %r", len(self), error)
+                first_bad = 0
+                bad_msg = self.env._(
+                    "ARCA did not answer and we could not check what it registered: %(error)s\n\n"
+                    "The document stays in draft. If ARCA did register it, validating it again recovers its "
+                    "authorization instead of reporting it twice.",
+                    error=repr(lost if lost is not None else error),
+                )
+            else:
+                if len(values_list) < len(self):
+                    first_bad = len(values_list)
+                    bad_msg = self[first_bad]._move_batch_unrecovered_msg(
+                        lost, response, header_codes, details[first_bad]["CbteDesde"], last
+                    )
+        else:
+            results = {}
+            if response.FeDetResp:
+                results = {r.CbteDesde: r for r in response.FeDetResp.FECAEDetResponse}
+            # A header error without details (auth, service) affects the whole chunk: do not retry.
+            retry = bool(results)
+            for idx, (inv, detail) in enumerate(zip(self, details)):
+                result = results.get(detail["CbteDesde"])
+                obs_codes, obs = [], ""
+                if result and result.Observaciones:
+                    obs = "".join(f"\n* Code {ob.Code}: {ob.Msg}" for ob in result.Observaciones.Obs)
+                    obs_codes = [str(ob.Code) for ob in result.Observaciones.Obs]
+                if not result or result.Resultado != "A":
+                    errors = (
+                        "".join(f"\n* Code {e.Code}: {e.Msg}" for e in response.Errors.Err) if response.Errors else ""
+                    )
+                    first_bad = idx
+                    bad_msg = inv._prepare_return_msg("wsfe", errors, obs, "", header_codes + obs_codes)
+                    break
+                values_list.append(
+                    {
+                        "l10n_ar_afip_auth_mode": "CAE",
+                        "l10n_ar_afip_auth_code": str(result.CAE),
+                        "l10n_ar_afip_auth_code_due": datetime.strptime(result.CAEFchVto, "%Y%m%d").date(),
+                        "l10n_ar_afip_result": result.Resultado,
+                        "_obs": obs and inv._prepare_return_msg("wsfe", "", obs, "", obs_codes),
+                    }
+                )
+        return values_list, first_bad, bad_msg, retry, unconfirmed, header_codes
+
+    def _move_batch_post_chunk(self, soft):
         """Post a chunk of invoices of the same (company, journal, document type) with one FECAESolicitar.
 
         Returns (validated, {invoice: error message}, pending) where pending are the invoices ARCA did not
@@ -213,7 +292,7 @@ class AccountMove(models.Model):
         """
         Move = self.browse()
         cr = self.env.cr
-        self._ff_lock()
+        self._move_batch_lock()
         first = self[0]
         client, auth, transport = first.company_id._l10n_ar_get_connection("wsfe")._get_client(return_transport=True)
 
@@ -227,6 +306,10 @@ class AccountMove(models.Model):
             sp = cr.savepoint(flush=True)
             try:
                 super(AccountMove, inv.with_context(**batch_ctx))._post(soft=soft)
+                if inv.state != "posted":
+                    # Some module in the chain deferred it instead of posting: keep its changes, no CAE.
+                    sp.close(rollback=False)
+                    continue
                 if hasattr(inv, "_check_vat_condition"):
                     inv._check_vat_condition()
                 inv.l10n_ar_check_rate()
@@ -253,64 +336,34 @@ class AccountMove(models.Model):
         start = time.monotonic()
         response = lost = None
         try:
-            response = posted._ff_send(client, auth, request)
+            response = posted._move_batch_send(client, auth, request)
         except Exception as error:  # noqa: BLE001
             lost = error
-            _logger.warning("ff: no answer for %s documents: %r", len(posted), error)
+            _logger.warning("batch CAE: no answer for %s documents: %r", len(posted), error)
         elapsed = time.monotonic() - start
 
-        values_list, first_bad, bad_msg, retry = [], None, "", True
-        header_codes = [str(err.Code) for err in response.Errors.Err] if response and response.Errors else []
-        if lost is not None or "10016" in header_codes:
-            values_list, last = posted._ff_recover(details, client, auth)
-            # A numbering mismatch rejects the rest too: do not retry them.
-            retry = False
-            if len(values_list) < len(posted):
-                first_bad = len(values_list)
-                bad_msg = posted[first_bad]._ff_unrecovered_msg(
-                    lost, response, header_codes, details[first_bad]["CbteDesde"], last
-                )
-        else:
-            results = {}
-            if response.FeDetResp:
-                results = {r.CbteDesde: r for r in response.FeDetResp.FECAEDetResponse}
-            # A header error without details (auth, service) affects the whole chunk: do not retry.
-            retry = bool(results)
-            for idx, (inv, detail) in enumerate(zip(posted, details)):
-                result = results.get(detail["CbteDesde"])
-                obs_codes, obs = [], ""
-                if result and result.Observaciones:
-                    obs = "".join(f"\n* Code {ob.Code}: {ob.Msg}" for ob in result.Observaciones.Obs)
-                    obs_codes = [str(ob.Code) for ob in result.Observaciones.Obs]
-                if not result or result.Resultado != "A":
-                    errors = (
-                        "".join(f"\n* Code {e.Code}: {e.Msg}" for e in response.Errors.Err) if response.Errors else ""
-                    )
-                    first_bad = idx
-                    bad_msg = inv._prepare_return_msg("wsfe", errors, obs, "", header_codes + obs_codes)
-                    break
-                values_list.append(
-                    {
-                        "l10n_ar_afip_auth_mode": "CAE",
-                        "l10n_ar_afip_auth_code": str(result.CAE),
-                        "l10n_ar_afip_auth_code_due": datetime.strptime(result.CAEFchVto, "%Y%m%d").date(),
-                        "l10n_ar_afip_result": result.Resultado,
-                        "_obs": obs and inv._prepare_return_msg("wsfe", "", obs, "", obs_codes),
-                    }
-                )
+        values_list, first_bad, bad_msg, retry, unconfirmed, header_codes = posted._move_batch_evaluate(
+            details, response, lost, client, auth
+        )
 
         xml_request, xml_response = transport.xml_request, transport.xml_response
         approved, pending = posted[: len(values_list)], Move
         if first_bad is not None:
             savepoints[first_bad].rollback()
-            rejected_failed, pending = posted._ff_reject_from(
-                first_bad,
-                bad_msg,
-                lost is None and retry,
-                lost is None and "10016" in header_codes,
-                {"l10n_ar_afip_xml_request": xml_request, "l10n_ar_afip_xml_response": xml_response},
-            )
-            failed.update(rejected_failed)
+            xml_values = {"l10n_ar_afip_xml_request": xml_request, "l10n_ar_afip_xml_response": xml_response}
+            if unconfirmed is not None:
+                # Keep the request on every document: it is the only trace of what may be registered in ARCA.
+                failed.update(dict.fromkeys(posted, bad_msg))
+                posted.sudo().write(xml_values)
+            else:
+                rejected_failed, pending = posted._move_batch_reject_from(
+                    first_bad,
+                    bad_msg,
+                    lost is None and retry,
+                    lost is None and "10016" in header_codes,
+                    xml_values,
+                )
+                failed.update(rejected_failed)
         # Releasing the outermost savepoint releases the nested ones (or the ones the rollback destroyed).
         cr.execute(SQL("RELEASE SAVEPOINT %s", SQL.identifier(savepoints[0].name)))
         for sp in savepoints:
@@ -324,7 +377,7 @@ class AccountMove(models.Model):
                     body=Markup("<p><b>%s%s</b></p>") % (self.env._("ARCA Messages"), plaintext2html(obs, "em"))
                 )
         _logger.info(
-            "ff: journal %s type %s: %s sent, %s approved, %s rejected, %s pending, FECAESolicitar %.3fs",
+            "batch CAE: journal %s type %s: %s sent, %s approved, %s rejected, %s pending, FECAESolicitar %.3fs",
             first.journal_id.id,
             first.l10n_latam_document_type_id.code,
             len(posted),
@@ -343,48 +396,58 @@ class AccountMove(models.Model):
 
     @api.model
     def _cron_background_post_invoices(self, ids=None):
-        """Post the due invoices of batch journals in chunks of `account_background_post.batch_size`, one
-        action_post per chunk. The other invoices keep being posted one by one."""
+        """Post the due invoices that can be batched in chunks of `account_background_post.batch_size`, one
+        action_post per chunk, and leave the rest to the original cron, one by one."""
+        if not self._move_batch_enabled():
+            return super()._cron_background_post_invoices(ids=ids)
         moves = self.browse(ids) if ids is not None else self._get_background_post_due_moves()
-        if not moves.filtered("journal_id.l10n_ar_batch_cae"):
+        batch = moves.filtered(lambda m: m._move_batch_eligible())
+        if not batch:
             return super()._cron_background_post_invoices(ids=ids)
         # ARCA rejects a date older than the last authorized one: oldest first, immediate before scheduled.
-        moves = moves.sorted(lambda m: (bool(m.background_post_date), m.invoice_date or m.date, m.id))
+        batch = batch.sorted(lambda m: (bool(m.background_post_date), m.invoice_date or m.date, m.id))
         size = max(1, self._get_background_post_batch_size())
-        batch = moves.filtered("journal_id.l10n_ar_batch_cae")
-        chunks = [batch[i : i + size] for i in range(0, len(batch), size)] + [move for move in moves - batch]
         cron = self.env["ir.cron"]
         remaining_time = cron._commit_progress(remaining=len(moves))
-        for index, chunk in enumerate(chunks):
+        for start in range(0, len(batch), size):
             if remaining_time <= 0:
                 _logger.info(
-                    "Background post cron ran out of time, %s chunks left for the next run", len(chunks) - index
+                    "Background post cron ran out of time, %s invoices left for the next run", len(moves) - start
                 )
-                break
-            self.env.cr.cache[ERRORS_KEY] = {}
-            try:
-                chunk.with_context(l10n_ar_batch_collect_errors=True).action_post()
-            except Exception as exp:  # noqa: BLE001
-                # Not an ARCA rejection of a batch (those are collected): retry what is left one by one.
-                self.env.cr.rollback()
-                if len(chunk) == 1:
-                    self.env.cr.cache.setdefault(ERRORS_KEY, {})[chunk.id] = exp
-                    chunk = self.browse()
-                else:
-                    _logger.warning("Background post chunk failed, retrying one by one: %s", exp)
-                for move in chunk.filtered(lambda m: m.state == "draft"):
+                return
+            chunk = batch[start : start + size]
+            chunk._move_batch_background_post_chunk()
+            # Every invoice of the chunk is done for this run: posted, rescheduled or given up.
+            remaining_time = cron._commit_progress(processed=len(chunk))
+        rest = moves - batch
+        if rest and remaining_time > 0:
+            # The original cron sets the remaining count to these invoices.
+            super()._cron_background_post_invoices(ids=rest.ids)
+
+    def _move_batch_background_post_chunk(self):
+        """Post this chunk with one action_post; reschedule or give up on the invoices that fail."""
+        self.env.cr.cache[ERRORS_KEY] = {}
+        try:
+            self.with_context(l10n_ar_batch_collect_errors=True).action_post()
+        except Exception as exp:  # noqa: BLE001
+            # Not an ARCA rejection of a batch (those are collected): retry what is left one by one.
+            self.env.cr.rollback()
+            if len(self) == 1:
+                self.env.cr.cache.setdefault(ERRORS_KEY, {})[self.id] = exp
+            else:
+                _logger.warning("Background post chunk failed, retrying one by one: %s", exp)
+                for move in self.filtered(lambda m: m.state == "draft"):
                     try:
                         move.action_post()
                     except Exception as move_exp:  # noqa: BLE001
                         self.env.cr.rollback()
                         self.env.cr.cache.setdefault(ERRORS_KEY, {})[move.id] = move_exp
-            errors = self.env.cr.cache.pop(ERRORS_KEY, {})
-            for move in self.browse(list(errors)):
-                error = errors[move.id]
-                move._ff_background_post_failed(error if isinstance(error, Exception) else UserError(error))
-            remaining_time = cron._commit_progress(processed=len(chunk))
+        errors = self.env.cr.cache.pop(ERRORS_KEY, {})
+        for move in self.browse(list(errors)):
+            error = errors[move.id]
+            move._move_batch_background_post_failed(error if isinstance(error, Exception) else UserError(error))
 
-    def _ff_background_post_failed(self, error):
+    def _move_batch_background_post_failed(self, error):
         """Same handling as a failure in the original cron: reschedule, or give up and notify."""
         self.ensure_one()
         if self._reschedule_background_post():
