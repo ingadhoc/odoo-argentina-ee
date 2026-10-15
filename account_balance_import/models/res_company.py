@@ -10,6 +10,16 @@ class ResCompany(models.Model):
         `amount_currency` on the opening move lines for accounts where an explicit
         value was provided. This avoids fully replacing the core implementation.
         """
+        if (
+            not self.account_opening_move_id
+            and any(amount for amounts in to_update.values() for amount in amounts)
+            and self.env.user.has_group("account.group_account_manager")
+        ):
+            # Core links the new move to the company, which needs Settings rights. Create it
+            # here so an accounting manager can load the opening balances too.
+            self.sudo().account_opening_move_id = self.env["account.move"].create(
+                self._get_default_opening_move_values()
+            )
         super()._update_opening_move(to_update)
         opening_move = self.account_opening_move_id
         if not opening_move:
@@ -61,9 +71,11 @@ class ResCompany(models.Model):
             # by `account_move_line_check_amount_currency_balance_sign`, and once stored it
             # would be read back as a debit line on the next save, where `update_vals`
             # overwrites or deletes it — which is why the opening credit never stuck.
-            final_amount_currency = amount_in_currency_value
+            # The typed sign is ignored: the template shows a credit amount as negative, and
+            # loading it back as is has to work the same as typing it positive.
+            final_amount_currency = abs(amount_in_currency_value)
             if account_lines.balance < 0.0:
-                final_amount_currency = -amount_in_currency_value
+                final_amount_currency = -final_amount_currency
 
             # Update amount_currency directly via SQL to avoid triggering recomputations
             # that could unbalance the move

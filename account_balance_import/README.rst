@@ -37,7 +37,7 @@ Características principales:
 
 * **Importación de Saldos de Partners (Partners Balance)**: Importa saldos iniciales de partners (deudores por ventas, proveedores y otras cuentas a cobrar o a pagar). Se generan los asientos contables correspondientes y las deudas quedan correctamente vinculadas.
 
-* **Revisión de Plan de Cuentas (Chart of Accounts)**: Permite revisar el plan de cuentas y configurar los saldos de fin de año para cada cuenta contable.
+* **Revisión de Plan de Cuentas (Chart of Accounts)**: Permite revisar el plan de cuentas y configurar los saldos de fin de año para cada cuenta contable. Desde la misma tarjeta se descarga una plantilla Excel con el plan de cuentas de la compañía activa (sin las cuentas a cobrar ni a pagar) y se importa con la importación nativa de Odoo, que busca cada cuenta por su id (columna ``.id``) o, si la fila no lo trae, por su código, y genera el asiento de apertura de la compañía en borrador. Si el archivo va a crear cuentas nuevas o a cambiar el nombre o el código de las existentes, la importación primero las lista y recién aplica los cambios al volver a importar.
 
 El módulo reorganiza la interfaz de importación en la configuración de contabilidad, dividiendo las opciones en dos secciones:
 - **Initial Setup** (izquierda): Configuración inicial de empresa y períodos
@@ -60,7 +60,7 @@ Para utilizar este módulo:
    **Importación:**
 
    - Partners Balance: Importe saldos iniciales de partners
-   - Chart of Accounts: Revise su plan de cuentas e importe saldos contables
+   - Chart of Accounts: Revise su plan de cuentas e importe saldos contables con la plantilla del plan de cuentas
 
 
 Bug Tracker
