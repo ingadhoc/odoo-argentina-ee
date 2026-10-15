@@ -37,10 +37,10 @@ class TestL10nArCurrencyUpdate(TransactionCase):
             ]
         ).unlink()
 
-        # Configure company to use AFIP provider
+        # Configure company to use ARCA provider
         self.env.company.write(
             {
-                "currency_provider": "afip",
+                "currency_provider": "arca",
                 "currency_interval_unit": "daily",
             }
         )
@@ -52,7 +52,7 @@ class TestL10nArCurrencyUpdate(TransactionCase):
             "USD": (0.0010481301358376655, test_date),
         }
 
-        with patch(f"{self.utils_path}._parse_afip_data", return_value=mocked_res):
+        with patch(f"{self.utils_path}._parse_arca_data", return_value=mocked_res):
             self.env.company.with_context(l10n_ar_force_create_rate=True).update_currency_rates()
 
         # Base currency WILL have a rate created with rate=1.0 (expected behavior)
@@ -106,7 +106,7 @@ class TestL10nArCurrencyUpdate(TransactionCase):
         # Configure company_1 with currency provider AND rate_perc
         company_1.write(
             {
-                "currency_provider": "afip",
+                "currency_provider": "arca",
                 "rate_perc": rate_perc,
                 "currency_interval_unit": "daily",
             }
@@ -115,7 +115,7 @@ class TestL10nArCurrencyUpdate(TransactionCase):
         # Configure company_2 with currency provider but WITHOUT rate_perc
         company_2.write(
             {
-                "currency_provider": "afip",
+                "currency_provider": "arca",
                 "currency_interval_unit": "daily",
                 "rate_perc": 0.0,  # Explicitly no markup
             }
@@ -130,14 +130,14 @@ class TestL10nArCurrencyUpdate(TransactionCase):
             ]
         ).unlink()
 
-        # Prepare mock data for AFIP
+        # Prepare mock data for ARCA
         mocked_res = {
             "ARS": (1.0, test_date),  # Base currency for both companies
             "USD": (1.0 / base_arca_rate, test_date),
         }
 
         # Execute test logic with patch - call update_currency_rates on both companies
-        with patch(f"{self.utils_path}._parse_afip_data", return_value=mocked_res):
+        with patch(f"{self.utils_path}._parse_arca_data", return_value=mocked_res):
             (company_1 | company_2).with_context(l10n_ar_force_create_rate=True).update_currency_rates()
 
         # Validate rate creation for company 1 (WITH percentage rate_perc)

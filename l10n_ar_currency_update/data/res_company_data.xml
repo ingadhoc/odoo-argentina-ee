@@ -1,6 +1,0 @@
-<odoo noupdate="1">
-    <!-- is needed to run _compute_currency_provider when whis module is installed to compute currency provider to
-    existing companies -->
-    <function model="res.company" name="_compute_currency_provider"/>
-
-</odoo>
