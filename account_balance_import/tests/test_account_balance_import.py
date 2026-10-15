@@ -3,7 +3,7 @@ import datetime
 import io
 
 import xlwt
-from odoo.exceptions import UserError
+from odoo.exceptions import UserError, ValidationError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
@@ -375,6 +375,22 @@ class TestAccountBalanceImport(TransactionCase):
             all(move.date == datetime.date(2025, 1, 1) for move in generated_moves),
             "All moves should have accounting date 01/01/25",
         )
+
+    def test_partner_balance_import_unsupported_format_raises_readable_error(self):
+        """A file that is neither XLS nor XLSX (e.g. a CSV) must raise a readable error."""
+        wizard = self.env["account.balance_import_wizard"].create(
+            {
+                "company_id": self.company.id,
+                "mode": "partner_balance",
+                "partner_balance_type": "receivable",
+                "journal_id": self.journal.id,
+                "counterpart_account_id": self.counterpart_account.id,
+                "accounting_date": datetime.date(2025, 1, 1),
+                "file": base64.b64encode(b"Nombre / CUIT,Referencia,Importe\r\nPartner,DOC-1,100"),
+            }
+        )
+        with self.assertRaisesRegex(ValidationError, r"\.xls or \.xlsx"):
+            wizard.action_import()
 
     def test_partner_balance_import_adjust_reconcile(self):
         """

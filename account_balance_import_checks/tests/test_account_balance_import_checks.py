@@ -3,6 +3,7 @@ import datetime
 import io
 
 import xlwt
+from odoo.exceptions import ValidationError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
 
@@ -403,3 +404,34 @@ class TestAccountBalanceImportChecks(TransactionCase):
         self.assertEqual(payment_1.l10n_latam_new_check_ids[0].amount, 791666.00)
         payment_2 = generated_payments.filtered(lambda p: p.partner_id == self.partner_2)
         self.assertEqual(payment_2.l10n_latam_new_check_ids[0].amount, 10000.50)
+
+    def test_check_balance_import_csv_raises_readable_error(self):
+        """A CSV export of the template must raise a readable error, not a traceback."""
+        csv_file = "Nº de Cheque,Importe\r\n14000018,4489988".encode()
+        wizard = self.env["account.balance_import_wizard"].create(
+            {
+                "company_id": self.company.id,
+                "mode": "check_balance",
+                "check_type": "issue_check",
+                "journal_id": self.bank_journal.id,
+                "counterpart_account_id": self.counterpart_account.id,
+                "accounting_date": datetime.date(2025, 1, 1),
+                "file": base64.b64encode(csv_file),
+            }
+        )
+        with self.assertRaisesRegex(ValidationError, r"\.xls or \.xlsx"):
+            wizard.action_import()
+
+    def test_check_balance_import_without_file_raises_readable_error(self):
+        wizard = self.env["account.balance_import_wizard"].create(
+            {
+                "company_id": self.company.id,
+                "mode": "check_balance",
+                "check_type": "issue_check",
+                "journal_id": self.bank_journal.id,
+                "counterpart_account_id": self.counterpart_account.id,
+                "accounting_date": datetime.date(2025, 1, 1),
+            }
+        )
+        with self.assertRaisesRegex(ValidationError, "Please upload an Excel file"):
+            wizard.action_import()
