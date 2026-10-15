@@ -436,6 +436,14 @@ msgstr ""
 #. module: account_balance_import
 #. odoo-python
 #: code:addons/account_balance_import/wizards/account_balance_import.py:0
+msgid ""
+"Unsupported file format. Please upload the import template as an Excel file "
+"(.xls or .xlsx)."
+msgstr ""
+
+#. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/wizards/account_balance_import.py:0
 msgid "Please upload an Excel file to import."
 msgstr ""
 
