@@ -12,7 +12,7 @@
             </setting>
 
             <xpath expr="//button[@name='update_currency_rates_manually']/.." position="after">
-                <div invisible="not module_currency_rate_live or currency_provider != 'afip'" groups="base.group_no_one">
+                <div invisible="not module_currency_rate_live or currency_provider != 'arca'" groups="base.group_no_one">
                     <div class="row">
                         <label for="rate_perc" class="col-md-3 o_light_label"/>
                         <field name="rate_perc"/>

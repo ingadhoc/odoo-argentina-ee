@@ -24,7 +24,7 @@
     "sequence": 14,
     "author": "ADHOC SA,Odoo Community Association (OCA)",
     "website": "www.adhoc.com.ar",
-    "license": "AGPL-3",
+    "license": "LGPL-3",
     "summary": "",
     "depends": [
         "currency_rate_live",
@@ -32,7 +32,6 @@
     ],
     "data": [
         "data/ir_cron_data.xml",
-        "data/res_company_data.xml",
         "views/res_currency_views.xml",
         "wizards/res_config_settings_views.xml",
     ],
