@@ -39,7 +39,7 @@ class AccountBalanceImport(models.TransientModel):
         super(AccountBalanceImport, self - checks)._compute_journal_domain()
 
     def action_import(self):
-        if self.mode == "check_balance":
+        if self.mode == "check_balance" and self.file:
             return self._import_checks()
         return super().action_import()
 
@@ -154,6 +154,7 @@ class AccountBalanceImport(models.TransientModel):
         errors = list()  # For storing possible errors
 
         decoded = base64.decodebytes(self.file)
+        self._check_excel_file(decoded)
         rows, workbook_datemode = self._load_check_rows(decoded)
 
         # Validate column count
