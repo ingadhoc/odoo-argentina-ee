@@ -499,6 +499,11 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
+msgid "Only for DDJJ without withholdings, so they can be deleted"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.fields.selection,name:l10n_ar_arba_ws.selection__l10n_ar_dj_arba__state__open
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
 msgid "Open"
@@ -549,6 +554,17 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
+msgid "Reset to Draft"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "Reset to draft. The ARBA DDJJ ID %s was removed from this record."
+msgstr ""
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_user_id
 msgid "Responsible User"
 msgstr ""
@@ -591,6 +607,11 @@ msgstr ""
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields.selection,name:l10n_ar_arba_ws.selection__res_company__l10n_ar_arba_env__testing
 msgid "Testing"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
+msgid "The ARBA DDJJ ID will be removed from this record. Continue?"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
@@ -688,4 +709,10 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "You cannot delete a DDJJ ARBA that has withholding lines."
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "You cannot reset to draft a DDJJ ARBA that has withholding lines: %s"
 msgstr ""
