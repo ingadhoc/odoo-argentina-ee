@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-07 16:03+0000\n"
+"POT-Creation-Date: 2026-10-16 11:20+0000\n"
 "PO-Revision-Date: 2026-04-20 15:41+0000\n"
 "Last-Translator: julia elizondo <jue@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
@@ -486,6 +486,11 @@ msgid "Closing Entry"
 msgstr "Asiento de cierre"
 
 #. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__company_id
 msgid "Company"
 msgstr "Companía"
@@ -596,6 +601,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sifere_report_handler__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sircar_report_handler__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_tucuman_report_handler__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_res_company__display_name
 msgid "Display Name"
 msgstr "Nombre para mostrar"
 
@@ -651,6 +657,15 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment_index__xml_id
 msgid "External ID"
 msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/res_company.py:0
+msgid ""
+"For Argentina: if the company is not subject to tax, leave the Tax ID empty."
+msgstr ""
+"Para Argentina: si la empresa no está sujeta a impuestos, dejar el CUIT "
+"vacío."
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields.selection,name:l10n_ar_account_reports.selection__account_return_type__deadline_periodicity__fortnightly
@@ -717,6 +732,7 @@ msgstr "¿Ha realizado asientos de cierre/apertura?"
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sifere_report_handler__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sircar_report_handler__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_tucuman_report_handler__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_res_company__id
 msgid "ID"
 msgstr "ID (identificación)"
 
@@ -1213,15 +1229,6 @@ msgstr "Crédito impositivo"
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "Tax groups"
 msgstr "Grupos de impuestos"
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/res_company.py:0
-msgid ""
-"For Argentina: if the company is not subject to tax, leave the Tax ID empty."
-msgstr ""
-"Para Argentina: si la empresa no está sujeta a impuestos, dejar el CUIT "
-"vacío."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
