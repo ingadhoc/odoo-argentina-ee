@@ -51,8 +51,15 @@
             "account_accountant_ux/static/src/components/account_report/filters/filters.js",
             "account_accountant_ux/static/src/components/account_report/controller.js",
             "account_accountant_ux/static/src/account_report_filters_patch.js",
+<<<<<<< 3df2457e5fe67e90f7bd3c05c09dcdb6e7b38819
             "account_accountant_ux/static/src/components/account_report/warnings.xml",
         ]
+||||||| 51f3402624ed80d5cb7bfa5ce1a9c4922280c302
+        ],
+=======
+            "account_accountant_ux/static/src/move_line_list_reconcile_patch.js",
+        ],
+>>>>>>> f295052e2584b2a6aabe53e3191e9d0ac69b4805
     },
     "post_init_hook": "post_init_hook",
     "demo": [],
