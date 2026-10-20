@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-25 13:29+0000\n"
+"POT-Creation-Date: 2026-10-20 15:05+0000\n"
 "PO-Revision-Date: 2026-05-21 16:41+0000\n"
 "Last-Translator: Gonzalo Lenzi <gl@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
@@ -446,14 +446,6 @@ msgstr ""
 
 #. module: account_accountant_ux
 #. odoo-python
-#: code:addons/account_accountant_ux/wizards/account_change_lock_date.py:0
-msgid "Only Billing Administrators are allowed to change lock dates!"
-msgstr ""
-"Solo usuarios con el permiso de Administración de Facturación pueden "
-"modificar fechas de bloqueo!"
-
-#. module: account_accountant_ux
-#. odoo-python
 #: code:addons/account_accountant_ux/models/account_report.py:0
 msgid ""
 "Parece que la liquidación quedaría desbalanceada. Si desea generarla "
@@ -698,6 +690,11 @@ msgid ""
 "the whole legal entity. Create it on «%(head)s», or give «%(company)s» its "
 "own Tax ID if it really is a different legal entity."
 msgstr ""
+
+#~ msgid "Only Billing Administrators are allowed to change lock dates!"
+#~ msgstr ""
+#~ "Solo usuarios con el permiso de Administración de Facturación pueden "
+#~ "modificar fechas de bloqueo!"
 
 #, fuzzy
 #~ msgid "<span class=\"o_stat_text\">Libro Mayor de Empresa</span>"
