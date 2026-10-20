@@ -33,11 +33,11 @@ class TestArcaLayer(TransactionCase):
 
     def _parse(self, companies, native_result, rate_company=None, context=None):
         """Run the module _parse_arca_data with the native one mocked. Returns the result and the calls made
-        to the native method, as (company, env company, currency names)."""
+        to the native method, as (company, env company of the currencies, currency names)."""
         calls = []
 
         def fake_native(company, available_currencies):
-            calls.append((company, company.env.company, set(available_currencies.mapped("name"))))
+            calls.append((company, available_currencies.env.company, set(available_currencies.mapped("name"))))
             return dict(native_result)
 
         rate_company = self.company_1 if rate_company is None else rate_company
@@ -49,7 +49,9 @@ class TestArcaLayer(TransactionCase):
         return res, calls
 
     def test_ask_arca_once_with_one_company(self):
-        """With several Argentinian companies ARCA is asked once, with the company that has the certificate"""
+        """With several Argentinian companies ARCA is asked once, connecting with the company that has the
+        certificate even when the current company is another one"""
+        self.assertNotEqual(self.env.company, self.company_2)
         _res, calls = self._parse(
             self.company_1 | self.company_2,
             {"USD": (0.001, self.today_str), "ARS": (1.0, self.today_str)},

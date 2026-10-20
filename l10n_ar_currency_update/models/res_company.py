@@ -79,7 +79,8 @@ class ResCompany(models.Model):
         arca_currencies = available_currencies.filtered("l10n_ar_afip_code")
         if skipped := available_currencies - arca_currencies:
             _logger.info("Currencies without ARCA code skipped: %s", ", ".join(skipped.mapped("name")))
-        res = super(ResCompany, company.with_company(company))._parse_arca_data(arca_currencies)
+        # The native method connects with the env company of the currencies, not of self
+        res = super(ResCompany, company.with_company(company))._parse_arca_data(arca_currencies.with_company(company))
 
         rate_date = fields.Date.to_string(self._l10n_ar_currency_today())
         force_create_rate = self.env.context.get("l10n_ar_force_create_rate")
