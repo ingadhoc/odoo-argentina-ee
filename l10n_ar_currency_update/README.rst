@@ -16,9 +16,11 @@ Argentinian Currency Rate Update
 
 This module extends the native Odoo currency provider *[AR] ARCA* with what Argentinian companies need:
 
-* ARCA is asked once, with a company that has a valid ARCA certificate, so it works with several Argentinian companies
+* ARCA is asked with one company whose own ARCA certificate is valid, preferring the ones in production, so it works with several Argentinian companies
+* ARCA is asked one currency at a time: an error in one currency does not stop the others
 * Currencies without ARCA code are skipped instead of stopping the whole update
-* Only today's rate is saved. If ARCA has not published it yet, a cron retries every 3 hours
+* Only today's rate is saved. If ARCA has not published it yet, a cron retries every 3 hours. Companies with weekly or monthly interval take the last published rate when today's is not available
+* The Argentinian companies that already exist when the module is installed get the *[AR] ARCA* provider
 * A rate already loaded for the day is not overwritten
 * A percentage and a surcharge per company can be added to the ARCA rate
 * The name of a currency with ARCA code cannot be changed, because the rate update and electronic invoicing use it
