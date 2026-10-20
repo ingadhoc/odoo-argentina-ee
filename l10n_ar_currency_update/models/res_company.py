@@ -57,50 +57,64 @@ class ResCompany(models.Model):
         ).with_context(l10n_ar_force_create_rate=l10n_ar_force_create_rate).update_currency_rates()
 
     def _l10n_ar_get_arca_rate_company(self):
-        """Company used to connect to ARCA: the current one if its certificate is valid, otherwise any
-        Argentinian company with a valid certificate. The rates are the same for every company."""
-        valid_certificate = (
-            self.env["certificate.certificate"]
-            .search([("active", "=", True), ("date_end", ">=", fields.Datetime.now())])
-            .filtered(lambda c: c.country_code == "AR")
+        """Company used to connect to ARCA: one whose own ARCA certificate is valid, production first and
+        then the current one. The rates are the same for every company."""
+        companies = (
+            self.env["res.company"]
+            .search([("l10n_ar_afip_ws_crt_id", "!=", False), ("l10n_ar_afip_ws_key_id", "!=", False)])
+            .filtered(lambda c: c.l10n_ar_afip_ws_crt_id.active and c.l10n_ar_afip_ws_crt_id.is_valid)
         )
-        if self.env.company.l10n_ar_afip_ws_crt_id in valid_certificate:
-            return self.env.company
-        return valid_certificate[:1].company_id
+        return companies.sorted(lambda c: (c.l10n_ar_afip_ws_environment != "production", c != self.env.company, c.id))[
+            :1
+        ]
 
     def _parse_arca_data(self, available_currencies):
-        """Ask ARCA once, with a single company, skipping the currencies without ARCA code.
-        Only today's rates are kept, unless l10n_ar_force_create_rate is in context."""
+        """Ask ARCA with a single company and one currency at a time, so an error in one currency does not
+        stop the others, skipping the currencies without ARCA code. Only today's rates are kept, unless
+        l10n_ar_force_create_rate is in context."""
+        rate_date = fields.Date.to_string(self._l10n_ar_currency_today())
+        currency_ars = self.env.ref("base.ARS")
+        res = {currency_ars.name: (1.0, rate_date)}
+        arca_currencies = available_currencies.filtered("l10n_ar_afip_code") - currency_ars
+        if skipped := available_currencies - arca_currencies - currency_ars:
+            _logger.info("Currencies without ARCA code skipped: %s", ", ".join(skipped.mapped("name")))
+        if not arca_currencies:
+            return res
+
         company = self._l10n_ar_get_arca_rate_company()
         if not company:
             _logger.info("No pudimos encontrar compañía con certificados de ARCA validos")
             return False
 
-        arca_currencies = available_currencies.filtered("l10n_ar_afip_code")
-        if skipped := available_currencies - arca_currencies:
-            _logger.info("Currencies without ARCA code skipped: %s", ", ".join(skipped.mapped("name")))
-        # The native method connects with the env company of the currencies, not of self
-        res = super(ResCompany, company.with_company(company))._parse_arca_data(arca_currencies.with_company(company))
-
-        rate_date = fields.Date.to_string(self._l10n_ar_currency_today())
         force_create_rate = self.env.context.get("l10n_ar_force_create_rate")
-        all_today = True
-        for currency_name, (rate, arca_date) in list(res.items()):
-            if currency_name == "ARS" or arca_date == rate_date:
+        for currency in arca_currencies:
+            try:
+                # The native method connects with the env company of the currencies, not of self
+                arca_res = super(ResCompany, company.with_company(company))._parse_arca_data(
+                    currency.with_company(company)
+                )
+            except Exception as e:
+                _logger.info("Could not get the ARCA rate for %s:\n%s", currency.name, e)
                 continue
-            if force_create_rate:
-                res[currency_name] = (rate, rate_date)
+            if currency.name not in arca_res:
+                continue
+            rate, arca_date = arca_res[currency.name]
+            if arca_date == rate_date or force_create_rate:
+                res[currency.name] = (rate, rate_date)
             else:
                 _logger.info(
-                    "Returned ARCA rate for %s is not today's rate (%s vs %s)", currency_name, arca_date, rate_date
+                    "Returned ARCA rate for %s is not today's rate (%s vs %s)", currency.name, arca_date, rate_date
                 )
-                res.pop(currency_name)
-                all_today = False
-        res["ARS"] = (1.0, rate_date)
-
-        if len(res) > 1 and all_today:
-            self.filtered(lambda c: c.currency_provider == "arca").l10n_ar_last_currency_sync_date = rate_date
         return res
+
+    def _l10n_ar_set_last_currency_sync_date(self, parsed_data):
+        """Mark the day as synced once the rates are created, only if there is today's rate for every
+        active currency with ARCA code. Without foreign currencies it is not marked, so the retry cron
+        takes a currency activated later in the day (it does not connect to ARCA meanwhile)."""
+        rate_date = fields.Date.to_string(self._l10n_ar_currency_today())
+        currencies = self.env["res.currency"].search([("l10n_ar_afip_code", "!=", False)]) - self.env.ref("base.ARS")
+        if currencies and all(c.name in parsed_data and str(parsed_data[c.name][1]) == rate_date for c in currencies):
+            self.l10n_ar_last_currency_sync_date = rate_date
 
     def _generate_currency_rates(self, parsed_data):
         """Sobre escribimos este método para lograr dos cosas:
@@ -137,3 +151,4 @@ class ResCompany(models.Model):
                     new_parsed_data[currency] = (rate, date_rate)
             super(ResCompany, company)._generate_currency_rates(new_parsed_data)
         super(ResCompany, self - ar_companies)._generate_currency_rates(parsed_data)
+        ar_companies._l10n_ar_set_last_currency_sync_date(parsed_data)
