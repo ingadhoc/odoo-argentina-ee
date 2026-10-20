@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-25 13:29+0000\n"
-"PO-Revision-Date: 2026-09-25 13:29+0000\n"
+"POT-Creation-Date: 2026-10-20 15:05+0000\n"
+"PO-Revision-Date: 2026-10-20 15:05+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -425,12 +425,6 @@ msgid ""
 "company the entry can be built in: an account that lives only in one branch "
 "cannot be used by another one. Add %(head)s to the selection to settle them "
 "together, or select one company at a time and settle each on its own."
-msgstr ""
-
-#. module: account_accountant_ux
-#. odoo-python
-#: code:addons/account_accountant_ux/wizards/account_change_lock_date.py:0
-msgid "Only Billing Administrators are allowed to change lock dates!"
 msgstr ""
 
 #. module: account_accountant_ux
