@@ -25,7 +25,7 @@
     "summary": "",
     "author": "ADHOC SA",
     "website": "www.adhoc.com.ar",
-    "license": "AGPL-3",
+    "license": "LGPL-3",
     "images": [],
     "depends": [
         "account_batch_payment",
