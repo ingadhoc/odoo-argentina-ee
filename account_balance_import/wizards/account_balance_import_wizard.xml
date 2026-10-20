@@ -10,7 +10,7 @@
                     <group class="alert alert-info" role="alert" style="margin-bottom: 20px;">
 
                         <h1>
-                            <span class="fa fa-info" aria-label="info"></span>
+                            <span class="oi" data-icon="info" aria-label="info"></span>
                         </h1>
 
                         <p style="margin-bottom: 0px;">
@@ -30,7 +30,7 @@
                             <field name="counterpart_account_id"/>
                             <div name="files" colspan="2">
                                 <button name="action_generate_partner_balance_xls" type="object" class="btn btn-link" invisible="mode != 'partner_balance'" role="button">
-                                    <span class="fa fa-download" title="download"></span>
+                                    <span class="oi" data-icon="download" title="download"></span>
                                     Download Partner Balances Import Template
                                 </button>
                             </div>
