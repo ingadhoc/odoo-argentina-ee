@@ -6,9 +6,9 @@
 
 .. |icon| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-icon.png
 
-.. image:: https://img.shields.io/badge/license-AGPL--3-blue.png
-   :target: https://www.gnu.org/licenses/agpl
-   :alt: License: AGPL-3
+.. image:: https://img.shields.io/badge/license-LGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/lgpl
+   :alt: License: LGPL-3
 
 ===========================
 Accounting Batch Payment UX
@@ -17,7 +17,8 @@ This module adds validations on batch payment operations:
 
 #. Restrict unlink payments linked to the batch payment if the batch is not on draft state.
 #. Restrict delete an account batch payment if it's not on draft state.
-#. Restrict set batch payments to draft if any associated payment line is reconciled.
+#. Add a "Reset To Draft" button on sent batch payments: the payments are marked as unsent and the batch goes back to draft.
+#. Restrict set batch payments to draft if any associated payment line is reconciled, with a shortcut to the matched bank statement lines.
 
 Installation
 ============
@@ -38,7 +39,7 @@ Usage
 
 To use this module, you need to:
 
-#. Go to ...
+#. Go to a sent batch payment and click "Reset To Draft".
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
    :alt: Try me on Runbot
