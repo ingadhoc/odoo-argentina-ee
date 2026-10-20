@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-11 19:08+0000\n"
+"POT-Creation-Date: 2026-10-20 14:46+0000\n"
 "PO-Revision-Date: 2026-04-13 22:41+0000\n"
 "Last-Translator: carla spiaggi <sca@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
@@ -24,19 +24,126 @@ msgstr ""
 "X-Generator: Weblate 5.10.4\n"
 
 #. module: account_balance_import
-#: model_terms:ir.ui.view,arch_db:account_balance_import.account_balance_import_wizard
+#: model:ir.module.module,description:base.module_account_balance_import
 msgid ""
-"<span class=\"fa fa-download\" title=\"download\"/>\n"
-"                                    Download Partner Balances Import Template"
+".. |company| replace:: ADHOC SA\n"
+"\n"
+".. |company_logo| image:: https://raw.githubusercontent.com/ingadhoc/"
+"maintainer-tools/master/resources/adhoc-logo.png\n"
+"   :alt: ADHOC SA\n"
+"   :target: https://www.adhoc.com.ar\n"
+"\n"
+".. |icon| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-"
+"tools/master/resources/adhoc-icon.png\n"
+"\n"
+".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/agpl\n"
+"   :alt: License: AGPL-3\n"
+"\n"
+"Installation\n"
+"============\n"
+"\n"
+"To install this module, you need to:\n"
+"\n"
+"#. Only need to install the module\n"
+"\n"
+"Configuration\n"
+"=============\n"
+"\n"
+"To configure this module, you need to:\n"
+"\n"
+"#. Nothing to configure\n"
+"\n"
+"\n"
+"Account Balance Import\n"
+"======================\n"
+"Este módulo extiende la funcionalidad de importación de saldos iniciales "
+"contables, proporcionando una interfaz mejorada en la configuración de "
+"contabilidad.\n"
+"\n"
+"Características principales:\n"
+"\n"
+"* **Revisión de Datos de Empresa (Review Company Data)**: Permite revisar y "
+"confirmar la información de la compañía antes de iniciar el proceso de "
+"importación.\n"
+"\n"
+"* **Configuración de Períodos (Set Periods)**: Facilita la configuración de "
+"años fiscales y períodos contables necesarios para la importación.\n"
+"\n"
+"* **Importación de Saldos de Partners (Partners Balance)**: Importa saldos "
+"iniciales de partners (deudores por ventas, proveedores y otras cuentas a "
+"cobrar o a pagar). Se generan los asientos contables correspondientes y las "
+"deudas quedan correctamente vinculadas.\n"
+"\n"
+"* **Revisión de Plan de Cuentas (Chart of Accounts)**: Permite revisar el "
+"plan de cuentas y configurar los saldos de fin de año para cada cuenta "
+"contable.\n"
+"\n"
+"El módulo reorganiza la interfaz de importación en la configuración de "
+"contabilidad, dividiendo las opciones en dos secciones:\n"
+"- **Initial Setup** (izquierda): Configuración inicial de empresa y "
+"períodos\n"
+"- **Importación de Datos** (derecha): Importación de saldos de partners y "
+"cuentas contables\n"
+"\n"
+"\n"
+"Usage\n"
+"=====\n"
+"\n"
+"Para utilizar este módulo:\n"
+"\n"
+"1. Vaya a Contabilidad > Configuración > Ajustes\n"
+"2. En la sección \"Initial Setup\", ajuste \"Accounting import\", encontrará "
+"las opciones organizadas:\n"
+"\n"
+"   **Initial Setup:**\n"
+"\n"
+"   - Review Company Data: Verifique los datos de su empresa\n"
+"   - Set Periods: Configure años fiscales y períodos\n"
+"\n"
+"   **Importación:**\n"
+"\n"
+"   - Partners Balance: Importe saldos iniciales de partners\n"
+"   - Chart of Accounts: Revise su plan de cuentas e importe saldos "
+"contables\n"
+"\n"
+"\n"
+"Bug Tracker\n"
+"===========\n"
+"\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Images\n"
+"------\n"
+"\n"
+"* |company| |icon|\n"
+"\n"
+"Contributors\n"
+"------------\n"
+"\n"
+"Maintainer\n"
+"----------\n"
+"\n"
+"|company_logo|\n"
+"\n"
+"This module is maintained by the |company|.\n"
+"\n"
+"To contribute to this module, please visit https://www.adhoc.com.ar.\n"
 msgstr ""
-"<span class=\"fa fa-download\" title=\"Descargar\"/>\n"
-"                                    Descargar Plantilla de Importación de "
-"Saldos de Partners"
 
 #. module: account_balance_import
 #: model_terms:ir.ui.view,arch_db:account_balance_import.account_balance_import_wizard
-msgid "<span class=\"fa fa-info\" aria-label=\"info\"/>"
-msgstr "<span class=\"fa fa-info\" aria-label=\"info\"/>"
+msgid ""
+"<span class=\"oi\" data-icon=\"download\" title=\"download\"/>\n"
+"                                    Download Partner Balances Import Template"
+msgstr ""
+
+#. module: account_balance_import
+#: model_terms:ir.ui.view,arch_db:account_balance_import.account_balance_import_wizard
+msgid "<span class=\"oi\" data-icon=\"info\" aria-label=\"info\"/>"
+msgstr ""
 
 #. module: account_balance_import
 #. odoo-javascript
@@ -64,6 +171,11 @@ msgstr ""
 #: model:ir.model,name:account_balance_import.model_account_account
 msgid "Account"
 msgstr "Cuenta"
+
+#. module: account_balance_import
+#: model:ir.module.module,shortdesc:base.module_account_balance_import
+msgid "Account Balance"
+msgstr ""
 
 #. module: account_balance_import
 #: model:ir.actions.act_window,name:account_balance_import.account_balance_import_action
@@ -113,10 +225,6 @@ msgstr "Plan de cuentas"
 
 #. module: account_balance_import
 #: model:ir.model,name:account_balance_import.model_res_company
-msgid "Companies"
-msgstr "Compañias"
-
-#. module: account_balance_import
 #: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__company_id
 msgid "Company"
 msgstr "Compañía"
@@ -294,6 +402,12 @@ msgid "Import initial balances for your partners."
 msgstr "Importar saldos iniciales para sus partners."
 
 #. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/wizards/account_balance_import.py:0
+msgid "Imported Journal Entries"
+msgstr ""
+
+#. module: account_balance_import
 #. odoo-javascript
 #: code:addons/account_balance_import/static/src/xml/account_import.xml:0
 msgid "Initial Setup Options"
@@ -367,6 +481,11 @@ msgstr "A Pagar"
 #: code:addons/account_balance_import/wizards/account_balance_import.py:0
 msgid "Please upload an Excel file to import."
 msgstr "Por favor, cargue un archivo Excel para importar."
+
+#. module: account_balance_import
+#: model:ir.module.module,summary:base.module_account_balance_import
+msgid "Provides a wizard for importing initial account balances"
+msgstr ""
 
 #. module: account_balance_import
 #: model:ir.model.fields.selection,name:account_balance_import.selection__account_balance_import_wizard__partner_balance_type__receivable
@@ -541,6 +660,21 @@ msgstr ""
 "\n"
 "Por favor, haga clic en 'Configurar Periodos' para configurar la fecha de "
 "apertura y los períodos fiscales."
+
+#~ msgid ""
+#~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
+#~ "                                    Download Partner Balances Import "
+#~ "Template"
+#~ msgstr ""
+#~ "<span class=\"fa fa-download\" title=\"Descargar\"/>\n"
+#~ "                                    Descargar Plantilla de Importación de "
+#~ "Saldos de Partners"
+
+#~ msgid "<span class=\"fa fa-info\" aria-label=\"info\"/>"
+#~ msgstr "<span class=\"fa fa-info\" aria-label=\"info\"/>"
+
+#~ msgid "Companies"
+#~ msgstr "Compañias"
 
 #~ msgid ""
 #~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
