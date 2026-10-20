@@ -181,6 +181,12 @@ class TestArcaLayer(TransactionCase):
         (others.l10n_ar_afip_ws_crt_id | certificate).active = False
         self.assertFalse(Company._l10n_ar_get_arca_rate_company())
 
+    def test_set_arca_provider_on_install(self):
+        """On install the Argentinian companies that already exist get the ARCA provider"""
+        self.company_1.currency_provider = "ecb"
+        self.env["res.company"]._l10n_ar_set_arca_currency_provider()
+        self.assertEqual(self.company_1.currency_provider, "arca")
+
     def test_existing_rate_not_overwritten(self):
         """A rate already loaded for the day is kept, the native provider would overwrite it"""
         existing = self.env["res.currency.rate"].create(
