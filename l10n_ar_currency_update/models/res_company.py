@@ -56,6 +56,11 @@ class ResCompany(models.Model):
             ]
         ).with_context(l10n_ar_force_create_rate=l10n_ar_force_create_rate).update_currency_rates()
 
+    @api.model
+    def _l10n_ar_set_arca_currency_provider(self):
+        """On install, the native compute only sets the provider when the country changes"""
+        self.search([]).filtered(lambda c: c.country_id.code == "AR").currency_provider = "arca"
+
     def _l10n_ar_get_arca_rate_company(self):
         """Company used to connect to ARCA: one whose own ARCA certificate is valid, production first and
         then the current one. The rates are the same for every company."""

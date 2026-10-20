@@ -1,0 +1,5 @@
+<odoo noupdate="1">
+    <!-- Set the ARCA provider to the Argentinian companies that already exist when the module is installed -->
+    <function model="res.company" name="_l10n_ar_set_arca_currency_provider"/>
+
+</odoo>
