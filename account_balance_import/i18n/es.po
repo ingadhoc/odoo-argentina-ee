@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-20 14:46+0000\n"
+"POT-Creation-Date: 2026-10-21 17:43+0000\n"
 "PO-Revision-Date: 2026-04-13 22:41+0000\n"
 "Last-Translator: carla spiaggi <sca@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
@@ -479,16 +479,6 @@ msgstr "A Pagar"
 #. module: account_balance_import
 #. odoo-python
 #: code:addons/account_balance_import/wizards/account_balance_import.py:0
-msgid ""
-"Unsupported file format. Please upload the import template as an Excel file "
-"(.xls or .xlsx)."
-msgstr ""
-"Formato de archivo no soportado. Por favor, cargue la plantilla de "
-"importación como archivo Excel (.xls o .xlsx)."
-
-#. module: account_balance_import
-#. odoo-python
-#: code:addons/account_balance_import/wizards/account_balance_import.py:0
 msgid "Please upload an Excel file to import."
 msgstr "Por favor, cargue un archivo Excel para importar."
 
@@ -637,6 +627,16 @@ msgstr ""
 "La cantidad de columnas (%(actual)s) no coincide con la cantidad esperada "
 "(%(expected)s).\n"
 "Campos esperados: %(fields)s"
+
+#. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/wizards/account_balance_import.py:0
+msgid ""
+"Unsupported file format. Please upload the import template as an Excel file "
+"(.xls or .xlsx)."
+msgstr ""
+"Formato de archivo no soportado. Por favor, cargue la plantilla de "
+"importación como archivo Excel (.xls o .xlsx)."
 
 #. module: account_balance_import
 #: model:ir.model.fields,help:account_balance_import.field_account_balance_import_wizard__counterpart_account_id
