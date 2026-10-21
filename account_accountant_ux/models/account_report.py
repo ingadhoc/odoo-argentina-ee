@@ -90,7 +90,7 @@ class AccountReport(models.Model):
         # (PDF, XLSX, etc.) y luego agregamos el botón de liquidación.
         super()._init_options_buttons(options, previous_options)
 
-        if not (self.allow_settlement and self.settlement_title):
+        if not self._has_settlement():
             return
 
         # ``branch_allowed`` on purpose, and it is the whole of the button-side gate.
@@ -118,6 +118,9 @@ class AccountReport(models.Model):
                 "branch_allowed": True,
             }
         )
+
+    def _has_settlement(self):
+        return bool(self.allow_settlement and self.settlement_title)
 
     def _get_settlement_company(self, companies):
         """The company that files the settlement for ``companies``, empty if none can.
@@ -493,19 +496,43 @@ class AccountReport(models.Model):
         read as "companies from the selector or not"; the ``account.tax.unit`` feature is
         not in play here and this module never uses it.
 
+        Except when the report carries the settlement button (Profit and Loss, Balance
+        Sheet): the entry is built per legal entity, so there it warns about the entry.
+
         Worded as a suggestion and not as an error, because filing part of an entity is
         allowed: what the settlement gate refuses is mixing Tax IDs, not filing branch by
         branch.
         """
         super()._generate_common_warnings(options, warnings)
 
-        if self.filter_multi_company == "selector":
+        from_selector = self.filter_multi_company == "selector"
+        if from_selector and not self._has_settlement():
             return
 
         report_companies = self.env["res.company"].browse(self.get_report_company_ids(options))
-        missing = self.env.company._get_branches_with_same_vat().sudo() - report_companies
+        if from_selector and not self._get_settlement_company(report_companies.sudo()):
+            # The settlement gate refuses this selection and says why: nothing to suggest.
+            return
+        missing = self._get_missing_legal_entity_companies(report_companies, selectable_only=from_selector)
         if missing:
-            warnings["account_accountant_ux.warning_missing_legal_entity_companies"] = {
+            key = (
+                "account_accountant_ux.warning_missing_legal_entity_companies_settlement"
+                if from_selector
+                else "account_accountant_ux.warning_missing_legal_entity_companies"
+            )
+            warnings[key] = {
                 "alert_type": "info",
                 "args": ", ".join(missing.mapped("display_name")),
             }
+
+    def _get_missing_legal_entity_companies(self, companies, selectable_only=False):
+        """The companies of the active company's legal entity that ``companies`` leaves out.
+
+        Sudo: they are outside the selection, so record rules hide them from non-managers.
+        ``selectable_only`` keeps the ones the user can tick; a partial tax return is flagged
+        whatever the user's access, so it does not use it.
+        """
+        missing = self.env.company._get_branches_with_same_vat().sudo() - companies.sudo()
+        if selectable_only:
+            missing &= self.env.user.sudo().company_ids
+        return missing
