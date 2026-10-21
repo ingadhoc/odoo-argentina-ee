@@ -252,15 +252,15 @@ class TestLegalEntityReports(AccountTestInvoicingCommon):
             .create({"journal_id": journal.id, "date": date, "ref": self.SETTLEMENT_TITLE})
         )
 
-    def _wizard_defaults(self, report, options, company):
+    def _wizard_defaults(self, report, options, company, fields_list=("already_settled_warning",)):
         return (
-            self.env["account.tax.settlement.wizard"]
+            report.env["account.tax.settlement.wizard"]
             .with_context(
                 default_report_id=report.id,
                 default_company_id=company.id,
                 account_report_generation_options=options,
             )
-            .default_get(["already_settled_warning"])
+            .default_get(list(fields_list))
         )
 
     def test_the_wizard_says_when_the_period_was_already_settled(self):
@@ -287,3 +287,12 @@ class TestLegalEntityReports(AccountTestInvoicingCommon):
         defaults = self._wizard_defaults(report, options, self.parent)
 
         self.assertFalse(defaults.get("already_settled_warning"))
+
+    def test_the_wizard_says_which_companies_of_the_entity_were_left_out(self):
+        report, options = self._get_options(self.parent + self.branch)
+        defaults = self._wizard_defaults(report, options, self.parent, ["missing_companies_warning"])
+        self.assertIn(self.sister.name, defaults["missing_companies_warning"])
+
+        report, options = self._get_options(self.parent + self.branch + self.sister)
+        defaults = self._wizard_defaults(report, options, self.parent, ["missing_companies_warning"])
+        self.assertFalse(defaults.get("missing_companies_warning"))
