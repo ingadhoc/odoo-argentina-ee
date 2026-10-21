@@ -177,6 +177,22 @@ class AccountMove(models.Model):
             res.update({"Permiso_existente": permiso_existente})
         return res
 
+    def _get_line_details(self, base_lines=None):
+        """In wsfex, upstream sends Pro_qty 0 for down payment / negative lines but keeps the UoM code,
+        so ARCA rejects the item (error 1780). Send 97 / 99 as Pro_umed, as ARCA expects."""
+        details = super()._get_line_details(base_lines=base_lines)
+        if self.journal_id.l10n_ar_afip_ws != "wsfex":
+            return details
+        for values, base_line in zip(details, base_lines):
+            if values["Pro_umed"] in ("97", "99", "00"):
+                continue
+            line = base_line["record"]
+            if line._get_downpayment_lines():
+                values["Pro_umed"] = "97"
+            elif line.price_unit < 0:
+                values["Pro_umed"] = "99"
+        return details
+
     def check_valid_boarding_permission(self):
         """This method is used to verify that the Permisos de embarque entered on the export invoice are valid. Receives the authentication credentials, cuit of the represented user, código de despacho and destination country and verifies their existence in the base de datos aduanera."""
         client, auth = self.company_id._l10n_ar_get_connection(self.journal_id.l10n_ar_afip_ws)._get_client()
