@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 20.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-20 14:46+0000\n"
-"PO-Revision-Date: 2026-10-20 14:46+0000\n"
+"POT-Creation-Date: 2026-10-21 17:43+0000\n"
+"PO-Revision-Date: 2026-10-21 17:43+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -436,14 +436,6 @@ msgstr ""
 #. module: account_balance_import
 #. odoo-python
 #: code:addons/account_balance_import/wizards/account_balance_import.py:0
-msgid ""
-"Unsupported file format. Please upload the import template as an Excel file "
-"(.xls or .xlsx)."
-msgstr ""
-
-#. module: account_balance_import
-#. odoo-python
-#: code:addons/account_balance_import/wizards/account_balance_import.py:0
 msgid "Please upload an Excel file to import."
 msgstr ""
 
@@ -575,6 +567,14 @@ msgstr ""
 msgid ""
 "The number of columns (%(actual)s) does not match the expected number (%(expected)s).\n"
 "Expected fields: %(fields)s"
+msgstr ""
+
+#. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/wizards/account_balance_import.py:0
+msgid ""
+"Unsupported file format. Please upload the import template as an Excel file "
+"(.xls or .xlsx)."
 msgstr ""
 
 #. module: account_balance_import
