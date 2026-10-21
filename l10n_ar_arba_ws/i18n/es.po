@@ -546,6 +546,11 @@ msgstr ""
 "proveedores"
 
 #. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
+msgid "Only for DDJJ without withholdings, so they can be deleted"
+msgstr "Solo para DDJJ sin retenciones, para poder eliminarlas"
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.fields.selection,name:l10n_ar_arba_ws.selection__l10n_ar_dj_arba__state__open
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
 msgid "Open"
@@ -598,6 +603,17 @@ msgstr ""
 "generado)"
 
 #. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
+msgid "Reset to Draft"
+msgstr "Volver a borrador"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "Reset to draft. The ARBA DDJJ ID %s was removed from this record."
+msgstr "Vuelta a borrador. Se quitó de este registro el ID de DDJJ ARBA %s."
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_user_id
 msgid "Responsible User"
 msgstr "Usuario Responsable"
@@ -645,6 +661,11 @@ msgstr ""
 #: model:ir.model.fields.selection,name:l10n_ar_arba_ws.selection__res_company__l10n_ar_arba_env__testing
 msgid "Testing"
 msgstr "Pruebas"
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
+msgid "The ARBA DDJJ ID will be removed from this record. Continue?"
+msgstr "Se quitará de este registro el ID de DDJJ ARBA. ¿Desea continuar?"
 
 #. module: l10n_ar_arba_ws
 #. odoo-python
@@ -730,6 +751,12 @@ msgstr "Retenciones"
 #: code:addons/l10n_ar_arba_ws/models/account_payment.py:0
 msgid "Warning - ARBA Withholdings"
 msgstr "Advertencia - Retenciones ARBA"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "You cannot reset to draft a DDJJ ARBA that has withholding lines: %s"
+msgstr "No puede volver a borrador una DDJJ ARBA que tiene líneas de retención: %s"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
