@@ -27,6 +27,7 @@ class TestLegalEntityReports(AccountTestInvoicingCommon):
     PARENT_VAT = "30111111118"
     OTHER_VAT = "30999999995"
     MISSING_WARNING = "account_accountant_ux.warning_missing_legal_entity_companies"
+    MISSING_SETTLEMENT_WARNING = "account_accountant_ux.warning_missing_legal_entity_companies_settlement"
     SETTLEMENT_TITLE = "Settlement of the tests"
 
     @classmethod
@@ -103,6 +104,32 @@ class TestLegalEntityReports(AccountTestInvoicingCommon):
         _options, warnings = self._get_warnings(self.parent, report=general_ledger)
 
         self.assertNotIn(self.MISSING_WARNING, warnings)
+
+    def test_warns_on_a_selector_report_that_settles_by_legal_entity(self):
+        """The Profit and Loss takes its companies from the selector, but its entry is per entity."""
+        profit_and_loss = self.env.ref("account_reports.profit_and_loss")
+        self.assertEqual(profit_and_loss.filter_multi_company, "selector")
+        profit_and_loss.write({"allow_settlement": True, "settlement_title": self.SETTLEMENT_TITLE})
+
+        _options, warnings = self._get_warnings(self.parent + self.branch, report=profit_and_loss)
+
+        self.assertNotIn(self.MISSING_WARNING, warnings)
+        self.assertIn(self.MISSING_SETTLEMENT_WARNING, warnings)
+        self.assertIn(self.sister.name, warnings[self.MISSING_SETTLEMENT_WARNING]["args"])
+        self.assertNotIn(self.branch.name, warnings[self.MISSING_SETTLEMENT_WARNING]["args"])
+        self.assertNotIn(self.other_entity.name, warnings[self.MISSING_SETTLEMENT_WARNING]["args"])
+
+        _options, warnings = self._get_warnings(self.parent + self.branch + self.sister, report=profit_and_loss)
+
+        self.assertNotIn(self.MISSING_SETTLEMENT_WARNING, warnings)
+
+        _options, warnings = self._get_warnings(self.parent + self.other_entity, report=profit_and_loss)
+
+        self.assertNotIn(self.MISSING_SETTLEMENT_WARNING, warnings)
+
+        _options, warnings = self._get_warnings(self.branch + self.sister, report=profit_and_loss)
+
+        self.assertNotIn(self.MISSING_SETTLEMENT_WARNING, warnings)
 
     def test_the_warning_is_worded_as_a_suggestion(self):
         """Filing part of an entity is allowed, so this is not an error."""
@@ -252,15 +279,15 @@ class TestLegalEntityReports(AccountTestInvoicingCommon):
             .create({"journal_id": journal.id, "date": date, "ref": self.SETTLEMENT_TITLE})
         )
 
-    def _wizard_defaults(self, report, options, company):
+    def _wizard_defaults(self, report, options, company, fields_list=("already_settled_warning",)):
         return (
-            self.env["account.tax.settlement.wizard"]
+            report.env["account.tax.settlement.wizard"]
             .with_context(
                 default_report_id=report.id,
                 default_company_id=company.id,
                 account_report_generation_options=options,
             )
-            .default_get(["already_settled_warning"])
+            .default_get(list(fields_list))
         )
 
     def test_the_wizard_says_when_the_period_was_already_settled(self):
@@ -287,3 +314,53 @@ class TestLegalEntityReports(AccountTestInvoicingCommon):
         defaults = self._wizard_defaults(report, options, self.parent)
 
         self.assertFalse(defaults.get("already_settled_warning"))
+
+    # -------------------------------------------------------------------------
+    # Settling part of the entity
+    # -------------------------------------------------------------------------
+
+    def test_the_wizard_says_which_companies_of_the_entity_were_left_out(self):
+        report, options = self._get_options(self.parent + self.branch)
+
+        defaults = self._wizard_defaults(report, options, self.parent, ["missing_companies_warning"])
+
+        self.assertIn(self.sister.name, defaults["missing_companies_warning"])
+        self.assertNotIn(self.other_entity.name, defaults["missing_companies_warning"])
+
+    def test_the_wizard_says_nothing_when_the_whole_entity_is_selected(self):
+        report, options = self._get_options(self.parent + self.branch + self.sister)
+
+        defaults = self._wizard_defaults(report, options, self.parent, ["missing_companies_warning"])
+
+        self.assertFalse(defaults.get("missing_companies_warning"))
+
+    def test_an_accountant_sees_the_companies_left_out(self):
+        """Those companies are not in the selection, so record rules hide them from non-managers."""
+        accountant = self.env["res.users"].create(
+            {
+                "name": "Contador",
+                "login": "contador_settlement",
+                "company_id": self.parent.id,
+                "company_ids": [(6, 0, (self.parent + self.branch + self.sister).ids)],
+                "group_ids": [(6, 0, self.env.ref("account.group_account_manager").ids)],
+            }
+        )
+        report, options = self._get_options(self.parent + self.branch)
+        report = report.with_user(accountant)
+
+        _options, warnings = self._get_warnings(self.parent + self.branch, report=report)
+        defaults = self._wizard_defaults(report, options, self.parent, ["missing_companies_warning"])
+
+        self.assertIn(self.sister.name, warnings[self.MISSING_WARNING]["args"])
+        self.assertIn(self.sister.name, defaults["missing_companies_warning"])
+
+    def test_settlement_does_not_suggest_companies_the_user_cannot_select(self):
+        """A partial return is still flagged, but a settlement only suggests what can be ticked."""
+        self.env.user.company_ids -= self.sister
+        report, options = self._get_options(self.parent + self.branch)
+
+        defaults = self._wizard_defaults(report, options, self.parent, ["missing_companies_warning"])
+        _options, warnings = self._get_warnings(self.parent)
+
+        self.assertFalse(defaults.get("missing_companies_warning"))
+        self.assertIn(self.sister.name, warnings[self.MISSING_WARNING]["args"])

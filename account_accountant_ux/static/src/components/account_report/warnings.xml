@@ -9,4 +9,13 @@
         </span>
     </t>
 
+    <t t-name="account_accountant_ux.warning_missing_legal_entity_companies_settlement">
+        <span>
+            The settlement entry of this report is built per legal entity, and these companies of
+            the same legal entity are not selected, so their balances would be left out of it:
+            <t t-out="warningParams.args"/>. Select them in the company selector if you meant to
+            settle the whole entity.
+        </span>
+    </t>
+
 </templates>
