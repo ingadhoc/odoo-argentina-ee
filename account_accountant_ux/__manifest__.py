@@ -36,7 +36,6 @@
     "data": [
         "security/account_accountant_ux_security.xml",
         "security/ir.model.access.csv",
-        "views/res_company_view.xml",
         "views/res_partner_view.xml",
         "views/account_move_line.xml",
         "views/account_report_view.xml",
