@@ -48,17 +48,21 @@ class AccountReconcileWizard(models.TransientModel):
     def reconcile(self):
         """Bloquea la conciliación entre compañías distintas cuando la compañía lo pide.
 
-        El flag ``block_intercompany_conciliation`` se define en este mismo módulo: el
-        único lugar donde se aplica es este wizard, que es de Enterprise
-        (``account_accountant``), así que la opción y su enforcement viven juntos y
-        ``account_multicompany_ux`` no necesita depender de Enterprise para ofrecerla.
+        ``block_intercompany_conciliation`` vive en ``account_ux``, en la raíz del árbol,
+        porque también decide qué deuda de otras sucursales se lee y se cobra: bloquea
+        siempre, o solo entre compañías de entidades fiscales distintas. Se mira en la raíz
+        y no en las compañías de los apuntes: dos sucursales hermanas no tienen a la padre
+        entre ellas.
         """
         for wizard in self:
-            companies = wizard.move_line_ids.mapped("company_id")
-            if len(companies) > 1 and companies.filtered(lambda c: c.child_ids and c.block_intercompany_conciliation):
+            companies = wizard.move_line_ids.mapped("company_id").sudo()
+            blocks = set(companies.root_id.mapped("block_intercompany_conciliation"))
+            if len(companies) > 1 and (
+                "all" in blocks or ("other_legal_entity" in blocks and len(companies.legal_entity_root_id) > 1)
+            ):
                 raise UserError(
                     "Cannot reconcile journal items from different companies. "
-                    "Please verify that the 'Block inter-company reconciliation' option "
-                    "is not enabled in the settings of the companies involved."
+                    "Please check the 'Block Inter-Company Reconciliation' option "
+                    "of the root company of the companies involved."
                 )
         return super().reconcile()
