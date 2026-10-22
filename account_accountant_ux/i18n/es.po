@@ -10,17 +10,15 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 18.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-25 13:29+0000\n"
-"PO-Revision-Date: 2026-05-21 16:41+0000\n"
+"POT-Creation-Date: 2026-10-22 13:23+0000\n"
+"PO-Revision-Date: 2026-10-22 13:23+0000\n"
 "Last-Translator: Gonzalo Lenzi <gl@adhoc.inc>\n"
-"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
-"argentina-ee-19-0/odoo-argentina-ee-19-0-account_accountant_ux/es/>\n"
+"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-argentina-ee-19-0/odoo-argentina-ee-19-0-account_accountant_ux/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == "
-"0) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == 0) ? 1 : 2);\n"
 "X-Generator: Weblate 5.10.4\n"
 
 #. module: account_accountant_ux
@@ -30,14 +28,107 @@ msgid ""
 "%(company)s already has a settlement entry of this report for this period: "
 "%(entries)s. Creating another one settles the same balances twice."
 msgstr ""
+"%(company)s ya tiene un asiento de liquidación de este reporte en este "
+"período: %(entries)s. Crear otro liquida dos veces los mismos saldos."
 
 #. module: account_accountant_ux
 #. odoo-javascript
 #: code:addons/account_accountant_ux/static/src/components/account_report/warnings.xml:0
 msgid ""
 ".\n"
-"            Select them in the company selector if you meant to file the "
-"whole entity."
+"            Select them in the company selector if you meant to file the whole entity."
+msgstr ""
+".\n"
+"            Selecciónelas en el selector de compañías si quería presentar la entidad completa."
+
+#. module: account_accountant_ux
+#: model:ir.module.module,description:base.module_account_accountant_ux
+msgid ""
+".. |company| replace:: ADHOC SA\n"
+"\n"
+".. |company_logo| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-logo.png\n"
+"   :alt: ADHOC SA\n"
+"   :target: https://www.adhoc.com.ar\n"
+"\n"
+".. |icon| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-icon.png\n"
+"\n"
+".. image:: https://img.shields.io/badge/license-LGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/lgpl\n"
+"   :alt: License: LGPL-3\n"
+"\n"
+"=====================\n"
+"Account Accountant UX\n"
+"=====================\n"
+"\n"
+"#. Agrega el parámetro \"Compañía\" en el wizard de Fechas Bloqueadas.\n"
+"#. Agrega filtros de \"Igual Monto\", \"Monto Aproximado\" y \"Monto Menor\" en el asistente de conciliación.\n"
+"#. Determina por defecto el filtro \"Igual Monto\" en el asistente de conciliación.\n"
+"#. Ajustar conciliación bancaria para compatibilidad con la opción de reconciliar en la moneda de la compañía.\n"
+"#. Agrega advertencia para posibles conciliaciones cruzadas entre partners.\n"
+"#. Desde el informe partner ledger, al ir a los journal items, vamos a la vista de apuntes que usamos para los menus \"customer/supplier ledger\" para unificar comportamiento (nativamente odoo manda a una _tree_grouped_partner)\n"
+"#. Agrega una estrategia de autoconciliacion que Permite reconciliar todas las lineas de un partner en un solo conciliacion parcial o total\n"
+"#. Cambia el nombre del botón de seguimiento de los partners a \"Follow-up Report\" y agrega al lado el botón \"Partner Ledger\", que abre el Libro Mayor de Empresa del partner.\n"
+"#. Agrega campo booleano \"Requerir Filtro Custom\" en la configuración de reportes. Si está activo y no hay filtros de partners o filtros personalizados aplicados, el reporte no cargará datos y mostrará un mensaje de advertencia.\n"
+"#. Los reportes contables de partner (Partner Ledger, Aged Receivable, Aged payable) vienen con el campo \"Requerir Filtro Custom\" desactivado y con los filtros \"Mostrar todo\" y de apuntes disponibles, para activarlo desde la configuración del reporte.\n"
+"#. Agrega el filtro de fecha \"Año calendario\" (del 1/1 al 31/12) en los reportes que usan períodos fiscales.\n"
+"#. Agrega la exportación a CSV del Libro Mayor de Empresa, completamente desplegado y armado contacto por contacto, para períodos grandes que no entran en un XLSX. La exportación también se puede generar en segundo plano con ``documents_account_bg``.\n"
+"#. Responde \"qué sucursales son la misma entidad fiscal\" con el criterio propio definido en ``account_ux`` (``legal_entity_root_id``) en lugar del nativo, que toma el CUIT vacío como el del padre. De ahí cuelgan los reportes fiscales que ignoran el selector de compañías, el gate de los botones de export y las declaraciones.\n"
+"#. Agrega el sufijo de compañía a las cuentas al expandir una línea de un reporte financiero con más de una compañía seleccionada (la otra mitad está en ``account_multicompany_ux``).\n"
+"#. Agrega la opción de compañía \"Bloquear conciliación entre diferentes compañías\", que impide conciliar apuntes de compañías o sucursales distintas.\n"
+"#. Sugiere, en los reportes que se presentan por CUIT (Libro de IVA y demás declaraciones), tildar las compañías de la misma entidad fiscal que quedaron afuera del selector. Nativamente esas compañías se descartan en silencio y el reporte sale parcial sin avisar. En los reportes que se filtran por el selector de compañías (Libro Mayor, Balance) no dice nada: ahí el usuario eligió las compañías a propósito.\n"
+"#. El asiento de liquidación y de refundición no impone un modo: se sugiere seleccionar la entidad fiscal completa —un solo asiento, que se lee como la declaración— pero se puede liquidar compañía por compañía. Se acepta la selección cuando todas las compañías tildadas comparten entidad fiscal (nunca se mezclan CUIT) y una de ellas es ancestro de todas las demás, que es la que liquida y donde va el asiento. Dos hermanas sin su padre se rechazan con un mensaje de qué hacer: una cuenta que vive solo en una sucursal no la puede usar la otra. Antes se exigía \"1 y solo 1 compañía\" derivada de los diarios del reporte, que era otra pregunta y más débil: con todos los diarios en la padre, una selección de media entidad pasaba sin que nadie se enterara.\n"
+"#. El botón de liquidación no queda deshabilitado por el gate nativo de sucursales (\"seleccioná la compañía principal y todas sus sucursales\"), que pedía algo distinto de lo que la liquidación necesita. El criterio se responde en un solo lugar y con el motivo concreto del rechazo.\n"
+"#. Nombra la cuenta antes de que el asiento de liquidación falle: si una cuenta a netear pertenece solo a una sucursal, la compañía que liquida no la puede usar, así que se avisa cuál es y se sugiere liquidar esa sucursal por separado en lugar de dejar reventar el chequeo de consistencia de compañías.\n"
+"#. Avisa en el wizard de liquidación si la compañía que liquida ya tiene un asiento de liquidación de ese reporte en el período. No bloquea: un segundo asiento puede ser una corrección.\n"
+"#. Saca la exportación a CSV del Libro Mayor del gate de sucursales (\"seleccioná la compañía principal y todas sus sucursales\"). Era el único botón de exportación del reporte sin ``branch_allowed``, así que el mismo reporte con la misma selección exportaba a XLSX y se negaba a exportar a CSV.\n"
+"#. Permite declarar un ejercicio fiscal explícito (``account.fiscal.year``) en la cabeza de una entidad fiscal, y no solamente en la compañía raíz como pide el nativo (*\"You cannot have a fiscal year on a child company\"*). La prohibición se mantiene para el resto de la entidad: el ejercicio se declara una sola vez, en su cabeza, y todas las compañías de la entidad lo leen de ahí. Es la otra mitad del ejercicio fiscal delegado a la entidad fiscal, cuya primera mitad —los campos ``fiscalyear_last_day`` / ``fiscalyear_last_month``— vive en ``account_ux``: sin esto, una sucursal que es cabeza de su propia entidad podría fijar los campos y seguir sin poder declarar un ejercicio irregular, porque el registro explícito le gana a los campos.\n"
+"#. Resuelve ``compute_fiscalyear_dates`` en la cabeza de la entidad fiscal en lugar de en cada compañía por separado, para que toda la entidad responda lo mismo ante la misma fecha. Nativamente el registro de ejercicio se busca con ``company_id = self``, así que una sucursal nunca encuentra el que declaró su propia cabeza y contesta solo con los campos.\n"
+"#. Agrega el campo \"Balance in GL\" en el tablero de contabilidad (diarios de banco, efectivo y tarjeta de crédito), con el saldo contable de la cuenta por defecto del diario a la fecha de hoy. El saldo se suma **por cuenta y por compañía**: cuando dos compañías comparten la misma cuenta por defecto —el caso de las sucursales que usan la cuenta de la madre— cada diario muestra el saldo de su propia compañía y no el consolidado de todas.\n"
+"\n"
+"Installation\n"
+"============\n"
+"\n"
+"To install this module, you need to:\n"
+"\n"
+"#. Only need to install the module\n"
+"\n"
+"Configuration\n"
+"=============\n"
+"\n"
+"To configure this module, you need to:\n"
+"\n"
+"#. Nothing to configure\n"
+"\n"
+"Usage\n"
+"=====\n"
+"\n"
+"To use this module, you need to:\n"
+"\n"
+"#. Go to ...\n"
+"\n"
+".. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas\n"
+"   :alt: Try me on Runbot\n"
+"   :target: http://runbot.adhoc.com.ar/\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Images\n"
+"------\n"
+"\n"
+"* |company| |icon|\n"
+"\n"
+"Contributors\n"
+"------------\n"
+"\n"
+"Maintainer\n"
+"----------\n"
+"\n"
+"|company_logo|\n"
+"\n"
+"This module is maintained by the |company|.\n"
+"\n"
+"To contribute to this module, please visit https://www.adhoc.com.ar.\n"
 msgstr ""
 
 #. module: account_accountant_ux
@@ -76,6 +167,9 @@ msgid ""
 "belong to %(entities)s. Select companies of a single legal entity in the "
 "company selector."
 msgstr ""
+"Una liquidación nunca abarca distintos CUIT, y las compañías seleccionadas "
+"pertenecen a %(entities)s. Seleccione compañías de una sola entidad fiscal "
+"en el selector de compañías."
 
 #. module: account_accountant_ux
 #. odoo-javascript
@@ -94,20 +188,25 @@ msgid "Account reconciliation wizard"
 msgstr "Asistente de conciliación bancaria"
 
 #. module: account_accountant_ux
+#: model:ir.module.module,shortdesc:base.module_account_accountant_ux
+msgid "Accounting Accountant UX"
+msgstr "Accounting Accountant UX"
+
+#. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_report
 msgid "Accounting Report"
-msgstr "Reporte Contable"
+msgstr "Reporte contable"
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_return
 msgid "Accounting Return"
-msgstr "Declaración de impuestos"
+msgstr "Declaración contable"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,help:account_accountant_ux.field_account_tax_settlement_wizard__already_settled_warning
 msgid ""
-"Advertencia si la compañía que liquida ya tiene un asiento de liquidación de "
-"este reporte en el período. No bloquea: puede ser una corrección."
+"Advertencia si la compañía que liquida ya tiene un asiento de liquidación de"
+" este reporte en el período. No bloquea: puede ser una corrección."
 msgstr ""
 
 #. module: account_accountant_ux
@@ -134,7 +233,7 @@ msgstr "Permitir la liquidación"
 #. odoo-python
 #: code:addons/account_accountant_ux/models/account_partner_ledger.py:0
 msgid "Amount Currency"
-msgstr ""
+msgstr "Moneda del importe"
 
 #. module: account_accountant_ux
 #. odoo-python
@@ -151,8 +250,8 @@ msgstr "Entradas Conciliadas Automáticamente"
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_bank_statement_line
-msgid "Bank Statement Line"
-msgstr "Línea de Extracto Bancario"
+msgid "Bank Transaction"
+msgstr "Transacción bancaria"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_company__block_intercompany_conciliation
@@ -169,11 +268,11 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_accountant_ux/models/account_partner_ledger.py:0
 msgid "CSV export only works with one column group"
-msgstr ""
+msgstr "La exportación a CSV solo funciona con un grupo de columnas"
 
 #. module: account_accountant_ux
-#. odoo-javascript
-#: code:addons/account_accountant_ux/static/src/account_report_filters_patch.js:0
+#. odoo-python
+#: code:addons/account_accountant_ux/models/account_report.py:0
 msgid "Calendar Year"
 msgstr "Año Calendario"
 
@@ -189,15 +288,11 @@ msgstr "Cambiar fecha de bloqueo"
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_res_company
-msgid "Companies"
-msgstr ""
-
-#. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_auto_reconcile_wizard__company_id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_change_lock_date__company_id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_fiscal_year__company_id
 msgid "Company"
-msgstr "Companía"
+msgstr "Empresa"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__company_id
@@ -233,7 +328,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_accountant_ux/models/account_partner_ledger.py:0
 msgid "Currency"
-msgstr ""
+msgstr "Moneda"
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_partner_view_search
@@ -255,8 +350,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_bank_statement_line__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_change_lock_date__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_fiscal_year__display_name
-#: model:ir.model.fields,field_description:account_accountant_ux.field_account_followup_manual_reminder__display_name
-#: model:ir.model.fields,field_description:account_accountant_ux.field_account_followup_report_handler__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_general_ledger_report_handler__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_journal__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_move__display_name
@@ -269,33 +362,27 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_company__display_name
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_partner__display_name
 msgid "Display Name"
-msgstr "Nombre para Mostrar"
+msgstr "Nombre en pantalla"
 
 #. module: account_accountant_ux
 #. odoo-python
 #: code:addons/account_accountant_ux/models/account_report.py:0
 msgid ""
-"El reporte no tiene expresiones con engine \"domain\". No es posible generar "
-"un asiento de liquidación."
+"El reporte no tiene expresiones con engine \"domain\". No es posible generar"
+" un asiento de liquidación."
 msgstr ""
 
 #. module: account_accountant_ux
-#. odoo-javascript
-#: code:addons/account_accountant_ux/static/src/account_report_filters_patch.js:0
-msgid "End of Month"
-msgstr "Fin de Mes"
-
-#. module: account_accountant_ux
-#. odoo-javascript
-#: code:addons/account_accountant_ux/static/src/account_report_filters_patch.js:0
-msgid "End of Quarter"
-msgstr "Fin de Trimestre"
+#. odoo-python
+#: code:addons/account_accountant_ux/models/account_report.py:0
+msgid "End of Calendar Year"
+msgstr "Fin del año calendario"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,help:account_accountant_ux.field_account_report__allow_settlement
 msgid ""
-"Esta opción habilita un botón en este reporte para liquidar todas las líneas "
-"cuya expresión tenga engine \"domain\"."
+"Esta opción habilita un botón en este reporte para liquidar todas las líneas"
+" cuya expresión tenga engine \"domain\"."
 msgstr ""
 
 #. module: account_accountant_ux
@@ -309,29 +396,20 @@ msgid "Filter Amount"
 msgstr "Filtrar Monto"
 
 #. module: account_accountant_ux
-#. odoo-javascript
-#: code:addons/account_accountant_ux/static/src/account_report_filters_patch.js:0
 #: model:ir.model,name:account_accountant_ux.model_account_fiscal_year
 msgid "Fiscal Year"
-msgstr "Año Fiscal"
-
-#. module: account_accountant_ux
-#: model:ir.model,name:account_accountant_ux.model_account_followup_report_handler
-msgid "Follow-Up Report Custom Handler"
-msgstr "Manejador personalizado de informes de seguimiento"
+msgstr "Año fiscal"
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_general_ledger_report_handler
 msgid "General Ledger Custom Handler"
-msgstr ""
+msgstr "Gestor personalizado del libro mayor"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_auto_reconcile_wizard__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_bank_statement_line__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_change_lock_date__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_fiscal_year__id
-#: model:ir.model.fields,field_description:account_accountant_ux.field_account_followup_manual_reminder__id
-#: model:ir.model.fields,field_description:account_accountant_ux.field_account_followup_report_handler__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_general_ledger_report_handler__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_journal__id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_move__id
@@ -367,8 +445,8 @@ msgid ""
 "partner reconciliations may occur. Please review them carefully."
 msgstr ""
 "Es posible que si se seleccionan más de dos contactos distintos, puedan "
-"ocurrir conciliaciones cruzadas entre los mismos. Revísalas cuidadosamente y "
-"utilice los asistentes de conciliación."
+"ocurrir conciliaciones cruzadas entre los mismos. Revísalas cuidadosamente y"
+" utilice los asistentes de conciliación."
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_journal
@@ -388,7 +466,8 @@ msgstr "Apunte contable"
 #. module: account_accountant_ux
 #. odoo-python
 #: code:addons/account_accountant_ux/models/account_report.py:0
-msgid "La fórmula de la expresión '%(expression)s' está mal formada: %(error)s"
+msgid ""
+"La fórmula de la expresión '%(expression)s' está mal formada: %(error)s"
 msgstr ""
 
 #. module: account_accountant_ux
@@ -400,12 +479,6 @@ msgstr "Última Actualización Por"
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__write_date
 msgid "Last Updated on"
 msgstr "Última Actualización en"
-
-#. module: account_accountant_ux
-#. odoo-javascript
-#: code:addons/account_accountant_ux/static/src/account_report_filters_patch.js:0
-msgid "Month"
-msgstr "Mes"
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.view_account_move_line_search_bank_rec_widget
@@ -426,7 +499,7 @@ msgstr "Múltiples Contactos"
 #. odoo-python
 #: code:addons/account_accountant_ux/models/account_partner_ledger.py:0
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #. module: account_accountant_ux
 #. odoo-python
@@ -443,34 +516,28 @@ msgid ""
 "cannot be used by another one. Add %(head)s to the selection to settle them "
 "together, or select one company at a time and settle each on its own."
 msgstr ""
-
-#. module: account_accountant_ux
-#. odoo-python
-#: code:addons/account_accountant_ux/wizards/account_change_lock_date.py:0
-msgid "Only Billing Administrators are allowed to change lock dates!"
-msgstr ""
-"Solo usuarios con el permiso de Administración de Facturación pueden "
-"modificar fechas de bloqueo!"
+"Ninguna de las compañías seleccionadas es padre de las demás, así que no hay"
+" una compañía en la que se pueda armar el asiento: una cuenta que existe "
+"solo en una sucursal no la puede usar otra. Agregue %(head)s a la selección "
+"para liquidarlas juntas, o seleccione una compañía por vez y liquide cada "
+"una por separado."
 
 #. module: account_accountant_ux
 #. odoo-python
 #: code:addons/account_accountant_ux/models/account_report.py:0
 msgid ""
-"Parece que la liquidación quedaría desbalanceada. Si desea generarla "
-"igualmente puede:\n"
-"1. Ir a \"Contabilidad / Configuración / Administración / Informes "
-"contables\"\n"
+"Parece que la liquidación quedaría desbalanceada. Si desea generarla igualmente puede:\n"
+"1. Ir a \"Contabilidad / Configuración / Administración / Informes contables\"\n"
 "2. Buscar el informe correspondiente\n"
 "3. En opciones, marcar \"Settlement Allow Unbalanced\"\n"
-"4. Volver a crear el asiento seleccionando la cuenta de contrapartida "
-"solicitada"
+"4. Volver a crear el asiento seleccionando la cuenta de contrapartida solicitada"
 msgstr ""
 
 #. module: account_accountant_ux
 #. odoo-python
 #: code:addons/account_accountant_ux/models/account_partner_ledger.py:0
 msgid "Partner"
-msgstr ""
+msgstr "Partner"
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_partner_ledger_report_handler
@@ -488,12 +555,6 @@ msgid "Permite desbalance"
 msgstr ""
 
 #. module: account_accountant_ux
-#. odoo-javascript
-#: code:addons/account_accountant_ux/static/src/account_report_filters_patch.js:0
-msgid "Quarter"
-msgstr "Trimestre"
-
-#. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_auto_reconcile_wizard__search_mode
 msgid "Reconcile"
 msgstr "Conciliar"
@@ -504,7 +565,7 @@ msgid ""
 "Reconcile journal items with opposite balance or clear accounts with a zero "
 "balance"
 msgstr ""
-"Conciliar asientos contables con saldos opuestos o vaciar cuentas con saldo "
+"Conciliar asientos de diario con saldos opuestos o vaciar cuentas con saldo "
 "cero"
 
 #. module: account_accountant_ux
@@ -535,12 +596,6 @@ msgid ""
 msgstr ""
 
 #. module: account_accountant_ux
-#. odoo-javascript
-#: code:addons/account_accountant_ux/static/src/components/bank_reconciliation/button_list/button_list.js:0
-msgid "Search: Journal Items to Match"
-msgstr "Buscar: Apuntes Contables para Conciliar"
-
-#. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__settlement_allow_unbalanced
 msgid "Settlement Allow Unbalanced"
 msgstr "Permitir desequilibrio en la liquidación"
@@ -569,46 +624,35 @@ msgstr ""
 #: model:ir.model.fields,help:account_accountant_ux.field_account_tax_settlement_wizard__report_settlement_allow_unbalanced
 msgid ""
 "Si se habilita esta opción, se requerirá una cuenta de contrapartida al "
-"crear el asiento de liquidación, de modo que el balance del reporte se envíe "
-"a dicha cuenta."
+"crear el asiento de liquidación, de modo que el balance del reporte se envíe"
+" a dicha cuenta."
 msgstr ""
 
 #. module: account_accountant_ux
 #. odoo-python
 #: code:addons/account_accountant_ux/models/account_fiscal_year.py:0
 msgid "The ending date must not be prior to the starting date."
-msgstr ""
+msgstr "La fecha de fin no debe ser anterior a la fecha de inicio."
 
 #. module: account_accountant_ux
 #. odoo-python
 #: code:addons/account_accountant_ux/models/account_report.py:0
 msgid ""
-"These accounts belong only to a branch, so the entry cannot be built in "
-"%(company)s with them in it: %(accounts)s.\n"
-"Settle %(owners)s on their own —select each of them alone in the company "
-"selector— or move those accounts up to the company that files."
+"These accounts belong only to a branch, so the entry cannot be built in %(company)s with them in it: %(accounts)s.\n"
+"Settle %(owners)s on their own —select each of them alone in the company selector— or move those accounts up to the company that files."
 msgstr ""
+"Estas cuentas pertenecen solo a una sucursal, así que el asiento no se puede armar en %(company)s con ellas: %(accounts)s.\n"
+"Liquide %(owners)s por separado —seleccione cada una sola en el selector de compañías— o pase esas cuentas a la compañía que presenta."
 
 #. module: account_accountant_ux
 #. odoo-javascript
 #: code:addons/account_accountant_ux/static/src/components/account_report/warnings.xml:0
 msgid ""
-"This report is filed by legal entity, and these companies of the same legal "
-"entity are\n"
+"This report is filed by legal entity, and these companies of the same legal entity are\n"
 "            not selected, so their operations are not in these numbers:"
 msgstr ""
-
-#. module: account_accountant_ux
-#. odoo-python
-#: code:addons/account_accountant_ux/models/account_followup_report.py:0
-msgid "Total Due"
-msgstr "Total Adeudado"
-
-#. module: account_accountant_ux
-#. odoo-python
-#: code:addons/account_accountant_ux/models/account_followup_report.py:0
-msgid "Total Overdue"
-msgstr "Total Vencido"
+"Este reporte se presenta por entidad fiscal, y estas compañías de la misma entidad fiscal\n"
+"            no están seleccionadas, así que sus operaciones no están en estos números:"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_partner__debit
@@ -641,11 +685,6 @@ msgid "With Filters"
 msgstr "Con Filtros"
 
 #. module: account_accountant_ux
-#: model:ir.model,name:account_accountant_ux.model_account_followup_manual_reminder
-msgid "Wizard for sending manual reminders to clients"
-msgstr "Asistente para enviar recordatorios manuales a clientes"
-
-#. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_tax_settlement_wizard
 msgid "Wizard para generar liquidaciones de impuestos desde reportes"
 msgstr ""
@@ -662,6 +701,8 @@ msgid ""
 "You can not have an overlap between two fiscal years, please correct the "
 "start and/or end dates of your fiscal years."
 msgstr ""
+"No puede haber superposición entre dos ejercicios fiscales; por favor, "
+"corrija las fechas de inicio y/o fin de sus ejercicios fiscales."
 
 #. module: account_accountant_ux
 #. odoo-python
@@ -673,8 +714,7 @@ msgstr "No puedes elegir una fecha futura como fecha de bloqueo"
 #. odoo-javascript
 #: code:addons/account_accountant_ux/static/src/components/bank_reconciliation/button_list/assets.xml:0
 msgid ""
-"account_accountant_ux/static/src/components/bank_reconciliation/button_list/"
-"button_list.js"
+"account_accountant_ux/static/src/components/bank_reconciliation/button_list/button_list.js"
 msgstr ""
 
 #. module: account_accountant_ux
@@ -698,53 +738,7 @@ msgid ""
 "the whole legal entity. Create it on «%(head)s», or give «%(company)s» its "
 "own Tax ID if it really is a different legal entity."
 msgstr ""
-
-#, fuzzy
-#~ msgid "<span class=\"o_stat_text\">Libro Mayor de Empresa</span>"
-#~ msgstr "<span class=\"o_stat_text\">Libro Mayor de Empresa</span>"
-
-#, fuzzy
-#~| msgid ""
-#~| "<span class=\"o_stat_text\">Payment </span>\n"
-#~| "                        <span class=\"o_stat_text\">Matching</span>"
-#~ msgid ""
-#~ "<span class=\"o_stat_text\">Aged</span>\n"
-#~ "                        <span class=\"o_stat_text\">Payable</span>"
-#~ msgstr ""
-#~ "<span class=\"o_stat_text\">Conciliación </span>\n"
-#~ "                        <span class=\"o_stat_text\">de Pagos</span>"
-
-#, fuzzy
-#~| msgid ""
-#~| "<span class=\"o_stat_text\">Payment </span>\n"
-#~| "                        <span class=\"o_stat_text\">Matching</span>"
-#~ msgid ""
-#~ "<span class=\"o_stat_text\">Aged</span>\n"
-#~ "                        <span class=\"o_stat_text\">Receivable</span>"
-#~ msgstr ""
-#~ "<span class=\"o_stat_text\">Conciliación </span>\n"
-#~ "                        <span class=\"o_stat_text\">de Pagos</span>"
-
-#~ msgid "Bank Reconciliation"
-#~ msgstr "Conciliación Bancaria"
-
-#~ msgid "Bank reconciliation widget for a single statement line"
-#~ msgstr "Widget de conciliación bancaria para una sola línea del extracto"
-
-#~ msgid "Config Settings"
-#~ msgstr "Ajustes de configuración"
-
-#~ msgid "Filter by same amount"
-#~ msgstr "Filtrar por Igual Monto"
-
-#~ msgid ""
-#~ "If you select this option, the bank reconciliation wizard will search for "
-#~ "movement lines with the same amount                             as the "
-#~ "selected statement line by default."
-#~ msgstr ""
-#~ "Si seleccionas esta opción, el asistente de conciliación bancaria buscará "
-#~ "líneas de movimiento con el mismo monto que la línea de estado "
-#~ "seleccionada por defecto."
-
-#~ msgid "Use Search Filter Amount"
-#~ msgstr "Utilizar Filtro \"Igual Monto\" por defecto"
+"«%(company)s» no es la cabeza de su entidad fiscal —lo es «%(head)s»—, así "
+"que no puede tener un ejercicio fiscal propio: el ejercicio fiscal se define"
+" una sola vez para toda la entidad fiscal. Créelo en «%(head)s», o asígnele "
+"a «%(company)s» su propio CUIT si realmente es una entidad fiscal distinta."
