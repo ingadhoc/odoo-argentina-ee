@@ -26,7 +26,7 @@ patch(AccountReportFilters.prototype, {
         // Add "Show All" status to the selected options display
         if (this.controller.filters.show_all_custom) {
             optionsArray.push(
-                this.controller.cachedFilterOptions.show_all_custom
+                this.controller.cachedFilterOptions().show_all_custom
                     ? _t("Show All")
                     : _t("With Filters")
             );
@@ -37,20 +37,20 @@ patch(AccountReportFilters.prototype, {
 
     async filterClicked({ optionKey, optionValue = undefined, reload = false}) {
         // If toggling "Show All" option to true, clear all other filters
-        if (optionKey === 'show_all_custom' && !this.controller.cachedFilterOptions.show_all_custom) {
+        if (optionKey === 'show_all_custom' && !this.controller.cachedFilterOptions().show_all_custom) {
             // Clear partner filters
-            if (this.controller.options.partner_ids) {
-                this.controller.options.partner_ids = [];
+            if (this.controller.options().partner_ids) {
+                this.controller.options().partner_ids = [];
             }
 
             // Clear partner categories
-            if (this.controller.options.selected_partner_categories) {
-                this.controller.options.selected_partner_categories = null;
+            if (this.controller.options().selected_partner_categories) {
+                this.controller.options().selected_partner_categories = null;
             }
 
             // Clear AML IR filters
-            if (this.controller.options.aml_ir_filters) {
-                this.controller.options.aml_ir_filters.forEach(filter => {
+            if (this.controller.options().aml_ir_filters) {
+                this.controller.options().aml_ir_filters.forEach(filter => {
                     filter.selected = false;
                 });
             }
@@ -58,19 +58,19 @@ patch(AccountReportFilters.prototype, {
             // Clear all extra filter options
             const extraOptions = this.filterExtraOptionsData;
             for (const option in extraOptions) {
-                if (option !== 'show_all_custom' && this.controller.cachedFilterOptions[option]) {
-                    this.controller.cachedFilterOptions[option] = false;
+                if (option !== 'show_all_custom' && this.controller.cachedFilterOptions()[option]) {
+                    this.controller.cachedFilterOptions()[option] = false;
                 }
             }
         }
 
         // If applying any other filter, disable "Show All" filter
-        if (optionKey !== 'show_all_custom' && this.controller.cachedFilterOptions.show_all_custom) {
+        if (optionKey !== 'show_all_custom' && this.controller.cachedFilterOptions().show_all_custom) {
             // Check if a filter is actually being applied (not cleared)
             const isApplyingFilter = this._isApplyingFilter(optionKey, optionValue);
 
             if (isApplyingFilter) {
-                this.controller.cachedFilterOptions.show_all_custom = false;
+                this.controller.cachedFilterOptions().show_all_custom = false;
             }
         }
 

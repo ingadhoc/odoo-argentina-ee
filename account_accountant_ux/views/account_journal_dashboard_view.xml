@@ -9,7 +9,7 @@
                 <div class="row" t-if="dashboard.account_balance_general">
                     <a type="object" name="action_open_bank_balance_in_gl" class="col overflow-hidden text-start"><span title="Balance in Odoo">Balance in GL</span></a>
                     <div class="col-auto text-end">
-                        <span class="o_kanban_monetary"><t t-esc="dashboard.account_balance_general"/></span>
+                        <span class="o_kanban_monetary"><t t-out="dashboard.account_balance_general"/></span>
                     </div>
                 </div>
             </xpath>
