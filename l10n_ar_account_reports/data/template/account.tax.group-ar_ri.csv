@@ -1,0 +1,4 @@
+"id","name","country_id","l10n_ar_tribute_afip_code","tax_payable_account_id","tax_receivable_account_id","name@es"
+"tax_group_withholding_sire_vat","VAT Sire Withholdings","base.ar","06","ri_iva_saldo_libre_disponibilidad","ri_iva_saldo_libre_disponibilidad","Retenciones de IVA Sire"
+"tax_group_withholding_sire_foreign_profits","Foreign Beneficiaries Profits Sire Withholdings","base.ar","01","base_default_vat","base_default_vat","Retenciones de Ganancias Beneficiarios del Exterior Sire"
+"tax_group_withholding_sire_suss","SUSS Sire Withholdings","base.ar","01","base_default_vat","base_default_vat","Retenciones de SUSS Sire"
