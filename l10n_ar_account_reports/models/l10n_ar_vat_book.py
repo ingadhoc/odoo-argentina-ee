@@ -14,6 +14,11 @@ class L10n_ArTaxReportHandler(models.AbstractModel):
     def _custom_options_initializer(self, report, options, previous_options):
         super()._custom_options_initializer(report, options, previous_options=previous_options)
 
+        # Both files only hold the active company, so they can be exported from a branch.
+        for button in options["buttons"]:
+            if button.get("action_param") == "vat_book_export_files_to_zip":
+                button["branch_allowed"] = True
+
         # Add export button
         options["buttons"] += [
             {
@@ -22,6 +27,7 @@ class L10n_ArTaxReportHandler(models.AbstractModel):
                 "action": "export_file",
                 "action_param": "vat_simple_export_files_to_zip",
                 "file_export_type": _("ZIP"),
+                "branch_allowed": True,
             },
         ]
 
