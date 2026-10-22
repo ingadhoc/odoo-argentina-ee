@@ -6,9 +6,9 @@
 
 .. |icon| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-icon.png
 
-.. image:: https://img.shields.io/badge/license-AGPL--3-blue.png
-   :target: https://www.gnu.org/licenses/agpl
-   :alt: License: AGPL-3
+.. image:: https://img.shields.io/badge/license-LGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/lgpl
+   :alt: License: LGPL-3
 
 =====================
 Account Accountant UX
@@ -21,9 +21,11 @@ Account Accountant UX
 #. Agrega advertencia para posibles conciliaciones cruzadas entre partners.
 #. Desde el informe partner ledger, al ir a los journal items, vamos a la vista de apuntes que usamos para los menus "customer/supplier ledger" para unificar comportamiento (nativamente odoo manda a una _tree_grouped_partner)
 #. Agrega una estrategia de autoconciliacion que Permite reconciliar todas las lineas de un partner en un solo conciliacion parcial o total
-#. Modifica el botón "Due" de los partners para que sea siempre visible y modifica su nombre a "Libro Mayor de Empresa".
+#. Cambia el nombre del botón de seguimiento de los partners a "Follow-up Report" y agrega al lado el botón "Partner Ledger", que abre el Libro Mayor de Empresa del partner.
 #. Agrega campo booleano "Requerir Filtro Custom" en la configuración de reportes. Si está activo y no hay filtros de partners o filtros personalizados aplicados, el reporte no cargará datos y mostrará un mensaje de advertencia.
-#. Los reportes contables de partner (Partner Ledger, Aged Receivable, Aged payable) vienen configurados por defecto con el campo "Requerir Filtro Custom" activo (True), forzando al usuario a aplicar filtros antes de cargar los datos.
+#. Los reportes contables de partner (Partner Ledger, Aged Receivable, Aged payable) vienen con el campo "Requerir Filtro Custom" desactivado y con los filtros "Mostrar todo" y de apuntes disponibles, para activarlo desde la configuración del reporte.
+#. Agrega el filtro de fecha "Año calendario" (del 1/1 al 31/12) en los reportes que usan períodos fiscales.
+#. Agrega la exportación a CSV del Libro Mayor de Empresa, completamente desplegado y armado contacto por contacto, para períodos grandes que no entran en un XLSX. La exportación también se puede generar en segundo plano con ``documents_account_bg``.
 #. Responde "qué sucursales son la misma entidad fiscal" con el criterio propio definido en ``account_ux`` (``legal_entity_root_id``) en lugar del nativo, que toma el CUIT vacío como el del padre. De ahí cuelgan los reportes fiscales que ignoran el selector de compañías, el gate de los botones de export y las declaraciones.
 #. Agrega el sufijo de compañía a las cuentas al expandir una línea de un reporte financiero con más de una compañía seleccionada (la otra mitad está en ``account_multicompany_ux``).
 #. Agrega la opción de compañía "Bloquear conciliación entre diferentes compañías", que impide conciliar apuntes de compañías o sucursales distintas.
