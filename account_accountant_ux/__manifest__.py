@@ -44,14 +44,11 @@
         "wizards/account_reconcile_wizard.xml",
         "wizards/account_tax_settlement_wizard_views.xml",
         "data/account_accountant_data.xml",
-        "data/account_followup_report_data.xml",
         "views/account_journal_dashboard_view.xml",
     ],
     "assets": {
         "web.assets_backend": [
             "account_accountant_ux/static/src/components/account_report/filters/filters.js",
-            "account_accountant_ux/static/src/components/account_report/controller.js",
-            "account_accountant_ux/static/src/account_report_filters_patch.js",
             "account_accountant_ux/static/src/components/account_report/warnings.xml",
             "account_accountant_ux/static/src/move_line_list_reconcile_patch.js",
         ],

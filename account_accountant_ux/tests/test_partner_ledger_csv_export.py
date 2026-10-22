@@ -99,7 +99,7 @@ class TestPartnerLedgerCsvExport(AccountTestInvoicingCommon):
 
     def _balance(self, line, options):
         balance_index = next(i for i, col in enumerate(options["columns"]) if col["expression_label"] == "balance")
-        return line["columns"][balance_index].get("no_format") or 0.0
+        return line.columns[balance_index].no_format or 0.0
 
     def test_the_partner_ledger_offers_a_csv_export(self):
         """Offered with ``branch_allowed``, so it passes the gate of "Copy to Documents" too."""
@@ -126,15 +126,20 @@ class TestPartnerLedgerCsvExport(AccountTestInvoicingCommon):
     def test_the_csv_is_the_report_fully_unfolded(self):
         """Row by row, the same lines and running balances the printed report shows unfolded.
 
-        Except the "Total <partner>" under each unfolded partner: its row already carries them.
+        Except the "Total <partner>" under each unfolded partner: its row already carries them;
+        and the section line on top, whose figures the total row at the bottom repeats.
         The batch size is taken down to one partner to cross batch boundaries.
         """
         options = self._get_options()
         print_options = self.report.get_options({**options, "export_mode": "print", "unfold_all": True})
         expected = [
-            (line["name"], self._balance(line, print_options))
-            for line in self.report._get_lines(print_options)
-            if not (line.get("parent_id") and self.report._parse_line_id(line["id"])[-1][0] == "total")
+            (line.name, self._balance(line, print_options))
+            for line in self.report.with_context(no_format=True)._get_lines(print_options)
+            if not (
+                self.report._parse_line_id(line.id)[-1][0] == "total"
+                and self.report._parse_line_id(line.parent_id)[-1][1] == "res.partner"
+            )
+            and self.report._parse_line_id(line.id)[-1][1] != "account.report.line"
         ]
 
         with patch("odoo.addons.account_accountant_ux.models.account_partner_ledger.CSV_PARTNER_BATCH_SIZE", 1):

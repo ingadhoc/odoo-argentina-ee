@@ -7,5 +7,4 @@ from . import (
     account_change_lock_date,
     account_reconcile_wizard,
     account_tax_settlement_wizard,
-    followup_manual_reminder,
 )
