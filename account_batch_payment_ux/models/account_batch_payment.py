@@ -41,3 +41,7 @@ class AccountBatchPayment(models.Model):
             self.payment_ids.move_id.is_move_sent = False
         self.payment_ids.unmark_as_sent()
         self.write({"state": "draft"})
+
+    def _valid_payment_states(self):
+        super()._valid_payment_states()
+        return ["in_process", "paid"]
