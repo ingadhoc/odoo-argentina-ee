@@ -81,18 +81,26 @@ This module automatically:
 
 Some tax returns need configuration, described below.
 
-**SUSS (Agente) tax return:**
+**SIRE (Agente) tax return:**
 
-The "SUSS (Agente)" return only includes vendor payment withholdings ("Tipo de Impuesto" = "Retención Pago de Proveedor") whose tax group name contains "SUSS" (in upper or lower case), such as "Retención de SUSS" from the Argentinian chart of accounts or a "Retenciones SUSS" group created by hand.
+The "SIRE (Agente)" return is monthly and includes vendor payment withholdings ("Tipo de Impuesto" = "Retención Pago de Proveedor") in one of the "Sire" tax groups below (names matched in upper or lower case). The module creates three tax groups for companies with the "Responsable Inscripto" or "Exento" chart of accounts: "Retenciones de IVA Sire" (ARCA tribute code "06"), "Retenciones de Ganancias Beneficiarios del Exterior Sire" and "Retenciones de SUSS Sire" (ARCA tribute code "01"). The report has three lines:
 
-If a SUSS withholding tax is in a tax group whose name doesn't contain "SUSS", go to Accounting → Configuration → Taxes, open the tax and, in "Opciones avanzadas", set a "Grupo de impuestos" whose name contains "SUSS".
+#. "Retenciones de IVA": taxes with ARCA tribute code "06" in a tax group whose name contains "IVA Sire" or "VAT Sire", such as "Retenciones de IVA Sire".
+#. "Retenciones de ganancias beneficiarios del exterior": taxes with another ARCA tribute code in a tax group whose name contains "Beneficiarios del Exterior Sire" or "Beneficiaries Profits Sire", such as "Retenciones de Ganancias Beneficiarios del Exterior Sire".
+#. "Retenciones de SUSS por compra": taxes with another ARCA tribute code in a tax group whose name contains "SUSS Sire", such as "Retenciones de SUSS Sire".
 
-The "SUSS (Agente)" returns are created only when there are SUSS withholdings, and not right after changing the tax group. To create them, use one of these options:
+If a withholding tax is in another tax group (for example "Retención de SUSS" from the Argentinian chart of accounts), go to Accounting → Configuration → Taxes, open the tax and, in "Opciones avanzadas", set the right "Sire" tax group.
 
-#. Open the "SUSS (Agente)" report on a period with SUSS withholdings and click "Returns". This creates the returns of the whole fiscal year at once.
+VAT withholdings in an "IVA Sire" / "VAT Sire" tax group are left out of the "SICORE (Agente)" report and TXT, so the same withholding is not settled twice. Earnings withholdings ("Earnings" or "Earnings Scale" type) always go to "SICORE (Agente)", even in a "Sire" tax group: none of the "SIRE (Agente)" lines take them.
+
+The "SIRE (Agente)" returns are created only when there are SIRE withholdings, and not right after changing the tax group. To create them, use one of these options:
+
+#. Open the "SIRE (Agente)" report on a period with SIRE withholdings and click "Returns". This creates the returns of the whole fiscal year at once.
 #. Wait for the daily scheduled action that creates the tax returns.
 
-The Argentinian chart of accounts has no "SUSS withholdings to pay" account, so by default the closing entry uses the payable account of the ARCA contact. To use another account, set it in "AR Closing Account" on the "SUSS (Agente)" return type.
+By default the "SIRE (Agente)" closing entry uses the payable account of the ARCA contact. To use another account, set it in "AR Closing Account" on the "SIRE (Agente)" return type.
+
+The "SUSS (Agente)" report and return type were removed: SUSS withholdings are settled in "SIRE (Agente)".
 
 Usage
 =====
