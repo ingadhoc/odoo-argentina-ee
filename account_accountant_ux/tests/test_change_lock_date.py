@@ -33,13 +33,13 @@ class TestChangeLockDateBypass(AccountTestInvoicingCommon):
 
     def test_bypass_off_blocks_hard_lock_decrease(self):
         """Sin bypass: mover el hard lock date hacia atrás debe seguir fallando."""
-        self.env["ir.config_parameter"].sudo().set_param("account.bypass_lock_date_validation", "False")
+        self.env["ir.config_parameter"].sudo().set_str("account.bypass_lock_date_validation", "False")
         with self.assertRaisesRegex(UserError, "decrease or remove the Hard Lock Date"):
             self._wizard(self.older_date).change_lock_date()
 
     def test_bypass_on_allows_hard_lock_decrease(self):
         """Con bypass: el wizard debe permitir retroceder el hard lock date."""
-        self.env["ir.config_parameter"].sudo().set_param("account.bypass_lock_date_validation", "True")
+        self.env["ir.config_parameter"].sudo().set_str("account.bypass_lock_date_validation", "True")
         self._wizard(self.older_date).change_lock_date()
         self.assertEqual(self.company.hard_lock_date, self.older_date)
 

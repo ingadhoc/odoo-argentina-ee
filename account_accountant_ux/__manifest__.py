@@ -49,12 +49,9 @@
     "assets": {
         "web.assets_backend": [
             "account_accountant_ux/static/src/components/account_report/filters/filters.js",
-            "account_accountant_ux/static/src/components/account_report/controller.js",
-            "account_accountant_ux/static/src/account_report_filters_patch.js",
             "account_accountant_ux/static/src/components/account_report/warnings.xml",
         ]
     },
-    "post_init_hook": "post_init_hook",
     "demo": [],
     "installable": True,
     "auto_install": True,
