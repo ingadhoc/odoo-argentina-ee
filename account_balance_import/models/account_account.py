@@ -65,6 +65,48 @@ class AccountAccount(models.Model):
                     if account.opening_credit:
                         account._set_opening_debit_credit(account.opening_credit, "credit")
 
+    @api.model
+    def load(self, fields, data):
+        """On the balances import from the guide, list the accounts the file would create
+        before creating them. The test run shows them; the import is held back until the
+        same accounts were shown once."""
+        if not self.env.context.get("account_balance_import"):
+            return super().load(fields, data)
+
+        existing_ids = set(self.with_context(active_test=False).search([]).ids)
+        with self.env.cr.savepoint() as savepoint:
+            result = super().load(fields, data)
+            new_accounts = self.browse(result["ids"] or []).filtered(lambda account: account.id not in existing_ids)
+            new_codes = sorted(set(new_accounts.mapped("code")))
+            if not new_codes:
+                return result
+
+            accounts_list = ", ".join(new_accounts.mapped("display_name"))
+            if self.env.context.get("account_balance_import_dryrun"):
+                message = _(
+                    "The import will create these new accounts: %(accounts)s. "
+                    "Check that the codes are right; if they are, click Import.",
+                    accounts=accounts_list,
+                )
+                result["messages"] = result["messages"] + [
+                    {"type": "warning", "message": message, "account_codes": new_codes}
+                ]
+                return result
+            if set(new_codes) <= set(self.env.context.get("account_balance_announced_codes") or []):
+                return result
+
+            savepoint.close(rollback=True)
+            message = _(
+                "Nothing was imported: the file would create these new accounts: %(accounts)s. "
+                "Check that the codes are right; if they are, click Import again.",
+                accounts=accounts_list,
+            )
+            return {
+                "ids": False,
+                "messages": [{"type": "error", "message": message, "account_codes": new_codes}],
+                "nextrow": 0,
+            }
+
     @api.constrains("amount_in_currency")
     def _check_amount_in_currency(self):
         for account in self:
