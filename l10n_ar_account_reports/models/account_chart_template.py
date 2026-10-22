@@ -9,10 +9,37 @@
 # directory
 ##############################################################################
 from odoo import models
+from odoo.addons.account.models.chart_template import template
 
 
 class AccountChartTemplate(models.AbstractModel):
     _inherit = "account.chart.template"
+
+    @template(model="account.tax.group")
+    def _get_l10n_ar_account_reports_account_tax_group(self, template_code):
+        # Registered without template so only the company's own CSV is read: a parent
+        # template function would run after ar_ri and override its values with ar_ex ones.
+        if template_code in ("ar_ri", "ar_ex"):
+            return self._parse_csv(template_code, "account.tax.group", module="l10n_ar_account_reports")
+
+    def _l10n_ar_setup_sire_tax_group(self, companies):
+        """Create the "Sire" withholding tax groups on companies whose chart of accounts was
+        loaded before these groups existed (new companies get them from the template)."""
+        # Only on root companies: branches use the groups of their root.
+        for company in companies.root_id.filtered(lambda c: c.chart_template in ("ar_ri", "ar_ex")):
+            chart_template = self.with_company(company)
+            tax_groups = {
+                xml_id: values
+                for xml_id, values in chart_template._parse_csv(
+                    company.chart_template, "account.tax.group", module="l10n_ar_account_reports"
+                ).items()
+                if not chart_template.ref(xml_id, raise_if_not_found=False)
+            }
+            if not tax_groups:
+                continue
+            data = {"account.tax.group": tax_groups}
+            chart_template._load_data(data)
+            chart_template._load_translations(companies=company, template_data=data)
 
     def _load(self, template_code, company, install_demo, force_create=True):
         # Call the original method first

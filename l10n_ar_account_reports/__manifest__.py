@@ -19,7 +19,7 @@
 ##############################################################################
 {
     "name": "Accounting Reports Customized for Argentina",
-    "version": "19.0.1.23.0",
+    "version": "19.0.1.24.0",
     "category": "Accounting",
     "sequence": 14,
     "summary": "",
@@ -58,7 +58,7 @@
         "data/santa_fe_report.xml",
         "data/tucuman_report.xml",
         "data/sicore_report.xml",
-        "data/suss_report.xml",
+        "data/sire_report.xml",
         "data/inflation_adjustment_index.xml",
         "data/account_report_settlement.xml",
         "wizard/inflation_adjustment_view.xml",
