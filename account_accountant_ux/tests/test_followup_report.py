@@ -50,8 +50,8 @@ class TestFollowupReport(AccountTestInvoicingCommon):
                 },
             }
         )
-        options["unfolded_lines"] = [self.report._get_generic_line_id("res.partner", self.partner_a.id)]
-        line_names = [line["name"] for line in self.report._get_lines(options)]
+        options["unfold_all"] = True
+        line_names = [line.name for line in self.report._get_lines(options)]
         self.assertIn(invoice_open.name, line_names)
         self.assertNotIn(invoice_paid.name, line_names)
         self.assertNotIn(payment.move_id.name, line_names)
