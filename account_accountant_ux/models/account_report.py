@@ -43,10 +43,11 @@ class AccountReport(models.Model):
             if options.get("show_all_custom"):
                 return domain
 
-            # The per-partner reports (follow-up, customer statement) never need the gate.
+            # The reports with a line component of their own never need the gate.
             custom_display_config = self.custom_handler_model_name in (
                 "account.followup.report.handler",
                 "account.customer.statement.report.handler",
+                "account.journal.report.handler",
             )
             has_partner_filter = options.get("partner_ids") and len(options.get("partner_ids", [])) > 0
             has_aml_filter = False
