@@ -3,11 +3,9 @@
 # directory
 ##############################################################################
 import logging
-from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
 from odoo import api, fields, models
-from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
 
@@ -15,9 +13,6 @@ _logger = logging.getLogger(__name__)
 class ResCompany(models.Model):
     _inherit = "res.company"
 
-    currency_provider = fields.Selection(
-        selection_add=[("afip", "ARCA Web Service (Argentina)")],
-    )
     rate_perc = fields.Float(
         digits=(16, 4),
     )
@@ -26,49 +21,34 @@ class ResCompany(models.Model):
     )
     l10n_ar_last_currency_sync_date = fields.Date(string="ARCA Last Sync Date", readonly=True)
 
-    @api.model
-    def _compute_currency_provider(self):
-        """Overwrite to include new currency provider"""
-        super()._compute_currency_provider()
-        ar_companies = self.search([]).filtered(lambda company: company.country_id.code == "AR")
-        if ar_companies:
-            ar_companies.currency_provider = "afip"
-            _logger.info(
-                "Currency Provider configured as ARCA for next companies: %s",
-                ", ".join(ar_companies.mapped("name")),
-            )
+    def _l10n_ar_currency_today(self):
+        return fields.Date.context_today(self.with_context(tz="America/Argentina/Buenos_Aires"))
 
     @api.model
-    def re_check_afip_currency_rate(self):
-        """If ARCA provider and set interval unit daily then check the
-        currency multiple times at day (in case the default odoo cron couldn't
-        update the currency with ARCA)"""
-        today = fields.Date.context_today(self.with_context(tz="America/Argentina/Buenos_Aires"))
-        # Daily
-        self._filter_recheck_afip_currency_rate_companies(
+    def re_check_arca_currency_rate(self):
+        """Retry the ARCA rate update for the companies that did not get it yet
+        (in case the default odoo cron couldn't update the currency with ARCA)"""
+        today = self._l10n_ar_currency_today()
+        self._filter_recheck_arca_currency_rate_companies(
             currency_interval_unit="daily", l10n_ar_last_currency_sync_date=today
         )
-        # Weekly
-        last_seven_days = today - relativedelta(days=7)
-        self._filter_recheck_afip_currency_rate_companies(
+        self._filter_recheck_arca_currency_rate_companies(
             currency_interval_unit="weekly",
-            l10n_ar_last_currency_sync_date=last_seven_days,
+            l10n_ar_last_currency_sync_date=today - relativedelta(days=7),
             l10n_ar_force_create_rate=True,
         )
-        # Monthly
-        last_month = today - relativedelta(months=1)
-        self._filter_recheck_afip_currency_rate_companies(
-            currency_interval_unit="monthly", l10n_ar_last_currency_sync_date=last_month, l10n_ar_force_create_rate=True
+        self._filter_recheck_arca_currency_rate_companies(
+            currency_interval_unit="monthly",
+            l10n_ar_last_currency_sync_date=today - relativedelta(months=1),
+            l10n_ar_force_create_rate=True,
         )
 
-    def _filter_recheck_afip_currency_rate_companies(
+    def _filter_recheck_arca_currency_rate_companies(
         self, currency_interval_unit, l10n_ar_last_currency_sync_date, l10n_ar_force_create_rate=False
     ):
-        """Filters companies that use the 'arca' currency provider and require a currency rate update,
-        based on the provided interval unit and last sync date. If applicable, triggers the rate update."""
         self.search(
             [
-                ("currency_provider", "=", "afip"),
+                ("currency_provider", "=", "arca"),
                 ("currency_interval_unit", "=", currency_interval_unit),
                 "|",
                 ("l10n_ar_last_currency_sync_date", "<", l10n_ar_last_currency_sync_date),
@@ -76,69 +56,70 @@ class ResCompany(models.Model):
             ]
         ).with_context(l10n_ar_force_create_rate=l10n_ar_force_create_rate).update_currency_rates()
 
-    def update_currency_rates(self):
-        """When the first cron 'Currency: rate update' runs, we only need to update the rates for Argentine companies that have a daily update interval.
-        If the interval is weekly or monthly, the rates will be updated in the second cron 'Currency: Re Check Afip Currency Rate'."""
-        if not self.env.context.get("l10n_ar_force_create_rate"):
-            self = self.filtered(lambda c: c.currency_interval_unit == "daily")
-        super(ResCompany, self).update_currency_rates()
+    @api.model
+    def _l10n_ar_set_arca_currency_provider(self):
+        """On install, the native compute only sets the provider when the country changes"""
+        self.search([]).filtered(lambda c: c.country_id.code == "AR").currency_provider = "arca"
 
-    def _parse_afip_data(self, available_currencies):
-        """This method is used to update the currency rates using ARCA provider. Rates are given against AR"""
-        res = {}
-        currency_ars = self.env.ref("base.ARS")
-        today = fields.Date.context_today(self.with_context(tz="America/Argentina/Buenos_Aires"))
-        if currency_ars in available_currencies:
-            res[currency_ars.name] = (1.0, today)
-        available_currencies = available_currencies.filtered("l10n_ar_afip_code") - currency_ars
-        rate_date = today
-
-        valid_certificate = (
-            self.env["certificate.certificate"]
-            .search([("active", "=", True), ("date_end", ">=", today)])
-            .filtered(lambda c: c.country_code == "AR")
+    def _l10n_ar_get_arca_rate_company(self):
+        """Company used to connect to ARCA: one whose own ARCA certificate is valid, production first and
+        then the current one. The rates are the same for every company."""
+        companies = (
+            self.env["res.company"]
+            .search([("l10n_ar_afip_ws_crt_id", "!=", False), ("l10n_ar_afip_ws_key_id", "!=", False)])
+            .filtered(lambda c: c.l10n_ar_afip_ws_crt_id.active and c.l10n_ar_afip_ws_crt_id.is_valid)
         )
-        if self.env.company.l10n_ar_afip_ws_crt_id in valid_certificate:
-            # Dejamos self.env.company porque self puede ser un recordset de más de una compañía
-            company = self.env.company
-        else:
-            company = valid_certificate[:1].company_id if valid_certificate else False
+        return companies.sorted(lambda c: (c.l10n_ar_afip_ws_environment != "production", c != self.env.company, c.id))[
+            :1
+        ]
+
+    def _parse_arca_data(self, available_currencies):
+        """Ask ARCA with a single company and one currency at a time, so an error in one currency does not
+        stop the others, skipping the currencies without ARCA code. Only today's rates are kept, unless
+        l10n_ar_force_create_rate is in context."""
+        rate_date = fields.Date.to_string(self._l10n_ar_currency_today())
+        currency_ars = self.env.ref("base.ARS")
+        res = {currency_ars.name: (1.0, rate_date)}
+        arca_currencies = available_currencies.filtered("l10n_ar_afip_code") - currency_ars
+        if skipped := available_currencies - arca_currencies - currency_ars:
+            _logger.info("Currencies without ARCA code skipped: %s", ", ".join(skipped.mapped("name")))
+        if not arca_currencies:
+            return res
+
+        company = self._l10n_ar_get_arca_rate_company()
         if not company:
             _logger.info("No pudimos encontrar compañía con certificados de ARCA validos")
             return False
 
-        # Create a new environment with the company context
-        # Cambiamos el env de esta manera como vimos en este PR:
-        # https://github.com/odoo/enterprise/commit/4fdcf86392f#diff-05c14fb3f27dcc12f22adcfaef217ec6f80ef5ad0b0f37a4bd7b501fdc55461dR499
-        original_env = self.env
-        self.env = self.env(context=dict(self.env.context, allowed_company_ids=company.ids))
-        error = False
-        for currency in available_currencies:
+        force_create_rate = self.env.context.get("l10n_ar_force_create_rate")
+        for currency in arca_currencies:
             try:
-                # Obtain the currencies to be updated
-                _logger.info("Connecting to ARCA to update the currency rates for %s", currency.name)
-
-                # Do not pass company since we need to find the one that has certificate
-                afip_date, rate = currency.with_company(company)._l10n_ar_get_afip_ws_currency_rate()
-                afip_date = datetime.strptime(afip_date, "%Y%m%d").date() + relativedelta(days=1)
-                if afip_date == rate_date or self.env.context.get("l10n_ar_force_create_rate"):
-                    res.update({currency.name: (1.0 / rate, rate_date)})
-                    _logger.info("Currency %s %s %s", currency.name, rate_date, rate)
-                else:
-                    raise UserError(
-                        "Returned ARCA rate is not today's rate (%s, %s vs %s, %s)"
-                        % (afip_date.strftime("%A"), afip_date, rate_date.strftime("%A"), rate_date)
-                    )
-            except Exception as e:
-                _logger.info("Could not get rate for currency %s. This is what we get:\n%s", currency.name, e)
-                error = True
-        if available_currencies and not error:
-            for company in self.filtered(lambda x: x.currency_provider == "afip"):
-                company.l10n_ar_last_currency_sync_date = fields.Date.context_today(
-                    self.with_context(tz="America/Argentina/Buenos_Aires")
+                # The native method connects with the env company of the currencies, not of self
+                arca_res = super(ResCompany, company.with_company(company))._parse_arca_data(
+                    currency.with_company(company)
                 )
-        self.env = original_env
-        return res or False
+            except Exception as e:
+                _logger.info("Could not get the ARCA rate for %s:\n%s", currency.name, e)
+                continue
+            if currency.name not in arca_res:
+                continue
+            rate, arca_date = arca_res[currency.name]
+            if arca_date == rate_date or force_create_rate:
+                res[currency.name] = (rate, rate_date)
+            else:
+                _logger.info(
+                    "Returned ARCA rate for %s is not today's rate (%s vs %s)", currency.name, arca_date, rate_date
+                )
+        return res
+
+    def _l10n_ar_set_last_currency_sync_date(self, parsed_data):
+        """Mark the day as synced once the rates are created, only if there is today's rate for every
+        active currency with ARCA code. Without foreign currencies it is not marked, so the retry cron
+        takes a currency activated later in the day (it does not connect to ARCA meanwhile)."""
+        rate_date = fields.Date.to_string(self._l10n_ar_currency_today())
+        currencies = self.env["res.currency"].search([("l10n_ar_afip_code", "!=", False)]) - self.env.ref("base.ARS")
+        if currencies and all(c.name in parsed_data and str(parsed_data[c.name][1]) == rate_date for c in currencies):
+            self.l10n_ar_last_currency_sync_date = rate_date
 
     def _generate_currency_rates(self, parsed_data):
         """Sobre escribimos este método para lograr dos cosas:
@@ -151,7 +132,7 @@ class ResCompany(models.Model):
         """
         currency_rate = self.env["res.currency.rate"]
         currency_object = self.env["res.currency"]
-        ar_companies = self.filtered(lambda x: x.currency_provider == "afip")
+        ar_companies = self.filtered(lambda x: x.currency_provider == "arca")
 
         for company in ar_companies:
             new_parsed_data = parsed_data.copy()
@@ -175,3 +156,4 @@ class ResCompany(models.Model):
                     new_parsed_data[currency] = (rate, date_rate)
             super(ResCompany, company)._generate_currency_rates(new_parsed_data)
         super(ResCompany, self - ar_companies)._generate_currency_rates(parsed_data)
+        ar_companies._l10n_ar_set_last_currency_sync_date(parsed_data)
