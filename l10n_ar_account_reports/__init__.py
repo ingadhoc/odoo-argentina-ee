@@ -14,3 +14,4 @@ def _post_init_hook_configure_ar_account_tags(env):
     # Apply tags to accounts
     env["account.chart.template"]._l10n_ar_account_reports_setup_account_tags(companies)
     env["account.chart.template"]._l10n_ar_setup_return_type_accounts(companies)
+    env["account.chart.template"]._l10n_ar_setup_sire_tax_group(companies)

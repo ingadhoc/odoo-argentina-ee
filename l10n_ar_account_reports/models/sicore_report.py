@@ -163,6 +163,7 @@ class L10n_ArSicoreReportHandler(models.AbstractModel):
         # - Ganancias: tipo de retención earnings / earnings_scale.
         # - IVA: código de tributo ARCA "06" en el grupo de impuestos. El tipo de
         #   retención no sirve acá porque su selection no tiene opción de IVA.
+        #   VAT withholdings in a "VAT Sire" / "IVA Sire" tax group go to the SIRE return.
         # Restringimos a apuntes con pago para no procesar asientos manuales,
         # de los que no podemos sacar ni el comprobante ni la base de cálculo.
         domain = [
@@ -171,7 +172,11 @@ class L10n_ArSicoreReportHandler(models.AbstractModel):
             ("tax_line_id.l10n_ar_state_id", "=", False),
             "|",
             ("tax_line_id.l10n_ar_tax_type", "in", ["earnings", "earnings_scale"]),
+            "&",
+            "&",
             ("tax_line_id.l10n_ar_tribute_afip_code", "=", "06"),
+            ("tax_line_id.tax_group_id.name", "not ilike", "VAT Sire"),
+            ("tax_line_id.tax_group_id.name", "not ilike", "IVA Sire"),
         ] + get_standard_lines_domain(self.env["account.report"].get_report_company_ids(options), options)
         return self.env["account.move.line"].search(domain, order="date asc, id asc")
 

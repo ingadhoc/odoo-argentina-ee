@@ -1152,10 +1152,20 @@ msgid "SIRCAR (Agente)"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#: model:account.report,name:l10n_ar_account_reports.l10n_ar_suss_report
-#: model:account.return.type,name:l10n_ar_account_reports.suss_return_type
-msgid "SUSS (Agente)"
+#: model:account.report,name:l10n_ar_account_reports.l10n_ar_sire_report
+#: model:account.return.type,name:l10n_ar_account_reports.sire_return_type
+msgid "SIRE (Agente)"
 msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sire_report_foreign_profits_line
+msgid "Foreign Beneficiaries Profits Withholdings"
+msgstr "Retenciones de ganancias beneficiarios del exterior"
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sire_report_vat_withholding_line
+msgid "VAT Withholdings"
+msgstr "Retenciones de IVA"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_caba_report_caba_perceptions_line
