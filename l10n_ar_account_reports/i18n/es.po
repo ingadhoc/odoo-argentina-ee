@@ -1309,8 +1309,8 @@ msgid ""
 "accounts needed for the tax closing entry: %(tax_groups)s"
 msgstr ""
 "A los siguientes grupos de impuestos, utilizados por los impuestos de este "
-"período, les faltan las cuentas necesarias para el asiento de cierre: "
-"%(tax_groups)s"
+"período, les faltan las cuentas necesarias para el asiento de cierre: %"
+"(tax_groups)s"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1390,8 +1390,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/l10n_ar_vat_ret_perc_sufrido.py:0
 msgid ""
-"The regime code must have 3 digits in the configuration of tax "
-"\"%(tax_name)s\""
+"The regime code must have 3 digits in the configuration of tax \"%"
+"(tax_name)s\""
 msgstr ""
 "El código de régimen tiene que tener 3 dígitos en la configuración del "
 "impuesto \"%(tax_name)s\""
@@ -1551,21 +1551,21 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/caba_report.py:0
 msgid ""
-"You must set the IIBB registration type for contact "
-"\"%(partner_name)s\" (id: %(partner_id)s)"
+"You must set the IIBB registration type for contact \"%(partner_name)s\" "
+"(id: %(partner_id)s)"
 msgstr ""
-"Debe setear el tipo de inscripción de IIBB del contacto "
-"\"%(partner_name)s\" (id: %(partner_id)s)"
+"Debe setear el tipo de inscripción de IIBB del contacto \"%(partner_name)s\" "
+"(id: %(partner_id)s)"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
 msgid ""
-"You must set the IIBB registration type for partner "
-"\"%(partner_name)s\" (id: %(partner_id)s)"
+"You must set the IIBB registration type for partner \"%(partner_name)s\" "
+"(id: %(partner_id)s)"
 msgstr ""
-"Debe establecer el tipo de inscripción de IIBB del partner "
-"\"%(partner_name)s\" (id: %(partner_id)s)"
+"Debe establecer el tipo de inscripción de IIBB del partner \"%"
+"(partner_name)s\" (id: %(partner_id)s)"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
