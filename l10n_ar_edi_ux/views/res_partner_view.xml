@@ -4,9 +4,9 @@
     <record id="view_partner_form" model="ir.ui.view">
         <field name="name">res.partner.form</field>
         <field name="model">res.partner</field>
-        <field name="inherit_id" ref="l10n_latam_base.view_partner_latam_form"/>
+        <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='vat']" position="after">
+            <xpath expr="//div[@id='vat_div']/field[@name='vat']" position="after">
                 <span>
                     <button name="button_update_partner_data_from_afip" string="Update From ARCA" class="oe_link oe_inline" type="object" invisible="not vat or (not is_company and parent_id)"/>
                 </span>
@@ -16,7 +16,7 @@
 
     <!-- actividades_padron se ancla en actividad_monotributo_padron, que agrega
          l10n_ar_ux en otra rama de la herencia: heredamos de esa vista y no de
-         la de l10n_latam_base, para no depender del orden de combinación. -->
+         la de base, para no depender del orden de combinación. -->
     <record id="view_partner_property_form" model="ir.ui.view">
         <field name="name">res.partner.form</field>
         <field name="model">res.partner</field>

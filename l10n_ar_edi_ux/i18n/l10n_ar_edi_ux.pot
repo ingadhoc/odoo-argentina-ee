@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 19.0+e\n"
+"Project-Id-Version: Odoo Server 20.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 12:17+0000\n"
-"PO-Revision-Date: 2026-09-08 12:17+0000\n"
+"POT-Creation-Date: 2026-10-26 13:32+0000\n"
+"PO-Revision-Date: 2026-10-26 13:32+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -52,6 +52,176 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/account_move.py:0
 msgid ". Invalid boarding permissions: %s"
+msgstr ""
+
+#. module: l10n_ar_edi_ux
+#: model:ir.module.module,description:base.module_l10n_ar_edi_ux
+msgid ""
+".. |company| replace:: ADHOC SA\n"
+"\n"
+".. |company_logo| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-logo.png\n"
+"   :alt: ADHOC SA\n"
+"   :target: https://www.adhoc.com.ar\n"
+"\n"
+".. |icon| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-icon.png\n"
+"\n"
+".. image:: https://img.shields.io/badge/license-LGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/lgpl\n"
+"   :alt: License: LGPL-3\n"
+"\n"
+"===================================\n"
+"Argentinian Electronic Invoicing UX\n"
+"===================================\n"
+"\n"
+"This module extends the functionality of the Argentinian Electronic Invoicing (EDI) system with improved user experience features and additional functionality for ARCA (Federal Administration of Public Revenues) integration.\n"
+"\n"
+"**Main Features:**\n"
+"\n"
+"* **Improved Document Linking:** Enhanced auto-detection of linked documents when posting credit/debit notes to ARCA by checking linked invoices on sale orders. As l10n_ar_edi only asks for the associated period when no related invoice is found, a credit note coming from a sale order with an invoice does not ask for it\n"
+"* **ARCA Padron Integration:** Complete logic to connect to ARCA Padron using the connection approach from the enterprise l10n_ar_edi module\n"
+"* **Journal Web Services:** Adds functionality to electronic journals to get valid document types for selected web services with user-friendly response messages\n"
+"* **Export Documentation:** Support for boarding permissions (Permisos de embarque) in Argentinian electronic export invoices\n"
+"* **Partner Data Synchronization:** Automated partner data updates from ARCA Padron with configurable title case formatting\n"
+"* **ARCA WSDL Caching:** Caches the ARCA WSDL instead of downloading it on every web service call. Odoo builds the zeep client with no cache, so the WSDL (~77 KB) is downloaded again for each invoice when requesting CAE, adding around 0.65 seconds per document\n"
+"* **Invoice PDF Legend on pre-printed journals:** The legend that l10n_ar_edi prints below the Document Type letter (*Add Legend to Invoice PDF* setting) is not printed on journals with pre-printed stationery, which print no document letter\n"
+"\n"
+"ARCA Padron Integration\n"
+"=======================\n"
+"\n"
+"This module provides comprehensive integration with ARCA's Padron system for automatic partner data synchronization:\n"
+"\n"
+"**Configuration Options:**\n"
+"\n"
+"* **Title Case Formatting:** To disable title case formatting for ARCA retrieved data, create or modify the system parameter \"use_title_case_on_padron_afip\" with value False (default: True)\n"
+"\n"
+"**Data Update Methods:**\n"
+"\n"
+"1. **Individual Partner Update:** From any partner with a configured CUIT, click the \"Update from ARCA\" button to synchronize data\n"
+"2. **Bulk Update:** Use the mass update wizard available in the Partners menu\n"
+"\n"
+"**Testing Environment:**\n"
+"\n"
+"For testing environments, you can use the following test CUITs for the 'ws_sr_constancia_inscripcion' padron service:\n"
+"\n"
+"* Test CUITs are available in the internal Argentina Localization documentation, section \"Padrón Datos Contacto\"\n"
+"* Documentation link: https://www.adhoc.inc/odoo/action-7014/139/knowledge/2109\n"
+"\n"
+"**Boarding Permissions (Export Documentation):**\n"
+"\n"
+"For export invoices, you can configure boarding permissions (Permisos de embarque) that will be included in the electronic invoice when:\n"
+"\n"
+"* The invoice is an export invoice\n"
+"* The ARCA concept is 'Products / Definitive export of goods'\n"
+"\n"
+"Installation\n"
+"============\n"
+"\n"
+"This module is auto-installed when both l10n_ar_ux and l10n_ar_edi modules are installed.\n"
+"\n"
+"**Prerequisites:**\n"
+"\n"
+"* l10n_ar_ux: Argentina Localization UX\n"
+"* contacts: Contacts (the mass update wizard is in its configuration menu)\n"
+"* l10n_ar_edi: Argentina Electronic Invoicing (Enterprise)\n"
+"* account_accountant: Accounting features\n"
+"\n"
+"Configuration\n"
+"=============\n"
+"\n"
+"**ARCA Connection Setup:**\n"
+"\n"
+"1. Configure your ARCA certificates and connection settings in the base l10n_ar_edi module\n"
+"2. Ensure your company has a valid CUIT configured\n"
+"\n"
+"**Optional Settings:**\n"
+"\n"
+"1. **Padron Title Case:** Go to Settings > Technical > Parameters > System Parameters\n"
+"\n"
+"   * Create parameter: `use_title_case_on_padron_afip`\n"
+"   * Value: `False` to disable title case formatting (default: `True`)\n"
+"\n"
+"2. **Foreign Currency Policy:** The module automatically sets the default foreign currency payment policy for Argentine companies during installation\n"
+"\n"
+"3. **ARCA WSDL Cache:** Go to Settings > Technical > Parameters > System Parameters\n"
+"\n"
+"   * Create parameter: `l10n_ar_edi_ux.wsdl_cache_ttl`\n"
+"   * Value: cache lifetime in seconds (default: `300`)\n"
+"   * Value `0` disables the cache and restores the native l10n_ar_edi behaviour, downloading the WSDL on every call. No restart is needed\n"
+"   * The WSDL is cached per worker process. Only the WSDL document is cached, never the credentials: the ARCA token and sign are read from the connection record on every call\n"
+"\n"
+"4. **Invoice PDF Legend:** It is configured with the l10n_ar_edi *Add Legend to Invoice PDF* setting. This module only keeps it off pre-printed journals\n"
+"\n"
+"**Boarding Permissions Setup:**\n"
+"\n"
+"1. Go to Accounting > Configuration > Argentina > Boarding Permissions\n"
+"2. Create boarding permissions for your export operations\n"
+"3. Associate them with export invoices as needed\n"
+"\n"
+"Usage\n"
+"=====\n"
+"\n"
+"**Partner Data Synchronization:**\n"
+"\n"
+"1. **Individual Update:**\n"
+"\n"
+"   * Open any partner record with a CUIT\n"
+"   * Click \"Update from ARCA\" button\n"
+"   * Review and confirm the data in the wizard\n"
+"\n"
+"2. **Electronic Journal Configuration:**\n"
+"\n"
+"   * Go to Accounting > Configuration > Journals\n"
+"   * Select an electronic journal\n"
+"   * Use the \"Get Valid Document Types\" button to retrieve ARCA web service information\n"
+"\n"
+"**Export Invoices with Boarding Permissions:**\n"
+"\n"
+"1. Create an export invoice\n"
+"2. Set the ARCA concept to \"Products / Definitive export of goods\"\n"
+"3. Add the relevant boarding permissions in the \"Permiso de Embarque\" field\n"
+"4. The boarding permission information will be included in the electronic invoice\n"
+"\n"
+".. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas\n"
+"   :alt: Try me on Runbot\n"
+"   :target: http://runbot.adhoc.com.ar/\n"
+"\n"
+"Bug Tracker\n"
+"===========\n"
+"\n"
+"Bugs are tracked on `GitHub Issues\n"
+"<https://github.com/ingadhoc/odoo-argentina-ee/issues>`_. In case of trouble, please\n"
+"check there if your issue has already been reported. If you spotted it first,\n"
+"help us by providing a detailed and welcomed feedback.\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Authors\n"
+"~~~~~~~\n"
+"\n"
+"* ADHOC SA\n"
+"\n"
+"Contributors\n"
+"~~~~~~~~~~~~\n"
+"\n"
+"* ADHOC SA Development Team\n"
+"\n"
+"Images\n"
+"------\n"
+"\n"
+"* |company| |icon|\n"
+"\n"
+"Maintainer\n"
+"----------\n"
+"\n"
+"|company_logo|\n"
+"\n"
+"This module is maintained by |company|.\n"
+"\n"
+"|company| specializes in Odoo implementations and provides comprehensive ERP solutions\n"
+"for businesses in Argentina and Latin America.\n"
+"\n"
+"To contribute to this module, please visit https://www.adhoc.com.ar.\n"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -157,11 +327,6 @@ msgid "Account import summary view"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
-msgid "Add Legend to Invoice PDF"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
 #: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__l10n_ar_arca_journal_wizard_line__shared_to_branches__all
 msgid "All branches"
 msgstr ""
@@ -172,20 +337,8 @@ msgid "Are you sure to execute the automatic update of your partners ?"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_asoc_period_end
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_asoc_period_end
-msgid "Associated Perdio End"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_move_form
-msgid "Associated Period"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_asoc_period_start
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_asoc_period_start
-msgid "Associated Period Start"
+#: model:ir.module.module,shortdesc:base.module_l10n_ar_edi_ux
+msgid "Argentinian Electronic Invoicing UX"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -308,10 +461,6 @@ msgstr ""
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_res_company
-msgid "Companies"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__company_id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard__company_id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__company_id
@@ -611,12 +760,6 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_company__l10n_ar_invoice_pdf_legend_ux
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_config_settings__l10n_ar_invoice_pdf_legend_ux
-msgid "Invoice PDF Legend"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
 msgid "Invoices Verification (WSCDC)"
@@ -663,11 +806,6 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__write_date
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__write_date
 msgid "Last Updated on"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
-msgid "Legend"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -739,11 +877,6 @@ msgid "Only this fields are going to be retrived and updated"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_company__l10n_ar_invoice_pdf_legend_ux__operation_subject_to_withholding
-msgid "Operation Subject to Withholding"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
 #: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_partner_update_from_padron_wizard__state__option
 msgid "Option"
 msgstr ""
@@ -761,11 +894,6 @@ msgstr ""
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__partner_ids
 msgid "Partners"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
-#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_company__l10n_ar_invoice_pdf_legend_ux__payment_on_informed_cbu
-msgid "Payment on Informed CBU"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -827,17 +955,6 @@ msgid "Selection"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_asoc_period_end
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_asoc_period_start
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_asoc_period_end
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_asoc_period_start
-msgid ""
-"Set this field if it is you are reporting debit/credit note and have not "
-"related invoice. IMPORTANT: This is only applies on \"Electronic Invoice - "
-"Web Service\""
-msgstr ""
-
-#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__shared_to_branches
 msgid "Shared to Branches"
 msgstr ""
@@ -874,19 +991,6 @@ msgid ""
 "The partner %s does not have an ARCA Responsibility configured. Please set "
 "the ARCA Responsibility Type in the partner's configuration to validate the "
 "invoice."
-msgstr ""
-
-#. module: l10n_ar_edi_ux
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_company__l10n_ar_invoice_pdf_legend_ux
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_config_settings__l10n_ar_invoice_pdf_legend_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
-msgid ""
-"The selected legend is printed below the Document Type letter on the Invoice"
-" PDF of documents with letter A and M. It is set per company: branches do "
-"not inherit the legend of their parent company, they only start from its "
-"value when they are created. It supersedes the l10n_ar_edi 'Add Withholding "
-"Legend to Invoice PDF' setting, whose value is left as it was and stops "
-"being read, so uninstalling this module restores it."
 msgstr ""
 
 #. module: l10n_ar_edi_ux
@@ -1081,11 +1185,6 @@ msgstr ""
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_res_partner_update_from_padron_wizard
 msgid "res.partner.update.from.padron.wizard"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_move_form
-msgid "to"
 msgstr ""
 
 #. module: l10n_ar_edi_ux

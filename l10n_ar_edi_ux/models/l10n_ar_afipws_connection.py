@@ -44,7 +44,7 @@ class L10nArAfipwsConnection(models.Model):
         WSDL en cada cliente; como esto se llama por factura, son ~0,65 s por comprobante.
         El TTL sale del parametro `l10n_ar_edi_ux.wsdl_cache_ttl`; en cero delega en `super()`.
         """
-        ttl = int(self.env["ir.config_parameter"].sudo().get_param(WSDL_CACHE_TTL_PARAM, DEFAULT_WSDL_CACHE_TTL))
+        ttl = self.env["ir.config_parameter"].sudo().get_int(WSDL_CACHE_TTL_PARAM, DEFAULT_WSDL_CACHE_TTL)
         if ttl <= 0:
             return super()._get_client(return_transport=return_transport)
 

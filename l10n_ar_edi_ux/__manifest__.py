@@ -1,17 +1,17 @@
 {
     "name": "Argentinian Electronic Invoicing UX",
-    "version": "19.0.1.9.0",
+    "version": "20.0.1.0.0",
     "category": "Localization/Argentina",
     "sequence": 14,
     "author": "ADHOC SA",
     "website": "www.adhoc.com.ar",
-    "license": "AGPL-3",
+    "license": "LGPL-3",
     "summary": "",
     "depends": [
         "account_ux",  # shared_to_branches, que este asistente escribe en el diario que crea
         "l10n_ar_ux",
+        "contacts",  # its menu hosts the padron wizard; came through l10n_latam_base up to 19.0
         "l10n_ar_edi",
-        "l10n_ar_reports_simple",
         "account_accountant",
         "account_base_import",
     ],
@@ -26,12 +26,12 @@
         "views/res_config_settings_view.xml",
         "views/l10n_ar_boarding_permission_view.xml",
         "views/report_invoice.xml",
-        "security/ir.model.access.csv",
+        "security/ir.access.csv",
     ],
     "demo": [
         "demo/res_partner_demo.xml",
     ],
-    "installable": False,
+    "installable": True,
     "auto_install": True,
     "application": False,
     "post_init_hook": "post_init_hook",
