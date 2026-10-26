@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-16 14:05+0000\n"
-"PO-Revision-Date: 2026-10-16 14:05+0000\n"
+"POT-Creation-Date: 2026-10-26 16:49+0000\n"
+"PO-Revision-Date: 2026-10-26 16:49+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -601,6 +601,11 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sire_report_foreign_profits_line
+msgid "Foreign Beneficiaries Profits Withholdings"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:ir.model.fields.selection,name:l10n_ar_account_reports.selection__account_return_type__deadline_periodicity__fortnightly
 #: model:ir.model.fields.selection,name:l10n_ar_account_reports.selection__account_return_type__default_deadline_periodicity__fortnightly
 msgid "Fortnightly"
@@ -1078,16 +1083,6 @@ msgid "SIRE (Agente)"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sire_report_foreign_profits_line
-msgid "Foreign Beneficiaries Profits Withholdings"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sire_report_vat_withholding_line
-msgid "VAT Withholdings"
-msgstr ""
-
-#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_caba_report_caba_perceptions_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_misiones_report_misiones_perceptions_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_pba_report_pba_perceptions_line
@@ -1376,6 +1371,11 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/sircar_report.py:0
 msgid "Unrecognized document type"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sire_report_vat_withholding_line
+msgid "VAT Withholdings"
 msgstr ""
 
 #. module: l10n_ar_account_reports
