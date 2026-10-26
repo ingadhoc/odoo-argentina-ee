@@ -33,19 +33,27 @@ class ResCompany(models.Model):
         self._filter_recheck_arca_currency_rate_companies(
             currency_interval_unit="daily", l10n_ar_last_currency_sync_date=today
         )
+        # Weekly and monthly companies are due on their day: if today's rate is not published yet, they take
+        # the last one that day, so their day does not move
         self._filter_recheck_arca_currency_rate_companies(
             currency_interval_unit="weekly",
             l10n_ar_last_currency_sync_date=today - relativedelta(days=7),
             l10n_ar_force_create_rate=True,
+            sync_date_operator="<=",
         )
         self._filter_recheck_arca_currency_rate_companies(
             currency_interval_unit="monthly",
             l10n_ar_last_currency_sync_date=today - relativedelta(months=1),
             l10n_ar_force_create_rate=True,
+            sync_date_operator="<=",
         )
 
     def _filter_recheck_arca_currency_rate_companies(
-        self, currency_interval_unit, l10n_ar_last_currency_sync_date, l10n_ar_force_create_rate=False
+        self,
+        currency_interval_unit,
+        l10n_ar_last_currency_sync_date,
+        l10n_ar_force_create_rate=False,
+        sync_date_operator="<",
     ):
         self.search(
             [
@@ -53,7 +61,7 @@ class ResCompany(models.Model):
                 ("currency_provider", "=", "arca"),
                 ("currency_interval_unit", "=", currency_interval_unit),
                 "|",
-                ("l10n_ar_last_currency_sync_date", "<", l10n_ar_last_currency_sync_date),
+                ("l10n_ar_last_currency_sync_date", sync_date_operator, l10n_ar_last_currency_sync_date),
                 ("l10n_ar_last_currency_sync_date", "=", False),
             ]
         ).with_context(l10n_ar_force_create_rate=l10n_ar_force_create_rate).update_currency_rates()

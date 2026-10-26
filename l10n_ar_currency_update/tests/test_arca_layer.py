@@ -5,6 +5,7 @@
 from datetime import datetime, timedelta
 from unittest.mock import MagicMock, patch
 
+from dateutil.relativedelta import relativedelta
 from odoo import fields
 from odoo.addons.currency_rate_live.models.res_config_settings import ResCompany as CurrencyRateLiveResCompany
 from odoo.addons.l10n_ar_edi.models.res_company import ResCompany as L10nArEdiResCompany
@@ -292,6 +293,46 @@ class TestArcaLayer(TransactionCase):
             self.env["res.company"].re_check_arca_currency_rate()
         self.assertIn(self.company_1, updated)
         self.assertNotIn(self.company_2, updated)
+
+    def test_recheck_cron_weekly_and_monthly_on_their_day(self):
+        """Weekly and monthly companies are retried on their day, with the last published rate, so their
+        day does not move when today's rate is not published yet"""
+        self.company_1.write(
+            {"currency_interval_unit": "weekly", "l10n_ar_last_currency_sync_date": self.today - timedelta(days=7)}
+        )
+        self.company_2.write(
+            {
+                "currency_interval_unit": "monthly",
+                "l10n_ar_last_currency_sync_date": self.today - relativedelta(months=1),
+            }
+        )
+        weekly_not_due = self.env["res.company"].create(
+            {"name": "AR Company 3", "country_id": self.env.ref("base.ar").id, "currency_id": self.ARS.id}
+        )
+        weekly_not_due.write(
+            {
+                "currency_provider": "arca",
+                "currency_interval_unit": "weekly",
+                "l10n_ar_last_currency_sync_date": self.today - timedelta(days=6),
+            }
+        )
+        updated = self.env["res.company"]
+        forced = self.env["res.company"]
+
+        def fake_update(companies):
+            nonlocal updated, forced
+            updated |= companies
+            if companies.env.context.get("l10n_ar_force_create_rate"):
+                forced |= companies
+            return True
+
+        with patch.object(
+            type(self.env["res.company"]), "update_currency_rates", autospec=True, side_effect=fake_update
+        ):
+            self.env["res.company"].re_check_arca_currency_rate()
+        self.assertIn(self.company_1, forced)
+        self.assertIn(self.company_2, forced)
+        self.assertNotIn(weekly_not_due, updated)
 
     def test_recheck_cron_skips_branches(self):
         """Rates are only created for main companies, so the retry cron does not take branches"""
