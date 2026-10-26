@@ -13,6 +13,8 @@ from odoo.addons.l10n_ar_edi.models.res_currency import ResCurrency as L10nArEdi
 from odoo.exceptions import UserError
 from odoo.tests import TransactionCase, tagged
 
+LOGGER = "odoo.addons.l10n_ar_currency_update.models.res_company"
+
 
 @tagged("post_install", "-at_install")
 class TestArcaLayer(TransactionCase):
@@ -94,9 +96,11 @@ class TestArcaLayer(TransactionCase):
 
     def test_error_in_one_currency_keeps_the_others(self):
         """An ARCA error in one currency does not stop the update of the other ones, as in 19.0"""
-        res, calls = self._parse(
-            self.company_1, {"USD": (0.001, self.today_str), "EUR": UserError("ARCA error for EUR")}
-        )
+        with self.assertLogs(LOGGER, level="WARNING") as logs:
+            res, calls = self._parse(
+                self.company_1, {"USD": (0.001, self.today_str), "EUR": UserError("ARCA error for EUR")}
+            )
+        self.assertIn("ARCA error for EUR", logs.output[0])
         self.assertEqual(len(calls), 2)
         self.assertEqual(res["USD"], (0.001, self.today_str))
         self.assertNotIn("EUR", res)
@@ -126,25 +130,29 @@ class TestArcaLayer(TransactionCase):
         """With l10n_ar_force_create_rate the last published rate is kept, dated today"""
         res, _calls = self._parse(
             self.company_1,
-            {"USD": (0.001, self.yesterday_str)},
+            {"USD": (0.001, self.yesterday_str), "EUR": (0.0009, self.yesterday_str)},
             context={"l10n_ar_force_create_rate": True},
         )
         self.assertEqual(res["USD"], (0.001, self.today_str))
 
     def test_no_company_with_valid_certificate(self):
         """Without a company with a valid certificate only ARS is returned, and the update does not fail"""
-        res, calls = self._parse(self.company_1, {}, rate_company=self.env["res.company"])
+        with self.assertLogs(LOGGER, level="WARNING"):
+            res, calls = self._parse(self.company_1, {}, rate_company=self.env["res.company"])
         self.assertEqual(res, {"ARS": (1.0, self.today_str)})
         self.assertFalse(calls)
-        with patch.object(
-            type(self.env["res.company"]), "_l10n_ar_get_arca_rate_company", return_value=self.env["res.company"]
+        with (
+            patch.object(
+                type(self.env["res.company"]), "_l10n_ar_get_arca_rate_company", return_value=self.env["res.company"]
+            ),
+            self.assertLogs(LOGGER, level="WARNING"),
         ):
             self.assertTrue(self.company_1.update_currency_rates())
         self.assertFalse(self.company_1.l10n_ar_last_currency_sync_date)
 
     def test_connection_error(self):
         """A connection error stops asking ARCA, so no currency is asked, and only ARS is returned"""
-        with self.assertLogs("odoo.addons.l10n_ar_currency_update.models.res_company", level="WARNING"):
+        with self.assertLogs(LOGGER, level="WARNING"):
             res, calls = self._parse(
                 self.company_1, {"USD": (0.001, self.today_str)}, connection_error=UserError("WSAA error")
             )
@@ -163,7 +171,7 @@ class TestArcaLayer(TransactionCase):
                     L10nArEdiResCurrency,
                     "_l10n_ar_get_afip_ws_currency_rate",
                     autospec=True,
-                    return_value=(None, False),
+                    return_value=((self.today - timedelta(days=1)).strftime("%Y%m%d"), 1000.0),
                 ),
             ):
                 self.company_1._parse_arca_data(self.ARS | self.USD | self.EUR)
