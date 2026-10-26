@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-09-08 12:17+0000\n"
-"PO-Revision-Date: 2026-05-28 00:25+0000\n"
+"POT-Creation-Date: 2026-10-26 13:32+0000\n"
+"PO-Revision-Date: 2026-10-26 13:32+0000\n"
 "Last-Translator: julia elizondo <jue@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
 "argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_edi_ux/es/>\n"
@@ -63,11 +63,344 @@ msgid ". Invalid boarding permissions: %s"
 msgstr ". Permiso de embarque inválidos: %s"
 
 #. module: l10n_ar_edi_ux
+#: model:ir.module.module,description:base.module_l10n_ar_edi_ux
+msgid ""
+".. |company| replace:: ADHOC SA\n"
+"\n"
+".. |company_logo| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-logo.png\n"
+"   :alt: ADHOC SA\n"
+"   :target: https://www.adhoc.com.ar\n"
+"\n"
+".. |icon| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-icon.png\n"
+"\n"
+".. image:: https://img.shields.io/badge/license-LGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/lgpl\n"
+"   :alt: License: LGPL-3\n"
+"\n"
+"===================================\n"
+"Argentinian Electronic Invoicing UX\n"
+"===================================\n"
+"\n"
+"This module extends the functionality of the Argentinian Electronic Invoicing (EDI) system with improved user experience features and additional functionality for ARCA (Federal Administration of Public Revenues) integration.\n"
+"\n"
+"**Main Features:**\n"
+"\n"
+"* **Improved Document Linking:** Enhanced auto-detection of linked documents when posting credit/debit notes to ARCA by checking linked invoices on sale orders. As l10n_ar_edi only asks for the associated period when no related invoice is found, a credit note coming from a sale order with an invoice does not ask for it\n"
+"* **ARCA Padron Integration:** Complete logic to connect to ARCA Padron using the connection approach from the enterprise l10n_ar_edi module\n"
+"* **Journal Web Services:** Adds functionality to electronic journals to get valid document types for selected web services with user-friendly response messages\n"
+"* **Export Documentation:** Support for boarding permissions (Permisos de embarque) in Argentinian electronic export invoices\n"
+"* **Partner Data Synchronization:** Automated partner data updates from ARCA Padron with configurable title case formatting\n"
+"* **ARCA WSDL Caching:** Caches the ARCA WSDL instead of downloading it on every web service call. Odoo builds the zeep client with no cache, so the WSDL (~77 KB) is downloaded again for each invoice when requesting CAE, adding around 0.65 seconds per document\n"
+"* **Invoice PDF Legend on pre-printed journals:** The legend that l10n_ar_edi prints below the Document Type letter (*Add Legend to Invoice PDF* setting) is not printed on journals with pre-printed stationery, which print no document letter\n"
+"\n"
+"ARCA Padron Integration\n"
+"=======================\n"
+"\n"
+"This module provides comprehensive integration with ARCA's Padron system for automatic partner data synchronization:\n"
+"\n"
+"**Configuration Options:**\n"
+"\n"
+"* **Title Case Formatting:** To disable title case formatting for ARCA retrieved data, create or modify the system parameter \"use_title_case_on_padron_afip\" with value False (default: True)\n"
+"\n"
+"**Data Update Methods:**\n"
+"\n"
+"1. **Individual Partner Update:** From any partner with a configured CUIT, click the \"Update from ARCA\" button to synchronize data\n"
+"2. **Bulk Update:** Use the mass update wizard available in the Partners menu\n"
+"\n"
+"**Testing Environment:**\n"
+"\n"
+"For testing environments, you can use the following test CUITs for the 'ws_sr_constancia_inscripcion' padron service:\n"
+"\n"
+"* Test CUITs are available in the internal Argentina Localization documentation, section \"Padrón Datos Contacto\"\n"
+"* Documentation link: https://www.adhoc.inc/odoo/action-7014/139/knowledge/2109\n"
+"\n"
+"**Boarding Permissions (Export Documentation):**\n"
+"\n"
+"For export invoices, you can configure boarding permissions (Permisos de embarque) that will be included in the electronic invoice when:\n"
+"\n"
+"* The invoice is an export invoice\n"
+"* The ARCA concept is 'Products / Definitive export of goods'\n"
+"\n"
+"Installation\n"
+"============\n"
+"\n"
+"This module is auto-installed when both l10n_ar_ux and l10n_ar_edi modules are installed.\n"
+"\n"
+"**Prerequisites:**\n"
+"\n"
+"* l10n_ar_ux: Argentina Localization UX\n"
+"* contacts: Contacts (the mass update wizard is in its configuration menu)\n"
+"* l10n_ar_edi: Argentina Electronic Invoicing (Enterprise)\n"
+"* account_accountant: Accounting features\n"
+"\n"
+"Configuration\n"
+"=============\n"
+"\n"
+"**ARCA Connection Setup:**\n"
+"\n"
+"1. Configure your ARCA certificates and connection settings in the base l10n_ar_edi module\n"
+"2. Ensure your company has a valid CUIT configured\n"
+"\n"
+"**Optional Settings:**\n"
+"\n"
+"1. **Padron Title Case:** Go to Settings > Technical > Parameters > System Parameters\n"
+"\n"
+"   * Create parameter: `use_title_case_on_padron_afip`\n"
+"   * Value: `False` to disable title case formatting (default: `True`)\n"
+"\n"
+"2. **Foreign Currency Policy:** The module automatically sets the default foreign currency payment policy for Argentine companies during installation\n"
+"\n"
+"3. **ARCA WSDL Cache:** Go to Settings > Technical > Parameters > System Parameters\n"
+"\n"
+"   * Create parameter: `l10n_ar_edi_ux.wsdl_cache_ttl`\n"
+"   * Value: cache lifetime in seconds (default: `300`)\n"
+"   * Value `0` disables the cache and restores the native l10n_ar_edi behaviour, downloading the WSDL on every call. No restart is needed\n"
+"   * The WSDL is cached per worker process. Only the WSDL document is cached, never the credentials: the ARCA token and sign are read from the connection record on every call\n"
+"\n"
+"4. **Invoice PDF Legend:** It is configured with the l10n_ar_edi *Add Legend to Invoice PDF* setting. This module only keeps it off pre-printed journals\n"
+"\n"
+"**Boarding Permissions Setup:**\n"
+"\n"
+"1. Go to Accounting > Configuration > Argentina > Boarding Permissions\n"
+"2. Create boarding permissions for your export operations\n"
+"3. Associate them with export invoices as needed\n"
+"\n"
+"Usage\n"
+"=====\n"
+"\n"
+"**Partner Data Synchronization:**\n"
+"\n"
+"1. **Individual Update:**\n"
+"\n"
+"   * Open any partner record with a CUIT\n"
+"   * Click \"Update from ARCA\" button\n"
+"   * Review and confirm the data in the wizard\n"
+"\n"
+"2. **Electronic Journal Configuration:**\n"
+"\n"
+"   * Go to Accounting > Configuration > Journals\n"
+"   * Select an electronic journal\n"
+"   * Use the \"Get Valid Document Types\" button to retrieve ARCA web service information\n"
+"\n"
+"**Export Invoices with Boarding Permissions:**\n"
+"\n"
+"1. Create an export invoice\n"
+"2. Set the ARCA concept to \"Products / Definitive export of goods\"\n"
+"3. Add the relevant boarding permissions in the \"Permiso de Embarque\" field\n"
+"4. The boarding permission information will be included in the electronic invoice\n"
+"\n"
+".. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas\n"
+"   :alt: Try me on Runbot\n"
+"   :target: http://runbot.adhoc.com.ar/\n"
+"\n"
+"Bug Tracker\n"
+"===========\n"
+"\n"
+"Bugs are tracked on `GitHub Issues\n"
+"<https://github.com/ingadhoc/odoo-argentina-ee/issues>`_. In case of trouble, please\n"
+"check there if your issue has already been reported. If you spotted it first,\n"
+"help us by providing a detailed and welcomed feedback.\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Authors\n"
+"~~~~~~~\n"
+"\n"
+"* ADHOC SA\n"
+"\n"
+"Contributors\n"
+"~~~~~~~~~~~~\n"
+"\n"
+"* ADHOC SA Development Team\n"
+"\n"
+"Images\n"
+"------\n"
+"\n"
+"* |company| |icon|\n"
+"\n"
+"Maintainer\n"
+"----------\n"
+"\n"
+"|company_logo|\n"
+"\n"
+"This module is maintained by |company|.\n"
+"\n"
+"|company| specializes in Odoo implementations and provides comprehensive ERP solutions\n"
+"for businesses in Argentina and Latin America.\n"
+"\n"
+"To contribute to this module, please visit https://www.adhoc.com.ar.\n"
+msgstr ""
+".. |company| replace:: ADHOC SA\n"
+"\n"
+".. |company_logo| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-logo.png\n"
+"   :alt: ADHOC SA\n"
+"   :target: https://www.adhoc.com.ar\n"
+"\n"
+".. |icon| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-icon.png\n"
+"\n"
+".. image:: https://img.shields.io/badge/license-LGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/lgpl\n"
+"   :alt: License: LGPL-3\n"
+"\n"
+"=====================================\n"
+"Facturación electrónica argentina UX\n"
+"=====================================\n"
+"\n"
+"Este módulo extiende la facturación electrónica argentina (EDI) con mejoras de usabilidad y funcionalidades adicionales para la integración con ARCA (Agencia de Recaudación y Control Aduanero).\n"
+"\n"
+"**Funcionalidades principales:**\n"
+"\n"
+"* **Vinculación de documentos mejorada:** Detecta mejor los documentos vinculados al validar notas de crédito/débito en ARCA, buscando las facturas vinculadas a los pedidos de venta. Como l10n_ar_edi solo pide el período asociado cuando no encuentra una factura relacionada, una nota de crédito que sale de un pedido de venta con factura no lo pide\n"
+"* **Integración con el padrón de ARCA:** Lógica completa para conectarse al padrón de ARCA usando la conexión del módulo enterprise l10n_ar_edi\n"
+"* **Webservices de los diarios:** Permite consultar desde los diarios electrónicos los tipos de documento válidos para cada webservice, con mensajes de respuesta legibles\n"
+"* **Documentación de exportación:** Soporte de permisos de embarque en las facturas electrónicas de exportación argentinas\n"
+"* **Sincronización de contactos:** Actualización automática de los datos de los contactos desde el padrón de ARCA, con formato de mayúsculas iniciales configurable\n"
+"* **Caché del WSDL de ARCA:** Guarda en caché el WSDL de ARCA en lugar de descargarlo en cada llamada a un webservice. Odoo arma el cliente zeep sin caché, así que el WSDL (~77 KB) se descarga de nuevo por cada factura al pedir el CAE, lo que suma alrededor de 0,65 segundos por comprobante\n"
+"* **Leyenda del PDF de la factura en diarios preimpresos:** La leyenda que l10n_ar_edi imprime debajo de la letra del tipo de documento (opción *Add Legend to Invoice PDF*) no se imprime en los diarios con formulario preimpreso, que no imprimen la letra del documento\n"
+"\n"
+"Integración con el padrón de ARCA\n"
+"=================================\n"
+"\n"
+"Este módulo integra el padrón de ARCA para sincronizar automáticamente los datos de los contactos:\n"
+"\n"
+"**Opciones de configuración:**\n"
+"\n"
+"* **Formato de mayúsculas iniciales:** Para desactivar el formato de mayúsculas iniciales en los datos que se obtienen de ARCA, cree o modifique el parámetro del sistema \"use_title_case_on_padron_afip\" con el valor False (por defecto: True)\n"
+"\n"
+"**Formas de actualizar los datos:**\n"
+"\n"
+"1. **Actualización individual:** Desde cualquier contacto con CUIT configurado, haga clic en el botón \"Update from ARCA\" para sincronizar los datos\n"
+"2. **Actualización masiva:** Use el asistente de actualización masiva disponible en el menú de Contactos\n"
+"\n"
+"**Entorno de pruebas:**\n"
+"\n"
+"En entornos de prueba se pueden usar los siguientes CUIT de prueba para el servicio de padrón 'ws_sr_constancia_inscripcion':\n"
+"\n"
+"* Los CUIT de prueba están en la documentación interna de la Localización Argentina, sección \"Padrón Datos Contacto\"\n"
+"* Link a la documentación: https://www.adhoc.inc/odoo/action-7014/139/knowledge/2109\n"
+"\n"
+"**Permisos de embarque (documentación de exportación):**\n"
+"\n"
+"En las facturas de exportación se pueden configurar permisos de embarque, que se incluyen en la factura electrónica cuando:\n"
+"\n"
+"* La factura es de exportación\n"
+"* El concepto ARCA es 'Products / Definitive export of goods'\n"
+"\n"
+"Instalación\n"
+"===========\n"
+"\n"
+"Este módulo se instala automáticamente cuando están instalados los módulos l10n_ar_ux y l10n_ar_edi.\n"
+"\n"
+"**Requisitos previos:**\n"
+"\n"
+"* l10n_ar_ux: Localización Argentina UX\n"
+"* contacts: Contactos (el asistente de actualización masiva está en su menú de configuración)\n"
+"* l10n_ar_edi: Facturación electrónica argentina (Enterprise)\n"
+"* account_accountant: Funcionalidades contables\n"
+"\n"
+"Configuración\n"
+"=============\n"
+"\n"
+"**Configuración de la conexión con ARCA:**\n"
+"\n"
+"1. Configure los certificados y la conexión con ARCA en el módulo base l10n_ar_edi\n"
+"2. Verifique que la empresa tenga un CUIT válido configurado\n"
+"\n"
+"**Configuraciones opcionales:**\n"
+"\n"
+"1. **Mayúsculas iniciales del padrón:** Vaya a Ajustes > Técnico > Parámetros > Parámetros del sistema\n"
+"\n"
+"   * Cree el parámetro: `use_title_case_on_padron_afip`\n"
+"   * Valor: `False` para desactivar el formato de mayúsculas iniciales (por defecto: `True`)\n"
+"\n"
+"2. **Política de moneda extranjera:** El módulo configura automáticamente, al instalarse, la política por defecto de pagos en moneda extranjera para las empresas argentinas\n"
+"\n"
+"3. **Caché del WSDL de ARCA:** Vaya a Ajustes > Técnico > Parámetros > Parámetros del sistema\n"
+"\n"
+"   * Cree el parámetro: `l10n_ar_edi_ux.wsdl_cache_ttl`\n"
+"   * Valor: duración de la caché en segundos (por defecto: `300`)\n"
+"   * El valor `0` desactiva la caché y vuelve al comportamiento nativo de l10n_ar_edi, que descarga el WSDL en cada llamada. No hace falta reiniciar\n"
+"   * El WSDL se guarda en caché por proceso de trabajo. Solo se guarda el documento WSDL, nunca las credenciales: el token y la firma de ARCA se leen del registro de la conexión en cada llamada\n"
+"\n"
+"4. **Leyenda del PDF de la factura:** Se configura con la opción *Add Legend to Invoice PDF* de l10n_ar_edi. Este módulo solo evita que se imprima en los diarios preimpresos\n"
+"\n"
+"**Configuración de los permisos de embarque:**\n"
+"\n"
+"1. Vaya a Contabilidad > Configuración > Argentina > Permisos de embarque\n"
+"2. Cree los permisos de embarque de sus operaciones de exportación\n"
+"3. Asócielos a las facturas de exportación que correspondan\n"
+"\n"
+"Uso\n"
+"===\n"
+"\n"
+"**Sincronización de los datos de los contactos:**\n"
+"\n"
+"1. **Actualización individual:**\n"
+"\n"
+"   * Abra un contacto con CUIT\n"
+"   * Haga clic en el botón \"Update from ARCA\"\n"
+"   * Revise y confirme los datos en el asistente\n"
+"\n"
+"2. **Configuración de los diarios electrónicos:**\n"
+"\n"
+"   * Vaya a Contabilidad > Configuración > Diarios\n"
+"   * Seleccione un diario electrónico\n"
+"   * Use el botón \"Get Valid Document Types\" para obtener la información del webservice de ARCA\n"
+"\n"
+"**Facturas de exportación con permisos de embarque:**\n"
+"\n"
+"1. Cree una factura de exportación\n"
+"2. Configure el concepto ARCA en \"Products / Definitive export of goods\"\n"
+"3. Agregue los permisos de embarque en el campo \"Permiso de Embarque\"\n"
+"4. La información de los permisos de embarque se incluye en la factura electrónica\n"
+"\n"
+".. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas\n"
+"   :alt: Try me on Runbot\n"
+"   :target: http://runbot.adhoc.com.ar/\n"
+"\n"
+"Seguimiento de errores\n"
+"======================\n"
+"\n"
+"Los errores se registran en `GitHub Issues\n"
+"<https://github.com/ingadhoc/odoo-argentina-ee/issues>`_. Si tiene un problema, revise\n"
+"ahí si ya fue reportado. Si lo encontró primero, ayúdenos con un reporte detallado.\n"
+"\n"
+"Créditos\n"
+"========\n"
+"\n"
+"Autores\n"
+"~~~~~~~\n"
+"\n"
+"* ADHOC SA\n"
+"\n"
+"Colaboradores\n"
+"~~~~~~~~~~~~~\n"
+"\n"
+"* ADHOC SA Development Team\n"
+"\n"
+"Imágenes\n"
+"--------\n"
+"\n"
+"* |company| |icon|\n"
+"\n"
+"Mantenimiento\n"
+"-------------\n"
+"\n"
+"|company_logo|\n"
+"\n"
+"Este módulo lo mantiene |company|.\n"
+"\n"
+"|company| se especializa en implementaciones de Odoo y ofrece soluciones ERP integrales\n"
+"para empresas de Argentina y Latinoamérica.\n"
+"\n"
+"Para contribuir con este módulo, visite https://www.adhoc.com.ar.\n"
+
+#. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_journal_wizard_form
 msgid ""
 "<strong>Automatic Journal Creation</strong><br/>\n"
-"                    This wizard will fetch your points of sale from ARCA and "
-"create journals automatically."
+"                    This wizard will fetch your points of sale from ARCA and create journals automatically."
 msgstr ""
 "<strong>Creación Automática de Diarios</strong><br/>\n"
 "                    Este asistente obtendrá sus puntos de venta desde ARCA y "
@@ -77,8 +410,7 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
 msgid ""
 "<strong>Configure ARCA Web Services Connection</strong><br/>\n"
-"                    Upload your certificate and private key to connect to "
-"ARCA electronic invoicing services."
+"                    Upload your certificate and private key to connect to ARCA electronic invoicing services."
 msgstr ""
 "<strong>Configurar Conexión a los Servicios Web de ARCA</strong><br/>\n"
 "                    Suba su certificado y clave privada para conectarse a "
@@ -142,45 +474,40 @@ msgstr "Servicio de Consulta a Padrón Constancia de Inscripción (ex A5)"
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_service_end
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_service_end
 msgid "ARCA Service End Date"
-msgstr "Fecha Fin Servicio ARCA"
+msgstr "Fecha de fin del servicio de ARCA"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_service_start
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_service_start
 msgid "ARCA Service Start Date"
-msgstr "Fecha Inicio Servicio ARCA"
+msgstr "Fecha de inicio del servicio de ARCA"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_l10n_ar_afipws_connection
 msgid "ARCA Webservice Connection"
-msgstr "Conexión Webservice de AFIP"
+msgstr "Conexión del webservice de ARCA"
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/res_partner.py:0
 msgid "ARCA did not return a name"
-msgstr ""
+msgstr "ARCA no devolvió un nombre"
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/res_partner_update_from_padron_wizard.py:0
 msgid "ARCA update failed: %s"
-msgstr ""
+msgstr "Falló la actualización desde ARCA: %s"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_account_import_summary
 msgid "Account import summary view"
-msgstr ""
-
-#. module: l10n_ar_edi_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
-msgid "Add Legend to Invoice PDF"
-msgstr "Agregar leyenda al PDF de la factura"
+msgstr "VIsta de resumen de la importación de la cuenta"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__l10n_ar_arca_journal_wizard_line__shared_to_branches__all
 msgid "All branches"
-msgstr ""
+msgstr "Todas las sucursales"
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
@@ -190,21 +517,9 @@ msgstr ""
 "contactos?"
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_asoc_period_end
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_asoc_period_end
-msgid "Associated Perdio End"
-msgstr "Fin del período asociado"
-
-#. module: l10n_ar_edi_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_move_form
-msgid "Associated Period"
-msgstr "Periodo Asociado"
-
-#. module: l10n_ar_edi_ux
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_asoc_period_start
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_asoc_period_start
-msgid "Associated Period Start"
-msgstr "Inicio del período asociado"
+#: model:ir.module.module,shortdesc:base.module_l10n_ar_edi_ux
+msgid "Argentinian Electronic Invoicing UX"
+msgstr "Facturación electrónica argentina UX"
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
@@ -273,6 +588,9 @@ msgid ""
 "'%(related)s' is still in draft state. Please post the related document "
 "before issuing the electronic credit/debit note."
 msgstr ""
+"No se puede validar electrónicamente '%(move)s' porque el documento "
+"relacionado '%(related)s' todavía está en borrador. Publique el documento "
+"relacionado antes de emitir la nota de crédito/débito electrónica."
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
@@ -295,8 +613,7 @@ msgstr "Certificado"
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/res_company.py:0
 msgid ""
-"Certificate CUIT differ from Company's doc type and number. You can only use "
-"the ARCA certificate if it matches\n"
+"Certificate CUIT differ from Company's doc type and number. You can only use the ARCA certificate if it matches\n"
 " * certificate %s\n"
 " * company %s %s"
 msgstr ""
@@ -339,23 +656,19 @@ msgstr ""
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_res_company
-msgid "Companies"
-msgstr "Compañías"
-
-#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__company_id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard__company_id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__company_id
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_boarding_permission__company_id
 msgid "Company"
-msgstr "Companía"
+msgstr "Empresa"
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/res_company.py:0
 msgid ""
-"Company \"%s\" has no ARCA certificate and no ancestor sharing the same CUIT "
-"was found. Please configure a certificate in the accounting settings."
+"Company \"%s\" has no ARCA certificate and no ancestor sharing the same CUIT"
+" was found. Please configure a certificate in the accounting settings."
 msgstr ""
 "La empresa \"%s\" no tiene certificado ARCA y no se encontró ningún padre "
 "con el mismo CUIT. Por favor configure un certificado en los ajustes de "
@@ -380,7 +693,7 @@ msgstr "Ajustes de configuración"
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
 msgid "Connected"
-msgstr ""
+msgstr "Conectado"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__connection_status_html
@@ -516,31 +829,31 @@ msgstr "País de destino de la mercadería"
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_info__display_name
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__display_name
 msgid "Display Name"
-msgstr "Nombre para mostrar"
+msgstr "Nombre en pantalla"
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_journal_wizard.py:0
 msgid "Electronic Fiscal Bond"
-msgstr ""
+msgstr "Bono fiscal electrónico"
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
 msgid "Electronic Fiscal Bond (WSBFE)"
-msgstr ""
+msgstr "Bono fiscal electrónico (WSBFE)"
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_journal_wizard.py:0
 msgid "Electronic Invoice"
-msgstr ""
+msgstr "Factura electrónica"
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
 msgid "Electronic Invoice (WSFE)"
-msgstr ""
+msgstr "Factura electrónica (WSFE)"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__error_message
@@ -551,13 +864,13 @@ msgstr "Error"
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_journal_wizard.py:0
 msgid "Export Invoice"
-msgstr ""
+msgstr "Factura de exportación"
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
 msgid "Export Invoice (WSFEX)"
-msgstr ""
+msgstr "Factura de exportación (WSFEX)"
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_journal_wizard_form
@@ -612,12 +925,12 @@ msgstr "Obtener tipos de documento válidos para este servicio web"
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard__has_points_of_sale
 msgid "Has Points Of Sale"
-msgstr ""
+msgstr "Tiene puntos de venta"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__has_valid_certificate
 msgid "Has Valid Certificate"
-msgstr ""
+msgstr "Tiene certificado válido"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_account_import_summary__id
@@ -654,16 +967,10 @@ msgstr ""
 " %s"
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_company__l10n_ar_invoice_pdf_legend_ux
-#: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_config_settings__l10n_ar_invoice_pdf_legend_ux
-msgid "Invoice PDF Legend"
-msgstr "Leyenda del PDF de la factura"
-
-#. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
 msgid "Invoices Verification (WSCDC)"
-msgstr ""
+msgstr "Verificación de comprobantes (WSCDC)"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_account_journal
@@ -684,7 +991,7 @@ msgstr "Nombre de Diario"
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_journal_wizard.py:0
 msgid "Journal already exists: %s"
-msgstr ""
+msgstr "El diario ya existe: %s"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__write_uid
@@ -709,11 +1016,6 @@ msgid "Last Updated on"
 msgstr "Última Actualización en"
 
 #. module: l10n_ar_edi_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
-msgid "Legend"
-msgstr "Leyenda"
-
-#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__new_value
 msgid "New Value"
 msgstr "Nuevo valor"
@@ -722,7 +1024,7 @@ msgstr "Nuevo valor"
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
 msgid "No certificate configured"
-msgstr ""
+msgstr "No hay certificado configurado"
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
@@ -758,8 +1060,7 @@ msgstr ""
 msgid ""
 "No valid ARCA certificate found.\n"
 "\n"
-"Please configure your certificate in the ARCA Connection Setup before "
-"fetching points of sale."
+"Please configure your certificate in the ARCA Connection Setup before fetching points of sale."
 msgstr ""
 "No se encontró un certificado ARCA válido.\n"
 "\n"
@@ -770,12 +1071,12 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
 msgid "Not available"
-msgstr ""
+msgstr "No disponible"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__l10n_ar_arca_journal_wizard_line__shared_to_branches__none
 msgid "Not shared"
-msgstr ""
+msgstr "No compartido"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_field__old_value
@@ -795,11 +1096,6 @@ msgstr ""
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__field_to_update_ids
 msgid "Only this fields are going to be retrived and updated"
 msgstr "Sólo estos campos serán recuperados y actualizados."
-
-#. module: l10n_ar_edi_ux
-#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_company__l10n_ar_invoice_pdf_legend_ux__operation_subject_to_withholding
-msgid "Operation Subject to Withholding"
-msgstr "Operación sujeta a retención"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_partner_update_from_padron_wizard__state__option
@@ -822,11 +1118,6 @@ msgid "Partners"
 msgstr "Contactos"
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__res_company__l10n_ar_invoice_pdf_legend_ux__payment_on_informed_cbu
-msgid "Payment on Informed CBU"
-msgstr "Pago en CBU informado"
-
-#. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/res_partner.py:0
 msgid "Please configure an ARCA Certificate in order to continue"
@@ -844,6 +1135,8 @@ msgstr "Por favor seleccione al menos un punto de venta para crear."
 msgid ""
 "Please upload a valid private key and ARCA certificate to test connections."
 msgstr ""
+"Cargue una clave privada y un certificado de ARCA válidos para probar las "
+"conexiones."
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard__pos_line_ids
@@ -860,12 +1153,12 @@ msgstr "Clave Privada"
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_journal_wizard.py:0
 msgid "Sales %s %05d"
-msgstr ""
+msgstr "Ventas %s %05d"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields.selection,name:l10n_ar_edi_ux.selection__l10n_ar_arca_journal_wizard_line__shared_to_branches__legal_entity
 msgid "Same legal entity"
-msgstr ""
+msgstr "Misma entidad legal"
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
@@ -875,8 +1168,8 @@ msgstr "Guardar y Cerrar"
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__branch_id
 msgid ""
-"Select a branch to assign this journal to a specific branch. Leave empty for "
-"the main company."
+"Select a branch to assign this journal to a specific branch. Leave empty for"
+" the main company."
 msgstr ""
 "Seleccione una sucursal para asignar este diario. Deje vacío para la "
 "compañía principal."
@@ -887,20 +1180,6 @@ msgid "Selection"
 msgstr "Selección"
 
 #. module: l10n_ar_edi_ux
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_asoc_period_end
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_bank_statement_line__l10n_ar_afip_asoc_period_start
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_asoc_period_end
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_account_move__l10n_ar_afip_asoc_period_start
-msgid ""
-"Set this field if it is you are reporting debit/credit note and have not "
-"related invoice. IMPORTANT: This is only applies on \"Electronic Invoice - "
-"Web Service\""
-msgstr ""
-"Establezca este campo si está informando una nota de débito/crédito y no "
-"tiene una factura relacionada. IMPORTANTE: Esto sólo aplica en \"Factura "
-"Electrónica - Web Service\""
-
-#. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__shared_to_branches
 msgid "Shared to Branches"
 msgstr "Compartir con Sucursales"
@@ -909,6 +1188,7 @@ msgstr "Compartir con Sucursales"
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__connection_status_html
 msgid "Shows the status of connections to different ARCA Web Services."
 msgstr ""
+"Muestra el estado de las conexiones a los distintos webservices de ARCA."
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
@@ -938,25 +1218,8 @@ msgid ""
 "the ARCA Responsibility Type in the partner's configuration to validate the "
 "invoice."
 msgstr ""
-
-#. module: l10n_ar_edi_ux
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_company__l10n_ar_invoice_pdf_legend_ux
-#: model:ir.model.fields,help:l10n_ar_edi_ux.field_res_config_settings__l10n_ar_invoice_pdf_legend_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.res_config_settings_view_form
-msgid ""
-"The selected legend is printed below the Document Type letter on the Invoice "
-"PDF of documents with letter A and M. It is set per company: branches do not "
-"inherit the legend of their parent company, they only start from its value "
-"when they are created. It supersedes the l10n_ar_edi 'Add Withholding Legend "
-"to Invoice PDF' setting, whose value is left as it was and stops being read, "
-"so uninstalling this module restores it."
-msgstr ""
-"La leyenda seleccionada se imprime debajo de la letra del comprobante en el "
-"PDF de los documentos con letra A y M. Se configura por compañía: las "
-"sucursales no heredan la leyenda de su compañía padre, solo parten de su "
-"valor cuando se crean. Reemplaza al ajuste \"Agregar leyenda de retención al "
-"PDF de la factura\" de l10n_ar_edi, cuyo valor queda como estaba y deja de "
-"leerse, así desinstalar este módulo lo restaura."
+"El contacto %s no tiene configurada una responsabilidad ARCA. Configure el "
+"tipo de responsabilidad ARCA en el contacto para validar la factura."
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form
@@ -1009,7 +1272,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/models/account_import_summary.py:0
 msgid "This option is only available for Argentinian companies."
-msgstr ""
+msgstr "Esta opción solo está disponible para empresas argentinas."
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_res_partner_update_from_padron_wizard__title_case
@@ -1020,7 +1283,7 @@ msgstr "Nombre Propio"
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
 msgid "Token expired"
-msgstr ""
+msgstr "Token vencido"
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_journal_wizard_form
@@ -1063,6 +1326,8 @@ msgstr "Actualización con verificación manual"
 msgid ""
 "Upload your ARCA certificate in PEM format obtained from the ARCA portal."
 msgstr ""
+"Cargue su certificado de ARCA en formato PEM, obtenido desde el portal de "
+"ARCA."
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_arca_connection_wizard__l10n_ar_afip_ws_key_id
@@ -1070,6 +1335,8 @@ msgid ""
 "Upload your private key in PEM format. If you don't have one, it will be "
 "generated automatically when you create a certificate request."
 msgstr ""
+"Cargue su clave privada en formato PEM. Si no tiene una, se genera "
+"automáticamente al crear una solicitud de certificado."
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
@@ -1117,12 +1384,12 @@ msgstr "Servicio Web"
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
 msgid "Web Services Status:"
-msgstr ""
+msgstr "Estado de los webservices:"
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,help:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__shared_to_branches
 msgid "Which branches of the company can use the journal that gets created."
-msgstr ""
+msgstr "Qué sucursales de la empresa pueden usar el diario que se crea."
 
 #. module: l10n_ar_edi_ux
 #: model:ir.model.fields,field_description:l10n_ar_edi_ux.field_l10n_ar_arca_journal_wizard_line__wizard_id
@@ -1163,11 +1430,6 @@ msgid "res.partner.update.from.padron.wizard"
 msgstr ""
 
 #. module: l10n_ar_edi_ux
-#: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_move_form
-msgid "to"
-msgstr "a"
-
-#. module: l10n_ar_edi_ux
 #. odoo-python
 #: code:addons/l10n_ar_edi_ux/wizards/l10n_ar_arca_connection_wizard.py:0
 msgid "ws_sr_constancia_inscripcion"
@@ -1203,29 +1465,3 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_l10n_ar_arca_connection_wizard_form
 msgid "📚 View ARCA Documentation"
 msgstr "📚 Ver Documentación de ARCA"
-
-#~ msgid "Environment"
-#~ msgstr "Entorno"
-
-#~ msgid "For testing, you can use demo certificates from ARCA"
-#~ msgstr "Para pruebas, puede usar certificados de demo de ARCA"
-
-#~ msgid "If checked, this journal will be shared with all branches."
-#~ msgstr ""
-#~ "Si está marcado, este diario será compartido con todas las sucursales."
-
-#~ msgid "Automatic Journal Creation"
-#~ msgstr "Creación Automática de Diarios"
-
-#~ msgid ""
-#~ "This wizard will fetch your points of sale from ARCA and create journals "
-#~ "automatically."
-#~ msgstr ""
-#~ "Este asistente obtendrá sus puntos de venta desde ARCA y creará los "
-#~ "diarios automáticamente."
-
-#~ msgid "No points of sale loaded yet."
-#~ msgstr "No hay puntos de venta cargados aún."
-
-#~ msgid "Save &amp; Close"
-#~ msgstr "Guardar y Cerrar"

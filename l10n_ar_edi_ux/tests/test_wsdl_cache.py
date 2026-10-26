@@ -27,7 +27,6 @@ class TestWsdlCache(TransactionCase):
 
         ar_country = cls.env.ref("base.ar")
         ar_currency = cls.env.ref("base.ARS")
-        cuit_type = cls.env.ref("l10n_ar.it_cuit")
         afip_ri = cls.env.ref("l10n_ar.res_IVARI")
 
         cls.company = cls.env["res.company"].create(
@@ -35,7 +34,6 @@ class TestWsdlCache(TransactionCase):
         )
         cls.company.partner_id.write(
             {
-                "l10n_latam_identification_type_id": cuit_type.id,
                 "vat": "20313932975",
                 "l10n_ar_afip_responsibility_type_id": afip_ri.id,
                 "country_id": ar_country.id,
@@ -100,7 +98,7 @@ class TestWsdlCache(TransactionCase):
     def test_05_wsdl_is_downloaded_once_by_default(self):
         """With no system parameter set, the second _get_client() must not download again."""
         self.assertFalse(
-            self.env["ir.config_parameter"].sudo().get_param(WSDL_CACHE_TTL_PARAM),
+            self.env["ir.config_parameter"].sudo().get_str(WSDL_CACHE_TTL_PARAM),
             "This test asserts the out of the box behaviour, the parameter must not be set",
         )
         self.assertGreater(DEFAULT_WSDL_CACHE_TTL, 0, "The default TTL must keep the cache enabled")
@@ -119,7 +117,7 @@ class TestWsdlCache(TransactionCase):
 
     def test_10_ttl_zero_restores_native_behaviour(self):
         """The kill switch: with the parameter at 0 the WSDL is downloaded on every call."""
-        self.env["ir.config_parameter"].sudo().set_param(WSDL_CACHE_TTL_PARAM, "0")
+        self.env["ir.config_parameter"].sudo().set_int(WSDL_CACHE_TTL_PARAM, 0)
 
         with self._mock_wsdl_download() as downloads:
             self.connection._get_client()
@@ -133,7 +131,7 @@ class TestWsdlCache(TransactionCase):
 
     def test_15_cache_is_keyed_by_webservice_url(self):
         """Each webservice has its own WSDL: caching one must not serve another."""
-        self.env["ir.config_parameter"].sudo().set_param(WSDL_CACHE_TTL_PARAM, "300")
+        self.env["ir.config_parameter"].sudo().set_int(WSDL_CACHE_TTL_PARAM, 300)
 
         with self._mock_wsdl_download() as downloads:
             self.connection._get_client()
@@ -149,7 +147,7 @@ class TestWsdlCache(TransactionCase):
 
     def test_20_credentials_are_never_cached(self):
         """Only the WSDL document is cached: token and sign are read on every call."""
-        self.env["ir.config_parameter"].sudo().set_param(WSDL_CACHE_TTL_PARAM, "300")
+        self.env["ir.config_parameter"].sudo().set_int(WSDL_CACHE_TTL_PARAM, 300)
 
         with self._mock_wsdl_download() as downloads:
             __, auth = self.connection._get_client()

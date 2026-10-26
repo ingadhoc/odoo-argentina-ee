@@ -1,23 +1,10 @@
 from odoo import _, api, fields, models
-from odoo.addons.l10n_ar_edi.models.account_move import WS_DATE_FORMAT
 from odoo.exceptions import UserError
 
 
 class AccountMove(models.Model):
     _inherit = "account.move"
 
-    l10n_ar_afip_asoc_period_start = fields.Date(
-        string="Associated Period Start",
-        copy=False,
-        help="Set this field if it is you are reporting debit/credit note and have not related invoice."
-        ' IMPORTANT: This is only applies on "Electronic Invoice - Web Service"',
-    )
-    l10n_ar_afip_asoc_period_end = fields.Date(
-        string="Associated Perdio End",
-        copy=False,
-        help="Set this field if it is you are reporting debit/credit note and have not related invoice."
-        ' IMPORTANT: This is only applies on "Electronic Invoice - Web Service"',
-    )
     l10n_ar_boarding_permission_ids = fields.Many2many(
         "l10n_ar.boarding_permission",
         string="Boarding Permission",
@@ -67,22 +54,6 @@ class AccountMove(models.Model):
                 )
                 % self.partner_id.name
             )
-
-    @api.model
-    def wsfe_get_cae_request(self, client=None):
-        res = super().wsfe_get_cae_request(client=client)
-        if self.l10n_latam_document_type_id.internal_type in ["credit_note", "debit_note"]:
-            related_invoices = self._get_related_invoice_data()
-            if not related_invoices and self.l10n_ar_afip_asoc_period_start and self.l10n_ar_afip_asoc_period_end:
-                res.get("FeDetReq")[0].get("FECAEDetRequest").update(
-                    {
-                        "PeriodoAsoc": {
-                            "FchDesde": self.l10n_ar_afip_asoc_period_start.strftime(WS_DATE_FORMAT["wsfe"]),
-                            "FchHasta": self.l10n_ar_afip_asoc_period_end.strftime(WS_DATE_FORMAT["wsfe"]),
-                        }
-                    }
-                )
-        return res
 
     def _l10n_ar_do_afip_ws_request_cae(self, client, auth, transport):
         """Check if the partner has CondicionIVAReceptorId configured."""
@@ -183,6 +154,22 @@ class AccountMove(models.Model):
             res.update({"Permisos": ArrayOfPermisions(permisos) if permisos else None})
             res.update({"Permiso_existente": permiso_existente})
         return res
+
+    def _get_line_details(self, base_lines=None):
+        """In wsfex, upstream sends Pro_qty 0 for down payment / negative lines but keeps the UoM code,
+        so ARCA rejects the item (error 1780). Send 97 / 99 as Pro_umed, as ARCA expects."""
+        details = super()._get_line_details(base_lines=base_lines)
+        if self.journal_id.l10n_ar_afip_ws != "wsfex":
+            return details
+        for values, base_line in zip(details, base_lines):
+            if values["Pro_umed"] in ("97", "99", "00"):
+                continue
+            line = base_line["record"]
+            if line._get_downpayment_lines():
+                values["Pro_umed"] = "97"
+            elif line.price_unit < 0:
+                values["Pro_umed"] = "99"
+        return details
 
     def check_valid_boarding_permission(self):
         """This method is used to verify that the Permisos de embarque entered on the export invoice are valid. Receives the authentication credentials, cuit of the represented user, código de despacho and destination country and verifies their existence in the base de datos aduanera."""

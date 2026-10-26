@@ -1,4 +1,3 @@
-import base64
 from contextlib import contextmanager
 from datetime import timedelta
 from unittest.mock import patch
@@ -6,7 +5,6 @@ from unittest.mock import patch
 from odoo import fields
 from odoo.exceptions import UserError
 from odoo.tests import TransactionCase, tagged
-from odoo.tools import file_open
 
 
 @tagged("post_install", "-at_install")
@@ -36,14 +34,13 @@ class TestAfipConnection(TransactionCase):
 
         ar_country = cls.env.ref("base.ar")
         ar_currency = cls.env.ref("base.ARS")
-        cuit_type = cls.env.ref("l10n_ar.it_cuit")
         afip_ri = cls.env.ref("l10n_ar.res_IVARI")
 
         # Shared private key (satisfies the certificate FK)
         cls.ar_key = cls.env["certificate.key"].create(
             {
                 "name": "Test RSA Key",
-                "content": base64.b64encode(file_open("l10n_ar_edi/tests/private_key.pem", "rb").read()),
+                "content": cls.file_read("l10n_ar_edi/tests/private_key.pem"),
             }
         )
 
@@ -51,7 +48,7 @@ class TestAfipConnection(TransactionCase):
         cls.ar_certificate = cls.env["certificate.certificate"].create(
             {
                 "name": "Test Cert (CUIT 20313932975)",
-                "content": base64.b64encode(file_open("l10n_ar_edi/tests/test_cert1.crt", "rb").read()),
+                "content": cls.file_read("l10n_ar_edi/tests/test_cert1.crt"),
                 "private_key_id": cls.ar_key.id,
             }
         )
@@ -62,7 +59,6 @@ class TestAfipConnection(TransactionCase):
         )
         cls.parent_company.partner_id.write(
             {
-                "l10n_latam_identification_type_id": cuit_type.id,
                 "vat": "20313932975",
                 "l10n_ar_afip_responsibility_type_id": afip_ri.id,
                 "country_id": ar_country.id,
@@ -86,7 +82,6 @@ class TestAfipConnection(TransactionCase):
         )
         cls.child_company.partner_id.write(
             {
-                "l10n_latam_identification_type_id": cuit_type.id,
                 "vat": "20313932975",
                 "l10n_ar_afip_responsibility_type_id": afip_ri.id,
                 "country_id": ar_country.id,
@@ -129,7 +124,6 @@ class TestAfipConnection(TransactionCase):
         )
         cls.branch_diff_cuit.partner_id.write(
             {
-                "l10n_latam_identification_type_id": cuit_type.id,
                 "vat": "30711017077",
                 "l10n_ar_afip_responsibility_type_id": afip_ri.id,
                 "country_id": ar_country.id,
@@ -148,7 +142,6 @@ class TestAfipConnection(TransactionCase):
         )
         cls.branch_with_cert.partner_id.write(
             {
-                "l10n_latam_identification_type_id": cuit_type.id,
                 "vat": "30500010084",
                 "l10n_ar_afip_responsibility_type_id": afip_ri.id,
                 "country_id": ar_country.id,
@@ -167,7 +160,6 @@ class TestAfipConnection(TransactionCase):
         )
         cls.company_matching.partner_id.write(
             {
-                "l10n_latam_identification_type_id": cuit_type.id,
                 "vat": "20313932975",
                 "l10n_ar_afip_responsibility_type_id": afip_ri.id,
                 "country_id": ar_country.id,
@@ -180,7 +172,6 @@ class TestAfipConnection(TransactionCase):
         )
         cls.company_mismatch.partner_id.write(
             {
-                "l10n_latam_identification_type_id": cuit_type.id,
                 "vat": "30711017077",
                 "l10n_ar_afip_responsibility_type_id": afip_ri.id,
                 "country_id": ar_country.id,
@@ -378,7 +369,6 @@ class TestAfipConnection(TransactionCase):
         )
         grandchild_same_cuit.partner_id.write(
             {
-                "l10n_latam_identification_type_id": self.env.ref("l10n_ar.it_cuit").id,
                 "vat": "20313932975",
                 "l10n_ar_afip_responsibility_type_id": self.env.ref("l10n_ar.res_IVARI").id,
                 "country_id": self.env.ref("base.ar").id,
