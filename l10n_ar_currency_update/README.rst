@@ -6,53 +6,47 @@
 
 .. |icon| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-icon.png
 
-.. image:: https://img.shields.io/badge/license-AGPL--3-blue.png
-   :target: https://www.gnu.org/licenses/agpl
-   :alt: License: AGPL-3
+.. image:: https://img.shields.io/badge/license-LGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/lgpl
+   :alt: License: LGPL-3
 
 ================================
 Argentinian Currency Rate Update
 ================================
 
-This module integrates ARCA Web Service as the official Argentinian currency provider for automatic exchange rate updates.
-This is needed to have a valid ARCA certificate must be configured in the company settings
+This module extends the native Odoo currency provider *[AR] ARCA* with what Argentinian companies need:
 
-**Setup:**
-By default, automatic rate updates are disabled. To enable them:
+* ARCA is asked with one company whose own ARCA certificate is valid, preferring the ones in production, so it works with several Argentinian companies
+* ARCA is asked one currency at a time: an error in one currency does not stop the others
+* Currencies without ARCA code are skipped instead of stopping the whole update
+* Only today's rate is saved. If ARCA has not published it yet, a cron retries every 3 hours. Companies with weekly or monthly interval take the last published rate when today's is not available
+* The Argentinian companies that already exist when the module is installed get the *[AR] ARCA* provider
+* A rate already loaded for the day is not overwritten
+* A percentage and a surcharge per company can be added to the ARCA rate
+* The name of a currency with ARCA code cannot be changed, because the rate update and electronic invoicing use it
 
-#. Go to *Accounting / Configuration / Settings*
-#. Locate the *Automatic Currency Rates* section
-#. Configure the *Interval* (recommended: daily) and *Next Run* date
-#. Click *Save*
-
-**Operation:**
-* Currency rates are automatically updated for all active currencies in your companies
-* Updates occur after 21:00 GMT-3, when ARCA publishes new rates
-* Rates are sourced from the official ARCA exchange service
-
-**Rate Verification:**
-Current exchange rates can be verified at: https://www.afip.gob.ar/aduana/cotizacionesMaria/
+ARCA publishes the new rates after 21:00 (GMT-3). They can be checked at: https://www.afip.gob.ar/aduana/cotizacionesMaria/
 
 Installation
 ============
 
 To install this module, you need to:
 
-#. Only need to install the module
+#. Only need to install the module. It is installed automatically with the Argentinian electronic invoicing and the automatic currency rates.
 
 Configuration
 =============
 
 To configure this module, you need to:
 
-#. Already configured to update currency rates one per day, you can change
-   this configurations going to General Settings / Invoicing / Automatic
-   currency Rates section.
+#. Set a valid ARCA certificate in the company.
+#. Go to *Accounting / Configuration / Settings*, *Automatic Currency Rates* section, choose *[AR] ARCA* as service and set the *Interval* (recommended: daily).
+#. Optionally, with developer mode, set the percentage and the surcharge to add to the ARCA rate in the same section.
 
 Usage
 =====
 
-Este modulo permite la actualización automática del tipo de cambio de las monedas que esten activadas, tomando la información desde la pagina de AFIP, la cual coincide con la del banco nación, tipo de cambio DIVISA de venta.
+The rates of the active currencies are updated automatically from ARCA, with the official selling rate (the same as Banco Nación).
 
 .. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas
    :alt: Try me on Runbot

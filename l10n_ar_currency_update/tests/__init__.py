@@ -3,3 +3,4 @@
 # directory
 ##############################################################################
 from . import test_l10n_ar_currency_update
+from . import test_arca_layer
