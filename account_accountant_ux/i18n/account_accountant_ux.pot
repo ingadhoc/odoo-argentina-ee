@@ -6,8 +6,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
+<<<<<<< 721b1f240ceb665f83f3b9ea013b837f5280efb0
 "POT-Creation-Date: 2026-09-25 13:29+0000\n"
 "PO-Revision-Date: 2026-09-25 13:29+0000\n"
+||||||| 0f736bf90cace33a16cae6037b880819bbf2068c
+"POT-Creation-Date: 2026-10-20 15:05+0000\n"
+"PO-Revision-Date: 2026-10-20 15:05+0000\n"
+=======
+"POT-Creation-Date: 2026-10-26 19:44+0000\n"
+"PO-Revision-Date: 2026-10-26 19:44+0000\n"
+>>>>>>> 009107adc6d05592527b481bc5afd7b853e50408
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -91,13 +99,6 @@ msgid "Accounting Return"
 msgstr ""
 
 #. module: account_accountant_ux
-#: model:ir.model.fields,help:account_accountant_ux.field_account_tax_settlement_wizard__already_settled_warning
-msgid ""
-"Advertencia si la compañía que liquida ya tiene un asiento de liquidación de"
-" este reporte en el período. No bloquea: puede ser una corrección."
-msgstr ""
-
-#. module: account_accountant_ux
 #: model:ir.actions.server,name:account_accountant_ux.action_aged_payable
 msgid "Aged Payable Report"
 msgstr ""
@@ -115,6 +116,11 @@ msgstr ""
 #. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__allow_settlement
 msgid "Allow Settlement"
+msgstr ""
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__already_settled_warning
+msgid "Already Settled"
 msgstr ""
 
 #. module: account_accountant_ux
@@ -177,6 +183,11 @@ msgstr ""
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_res_company
 msgid "Companies"
+msgstr ""
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__missing_companies_warning
+msgid "Companies Left Out"
 msgstr ""
 
 #. module: account_accountant_ux
@@ -564,6 +575,15 @@ msgid ""
 msgstr ""
 
 #. module: account_accountant_ux
+#. odoo-python
+#: code:addons/account_accountant_ux/wizards/account_tax_settlement_wizard.py:0
+msgid ""
+"These companies of the same legal entity are not selected, so their balances"
+" will not be in this entry: %(companies)s. Select them in the company "
+"selector if you meant to settle the whole entity."
+msgstr ""
+
+#. module: account_accountant_ux
 #. odoo-javascript
 #: code:addons/account_accountant_ux/static/src/components/account_report/warnings.xml:0
 msgid ""
@@ -608,6 +628,21 @@ msgid "Total amount you have to pay to this vendor."
 msgstr ""
 
 #. module: account_accountant_ux
+#: model:ir.model.fields,help:account_accountant_ux.field_account_tax_settlement_wizard__missing_companies_warning
+msgid ""
+"Warns if companies of the same legal entity are not selected: their balances"
+" will not be in the entry. It does not block: settling branch by branch is "
+"allowed."
+msgstr ""
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,help:account_accountant_ux.field_account_tax_settlement_wizard__already_settled_warning
+msgid ""
+"Warns if the settling company already has a settlement entry of this report "
+"in the period. It does not block: it may be a correction."
+msgstr ""
+
+#. module: account_accountant_ux
 #. odoo-javascript
 #: code:addons/account_accountant_ux/static/src/components/account_report/filters/filters.js:0
 msgid "With Filters"
@@ -621,11 +656,6 @@ msgstr ""
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_account_tax_settlement_wizard
 msgid "Wizard para generar liquidaciones de impuestos desde reportes"
-msgstr ""
-
-#. module: account_accountant_ux
-#: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__already_settled_warning
-msgid "Ya liquidado"
 msgstr ""
 
 #. module: account_accountant_ux

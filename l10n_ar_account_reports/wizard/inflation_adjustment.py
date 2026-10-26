@@ -3,7 +3,7 @@
 # directory
 ##############################################################################
 from dateutil.relativedelta import relativedelta
-from odoo import _, api, fields, models
+from odoo import Command, _, api, fields, models
 from odoo.exceptions import UserError
 from odoo.tools.misc import format_date, formatLang
 
@@ -24,6 +24,17 @@ class InflationAdjustment(models.TransientModel):
     company_id = fields.Many2one(
         "res.company",
         required=True,
+        readonly=True,
+        help="Company the entry is built in: the one of the selected companies that is a parent of the others.",
+    )
+    company_ids = fields.Many2many(
+        "res.company",
+        string="Companies",
+        readonly=True,
+        help="Companies whose journal items are adjusted: the ones selected in the company selector.",
+    )
+    missing_companies_warning = fields.Char(
+        readonly=True,
     )
     account_id = fields.Many2one("account.account", domain=[("active", "=", True)], required=True, check_company=True)
     start_index = fields.Float(
@@ -39,13 +50,20 @@ class InflationAdjustment(models.TransientModel):
         help="If you have made the closing/opening entries, please indicate them"
         " so they can be excluded from the calculation.",
     )
-    closure_move_id = fields.Many2one(
+    closure_move_ids = fields.Many2many(
         "account.move",
-        string="Closing Entry",
+        "inflation_adjustment_closure_move_rel",
+        string="Closing Entries",
+        help="One per selected company that has its own closing entry.",
     )
-    open_move_id = fields.Many2one(
+    open_move_ids = fields.Many2many(
         "account.move",
-        string="Opening Entry",
+        "inflation_adjustment_open_move_rel",
+        string="Opening Entries",
+        help="One per selected company that has its own opening entry.",
+    )
+    missing_entries_warning = fields.Char(
+        compute="_compute_missing_entries_warning",
     )
 
     def get_account_id(self, line):
@@ -55,14 +73,57 @@ class InflationAdjustment(models.TransientModel):
     def default_get(self, field_list):
         res = super(InflationAdjustment, self).default_get(field_list)
         today = fields.Datetime.now()
-        company = self.env.company
+        companies = self.env.companies
+        head = companies._get_filing_company()
+        # Without a head the wizard still opens; _check_companies refuses it at confirm.
+        company = head or self.env.company
         res["company_id"] = company.id
+        res["company_ids"] = [Command.set(companies.ids)]
+        # Only when the selection can be adjusted: otherwise the gate refuses it at confirm, and says why.
+        if head:
+            missing = companies._get_legal_entity_companies_left_out(selectable_only=True)
+            if missing:
+                res["missing_companies_warning"] = _(
+                    "These companies of the same legal entity are not selected, so their journal items will not "
+                    "be adjusted: %(companies)s. Select them in the company selector if you meant to adjust the "
+                    "whole entity.",
+                    companies=", ".join(missing.mapped("display_name")),
+                )
         company_fiscalyear_dates = company.compute_fiscalyear_dates(today - relativedelta(year=today.year - 1))
         # Filter out keys that are not fields of this model (e.g., 'record')
         for key, value in company_fiscalyear_dates.items():
             if key in self._fields:
                 res[key] = value
         return res
+
+    @api.depends("open_cloure_entry", "company_ids", "company_id", "closure_move_ids", "open_move_ids")
+    def _compute_missing_entries_warning(self):
+        """Name the selected companies with no closing or opening entry chosen.
+
+        A suggestion, not a check: whether a company closed the year on its own cannot be
+        told from its entries. Only once an entry of a branch is chosen, which says the
+        entity closes branch by branch; when it closes only in its head, the branches have
+        none and there is nothing to warn about.
+        """
+        for rec in self:
+            rec.missing_entries_warning = False
+            if rec.open_cloure_entry != "yes":
+                continue
+            # Sudo: the res.company rule only lets the user read the companies ticked right now.
+            entries = (rec.closure_move_ids | rec.open_move_ids).sudo()
+            if not (entries.company_id - rec.company_id.sudo()):
+                continue
+            closures = rec.closure_move_ids.sudo().company_id
+            openings = rec.open_move_ids.sudo().company_id
+            without = rec.sudo().company_ids.filtered(
+                lambda company: company not in closures or company not in openings
+            )
+            if without:
+                rec.missing_entries_warning = _(
+                    "No closing or opening entry was chosen for %(companies)s. If they closed the year on their "
+                    "own, add those entries too: otherwise they are adjusted as movements of the period.",
+                    companies=", ".join(without.mapped("display_name")),
+                )
 
     @api.depends("date_from", "date_to")
     def _compute_index(self):
@@ -127,17 +188,69 @@ class InflationAdjustment(models.TransientModel):
             start_date += relativedelta(months=1, day=1)
         return res
 
+    def _check_companies(self):
+        self.ensure_one()
+        # Sudo: the res.company rule only lets the user read the companies ticked right now.
+        companies = self.sudo().company_ids
+        if not companies:
+            raise UserError(_("Select the companies to adjust in the company selector."))
+        entities = companies.legal_entity_root_id
+        if len(entities) != 1:
+            raise UserError(
+                _(
+                    "An inflation adjustment is never done across Tax IDs, and the selected companies belong to "
+                    "%(entities)s. Select companies of a single legal entity in the company selector.",
+                    entities=", ".join(entities.sudo().mapped("display_name")),
+                )
+            )
+        head = companies._get_filing_company()
+        if head and head != self.company_id.sudo():
+            raise UserError(
+                _(
+                    "The entry of the selected companies is built in %(head)s, not in %(company)s.",
+                    head=head.display_name,
+                    company=self.company_id.sudo().display_name,
+                )
+            )
+        if not head:
+            raise UserError(
+                _(
+                    "None of the selected companies is a parent of the others, so there is no company the "
+                    "entry can be built in. Add %(head)s to the selection to adjust them together, or select one "
+                    "company at a time and adjust each on its own.",
+                    head=entities.sudo().display_name,
+                )
+            )
+
+    def _check_accounts_are_reachable(self, accounts):
+        """Name the accounts the entry cannot use before the company check of the ORM does."""
+        company = self.company_id.sudo()
+        accounts = accounts.sudo()
+        unreachable = accounts.filtered(lambda account: not (account.company_ids & company.parent_ids))
+        if unreachable:
+            raise UserError(
+                _(
+                    "These accounts belong only to a branch, so the entry cannot be built in %(company)s with "
+                    "them in it: %(accounts)s.\n"
+                    "Adjust %(owners)s on their own —select each of them alone in the company selector— or "
+                    "move those accounts up to the company that files.",
+                    company=company.display_name,
+                    accounts=", ".join(unreachable.mapped("display_name")),
+                    owners=", ".join((unreachable.company_ids & self.sudo().company_ids).mapped("display_name")),
+                )
+            )
+
     def get_move_line_domain(self):
         self.ensure_one()
         res = [
             ("account_id.is_monetary", "=", False),
-            ("company_id", "=", self.company_id.id),
+            ("company_id", "in", self.sudo().company_ids.ids),
             ("move_id.state", "=", "posted"),
         ]
-        if self.open_move_id:
-            res += [("move_id", "!=", self.open_move_id.id)]
-        if self.closure_move_id:
-            res += [("move_id", "!=", self.closure_move_id.id)]
+        excluded = self.open_move_ids | self.closure_move_ids
+        # Answering "No" hides the fields but keeps their values.
+        if self.open_cloure_entry == "yes" and excluded:
+            res += [("move_id", "not in", excluded.ids)]
         return res
 
     def confirm(self):
@@ -149,6 +262,7 @@ class InflationAdjustment(models.TransientModel):
             return formatLang(self.env, amount, currency_obj=self.company_id.currency_id)
 
         self.ensure_one()
+        self._check_companies()
         account_move_line = self.env["account.move.line"]
         adjustment_total = {"debit": 0.0, "credit": 0.0}
         lines = []
@@ -223,6 +337,9 @@ class InflationAdjustment(models.TransientModel):
 
         if not lines:
             raise UserError(_("No journal entries to adjust were found for the selected period."))
+        self._check_accounts_are_reachable(
+            self.account_id | self.env["account.account"].browse({line["account_id"] for line in lines})
+        )
 
         # Generate total amount adjustment line
         adj_diff = adjustment_total.get("debit", 0.0) - adjustment_total.get("credit", 0.0)
@@ -242,6 +359,8 @@ class InflationAdjustment(models.TransientModel):
             .create(
                 {
                     "journal_id": self.journal_id.id,
+                    # Explicit: a branch may book with its parent's journal.
+                    "company_id": self.company_id.id,
                     "date": self.date_to,
                     "ref": _("Inflation Adjustment %s") % (date_to.year),
                     "line_ids": [(0, 0, line_data) for line_data in lines],
