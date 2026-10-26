@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-26 16:49+0000\n"
-"PO-Revision-Date: 2026-04-20 15:41+0000\n"
+"POT-Creation-Date: 2026-10-26 19:16+0000\n"
+"PO-Revision-Date: 2026-10-26 19:16+0000\n"
 "Last-Translator: julia elizondo <jue@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
 "argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_account_reports/es/>\n"
@@ -322,7 +322,7 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_report
 msgid "Accounting Report"
-msgstr ""
+msgstr "Reporte contable"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_return
@@ -355,6 +355,18 @@ msgid ""
 msgstr ""
 "Ya existe un índice para el periodo %s %s. Solo puedes tener un índice de "
 "inflación por mes"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid ""
+"An inflation adjustment is never done across Tax IDs, and the selected "
+"companies belong to %(entities)s. Select companies of a single legal entity "
+"in the company selector."
+msgstr ""
+"Un ajuste por inflación nunca se hace entre CUIT distintos, y las compañías "
+"seleccionadas pertenecen a %(entities)s. Seleccione compañías de una sola "
+"entidad legal en el selector de compañías."
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_advances_from_customers
@@ -481,19 +493,38 @@ msgid "Cargas fiscales"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__closure_move_id
-msgid "Closing Entry"
-msgstr "Asiento de cierre"
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__closure_move_ids
+msgid "Closing Entries"
+msgstr "Asientos de cierre"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_res_company
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__company_ids
 msgid "Companies"
+msgstr "Empresas"
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,help:l10n_ar_account_reports.field_inflation_adjustment__company_ids
+msgid ""
+"Companies whose journal items are adjusted: the ones selected in the company"
+" selector."
 msgstr ""
+"Compañías cuyos apuntes se ajustan: las seleccionadas en el selector de "
+"compañías."
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__company_id
 msgid "Company"
 msgstr "Companía"
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,help:l10n_ar_account_reports.field_inflation_adjustment__company_id
+msgid ""
+"Company the entry is built in: the one of the selected companies that is a "
+"parent of the others."
+msgstr ""
+"Compañía en la que se arma el asiento: la que, entre las compañías "
+"seleccionadas, es padre de las demás."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -871,12 +902,12 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_move
 msgid "Journal Entry"
-msgstr ""
+msgstr "Asiento contable"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_move_line
 msgid "Journal Item"
-msgstr ""
+msgstr "Apunte contable"
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__write_uid
@@ -896,9 +927,31 @@ msgid "Llave de negocio"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__missing_companies_warning
+msgid "Missing Companies Warning"
+msgstr "Aviso de compañías sin seleccionar"
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__missing_entries_warning
+msgid "Missing Entries Warning"
+msgstr "Aviso de asientos sin elegir"
+
+#. module: l10n_ar_account_reports
 #: model:ir.model.fields.selection,name:l10n_ar_account_reports.selection__inflation_adjustment__open_cloure_entry__no
 msgid "No"
 msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid ""
+"No closing or opening entry was chosen for %(companies)s. If they closed the"
+" year on their own, add those entries too: otherwise they are adjusted as "
+"movements of the period."
+msgstr ""
+"No se eligió asiento de cierre o de apertura para %(companies)s. Si "
+"cerraron el ejercicio por su cuenta, agregue también esos asientos: si no, "
+"se ajustan como movimientos del período."
 
 #. module: l10n_ar_account_reports
 #: model_terms:ir.actions.act_window,help:l10n_ar_account_reports.inflation_adjustment_index_action
@@ -924,9 +977,34 @@ msgstr ""
 "seleccionado."
 
 #. module: l10n_ar_account_reports
-#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__open_move_id
-msgid "Opening Entry"
-msgstr "Asiento de apertura"
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid ""
+"None of the selected companies is a parent of the others, so there is no "
+"company the entry can be built in. Add %(head)s to the selection to adjust "
+"them together, or select one company at a time and adjust each on its own."
+msgstr ""
+"Ninguna de las compañías seleccionadas es padre de las demás, por lo que no "
+"hay una compañía en la que se pueda armar el asiento. Agregue %(head)s a la "
+"selección para ajustarlas juntas, o seleccione una compañía a la vez y "
+"ajuste cada una por separado."
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,help:l10n_ar_account_reports.field_inflation_adjustment__closure_move_ids
+msgid "One per selected company that has its own closing entry."
+msgstr ""
+"Uno por cada compañía seleccionada que tenga su propio asiento de cierre."
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,help:l10n_ar_account_reports.field_inflation_adjustment__open_move_ids
+msgid "One per selected company that has its own opening entry."
+msgstr ""
+"Uno por cada compañía seleccionada que tenga su propio asiento de apertura."
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__open_move_ids
+msgid "Opening Entries"
+msgstr "Asientos de apertura"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_other_liabilities
@@ -971,7 +1049,7 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_partial_reconcile
 msgid "Partial Reconcile"
-msgstr ""
+msgstr "Conciliación parcial"
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_long_term_investments
@@ -1189,6 +1267,12 @@ msgstr "Buscar Descripción"
 
 #. module: l10n_ar_account_reports
 #. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid "Select the companies to adjust in the company selector."
+msgstr "Seleccione en el selector de compañías las compañías a ajustar."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
 #: code:addons/l10n_ar_account_reports/models/tucuman_report.py:0
 msgid ""
 "Some corrective documents do not contain information about which original "
@@ -1280,6 +1364,16 @@ msgid ""
 msgstr ""
 "El contacto \"%(partner_name)s\" (id %(partner_id)s), debe tener el tipo de "
 "identificación CUIT, CUIL, CDI."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid ""
+"The entry of the selected companies is built in %(head)s, not in "
+"%(company)s."
+msgstr ""
+"El asiento de las compañías seleccionadas se arma en %(head)s, no en "
+"%(company)s."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1445,6 +1539,30 @@ msgstr ""
 "el impuesto '%(tax_name)s'"
 
 #. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid ""
+"These accounts belong only to a branch, so the entry cannot be built in %(company)s with them in it: %(accounts)s.\n"
+"Adjust %(owners)s on their own —select each of them alone in the company selector— or move those accounts up to the company that files."
+msgstr ""
+"Estas cuentas pertenecen solo a una sucursal, por lo que el asiento no se "
+"puede armar en %(company)s con ellas: %(accounts)s.\n"
+"Ajuste %(owners)s por separado —seleccione cada una sola en el selector de "
+"compañías— o mueva esas cuentas a la compañía que declara."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid ""
+"These companies of the same legal entity are not selected, so their journal "
+"items will not be adjusted: %(companies)s. Select them in the company "
+"selector if you meant to adjust the whole entity."
+msgstr ""
+"Estas compañías de la misma entidad legal no están seleccionadas, por lo "
+"que sus apuntes no se van a ajustar: %(companies)s. Selecciónelas en el "
+"selector de compañías si quería ajustar toda la entidad."
+
+#. module: l10n_ar_account_reports
 #. odoo-javascript
 #: code:addons/l10n_ar_account_reports/static/src/components/account_report/warnings.xml:0
 msgid "These numbers are from Tax ID"
@@ -1578,15 +1696,3 @@ msgstr "pagable"
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "receivable"
 msgstr "por cobrar"
-
-#, fuzzy
-#~ msgid "AR ESP: Patrimonio Neto"
-#~ msgstr "AR ESP: Patrimonio Neto"
-
-#, fuzzy
-#~| msgid "Partner Ledger Custom Handler"
-#~ msgid "Argentinian Tax Report Custom Handler"
-#~ msgstr "Gestor personalizado del libro mayor del contacto"
-
-#~ msgid "or"
-#~ msgstr "o"
