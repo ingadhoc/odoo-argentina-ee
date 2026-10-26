@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-26 16:49+0000\n"
-"PO-Revision-Date: 2026-10-26 16:49+0000\n"
+"POT-Creation-Date: 2026-10-26 19:16+0000\n"
+"PO-Revision-Date: 2026-10-26 19:16+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -299,6 +299,15 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid ""
+"An inflation adjustment is never done across Tax IDs, and the selected "
+"companies belong to %(entities)s. Select companies of a single legal entity "
+"in the company selector."
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.account_financial_report_l10n_ar_estado_patrimonial_line_advances_from_customers
 msgid "Anticipos de clientes"
 msgstr ""
@@ -418,18 +427,33 @@ msgid "Cargas fiscales"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__closure_move_id
-msgid "Closing Entry"
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__closure_move_ids
+msgid "Closing Entries"
 msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_res_company
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__company_ids
 msgid "Companies"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,help:l10n_ar_account_reports.field_inflation_adjustment__company_ids
+msgid ""
+"Companies whose journal items are adjusted: the ones selected in the company"
+" selector."
 msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__company_id
 msgid "Company"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,help:l10n_ar_account_reports.field_inflation_adjustment__company_id
+msgid ""
+"Company the entry is built in: the one of the selected companies that is a "
+"parent of the others."
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -822,8 +846,27 @@ msgid "Llave de negocio"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__missing_companies_warning
+msgid "Missing Companies Warning"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__missing_entries_warning
+msgid "Missing Entries Warning"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:ir.model.fields.selection,name:l10n_ar_account_reports.selection__inflation_adjustment__open_cloure_entry__no
 msgid "No"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid ""
+"No closing or opening entry was chosen for %(companies)s. If they closed the"
+" year on their own, add those entries too: otherwise they are adjusted as "
+"movements of the period."
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -846,8 +889,27 @@ msgid "No journal entries to adjust were found for the selected period."
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__open_move_id
-msgid "Opening Entry"
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid ""
+"None of the selected companies is a parent of the others, so there is no "
+"company the entry can be built in. Add %(head)s to the selection to adjust "
+"them together, or select one company at a time and adjust each on its own."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,help:l10n_ar_account_reports.field_inflation_adjustment__closure_move_ids
+msgid "One per selected company that has its own closing entry."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,help:l10n_ar_account_reports.field_inflation_adjustment__open_move_ids
+msgid "One per selected company that has its own opening entry."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__open_move_ids
+msgid "Opening Entries"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -1109,6 +1171,12 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid "Select the companies to adjust in the company selector."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
 #: code:addons/l10n_ar_account_reports/models/tucuman_report.py:0
 msgid ""
 "Some corrective documents do not contain information about which original document they are reversing:\n"
@@ -1181,6 +1249,14 @@ msgstr ""
 msgid ""
 "The contact \"%(partner_name)s\" (id %(partner_id)s) must have the "
 "identification type CUIT, CUIL, or CDI."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid ""
+"The entry of the selected companies is built in %(head)s, not in "
+"%(company)s."
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -1311,6 +1387,23 @@ msgstr ""
 msgid ""
 "There is no withholding regime (ARCA Code 'l10n_ar_code') configured for tax"
 " '%(tax_name)s'"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid ""
+"These accounts belong only to a branch, so the entry cannot be built in %(company)s with them in it: %(accounts)s.\n"
+"Adjust %(owners)s on their own —select each of them alone in the company selector— or move those accounts up to the company that files."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
+msgid ""
+"These companies of the same legal entity are not selected, so their journal "
+"items will not be adjusted: %(companies)s. Select them in the company "
+"selector if you meant to adjust the whole entity."
 msgstr ""
 
 #. module: l10n_ar_account_reports

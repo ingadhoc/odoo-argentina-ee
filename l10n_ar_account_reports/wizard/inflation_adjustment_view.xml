@@ -6,9 +6,13 @@
         <field name="arch" type="xml">
             <form string="Inflation Adjustment">
                 <sheet>
+                    <div class="alert alert-info" role="alert" invisible="not missing_companies_warning">
+                        <field name="missing_companies_warning" nolabel="1"/>
+                    </div>
                     <group>
                         <group colspan="4">
                             <field name="company_id" options="{'no_create': True, 'no_open': True}" groups="base.group_multi_company"/>
+                            <field name="company_ids" widget="many2many_tags" groups="base.group_multi_company"/>
                             <field name="account_id" options="{'no_create': True, 'no_open': True}"/>
                             <field name="journal_id"/>
                         </group>
@@ -17,13 +21,16 @@
                             <div class="o_row">
                                 <field name="open_cloure_entry" widget="radio" nolabel="1"/>
                                 <div invisible="open_cloure_entry == 'no'">
-                                    <label for="closure_move_id"/>
-                                    <field name="closure_move_id" required="open_cloure_entry == 'yes'" options="{'no_create': True, 'no_open': True}"/>
+                                    <label for="closure_move_ids"/>
+                                    <field name="closure_move_ids" widget="many2many_tags" required="open_cloure_entry == 'yes'" domain="[('company_id', 'in', company_ids), ('state', '=', 'posted')]" options="{'no_create': True, 'no_open': True}"/>
                                 </div>
                                 <div invisible="open_cloure_entry == 'no'">
-                                    <label for="open_move_id"/>
-                                    <field name="open_move_id" required="open_cloure_entry == 'yes'" options="{'no_create': True, 'no_open': True}"/>
+                                    <label for="open_move_ids"/>
+                                    <field name="open_move_ids" widget="many2many_tags" required="open_cloure_entry == 'yes'" domain="[('company_id', 'in', company_ids), ('state', '=', 'posted')]" options="{'no_create': True, 'no_open': True}"/>
                                 </div>
+                            </div>
+                            <div class="alert alert-info" role="alert" colspan="2" invisible="not missing_entries_warning">
+                                <field name="missing_entries_warning" nolabel="1"/>
                             </div>
                         </group>
                         <group colspan="1">
