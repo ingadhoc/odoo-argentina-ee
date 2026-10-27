@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 19.0+e\n"
+"Project-Id-Version: Odoo Server 20.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-30 11:22+0000\n"
-"PO-Revision-Date: 2026-06-30 11:22+0000\n"
+"POT-Creation-Date: 2026-10-27 18:07+0000\n"
+"PO-Revision-Date: 2026-10-27 18:07+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -16,19 +16,19 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. module: l10n_ar_import_bill
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_file_wizard_form
 #: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
 msgid ""
-"<i class=\"fa fa-exclamation-triangle\" title=\"Warning\"/>\n"
-"                   <span>Importing sales from ARCA: Only invoices dated before the accounting start date will be imported.</span>"
+"<i class=\"oi\" data-icon=\"info\" title=\"Info\"/> <span "
+"invisible=\"total_bills_exists == 0\">Invoices highlighted in yellow will "
+"not be created because they already exist. </span>"
 msgstr ""
 
 #. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_file_wizard_form
 #: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
 msgid ""
-"<i class=\"fa fa-info-circle\" title=\"Info\"/> <span "
-"invisible=\"total_bills_exists == 0\">Invoices highlighted in yellow will "
-"not be created because they already exist. </span>"
+"<i class=\"oi\" data-icon=\"warning\" title=\"Warning\"/>\n"
+"                   <span>Importing sales from ARCA: Only invoices dated before the accounting start date will be imported.</span>"
 msgstr ""
 
 #. module: l10n_ar_import_bill
@@ -57,6 +57,11 @@ msgstr ""
 msgid ""
 "An uploaded file does not correspond to either sales or purchases for "
 "importing invoices from ARCA."
+msgstr ""
+
+#. module: l10n_ar_import_bill
+#: model:ir.module.module,shortdesc:base.module_l10n_ar_import_bill
+msgid "Argentinian Importing Bills from ARCA"
 msgstr ""
 
 #. module: l10n_ar_import_bill

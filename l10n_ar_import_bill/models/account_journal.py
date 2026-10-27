@@ -1,6 +1,5 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-import base64
 from io import BytesIO
 
 import pandas as pd
@@ -47,7 +46,7 @@ class AccountJournal(models.Model):
 
     def import_bills_from_xls(self, attachments):
         for attachment in attachments:
-            file_content = base64.b64decode(attachment.datas)
+            file_content = attachment.raw.content
             try:
                 df = pd.read_excel(BytesIO(file_content), engine="openpyxl")  # use openpyxl for .xlsx
             except Exception as e:

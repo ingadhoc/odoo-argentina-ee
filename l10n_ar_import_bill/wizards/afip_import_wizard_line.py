@@ -1,5 +1,15 @@
+import json
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
+from odoo.tools import SQL
+
+# Lo que ARCA escribe en la columna del tipo de documento y no coincide con la clave
+# del identificador en 20. El resto sale de la metadata del core, por clave.
+ARCA_IDENTIFIER_ALIASES = {
+    "pasaporte": "PASSPORT",
+    "passport": "PASSPORT",
+}
 
 
 class AfipImportWizardLine(models.TransientModel):
@@ -37,6 +47,9 @@ class AfipImportWizardLine(models.TransientModel):
 
     @api.depends("invoice_number", "partner_vat")
     def _compute_exists(self):
+        # Un listado de ARCA repite el mismo proveedor en muchas líneas: sin esto,
+        # resolverlo sería una consulta por línea.
+        partners = {}
         for line in self:
             # Determine move types based on journal type
             if line.wizard_id.journal_id.type == "sale":
@@ -44,17 +57,71 @@ class AfipImportWizardLine(models.TransientModel):
             else:
                 move_types = ["in_refund", "in_invoice"]
 
+            cache_key = (line._get_identifier_key(), line.partner_vat)
+            if cache_key not in partners:
+                partners[cache_key] = line._find_partner()
+            partner = partners[cache_key]
+            if not partner:
+                line.exists = False
+                continue
+
             existing_invoice = line.env["account.move"].search(
                 [
                     ("move_type", "in", move_types),
                     ("display_name", "ilike", line.invoice_number),
-                    ("partner_id.vat", "=", line.partner_vat),
+                    ("partner_id", "=", partner.id),
                     ("company_id", "=", line.wizard_id.company_id.id),
                 ],
                 limit=1,
             )
 
             line.exists = bool(existing_invoice)
+
+    def _get_identifier_key(self):
+        """ARCA nombra el tipo de documento ("CUIT", "DNI", "Pasaporte"). Hasta la 19 eso
+        era un registro del catálogo LatAm; en 20 el CUIT viaja en `vat` y los demás
+        documentos son identificadores adicionales del contacto.
+
+        The match is against identifier keys, never their labels: a label is translated
+        and would map the same file differently depending on who imports it.
+        """
+        self.ensure_one()
+        name = (self.partner_identification_type or "").strip().lower()
+        if not name:
+            return None
+        if name == "cuit":
+            return "AR_CUIT"
+        if name in ARCA_IDENTIFIER_ALIASES:
+            return ARCA_IDENTIFIER_ALIASES[name]
+        # La metadata del contacto mezcla las claves del core con las argentinas, así que
+        # acá entran tanto PASSPORT como AR_DNI; ARCA escribe la sigla, sin el prefijo.
+        for key in self.env["res.partner"]._get_all_additional_identifiers_metadata():
+            if key.lower() == name or key.lower().removeprefix("ar_") == name:
+                return key
+        return None
+
+    def _find_partner(self):
+        """El contacto que ya tiene el documento de esta línea, o vacío.
+
+        Los dos caminos buscan igual que en 19.0: el primero que tenga ese documento,
+        sin filtrar por compañía. An `additional_identifiers` lookup needs raw SQL
+        because a Json field cannot be searched through a domain.
+        """
+        self.ensure_one()
+        identifier_key = self._get_identifier_key()
+        if not identifier_key or identifier_key == "AR_CUIT":
+            return self.env["res.partner"].search([("vat", "=", self.partner_vat)], limit=1)
+
+        partners = self.env["res.partner"]
+        query = partners._search([("active", "=", True)], limit=1)
+        query.add_where(
+            SQL(
+                "%s @> %s::jsonb",
+                partners._field_to_sql(partners._table, "additional_identifiers"),
+                json.dumps({identifier_key: self.partner_vat}),
+            )
+        )
+        return partners.browse(query)
 
     def _get_partner_by_vat(self):
         """
@@ -64,23 +131,29 @@ class AfipImportWizardLine(models.TransientModel):
         """
         self.ensure_one()
 
-        partner = self.env["res.partner"].search([("vat", "=", self.partner_vat)], limit=1)
+        partner = self._find_partner()
 
         if not partner:
-            identification_type = self.env["l10n_latam.identification.type"].search(
-                [("name", "ilike", self.partner_identification_type)], limit=1
-            )
+            identifier_key = self._get_identifier_key()
+            vals = {"name": self.partner_name}
+            if identifier_key == "AR_CUIT":
+                # El país es lo que hace que 20 lea el número como CUIT: de ahí salen
+                # el código de AFIP y que el contacto quede como compañía.
+                vals["vat"] = self.partner_vat
+                vals["country_id"] = self.env.ref("base.ar").id
+            elif identifier_key:
+                # A personal document and a CUIT cannot live on the same partner in 20.0.
+                vals["additional_identifiers"] = {identifier_key: self.partner_vat}
+            else:
+                # Sin tipo reconocible el número va donde iba en 19.0, y el país no se
+                # inventa: un proveedor del exterior no es argentino.
+                vals["vat"] = self.partner_vat
 
-            partner = self.env["res.partner"].create(
-                {
-                    "name": self.partner_name,
-                    "vat": self.partner_vat,
-                    "l10n_latam_identification_type_id": identification_type.id,
-                    "company_type": "company",
-                }
-            )
+            partner = self.env["res.partner"].create(vals)
             # Si el tipo de identificación es CUIT (código AFIP 80), actualizamos los datos desde AFIP
-            if partner.l10n_latam_identification_type_id.l10n_ar_afip_code == 80:
+            # The code is text and this compares it to a number, so it never matches: kept as it
+            # was in 19.0, where the AFIP lookup was already dead. Turning it on is a decision.
+            if partner.l10n_ar_afip_code == 80:
                 partner.button_update_partner_data_from_afip()
 
         return partner

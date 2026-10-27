@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-30 11:22+0000\n"
-"PO-Revision-Date: 2026-04-20 15:41+0000\n"
+"POT-Creation-Date: 2026-10-27 18:08+0000\n"
+"PO-Revision-Date: 2026-10-27 18:08+0000\n"
 "Last-Translator: julia elizondo <jue@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
 "argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_import_bill/es/>\n"
@@ -23,28 +23,27 @@ msgstr ""
 "X-Generator: Weblate 5.10.4\n"
 
 #. module: l10n_ar_import_bill
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_file_wizard_form
 #: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
 msgid ""
-"<i class=\"fa fa-exclamation-triangle\" title=\"Warning\"/>\n"
-"                   <span>Importing sales from ARCA: Only invoices dated "
-"before the accounting start date will be imported.</span>"
-msgstr ""
-"<i class=\"fa fa-exclamation-triangle\" title=\"Warning\"/>\n"
-"                   <span>Importación de ventas desde ARCA: Solo se "
-"importarán las facturas con fecha anterior a la fecha de inicio de la "
-"contabilidad.</span>"
-
-#. module: l10n_ar_import_bill
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
-msgid ""
-"<i class=\"fa fa-info-circle\" title=\"Info\"/> <span "
+"<i class=\"oi\" data-icon=\"info\" title=\"Info\"/> <span "
 "invisible=\"total_bills_exists == 0\">Invoices highlighted in yellow will "
 "not be created because they already exist. </span>"
 msgstr ""
-"<i class=\"fa fa-info-circle\" title=\"Info\"/> <span "
+"<i class=\"oi\" data-icon=\"info\" title=\"Info\"/> <span "
 "invisible=\"total_bills_exists == 0\">Las facturas resaltadas en amarillo no "
 "se crearán porque ya existen. </span>"
+
+#. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_file_wizard_form
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
+msgid ""
+"<i class=\"oi\" data-icon=\"warning\" title=\"Warning\"/>\n"
+"                   <span>Importing sales from ARCA: Only invoices dated before the accounting start date will be imported.</span>"
+msgstr ""
+"<i class=\"oi\" data-icon=\"warning\" title=\"Warning\"/>\n"
+"                   <span>Importación de ventas desde ARCA: Solo se "
+"importarán las facturas con fecha anterior a la fecha de inicio de la "
+"contabilidad.</span>"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__file_data
@@ -54,7 +53,7 @@ msgstr "Archivo Excel ARCA"
 #. module: l10n_ar_import_bill
 #: model:ir.model,name:l10n_ar_import_bill.model_account_import_summary
 msgid "Account import summary view"
-msgstr "Vista de resumen de la importación de cuentas"
+msgstr "Vista de resumen de importación de cuenta"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,help:l10n_ar_import_bill.field_afip_import_wizard__counterpart_account_id
@@ -75,6 +74,11 @@ msgid ""
 msgstr ""
 "Se subió un archivo que no se corresponde ni con ventas ni con compras para "
 "importar facturas desde ARCA."
+
+#. module: l10n_ar_import_bill
+#: model:ir.module.module,shortdesc:base.module_l10n_ar_import_bill
+msgid "Argentinian Importing Bills from ARCA"
+msgstr "Importación de facturas desde ARCA"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__auto_validate
@@ -168,7 +172,7 @@ msgstr "Eliminar"
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__display_name
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__display_name
 msgid "Display Name"
-msgstr "Nombre para mostrar"
+msgstr "Mostrar nombre"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__document_type
@@ -413,7 +417,8 @@ msgstr ""
 #. module: l10n_ar_import_bill
 #. odoo-python
 #: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard.py:0
-msgid "No VAT tax found for the %s%% rate. Check whether this tax is disabled."
+msgid ""
+"No VAT tax found for the %s%% rate. Check whether this tax is disabled."
 msgstr ""
 "No se encontró un impuesto de IVA para la alícuota %s%%. Revise si este "
 "impuesto está deshabilitado."
@@ -474,9 +479,7 @@ msgstr "Por favor, suba un archivo Excel para importar."
 msgid ""
 "The file does not contain the following required columns: %s.\n"
 "\n"
-"If you did not make manual changes to the Excel file, ARCA may have changed "
-"the file format. In that case, please report the issue through a support "
-"ticket."
+"If you did not make manual changes to the Excel file, ARCA may have changed the file format. In that case, please report the issue through a support ticket."
 msgstr ""
 "El archivo no contiene las siguientes columnas requeridas: %s.\n"
 "\n"
