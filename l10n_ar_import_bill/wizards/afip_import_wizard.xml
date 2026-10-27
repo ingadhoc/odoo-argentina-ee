@@ -8,7 +8,7 @@
         <field name="arch" type="xml">
             <form>
                 <div class="alert alert-warning" role="status">
-                   <i class="fa fa-exclamation-triangle" title="Warning"/>
+                   <i class="oi" data-icon="warning" title="Warning"/>
                    <span>Importing sales from ARCA: Only invoices dated before the accounting start date will be imported.</span>
                 </div>
 
@@ -35,11 +35,11 @@
         <field name="arch" type="xml">
             <form >
                 <div class="alert alert-info" role="status" invisible="total_bills_exists == 0">
-                   <i class="fa fa-info-circle" title="Info"/> <span invisible="total_bills_exists == 0">Invoices highlighted in yellow will not be created because they already exist. </span>
+                   <i class="oi" data-icon="info" title="Info"/> <span invisible="total_bills_exists == 0">Invoices highlighted in yellow will not be created because they already exist. </span>
                 </div>
 
                 <div class="alert alert-warning" role="status" invisible="not context.get('from_settings')">
-                   <i class="fa fa-exclamation-triangle" title="Warning"/>
+                   <i class="oi" data-icon="warning" title="Warning"/>
                    <span>Importing sales from ARCA: Only invoices dated before the accounting start date will be imported.</span>
                 </div>
 
@@ -65,7 +65,7 @@
                         <field name="date_invoice"/>
                         <field name="currency"/>
                         <field name="amount_total"/>
-                        <button name="action_remove" type="object" icon="fa-trash-o" title="Delete" class="oe_inline"/>
+                        <button name="action_remove" type="object" icon="delete" title="Delete" class="oe_inline"/>
                     </list>
 
                 </field>

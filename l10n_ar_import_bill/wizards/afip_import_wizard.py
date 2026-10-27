@@ -36,7 +36,7 @@ class AfipImportWizard(models.TransientModel):
 
     file_data = fields.Binary(string="ARCA Excel File", help="Excel file exported from ARCA")
     file_name = fields.Char()
-    journal_domain = fields.Binary(
+    journal_domain = fields.Json(
         compute="_compute_journal_domain",
     )
 
@@ -59,7 +59,7 @@ class AfipImportWizard(models.TransientModel):
         attachment = self.env["ir.attachment"].create(
             {
                 "name": self.file_name or "import.xlsx",
-                "datas": self.file_data,
+                "raw": self.file_data,
             }
         )
         return self.journal_id.with_context(
