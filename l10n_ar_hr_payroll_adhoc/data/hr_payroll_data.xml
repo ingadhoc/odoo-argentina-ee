@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Categories: REM, NOREM, INDEM and DED build the net; COMP is employer cost -->
+    <record id="category_rem" model="hr.salary.rule.category">
+        <field name="name">Remunerative</field>
+        <field name="code">REM</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="category_sac" model="hr.salary.rule.category">
+        <field name="name">SAC</field>
+        <field name="code">SAC</field>
+        <field name="country_id" ref="base.ar"/>
+        <field name="parent_id" ref="category_rem"/>
+    </record>
+    <record id="category_norem" model="hr.salary.rule.category">
+        <field name="name">Non-remunerative</field>
+        <field name="code">NOREM</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="category_indem" model="hr.salary.rule.category">
+        <field name="name">Severance</field>
+        <field name="code">INDEM</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+
+    <!-- Work entry types and time off -->
+    <record id="work_entry_type_holiday" model="hr.work.entry.type">
+        <field name="name">Public Holiday</field>
+        <field name="code">LEAVE500</field>
+        <field name="is_leave" eval="True"/>
+    </record>
+    <record id="work_entry_type_vacation" model="hr.work.entry.type">
+        <field name="name">Vacations</field>
+        <field name="code">LEAVE720</field>
+        <field name="is_leave" eval="True"/>
+    </record>
+    <record id="work_entry_type_unjustified" model="hr.work.entry.type">
+        <field name="name">Unjustified Absence</field>
+        <field name="code">LEAVE700</field>
+        <field name="is_leave" eval="True"/>
+    </record>
+    <record id="leave_type_vacation" model="hr.leave.type">
+        <field name="name">Vacations</field>
+        <field name="work_entry_type_id" ref="work_entry_type_vacation"/>
+        <field name="requires_allocation" eval="True"/>
+        <field name="leave_validation_type">hr</field>
+        <field name="request_unit">day</field>
+        <field name="company_id" eval="False"/>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="leave_type_unjustified" model="hr.leave.type">
+        <field name="name">Unjustified Absence</field>
+        <field name="work_entry_type_id" ref="work_entry_type_unjustified"/>
+        <field name="requires_allocation" eval="False"/>
+        <field name="leave_validation_type">hr</field>
+        <field name="request_unit">day</field>
+        <field name="company_id" eval="False"/>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+
+    <!-- Novedades: inputs loaded on the payslip or from salary adjustments -->
+    <record id="input_rem" model="hr.payslip.input.type">
+        <field name="name">Other Remunerative</field>
+        <field name="code">AR_REM</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_norem" model="hr.payslip.input.type">
+        <field name="name">Non-remunerative</field>
+        <field name="code">AR_NOREM</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_vacation_days" model="hr.payslip.input.type">
+        <field name="name">Unused Vacation Days</field>
+        <field name="code">AR_VAC_DAYS</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+
+    <!-- Structures: rule_ids is set empty to skip the generic default rules -->
+    <record id="structure_type_lct" model="hr.payroll.structure.type">
+        <field name="name">LCT fuera de convenio</field>
+        <field name="wage_type">monthly</field>
+        <field name="default_schedule_pay">monthly</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="structure_monthly" model="hr.payroll.structure">
+        <field name="name">LCT: Monthly</field>
+        <field name="code">AR_MONTHLY</field>
+        <field name="report_id" ref="action_report_payslip_ar"/>
+        <field name="l10n_ar_kind">monthly</field>
+        <field name="type_id" ref="structure_type_lct"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="rule_ids" eval="[]"/>
+        <field name="unpaid_work_entry_type_ids" eval="[(4, ref('work_entry_type_unjustified')), (4, ref('hr_work_entry.work_entry_type_unpaid_leave'))]"/>
+        <field name="input_line_type_ids" eval="[(4, ref('input_rem')), (4, ref('input_norem')), (4, ref('hr_payroll.input_deduction')), (4, ref('hr_payroll.input_attachment_salary'))]"/>
+    </record>
+    <function model="hr.payroll.structure.type" name="write">
+        <value eval="[ref('structure_type_lct')]"/>
+        <value eval="{'default_struct_id': ref('structure_monthly')}"/>
+    </function>
+    <record id="structure_sac" model="hr.payroll.structure">
+        <field name="name">LCT: SAC</field>
+        <field name="code">AR_SAC</field>
+        <field name="report_id" ref="action_report_payslip_ar"/>
+        <field name="payslip_name">Thirteenth Salary</field>
+        <field name="l10n_ar_kind">sac</field>
+        <field name="type_id" ref="structure_type_lct"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="use_worked_day_lines" eval="False"/>
+        <field name="rule_ids" eval="[]"/>
+        <field name="input_line_type_ids" eval="[(4, ref('hr_payroll.input_deduction')), (4, ref('hr_payroll.input_attachment_salary'))]"/>
+    </record>
+    <record id="structure_final" model="hr.payroll.structure">
+        <field name="name">LCT: Final Settlement</field>
+        <field name="code">AR_FINAL</field>
+        <field name="report_id" ref="action_report_payslip_ar"/>
+        <field name="payslip_name">Final Settlement</field>
+        <field name="l10n_ar_kind">final</field>
+        <field name="type_id" ref="structure_type_lct"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="rule_ids" eval="[]"/>
+        <field name="unpaid_work_entry_type_ids" eval="[(4, ref('work_entry_type_unjustified')), (4, ref('hr_work_entry.work_entry_type_unpaid_leave'))]"/>
+        <field name="input_line_type_ids" eval="[(4, ref('input_rem')), (4, ref('input_norem')), (4, ref('input_vacation_days')), (4, ref('hr_payroll.input_deduction')), (4, ref('hr_payroll.input_attachment_salary'))]"/>
+    </record>
+</odoo>

@@ -1,0 +1,846 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* l10n_ar_hr_payroll_adhoc
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+"Language: es\n"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar_lines
+msgid "%"
+msgstr "%"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_adhoc/models/hr_employee.py:0
+msgid "%(employee)s can have at most three employment status changes per month."
+msgstr "%(employee)s puede tener como máximo tres cambios de situación de revista por mes."
+
+#. module: l10n_ar_hr_payroll_adhoc
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_adhoc/wizard/l10n_ar_lsd_wizard.py:0
+msgid "%s has more than three employment status changes in the period."
+msgstr "%s tiene más de tres cambios de situación de revista en el período."
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:mail.template,body_html:l10n_ar_hr_payroll_adhoc.mail_template_payslip_ar
+msgid ",<br><br>\n    Please find attached your payslip for the period"
+msgstr ",<br><br>\n    Te adjuntamos tu recibo de sueldo del período"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:mail.template,body_html:l10n_ar_hr_payroll_adhoc.mail_template_payslip_ar
+msgid ".<br><br>\n    Best regards,<br>"
+msgstr ".<br><br>\n    Saludos,<br>"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "<strong>Receipt Law 20.744</strong>"
+msgstr "<strong>Recibo Ley 20.744</strong>"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_canssal
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_canssal
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_sac_canssal
+msgid "ANSSAL"
+msgstr "ANSSAL"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.actions.act_window,name:l10n_ar_hr_payroll_adhoc.action_l10n_ar_payroll_afip_code
+#: model:ir.ui.menu,name:l10n_ar_hr_payroll_adhoc.menu_l10n_ar_payroll_afip_code
+msgid "ARCA Codes"
+msgstr "Códigos ARCA"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model,name:l10n_ar_hr_payroll_adhoc.model_l10n_ar_payroll_afip_code
+msgid "ARCA code for the digital payroll book"
+msgstr "Código ARCA para libro de sueldos digital"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_adhoc/models/hr_payslip.py:0
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_art
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_art
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_sac_art
+msgid "ART"
+msgstr "ART"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_artf
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_artf
+msgid "ART Fixed Fee"
+msgstr "ART cuota fija"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_hr_employee__l10n_ar_activity_id
+#: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_adhoc.selection__l10n_ar_payroll_afip_code__type__2
+msgid "Activity"
+msgstr "Actividad"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_adhoc/wizard/l10n_ar_lsd_wizard.py:0
+msgid "All batches must belong to the same company."
+msgstr "Todos los lotes tienen que ser de la misma compañía."
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Amount"
+msgstr "Monto"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Amount in words:"
+msgstr "Son pesos:"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Base"
+msgstr "Base"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,help:l10n_ar_hr_payroll_adhoc.field_hr_employee__l10n_ar_seniority_date
+msgid "Base for seniority. If empty, the contract start date is used."
+msgstr "Base para la antigüedad. Si está vacía se usa el inicio del contrato."
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_basic
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_basic
+msgid "Basic Salary"
+msgstr "Sueldo básico"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_l10n_ar_lsd_wizard__run_ids
+msgid "Batches"
+msgstr "Lotes"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "C.U.I.T."
+msgstr "C.U.I.T."
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "CBU for salary deposit:"
+msgstr "CBU para depósito de haberes:"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.hr_employee_view_form
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "CUIL"
+msgstr "CUIL"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_hr_employee__l10n_ar_casualty_id
+#: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_adhoc.selection__l10n_ar_payroll_afip_code__type__4
+msgid "Casualty"
+msgstr "Siniestrado"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_adhoc.selection__l10n_ar_payroll_family__kind__children
+msgid "Children"
+msgstr "Hijos"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.l10n_ar_lsd_wizard_view_form
+msgid "Close"
+msgstr "Cerrar"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Code"
+msgstr "Código"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,help:l10n_ar_hr_payroll_adhoc.field_hr_salary_rule__l10n_ar_lsd_code
+msgid "Concept code in the digital payroll book. If empty, the rule code is used."
+msgstr "Código del concepto en el libro de sueldos digital. Si está vacío se usa el código de la regla."
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_hr_employee__l10n_ar_condition_id
+#: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_adhoc.selection__l10n_ar_payroll_afip_code__type__1
+msgid "Condition"
+msgstr "Condición"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Contributions Paid On"
+msgstr "F. pago aportes"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_hr_payslip_run__l10n_ar_contribution_date
+msgid "Contributions Payment Date"
+msgstr "Fecha de pago de aportes"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,help:l10n_ar_hr_payroll_adhoc.field_hr_payslip_run__l10n_ar_contribution_date
+msgid "Date of the last social security deposit, shown on the payslip."
+msgstr "Fecha del último depósito de aportes, se informa en el recibo."
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_adhoc.selection__res_company__l10n_ar_employer_type__8
+msgid "Decree 1212/03 - AFA clubs"
+msgstr "Decreto 1212/03 - Clubes AFA"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_adhoc.selection__res_company__l10n_ar_employer_type__4
+msgid "Decree 814/01, art. 2 sub. A"
+msgstr "Decreto 814/01, art. 2 inc. A"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_adhoc.selection__res_company__l10n_ar_employer_type__1
+msgid "Decree 814/01, art. 2 sub. B"
+msgstr "Decreto 814/01, art. 2 inc. B"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_deduction
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_deduction
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_sac_deduction
+msgid "Deduction"
+msgstr "Deducción"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Deductions"
+msgstr "Descuentos"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Deductions:"
+msgstr "Descuentos:"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_l10n_ar_payroll_family__children_count
+msgid "Dependent Children"
+msgstr "Hijos a cargo"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_l10n_ar_payroll_family__dependent
+msgid "Dependent Spouse"
+msgstr "Cónyuge a cargo"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Detail"
+msgstr "Detalle"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.actions.act_window,name:l10n_ar_hr_payroll_adhoc.action_l10n_ar_lsd_wizard
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.l10n_ar_lsd_wizard_view_form
+msgid "Digital Payroll Book"
+msgstr "Libro de sueldos digital"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model,name:l10n_ar_hr_payroll_adhoc.model_l10n_ar_lsd_wizard
+msgid "Digital payroll book"
+msgstr "Libro de sueldos digital"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_hr_payslip__l10n_ar_dismissal
+msgid "Dismissal Without Cause"
+msgstr "Despido sin causa"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Employee Signature"
+msgstr "Firma empleado"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Employee:"
+msgstr "Trabajador:"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Employer Contributions Subtotal"
+msgstr "Subtotal contribuciones empleador"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_cos
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_cos
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_sac_cos
+msgid "Employer Health Insurance"
+msgstr "Contribución obra social"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_cley19032
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_cley19032
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_sac_cley19032
+msgid "Employer Law 19.032"
+msgstr "Contribución ley 19.032"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_cjub
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_cjub
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_sac_cjub
+msgid "Employer Retirement"
+msgstr "Contribución jubilación"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Employer Signature"
+msgstr "Firma empleador"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_res_company__l10n_ar_employer_type
+msgid "Employer Type (LSD)"
+msgstr "Tipo de empleador (LSD)"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Employer:"
+msgstr "Empleador:"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_l10n_ar_payroll_situation__situation_id
+#: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_adhoc.selection__l10n_ar_payroll_afip_code__type__6
+msgid "Employment Status"
+msgstr "Situación de revista"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_hr_employee__l10n_ar_situation_ids
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.hr_employee_view_form
+msgid "Employment Status History"
+msgstr "Historial de situación de revista"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model,name:l10n_ar_hr_payroll_adhoc.model_l10n_ar_payroll_situation
+msgid "Employment status history (digital payroll book)"
+msgstr "Historial de situación de revista (libro de sueldos digital)"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,help:l10n_ar_hr_payroll_adhoc.field_hr_payslip__l10n_ar_dismissal
+msgid "Enables notice period, month integration and seniority severance."
+msgstr "Habilita preaviso, integración del mes e indemnización por antigüedad."
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_cfam
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_cfam
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_sac_cfam
+msgid "Family Allowances"
+msgstr "Asignaciones familiares"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_hr_employee__l10n_ar_family_ids
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.hr_employee_view_form
+msgid "Family Information"
+msgstr "Información familiar"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model,name:l10n_ar_hr_payroll_adhoc.model_l10n_ar_payroll_family
+msgid "Family information history (digital payroll book)"
+msgstr "Historial de información familiar (libro de sueldos digital)"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_l10n_ar_lsd_wizard__lsd_file
+msgid "File"
+msgstr "Archivo"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "File No."
+msgstr "Nº legajo"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_hr_employee__l10n_ar_file_number
+msgid "File Number"
+msgstr "Legajo"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.payroll.structure,payslip_name:l10n_ar_hr_payroll_adhoc.structure_final
+#: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_adhoc.selection__hr_payroll_structure__l10n_ar_kind__final
+msgid "Final Settlement"
+msgstr "Liquidación final"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_l10n_ar_payroll_family__date_from
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_l10n_ar_payroll_situation__date_from
+msgid "From"
+msgstr "Desde"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Full Name"
+msgstr "Apellido y nombres"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.l10n_ar_lsd_wizard_view_form
+msgid "Generate File"
+msgstr "Generar archivo"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Gross Salary"
+msgstr "Sueldo bruto"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_os
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_os
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_sac_os
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_hr_employee__l10n_ar_health_insurance_id
+#: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_adhoc.selection__l10n_ar_payroll_afip_code__type__7
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Health Insurance"
+msgstr "Obra social"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_adhoc/models/hr_payslip.py:0
+msgid "Health insurance"
+msgstr "Obra social"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:mail.template,body_html:l10n_ar_hr_payroll_adhoc.mail_template_payslip_ar
+msgid "Hello"
+msgstr "Hola"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_hr_employee__l10n_ar_modality_id
+#: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_adhoc.selection__l10n_ar_payroll_afip_code__type__3
+msgid "Hiring Modality"
+msgstr "Modalidad de contratación"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "I received the amount of this settlement as payment of my remuneration for the stated period, and its duplicate, in accordance with current law."
+msgstr "Recibí el importe de esta liquidación en pago de mi remuneración correspondiente al período indicado y duplicado de la misma conforme a la ley vigente."
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Job Category"
+msgstr "Categoría laboral"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.payroll.structure,name:l10n_ar_hr_payroll_adhoc.structure_final
+msgid "LCT: Final Settlement"
+msgstr "LCT: Liquidación final"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.payroll.structure,name:l10n_ar_hr_payroll_adhoc.structure_monthly
+msgid "LCT: Monthly"
+msgstr "LCT: Mensual"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.payroll.structure,name:l10n_ar_hr_payroll_adhoc.structure_sac
+msgid "LCT: SAC"
+msgstr "LCT: Aguinaldo (SAC)"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_hr_salary_rule__l10n_ar_lsd_code
+msgid "LSD Code"
+msgstr "Código LSD"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_ley19032
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_ley19032
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_sac_ley19032
+msgid "Law 19.032"
+msgstr "Ley 19.032"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_adhoc/models/hr_payslip.py:0
+msgid "Life insurance"
+msgstr "Seguro de vida"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_scvo
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_scvo
+msgid "Mandatory Life Insurance"
+msgstr "Seguro de vida obligatorio"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Month"
+msgstr "Mes"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_imd
+msgid "Month of Dismissal Integration"
+msgstr "Integración mes de despido"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_adhoc.selection__hr_payroll_structure__l10n_ar_kind__monthly
+msgid "Monthly"
+msgstr "Mensual"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_cfne
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_cfne
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_sac_cfne
+msgid "National Employment Fund"
+msgstr "Fondo Nacional de Empleo"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_net
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_net
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_sac_net
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Net Salary"
+msgstr "Sueldo neto"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.payslip.input.type,name:l10n_ar_hr_payroll_adhoc.input_norem
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_ar_norem
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_ar_norem
+#: model:hr.salary.rule.category,name:l10n_ar_hr_payroll_adhoc.category_norem
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Non-remunerative"
+msgstr "No remunerativo"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Non-remunerative:"
+msgstr "No remunerativo:"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_hr_payslip__l10n_ar_notice_given
+msgid "Notice Given"
+msgstr "Preaviso otorgado"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.payslip.input.type,name:l10n_ar_hr_payroll_adhoc.input_rem
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_ar_rem
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_ar_rem
+msgid "Other Remunerative"
+msgstr "Otros remunerativos"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_adhoc/models/hr_payslip.py:0
+msgid "PAMI"
+msgstr "PAMI"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_hr_payslip_run__l10n_ar_payment_date
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Payment Date"
+msgstr "Fecha de pago"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_preav
+msgid "Payment in Lieu of Notice"
+msgstr "Indemnización sustitutiva de preaviso"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.hr_employee_view_form
+msgid "Payroll Book"
+msgstr "Libro de sueldos"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:mail.template,name:l10n_ar_hr_payroll_adhoc.mail_template_payslip_ar
+msgid "Payroll: Payslip (AR)"
+msgstr "Nómina: recibo de sueldo (AR)"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.actions.report,name:l10n_ar_hr_payroll_adhoc.action_report_payslip_ar
+msgid "Payslip (AR)"
+msgstr "Recibo de sueldo"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:mail.template,subject:l10n_ar_hr_payroll_adhoc.mail_template_payslip_ar
+msgid "Payslip {{ object.date_to.strftime('%m/%Y') }} - {{ object.employee_id.name }}"
+msgstr "Recibo de sueldo {{ object.date_to.strftime('%m/%Y') }} - {{ object.employee_id.name }}"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Place of Payment"
+msgstr "Lugar de pago"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_adhoc.selection__res_company__l10n_ar_employer_type__7
+msgid "Private education"
+msgstr "Enseñanza privada"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_sac
+msgid "Proportional SAC"
+msgstr "SAC proporcional"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_feriado
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_feriado
+#: model:hr.work.entry.type,name:l10n_ar_hr_payroll_adhoc.work_entry_type_holiday
+msgid "Public Holiday"
+msgstr "Feriado"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_adhoc.selection__res_company__l10n_ar_employer_type__0
+msgid "Public administration"
+msgstr "Administración pública"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_hr_employee__l10n_ar_seniority_date
+msgid "Recognized Start Date"
+msgstr "Fecha de ingreso reconocida"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.actions.server,name:l10n_ar_hr_payroll_adhoc.action_l10n_ar_register_payments
+msgid "Register Employee Payments"
+msgstr "Registrar pagos a empleados"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule.category,name:l10n_ar_hr_payroll_adhoc.category_rem
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Remunerative"
+msgstr "Remunerativo"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_gross
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_gross
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_sac_gross
+msgid "Remunerative Gross"
+msgstr "Bruto remunerativo"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Remunerative:"
+msgstr "Remunerativo:"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_jub
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_jub
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_sac_jub
+msgid "Retirement"
+msgstr "Jubilación"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule.category,name:l10n_ar_hr_payroll_adhoc.category_sac
+#: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_adhoc.selection__hr_payroll_structure__l10n_ar_kind__sac
+msgid "SAC"
+msgstr "SAC"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_imdsac
+msgid "SAC on Month of Dismissal Integration"
+msgstr "SAC s/ integración mes de despido"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_preavsac
+msgid "SAC on Notice"
+msgstr "SAC s/ preaviso"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_vngsac
+msgid "SAC on Unused Vacations"
+msgstr "SAC s/ vacaciones no gozadas"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Salary"
+msgstr "Sueldo"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Salary Breakdown"
+msgstr "Composición salarial"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Salary Breakdown Detail"
+msgstr "Detalle de la composición salarial"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Seniority"
+msgstr "Antigüedad"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_iatg
+msgid "Seniority Severance"
+msgstr "Indemnización por antigüedad"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_adhoc/wizard/l10n_ar_lsd_wizard.py:0
+msgid "Set the employment status history of %s."
+msgstr "Cargá el historial de situación de revista de %s."
+
+#. module: l10n_ar_hr_payroll_adhoc
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_adhoc/wizard/l10n_ar_lsd_wizard.py:0
+msgid "Set the payment date on the batch."
+msgstr "Cargá la fecha de pago en el lote."
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_hr_payroll_structure__l10n_ar_kind
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_hr_payslip__l10n_ar_kind
+msgid "Settlement Kind (AR)"
+msgstr "Tipo de liquidación (AR)"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_l10n_ar_lsd_wizard__liquidation_number
+msgid "Settlement Number"
+msgstr "Número de liquidación"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule.category,name:l10n_ar_hr_payroll_adhoc.category_indem
+msgid "Severance"
+msgstr "Indemnizaciones"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_adhoc/models/hr_payslip.py:0
+msgid "Social security"
+msgstr "Seguridad social"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_adhoc.selection__l10n_ar_payroll_family__kind__spouse
+msgid "Spouse"
+msgstr "Cónyuge"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Start Date"
+msgstr "Fecha de ingreso"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_adhoc/models/hr_payslip.py:0
+msgid "Taxable salary"
+msgstr "Sueldo imponible"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_adhoc.selection__res_company__l10n_ar_employer_type__5
+msgid "Temporary services, art. 2 sub. A"
+msgstr "Servicios eventuales, art. 2 inc. A"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_adhoc.selection__res_company__l10n_ar_employer_type__2
+msgid "Temporary services, art. 2 sub. B"
+msgstr "Servicios eventuales, art. 2 inc. B"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_adhoc/wizard/l10n_ar_lsd_wizard.py:0
+msgid "The CUIL (11 digits) of %s is missing."
+msgstr "Falta el CUIL (11 dígitos) de %s."
+
+#. module: l10n_ar_hr_payroll_adhoc
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_adhoc/wizard/l10n_ar_lsd_wizard.py:0
+msgid "The batches have no validated payslips."
+msgstr "Los lotes no tienen recibos validados."
+
+#. module: l10n_ar_hr_payroll_adhoc
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_adhoc/models/hr_payslip_run.py:0
+msgid "There are no pending salaries to pay. Check that the journal entry is posted and that the NET rule has a reconcilable credit account and \"Set employee on account line\"."
+msgstr "No hay sueldos a pagar pendientes. Revisá que el asiento esté publicado y que la regla NET tenga cuenta acreedora conciliable y \"Asignar empleado en la línea contable\"."
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.payroll.structure,payslip_name:l10n_ar_hr_payroll_adhoc.structure_sac
+msgid "Thirteenth Salary"
+msgstr "Aguinaldo"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_sac_sac
+msgid "Thirteenth Salary (SAC)"
+msgstr "Aguinaldo (SAC)"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Total ART Cost"
+msgstr "Total costo ART"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Total Employer Cost"
+msgstr "Costo total empleador"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Total Health Insurance"
+msgstr "Total obra social"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Total INSSJP Cost"
+msgstr "Total costo INSSJP"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Total Life Insurance Cost"
+msgstr "Total costo seguro de vida"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Total Social Security"
+msgstr "Total seguridad social"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Total Union Cost"
+msgstr "Total costo sindical"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_l10n_ar_payroll_family__kind
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.l10n_ar_payroll_afip_code_view_search
+msgid "Type"
+msgstr "Tipo"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_adhoc/models/hr_payslip.py:0
+msgid "Union cost"
+msgstr "Costo sindical"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Units"
+msgstr "Unidades"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.leave.type,name:l10n_ar_hr_payroll_adhoc.leave_type_unjustified
+#: model:hr.work.entry.type,name:l10n_ar_hr_payroll_adhoc.work_entry_type_unjustified
+msgid "Unjustified Absence"
+msgstr "Ausencia injustificada"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.payslip.input.type,name:l10n_ar_hr_payroll_adhoc.input_vacation_days
+msgid "Unused Vacation Days"
+msgstr "Días de vacaciones no gozadas"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_vng
+msgid "Unused Vacations"
+msgstr "Vacaciones no gozadas"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_plusvac
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_plusvac
+msgid "Vacation Bonus"
+msgstr "Plus vacacional"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.leave.type,name:l10n_ar_hr_payroll_adhoc.leave_type_vacation
+#: model:hr.work.entry.type,name:l10n_ar_hr_payroll_adhoc.work_entry_type_vacation
+msgid "Vacations"
+msgstr "Vacaciones"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_final_attach_salary
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_monthly_attach_salary
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_adhoc.rule_sac_attach_salary
+msgid "Wage Garnishment"
+msgstr "Embargo"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_adhoc.report_payslip_ar
+msgid "Year"
+msgstr "Año"
+
+#. module: l10n_ar_hr_payroll_adhoc
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_adhoc.field_hr_employee__l10n_ar_zone_id
+#: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_adhoc.selection__l10n_ar_payroll_afip_code__type__5
+msgid "Zone"
+msgstr "Zona"
