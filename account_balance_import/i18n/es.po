@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-21 17:43+0000\n"
-"PO-Revision-Date: 2026-04-13 22:41+0000\n"
+"POT-Creation-Date: 2026-10-28 19:23+0000\n"
+"PO-Revision-Date: 2026-10-28 19:23+0000\n"
 "Last-Translator: carla spiaggi <sca@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
 "enterprise-extensions-19-0/enterprise-extensions-19-0-account_balance_import/"
@@ -28,13 +28,11 @@ msgstr ""
 msgid ""
 ".. |company| replace:: ADHOC SA\n"
 "\n"
-".. |company_logo| image:: https://raw.githubusercontent.com/ingadhoc/"
-"maintainer-tools/master/resources/adhoc-logo.png\n"
+".. |company_logo| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-logo.png\n"
 "   :alt: ADHOC SA\n"
 "   :target: https://www.adhoc.com.ar\n"
 "\n"
-".. |icon| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-"
-"tools/master/resources/adhoc-icon.png\n"
+".. |icon| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-icon.png\n"
 "\n"
 ".. image:: https://img.shields.io/badge/license-AGPL--3-blue.png\n"
 "   :target: https://www.gnu.org/licenses/agpl\n"
@@ -57,34 +55,21 @@ msgid ""
 "\n"
 "Account Balance Import\n"
 "======================\n"
-"Este módulo extiende la funcionalidad de importación de saldos iniciales "
-"contables, proporcionando una interfaz mejorada en la configuración de "
-"contabilidad.\n"
+"Este módulo extiende la funcionalidad de importación de saldos iniciales contables, proporcionando una interfaz mejorada en la configuración de contabilidad.\n"
 "\n"
 "Características principales:\n"
 "\n"
-"* **Revisión de Datos de Empresa (Review Company Data)**: Permite revisar y "
-"confirmar la información de la compañía antes de iniciar el proceso de "
-"importación.\n"
+"* **Revisión de Datos de Empresa (Review Company Data)**: Permite revisar y confirmar la información de la compañía antes de iniciar el proceso de importación.\n"
 "\n"
-"* **Configuración de Períodos (Set Periods)**: Facilita la configuración de "
-"años fiscales y períodos contables necesarios para la importación.\n"
+"* **Configuración de Períodos (Set Periods)**: Facilita la configuración de años fiscales y períodos contables necesarios para la importación.\n"
 "\n"
-"* **Importación de Saldos de Partners (Partners Balance)**: Importa saldos "
-"iniciales de partners (deudores por ventas, proveedores y otras cuentas a "
-"cobrar o a pagar). Se generan los asientos contables correspondientes y las "
-"deudas quedan correctamente vinculadas.\n"
+"* **Importación de Saldos de Partners (Partners Balance)**: Importa saldos iniciales de partners (deudores por ventas, proveedores y otras cuentas a cobrar o a pagar). Se generan los asientos contables correspondientes y las deudas quedan correctamente vinculadas.\n"
 "\n"
-"* **Revisión de Plan de Cuentas (Chart of Accounts)**: Permite revisar el "
-"plan de cuentas y configurar los saldos de fin de año para cada cuenta "
-"contable.\n"
+"* **Revisión de Plan de Cuentas (Chart of Accounts)**: Permite revisar el plan de cuentas y configurar los saldos de fin de año para cada cuenta contable. Desde la misma tarjeta se descarga una plantilla Excel con el plan de cuentas de la compañía activa (sin las cuentas a cobrar ni a pagar) y se importa con la importación nativa de Odoo, que busca cada cuenta por su id (columna ``.id``) o, si la fila no lo trae, por su código, y genera el asiento de apertura de la compañía en borrador. Si el archivo va a crear cuentas nuevas o a cambiar el nombre o el código de las existentes, la importación primero las lista y recién aplica los cambios al volver a importar.\n"
 "\n"
-"El módulo reorganiza la interfaz de importación en la configuración de "
-"contabilidad, dividiendo las opciones en dos secciones:\n"
-"- **Initial Setup** (izquierda): Configuración inicial de empresa y "
-"períodos\n"
-"- **Importación de Datos** (derecha): Importación de saldos de partners y "
-"cuentas contables\n"
+"El módulo reorganiza la interfaz de importación en la configuración de contabilidad, dividiendo las opciones en dos secciones:\n"
+"- **Initial Setup** (izquierda): Configuración inicial de empresa y períodos\n"
+"- **Importación de Datos** (derecha): Importación de saldos de partners y cuentas contables\n"
 "\n"
 "\n"
 "Usage\n"
@@ -93,8 +78,7 @@ msgid ""
 "Para utilizar este módulo:\n"
 "\n"
 "1. Vaya a Contabilidad > Configuración > Ajustes\n"
-"2. En la sección \"Initial Setup\", ajuste \"Accounting import\", encontrará "
-"las opciones organizadas:\n"
+"2. En la sección \"Initial Setup\", ajuste \"Accounting import\", encontrará las opciones organizadas:\n"
 "\n"
 "   **Initial Setup:**\n"
 "\n"
@@ -104,8 +88,7 @@ msgid ""
 "   **Importación:**\n"
 "\n"
 "   - Partners Balance: Importe saldos iniciales de partners\n"
-"   - Chart of Accounts: Revise su plan de cuentas e importe saldos "
-"contables\n"
+"   - Chart of Accounts: Revise su plan de cuentas e importe saldos contables con la plantilla del plan de cuentas\n"
 "\n"
 "\n"
 "Bug Tracker\n"
@@ -178,6 +161,11 @@ msgid "Account Balance"
 msgstr ""
 
 #. module: account_balance_import
+#: model:ir.model.fields,field_description:account_balance_import.field_base_import_import__account_balance_announced
+msgid "Account Balance Announced"
+msgstr "Cambios de cuentas ya informados"
+
+#. module: account_balance_import
 #: model:ir.actions.act_window,name:account_balance_import.account_balance_import_action
 msgid "Account Balance Import Wizard"
 msgstr "Asistente de Importación de Saldos de Cuentas"
@@ -206,6 +194,11 @@ msgstr "Ajuste"
 #: model:ir.model.fields,field_description:account_balance_import.field_account_account__amount_in_currency
 msgid "Amount in Account Currency"
 msgstr "Importe en la moneda de la cuenta"
+
+#. module: account_balance_import
+#: model:ir.model,name:account_balance_import.model_base_import_import
+msgid "Base Import"
+msgstr "Importación base"
 
 #. module: account_balance_import
 #: model_terms:ir.ui.view,arch_db:account_balance_import.account_balance_import_wizard
@@ -286,6 +279,12 @@ msgid "Currency"
 msgstr "Moneda"
 
 #. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/models/base_import.py:0
+msgid "Database ID"
+msgstr "ID de base de datos"
+
+#. module: account_balance_import
 #: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__partner_balance_type
 msgid "Debt Type"
 msgstr "Tipo de Deuda"
@@ -300,6 +299,12 @@ msgstr "Tipo de Deuda"
 #: model:ir.model.fields,field_description:account_balance_import.field_res_currency__display_name
 msgid "Display Name"
 msgstr "Nombre para mostrar"
+
+#. module: account_balance_import
+#. odoo-javascript
+#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
+msgid "Download"
+msgstr "Descargar"
 
 #. module: account_balance_import
 #: model_terms:ir.ui.view,arch_db:account_balance_import.account_balance_import_wizard
@@ -370,6 +375,12 @@ msgid "Import"
 msgstr "Importar"
 
 #. module: account_balance_import
+#. odoo-javascript
+#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
+msgid "Import Account Balances"
+msgstr "Importar Saldos de Cuentas"
+
+#. module: account_balance_import
 #: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__file
 msgid "Import File"
 msgstr "Archivo de Importación"
@@ -400,6 +411,12 @@ msgstr "Asistente de Importación"
 #: code:addons/account_balance_import/static/src/xml/account_import.xml:0
 msgid "Import initial balances for your partners."
 msgstr "Importar saldos iniciales para sus partners."
+
+#. module: account_balance_import
+#. odoo-javascript
+#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
+msgid "Import the initial balances of your accounts using the"
+msgstr "Importe los saldos iniciales de sus cuentas con la"
 
 #. module: account_balance_import
 #. odoo-python
@@ -438,6 +455,26 @@ msgstr "Última actualización por"
 #: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__write_date
 msgid "Last Updated on"
 msgstr "Última actualización el"
+
+#. module: account_balance_import
+#: model:ir.model.fields,help:account_balance_import.field_base_import_import__account_balance_announced
+msgid ""
+"New and renamed accounts already shown to the user on the account balances "
+"import"
+msgstr ""
+"Cuentas nuevas y renombradas que ya se le mostraron al usuario en la "
+"importación de saldos de cuentas"
+
+#. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/models/account_account.py:0
+msgid ""
+"Nothing was imported: the file would create or rename accounts "
+"(%(changes)s). Check that the file is right; if it is, click Import again."
+msgstr ""
+"No se importó nada: el archivo crearía o renombraría cuentas "
+"(%(changes)s). Verifique que el archivo sea correcto; si lo es, haga clic "
+"en Importar nuevamente."
 
 #. module: account_balance_import
 #: model:ir.model,name:account_balance_import.model_onboarding_onboarding
@@ -618,6 +655,16 @@ msgstr ""
 
 #. module: account_balance_import
 #. odoo-python
+#: code:addons/account_balance_import/models/account_account.py:0
+msgid ""
+"The import will create or rename accounts (%(changes)s). Check that the file"
+" is right; if it is, click Import."
+msgstr ""
+"La importación creará o renombrará cuentas (%(changes)s). Verifique que el "
+"archivo sea correcto; si lo es, haga clic en Importar."
+
+#. module: account_balance_import
+#. odoo-python
 #: code:addons/account_balance_import/wizards/account_balance_import.py:0
 msgid ""
 "The number of columns (%(actual)s) does not match the expected number "
@@ -671,143 +718,26 @@ msgstr ""
 "Por favor, haga clic en 'Configurar Periodos' para configurar la fecha de "
 "apertura y los períodos fiscales."
 
-#~ msgid ""
-#~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
-#~ "                                    Download Partner Balances Import "
-#~ "Template"
-#~ msgstr ""
-#~ "<span class=\"fa fa-download\" title=\"Descargar\"/>\n"
-#~ "                                    Descargar Plantilla de Importación de "
-#~ "Saldos de Partners"
+#. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/models/account_account.py:0
+msgid "new accounts: %(accounts)s"
+msgstr "cuentas nuevas: %(accounts)s"
 
-#~ msgid "<span class=\"fa fa-info\" aria-label=\"info\"/>"
-#~ msgstr "<span class=\"fa fa-info\" aria-label=\"info\"/>"
+#. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/models/account_account.py:0
+msgid "renamed accounts: %(accounts)s"
+msgstr "cuentas renombradas: %(accounts)s"
 
-#~ msgid "Companies"
-#~ msgstr "Compañias"
+#. module: account_balance_import
+#. odoo-javascript
+#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
+msgid "template"
+msgstr "plantilla"
 
-#~ msgid ""
-#~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
-#~ "                                Descargar Plantilla de Importación de "
-#~ "Cheques Propios"
-#~ msgstr ""
-#~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
-#~ "                                Descargar Plantilla de Importación de "
-#~ "Cheques Propios"
-
-#~ msgid ""
-#~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
-#~ "                                Descargar Plantilla de Importación de "
-#~ "Cheques de Terceros"
-#~ msgstr ""
-#~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
-#~ "                                Descargar Plantilla de Importación de "
-#~ "Cheques de Terceros"
-
-#~ msgid ""
-#~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
-#~ "                                Descargar Plantilla de Importación de "
-#~ "Saldos Contables"
-#~ msgstr ""
-#~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
-#~ "                                Descargar Plantilla de Importación de "
-#~ "Saldos Contables"
-
-#~ msgid ""
-#~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
-#~ "                                Descargar Plantilla de Importación de "
-#~ "Saldos de Partners"
-#~ msgstr ""
-#~ "<span class=\"fa fa-download\" title=\"download\"/>\n"
-#~ "                                Descargar Plantilla de Importación de "
-#~ "Saldos de Partners"
-
-#~ msgid "Account Balance Import"
-#~ msgstr "Alta Inicial de Saldos de Cuentas"
-
-#~ msgid "Archivo de Importación de Cheques"
-#~ msgstr "Archivo de Importación de Cheques"
-
-#~ msgid "Archivo de Importación de Saldos Contables"
-#~ msgstr "Archivo de Importación de Saldos Contables"
-
-#~ msgid "Archivo de Importación de Saldos de Partners"
-#~ msgstr "Archivo de Importación de Saldos de Partners"
-
-#~ msgid "Automatic Balancing Line"
-#~ msgstr "Línea de Compensación Automática"
-
-#~ msgid "Check Balance Import"
-#~ msgstr "Alta Inicial de Cheques"
-
-#~ msgid "Cheques"
-#~ msgstr "Cheques"
-
-#~ msgid "De Terceros"
-#~ msgstr "De Terceros"
-
-#~ msgid "Diario de Asientos de Apertura"
-#~ msgstr "Diario de Asientos de Apertura"
-
-#~ msgid "Import check balances"
-#~ msgstr "Importar Cheques"
-
-#~ msgid "Import initial account balances"
-#~ msgstr "Importar saldos contables iniciales"
-
-#~ msgid "Import partner balances"
-#~ msgstr "Importar saldos de contactos"
-
-#~ msgid "Importar Cheques"
-#~ msgstr "Importar Cheques"
-
-#~ msgid "Importar Saldos Contables"
-#~ msgstr "Importar Saldos Contables"
-
-#~ msgid "Importar Saldos de Partners"
-#~ msgstr "Importar Saldos de Contactos"
-
-#~ msgid "Opening balance"
-#~ msgstr "Saldo Inicial"
-
-#~ msgid "Partner Balance Import"
-#~ msgstr "Alta Inicial de Saldos de Contactos"
-
-#~ msgid "Payments"
-#~ msgstr "Pagos"
-
-#~ msgid "Propios"
-#~ msgstr "Propios"
-
-#~ msgid "Saldos Contables"
-#~ msgstr "Saldos Contables"
-
-#~ msgid "Tipo de Cheques"
-#~ msgstr "Tipo de Cheques"
-
-#~ msgid ""
-#~ "Use this wizard to import your checks from an Excel file.\n"
-#~ "                Download the template, fill it with your data, and upload "
-#~ "it back."
-#~ msgstr ""
-#~ "Usa este asistente para importar tus cheques desde un archivo de Excel.\n"
-#~ "                Descarga la plantilla, complétala con tus datos y cárgala."
-
-#~ msgid ""
-#~ "Use this wizard to import your initial account balances from an Excel "
-#~ "file.\n"
-#~ "                Download the template, fill it with your data, and upload "
-#~ "it back."
-#~ msgstr ""
-#~ "Usa este asistente para importar los saldos iniciales de tus cuentas "
-#~ "desde un archivo de Excel.\n"
-#~ "                Descarga la plantilla, complétala con tus datos y cárgala."
-
-#~ msgid ""
-#~ "Use this wizard to import your partner balances from an Excel file.\n"
-#~ "                Download the template, fill it with your data, and upload "
-#~ "it back."
-#~ msgstr ""
-#~ "Usa este asistente para importar los saldos de tus contactos desde un "
-#~ "archivo de Excel.\n"
-#~ "                Descarga la plantilla, complétala con tus datos y cárgala."
+#. module: account_balance_import
+#. odoo-javascript
+#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
+msgid "with your chart already loaded."
+msgstr "que ya trae cargado su plan de cuentas."

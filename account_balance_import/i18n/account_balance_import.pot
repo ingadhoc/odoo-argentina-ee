@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 20.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-21 17:43+0000\n"
-"PO-Revision-Date: 2026-10-21 17:43+0000\n"
+"POT-Creation-Date: 2026-10-28 19:23+0000\n"
+"PO-Revision-Date: 2026-10-28 19:23+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -57,7 +57,7 @@ msgid ""
 "\n"
 "* **Importación de Saldos de Partners (Partners Balance)**: Importa saldos iniciales de partners (deudores por ventas, proveedores y otras cuentas a cobrar o a pagar). Se generan los asientos contables correspondientes y las deudas quedan correctamente vinculadas.\n"
 "\n"
-"* **Revisión de Plan de Cuentas (Chart of Accounts)**: Permite revisar el plan de cuentas y configurar los saldos de fin de año para cada cuenta contable.\n"
+"* **Revisión de Plan de Cuentas (Chart of Accounts)**: Permite revisar el plan de cuentas y configurar los saldos de fin de año para cada cuenta contable. Desde la misma tarjeta se descarga una plantilla Excel con el plan de cuentas de la compañía activa (sin las cuentas a cobrar ni a pagar) y se importa con la importación nativa de Odoo, que busca cada cuenta por su id (columna ``.id``) o, si la fila no lo trae, por su código, y genera el asiento de apertura de la compañía en borrador. Si el archivo va a crear cuentas nuevas o a cambiar el nombre o el código de las existentes, la importación primero las lista y recién aplica los cambios al volver a importar.\n"
 "\n"
 "El módulo reorganiza la interfaz de importación en la configuración de contabilidad, dividiendo las opciones en dos secciones:\n"
 "- **Initial Setup** (izquierda): Configuración inicial de empresa y períodos\n"
@@ -80,7 +80,7 @@ msgid ""
 "   **Importación:**\n"
 "\n"
 "   - Partners Balance: Importe saldos iniciales de partners\n"
-"   - Chart of Accounts: Revise su plan de cuentas e importe saldos contables\n"
+"   - Chart of Accounts: Revise su plan de cuentas e importe saldos contables con la plantilla del plan de cuentas\n"
 "\n"
 "\n"
 "Bug Tracker\n"
@@ -149,6 +149,11 @@ msgid "Account Balance"
 msgstr ""
 
 #. module: account_balance_import
+#: model:ir.model.fields,field_description:account_balance_import.field_base_import_import__account_balance_announced
+msgid "Account Balance Announced"
+msgstr ""
+
+#. module: account_balance_import
 #: model:ir.actions.act_window,name:account_balance_import.account_balance_import_action
 msgid "Account Balance Import Wizard"
 msgstr ""
@@ -176,6 +181,11 @@ msgstr ""
 #. module: account_balance_import
 #: model:ir.model.fields,field_description:account_balance_import.field_account_account__amount_in_currency
 msgid "Amount in Account Currency"
+msgstr ""
+
+#. module: account_balance_import
+#: model:ir.model,name:account_balance_import.model_base_import_import
+msgid "Base Import"
 msgstr ""
 
 #. module: account_balance_import
@@ -256,6 +266,12 @@ msgid "Currency"
 msgstr ""
 
 #. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/models/base_import.py:0
+msgid "Database ID"
+msgstr ""
+
+#. module: account_balance_import
 #: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__partner_balance_type
 msgid "Debt Type"
 msgstr ""
@@ -265,10 +281,17 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__display_name
 #: model:ir.model.fields,field_description:account_balance_import.field_account_financial_year_op__display_name
 #: model:ir.model.fields,field_description:account_balance_import.field_account_import_summary__display_name
+#: model:ir.model.fields,field_description:account_balance_import.field_base_import_import__display_name
 #: model:ir.model.fields,field_description:account_balance_import.field_onboarding_onboarding__display_name
 #: model:ir.model.fields,field_description:account_balance_import.field_res_company__display_name
 #: model:ir.model.fields,field_description:account_balance_import.field_res_currency__display_name
 msgid "Display Name"
+msgstr ""
+
+#. module: account_balance_import
+#. odoo-javascript
+#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
+msgid "Download"
 msgstr ""
 
 #. module: account_balance_import
@@ -301,6 +324,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__id
 #: model:ir.model.fields,field_description:account_balance_import.field_account_financial_year_op__id
 #: model:ir.model.fields,field_description:account_balance_import.field_account_import_summary__id
+#: model:ir.model.fields,field_description:account_balance_import.field_base_import_import__id
 #: model:ir.model.fields,field_description:account_balance_import.field_onboarding_onboarding__id
 #: model:ir.model.fields,field_description:account_balance_import.field_res_company__id
 #: model:ir.model.fields,field_description:account_balance_import.field_res_currency__id
@@ -324,6 +348,12 @@ msgstr ""
 #. module: account_balance_import
 #: model_terms:ir.ui.view,arch_db:account_balance_import.account_balance_import_wizard
 msgid "Import"
+msgstr ""
+
+#. module: account_balance_import
+#. odoo-javascript
+#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
+msgid "Import Account Balances"
 msgstr ""
 
 #. module: account_balance_import
@@ -356,6 +386,12 @@ msgstr ""
 #. odoo-javascript
 #: code:addons/account_balance_import/static/src/xml/account_import.xml:0
 msgid "Import initial balances for your partners."
+msgstr ""
+
+#. module: account_balance_import
+#. odoo-javascript
+#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
+msgid "Import the initial balances of your accounts using the"
 msgstr ""
 
 #. module: account_balance_import
@@ -394,6 +430,21 @@ msgstr ""
 #. module: account_balance_import
 #: model:ir.model.fields,field_description:account_balance_import.field_account_balance_import_wizard__write_date
 msgid "Last Updated on"
+msgstr ""
+
+#. module: account_balance_import
+#: model:ir.model.fields,help:account_balance_import.field_base_import_import__account_balance_announced
+msgid ""
+"New and renamed accounts already shown to the user on the account balances "
+"import"
+msgstr ""
+
+#. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/models/account_account.py:0
+msgid ""
+"Nothing was imported: the file would create or rename accounts "
+"(%(changes)s). Check that the file is right; if it is, click Import again."
 msgstr ""
 
 #. module: account_balance_import
@@ -563,6 +614,14 @@ msgstr ""
 
 #. module: account_balance_import
 #. odoo-python
+#: code:addons/account_balance_import/models/account_account.py:0
+msgid ""
+"The import will create or rename accounts (%(changes)s). Check that the file"
+" is right; if it is, click Import."
+msgstr ""
+
+#. module: account_balance_import
+#. odoo-python
 #: code:addons/account_balance_import/wizards/account_balance_import.py:0
 msgid ""
 "The number of columns (%(actual)s) does not match the expected number (%(expected)s).\n"
@@ -598,4 +657,28 @@ msgid ""
 "You must set fiscal periods before importing partner balances.\n"
 "\n"
 "Please click 'Set Periods' to configure the opening date and the fiscal periods."
+msgstr ""
+
+#. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/models/account_account.py:0
+msgid "new accounts: %(accounts)s"
+msgstr ""
+
+#. module: account_balance_import
+#. odoo-python
+#: code:addons/account_balance_import/models/account_account.py:0
+msgid "renamed accounts: %(accounts)s"
+msgstr ""
+
+#. module: account_balance_import
+#. odoo-javascript
+#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
+msgid "template"
+msgstr ""
+
+#. module: account_balance_import
+#. odoo-javascript
+#: code:addons/account_balance_import/static/src/xml/account_import.xml:0
+msgid "with your chart already loaded."
 msgstr ""
