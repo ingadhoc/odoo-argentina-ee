@@ -146,11 +146,14 @@ msgid ""
 "<span class=\"oi\" data-icon=\"download\" title=\"download\"/>\n"
 "                                    Download Partner Balances Import Template"
 msgstr ""
+"<span class=\"oi\" data-icon=\"download\" title=\"Descargar\"/>\n"
+"                                    Descargar Plantilla de Importación de "
+"Saldos de Partners"
 
 #. module: account_balance_import
 #: model_terms:ir.ui.view,arch_db:account_balance_import.account_balance_import_wizard
 msgid "<span class=\"oi\" data-icon=\"info\" aria-label=\"info\"/>"
-msgstr ""
+msgstr "<span class=\"oi\" data-icon=\"info\" aria-label=\"info\"/>"
 
 #. module: account_balance_import
 #. odoo-javascript
@@ -182,7 +185,7 @@ msgstr "Cuenta"
 #. module: account_balance_import
 #: model:ir.module.module,shortdesc:base.module_account_balance_import
 msgid "Account Balance"
-msgstr ""
+msgstr "Saldos de Cuentas"
 
 #. module: account_balance_import
 #: model:ir.model.fields,field_description:account_balance_import.field_base_import_import__account_balance_announced
@@ -448,7 +451,7 @@ msgstr "Importe los saldos iniciales de sus cuentas con la"
 #. odoo-python
 #: code:addons/account_balance_import/wizards/account_balance_import.py:0
 msgid "Imported Journal Entries"
-msgstr ""
+msgstr "Asientos importados"
 
 #. module: account_balance_import
 #. odoo-javascript
@@ -548,7 +551,7 @@ msgstr "Por favor, cargue un archivo Excel para importar."
 #. module: account_balance_import
 #: model:ir.module.module,summary:base.module_account_balance_import
 msgid "Provides a wizard for importing initial account balances"
-msgstr ""
+msgstr "Provee un asistente para importar saldos iniciales de cuentas"
 
 #. module: account_balance_import
 #: model:ir.model.fields.selection,name:account_balance_import.selection__account_balance_import_wizard__partner_balance_type__receivable
@@ -678,6 +681,9 @@ msgid ""
 "opening balance. Load the net balance on the debit or the credit side, not "
 "both."
 msgstr ""
+"La cuenta %s tiene un importe en su propia moneda, por lo que solo puede "
+"tener un saldo de apertura. Cargue el saldo neto en el débito o en el "
+"crédito, no en ambos."
 
 #. module: account_balance_import
 #. odoo-python
