@@ -1,5 +1,6 @@
 import logging
 
+import stdnum.ar
 from odoo import _, fields, models
 from odoo.exceptions import UserError
 from odoo.tools.zeep.helpers import serialize_object
@@ -107,7 +108,7 @@ class ResPartner(models.Model):
 
     def get_data_from_padron_afip(self):  # noqa: C901
         self.ensure_one()
-        vat = self.ensure_vat()
+        vat = stdnum.ar.cuit.compact(self.ensure_vat())
 
         # if there is certificate for current company use that one, if not use the company with first certificate found
         today = fields.Date.context_today(self.with_context(tz="America/Argentina/Buenos_Aires"))
