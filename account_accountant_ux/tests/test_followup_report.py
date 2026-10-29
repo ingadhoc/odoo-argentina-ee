@@ -67,3 +67,19 @@ class TestFollowupReport(AccountTestInvoicingCommon):
         labels = self.report.column_ids.mapped("expression_label")
         self.assertNotIn("balance", labels)
         self.assertEqual(labels.count("amount_residual"), 1)
+
+    def test_balance_column_kept_when_report_shows_it(self):
+        """Given the report is set to show balance, when this module's data loads again after
+        account_reports, then balance stays once; when the option is turned off, balance goes away."""
+        self.report.followup_show_balance = True
+        labels = self.report.column_ids.sorted("sequence").mapped("expression_label")
+        self.assertEqual(labels.count("balance"), 1)
+        # Totals go in the last column, which must stay amount_residual.
+        self.assertEqual(labels[-1], "amount_residual")
+
+        convert_file(self.env, "account_reports", "data/followup_report.xml", {}, mode="update")
+        convert_file(self.env, "account_accountant_ux", "data/account_followup_report_data.xml", {}, mode="update")
+        self.assertEqual(self.report.column_ids.mapped("expression_label").count("balance"), 1)
+
+        self.report.followup_show_balance = False
+        self.assertNotIn("balance", self.report.column_ids.mapped("expression_label"))
