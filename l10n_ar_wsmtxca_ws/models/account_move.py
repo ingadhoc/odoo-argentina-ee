@@ -140,6 +140,12 @@ class AccountMove(models.Model):
             }
         )
 
+        # ARCA (errores 209/212): para NC/ND de Factura de Crédito MiPyME (FCE) el comprobante asociado debe
+        # informar el CUIT del emisor del comprobante original.
+        issuer_cuit = related_inv.company_id.partner_id._get_id_number_sanitize()
+        if issuer_cuit:
+            res[wsmtxca_keys["cuit"]] = int(issuer_cuit)
+
         return res
 
     def _get_line_details(self, base_lines=None):
