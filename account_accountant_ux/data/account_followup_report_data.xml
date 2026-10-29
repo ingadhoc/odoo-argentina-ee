@@ -1,0 +1,4 @@
+<odoo>
+    <!-- Not noupdate: must run after account_reports reloads followup_report.xml on every update -->
+    <function model="account.followup.report.handler" name="_setup_followup_report_columns"/>
+</odoo>

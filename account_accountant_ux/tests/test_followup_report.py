@@ -4,6 +4,7 @@ from dateutil.relativedelta import relativedelta
 from odoo import fields
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 from odoo.tests.common import tagged
+from odoo.tools import convert_file
 
 
 @tagged("post_install", "-at_install")
@@ -55,3 +56,14 @@ class TestFollowupReport(AccountTestInvoicingCommon):
         self.assertIn(invoice_open.name, line_names)
         self.assertNotIn(invoice_paid.name, line_names)
         self.assertNotIn(payment.move_id.name, line_names)
+
+    def test_balance_column_stays_removed_after_account_reports_update(self):
+        """Given account_reports reloads its followup data, which recreates balance, when this module's
+        data loads again, then the report shows amount_residual and not balance."""
+        convert_file(self.env, "account_reports", "data/followup_report.xml", {}, mode="update")
+        self.assertIn("balance", self.report.column_ids.mapped("expression_label"))
+
+        convert_file(self.env, "account_accountant_ux", "data/account_followup_report_data.xml", {}, mode="update")
+        labels = self.report.column_ids.mapped("expression_label")
+        self.assertNotIn("balance", labels)
+        self.assertEqual(labels.count("amount_residual"), 1)
