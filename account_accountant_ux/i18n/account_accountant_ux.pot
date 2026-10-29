@@ -368,6 +368,13 @@ msgid "Journal Item"
 msgstr ""
 
 #. module: account_accountant_ux
+#: model:ir.model.fields,help:account_accountant_ux.field_account_report__followup_show_balance
+msgid ""
+"Keep the standard Balance column next to Amount Residual. Balance adds up "
+"the full amount of open entries, without partial payments."
+msgstr ""
+
+#. module: account_accountant_ux
 #. odoo-python
 #: code:addons/account_accountant_ux/models/account_report.py:0
 msgid ""
@@ -525,6 +532,11 @@ msgstr ""
 #: code:addons/account_accountant_ux/static/src/components/account_report/filters/filters.js:0
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__filter_show_all_custom
 msgid "Show All"
+msgstr ""
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__followup_show_balance
+msgid "Show Balance"
 msgstr ""
 
 #. module: account_accountant_ux

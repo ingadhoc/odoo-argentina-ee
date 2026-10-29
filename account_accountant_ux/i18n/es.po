@@ -386,6 +386,15 @@ msgid "Journal Item"
 msgstr "Apunte contable"
 
 #. module: account_accountant_ux
+#: model:ir.model.fields,help:account_accountant_ux.field_account_report__followup_show_balance
+msgid ""
+"Keep the standard Balance column next to Amount Residual. Balance adds up "
+"the full amount of open entries, without partial payments."
+msgstr ""
+"Mantiene la columna estándar Saldo junto a Importe Residual. Saldo suma el "
+"importe completo de los apuntes abiertos, sin descontar los pagos parciales."
+
+#. module: account_accountant_ux
 #. odoo-python
 #: code:addons/account_accountant_ux/models/account_report.py:0
 msgid "La fórmula de la expresión '%(expression)s' está mal formada: %(error)s"
@@ -548,6 +557,11 @@ msgstr "Título de la liquidación"
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__filter_show_all_custom
 msgid "Show All"
 msgstr "Mostrar Todo"
+
+#. module: account_accountant_ux
+#: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__followup_show_balance
+msgid "Show Balance"
+msgstr "Mostrar Saldo"
 
 #. module: account_accountant_ux
 #: model:ir.model.fields,help:account_accountant_ux.field_res_company__block_intercompany_conciliation

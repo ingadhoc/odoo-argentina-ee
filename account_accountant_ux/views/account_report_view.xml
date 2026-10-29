@@ -15,11 +15,9 @@
                 <field name="settlement_title" invisible="not allow_settlement" required="allow_settlement"/>
                 <field name="settlement_allow_unbalanced" invisible="not allow_settlement"/>
             </xpath>
-            <xpath expr="//page[@name='page_columns']/field[@name='column_ids']" position="before">
-                <group invisible="custom_handler_model_name != 'account.followup.report.handler'">
-                    <field name="custom_handler_model_name" invisible="1"/>
-                    <field name="followup_show_balance"/>
-                </group>
+            <xpath expr="//page[@name='page_options']//field[@name='load_more_limit']" position="before">
+                <field name="custom_handler_model_name" invisible="1"/>
+                <field name="followup_show_balance" invisible="custom_handler_model_name != 'account.followup.report.handler'"/>
             </xpath>
         </field>
     </record>
