@@ -19,6 +19,14 @@
                     <field name="already_settled_warning" nolabel="1" readonly="1" />
                 </div>
 
+                <div
+                    class="alert alert-info"
+                    role="alert"
+                    invisible="not missing_companies_warning"
+                >
+                    <field name="missing_companies_warning" nolabel="1" readonly="1" />
+                </div>
+
                 <p>
                     Se va a crear un asiento de liquidación con la información del
                     reporte. ¿Desea continuar?
