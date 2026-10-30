@@ -506,8 +506,8 @@ msgstr "Empresas"
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,help:l10n_ar_account_reports.field_inflation_adjustment__company_ids
 msgid ""
-"Companies whose journal items are adjusted: the ones selected in the company"
-" selector."
+"Companies whose journal items are adjusted: the ones selected in the company "
+"selector."
 msgstr ""
 "Compañías cuyos apuntes se ajustan: las seleccionadas en el selector de "
 "compañías."
@@ -945,13 +945,13 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
 msgid ""
-"No closing or opening entry was chosen for %(companies)s. If they closed the"
-" year on their own, add those entries too: otherwise they are adjusted as "
+"No closing or opening entry was chosen for %(companies)s. If they closed the "
+"year on their own, add those entries too: otherwise they are adjusted as "
 "movements of the period."
 msgstr ""
-"No se eligió asiento de cierre o de apertura para %(companies)s. Si "
-"cerraron el ejercicio por su cuenta, agregue también esos asientos: si no, "
-"se ajustan como movimientos del período."
+"No se eligió asiento de cierre o de apertura para %(companies)s. Si cerraron "
+"el ejercicio por su cuenta, agregue también esos asientos: si no, se ajustan "
+"como movimientos del período."
 
 #. module: l10n_ar_account_reports
 #: model_terms:ir.actions.act_window,help:l10n_ar_account_reports.inflation_adjustment_index_action
@@ -1369,11 +1369,10 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
 msgid ""
-"The entry of the selected companies is built in %(head)s, not in "
-"%(company)s."
+"The entry of the selected companies is built in %(head)s, not in %(company)s."
 msgstr ""
-"El asiento de las compañías seleccionadas se arma en %(head)s, no en "
-"%(company)s."
+"El asiento de las compañías seleccionadas se arma en %(head)s, no en %"
+"(company)s."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1542,8 +1541,10 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/wizard/inflation_adjustment.py:0
 msgid ""
-"These accounts belong only to a branch, so the entry cannot be built in %(company)s with them in it: %(accounts)s.\n"
-"Adjust %(owners)s on their own —select each of them alone in the company selector— or move those accounts up to the company that files."
+"These accounts belong only to a branch, so the entry cannot be built in %"
+"(company)s with them in it: %(accounts)s.\n"
+"Adjust %(owners)s on their own —select each of them alone in the company "
+"selector— or move those accounts up to the company that files."
 msgstr ""
 "Estas cuentas pertenecen solo a una sucursal, por lo que el asiento no se "
 "puede armar en %(company)s con ellas: %(accounts)s.\n"
@@ -1558,9 +1559,9 @@ msgid ""
 "items will not be adjusted: %(companies)s. Select them in the company "
 "selector if you meant to adjust the whole entity."
 msgstr ""
-"Estas compañías de la misma entidad legal no están seleccionadas, por lo "
-"que sus apuntes no se van a ajustar: %(companies)s. Selecciónelas en el "
-"selector de compañías si quería ajustar toda la entidad."
+"Estas compañías de la misma entidad legal no están seleccionadas, por lo que "
+"sus apuntes no se van a ajustar: %(companies)s. Selecciónelas en el selector "
+"de compañías si quería ajustar toda la entidad."
 
 #. module: l10n_ar_account_reports
 #. odoo-javascript
