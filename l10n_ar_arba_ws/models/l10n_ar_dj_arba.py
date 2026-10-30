@@ -63,7 +63,7 @@ class L10nArDjArba(models.Model):
 
     # Constrains
 
-    @api.constrains("display_name", "company_id", "state")
+    @api.constrains("date", "company_id", "state")
     def unique_by_company_period_state(self):
         for ddjj in self:
             from_date, to_date = ddjj._find_dates(ddjj.date)
@@ -189,7 +189,7 @@ class L10nArDjArba(models.Model):
             return
 
         # A previous attempt was created in ARBA but its answer was lost (4xx come in response, not in error)
-        if ARBA_DUPLICATED_TRANSACTION in str(response):
+        if response.get("error") == ARBA_DUPLICATED_TRANSACTION:
             response = self._find_withholding(request_data) or response
 
         # Adjuntamos el numero de certificado al nombre de la retencion solo cuando realmente lo obtuvimos
@@ -336,7 +336,9 @@ class L10nArDjArba(models.Model):
         """Let us to have both clean response dictionary and string of errors if exists
         :return: tuple (response, error) -- type (dict, string)"""
         error = False
-        connection = self.company_id._l10n_ar_get_connection(WS_NAME)
+        # ARBA tokens can be requested again at any time, so a new one does not need the commit that AFIP
+        # needs, which would also commit the payment posting this runs in
+        connection = self.company_id.with_context(l10n_ar_invoice_skip_commit=True)._l10n_ar_get_connection(WS_NAME)
         url = connection._l10n_ar_get_afip_ws_url(WS_NAME, env_type) + url
         headers = {
             "Content-Type": "application/json",
