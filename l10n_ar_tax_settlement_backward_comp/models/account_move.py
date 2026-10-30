@@ -43,3 +43,10 @@ class AccountMove(models.Model):
                 )
 
         return res
+
+    def _get_archived_taxes_to_remove_on_copy(self, taxes):
+        to_remove = super()._get_archived_taxes_to_remove_on_copy(taxes)
+        if self.is_sale_document() and self.country_code == "AR":
+            # copy() replaces the archived backward taxes with the partner tax, so they must reach it
+            to_remove = to_remove.filtered(lambda x: not x.is_backward_tax)
+        return to_remove
