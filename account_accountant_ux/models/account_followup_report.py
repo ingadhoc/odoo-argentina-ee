@@ -1,8 +1,44 @@
-from odoo import _, models
+from odoo import _, api, models
 
 
 class FollowupReportCustomHandler(models.AbstractModel):
     _inherit = "account.followup.report.handler"
+
+    @api.model
+    def _setup_followup_report_columns(self):
+        """Replace the balance column with amount_residual in the followup report, unless the report keeps it.
+
+        Called from data on every install and update, since updating account_reports recreates balance.
+        """
+        report = self.env.ref("account_reports.followup_report")
+        balance = report.column_ids.filtered(lambda c: c.expression_label == "balance")
+        if not report.followup_show_balance:
+            balance.unlink()
+        elif not balance:
+            # Keep the standard xmlid so updating account_reports does not add a second balance column.
+            self.env["account.report.column"]._load_records(
+                [
+                    {
+                        "xml_id": "account_reports.followup_report_report_balance",
+                        "values": {
+                            "name": "Balance",
+                            "expression_label": "balance",
+                            "report_id": report.id,
+                            "sequence": 99,
+                        },
+                    }
+                ]
+            )
+        if not report.column_ids.filtered(lambda c: c.expression_label == "amount_residual"):
+            self.env["account.report.column"].create(
+                {
+                    "name": "Importe Residual",
+                    "expression_label": "amount_residual",
+                    "report_id": report.id,
+                    "sequence": 100,
+                    "figure_type": "monetary",
+                }
+            )
 
     def _custom_options_initializer(self, report, options, previous_options):
         super()._custom_options_initializer(report, options, previous_options)

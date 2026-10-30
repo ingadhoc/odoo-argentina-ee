@@ -23,6 +23,17 @@ class AccountReport(models.Model):
         readonly=False,
         store=True,
     )
+    followup_show_balance = fields.Boolean(
+        string="Show Balance",
+        help="Keep the standard Balance column next to Amount Residual. "
+        "Balance adds up the full amount of open entries, without partial payments.",
+    )
+
+    def write(self, vals):
+        res = super().write(vals)
+        if "followup_show_balance" in vals and self.env.ref("account_reports.followup_report") in self:
+            self.env["account.followup.report.handler"]._setup_followup_report_columns()
+        return res
 
     def _init_options_show_all_custom(self, options, previous_options):
         """Initialize the show_all_custom option."""

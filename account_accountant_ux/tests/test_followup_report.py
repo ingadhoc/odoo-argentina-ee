@@ -4,6 +4,7 @@ from dateutil.relativedelta import relativedelta
 from odoo import fields
 from odoo.addons.account.tests.common import AccountTestInvoicingCommon
 from odoo.tests.common import tagged
+from odoo.tools import convert_file
 
 
 @tagged("post_install", "-at_install")
@@ -55,3 +56,30 @@ class TestFollowupReport(AccountTestInvoicingCommon):
         self.assertIn(invoice_open.name, line_names)
         self.assertNotIn(invoice_paid.name, line_names)
         self.assertNotIn(payment.move_id.name, line_names)
+
+    def test_balance_column_stays_removed_after_account_reports_update(self):
+        """Given account_reports reloads its followup data, which recreates balance, when this module's
+        data loads again, then the report shows amount_residual and not balance."""
+        convert_file(self.env, "account_reports", "data/followup_report.xml", {}, mode="update")
+        self.assertIn("balance", self.report.column_ids.mapped("expression_label"))
+
+        convert_file(self.env, "account_accountant_ux", "data/account_followup_report_data.xml", {}, mode="update")
+        labels = self.report.column_ids.mapped("expression_label")
+        self.assertNotIn("balance", labels)
+        self.assertEqual(labels.count("amount_residual"), 1)
+
+    def test_balance_column_kept_when_report_shows_it(self):
+        """Given the report is set to show balance, when this module's data loads again after
+        account_reports, then balance stays once; when the option is turned off, balance goes away."""
+        self.report.followup_show_balance = True
+        labels = self.report.column_ids.sorted("sequence").mapped("expression_label")
+        self.assertEqual(labels.count("balance"), 1)
+        # Totals go in the last column, which must stay amount_residual.
+        self.assertEqual(labels[-1], "amount_residual")
+
+        convert_file(self.env, "account_reports", "data/followup_report.xml", {}, mode="update")
+        convert_file(self.env, "account_accountant_ux", "data/account_followup_report_data.xml", {}, mode="update")
+        self.assertEqual(self.report.column_ids.mapped("expression_label").count("balance"), 1)
+
+        self.report.followup_show_balance = False
+        self.assertNotIn("balance", self.report.column_ids.mapped("expression_label"))

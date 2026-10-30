@@ -14,6 +14,8 @@
                 <field name="allow_settlement"/>
                 <field name="settlement_title" invisible="not allow_settlement" required="allow_settlement"/>
                 <field name="settlement_allow_unbalanced" invisible="not allow_settlement"/>
+                <field name="custom_handler_model_name" invisible="1"/>
+                <field name="followup_show_balance" invisible="custom_handler_model_name != 'account.followup.report.handler'"/>
             </xpath>
         </field>
     </record>
