@@ -27,8 +27,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_accountant_ux/wizards/account_tax_settlement_wizard.py:0
 msgid ""
-"%(company)s already has a settlement entry of this report for this period: "
-"%(entries)s. Creating another one settles the same balances twice."
+"%(company)s already has a settlement entry of this report for this period: %"
+"(entries)s. Creating another one settles the same balances twice."
 msgstr ""
 
 #. module: account_accountant_ux
@@ -578,8 +578,8 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_accountant_ux/models/account_report.py:0
 msgid ""
-"These accounts belong only to a branch, so the entry cannot be built in "
-"%(company)s with them in it: %(accounts)s.\n"
+"These accounts belong only to a branch, so the entry cannot be built in %"
+"(company)s with them in it: %(accounts)s.\n"
 "Settle %(owners)s on their own —select each of them alone in the company "
 "selector— or move those accounts up to the company that files."
 msgstr ""
@@ -588,13 +588,13 @@ msgstr ""
 #. odoo-python
 #: code:addons/account_accountant_ux/wizards/account_tax_settlement_wizard.py:0
 msgid ""
-"These companies of the same legal entity are not selected, so their balances"
-" will not be in this entry: %(companies)s. Select them in the company "
+"These companies of the same legal entity are not selected, so their balances "
+"will not be in this entry: %(companies)s. Select them in the company "
 "selector if you meant to settle the whole entity."
 msgstr ""
-"Estas compañías de la misma entidad legal no están seleccionadas, por lo "
-"que sus saldos no van a estar en este asiento: %(companies)s. Selecciónelas "
-"en el selector de compañías si quería liquidar toda la entidad."
+"Estas compañías de la misma entidad legal no están seleccionadas, por lo que "
+"sus saldos no van a estar en este asiento: %(companies)s. Selecciónelas en "
+"el selector de compañías si quería liquidar toda la entidad."
 
 #. module: account_accountant_ux
 #. odoo-javascript
@@ -644,8 +644,8 @@ msgstr "Importe total a pagar a este proveedor."
 #. module: account_accountant_ux
 #: model:ir.model.fields,help:account_accountant_ux.field_account_tax_settlement_wizard__missing_companies_warning
 msgid ""
-"Warns if companies of the same legal entity are not selected: their balances"
-" will not be in the entry. It does not block: settling branch by branch is "
+"Warns if companies of the same legal entity are not selected: their balances "
+"will not be in the entry. It does not block: settling branch by branch is "
 "allowed."
 msgstr ""
 "Aviso si quedaron sin seleccionar compañías de la misma entidad fiscal: sus "
@@ -658,8 +658,8 @@ msgid ""
 "Warns if the settling company already has a settlement entry of this report "
 "in the period. It does not block: it may be a correction."
 msgstr ""
-"Advertencia si la compañía que liquida ya tiene un asiento de liquidación "
-"de este reporte en el período. No bloquea: puede ser una corrección."
+"Advertencia si la compañía que liquida ya tiene un asiento de liquidación de "
+"este reporte en el período. No bloquea: puede ser una corrección."
 
 #. module: account_accountant_ux
 #. odoo-javascript
