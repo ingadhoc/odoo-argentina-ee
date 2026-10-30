@@ -8,10 +8,11 @@ import requests
 from markupsafe import Markup
 from odoo import api, fields, models
 from odoo.exceptions import UserError, ValidationError
-from odoo.tools import format_date, html_escape
+from odoo.tools import float_compare, format_date, html_escape
 
 WS_NAME = "A122R"
 ARBA_CONNECTION_ATTEMPTS = 3
+ARBA_DUPLICATED_TRANSACTION = "ERROR_DUPLICIDAD_NUMERO_TRANSACCION"
 
 _logger = logging.getLogger(__name__)
 
@@ -62,7 +63,7 @@ class L10nArDjArba(models.Model):
 
     # Constrains
 
-    @api.constrains("display_name", "company_id", "state")
+    @api.constrains("date", "company_id", "state")
     def unique_by_company_period_state(self):
         for ddjj in self:
             from_date, to_date = ddjj._find_dates(ddjj.date)
@@ -136,11 +137,12 @@ class L10nArDjArba(models.Model):
         open_ddjj_error = False
         if not ddjj:
             try:
-                ddjj = self._ensure_dj(wh_line.payment_id.date, wh_line.company_id)
+                # A full rollback would also undo the payment posting this runs in
+                with self.env.cr.savepoint():
+                    ddjj = self._ensure_dj(wh_line.payment_id.date, wh_line.company_id)
                 if ddjj.state != "open":
                     open_ddjj_error = self.env._("DDJJ could not be opened, the withholding cannot be created")
             except (UserError, ValidationError) as exp:
-                self.env.cr.rollback()
                 open_ddjj_error = str(exp)
 
         if open_ddjj_error or not ddjj:
@@ -186,6 +188,10 @@ class L10nArDjArba(models.Model):
             self._process_arba_error(error, error_prefix, wh_line.payment_id)
             return
 
+        # A previous attempt was created in ARBA but its answer was lost (4xx come in response, not in error)
+        if response.get("error") == ARBA_DUPLICATED_TRANSACTION:
+            response = self._find_withholding(request_data) or response
+
         # Adjuntamos el numero de certificado al nombre de la retencion solo cuando realmente lo obtuvimos
         # Si esto no ocurre dejamos mensaje en el chatter
         if cert_number := response.get("nroEmision"):
@@ -198,6 +204,33 @@ class L10nArDjArba(models.Model):
             wh_line.payment_id.message_post(body=ok_msg)
         else:
             self._process_arba_error(response, error_prefix, wh_line.payment_id)
+
+    def _find_withholding(self, request_data):
+        """Devuelve el comprobante ya dado de alta en ARBA para este request, o {} si no lo encontramos.
+        Comparamos también el importe para no linkear otra retención que repita los dígitos del número."""
+        response, error = self._process_arba_response(
+            "GET",
+            f"/comprobantes?idDj={self.name}&cuitAgente={request_data['cuitAgente']}"
+            f"&cuitContribuyente={request_data['cuitContribuyente']}&estado=TODOS",
+            self.company_id._get_arba_ws_environment_type(),
+            self.env._("Get Withholding Information"),
+        )
+        if error:
+            return {}
+        n_transaction = request_data["nTransaccionAgente"].lstrip("0")
+        for withholding in response if isinstance(response, list) else [response or {}]:
+            if (
+                n_transaction
+                and str(withholding.get("nroTransaccionAgente")).lstrip("0") == n_transaction
+                and float_compare(
+                    withholding.get("importeRetenido") or 0.0, request_data["importeRetencion"], precision_digits=2
+                )
+                == 0
+                and withholding.get("nroEmision")
+                and not withholding.get("fechaBaja")
+            ):
+                return withholding
+        return {}
 
     @api.model
     def _find_dates(self, wh_date):
@@ -303,7 +336,9 @@ class L10nArDjArba(models.Model):
         """Let us to have both clean response dictionary and string of errors if exists
         :return: tuple (response, error) -- type (dict, string)"""
         error = False
-        connection = self.company_id._l10n_ar_get_connection(WS_NAME)
+        # ARBA tokens can be requested again at any time, so a new one does not need the commit that AFIP
+        # needs, which would also commit the payment posting this runs in
+        connection = self.company_id.with_context(l10n_ar_invoice_skip_commit=True)._l10n_ar_get_connection(WS_NAME)
         url = connection._l10n_ar_get_afip_ws_url(WS_NAME, env_type) + url
         headers = {
             "Content-Type": "application/json",
