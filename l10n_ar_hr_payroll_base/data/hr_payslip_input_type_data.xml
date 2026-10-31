@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- One input per concept: the skill writes its amount, always positive, on the payslip -->
+    <record id="input_basic" model="hr.payslip.input.type">
+        <field name="name">Basic Salary</field>
+        <field name="code">BASIC</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_feriado" model="hr.payslip.input.type">
+        <field name="name">Public Holiday</field>
+        <field name="code">FERIADO</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_plusvac" model="hr.payslip.input.type">
+        <field name="name">Vacation Bonus</field>
+        <field name="code">PLUSVAC</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_ar_rem" model="hr.payslip.input.type">
+        <field name="name">Other Remunerative</field>
+        <field name="code">AR_REM</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_sac" model="hr.payslip.input.type">
+        <field name="name">Thirteenth Salary (SAC)</field>
+        <field name="code">SAC</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_jub" model="hr.payslip.input.type">
+        <field name="name">Retirement</field>
+        <field name="code">JUB</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_ley19032" model="hr.payslip.input.type">
+        <field name="name">Law 19.032</field>
+        <field name="code">LEY19032</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_os" model="hr.payslip.input.type">
+        <field name="name">Health Insurance</field>
+        <field name="code">OS</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_ar_norem" model="hr.payslip.input.type">
+        <field name="name">Non-remunerative</field>
+        <field name="code">AR_NOREM</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_vng" model="hr.payslip.input.type">
+        <field name="name">Unused Vacations</field>
+        <field name="code">VNG</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_vngsac" model="hr.payslip.input.type">
+        <field name="name">SAC on Unused Vacations</field>
+        <field name="code">VNGSAC</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_preav" model="hr.payslip.input.type">
+        <field name="name">Payment in Lieu of Notice</field>
+        <field name="code">PREAV</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_preavsac" model="hr.payslip.input.type">
+        <field name="name">SAC on Notice</field>
+        <field name="code">PREAVSAC</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_imd" model="hr.payslip.input.type">
+        <field name="name">Month of Dismissal Integration</field>
+        <field name="code">IMD</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_imdsac" model="hr.payslip.input.type">
+        <field name="name">SAC on Month of Dismissal Integration</field>
+        <field name="code">IMDSAC</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_iatg" model="hr.payslip.input.type">
+        <field name="name">Seniority Severance</field>
+        <field name="code">IATG</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_gan" model="hr.payslip.input.type">
+        <field name="name">Income Tax Withholding</field>
+        <field name="code">GAN</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_cjub" model="hr.payslip.input.type">
+        <field name="name">Employer Retirement</field>
+        <field name="code">CJUB</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_cley19032" model="hr.payslip.input.type">
+        <field name="name">Employer Law 19.032</field>
+        <field name="code">CLEY19032</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_cfne" model="hr.payslip.input.type">
+        <field name="name">National Employment Fund</field>
+        <field name="code">CFNE</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_canssal" model="hr.payslip.input.type">
+        <field name="name">ANSSAL</field>
+        <field name="code">CANSSAL</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_cfam" model="hr.payslip.input.type">
+        <field name="name">Family Allowances</field>
+        <field name="code">CFAM</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_cos" model="hr.payslip.input.type">
+        <field name="name">Employer Health Insurance</field>
+        <field name="code">COS</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_art" model="hr.payslip.input.type">
+        <field name="name">ART</field>
+        <field name="code">ART</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_artf" model="hr.payslip.input.type">
+        <field name="name">ART Fixed Fee</field>
+        <field name="code">ARTF</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_scvo" model="hr.payslip.input.type">
+        <field name="name">Mandatory Life Insurance</field>
+        <field name="code">SCVO</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+</odoo>
