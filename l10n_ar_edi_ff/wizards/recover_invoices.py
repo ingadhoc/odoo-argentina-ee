@@ -5,6 +5,9 @@ from odoo.exceptions import UserError
 
 from ..models.account_move import PARAM
 
+# Context key: open the wizard with the documents already brought from ARCA
+FETCH_KEY = "l10n_ar_edi_ff_recover_fetch"
+
 
 class L10nArEdiFfRecover(models.TransientModel):
     _name = "l10n_ar_edi_ff.recover"
@@ -48,6 +51,9 @@ class L10nArEdiFfRecover(models.TransientModel):
             last_there = wizard.journal_id._l10n_ar_get_afip_last_invoice_number(wizard.document_type_id)
             wizard.number_from = last_here + 1
             wizard.number_to = max(last_there, last_here)
+            if self.env.context.get(FETCH_KEY):
+                # Opened from the invoice that hit the gap: nothing to ask, bring the documents right away
+                wizard._fill_lines()
 
     def _last_number_here(self):
         self.ensure_one()
@@ -78,6 +84,14 @@ class L10nArEdiFfRecover(models.TransientModel):
         """Ask ARCA for every number of the range and propose the draft each one goes to."""
         self.ensure_one()
         self.number_from = self._last_number_here() + 1
+        self._fill_lines()
+        return self._reopen()
+
+    def _fill_lines(self):
+        """Ask ARCA for every number of the range and propose the draft each one goes to.
+
+        Also runs in the onchange, on a record that is not saved yet."""
+        self.ensure_one()
         if self.number_to < self.number_from:
             raise UserError(self.env._("Odoo already has every document up to number %s.", self.number_to))
         limit = int(self.env["ir.config_parameter"].sudo().get_param(f"{PARAM}.recover_wizard_limit", 100))
@@ -91,7 +105,6 @@ class L10nArEdiFfRecover(models.TransientModel):
                 )
             )
         client, auth, _transport = self.company_id._l10n_ar_get_connection("wsfe")._get_client(return_transport=True)
-        self.line_ids.unlink()
         taken = self.env["account.move"]
         lines = []
         for number in range(self.number_from, self.number_to + 1):
@@ -109,8 +122,7 @@ class L10nArEdiFfRecover(models.TransientModel):
             values = self._prepare_line(number, res.ResultGet, taken)
             taken |= self.env["account.move"].browse(values.get("move_id") or [])
             lines.append(values)
-        self.write({"state": "review", "line_ids": [Command.create(values) for values in lines]})
-        return self._reopen()
+        self.update({"state": "review", "line_ids": [Command.clear()] + [Command.create(v) for v in lines]})
 
     def _prepare_line(self, number, got, taken):
         self.ensure_one()

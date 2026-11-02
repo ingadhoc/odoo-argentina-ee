@@ -1,6 +1,6 @@
 from dateutil.relativedelta import relativedelta
 from odoo.exceptions import RedirectWarning, UserError
-from odoo.tests import tagged
+from odoo.tests import Form, tagged
 from odoo.tools import mute_logger
 
 from .common import BatchCaeCommon
@@ -81,3 +81,22 @@ class TestRecoverWizard(BatchCaeCommon):
         wizard.line_ids.amount_total = lost.amount_total
         with self.assertRaisesRegex(UserError, "not the document ARCA authorized"):
             wizard.action_apply()
+
+    @mute_logger("odoo.addons.l10n_ar_edi_ff.models.account_move")
+    def test_wizard_from_the_invoice_comes_with_the_documents(self):
+        """Opened from the invoice that hit the gap, the wizard brings the documents with no question asked."""
+        lost = self._create_invoices(2)
+        self._lose_and_stay_down(lost)
+        context = {
+            "default_journal_id": self.journal.id,
+            "default_document_type_id": lost[0].l10n_latam_document_type_id.id,
+            "l10n_ar_edi_ff_recover_fetch": True,
+        }
+        with Form(self.env["l10n_ar_edi_ff.recover"].with_context(**context)) as form:
+            self.assertEqual(form.state, "review")
+            self.assertEqual(len(form.line_ids), 2)
+        wizard = form.record
+        self.assertEqual(wizard.line_ids.mapped("move_id"), lost)
+        wizard.action_apply()
+        self.assertEqual(set(lost.mapped("state")), {"posted"})
+        self.assert_batch_coherence()

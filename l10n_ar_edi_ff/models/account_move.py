@@ -117,6 +117,7 @@ class AccountMove(models.Model):
                 action["context"] = {
                     "default_journal_id": journal_id,
                     "default_document_type_id": document_type_id,
+                    "l10n_ar_edi_ff_recover_fetch": True,
                 }
                 raise RedirectWarning(msg, action, self.env._("Recover documents from ARCA"))
             raise UserError(msg)

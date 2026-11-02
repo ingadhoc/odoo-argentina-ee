@@ -6,7 +6,7 @@
         <field name="model">l10n_ar_edi_ff.recover</field>
         <field name="arch" type="xml">
             <form string="Recover documents from ARCA">
-                <field name="state" invisible="1"/>
+                <field name="state" invisible="1" force_save="1"/>
                 <field name="company_id" invisible="1"/>
                 <field name="currency_id" invisible="1"/>
                 <field name="available_document_type_ids" invisible="1"/>
@@ -36,15 +36,18 @@
                     <list editable="bottom" create="false" delete="false" decoration-muted="action == 'skip'">
                         <field name="company_id" column_invisible="1"/>
                         <field name="currency_id" column_invisible="1"/>
-                        <field name="number"/>
-                        <field name="date"/>
-                        <field name="document_number"/>
-                        <field name="amount_total"/>
-                        <field name="auth_code"/>
-                        <field name="partner_id"/>
+                        <field name="auth_mode" column_invisible="1" force_save="1"/>
+                        <field name="auth_code_due" column_invisible="1" force_save="1"/>
+                        <field name="result" column_invisible="1" force_save="1"/>
+                        <field name="number" force_save="1"/>
+                        <field name="date" force_save="1"/>
+                        <field name="document_number" force_save="1"/>
+                        <field name="amount_total" force_save="1"/>
+                        <field name="auth_code" force_save="1"/>
+                        <field name="partner_id" force_save="1"/>
                         <field name="action"/>
                         <field name="move_id" readonly="action != 'match'"/>
-                        <field name="note"/>
+                        <field name="note" force_save="1"/>
                     </list>
                 </field>
                 <footer>
