@@ -1,3 +1,4 @@
+from dateutil.relativedelta import relativedelta
 from odoo.exceptions import RedirectWarning, UserError
 from odoo.tests import tagged
 from odoo.tools import mute_logger
@@ -38,7 +39,7 @@ class TestRecoverWizard(BatchCaeCommon):
         self.assertEqual((assign_1.action, assign_1.move_id), ("match", first))
         self.assertEqual((assign_2.action, assign_2.move_id), ("match", second))
         self.assertEqual(missing.action, "skip")
-        self.assertIn("Load it as a draft", missing.note)
+        self.assertIn("load it", missing.note)
         wizard.action_apply()
         self.assertEqual((first + second).mapped("state"), ["posted", "posted"])
         self.assertEqual([self._number(first), self._number(second)], [2, 3])
@@ -55,3 +56,14 @@ class TestRecoverWizard(BatchCaeCommon):
         first.action = "skip"
         with self.assertRaisesRegex(UserError, "taken in order"):
             wizard.action_apply()
+
+    @mute_logger("odoo.addons.l10n_ar_edi_ff.models.account_move")
+    def test_wizard_skips_an_old_draft_with_the_same_total(self):
+        """An old draft of the same customer and total is not proposed: the date of ARCA has to match."""
+        lost = self._create_invoices(1)
+        self._lose_and_stay_down(lost)
+        old = self._create_invoices(1)
+        old.invoice_date = self.today - relativedelta(days=40)
+        wizard = self._wizard(lost)
+        wizard.action_fetch()
+        self.assertEqual(wizard.line_ids.move_id, lost)

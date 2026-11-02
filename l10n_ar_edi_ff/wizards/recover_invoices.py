@@ -132,8 +132,8 @@ class L10nArEdiFfRecover(models.TransientModel):
             values.update(move_id=draft.id, action="match")
         else:
             values["note"] = self.env._(
-                "No draft of Odoo is this document. Load it as a draft with this customer, date and total, then "
-                "run the wizard again."
+                "No draft of Odoo with this customer, date and total. Pick one in the Draft column, or load it "
+                "as a draft and run the wizard again."
             )
         return values
 
@@ -156,10 +156,15 @@ class L10nArEdiFfRecover(models.TransientModel):
         )
 
     def _find_draft(self, got, partner, taken):
-        """The oldest draft of the journal with the same customer and total, not proposed for another number."""
+        """The draft of the journal with the same customer, total and date, not proposed for another number.
+
+        A draft without date also fits: Odoo would date it when posting. One with another date is not proposed,
+        since an old draft with the same customer and total is a common thing; the user can still pick it.
+        """
         self.ensure_one()
         if not partner:
             return self.env["account.move"]
+        date = datetime.strptime(str(got.CbteFch), "%Y%m%d").date()
         drafts = self.env["account.move"].search(
             [
                 ("journal_id", "=", self.journal_id.id),
@@ -167,12 +172,14 @@ class L10nArEdiFfRecover(models.TransientModel):
                 ("state", "=", "draft"),
                 ("l10n_ar_afip_auth_code", "=", False),
                 ("commercial_partner_id", "=", partner.commercial_partner_id.id),
+                ("invoice_date", "in", (date, False)),
                 ("id", "not in", taken.ids),
             ],
             order="invoice_date, id",
         )
         total = float(got.ImpTotal or 0)
-        return drafts.filtered(lambda m: not m.currency_id.compare_amounts(m.amount_total, total))[:1]
+        drafts = drafts.filtered(lambda m: not m.currency_id.compare_amounts(m.amount_total, total))
+        return (drafts.filtered("invoice_date") or drafts)[:1]
 
     # ------------------------------------------------------------------ apply
 
