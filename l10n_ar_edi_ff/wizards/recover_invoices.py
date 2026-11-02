@@ -205,9 +205,10 @@ class L10nArEdiFfRecover(models.TransientModel):
             )
         if not todo:
             raise UserError(self.env._("No document is marked to assign."))
+        client, auth, _transport = self.company_id._l10n_ar_get_connection("wsfe")._get_client(return_transport=True)
         done = self.env["account.move"]
         for line in todo:
-            done |= line._apply()
+            done |= line._apply(client, auth)
         return {
             "type": "ir.actions.act_window",
             "name": self.env._("Recovered documents"),
@@ -242,21 +243,22 @@ class L10nArEdiFfRecoverLine(models.TransientModel):
     result = fields.Char(readonly=True)
     note = fields.Char(readonly=True)
 
-    def _apply(self):
-        """Give the draft the number and authorization ARCA already has for it."""
+    def _apply(self, client, auth):
+        """Give the draft the number and authorization ARCA already has for it, if it is that document."""
         self.ensure_one()
         move = self.move_id
         if not move or move.state != "draft":
             raise UserError(self.env._("Number %s: choose a draft to assign it to.", self.number))
-        move.sudo().write(
-            {
-                "l10n_ar_afip_auth_mode": self.auth_mode,
-                "l10n_ar_afip_auth_code": self.auth_code,
-                "l10n_ar_afip_auth_code_due": self.auth_code_due,
-                "l10n_ar_afip_result": self.result,
-                "invoice_date": self.date,
-            }
-        )
+        values = {
+            "l10n_ar_afip_auth_mode": self.auth_mode,
+            "l10n_ar_afip_auth_code": self.auth_code,
+            "l10n_ar_afip_auth_code_due": self.auth_code_due,
+            "l10n_ar_afip_result": self.result,
+        }
+        # Writing the date recomputes taxes (perceptions by date, for one): only when it changes
+        if move.invoice_date != self.date:
+            values["invoice_date"] = self.date
+        move.sudo().write(values)
         # With the authorization written, posting does not ask ARCA again; no commit until the number is checked
         move.with_context(l10n_ar_invoice_skip_commit=True).action_post()
         if move.state != "posted" or move._move_batch_number() != self.number:
@@ -267,6 +269,7 @@ class L10nArEdiFfRecoverLine(models.TransientModel):
                     got=move.name,
                 )
             )
+        self._check_same_document(move, client, auth)
         move.message_post(
             body=self.env._(
                 "Recovered from ARCA with the recovery wizard: number %(number)s, CAE %(cae)s.",
@@ -275,3 +278,29 @@ class L10nArEdiFfRecoverLine(models.TransientModel):
             )
         )
         return move
+
+    def _check_same_document(self, move, client, auth):
+        """The posted draft has to be what ARCA authorized, field by field, as in the automatic recovery."""
+        self.ensure_one()
+        wizard = self.wizard_id
+        res = client.service.FECompConsultar(
+            auth,
+            {
+                "CbteTipo": wizard.document_type_id.code,
+                "CbteNro": self.number,
+                "PtoVta": wizard.journal_id.l10n_ar_afip_pos_number,
+            },
+        )
+        detail = move.wsfe_get_cae_request(client)["FeDetReq"][0]["FECAEDetRequest"]
+        if res.Errors or not res.ResultGet or not move._move_batch_same_document(detail, res.ResultGet):
+            raise UserError(
+                self.env._(
+                    "Number %(number)s: %(draft)s, once posted, is not the document ARCA authorized (it differs in "
+                    "customer, date or amounts; it now totals %(total)s and ARCA authorized %(arca)s). Nothing was "
+                    "recovered.",
+                    number=self.number,
+                    draft=move.display_name,
+                    total=move.amount_total,
+                    arca=self.amount_total,
+                )
+            )

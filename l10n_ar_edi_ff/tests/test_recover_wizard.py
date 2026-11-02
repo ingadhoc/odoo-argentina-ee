@@ -67,3 +67,17 @@ class TestRecoverWizard(BatchCaeCommon):
         wizard = self._wizard(lost)
         wizard.action_fetch()
         self.assertEqual(wizard.line_ids.move_id, lost)
+
+    @mute_logger("odoo.addons.l10n_ar_edi_ff.models.account_move")
+    def test_wizard_does_not_assign_a_draft_that_changed(self):
+        """A draft that, once posted, is not what ARCA authorized does not take the number."""
+        lost = self._create_invoices(1)
+        self._lose_and_stay_down(lost)
+        wizard = self._wizard(lost)
+        wizard.action_fetch()
+        self.assertEqual(wizard.line_ids.move_id, lost)
+        # A change after ARCA authorized it, like a perception added when the date is written
+        lost.invoice_line_ids.price_unit += 1
+        wizard.line_ids.amount_total = lost.amount_total
+        with self.assertRaisesRegex(UserError, "not the document ARCA authorized"):
+            wizard.action_apply()
