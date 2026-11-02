@@ -38,20 +38,48 @@ class TestFollowupReport(AccountTestInvoicingCommon):
         # The chain stays open, so the paid invoice has no full reconciliation.
         self.assertFalse(invoice_paid.line_ids.full_reconcile_id)
 
-        date_from = fields.Date.to_string(self.today - relativedelta(days=60))
+        line_names = [line.name for line in self._get_report_lines()]
+        self.assertIn(invoice_open.name, line_names)
+        self.assertNotIn(invoice_paid.name, line_names)
+        self.assertNotIn(payment.move_id.name, line_names)
+
+    def test_partner_total_due_and_overdue_lines(self):
+        """Given an overdue invoice and one not yet due, when the followup report is opened, then the
+        partner shows Total Due with both residuals and Total Overdue with only the overdue one."""
+        for days_due, amount in ((-30, 100.0), (10, 50.0)):
+            invoice = self.init_invoice(
+                "out_invoice",
+                partner=self.partner_a,
+                invoice_date=self.today - relativedelta(days=40),
+                amounts=[amount],
+            )
+            invoice.invoice_payment_term_id = False
+            invoice.invoice_date_due = self.today + relativedelta(days=days_due)
+            invoice.invoice_line_ids.tax_ids = False
+            invoice.action_post()
+
+        lines = self._get_report_lines()
+        residual_index = next(
+            i for i, column in enumerate(lines[0].columns) if column.expression_label == "amount_residual"
+        )
+        totals = {
+            self.report._get_markup(line.id): line.columns[residual_index].no_format
+            for line in lines
+            if self.report._get_markup(line.id) in ("total_due", "total_overdue")
+        }
+        self.assertEqual(totals, {"total_due": 150.0, "total_overdue": 100.0})
+
+    def _get_report_lines(self):
         options = self.report.get_options(
             {
                 "selected_variant_id": self.report.id,
                 "date": {
-                    "date_from": date_from,
+                    "date_from": fields.Date.to_string(self.today - relativedelta(days=60)),
                     "date_to": fields.Date.to_string(self.today),
                     "mode": "range",
                     "filter": "custom",
                 },
             }
         )
-        options["unfolded_lines"] = [self.report._get_generic_line_id("res.partner", self.partner_a.id)]
-        line_names = [line["name"] for line in self.report._get_lines(options)]
-        self.assertIn(invoice_open.name, line_names)
-        self.assertNotIn(invoice_paid.name, line_names)
-        self.assertNotIn(payment.move_id.name, line_names)
+        options["unfold_all"] = True
+        return self.report._get_lines(options)
