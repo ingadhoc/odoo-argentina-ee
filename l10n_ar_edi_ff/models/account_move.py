@@ -5,7 +5,7 @@ from datetime import datetime
 
 from markupsafe import Markup
 from odoo import api, models
-from odoo.exceptions import UserError
+from odoo.exceptions import RedirectWarning, UserError
 from odoo.tools import SQL, plaintext2html
 from psycopg2 import errors as pg_errors
 
@@ -13,6 +13,8 @@ _logger = logging.getLogger(__name__)
 
 PARAM = "l10n_ar_edi_ff"
 ERRORS_KEY = f"{PARAM}.errors"
+# (journal, document type) whose gap with ARCA was left for the recovery wizard
+GAPS_KEY = f"{PARAM}.gaps"
 FLAG_ENV = "ODOO_FLAG_L10N_AR_BATCH_CAE"
 FLAG_PARAM = f"{PARAM}.batch_cae"
 # What FECompConsultar returns of a document, compared with the request that would send it. The number is left
@@ -91,6 +93,7 @@ class AccountMove(models.Model):
                 failed.update(chunk_failed)
                 queue = pending.ids + queue[size:]
 
+        gaps = self.env.cr.cache.pop(GAPS_KEY, set())
         if failed and self.env.context.get("l10n_ar_batch_collect_errors"):
             # The background post cron handles each failure on its own. Not a dict in the context: Odoo reuses
             # environments whose context compares equal, so an empty dict would be shared between calls.
@@ -101,14 +104,22 @@ class AccountMove(models.Model):
                 for inv, msg in failed.items()
             )
             if validated:
-                raise UserError(
-                    self.env._(
-                        "These documents were validated in ARCA:\n   * %(ok)s\n\nThese documents were not:\n%(ko)s",
-                        ok="\n   * ".join(validated.mapped("name")),
-                        ko=lines,
-                    )
+                msg = self.env._(
+                    "These documents were validated in ARCA:\n   * %(ok)s\n\nThese documents were not:\n%(ko)s",
+                    ok="\n   * ".join(validated.mapped("name")),
+                    ko=lines,
                 )
-            raise UserError(self.env._("We couldn't validate the documents in ARCA:\n%s", lines))
+            else:
+                msg = self.env._("We couldn't validate the documents in ARCA:\n%s", lines)
+            if gaps:
+                journal_id, document_type_id = next(iter(gaps))
+                action = self.env["ir.actions.act_window"]._for_xml_id("l10n_ar_edi_ff.action_recover_invoices")
+                action["context"] = {
+                    "default_journal_id": journal_id,
+                    "default_document_type_id": document_type_id,
+                }
+                raise RedirectWarning(msg, action, self.env._("Recover documents from ARCA"))
+            raise UserError(msg)
         return validated
 
     def _l10n_ar_do_afip_ws_request_cae(self, client, auth, transport):
@@ -207,6 +218,7 @@ class AccountMove(models.Model):
                 limit=limit,
             )
             self.sudo().write(xml_values)
+            self._move_batch_leave_gap()
             return Move, dict.fromkeys(self, msg), Move
 
         recovered = Move
@@ -226,6 +238,7 @@ class AccountMove(models.Model):
                 msg = self.env._(
                     "ARCA registered number %(number)s and no draft of Odoo is that document.", number=first_number
                 ) + ("\n\n" + msg)
+                self._move_batch_leave_gap()
             failed, _pending = self._move_batch_reject_from(0, msg, False, lost is None, xml_values)
             return Move, failed, Move
         self._move_batch_flag_twins(recovered)
@@ -239,7 +252,13 @@ class AccountMove(models.Model):
             arca=last,
         )
         rest.sudo().write(xml_values)
+        self._move_batch_leave_gap()
         return recovered, dict.fromkeys(rest, msg), Move
+
+    def _move_batch_leave_gap(self):
+        self.env.cr.cache.setdefault(GAPS_KEY, set()).add(
+            (self[0].journal_id.id, self[0].l10n_latam_document_type_id.id)
+        )
 
     def _move_batch_recover_number(self, number, taken, soft, client, auth):
         """The draft that takes `number` from ARCA, posted with its authorization, or an empty recordset."""

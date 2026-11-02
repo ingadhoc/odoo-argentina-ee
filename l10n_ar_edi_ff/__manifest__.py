@@ -7,6 +7,9 @@
     "author": "ADHOC SA",
     "license": "AGPL-3",
     "depends": ["l10n_ar_edi_ux", "account_background_post"],
-    "data": [],
+    "data": [
+        "security/ir.model.access.csv",
+        "wizards/recover_invoices_views.xml",
+    ],
     "installable": True,
 }
