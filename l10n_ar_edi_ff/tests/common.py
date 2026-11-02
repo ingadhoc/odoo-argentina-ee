@@ -6,7 +6,7 @@ from dateutil.relativedelta import relativedelta
 from odoo import fields
 from odoo.addons.l10n_ar_edi.tests.common import ArMockedClient, TestArEdiCommon
 
-from ..models.account_move import ERRORS_KEY, FLAG_ENV, FLAG_PARAM
+from ..models.account_move import ERRORS_KEY, FLAG_ENV, FLAG_PARAM, MATCH_FIELDS
 
 
 class ArcaDown(Exception):
@@ -24,6 +24,7 @@ class FakeArca:
         self.today = today
         self.registered = {}  # number -> detail sent, plus the CAE ARCA gave it
         self.sends = 0
+        self.consults = 0
         self.reset()
 
     def reset(self):
@@ -76,6 +77,7 @@ class FakeArca:
         )
 
     def consult(self, number):
+        self.consults += 1
         if self.down:
             raise ArcaDown("connection refused")
         detail = self.registered.get(number)
@@ -84,9 +86,7 @@ class FakeArca:
         return SimpleNamespace(
             Errors=None,
             ResultGet=SimpleNamespace(
-                CbteFch=detail["CbteFch"],
-                ImpTotal=detail["ImpTotal"],
-                DocNro=detail["DocNro"],
+                **{field: detail.get(field) for field in MATCH_FIELDS},
                 EmisionTipo="CAE",
                 CodAutorizacion=detail["CAE"],
                 FchVto=(self.today + relativedelta(days=10)).strftime("%Y%m%d"),
@@ -130,12 +130,26 @@ class BatchCaeCommon(TestArEdiCommon):
         # Each test starts from the class data, so ARCA starts empty too.
         self.arca.registered.clear()
         self.arca.sends = 0
+        self.arca.consults = 0
         self.arca.reset()
 
-    def _create_invoices(self, count):
-        return self.env["account.move"].concat(
+    def _create_invoices(self, count, price=None):
+        invoices = self.env["account.move"].concat(
             *(self._create_invoice_ar(journal_id=self.journal, invoice_date=self.today) for _i in range(count))
         )
+        if price:
+            # A different total makes a different document for ARCA
+            invoices.invoice_line_ids.price_unit = price
+        return invoices
+
+    def _lose_and_stay_down(self, invoices):
+        """ARCA registers the whole chunk, the answer gets lost and ARCA stays down: all of it ends in draft."""
+        self.arca.reset()
+        self.arca.lose_after = len(invoices)
+        self.arca.down_after_send = True
+        self._post_batch(invoices)
+        self.assertEqual(set(invoices.mapped("state")), {"draft"})
+        self.arca.reset()
 
     def _post_batch(self, invoices):
         """Post as the background cron does: no commit, and the ARCA rejections collected instead of raised."""

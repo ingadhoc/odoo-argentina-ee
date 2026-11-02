@@ -62,11 +62,12 @@ class TestBatchOutcome(BatchCaeCommon):
             self.arca.reset()
             first, second, third = invoices = self._create_invoices(3)
             self.arca.lose_after = 2
+            sends = self.arca.sends
             errors = self._post_batch(invoices)
-            # The registered prefix is recovered; the third is not sent again
-            self.assertEqual((first + second).mapped("state"), ["posted", "posted"])
-            self.assertEqual(third.state, "draft")
-            self.assertIn("No answer from ARCA", errors[third.id])
+            # The two registered ones are recovered; ARCA has nothing after them, so the third is sent again
+            self.assertFalse(errors)
+            self.assertEqual(self.arca.sends - sends, 2)
+            self.assertEqual(invoices.mapped("state"), ["posted", "posted", "posted"])
             self.assert_batch_coherence()
 
         with self.subTest("the answer is lost and ARCA stays down"):
@@ -101,3 +102,56 @@ class TestBatchOutcome(BatchCaeCommon):
         invoice.l10n_ar_afip_auth_code = "1"
         with self.assertRaises(AssertionError):
             self.assert_batch_coherence()
+
+    @mute_logger("odoo.addons.l10n_ar_edi_ff.models.account_move")
+    def test_recover_the_gap_from_other_drafts(self):
+        """The drafts ARCA registered take their numbers when another invoice is validated."""
+        lost = self._create_invoices(3)
+        self._lose_and_stay_down(lost)
+        new = self._create_invoices(1, price=500)
+        errors = self._post_batch(new)
+        # ARCA answers 10016 to the new one: the three drafts take their numbers, then the new one goes on
+        self.assertFalse(errors)
+        self.assertEqual(set((lost + new).mapped("state")), {"posted"})
+        self.assertEqual(self._number(new), 4)
+        self.assert_batch_coherence()
+        self.assertTrue(any("recovered from ARCA" in m.body for m in lost[0].message_ids))
+
+    @mute_logger("odoo.addons.l10n_ar_edi_ff.models.account_move")
+    def test_recover_warns_on_a_twin_draft(self):
+        """Two equal drafts and one number in ARCA: the one being validated takes it, the other is warned."""
+        original = self._create_invoices(1)
+        self._lose_and_stay_down(original)
+        # The user thought it failed and made it again
+        copy = self._create_invoices(1)
+        errors = self._post_batch(copy)
+        self.assertFalse(errors)
+        self.assertEqual(copy.state, "posted")
+        self.assertEqual(original.state, "draft")
+        self.assertTrue(any("is not a duplicate" in m.body for m in original.message_ids))
+        self.assert_batch_coherence()
+
+    @mute_logger("odoo.addons.l10n_ar_edi_ff.models.account_move")
+    def test_recover_stops_without_the_document(self):
+        """A number of ARCA that is no draft of Odoo is not given to another document."""
+        lost = self._create_invoices(1)
+        self._lose_and_stay_down(lost)
+        lost.unlink()
+        new = self._create_invoices(1, price=500)
+        errors = self._post_batch(new)
+        self.assertEqual(new.state, "draft")
+        self.assertIn("no draft of Odoo is that document", errors[new.id])
+        self.assertEqual(sorted(self.arca.registered), [1])
+
+    @mute_logger("odoo.addons.l10n_ar_edi_ff.models.account_move")
+    def test_recover_does_not_query_a_gap_over_the_limit(self):
+        """A gap bigger than the limit is not queried number by number."""
+        self.env["ir.config_parameter"].sudo().set_param("l10n_ar_edi_ff.recover_limit", 2)
+        lost = self._create_invoices(3)
+        self._lose_and_stay_down(lost)
+        new = self._create_invoices(1, price=500)
+        consults = self.arca.consults
+        errors = self._post_batch(new)
+        self.assertEqual(self.arca.consults, consults)
+        self.assertEqual(new.state, "draft")
+        self.assertIn("more than the 2", errors[new.id])

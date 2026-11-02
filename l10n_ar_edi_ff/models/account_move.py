@@ -15,6 +15,23 @@ PARAM = "l10n_ar_edi_ff"
 ERRORS_KEY = f"{PARAM}.errors"
 FLAG_ENV = "ODOO_FLAG_L10N_AR_BATCH_CAE"
 FLAG_PARAM = f"{PARAM}.batch_cae"
+# What FECompConsultar returns of a document, compared with the request that would send it. The number is left
+# out: it is what the recovery assigns.
+MATCH_FIELDS = (
+    "CbteFch",
+    "Concepto",
+    "DocTipo",
+    "DocNro",
+    "MonId",
+    "ImpTotal",
+    "ImpTotConc",
+    "ImpNeto",
+    "ImpOpEx",
+    "ImpTrib",
+    "ImpIVA",
+    "FchServDesde",
+    "FchServHasta",
+)
 
 
 class AccountMove(models.Model):
@@ -134,52 +151,191 @@ class AccountMove(models.Model):
         """Isolated so tests can simulate a lost response."""
         return client.service.FECAESolicitar(auth, request)
 
-    def _move_batch_recover(self, details, client, auth):
-        """Find out which documents of the chunk ARCA registered although we got no usable answer.
+    def _move_batch_number(self):
+        self.ensure_one()
+        return self._l10n_ar_get_document_number_parts(
+            self.l10n_latam_document_number, self.l10n_latam_document_type_id.code
+        )["invoice_number"]
 
-        Returns (values to write for the registered prefix of the chunk, last number authorized in ARCA).
-        Stops at the first document that is not registered (or does not match), because ARCA authorizes in
-        order.
+    @api.model
+    def _move_batch_same_document(self, detail, got):
+        """Whether what ARCA registered (`got`) is the document of this request detail, field by field."""
+
+        def norm(value):
+            # ARCA answers 0 / empty where Odoo sends 0.00 / None
+            return None if value is None else (self._l10n_ar_parse_xml_value(str(value)) or None)
+
+        return all(norm(detail.get(field)) == norm(getattr(got, field, None)) for field in MATCH_FIELDS)
+
+    def _move_batch_recover_gap(self, first_number, soft, client, auth, lost, response, header_codes, xml_values):
+        """Bring what ARCA registered from `first_number` on, which Odoo does not have. This chunk is in draft.
+
+        Each number goes, in order, to the draft that is the same document: first the invoices of this chunk,
+        then the other drafts of the journal, oldest first. ARCA returns no lines, so equal drafts are the same
+        document for it and the first one takes the number.
+
+        Returns (recovered, {invoice: error message}, pending). The rest of the chunk is sent again only when
+        the whole gap was recovered: until then ARCA keeps answering 10016.
         """
-        journal = self[0].journal_id
-        doc_type = self[0].l10n_latam_document_type_id
-        last = journal._l10n_ar_get_afip_last_invoice_number(doc_type)
-        recovered = []
-        for inv, detail in zip(self, details):
-            if detail["CbteDesde"] > last:
+        Move = self.browse()
+        journal, doc_type = self[0].journal_id, self[0].l10n_latam_document_type_id
+        try:
+            last = journal._l10n_ar_get_afip_last_invoice_number(doc_type)
+        except Exception as error:  # noqa: BLE001
+            # ARCA is most likely still down. Nothing is confirmed: the whole chunk stays in draft and the next
+            # attempt reconciles it through the 10016 path.
+            _logger.warning("batch CAE: could not check %s documents in ARCA: %r", len(self), error)
+            msg = self.env._(
+                "ARCA did not answer and we could not check what it registered: %(error)s\n\n"
+                "The document stays in draft. If ARCA did register it, validating it again recovers its "
+                "authorization instead of reporting it twice.",
+                error=repr(lost if lost is not None else error),
+            )
+            # The request is the only trace of what may be registered in ARCA
+            self.sudo().write(xml_values)
+            return Move, dict.fromkeys(self, msg), Move
+
+        gap = range(first_number, last + 1)
+        limit = max(1, int(self.env["ir.config_parameter"].sudo().get_param(f"{PARAM}.recover_limit", 20)))
+        if len(gap) > limit:
+            msg = self.env._(
+                "ARCA has %(count)s documents (numbers %(first)s to %(last)s) that Odoo does not have, more than "
+                "the %(limit)s that are recovered automatically. Recover them before validating again.",
+                count=len(gap),
+                first=first_number,
+                last=last,
+                limit=limit,
+            )
+            self.sudo().write(xml_values)
+            return Move, dict.fromkeys(self, msg), Move
+
+        recovered = Move
+        for number in gap:
+            match = self._move_batch_recover_number(number, recovered, soft, client, auth)
+            if not match:
                 break
+            recovered |= match
+        _logger.info(
+            "batch CAE: recovered %s of %s documents from ARCA (%s to %s)", len(recovered), len(gap), first_number, last
+        )
+        rest = self - recovered
+        if not recovered:
+            # Nothing to bring: ARCA registered nothing of this chunk, or what it has is no draft of Odoo
+            msg = self[0]._move_batch_unrecovered_msg(lost, response, header_codes, first_number, last)
+            if gap:
+                msg = self.env._(
+                    "ARCA registered number %(number)s and no draft of Odoo is that document.", number=first_number
+                ) + ("\n\n" + msg)
+            failed, _pending = self._move_batch_reject_from(0, msg, False, lost is None, xml_values)
+            return Move, failed, Move
+        self._move_batch_flag_twins(recovered)
+        if len(recovered) == len(gap):
+            return recovered, {}, rest
+        msg = self.env._(
+            "ARCA registered number %(number)s and no draft of Odoo is that document. Number sent by Odoo: "
+            "%(odoo)s. Last number authorized in ARCA: %(arca)s.",
+            number=gap[len(recovered)],
+            odoo=first_number,
+            arca=last,
+        )
+        rest.sudo().write(xml_values)
+        return recovered, dict.fromkeys(rest, msg), Move
+
+    def _move_batch_recover_number(self, number, taken, soft, client, auth):
+        """The draft that takes `number` from ARCA, posted with its authorization, or an empty recordset."""
+        Move = self.browse()
+        journal, doc_type = self[0].journal_id, self[0].l10n_latam_document_type_id
+        try:
             res = client.service.FECompConsultar(
-                auth,
-                {
-                    "CbteTipo": doc_type.code,
-                    "CbteNro": detail["CbteDesde"],
-                    "PtoVta": journal.l10n_ar_afip_pos_number,
-                },
+                auth, {"CbteTipo": doc_type.code, "CbteNro": number, "PtoVta": journal.l10n_ar_afip_pos_number}
             )
-            got = res.ResultGet
-            if (
-                res.Errors
-                or not got
-                or (
-                    got.CbteFch != detail["CbteFch"]
-                    or float(got.ImpTotal) != float(detail["ImpTotal"])
-                    or int(got.DocNro) != int(detail["DocNro"])
+        except Exception as error:  # noqa: BLE001
+            _logger.warning("batch CAE: could not read number %s from ARCA: %r", number, error)
+            return Move
+        got = res.ResultGet
+        if res.Errors or not got or got.Resultado not in ("A", "O"):
+            return Move
+        others = self.search(
+            [
+                ("company_id", "=", self[0].company_id.id),
+                ("journal_id", "=", journal.id),
+                ("l10n_latam_document_type_id", "=", doc_type.id),
+                ("move_type", "in", ("out_invoice", "out_refund")),
+                ("state", "=", "draft"),
+                ("l10n_ar_afip_auth_code", "=", False),
+                ("id", "not in", (self | taken).ids),
+            ],
+            order="invoice_date, id",
+        )
+        total = float(got.ImpTotal)
+        for inv in (self - taken) | others:
+            if inv.currency_id.compare_amounts(inv.amount_total, total):
+                continue
+            if inv._move_batch_take(number, got, soft, client):
+                return inv
+        return Move
+
+    def _move_batch_take(self, number, got, soft, client):
+        """Post this draft with `number` and the authorization ARCA gave it, if it is that document."""
+        self.ensure_one()
+        sp = self.env.cr.savepoint(flush=True)
+        try:
+            ctx = {"l10n_ar_batch_ids": (self.id,), "l10n_ar_invoice_skip_commit": True}
+            super(AccountMove, self.with_context(**ctx))._post(soft=soft)
+            same = (
+                self.state == "posted"
+                and self._move_batch_number() == number
+                and self._move_batch_same_document(
+                    self.wsfe_get_cae_request(client)["FeDetReq"][0]["FECAEDetRequest"], got
                 )
-            ):
-                _logger.warning(
-                    "batch CAE: %s number %s in ARCA does not match, stop recovery", inv.id, detail["CbteDesde"]
-                )
-                break
-            recovered.append(
-                {
-                    "l10n_ar_afip_auth_mode": got.EmisionTipo,
-                    "l10n_ar_afip_auth_code": str(got.CodAutorizacion),
-                    "l10n_ar_afip_auth_code_due": datetime.strptime(got.FchVto, "%Y%m%d").date(),
-                    "l10n_ar_afip_result": got.Resultado,
-                }
             )
-        _logger.info("batch CAE: recovered %s of %s documents from ARCA (last %s)", len(recovered), len(self), last)
-        return recovered, last
+        except UserError:
+            same = False
+        sp.close(rollback=not same)
+        if not same:
+            return False
+        self.sudo().write(
+            {
+                "l10n_ar_afip_auth_mode": got.EmisionTipo,
+                "l10n_ar_afip_auth_code": str(got.CodAutorizacion),
+                "l10n_ar_afip_auth_code_due": datetime.strptime(got.FchVto, "%Y%m%d").date(),
+                "l10n_ar_afip_result": got.Resultado,
+            }
+        )
+        self.message_post(
+            body=self.env._(
+                "ARCA had authorized this document with number %(number)s and CAE %(cae)s, but its answer did not "
+                "reach Odoo. The authorization was recovered from ARCA.",
+                number=number,
+                cae=got.CodAutorizacion,
+            )
+        )
+        return True
+
+    def _move_batch_flag_twins(self, recovered):
+        """Warn on the drafts equal to a recovered document: it may be a copy made after the answer got lost.
+
+        The invoices of this chunk are being validated on purpose, so they are not warned."""
+        for inv in recovered:
+            twins = self.search(
+                [
+                    ("journal_id", "=", inv.journal_id.id),
+                    ("l10n_latam_document_type_id", "=", inv.l10n_latam_document_type_id.id),
+                    ("commercial_partner_id", "=", inv.commercial_partner_id.id),
+                    ("state", "=", "draft"),
+                    ("l10n_ar_afip_auth_code", "=", False),
+                    ("invoice_date", "in", (inv.invoice_date, False)),
+                    ("id", "not in", self.ids),
+                ]
+            ).filtered(lambda m, inv=inv: not m.currency_id.compare_amounts(m.amount_total, inv.amount_total))
+            for twin in twins:
+                twin.message_post(
+                    body=self.env._(
+                        "%(doc)s, identical to this one, was recovered from ARCA. Check that this one is not a "
+                        "duplicate before validating it.",
+                        doc=inv.display_name,
+                    )
+                )
 
     def _move_batch_unrecovered_msg(self, lost, response, codes, number, last):
         """Error for a document that ARCA did not register: what ARCA said (or that it did not answer),
@@ -223,66 +379,44 @@ class AccountMove(models.Model):
             rejected.sudo().write(xml_values)
         return failed, pending
 
-    def _move_batch_evaluate(self, details, response, lost, client, auth):
-        """Read what ARCA did with this posted chunk.
+    def _move_batch_evaluate(self, details, response, header_codes):
+        """Read what ARCA answered to this posted chunk.
 
         Returns (values for the approved prefix, index of the first document not approved or None, its error
-        message, whether the documents after it can be retried, the error that kept us from checking ARCA or
-        None, the header error codes)."""
-        values_list, first_bad, bad_msg, retry, unconfirmed = [], None, "", True, None
-        header_codes = [str(err.Code) for err in response.Errors.Err] if response and response.Errors else []
-        if lost is not None or "10016" in header_codes:
-            # A numbering mismatch rejects the rest too: do not retry them.
-            retry = False
-            try:
-                values_list, last = self._move_batch_recover(details, client, auth)
-            except Exception as error:  # noqa: BLE001
-                # ARCA is most likely still down. Nothing is confirmed: the whole chunk goes back to draft and
-                # the next attempt reconciles it through the 10016 path.
-                unconfirmed = error
-                _logger.warning("batch CAE: could not check %s documents in ARCA: %r", len(self), error)
-                first_bad = 0
-                bad_msg = self.env._(
-                    "ARCA did not answer and we could not check what it registered: %(error)s\n\n"
-                    "The document stays in draft. If ARCA did register it, validating it again recovers its "
-                    "authorization instead of reporting it twice.",
-                    error=repr(lost if lost is not None else error),
-                )
-            else:
-                if len(values_list) < len(self):
-                    first_bad = len(values_list)
-                    bad_msg = self[first_bad]._move_batch_unrecovered_msg(
-                        lost, response, header_codes, details[first_bad]["CbteDesde"], last
-                    )
-        else:
-            results = {}
-            if response.FeDetResp:
-                results = {r.CbteDesde: r for r in response.FeDetResp.FECAEDetResponse}
-            # A header error without details (auth, service) affects the whole chunk: do not retry.
-            retry = bool(results)
-            for idx, (inv, detail) in enumerate(zip(self, details)):
-                result = results.get(detail["CbteDesde"])
-                obs_codes, obs = [], ""
-                if result and result.Observaciones:
-                    obs = "".join(f"\n* Code {ob.Code}: {ob.Msg}" for ob in result.Observaciones.Obs)
-                    obs_codes = [str(ob.Code) for ob in result.Observaciones.Obs]
-                if not result or result.Resultado != "A":
-                    errors = (
-                        "".join(f"\n* Code {e.Code}: {e.Msg}" for e in response.Errors.Err) if response.Errors else ""
-                    )
-                    first_bad = idx
-                    bad_msg = inv._prepare_return_msg("wsfe", errors, obs, "", header_codes + obs_codes)
-                    break
-                values_list.append(
-                    {
-                        "l10n_ar_afip_auth_mode": "CAE",
-                        "l10n_ar_afip_auth_code": str(result.CAE),
-                        "l10n_ar_afip_auth_code_due": datetime.strptime(result.CAEFchVto, "%Y%m%d").date(),
-                        "l10n_ar_afip_result": result.Resultado,
-                        "_obs": obs and inv._prepare_return_msg("wsfe", "", obs, "", obs_codes),
-                    }
-                )
-        return values_list, first_bad, bad_msg, retry, unconfirmed, header_codes
+        message, whether the documents after it can be retried)."""
+        values_list, first_bad, bad_msg, retry = [], None, "", True
+        results = {}
+        if response.FeDetResp:
+            results = {r.CbteDesde: r for r in response.FeDetResp.FECAEDetResponse}
+        # A header error without details (auth, service) affects the whole chunk: do not retry.
+        retry = bool(results)
+        for idx, (inv, detail) in enumerate(zip(self, details)):
+            result = results.get(detail["CbteDesde"])
+            obs_codes, obs = [], ""
+            if result and result.Observaciones:
+                obs = "".join(f"\n* Code {ob.Code}: {ob.Msg}" for ob in result.Observaciones.Obs)
+                obs_codes = [str(ob.Code) for ob in result.Observaciones.Obs]
+            if not result or result.Resultado != "A":
+                errors = "".join(f"\n* Code {e.Code}: {e.Msg}" for e in response.Errors.Err) if response.Errors else ""
+                first_bad = idx
+                bad_msg = inv._prepare_return_msg("wsfe", errors, obs, "", header_codes + obs_codes)
+                break
+            values_list.append(
+                {
+                    "l10n_ar_afip_auth_mode": "CAE",
+                    "l10n_ar_afip_auth_code": str(result.CAE),
+                    "l10n_ar_afip_auth_code_due": datetime.strptime(result.CAEFchVto, "%Y%m%d").date(),
+                    "l10n_ar_afip_result": result.Resultado,
+                    "_obs": obs and inv._prepare_return_msg("wsfe", "", obs, "", obs_codes),
+                }
+            )
+        return values_list, first_bad, bad_msg, retry
+
+    def _move_batch_release(self, savepoints):
+        """Releasing the outermost savepoint releases the nested ones (or the ones a rollback destroyed)."""
+        self.env.cr.execute(SQL("RELEASE SAVEPOINT %s", SQL.identifier(savepoints[0].name)))
+        for sp in savepoints:
+            sp.closed = True
 
     def _move_batch_post_chunk(self, soft):
         """Post a chunk of invoices of the same (company, journal, document type) with one FECAESolicitar.
@@ -342,40 +476,35 @@ class AccountMove(models.Model):
             _logger.warning("batch CAE: no answer for %s documents: %r", len(posted), error)
         elapsed = time.monotonic() - start
 
-        values_list, first_bad, bad_msg, retry, unconfirmed, header_codes = posted._move_batch_evaluate(
-            details, response, lost, client, auth
-        )
-
-        xml_request, xml_response = transport.xml_request, transport.xml_response
-        approved, pending = posted[: len(values_list)], Move
-        if first_bad is not None:
-            savepoints[first_bad].rollback()
-            xml_values = {"l10n_ar_afip_xml_request": xml_request, "l10n_ar_afip_xml_response": xml_response}
-            if unconfirmed is not None:
-                # Keep the request on every document: it is the only trace of what may be registered in ARCA.
-                failed.update(dict.fromkeys(posted, bad_msg))
-                posted.sudo().write(xml_values)
-            else:
-                rejected_failed, pending = posted._move_batch_reject_from(
-                    first_bad,
-                    bad_msg,
-                    lost is None and retry,
-                    lost is None and "10016" in header_codes,
-                    xml_values,
-                )
+        xml_values = {
+            "l10n_ar_afip_xml_request": transport.xml_request,
+            "l10n_ar_afip_xml_response": transport.xml_response,
+        }
+        header_codes = [str(err.Code) for err in response.Errors.Err] if response and response.Errors else []
+        if lost is not None or "10016" in header_codes:
+            # ARCA may have registered documents Odoo does not know: the chunk goes back to draft and each number
+            # ARCA has goes to the draft that is that document.
+            savepoints[0].rollback()
+            self._move_batch_release(savepoints)
+            approved, gap_failed, pending = posted._move_batch_recover_gap(
+                details[0]["CbteDesde"], soft, client, auth, lost, response, header_codes, xml_values
+            )
+            failed.update(gap_failed)
+        else:
+            values_list, first_bad, bad_msg, retry = posted._move_batch_evaluate(details, response, header_codes)
+            approved, pending = posted[: len(values_list)], Move
+            if first_bad is not None:
+                savepoints[first_bad].rollback()
+                rejected_failed, pending = posted._move_batch_reject_from(first_bad, bad_msg, retry, False, xml_values)
                 failed.update(rejected_failed)
-        # Releasing the outermost savepoint releases the nested ones (or the ones the rollback destroyed).
-        cr.execute(SQL("RELEASE SAVEPOINT %s", SQL.identifier(savepoints[0].name)))
-        for sp in savepoints:
-            sp.closed = True
-
-        for inv, values in zip(approved, values_list):
-            obs = values.pop("_obs", "")
-            inv.sudo().write(dict(values, l10n_ar_afip_xml_request=xml_request, l10n_ar_afip_xml_response=xml_response))
-            if obs:
-                inv.message_post(
-                    body=Markup("<p><b>%s%s</b></p>") % (self.env._("ARCA Messages"), plaintext2html(obs, "em"))
-                )
+            self._move_batch_release(savepoints)
+            for inv, values in zip(approved, values_list):
+                obs = values.pop("_obs", "")
+                inv.sudo().write(dict(values, **xml_values))
+                if obs:
+                    inv.message_post(
+                        body=Markup("<p><b>%s%s</b></p>") % (self.env._("ARCA Messages"), plaintext2html(obs, "em"))
+                    )
         _logger.info(
             "batch CAE: journal %s type %s: %s sent, %s approved, %s rejected, %s pending, FECAESolicitar %.3fs",
             first.journal_id.id,
