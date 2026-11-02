@@ -87,7 +87,6 @@ class FakeArca:
             Errors=None,
             ResultGet=SimpleNamespace(
                 **{field: detail.get(field) for field in MATCH_FIELDS},
-                Iva=SimpleNamespace(AlicIva=[SimpleNamespace(**item) for item in detail.get("Iva") or []]),
                 EmisionTipo="CAE",
                 CodAutorizacion=detail["CAE"],
                 FchVto=(self.today + relativedelta(days=10)).strftime("%Y%m%d"),

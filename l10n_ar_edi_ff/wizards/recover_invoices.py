@@ -3,12 +3,7 @@ from datetime import datetime
 from odoo import Command, api, fields, models
 from odoo.exceptions import UserError
 
-from ..models.account_move import MATCH_FIELDS, PARAM
-
-# VAT codes of ARCA for what is not taxed and what is exempt, reported apart from the aliquots
-NOT_TAXED_CODE = "1"
-EXEMPT_CODE = "2"
-LOCAL_CURRENCY_CODE = "PES"
+from ..models.account_move import PARAM
 
 
 class L10nArEdiFfRecover(models.TransientModel):
@@ -35,13 +30,6 @@ class L10nArEdiFfRecover(models.TransientModel):
         help="Next number of Odoo. Documents are numbered in order, so the recovery starts here.",
     )
     number_to = fields.Integer(help="By default, the last number authorized in ARCA.")
-    account_id = fields.Many2one(
-        "account.account",
-        string="Account for created documents",
-        check_company=True,
-        domain="[('account_type', 'in', ('income', 'income_other'))]",
-        help="Account of the lines of the documents this wizard creates.",
-    )
     line_ids = fields.One2many("l10n_ar_edi_ff.recover.line", "wizard_id")
     state = fields.Selection([("setup", "Setup"), ("review", "Review")], default="setup", required=True)
 
@@ -74,9 +62,6 @@ class L10nArEdiFfRecover(models.TransientModel):
         )
         return last._move_batch_number() if last else 0
 
-    def _format_number(self, number):
-        return "%05d-%08d" % (self.journal_id.l10n_ar_afip_pos_number, number)
-
     def _reopen(self):
         return {
             "type": "ir.actions.act_window",
@@ -90,7 +75,7 @@ class L10nArEdiFfRecover(models.TransientModel):
     # ------------------------------------------------------------------ fetch
 
     def action_fetch(self):
-        """Ask ARCA for every number of the range and propose what to do with each one."""
+        """Ask ARCA for every number of the range and propose the draft each one goes to."""
         self.ensure_one()
         self.number_from = self._last_number_here() + 1
         if self.number_to < self.number_from:
@@ -129,11 +114,6 @@ class L10nArEdiFfRecover(models.TransientModel):
 
     def _prepare_line(self, number, got, taken):
         self.ensure_one()
-        serialized = {field: self._serialize(getattr(got, field, None)) for field in MATCH_FIELDS}
-        serialized["Iva"] = [
-            {"Id": str(item.Id), "BaseImp": float(item.BaseImp or 0)}
-            for item in (getattr(getattr(got, "Iva", None), "AlicIva", None) or [])
-        ]
         values = {
             "number": number,
             "date": datetime.strptime(str(got.CbteFch), "%Y%m%d").date(),
@@ -143,7 +123,6 @@ class L10nArEdiFfRecover(models.TransientModel):
             "auth_code": str(got.CodAutorizacion),
             "auth_code_due": datetime.strptime(str(got.FchVto), "%Y%m%d").date(),
             "result": got.Resultado,
-            "values": serialized,
             "action": "skip",
         }
         partner = self._find_partner(got)
@@ -151,17 +130,12 @@ class L10nArEdiFfRecover(models.TransientModel):
         draft = self._find_draft(got, partner, taken)
         if draft:
             values.update(move_id=draft.id, action="match")
-            return values
-        values["note"] = self._create_blocker(got, partner)
-        if not values["note"]:
-            values["action"] = "create"
+        else:
+            values["note"] = self.env._(
+                "No draft of Odoo is this document. Load it as a draft with this customer, date and total, then "
+                "run the wizard again."
+            )
         return values
-
-    @api.model
-    def _serialize(self, value):
-        if value is None:
-            return None
-        return value if isinstance(value, (int, float, str)) else str(value)
 
     def _find_partner(self, got):
         """The customer ARCA reports, by its identification. Without a number it is the anonymous final consumer."""
@@ -200,28 +174,15 @@ class L10nArEdiFfRecover(models.TransientModel):
         total = float(got.ImpTotal or 0)
         return drafts.filtered(lambda m: not m.currency_id.compare_amounts(m.amount_total, total))[:1]
 
-    def _create_blocker(self, got, partner):
-        """Why this document cannot be created from what ARCA reports, if it cannot."""
-        self.ensure_one()
-        if not partner:
-            return self.env._("No contact has the identification %s.", got.DocNro)
-        if (got.MonId or LOCAL_CURRENCY_CODE) != LOCAL_CURRENCY_CODE:
-            return self.env._("It is in foreign currency (%s): it can be assigned to a draft, not created.", got.MonId)
-        if float(got.ImpTrib or 0):
-            return self.env._("It has other taxes for %s, which have to be set by hand.", got.ImpTrib)
-        return ""
-
     # ------------------------------------------------------------------ apply
 
     def action_apply(self):
-        """Assign and create what is marked, from the lowest number up.
+        """Assign what is marked, from the lowest number up.
 
         Odoo numbers with its own sequence, so the numbers are taken in order: a skipped number stops the ones
         after it."""
         self.ensure_one()
         lines = self.line_ids.sorted("number")
-        if lines.filtered(lambda line: line.action == "create") and not self.account_id:
-            raise UserError(self.env._("Choose the account of the documents that are going to be created."))
         todo = self.env["l10n_ar_edi_ff.recover.line"]
         for line in lines:
             if line.action == "skip":
@@ -236,12 +197,10 @@ class L10nArEdiFfRecover(models.TransientModel):
                 )
             )
         if not todo:
-            raise UserError(self.env._("No document is marked to assign or create."))
+            raise UserError(self.env._("No document is marked to assign."))
         done = self.env["account.move"]
         for line in todo:
             done |= line._apply()
-        for line in todo.filtered("reverse"):
-            line._reverse(line.applied_move_id)
         return {
             "type": "ir.actions.act_window",
             "name": self.env._("Recovered documents"),
@@ -249,23 +208,6 @@ class L10nArEdiFfRecover(models.TransientModel):
             "view_mode": "list,form",
             "domain": [("id", "in", done.ids)],
         }
-
-    def _sale_taxes_by_vat_code(self):
-        """One sale tax per ARCA VAT code. With more than one the first is used: if it is not the right one the
-        total does not match and the document is not created."""
-        self.ensure_one()
-        taxes = self.env["account.tax"].search(
-            [
-                ("company_id", "parent_of", self.company_id.id),
-                ("type_tax_use", "=", "sale"),
-                ("tax_group_id.l10n_ar_vat_afip_code", "!=", False),
-            ],
-            order="sequence, id",
-        )
-        by_code = {}
-        for tax in taxes:
-            by_code.setdefault(tax.tax_group_id.l10n_ar_vat_afip_code, tax)
-        return by_code
 
 
 class L10nArEdiFfRecoverLine(models.TransientModel):
@@ -280,48 +222,34 @@ class L10nArEdiFfRecoverLine(models.TransientModel):
     date = fields.Date(readonly=True)
     amount_total = fields.Monetary("Total", readonly=True)
     document_number = fields.Char("Identification", readonly=True)
-    partner_id = fields.Many2one("res.partner", string="Customer")
+    partner_id = fields.Many2one("res.partner", string="Customer", readonly=True)
     move_id = fields.Many2one(
         "account.move",
         string="Draft",
         domain="[('journal_id', '=', parent.journal_id), ('state', '=', 'draft')]",
     )
-    applied_move_id = fields.Many2one("account.move", readonly=True)
-    action = fields.Selection(
-        [("match", "Assign"), ("create", "Create"), ("skip", "Skip")],
-        required=True,
-        default="skip",
-    )
-    reverse = fields.Boolean(
-        "Neutralize",
-        help="Issue the document that cancels it: a credit note for an invoice or a debit note, a debit note "
-        "for a credit note. It is validated right away, so it asks ARCA for its own authorization.",
-    )
+    action = fields.Selection([("match", "Assign"), ("skip", "Skip")], required=True, default="skip")
     auth_mode = fields.Char(readonly=True)
     auth_code = fields.Char("CAE", readonly=True)
     auth_code_due = fields.Date("CAE due date", readonly=True)
     result = fields.Char(readonly=True)
     note = fields.Char(readonly=True)
-    values = fields.Json(readonly=True)
-
-    def _authorization_values(self):
-        self.ensure_one()
-        return {
-            "l10n_ar_afip_auth_mode": self.auth_mode,
-            "l10n_ar_afip_auth_code": self.auth_code,
-            "l10n_ar_afip_auth_code_due": self.auth_code_due,
-            "l10n_ar_afip_result": self.result,
-        }
 
     def _apply(self):
+        """Give the draft the number and authorization ARCA already has for it."""
         self.ensure_one()
-        if self.action == "match":
-            move = self.move_id
-            if not move or move.state != "draft":
-                raise UserError(self.env._("Number %s: the draft is no longer in draft.", self.number))
-            move.sudo().write(dict(self._authorization_values(), invoice_date=self.date))
-        else:
-            move = self._create_move()
+        move = self.move_id
+        if not move or move.state != "draft":
+            raise UserError(self.env._("Number %s: choose a draft to assign it to.", self.number))
+        move.sudo().write(
+            {
+                "l10n_ar_afip_auth_mode": self.auth_mode,
+                "l10n_ar_afip_auth_code": self.auth_code,
+                "l10n_ar_afip_auth_code_due": self.auth_code_due,
+                "l10n_ar_afip_result": self.result,
+                "invoice_date": self.date,
+            }
+        )
         # With the authorization written, posting does not ask ARCA again; no commit until the number is checked
         move.with_context(l10n_ar_invoice_skip_commit=True).action_post()
         if move.state != "posted" or move._move_batch_number() != self.number:
@@ -339,94 +267,4 @@ class L10nArEdiFfRecoverLine(models.TransientModel):
                 cae=self.auth_code,
             )
         )
-        self.applied_move_id = move
         return move
-
-    def _create_move(self):
-        self.ensure_one()
-        wizard = self.wizard_id
-        is_credit_note = wizard.document_type_id.internal_type == "credit_note"
-        move = self.env["account.move"].create(
-            dict(
-                self._authorization_values(),
-                move_type="out_refund" if is_credit_note else "out_invoice",
-                partner_id=self.partner_id.id,
-                journal_id=wizard.journal_id.id,
-                invoice_date=self.date,
-                l10n_latam_document_type_id=wizard.document_type_id.id,
-                invoice_line_ids=[Command.create(values) for values in self._line_values()],
-            )
-        )
-        if move.l10n_latam_document_type_id != wizard.document_type_id:
-            raise UserError(
-                self.env._(
-                    "Number %(number)s: %(partner)s does not take %(document)s documents.",
-                    number=self.number,
-                    partner=self.partner_id.display_name,
-                    document=wizard.document_type_id.display_name,
-                )
-            )
-        if move.currency_id.compare_amounts(move.amount_total, self.amount_total):
-            raise UserError(
-                self.env._(
-                    "Number %(number)s: built with a total of %(built)s and ARCA reports %(reported)s. Check the "
-                    "sale taxes of the company before recovering it.",
-                    number=self.number,
-                    built=move.amount_total,
-                    reported=self.amount_total,
-                )
-            )
-        return move
-
-    def _line_values(self):
-        """One line per aliquot ARCA reported, plus what is not taxed and what is exempt."""
-        self.ensure_one()
-        values = self.values or {}
-        taxes = self.wizard_id._sale_taxes_by_vat_code()
-        label = self.env._("Document %s authorized by ARCA", self.wizard_id._format_number(self.number))
-        buckets = [(item["Id"], item["BaseImp"]) for item in values.get("Iva") or []]
-        buckets += [(NOT_TAXED_CODE, values.get("ImpTotConc")), (EXEMPT_CODE, values.get("ImpOpEx"))]
-        lines = []
-        for code, base in buckets:
-            if not base or not float(base):
-                continue
-            tax = taxes.get(code)
-            if not tax:
-                raise UserError(self.env._("The company has no sale tax with the ARCA VAT code %s.", code))
-            lines.append(
-                {
-                    "name": label,
-                    "account_id": self.wizard_id.account_id.id,
-                    "quantity": 1,
-                    "price_unit": float(base),
-                    "tax_ids": [Command.set(tax.ids)],
-                }
-            )
-        if not lines:
-            raise UserError(self.env._("ARCA reported no amounts for number %s.", self.number))
-        return lines
-
-    def _reverse(self, move):
-        """The document that cancels the recovered one: a credit note for an invoice or a debit note, a debit
-        note for a credit note. Odoo's own wizards pick its document type."""
-        self.ensure_one()
-        today = fields.Date.context_today(self)
-        reason = self.env._("Cancels %s, recovered from ARCA", move.name)
-        ctx = {"active_model": "account.move", "active_ids": move.ids}
-        if move.move_type == "out_refund":
-            self.env["account.debit.note"].with_context(**ctx).create(
-                {"date": today, "reason": reason, "copy_lines": True}
-            ).create_debit()
-            reverse = self.env["account.move"].search([("debit_origin_id", "=", move.id)], limit=1)
-        else:
-            reversal = (
-                self.env["account.move.reversal"]
-                .with_context(**ctx)
-                .create({"journal_id": move.journal_id.id, "date": today, "reason": reason})
-            )
-            reversal.reverse_moves()
-            reverse = reversal.new_move_ids
-        if not reverse:
-            raise UserError(self.env._("Could not build the document that cancels %s.", move.name))
-        reverse.action_post()
-        return reverse

@@ -25,26 +25,24 @@ class TestRecoverWizard(BatchCaeCommon):
             new.with_context(l10n_ar_invoice_skip_commit=True).action_post()
 
     @mute_logger("odoo.addons.l10n_ar_edi_ff.models.account_move")
-    def test_wizard_assigns_and_creates(self):
-        """The wizard assigns a number to its draft and creates the document that has none in Odoo."""
-        lost = self._create_invoices(2)
+    def test_wizard_assigns_and_stops_without_draft(self):
+        """The wizard assigns each number to its draft; a number with no draft is left for the user to load."""
+        lost = self._create_invoices(3)
         self._lose_and_stay_down(lost)
-        kept, deleted = lost
+        first, second, deleted = lost
         deleted.unlink()
-        wizard = self._wizard(kept)
-        self.assertEqual((wizard.number_from, wizard.number_to), (2, 3))
+        wizard = self._wizard(first)
+        self.assertEqual((wizard.number_from, wizard.number_to), (2, 4))
         wizard.action_fetch()
-        assign, create = wizard.line_ids.sorted("number")
-        self.assertEqual((assign.action, assign.move_id), ("match", kept))
-        self.assertEqual(create.action, "create")
-        wizard.account_id = self.env["account.account"].search(
-            [("company_ids", "in", self.company_ri.ids), ("account_type", "=", "income")], limit=1
-        )
+        assign_1, assign_2, missing = wizard.line_ids.sorted("number")
+        self.assertEqual((assign_1.action, assign_1.move_id), ("match", first))
+        self.assertEqual((assign_2.action, assign_2.move_id), ("match", second))
+        self.assertEqual(missing.action, "skip")
+        self.assertIn("Load it as a draft", missing.note)
         wizard.action_apply()
-        self.assertEqual(kept.state, "posted")
-        self.assertEqual(create.applied_move_id.state, "posted")
-        self.assertEqual(create.applied_move_id.amount_total, kept.amount_total)
-        self.assert_batch_coherence()
+        self.assertEqual((first + second).mapped("state"), ["posted", "posted"])
+        self.assertEqual([self._number(first), self._number(second)], [2, 3])
+        self.assertEqual(first.l10n_ar_afip_auth_code, self.arca.registered[2]["CAE"])
 
     @mute_logger("odoo.addons.l10n_ar_edi_ff.models.account_move")
     def test_wizard_takes_numbers_in_order(self):

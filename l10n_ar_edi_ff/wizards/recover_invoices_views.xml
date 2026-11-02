@@ -13,7 +13,8 @@
                 <div class="alert alert-info" role="alert" invisible="state != 'setup'">
                     When ARCA authorizes a document and its answer does not reach Odoo, the document is
                     authorized in ARCA and not in Odoo. This wizard asks ARCA for each number Odoo does not
-                    have, matches it with the drafts of the journal and proposes to assign or create it.
+                    have, matches it with the drafts of the journal and assigns it to its draft. A document with no draft
+                    has to be loaded as a draft first.
                 </div>
                 <group invisible="state != 'setup'">
                     <group>
@@ -30,9 +31,6 @@
                         <field name="journal_id" readonly="1"/>
                         <field name="document_type_id" readonly="1"/>
                     </group>
-                    <group>
-                        <field name="account_id"/>
-                    </group>
                 </group>
                 <field name="line_ids" invisible="state != 'review'" nolabel="1">
                     <list editable="bottom" create="false" delete="false" decoration-muted="action == 'skip'">
@@ -43,10 +41,9 @@
                         <field name="document_number"/>
                         <field name="amount_total"/>
                         <field name="auth_code"/>
-                        <field name="partner_id" readonly="action == 'skip'"/>
+                        <field name="partner_id"/>
                         <field name="action"/>
                         <field name="move_id" readonly="action != 'match'"/>
-                        <field name="reverse" readonly="action == 'skip'"/>
                         <field name="note"/>
                     </list>
                 </field>
