@@ -14,4 +14,5 @@ from . import (
     res_company,
     res_partner,
     account_report,
+    account_followup_report,
 )
