@@ -5,7 +5,7 @@
     "sequence": 14,
     "author": "ADHOC SA",
     "website": "www.adhoc.com.ar",
-    "license": "AGPL-3",
+    "license": "LGPL-3",
     "summary": "Provides a wizard for importing initial account balances",
     "depends": [
         "account_ux",
