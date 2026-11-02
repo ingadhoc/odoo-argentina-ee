@@ -622,6 +622,18 @@ msgid ""
 msgstr ""
 
 #. module: account_accountant_ux
+#. odoo-python
+#: code:addons/account_accountant_ux/models/account_followup_report.py:0
+msgid "Total Due"
+msgstr ""
+
+#. module: account_accountant_ux
+#. odoo-python
+#: code:addons/account_accountant_ux/models/account_followup_report.py:0
+msgid "Total Overdue"
+msgstr ""
+
+#. module: account_accountant_ux
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_partner__debit
 #: model:ir.model.fields,field_description:account_accountant_ux.field_res_users__debit
 msgid "Total Payable"
