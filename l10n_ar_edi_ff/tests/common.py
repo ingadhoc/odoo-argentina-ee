@@ -143,7 +143,11 @@ class BatchCaeCommon(TestArEdiCommon):
         return invoices
 
     def _lose_and_stay_down(self, invoices):
-        """ARCA registers the whole chunk, the answer gets lost and ARCA stays down: all of it ends in draft."""
+        """ARCA registers the whole chunk, the answer gets lost and ARCA stays down: all of it ends in draft.
+
+        The journal gets a posted invoice first: with none, l10n_ar_edi takes the first number from ARCA and
+        the lost ones would be skipped instead of answered with 10016."""
+        self._post_batch(self._create_invoices(1, price=900))
         self.arca.reset()
         self.arca.lose_after = len(invoices)
         self.arca.down_after_send = True

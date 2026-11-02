@@ -113,7 +113,7 @@ class TestBatchOutcome(BatchCaeCommon):
         # ARCA answers 10016 to the new one: the three drafts take their numbers, then the new one goes on
         self.assertFalse(errors)
         self.assertEqual(set((lost + new).mapped("state")), {"posted"})
-        self.assertEqual(self._number(new), 4)
+        self.assertEqual(self._number(new), 5)
         self.assert_batch_coherence()
         self.assertTrue(any("recovered from ARCA" in m.body for m in lost[0].message_ids))
 
@@ -141,7 +141,7 @@ class TestBatchOutcome(BatchCaeCommon):
         errors = self._post_batch(new)
         self.assertEqual(new.state, "draft")
         self.assertIn("no draft of Odoo is that document", errors[new.id])
-        self.assertEqual(sorted(self.arca.registered), [1])
+        self.assertEqual(sorted(self.arca.registered), [1, 2])
 
     @mute_logger("odoo.addons.l10n_ar_edi_ff.models.account_move")
     def test_recover_does_not_query_a_gap_over_the_limit(self):

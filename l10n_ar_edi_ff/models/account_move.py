@@ -291,7 +291,9 @@ class AccountMove(models.Model):
             )
         except UserError:
             same = False
-        sp.close(rollback=not same)
+        if not same:
+            self._move_batch_rollback(sp)
+        sp.close(rollback=False)
         if not same:
             return False
         self.sudo().write(
@@ -412,6 +414,15 @@ class AccountMove(models.Model):
             )
         return values_list, first_bad, bad_msg, retry
 
+    def _move_batch_rollback(self, savepoint):
+        """Roll back to `savepoint` and forget the numbers handed out after it.
+
+        The sequence cache of Odoo lives in the cursor and a savepoint rollback does not clear it: the next
+        posting would take the number after the undone ones, which is the one ARCA expects, and the gap would
+        never be noticed."""
+        savepoint.rollback()
+        self.env.cr.cache.pop("sequence.mixin", None)
+
     def _move_batch_release(self, savepoints):
         """Releasing the outermost savepoint releases the nested ones (or the ones a rollback destroyed)."""
         self.env.cr.execute(SQL("RELEASE SAVEPOINT %s", SQL.identifier(savepoints[0].name)))
@@ -449,7 +460,8 @@ class AccountMove(models.Model):
                 inv.l10n_ar_check_rate()
                 details.append(inv.wsfe_get_cae_request(client)["FeDetReq"][0]["FECAEDetRequest"])
             except UserError as error:
-                sp.close(rollback=True)
+                self._move_batch_rollback(sp)
+                sp.close(rollback=False)
                 failed[inv] = str(error)
                 continue
             posted |= inv
@@ -484,7 +496,7 @@ class AccountMove(models.Model):
         if lost is not None or "10016" in header_codes:
             # ARCA may have registered documents Odoo does not know: the chunk goes back to draft and each number
             # ARCA has goes to the draft that is that document.
-            savepoints[0].rollback()
+            self._move_batch_rollback(savepoints[0])
             self._move_batch_release(savepoints)
             approved, gap_failed, pending = posted._move_batch_recover_gap(
                 details[0]["CbteDesde"], soft, client, auth, lost, response, header_codes, xml_values
@@ -494,7 +506,7 @@ class AccountMove(models.Model):
             values_list, first_bad, bad_msg, retry = posted._move_batch_evaluate(details, response, header_codes)
             approved, pending = posted[: len(values_list)], Move
             if first_bad is not None:
-                savepoints[first_bad].rollback()
+                self._move_batch_rollback(savepoints[first_bad])
                 rejected_failed, pending = posted._move_batch_reject_from(first_bad, bad_msg, retry, False, xml_values)
                 failed.update(rejected_failed)
             self._move_batch_release(savepoints)
