@@ -79,7 +79,7 @@ class AccountMove(models.Model):
         rest = self - batchable
         validated = super(AccountMove, rest)._post(soft=soft) if rest else self.browse()
         size = max(1, int(self.env["ir.config_parameter"].sudo().get_param(f"{PARAM}.batch_size", 20)))
-        failed = {}
+        failed, gaps = {}, set()
 
         groups = {}
         for inv in batchable.sorted(lambda m: (m.invoice_date or m.date, m.id)):
@@ -88,12 +88,12 @@ class AccountMove(models.Model):
         for queue in groups.values():
             while queue:
                 chunk = self.browse(queue[:size])
-                done, chunk_failed, pending = chunk._move_batch_post_chunk(soft)
+                done, chunk_failed, pending, chunk_gaps = chunk._move_batch_post_chunk(soft)
+                gaps |= chunk_gaps
                 validated |= done
                 failed.update(chunk_failed)
                 queue = pending.ids + queue[size:]
 
-        gaps = self.env.cr.cache.pop(GAPS_KEY, set())
         if failed and self.env.context.get("l10n_ar_batch_collect_errors"):
             # The background post cron handles each failure on its own. Not a dict in the context: Odoo reuses
             # environments whose context compares equal, so an empty dict would be shared between calls.
@@ -245,10 +245,9 @@ class AccountMove(models.Model):
         if len(recovered) == len(gap):
             return recovered, {}, rest
         msg = self.env._(
-            "ARCA registered number %(number)s and no draft of Odoo is that document. Number sent by Odoo: "
-            "%(odoo)s. Last number authorized in ARCA: %(arca)s.",
+            "ARCA registered number %(number)s and no draft of Odoo is that document. Last number authorized in "
+            "ARCA: %(arca)s.",
             number=gap[len(recovered)],
-            odoo=first_number,
             arca=last,
         )
         rest.sudo().write(xml_values)
@@ -451,8 +450,9 @@ class AccountMove(models.Model):
     def _move_batch_post_chunk(self, soft):
         """Post a chunk of invoices of the same (company, journal, document type) with one FECAESolicitar.
 
-        Returns (validated, {invoice: error message}, pending) where pending are the invoices ARCA did not
-        evaluate because a previous one of the chunk was rejected.
+        Returns (validated, {invoice: error message}, pending, gaps) where pending are the invoices ARCA did not
+        evaluate because a previous one of the chunk was rejected, and gaps the (journal, document type) left
+        for the recovery wizard.
         """
         Move = self.browse()
         cr = self.env.cr
@@ -486,7 +486,7 @@ class AccountMove(models.Model):
             posted |= inv
             savepoints.append(sp)
         if not posted:
-            return Move, failed, Move
+            return Move, failed, Move, set()
 
         request = {
             "FeCabReq": {
@@ -546,9 +546,11 @@ class AccountMove(models.Model):
             len(pending),
             elapsed,
         )
+        # Read before the commit, which drops the cursor cache
+        gaps = cr.cache.pop(GAPS_KEY, set())
         if not self.env.context.get("l10n_ar_invoice_skip_commit"):
             cr.commit()  # pragma pylint: disable=invalid-commit
-        return approved, failed, pending
+        return approved, failed, pending, gaps
 
     # -------------------------------------------------------------------------
     # Background post

@@ -80,6 +80,7 @@ class L10nArEdiFfRecover(models.TransientModel):
     def _reopen(self):
         return {
             "type": "ir.actions.act_window",
+            "name": self.env._("Recover documents from ARCA"),
             "res_model": self._name,
             "res_id": self.id,
             "view_mode": "form",
