@@ -135,13 +135,12 @@ class L10nArEdiFfRecover(models.TransientModel):
             "auth_code": str(got.CodAutorizacion),
             "auth_code_due": datetime.strptime(str(got.FchVto), "%Y%m%d").date(),
             "result": got.Resultado,
-            "action": "skip",
         }
         partner = self._find_partner(got)
         values["partner_id"] = partner.id
         draft = self._find_draft(got, partner, taken)
         if draft:
-            values.update(move_id=draft.id, action="match")
+            values["move_id"] = draft.id
         else:
             values["note"] = self.env._(
                 "No draft of Odoo with this customer, date and total. Pick one in the Draft column, or load it "
@@ -196,27 +195,27 @@ class L10nArEdiFfRecover(models.TransientModel):
     # ------------------------------------------------------------------ apply
 
     def action_apply(self):
-        """Assign what is marked, from the lowest number up.
+        """Assign each number to its draft, from the lowest number up.
 
-        Odoo numbers with its own sequence, so the numbers are taken in order: a skipped number stops the ones
-        after it."""
+        Odoo numbers with its own sequence, so the numbers are taken in order: a number with no draft stops
+        the ones after it."""
         self.ensure_one()
         lines = self.line_ids.sorted("number")
         todo = self.env["l10n_ar_edi_ff.recover.line"]
         for line in lines:
-            if line.action == "skip":
+            if not line.move_id:
                 break
             todo |= line
-        if skipped := (lines - todo).filtered(lambda line: line.action != "skip"):
+        if skipped := (lines - todo).filtered("move_id"):
             raise UserError(
                 self.env._(
-                    "Numbers are taken in order: number %(skipped)s is skipped, so %(next)s cannot be recovered.",
+                    "Numbers are taken in order: number %(skipped)s has no draft, so %(next)s cannot be recovered.",
                     skipped=(lines - todo)[0].number,
                     next=skipped[0].number,
                 )
             )
         if not todo:
-            raise UserError(self.env._("No document is marked to assign."))
+            raise UserError(self.env._("No number has a draft to assign."))
         client, auth, _transport = self.company_id._l10n_ar_get_connection("wsfe")._get_client(return_transport=True)
         done = self.env["account.move"]
         for line in todo:
@@ -248,7 +247,6 @@ class L10nArEdiFfRecoverLine(models.TransientModel):
         string="Draft",
         domain="[('journal_id', '=', parent.journal_id), ('state', '=', 'draft')]",
     )
-    action = fields.Selection([("match", "Assign"), ("skip", "Skip")], required=True, default="skip")
     auth_mode = fields.Char(readonly=True)
     auth_code = fields.Char("CAE", readonly=True)
     auth_code_due = fields.Date("CAE due date", readonly=True)

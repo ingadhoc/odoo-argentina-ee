@@ -36,9 +36,8 @@ class TestRecoverWizard(BatchCaeCommon):
         self.assertEqual((wizard.number_from, wizard.number_to), (2, 4))
         wizard.action_fetch()
         assign_1, assign_2, missing = wizard.line_ids.sorted("number")
-        self.assertEqual((assign_1.action, assign_1.move_id), ("match", first))
-        self.assertEqual((assign_2.action, assign_2.move_id), ("match", second))
-        self.assertEqual(missing.action, "skip")
+        self.assertEqual((assign_1 + assign_2).mapped("move_id"), first + second)
+        self.assertFalse(missing.move_id)
         self.assertIn("load it", missing.note)
         wizard.action_apply()
         self.assertEqual((first + second).mapped("state"), ["posted", "posted"])
@@ -53,8 +52,8 @@ class TestRecoverWizard(BatchCaeCommon):
         wizard = self._wizard(lost)
         wizard.action_fetch()
         first, _second = wizard.line_ids.sorted("number")
-        first.action = "skip"
-        with self.assertRaisesRegex(UserError, "taken in order"):
+        first.move_id = False
+        with self.assertRaisesRegex(UserError, "has no draft"):
             wizard.action_apply()
 
     @mute_logger("odoo.addons.l10n_ar_edi_ff.models.account_move")
