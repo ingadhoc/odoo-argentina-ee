@@ -198,6 +198,9 @@ class AccountChartTemplate(models.AbstractModel):
             else:
                 return tags["otros_gastos"].id
 
+        elif account.account_type == "expense_other":
+            return tags["otros_gastos"].id
+
         # Other income/expenses
         elif account.account_type == "income_other":
             # Exchange differences (Diferencias de cambio)
@@ -344,6 +347,7 @@ class AccountChartTemplate(models.AbstractModel):
                     "expense",
                     "expense_direct_cost",
                     "expense_depreciation",
+                    "expense_other",
                     "income_other",
                 ]:
                     tag_id = self._get_tag_for_income_account(account, tags, company)
