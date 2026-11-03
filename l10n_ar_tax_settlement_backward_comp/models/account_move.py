@@ -44,6 +44,10 @@ class AccountMove(models.Model):
                     % {"tax_name": bw_tax.name, "tax_id": bw_tax.id},
                 )
 
+        # archived backward taxes not handled above are removed, as account_ux does for the rest
+        for new in res:
+            for line in new.line_ids.filtered(lambda l: any(t.is_backward_tax and not t.active for t in l.tax_ids)):
+                line.tax_ids = [(3, t.id) for t in line.tax_ids.filtered(lambda t: t.is_backward_tax and not t.active)]
         return res
 
     def _get_archived_taxes_to_remove_on_copy(self, taxes):
