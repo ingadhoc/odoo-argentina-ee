@@ -197,3 +197,17 @@ class TestSircipPadron(common.TransactionCase):
             self.assertTrue(tax_line.account_id, "%s has no account" % tax.name)
             self.assertIn(tag, tax_line.tag_ids)
         self.assertEqual(templates.tax_group_id.l10n_ar_tribute_afip_code, "07")
+
+    def test_load_test_padron(self):
+        """The test padron is the demo file dated in the requested month, and loading it twice keeps one."""
+        company = self.env.company
+        date = fields.Date.today() - relativedelta(years=2, day=15)
+        padron = company._l10n_ar_sircip_load_test_padron(date)
+        month_start = date.replace(day=1)
+        self.assertEqual(padron.l10n_ar_padron_from_date, month_start)
+        self.assertEqual(padron.l10n_ar_padron_to_date, fields.Date.end_of(month_start, "month"))
+        self.assertEqual(padron.filename, "padron_sircip_PRUEBA_%s.txt" % month_start.strftime("%Y%m"))
+        rows = base64.b64decode(padron.file_padron).decode("latin-1").splitlines()[1:]
+        self.assertTrue(rows)
+        self.assertTrue(all(row.startswith(month_start.strftime("%Y%m") + ",") for row in rows))
+        self.assertEqual(company._l10n_ar_sircip_load_test_padron(date + relativedelta(days=5)), padron)
