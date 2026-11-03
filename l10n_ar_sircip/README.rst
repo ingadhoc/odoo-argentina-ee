@@ -31,7 +31,8 @@ Instalación
 #. Instalar el módulo ``l10n_ar_account_tax_settlement`` (dependencia obligatoria).
 #. Instalar este módulo ``l10n_ar_sircip``.
 #. Instalar no configura ninguna compañía: cada agente se activa desde Ajustes (ver Configuración). Solo con
-   datos de demostración la compañía RI demo queda como agente, con un padrón del mes.
+   datos de demostración la compañía RI demo queda como agente, con el padrón de prueba del mes anterior y del
+   actual (los tests de otros módulos pueden fechar documentos unos días atrás).
 #. Al activar una compañía como agente, el módulo le crea:
 
    * Grupo de impuestos **SIRCIP**, con el código de tributo AFIP de percepción IIBB (``07``).
@@ -139,6 +140,11 @@ Carga del Padrón
 El padrón es mensual: sin padrón cargado para el mes no se pueden facturar ventas con la posición
 fiscal SIRCIP. El período del archivo (primera columna) tiene que ser el mes de **Desde**: la Comisión Arbitral
 publica el del mes siguiente el día 22, y cargarlo en el mes equivocado da error.
+
+**Padrón de prueba:** para probar sin un archivo real, ``res.company._l10n_ar_sircip_load_test_padron(fecha)``
+carga el padrón de demostración como padrón del mes de esa fecha (archivo ``padron_sircip_PRUEBA_<aaaamm>.txt``). Si
+el mes ya tiene padrón SIRCIP, no hace nada. Sus CUITs son ficticios: los clientes reales de la base quedan fuera
+del padrón y les corresponde *no inscripto* (2 %) si la entrega es en una provincia adherida (ver Pendientes, 23).
 
 **Formato del padrón (CSV separado por comas):**
 
@@ -277,6 +283,8 @@ la subtarea de la DDJJ, que además decide cómo unificar las dos implementacion
 - ``[ ]`` 19. Validar un período completo contra el portal SIRCIP.
 - ``[x]`` 20. CUITs del padrón demo ficticios y comentarios del módulo en inglés y mínimos.
 - ``[ ]`` 21. Forward-port a 19.
+- ``[ ]`` 23. Padrón de prueba con algunos clientes reales de la base (inscripto, sobretasa), para probar esos casos
+  en la base de test de un cliente. Hoy: solo los CUITs ficticios de la demo.
 
 **Posiciones en el campo 7 por jurisdicción**
   El mapa ``SIRCIP_CAMPO7_POSITION`` en ``models/account_fiscal_position_l10n_ar_tax.py`` sale del PDF y de los

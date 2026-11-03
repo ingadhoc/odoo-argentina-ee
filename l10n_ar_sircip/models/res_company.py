@@ -2,7 +2,12 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
+import base64
+import re
+
+from dateutil.relativedelta import relativedelta
 from odoo import fields, models
+from odoo.tools import file_open
 
 
 class ResCompany(models.Model):
@@ -29,3 +34,34 @@ class ResCompany(models.Model):
         sircip_state = self.env.ref("l10n_ar_sircip.state_ar_sircip")
         for company in self.filtered(lambda c: c.l10n_ar_sircip_agent and c.account_fiscal_country_id.code == "AR"):
             _create_sircip_data_for_company(self.env, company, sircip_state)
+
+    def _l10n_ar_sircip_load_test_padron(self, date):
+        """Load the demo padron as the padron of the month of ``date``, with fictitious CUITs, so the company can
+        try SIRCIP without a real file. Does nothing if that month already has a SIRCIP padron."""
+        self.ensure_one()
+        Padron = self.env["res.company.jurisdiction.padron"]
+        sircip_state = self.env.ref("l10n_ar_sircip.state_ar_sircip")
+        month_start = date + relativedelta(day=1)
+        existing = Padron.search(
+            [
+                ("company_id", "=", self.id),
+                ("state_id", "=", sircip_state.id),
+                ("l10n_ar_padron_from_date", "=", month_start),
+            ],
+            limit=1,
+        )
+        if existing:
+            return existing
+        period = month_start.strftime("%Y%m").encode()
+        with file_open("l10n_ar_sircip/demo/padron_sircip_demo.txt", "rb") as demo_file:
+            content = re.sub(rb"^\d{6},", period + b",", demo_file.read(), flags=re.M)
+        return Padron.create(
+            {
+                "company_id": self.id,
+                "state_id": sircip_state.id,
+                "l10n_ar_padron_from_date": month_start,
+                "l10n_ar_padron_to_date": month_start + relativedelta(months=1, days=-1),
+                "filename": "padron_sircip_PRUEBA_%s.txt" % period.decode(),
+                "file_padron": base64.b64encode(content),
+            }
+        )
