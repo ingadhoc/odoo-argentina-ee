@@ -295,7 +295,6 @@ msgid "AR ESP: Resultados"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return__l10n_ar_is_simple_closing_return
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__l10n_ar_is_simple_closing_return
 msgid "AR Simple Closing"
 msgstr "AR Cierre Simple"
@@ -1700,11 +1699,6 @@ msgid "receivable"
 msgstr "por cobrar"
 
 #. module: l10n_ar_account_reports
-#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.account_return_kanban_view
-msgid "Companies in this return:"
-msgstr "Empresas de esta declaración:"
-
-#. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid ""
@@ -1713,12 +1707,6 @@ msgid ""
 msgstr ""
 "Seleccione %(company)s en el selector de empresas para validar esta "
 "declaración: el asiento de cierre de toda la entidad fiscal se genera ahí."
-
-#. module: l10n_ar_account_reports
-#: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.account_return_kanban_view
-msgid "Some of these companies are not selected in the company selector."
-msgstr ""
-"Algunas de estas empresas no están seleccionadas en el selector de empresas."
 
 #. module: l10n_ar_account_reports
 #. odoo-python

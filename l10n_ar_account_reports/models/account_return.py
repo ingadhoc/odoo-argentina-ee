@@ -7,8 +7,6 @@ from odoo.exceptions import RedirectWarning, UserError
 class AccountReturn(models.Model):
     _inherit = "account.return"
 
-    l10n_ar_is_simple_closing_return = fields.Boolean(related="type_id.l10n_ar_is_simple_closing_return")
-
     def _get_closing_report_options(self):
         """Avoid custom_return_period for sub-monthly return types.
 

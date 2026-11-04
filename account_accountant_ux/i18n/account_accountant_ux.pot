@@ -686,3 +686,13 @@ msgid ""
 "the whole legal entity. Create it on «%(head)s», or give «%(company)s» its "
 "own Tax ID if it really is a different legal entity."
 msgstr ""
+
+#. module: account_accountant_ux
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.account_return_kanban_view
+msgid "Companies in this return:"
+msgstr ""
+
+#. module: account_accountant_ux
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.account_return_kanban_view
+msgid "This return includes all these companies, even the ones not selected. Select them all to see complete checks."
+msgstr ""
