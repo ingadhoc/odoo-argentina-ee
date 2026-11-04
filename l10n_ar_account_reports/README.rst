@@ -83,7 +83,7 @@ Some tax returns need configuration, described below.
 
 **SIRE (Agente) tax return:**
 
-The "SIRE (Agente)" return is monthly and includes vendor payment withholdings ("Tipo de Impuesto" = "Retención Pago de Proveedor") in one of the "Sire" tax groups below (names matched in upper or lower case). The module creates three tax groups for companies with the "Responsable Inscripto" or "Exento" chart of accounts: "Retenciones de IVA Sire" (ARCA tribute code "06"), "Retenciones de Ganancias Beneficiarios del Exterior Sire" and "Retenciones de SUSS Sire" (ARCA tribute code "01"). The report has three lines:
+The "SIRE (Agente)" return is fortnightly (1st to 15th and 16th to end of month) and includes vendor payment withholdings ("Tipo de Impuesto" = "Retención Pago de Proveedor") in one of the "Sire" tax groups below (names matched in upper or lower case). The module creates three tax groups for companies with the "Responsable Inscripto" or "Exento" chart of accounts: "Retenciones de IVA Sire" (ARCA tribute code "06"), "Retenciones de Ganancias Beneficiarios del Exterior Sire" and "Retenciones de SUSS Sire" (ARCA tribute code "01"). The report has three lines:
 
 #. "Retenciones de IVA": taxes with ARCA tribute code "06" in a tax group whose name contains "IVA Sire" or "VAT Sire", such as "Retenciones de IVA Sire".
 #. "Retenciones de ganancias beneficiarios del exterior": taxes with another ARCA tribute code in a tax group whose name contains "Beneficiarios del Exterior Sire" or "Beneficiaries Profits Sire", such as "Retenciones de Ganancias Beneficiarios del Exterior Sire".
