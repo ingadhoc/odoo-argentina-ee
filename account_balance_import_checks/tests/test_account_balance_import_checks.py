@@ -1,46 +1,41 @@
-import base64
 import datetime
 import io
 
-import xlwt
+import xlsxwriter
 from odoo.exceptions import ValidationError
 from odoo.tests import tagged
 from odoo.tests.common import TransactionCase
+from odoo.tools import BinaryBytes
 
 
-def generate_xls(data):
+def generate_xlsx(data):
     """
-    Generates an XLS file from the given data dictionary. Each key in the `data` dictionary represents a column header,
-    and its corresponding values are written as rows under that column.
+    Generates an XLSX file from the given data dictionary. Each key in the `data` dictionary represents a column
+    header, and its corresponding values are written as rows under that column.
 
     Date and datetime objects in the values will automatically set the style of the cell to a date/datetime.
 
     :param dict data: keys are column headers, values are rows.
-    :return bytes: the xls file as bytes.
+    :return bytes: the xlsx file as bytes.
     """
-    wb = xlwt.Workbook()
-    ws = wb.add_sheet("Sheet1")
+    output = io.BytesIO()
+    wb = xlsxwriter.Workbook(output, {"in_memory": True})
+    ws = wb.add_worksheet("Sheet1")
 
-    default_style = xlwt.XFStyle()
-
-    date_style = xlwt.XFStyle()
-    date_style.num_format_str = "yyyy-mm-dd"
-
-    datetime_style = xlwt.XFStyle()
-    datetime_style.num_format_str = "yyyy-mm-dd hh:mm:ss"
+    date_style = wb.add_format({"num_format": "yyyy-mm-dd"})
+    datetime_style = wb.add_format({"num_format": "yyyy-mm-dd hh:mm:ss"})
 
     for column, (key, values) in enumerate(data.items()):
-        ws.write(0, column, key, default_style)
+        ws.write(0, column, key)
         for row, value in enumerate(values, 1):
-            style = default_style
             if isinstance(value, datetime.datetime):
-                style = datetime_style
+                ws.write_datetime(row, column, value, datetime_style)
             elif isinstance(value, datetime.date):
-                style = date_style
-            ws.write(row, column, value, style)
+                ws.write_datetime(row, column, value, date_style)
+            else:
+                ws.write(row, column, value)
 
-    output = io.BytesIO()
-    wb.save(output)
+    wb.close()
     return output.getvalue()
 
 
@@ -177,7 +172,7 @@ class TestAccountBalanceImportChecks(TransactionCase):
                 "Banco": ["Test Bank", "Test Bank"],
             }
 
-        return base64.b64encode(generate_xls(data))
+        return BinaryBytes(generate_xlsx(data))
 
     def test_check_balance_import_own_checks(self):
         """
@@ -221,11 +216,10 @@ class TestAccountBalanceImportChecks(TransactionCase):
         # Validar que se generaron 2 pagos
         self.assertEqual(len(generated_payments), 2, "Deberían haberse creado 2 pagos")
 
-        # Validar que todos los pagos están en estado in_process o posted
-        # Los cheques propios pueden quedar en in_process esperando ser impresos/confirmados
+        # Validar que todos los pagos quedaron confirmados
         self.assertTrue(
-            all(payment.state in ["in_process", "posted"] for payment in generated_payments),
-            "Todos los pagos deberían estar en in_process o posted",
+            all(payment.state == "paid" for payment in generated_payments),
+            "Todos los pagos deberían estar en paid",
         )
 
         # Validar que son pagos de tipo outbound (salientes)
@@ -305,10 +299,17 @@ class TestAccountBalanceImportChecks(TransactionCase):
         # Validate 2 payments were generated
         self.assertEqual(len(generated_payments), 2, "Should have created 2 payments")
 
-        # Validate all payments are in in_process or posted state
+        # Validate all payments are paid and their checks are on hand in the cash journal
         self.assertTrue(
-            all(payment.state in ["in_process", "posted"] for payment in generated_payments),
-            "All payments should be in in_process or posted state",
+            all(payment.state == "paid" for payment in generated_payments),
+            "All payments should be in paid state",
+        )
+        self.assertTrue(
+            all(
+                payment.l10n_latam_new_check_ids.current_journal_id == self.cash_journal
+                for payment in generated_payments
+            ),
+            "All third party checks should be on hand in the cash journal",
         )
 
         # Validate payments are inbound type
@@ -383,7 +384,7 @@ class TestAccountBalanceImportChecks(TransactionCase):
             "Otra Moneda (Opcional)": ["", ""],
             "Importe en Otra moneda (Opcional)": ["", ""],
         }
-        excel_file = base64.b64encode(generate_xls(data))
+        excel_file = BinaryBytes(generate_xlsx(data))
         wizard = self.env["account.balance_import_wizard"].create(
             {
                 "company_id": self.company.id,
@@ -416,7 +417,7 @@ class TestAccountBalanceImportChecks(TransactionCase):
                 "journal_id": self.bank_journal.id,
                 "counterpart_account_id": self.counterpart_account.id,
                 "accounting_date": datetime.date(2025, 1, 1),
-                "file": base64.b64encode(csv_file),
+                "file": BinaryBytes(csv_file),
             }
         )
         with self.assertRaisesRegex(ValidationError, r"\.xls or \.xlsx"):

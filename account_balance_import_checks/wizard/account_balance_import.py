@@ -1,4 +1,3 @@
-import base64
 import datetime
 import io
 import numbers
@@ -153,7 +152,7 @@ class AccountBalanceImport(models.TransientModel):
         pre_data = list()  # For storing data before persisting to db
         errors = list()  # For storing possible errors
 
-        decoded = base64.decodebytes(self.file)
+        decoded = self.file.content
         self._check_excel_file(decoded)
         rows, workbook_datemode = self._load_check_rows(decoded)
 

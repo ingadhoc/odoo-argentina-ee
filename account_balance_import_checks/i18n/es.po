@@ -4,14 +4,12 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 19.0+e\n"
+"Project-Id-Version: Odoo Server 20.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-08-25 17:27+0000\n"
-"PO-Revision-Date: 2026-04-13 22:41+0000\n"
+"POT-Creation-Date: 2026-11-04 18:49+0000\n"
+"PO-Revision-Date: 2026-11-04 18:49+0000\n"
 "Last-Translator: carla spiaggi <sca@adhoc.inc>\n"
-"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/"
-"enterprise-extensions-19-0/enterprise-extensions-19-0-"
-"account_balance_import_checks/es/>\n"
+"Language-Team: Spanish <https://translation.dev-adhoc.com/projects/enterprise-extensions-20-0/enterprise-extensions-20-0-account_balance_import_checks/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,22 +18,116 @@ msgstr ""
 "X-Generator: Weblate 5.10.4\n"
 
 #. module: account_balance_import_checks
-#: model_terms:ir.ui.view,arch_db:account_balance_import_checks.account_balance_import_wizard
+#: model:ir.module.module,description:base.module_account_balance_import_checks
 msgid ""
-"<span class=\"fa fa-download\" title=\"download\"/>\n"
-"                    Descargar Plantilla de Importación de Cheques Propios"
+".. |company| replace:: ADHOC SA\n"
+"\n"
+".. |company_logo| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-logo.png\n"
+"   :alt: ADHOC SA\n"
+"   :target: https://www.adhoc.com.ar\n"
+"\n"
+".. |icon| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-icon.png\n"
+"\n"
+".. image:: https://img.shields.io/badge/license-LGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/lgpl\n"
+"   :alt: License: LGPL-3\n"
+"\n"
+"Installation\n"
+"============\n"
+"\n"
+"To install this module, you need to:\n"
+"\n"
+"#. Only need to install the module\n"
+"\n"
+"Configuration\n"
+"=============\n"
+"\n"
+"To configure this module, you need to:\n"
+"\n"
+"#. Nothing to configure\n"
+"\n"
+"\n"
+"Account Balance Import - Checks\n"
+"================================\n"
+"\n"
+"Este módulo extiende la funcionalidad de `account_balance_import` para permitir la importación de cheques\n"
+"(cheques de terceros en cartera y cheques propios emitidos) como parte de la carga de saldos iniciales.\n"
+"\n"
+"Se integra con el módulo `l10n_latam_check` para gestionar correctamente los cheques según las\n"
+"regulaciones de LATAM.\n"
+"\n"
+"Características principales:\n"
+"\n"
+"* Importación de cheques de terceros en cartera\n"
+"* Importación de cheques propios emitidos pero no debitados\n"
+"* Generación automática de asientos contables\n"
+"* Integración con el sistema de cheques de LATAM\n"
+"\n"
+"Usage\n"
+"=====\n"
+"\n"
+"Para importar cheques:\n"
+"\n"
+"#. Ir a Contabilidad > Configuración > Ajustes y, en \"Accounting import\", abrir la guía de importación\n"
+"#. En la guía, hacer clic en \"Import Checks\"\n"
+"#. Elegir el tipo de cheques (propios o de terceros), el diario y la cuenta de contrapartida\n"
+"#. Descargar la plantilla de cheques y completar la información requerida\n"
+"#. Subir el archivo e importar\n"
+"\n"
+"Bug Tracker\n"
+"===========\n"
+"\n"
+"Bugs are tracked on `GitHub Issues\n"
+"<https://github.com/ingadhoc/odoo-argentina-ee/issues>`_. In case of trouble, please\n"
+"check there if your issue has already been reported. If you spotted it first,\n"
+"help us smashing it by providing a detailed and welcomed\n"
+"`feedback <https://github.com/ingadhoc/odoo-argentina-ee/issues/new?body=module:%20\n"
+"account_balance_import_checks%0Aversion:%20\n"
+"20.0%0A%0A**Steps%20to%20reproduce**%0A-%20...%0A%0A**Current%20behavior**%0A%0A**Expected%20behavior**>`_.\n"
+"\n"
+"Do not contact contributors directly about support or help with technical issues.\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Authors\n"
+"~~~~~~~\n"
+"\n"
+"* |company|\n"
+"\n"
+"Contributors\n"
+"~~~~~~~~~~~~\n"
+"\n"
+"* |company| |icon|\n"
+"\n"
+"Maintainer\n"
+"~~~~~~~~~~\n"
+"\n"
+"* |company_logo|\n"
+"\n"
+"This module is maintained by ADHOC SA.\n"
+"\n"
+"To contribute to this module, please visit https://www.adhoc.com.ar.\n"
 msgstr ""
-"<span class=\"fa fa-download\" title=\"download\"/>\n"
-"                    Descargar Plantilla de Importación de Cheques Propios"
 
 #. module: account_balance_import_checks
 #: model_terms:ir.ui.view,arch_db:account_balance_import_checks.account_balance_import_wizard
 msgid ""
-"<span class=\"fa fa-download\" title=\"download\"/>\n"
+"<span class=\"oi\" data-icon=\"download\" title=\"download\"/>\n"
+"                    Descargar Plantilla de Importación de Cheques Propios"
+msgstr ""
+
+#. module: account_balance_import_checks
+#: model_terms:ir.ui.view,arch_db:account_balance_import_checks.account_balance_import_wizard
+msgid ""
+"<span class=\"oi\" data-icon=\"download\" title=\"download\"/>\n"
 "                    Descargar Plantilla de Importación de Cheques de Terceros"
 msgstr ""
-"<span class=\"fa fa-download\" title=\"download\"/>\n"
-"                    Descargar Plantilla de Importación de Cheques de Terceros"
+
+#. module: account_balance_import_checks
+#: model:ir.module.module,shortdesc:base.module_account_balance_import_checks
+msgid "Account Balance Import - Checks"
+msgstr "Importación de Saldos de Cuentas - Cheques"
 
 #. module: account_balance_import_checks
 #: model:ir.model,name:account_balance_import_checks.model_account_balance_import_wizard
@@ -62,7 +154,7 @@ msgstr "De Terceros"
 #: model:ir.model.fields,field_description:account_balance_import_checks.field_account_import_summary__display_name
 #: model:ir.model.fields,field_description:account_balance_import_checks.field_account_payment__display_name
 msgid "Display Name"
-msgstr "Nombre para mostrar"
+msgstr "Mostrar nombre"
 
 #. module: account_balance_import_checks
 #: model:ir.model.fields,field_description:account_balance_import_checks.field_account_balance_import_wizard__id
@@ -80,7 +172,12 @@ msgstr "Importar Cheques"
 #. module: account_balance_import_checks
 #: model:ir.model.fields,field_description:account_balance_import_checks.field_account_balance_import_wizard__mode
 msgid "Import Mode"
-msgstr ""
+msgstr "Modo de Importación"
+
+#. module: account_balance_import_checks
+#: model:ir.module.module,summary:base.module_account_balance_import_checks
+msgid "Import checks with initial balances using account_balance_import"
+msgstr "Importar cheques con saldos iniciales usando account_balance_import"
 
 #. module: account_balance_import_checks
 #. odoo-javascript
@@ -90,8 +187,8 @@ msgstr "Importar saldos iniciales para cheques."
 
 #. module: account_balance_import_checks
 #: model:ir.model,name:account_balance_import_checks.model_account_payment
-msgid "Payments"
-msgstr ""
+msgid "Payment"
+msgstr "Pago"
 
 #. module: account_balance_import_checks
 #: model:ir.model.fields.selection,name:account_balance_import_checks.selection__account_balance_import_wizard__check_type__issue_check
@@ -102,6 +199,3 @@ msgstr "Propios"
 #: model:ir.model.fields,field_description:account_balance_import_checks.field_account_balance_import_wizard__check_type
 msgid "Tipo de Cheques"
 msgstr "Tipo de Cheques"
-
-#~ msgid "Modo de Importación"
-#~ msgstr "Modo de Importación"

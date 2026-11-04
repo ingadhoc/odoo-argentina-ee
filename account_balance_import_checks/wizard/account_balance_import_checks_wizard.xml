@@ -20,14 +20,14 @@
                     invisible="check_type != 'issue_check' or mode != 'check_balance'"
                     href="/account_balance_import_checks/static/xls/own_check_balance.xls"
                     role="button">
-                    <span class="fa fa-download" title="download"></span>
+                    <span class="oi" data-icon="download" title="download"></span>
                     Descargar Plantilla de Importación de Cheques Propios
                 </a>
                 <a class="btn btn-link"
                     invisible="check_type != 'third_check' or mode != 'check_balance'"
                     href="/account_balance_import_checks/static/xls/third_check_balance.xls"
                     role="button">
-                    <span class="fa fa-download" title="download"></span>
+                    <span class="oi" data-icon="download" title="download"></span>
                     Descargar Plantilla de Importación de Cheques de Terceros
                 </a>
             </div>
