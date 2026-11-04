@@ -2,6 +2,7 @@ import json
 from unittest.mock import patch
 
 import requests
+from odoo import fields
 from odoo.tests import TransactionCase, tagged
 
 
@@ -80,3 +81,12 @@ class TestArbaWsBranches(TransactionCase):
         with patch.object(type(self.env["res.company"]), "_l10n_ar_get_connection", _fake_connection):
             self.branch._l10n_ar_get_arba_ws_connection()
         self.assertEqual(companies, [(self.root, "A122R", True)])
+
+    def test_branches_report_on_the_ddjj_of_their_fiscal_entity(self):
+        self.root.l10n_ar_arba_env = "demo"
+        dj_model = self.env["l10n_ar.dj.arba"]
+        today = fields.Date.today()
+        ddjj = dj_model._ensure_dj(today, self.branch)
+        self.assertEqual(ddjj.company_id, self.root)
+        self.assertEqual(dj_model._ensure_dj(today, self.root), ddjj, "One DDJJ per fiscal entity and period")
+        self.assertEqual(dj_model._ensure_dj(today, self.other_cuit).company_id, self.other_cuit)
