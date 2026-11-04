@@ -97,6 +97,30 @@ msgid "<ul><li> STATUS %s</li><li>CODE %s</li><li>MESSAGE %s</li></ul>"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+#: model:ir.model.fields,help:l10n_ar_arba_ws.field_res_company__l10n_ar_arba_client_id
+#: model:ir.model.fields,help:l10n_ar_arba_ws.field_res_config_settings__l10n_ar_arba_client_id
+msgid ""
+"A branch with the same CUIT and no CIT of its own uses the client ID of the "
+"company whose CIT it uses."
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+#: model:ir.model.fields,help:l10n_ar_arba_ws.field_res_company__l10n_ar_arba_client_secret
+#: model:ir.model.fields,help:l10n_ar_arba_ws.field_res_config_settings__l10n_ar_arba_client_secret
+msgid ""
+"A branch with the same CUIT and no CIT of its own uses the client secret of "
+"the company whose CIT it uses."
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+#: model:ir.model.fields,help:l10n_ar_arba_ws.field_res_company__l10n_ar_arba_env
+#: model:ir.model.fields,help:l10n_ar_arba_ws.field_res_config_settings__l10n_ar_arba_env
+msgid ""
+"A branch with the same CUIT and no CIT of its own uses the environment of "
+"the company whose CIT it uses."
+msgstr ""
+
+#. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_account_payment_form
 msgid "ARBA"
 msgstr ""
@@ -466,6 +490,12 @@ msgstr ""
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__is_arba_ws_needed
 msgid "It needs to be sent to the ARBA A122R webservice"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/res_config_settings.py:0
+msgid "It uses the ARBA credentials of company %s"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
