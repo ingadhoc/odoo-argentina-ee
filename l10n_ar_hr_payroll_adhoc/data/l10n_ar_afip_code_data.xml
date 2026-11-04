@@ -1,0 +1,2648 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="afip_code_condition_1" model="l10n_ar.payroll.afip.code">
+        <field name="type">1</field>
+        <field name="code">1</field>
+        <field name="name">Servicios Comunes Mayor de 18 años</field>
+    </record>
+    <record id="afip_code_activity_1" model="l10n_ar.payroll.afip.code">
+        <field name="type">2</field>
+        <field name="code">1</field>
+        <field name="name">Producción Primaria excepto actividad agropecuaria</field>
+    </record>
+    <record id="afip_code_activity_2" model="l10n_ar.payroll.afip.code">
+        <field name="type">2</field>
+        <field name="code">2</field>
+        <field name="name">Producción de bienes sin comercialización</field>
+    </record>
+    <record id="afip_code_activity_3" model="l10n_ar.payroll.afip.code">
+        <field name="type">2</field>
+        <field name="code">3</field>
+        <field name="name">Construcción de inmuebles</field>
+    </record>
+    <record id="afip_code_activity_4" model="l10n_ar.payroll.afip.code">
+        <field name="type">2</field>
+        <field name="code">4</field>
+        <field name="name">Turismo</field>
+    </record>
+    <record id="afip_code_activity_5" model="l10n_ar.payroll.afip.code">
+        <field name="type">2</field>
+        <field name="code">5</field>
+        <field name="name">Investigación Científica y Tecnológica</field>
+    </record>
+    <record id="afip_code_activity_6" model="l10n_ar.payroll.afip.code">
+        <field name="type">2</field>
+        <field name="code">40</field>
+        <field name="name">Industria del software Ley N° 25922</field>
+    </record>
+    <record id="afip_code_activity_7" model="l10n_ar.payroll.afip.code">
+        <field name="type">2</field>
+        <field name="code">049</field>
+        <field name="name">No clasificados (con ART)</field>
+    </record>
+    <record id="afip_code_modality_1" model="l10n_ar.payroll.afip.code">
+        <field name="type">3</field>
+        <field name="code">1</field>
+        <field name="name">A tiempo parcial: Indeterminado /permanente</field>
+    </record>
+    <record id="afip_code_modality_2" model="l10n_ar.payroll.afip.code">
+        <field name="type">3</field>
+        <field name="code">3</field>
+        <field name="name">De aprendizaje l.25013</field>
+    </record>
+    <record id="afip_code_modality_3" model="l10n_ar.payroll.afip.code">
+        <field name="type">3</field>
+        <field name="code">8</field>
+        <field name="name">A Tiempo completo indeterminado /Trabajo permanente</field>
+    </record>
+    <record id="afip_code_modality_4" model="l10n_ar.payroll.afip.code">
+        <field name="type">3</field>
+        <field name="code">10</field>
+        <field name="name">Práctica profesionalizante-Dcto. 1374/11-Pasantías</field>
+    </record>
+    <record id="afip_code_modality_5" model="l10n_ar.payroll.afip.code">
+        <field name="type">3</field>
+        <field name="code">14</field>
+        <field name="name">Nuevo Período de Prueba</field>
+    </record>
+    <record id="afip_code_modality_6" model="l10n_ar.payroll.afip.code">
+        <field name="type">3</field>
+        <field name="code">21</field>
+        <field name="name">A tiempo parcial determinado</field>
+    </record>
+    <record id="afip_code_modality_7" model="l10n_ar.payroll.afip.code">
+        <field name="type">3</field>
+        <field name="code">22</field>
+        <field name="name">A Tiempo completo determinado</field>
+    </record>
+    <record id="afip_code_modality_8" model="l10n_ar.payroll.afip.code">
+        <field name="type">3</field>
+        <field name="code">49</field>
+        <field name="name">Directores - empleado SA con Obra Social y LRT</field>
+    </record>
+    <record id="afip_code_casualty_1" model="l10n_ar.payroll.afip.code">
+        <field name="type">4</field>
+        <field name="code">0</field>
+        <field name="name">No Incapacitado</field>
+    </record>
+    <record id="afip_code_situation_1" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">13</field>
+        <field name="name">Licencia sin goce de haberes</field>
+    </record>
+    <record id="afip_code_situation_2" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">14</field>
+        <field name="name">Reserva de puesto</field>
+    </record>
+    <record id="afip_code_situation_3" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">15</field>
+        <field name="name">E.S.E. Cese transitorio de servicios (art. 6, incs. 6 y 7 Dto. 342/92)</field>
+    </record>
+    <record id="afip_code_situation_4" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">16</field>
+        <field name="name">Personal Siniestrado de terceros uso por la ART</field>
+    </record>
+    <record id="afip_code_situation_5" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">17</field>
+        <field name="name">Reingreso por disposición judicial</field>
+    </record>
+    <record id="afip_code_situation_6" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">18</field>
+        <field name="name">ILT primeros 10 días</field>
+    </record>
+    <record id="afip_code_situation_7" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">19</field>
+        <field name="name">ILT dias 11 y siguientes</field>
+    </record>
+    <record id="afip_code_situation_8" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">1</field>
+        <field name="name">Activo</field>
+    </record>
+    <record id="afip_code_situation_9" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">6</field>
+        <field name="name">Suspensiones otras causales</field>
+    </record>
+    <record id="afip_code_situation_10" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">9</field>
+        <field name="name">Suspendido. Ley 20744 art.223bis</field>
+    </record>
+    <record id="afip_code_situation_11" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">10</field>
+        <field name="name">Licencia por excedencia</field>
+    </record>
+    <record id="afip_code_situation_12" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">11</field>
+        <field name="name">Licencia por maternidad Down</field>
+    </record>
+    <record id="afip_code_situation_13" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">12</field>
+        <field name="name">Licencia por vacaciones</field>
+    </record>
+    <record id="afip_code_situation_14" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">21</field>
+        <field name="name">Trabajador de temporada Reserva de puesto</field>
+    </record>
+    <record id="afip_code_situation_15" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">31</field>
+        <field name="name">Activo - Funciones en el exterior</field>
+    </record>
+    <record id="afip_code_situation_16" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">32</field>
+        <field name="name">Licencia por paternidad</field>
+    </record>
+    <record id="afip_code_situation_17" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">33</field>
+        <field name="name">Licencia por fuerza mayor (art. 221 LCT)</field>
+    </record>
+    <record id="afip_code_situation_18" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">42</field>
+        <field name="name">Empl. eventual en EU (p/uso ESE) mes completo</field>
+    </record>
+    <record id="afip_code_situation_19" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">43</field>
+        <field name="name">Empl. eventual en EU (p/uso ESE) mes incompleto</field>
+    </record>
+    <record id="afip_code_situation_20" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">44</field>
+        <field name="name">Conservación del empleo p/accidente o enf. Inculpable art. 211 LCT</field>
+    </record>
+    <record id="afip_code_situation_21" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">45</field>
+        <field name="name">Suspensiones p/causas disciplinarias</field>
+    </record>
+    <record id="afip_code_situation_22" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">48</field>
+        <field name="name">Suspendido. Res. 397/2020 MTEySS c/Aportes OS</field>
+    </record>
+    <record id="afip_code_situation_23" model="l10n_ar.payroll.afip.code">
+        <field name="type">6</field>
+        <field name="code">49</field>
+        <field name="name">Susp. período parcial L 20744 art.223bis / Res. 397 MTEySS</field>
+    </record>
+    <record id="afip_code_zone_1" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - Almte. Brown</field>
+    </record>
+    <record id="afip_code_zone_2" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - Avellaneda</field>
+    </record>
+    <record id="afip_code_zone_3" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - Berazategui</field>
+    </record>
+    <record id="afip_code_zone_4" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">03</field>
+        <field name="name">Buenos Aires - Berisso</field>
+    </record>
+    <record id="afip_code_zone_5" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">03</field>
+        <field name="name">Buenos Aires - Cañuelas</field>
+    </record>
+    <record id="afip_code_zone_6" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">04</field>
+        <field name="name">Buenos Aires - Carmen de Patagones</field>
+    </record>
+    <record id="afip_code_zone_7" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">03</field>
+        <field name="name">Buenos Aires - Ensenada</field>
+    </record>
+    <record id="afip_code_zone_8" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">03</field>
+        <field name="name">Buenos Aires - Escobar</field>
+    </record>
+    <record id="afip_code_zone_9" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - Estevan Echeverria</field>
+    </record>
+    <record id="afip_code_zone_10" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - Florencio Varela</field>
+    </record>
+    <record id="afip_code_zone_11" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">03</field>
+        <field name="name">Buenos Aires - Gral. Rodiguez</field>
+    </record>
+    <record id="afip_code_zone_12" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - Gral. San Martín</field>
+    </record>
+    <record id="afip_code_zone_13" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - Gral. Sarmiento</field>
+    </record>
+    <record id="afip_code_zone_14" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - Gran Buenos Aires</field>
+    </record>
+    <record id="afip_code_zone_15" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - La Matanza</field>
+    </record>
+    <record id="afip_code_zone_16" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">03</field>
+        <field name="name">Buenos Aires - La Plata</field>
+    </record>
+    <record id="afip_code_zone_17" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - Lanús</field>
+    </record>
+    <record id="afip_code_zone_18" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - Lanús</field>
+    </record>
+    <record id="afip_code_zone_19" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - Lomas de Zamora</field>
+    </record>
+    <record id="afip_code_zone_20" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - Lomas de Zamora</field>
+    </record>
+    <record id="afip_code_zone_21" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">03</field>
+        <field name="name">Buenos Aires - Marcos Paz</field>
+    </record>
+    <record id="afip_code_zone_22" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - Merlo</field>
+    </record>
+    <record id="afip_code_zone_23" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - Moreno</field>
+    </record>
+    <record id="afip_code_zone_24" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - Morón</field>
+    </record>
+    <record id="afip_code_zone_25" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">05</field>
+        <field name="name">Buenos Aires - Patagones</field>
+    </record>
+    <record id="afip_code_zone_26" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">03</field>
+        <field name="name">Buenos Aires - Pilar</field>
+    </record>
+    <record id="afip_code_zone_27" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - Quilmes</field>
+    </record>
+    <record id="afip_code_zone_28" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">07</field>
+        <field name="name">Buenos Aires - Resto de la Provincia</field>
+    </record>
+    <record id="afip_code_zone_29" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">07</field>
+        <field name="name">Buenos Aires - San Fernando</field>
+    </record>
+    <record id="afip_code_zone_30" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - San Isidro</field>
+    </record>
+    <record id="afip_code_zone_31" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">03</field>
+        <field name="name">Buenos Aires - San Vicente</field>
+    </record>
+    <record id="afip_code_zone_32" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - Tigre</field>
+    </record>
+    <record id="afip_code_zone_33" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - Tres de Febrero</field>
+    </record>
+    <record id="afip_code_zone_34" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">02</field>
+        <field name="name">Buenos Aires - Vicente Lopez</field>
+    </record>
+    <record id="afip_code_zone_35" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">06</field>
+        <field name="name">Buenos Aires - Villarino</field>
+    </record>
+    <record id="afip_code_zone_36" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">01</field>
+        <field name="name">Capital Federal</field>
+    </record>
+    <record id="afip_code_zone_37" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">09</field>
+        <field name="name">Catamarca</field>
+    </record>
+    <record id="afip_code_zone_38" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">D5</field>
+        <field name="name">Catamarca - Antofagasta de la S. Activ. Minera</field>
+    </record>
+    <record id="afip_code_zone_39" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">D6</field>
+        <field name="name">Catamarca - Antofagasta de la S. Resto Activ</field>
+    </record>
+    <record id="afip_code_zone_40" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">D8</field>
+        <field name="name">Catamarca - Gran Catamarca</field>
+    </record>
+    <record id="afip_code_zone_41" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">27</field>
+        <field name="name">Chaco</field>
+    </record>
+    <record id="afip_code_zone_42" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">26</field>
+        <field name="name">Chaco - Gran Resistencia</field>
+    </record>
+    <record id="afip_code_zone_43" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">29</field>
+        <field name="name">Chubut</field>
+    </record>
+    <record id="afip_code_zone_44" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">28</field>
+        <field name="name">Chubut - Rawson</field>
+    </record>
+    <record id="afip_code_zone_45" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">28</field>
+        <field name="name">Chubut - Trelew</field>
+    </record>
+    <record id="afip_code_zone_46" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">13</field>
+        <field name="name">Córdoba - Cruz del Eje</field>
+    </record>
+    <record id="afip_code_zone_47" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">18</field>
+        <field name="name">Córdoba - Gran Córdoba</field>
+    </record>
+    <record id="afip_code_zone_48" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">14</field>
+        <field name="name">Córdoba - Minas</field>
+    </record>
+    <record id="afip_code_zone_49" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">15</field>
+        <field name="name">CCórdoba - Pocho</field>
+    </record>
+    <record id="afip_code_zone_50" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">19</field>
+        <field name="name">Córdoba - Resto de la Provincia</field>
+    </record>
+    <record id="afip_code_zone_51" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">11</field>
+        <field name="name">Córdoba - Río Seco</field>
+    </record>
+    <record id="afip_code_zone_52" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">16</field>
+        <field name="name">Córdoba - San Alberto</field>
+    </record>
+    <record id="afip_code_zone_53" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">17</field>
+        <field name="name">Córdoba - San Javier</field>
+    </record>
+    <record id="afip_code_zone_54" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">10</field>
+        <field name="name">Córdoba - Sobremonte</field>
+    </record>
+    <record id="afip_code_zone_55" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">12</field>
+        <field name="name">Córdoba - Tulumba</field>
+    </record>
+    <record id="afip_code_zone_56" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">24</field>
+        <field name="name">Corrientes - Ciudad de Corriente</field>
+    </record>
+    <record id="afip_code_zone_57" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">22</field>
+        <field name="name">Corrientes - Curuzú-Cuatia</field>
+    </record>
+    <record id="afip_code_zone_58" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">20</field>
+        <field name="name">Corrientes - Esquina</field>
+    </record>
+    <record id="afip_code_zone_59" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">23</field>
+        <field name="name">Corrientes - Monte Caseros</field>
+    </record>
+    <record id="afip_code_zone_60" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">25</field>
+        <field name="name">Corrientes - Resto de la Provincia</field>
+    </record>
+    <record id="afip_code_zone_61" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">21</field>
+        <field name="name">Corrientes - Sauce</field>
+    </record>
+    <record id="afip_code_zone_62" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">30</field>
+        <field name="name">Entre Ríos - Federación</field>
+    </record>
+    <record id="afip_code_zone_63" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">31</field>
+        <field name="name">Entre Ríos - Feliciano</field>
+    </record>
+    <record id="afip_code_zone_64" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">32</field>
+        <field name="name">Entre Ríos - Paraná</field>
+    </record>
+    <record id="afip_code_zone_65" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">33</field>
+        <field name="name">Entre Ríos - Resto de la Provincia</field>
+    </record>
+    <record id="afip_code_zone_66" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">35</field>
+        <field name="name">Formosa</field>
+    </record>
+    <record id="afip_code_zone_67" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">87</field>
+        <field name="name">Formosa - Bermejo</field>
+    </record>
+    <record id="afip_code_zone_68" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">34</field>
+        <field name="name">Formosa - Ciudad de Formosa</field>
+    </record>
+    <record id="afip_code_zone_69" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">89</field>
+        <field name="name">Formosa - Mataco</field>
+    </record>
+    <record id="afip_code_zone_70" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">88</field>
+        <field name="name">Formosa - Ramón Lista</field>
+    </record>
+    <record id="afip_code_zone_71" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">37</field>
+        <field name="name">Jujuy</field>
+    </record>
+    <record id="afip_code_zone_72" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">36</field>
+        <field name="name">Jujuy - Ciudad de Jujuy</field>
+    </record>
+    <record id="afip_code_zone_73" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">D7</field>
+        <field name="name">Jujuy - Cochinoca</field>
+    </record>
+    <record id="afip_code_zone_74" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">D8</field>
+        <field name="name">Jujuy - Humahuaca</field>
+    </record>
+    <record id="afip_code_zone_75" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">D9</field>
+        <field name="name">Jujuy - Rinconada</field>
+    </record>
+    <record id="afip_code_zone_76" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">E0</field>
+        <field name="name">Jujuy - Santa Catalina</field>
+    </record>
+    <record id="afip_code_zone_77" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">E1</field>
+        <field name="name">Jujuy - Susques</field>
+    </record>
+    <record id="afip_code_zone_78" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">E2</field>
+        <field name="name">Jujuy - Yavi</field>
+    </record>
+    <record id="afip_code_zone_79" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">39</field>
+        <field name="name">La Pampa - Chalileo</field>
+    </record>
+    <record id="afip_code_zone_80" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">38</field>
+        <field name="name">La Pampa - Chical-Co</field>
+    </record>
+    <record id="afip_code_zone_81" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">42</field>
+        <field name="name">La Pampa - Curaco</field>
+    </record>
+    <record id="afip_code_zone_82" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">43</field>
+        <field name="name">La Pampa - Lihuel - Calel</field>
+    </record>
+    <record id="afip_code_zone_83" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">41</field>
+        <field name="name">La Pampa - Limay-Mahuilda</field>
+    </record>
+    <record id="afip_code_zone_84" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">40</field>
+        <field name="name">La Pampa - Puelén</field>
+    </record>
+    <record id="afip_code_zone_85" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">45</field>
+        <field name="name">La Pampa - Resto de la Provincia</field>
+    </record>
+    <record id="afip_code_zone_86" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">44</field>
+        <field name="name">La Pampa - Santa Rosa</field>
+    </record>
+    <record id="afip_code_zone_87" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">44</field>
+        <field name="name">La Pampa - Toay</field>
+    </record>
+    <record id="afip_code_zone_88" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">47</field>
+        <field name="name">La Rioja</field>
+    </record>
+    <record id="afip_code_zone_89" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">46</field>
+        <field name="name">La Rioja - Ciudad de La Rioja</field>
+    </record>
+    <record id="afip_code_zone_90" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">49</field>
+        <field name="name">Mendoza</field>
+    </record>
+    <record id="afip_code_zone_91" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">A9</field>
+        <field name="name">Mendoza - Resto Distritos San Carlos</field>
+    </record>
+    <record id="afip_code_zone_92" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">A6</field>
+        <field name="name">Mendoza - Tunuyán – Campos de los Andes</field>
+    </record>
+    <record id="afip_code_zone_93" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">48</field>
+        <field name="name">Mendoza - Gran Mendoza</field>
+    </record>
+    <record id="afip_code_zone_94" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">90</field>
+        <field name="name">Mendoza - Las Heras - Las Cuevas</field>
+    </record>
+    <record id="afip_code_zone_95" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">94</field>
+        <field name="name">Mendoza - Luján de Cuyo - Agrelo</field>
+    </record>
+    <record id="afip_code_zone_96" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">93</field>
+        <field name="name">Mendoza - Luján de Cuyo - Carrizal</field>
+    </record>
+    <record id="afip_code_zone_97" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">97</field>
+        <field name="name">Mendoza - Luján de Cuyo - Las Compuertas</field>
+    </record>
+    <record id="afip_code_zone_98" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">96</field>
+        <field name="name">Mendoza - Luján de Cuyo - Perdriel</field>
+    </record>
+    <record id="afip_code_zone_99" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">92</field>
+        <field name="name">Mendoza - Luján de Cuyo - Potrerillos</field>
+    </record>
+    <record id="afip_code_zone_100" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">95</field>
+        <field name="name">Mendoza - Luján de Cuyo - Ugarteche</field>
+    </record>
+    <record id="afip_code_zone_101" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">B8</field>
+        <field name="name">Mendoza – Maipu – Cruz de Piedra</field>
+    </record>
+    <record id="afip_code_zone_102" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">C0</field>
+        <field name="name">Mendoza – Maipu – Las Barrancas</field>
+    </record>
+    <record id="afip_code_zone_103" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">B9</field>
+        <field name="name">Mendoza – Maipu – Lumlunta</field>
+    </record>
+    <record id="afip_code_zone_104" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">B7</field>
+        <field name="name">Mendoza – Maipu – Russell</field>
+    </record>
+    <record id="afip_code_zone_105" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">B3</field>
+        <field name="name">Mendoza – Malargue - Río Grande</field>
+    </record>
+    <record id="afip_code_zone_106" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">B5</field>
+        <field name="name">Mendoza – Malargue – Agua Escondida</field>
+    </record>
+    <record id="afip_code_zone_107" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">B2</field>
+        <field name="name">Mendoza – Malargue – Malargue</field>
+    </record>
+    <record id="afip_code_zone_108" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">B4</field>
+        <field name="name">Mendoza – Malargue – Río Barrancas</field>
+    </record>
+    <record id="afip_code_zone_109" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">98</field>
+        <field name="name">Mendoza - Resto Distritos Luján de Cuyo</field>
+    </record>
+    <record id="afip_code_zone_110" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">C1</field>
+        <field name="name">Mendoza – Resto Distritos Maipu</field>
+    </record>
+    <record id="afip_code_zone_111" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">B6</field>
+        <field name="name">Mendoza – Resto Distritos Malargue</field>
+    </record>
+    <record id="afip_code_zone_112" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">C7</field>
+        <field name="name">Mendoza - Resto Distritos Rivadavia</field>
+    </record>
+    <record id="afip_code_zone_113" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">B1</field>
+        <field name="name">Mendoza – Resto Distritos San Rafael</field>
+    </record>
+    <record id="afip_code_zone_114" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">A7</field>
+        <field name="name">Mendoza – Resto Distritos Tunuyán</field>
+    </record>
+    <record id="afip_code_zone_115" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">A3</field>
+        <field name="name">Mendoza – Resto Distritos Tupungato</field>
+    </record>
+    <record id="afip_code_zone_116" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">91</field>
+        <field name="name">Mendoza - Resto Las Heras</field>
+    </record>
+    <record id="afip_code_zone_117" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">C2</field>
+        <field name="name">Mendoza – Rivadavia – El Mirador</field>
+    </record>
+    <record id="afip_code_zone_118" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">C4</field>
+        <field name="name">Mendoza - Rivadavia - Los Arboles</field>
+    </record>
+    <record id="afip_code_zone_119" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">C3</field>
+        <field name="name">Mendoza - Rivadavia - Los Campamentos</field>
+    </record>
+    <record id="afip_code_zone_120" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">C6</field>
+        <field name="name">Mendoza - Rivadavia - Medrano</field>
+    </record>
+    <record id="afip_code_zone_121" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">C5</field>
+        <field name="name">Mendoza - Rivadavia - Reducción</field>
+    </record>
+    <record id="afip_code_zone_122" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">C1</field>
+        <field name="name">Mendoza - Rivadavia - Reducción</field>
+    </record>
+    <record id="afip_code_zone_123" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">A8</field>
+        <field name="name">Mendoza – San Carlos – Pareditas</field>
+    </record>
+    <record id="afip_code_zone_124" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">B0</field>
+        <field name="name">Mendoza – San Rafael – Cuadro Venegas</field>
+    </record>
+    <record id="afip_code_zone_125" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">A4</field>
+        <field name="name">Mendoza – Tunuyán – Los Arboles</field>
+    </record>
+    <record id="afip_code_zone_126" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">A5</field>
+        <field name="name">Mendoza – Tunuyán – Los Chacayes</field>
+    </record>
+    <record id="afip_code_zone_127" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">A2</field>
+        <field name="name">Mendoza – Tupungato – Anchoris</field>
+    </record>
+    <record id="afip_code_zone_128" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">C1</field>
+        <field name="name">Mendoza – Resto Distritos Maipu</field>
+    </record>
+    <record id="afip_code_zone_129" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">99</field>
+        <field name="name">Mendoza - Tupungato - Santa Clara</field>
+    </record>
+    <record id="afip_code_zone_130" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">A0</field>
+        <field name="name">Mendoza – Tupungato - Zapata</field>
+    </record>
+    <record id="afip_code_zone_131" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">A1</field>
+        <field name="name">Mendoza -Tupungato – San José</field>
+    </record>
+    <record id="afip_code_zone_132" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">51</field>
+        <field name="name">Misiones</field>
+    </record>
+    <record id="afip_code_zone_133" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">C1</field>
+        <field name="name">Misiones - Posadas</field>
+    </record>
+    <record id="afip_code_zone_134" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">56</field>
+        <field name="name">Neuquen</field>
+    </record>
+    <record id="afip_code_zone_135" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">53</field>
+        <field name="name">Neuquen - Centenario</field>
+    </record>
+    <record id="afip_code_zone_136" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">52</field>
+        <field name="name">Neuquen - Ciudad de Neuque</field>
+    </record>
+    <record id="afip_code_zone_137" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">54</field>
+        <field name="name">Neuquen - Cutral-Co</field>
+    </record>
+    <record id="afip_code_zone_138" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">55</field>
+        <field name="name">Neuquen - Plaza Huincul</field>
+    </record>
+    <record id="afip_code_zone_139" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">52</field>
+        <field name="name">Neuquen - Plottier</field>
+    </record>
+    <record id="afip_code_zone_140" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">59</field>
+        <field name="name">Río Negro - Alejando Stefenelli</field>
+    </record>
+    <record id="afip_code_zone_141" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">59</field>
+        <field name="name">Río Negro - Allen</field>
+    </record>
+    <record id="afip_code_zone_142" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">59</field>
+        <field name="name">Río Negro - Alto Valle</field>
+    </record>
+    <record id="afip_code_zone_143" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">59</field>
+        <field name="name">Río Negro - Cervantes</field>
+    </record>
+    <record id="afip_code_zone_144" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">59</field>
+        <field name="name">Río Negro - Chichinales</field>
+    </record>
+    <record id="afip_code_zone_145" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">59</field>
+        <field name="name">Río Negro - Cinco Saltos</field>
+    </record>
+    <record id="afip_code_zone_146" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">59</field>
+        <field name="name">Río Negro - Cipoletti</field>
+    </record>
+    <record id="afip_code_zone_147" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">59</field>
+        <field name="name">Río Negro - Contralmirante. Cordero</field>
+    </record>
+    <record id="afip_code_zone_148" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">59</field>
+        <field name="name">Río Negro - Coronel Juan J. Gomez</field>
+    </record>
+    <record id="afip_code_zone_149" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">59</field>
+        <field name="name">Río Negro - Fernández Oro</field>
+    </record>
+    <record id="afip_code_zone_150" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">59</field>
+        <field name="name">Río Negro - Gral Enrique Godoy</field>
+    </record>
+    <record id="afip_code_zone_151" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">59</field>
+        <field name="name">Río Negro - Gral Roca</field>
+    </record>
+    <record id="afip_code_zone_152" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">59</field>
+        <field name="name">Río Negro - Ing. L. A. Huergo</field>
+    </record>
+    <record id="afip_code_zone_153" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">59</field>
+        <field name="name">Río Negro - Mainque</field>
+    </record>
+    <record id="afip_code_zone_154" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">58</field>
+        <field name="name">Río Negro - Viedama</field>
+    </record>
+    <record id="afip_code_zone_155" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">59</field>
+        <field name="name">Río Negro - Villa Regina</field>
+    </record>
+    <record id="afip_code_zone_156" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">60</field>
+        <field name="name">Río Negro - Zona Nº 1</field>
+    </record>
+    <record id="afip_code_zone_157" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">57</field>
+        <field name="name">Río Negro - Zona Nº 2</field>
+    </record>
+    <record id="afip_code_zone_158" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">62</field>
+        <field name="name">Salta</field>
+    </record>
+    <record id="afip_code_zone_159" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">D3</field>
+        <field name="name">Salta - Gral San Martín - Tartagal y su ejido</field>
+    </record>
+    <record id="afip_code_zone_160" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">C1</field>
+        <field name="name">Salta - Gran Salta</field>
+    </record>
+    <record id="afip_code_zone_161" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">D0</field>
+        <field name="name">Salta - Los Andes</field>
+    </record>
+    <record id="afip_code_zone_162" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">C8</field>
+        <field name="name">Salta - Oran - San Ramón de la N. Oran y ejid</field>
+    </record>
+    <record id="afip_code_zone_163" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">D4</field>
+        <field name="name">Salta - Resto Distrigos Gral. San Martín</field>
+    </record>
+    <record id="afip_code_zone_164" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">C1</field>
+        <field name="name">Mendoza – Resto Distritos Maipu</field>
+    </record>
+    <record id="afip_code_zone_165" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">C9</field>
+        <field name="name">Salta - Resto Distritos Oran</field>
+    </record>
+    <record id="afip_code_zone_166" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">D2</field>
+        <field name="name">Salta - Rivadavia</field>
+    </record>
+    <record id="afip_code_zone_167" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">D1</field>
+        <field name="name">Salta - Santa Victoria</field>
+    </record>
+    <record id="afip_code_zone_168" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">64</field>
+        <field name="name">San Juan</field>
+    </record>
+    <record id="afip_code_zone_169" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">C1</field>
+        <field name="name">San Juan - Gran San Juan</field>
+    </record>
+    <record id="afip_code_zone_170" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">66</field>
+        <field name="name">San Luis</field>
+    </record>
+    <record id="afip_code_zone_171" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">65</field>
+        <field name="name">San Luis - Ciudad de San Luis</field>
+    </record>
+    <record id="afip_code_zone_172" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">69</field>
+        <field name="name">Santa Cruz</field>
+    </record>
+    <record id="afip_code_zone_173" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">67</field>
+        <field name="name">Santa Cruz - Caleta Olivia</field>
+    </record>
+    <record id="afip_code_zone_174" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">68</field>
+        <field name="name">Santa Cruz - Río Gallegos</field>
+    </record>
+    <record id="afip_code_zone_175" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">73</field>
+        <field name="name">Santa Fe - 9 de Julio</field>
+    </record>
+    <record id="afip_code_zone_176" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">70</field>
+        <field name="name">Santa Fe - Gral Obligado</field>
+    </record>
+    <record id="afip_code_zone_177" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">75</field>
+        <field name="name">Santa Fe - Resto de la Provincia</field>
+    </record>
+    <record id="afip_code_zone_178" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">71</field>
+        <field name="name">Santa Fe - San Javier</field>
+    </record>
+    <record id="afip_code_zone_179" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">72</field>
+        <field name="name">Santa Fe - Santo Tome</field>
+    </record>
+    <record id="afip_code_zone_180" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">74</field>
+        <field name="name">Santa Fe - Vera</field>
+    </record>
+    <record id="afip_code_zone_181" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">76</field>
+        <field name="name">Santiago del Estero - Cdad de Stiago del Ester</field>
+    </record>
+    <record id="afip_code_zone_182" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">76</field>
+        <field name="name">Santiago del Estero - La Banda</field>
+    </record>
+    <record id="afip_code_zone_183" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">77</field>
+        <field name="name">Santiago del Estero - Ojo de Agua</field>
+    </record>
+    <record id="afip_code_zone_184" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">80</field>
+        <field name="name">Santiago del Estero - Quebrachos</field>
+    </record>
+    <record id="afip_code_zone_185" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">80</field>
+        <field name="name">Santiago del Estero - Resto de la Provincia</field>
+    </record>
+    <record id="afip_code_zone_186" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">79</field>
+        <field name="name">Santiago del Estero - Rivadavia</field>
+    </record>
+    <record id="afip_code_zone_187" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">83</field>
+        <field name="name">Tierra del Fuego</field>
+    </record>
+    <record id="afip_code_zone_188" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">81</field>
+        <field name="name">Tierra del Fuego - Río Grande</field>
+    </record>
+    <record id="afip_code_zone_189" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">82</field>
+        <field name="name">Tierra del Fuego - Ushuaia</field>
+    </record>
+    <record id="afip_code_zone_190" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">85</field>
+        <field name="name">Tucuman</field>
+    </record>
+    <record id="afip_code_zone_191" model="l10n_ar.payroll.afip.code">
+        <field name="type">5</field>
+        <field name="code">84</field>
+        <field name="name">Tucuman - Gran Tucuman</field>
+    </record>
+    <record id="afip_code_health_1" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">000000</field>
+        <field name="name">NINGUNA</field>
+    </record>
+    <record id="afip_code_health_2" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">000208</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA GRAFICA DE LA PROVINCIA DE CORDOBA</field>
+    </record>
+    <record id="afip_code_health_3" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">000307</field>
+        <field name="name">OS PORTUARIOS ARGENTINOS DE MAR DEL PLATA</field>
+    </record>
+    <record id="afip_code_health_4" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">000406</field>
+        <field name="name">OS DEL PERSONAL DEL ORGANISMO DE CONTROL EXTERNO*</field>
+    </record>
+    <record id="afip_code_health_5" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">000505</field>
+        <field name="name">OS DE CAPITANES, PILOTOS Y PATRONES DE PESCA</field>
+    </record>
+    <record id="afip_code_health_6" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">000604</field>
+        <field name="name">OS DE AGENTES DE LOTERIAS Y AFINES DE LA REPUBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_7" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">000604</field>
+        <field name="name">OS DE AGENTES DE LOTERIAS Y AFINES DE LA REPUBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_8" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">000703</field>
+        <field name="name">MUTUAL DEL PERSONAL DEL AGUA Y LA ENERGIA ELECTRICA DE MENDOZA*</field>
+    </record>
+    <record id="afip_code_health_9" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">000901</field>
+        <field name="name">OS DE LA ACTIVIDAD DE SEGUROS, REASEGUROS, CAPITALIZACION Y AHORRO Y PRESTAMO PARA LA VIVIENDA</field>
+    </record>
+    <record id="afip_code_health_10" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">001102</field>
+        <field name="name">OS PARA LA ACTIVIDAD DOCENTE</field>
+    </record>
+    <record id="afip_code_health_11" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">001201</field>
+        <field name="name">OS PARA EL PERSONAL DEL MINISTERIO DE ECONOMIA Y DE OBRAS Y SERVICIOS PUBLICOS</field>
+    </record>
+    <record id="afip_code_health_12" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">001300</field>
+        <field name="name">OS FERROVIARIA</field>
+    </record>
+    <record id="afip_code_health_13" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">001508</field>
+        <field name="name">OS DE LA ASOCIACION CIVIL PRO SINDICATO AMAS DE CASA DE LA REPUBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_14" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">001607</field>
+        <field name="name">OS DEL SINDICATO UNIDO DE TRABAJADORES DE LA INDUSTRIA DE AGUAS GASEOSAS DE LA PROVINCIA DE SANTA FE</field>
+    </record>
+    <record id="afip_code_health_15" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">001607</field>
+        <field name="name">OS DEL SINDICATO UNIDO DE TRABAJADORES DE LA INDUSTRIA DE AGUAS GASEOSAS DE LA PROVINCIA DE SANTA FE</field>
+    </record>
+    <record id="afip_code_health_16" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">001706</field>
+        <field name="name">OS DEL PERSONAL JERARQUICO DE LA REPUBLICA ARGENTINA PARA EL PERSONAL JERARQUICO DE LA INDUSTRIA GRAFICA Y EL PERSONAL JERARQUICO DEL AGUA Y LA ENERGIA</field>
+    </record>
+    <record id="afip_code_health_17" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">001805</field>
+        <field name="name">OS DE LOS LEGISLADORES DE LA REPUBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_18" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">001805</field>
+        <field name="name">OS DE LOS LEGISLADORES DE LA REPUBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_19" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">001904</field>
+        <field name="name">OS DE LA FEDERACION DE CAMARAS Y CENTROS COMERCIALES ZONALES DE LA REPUBLICA ARGENTINA (O.S.FEDECAMARAS)</field>
+    </record>
+    <record id="afip_code_health_20" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">002105</field>
+        <field name="name">OS PROFESIONALES DEL TURF DE LA RA (OSPROTURA)</field>
+    </record>
+    <record id="afip_code_health_21" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">002204</field>
+        <field name="name">OS DE EMPL.Y PERS. JERARQ.DE LA ACT.DEL NEUM.ARG.DE NEUM.G.YEAR</field>
+    </record>
+    <record id="afip_code_health_22" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">002303</field>
+        <field name="name">OS PARA EL PERSONAL DE EMPRESAS DE LIMPIEZA, SERVICIOS Y MAESTRANZA DE MENDOZA</field>
+    </record>
+    <record id="afip_code_health_23" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">002402</field>
+        <field name="name">OBRA SOCIAL DEL PERSONAL JERARQUICO DEL TRANSPORTE AUTOMOTOR DE PASAJEROS DE CORDOBA Y AFINES</field>
+    </record>
+    <record id="afip_code_health_24" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">002501</field>
+        <field name="name">OS DE MINISTROS, SECRETARIOS Y SUBSECRETARIOS</field>
+    </record>
+    <record id="afip_code_health_25" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">002600</field>
+        <field name="name">OS DE LOS TRABAJADORES DE LA CARNE Y AFINES DE LA REPUBLICA ARGENTINA (OSCARA)</field>
+    </record>
+    <record id="afip_code_health_26" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">002709</field>
+        <field name="name">OS DE LOS TRABAJADORES ASOCIADOS A LA ASOCIACION MUTUAL MERCANTIL ARGENTINA (OSTAMMA)</field>
+    </record>
+    <record id="afip_code_health_27" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">002808</field>
+        <field name="name">OS DE LA CAMARA DE EMPRESARIOS DE AGENCIAS DE REMISES DE LA PROVINCIA DE BUENOS AIRES (O.S.C.E.A.R.B.A)</field>
+    </record>
+    <record id="afip_code_health_28" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">002907</field>
+        <field name="name">OS ASOCIACION MUTUAL METALURGICA VILLA CONSTITUCION (O.S.A.M.M.V.C.)</field>
+    </record>
+    <record id="afip_code_health_29" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">003009</field>
+        <field name="name">O.S.PERSONAL ASOCIADO A ASOC.MUTUAL SANCOR (O.S.PERS.A.A.M.S)</field>
+    </record>
+    <record id="afip_code_health_30" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">003108</field>
+        <field name="name">OS DE LOS INMIGRANTES ESPAÑOLES Y SUS DESCENDIENTES RESIDENTES EN LA R.A (OSPAÑA)</field>
+    </record>
+    <record id="afip_code_health_31" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">003207</field>
+        <field name="name">OS DE TRABAJADORES SOCIOS DE LA ASOCIACION MUTUAL DEL PERSONAL JERARQUICO DE BANCOS OFICIALES NACIONALES - JERARQUICO SALUD</field>
+    </record>
+    <record id="afip_code_health_32" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">003306</field>
+        <field name="name">OS DE TRABAJADORES VENDEDORES DE DIARIOS, REVISTAS Y AF. (OSTVENDRA)</field>
+    </record>
+    <record id="afip_code_health_33" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">003405</field>
+        <field name="name">OS DE LA ASOCIACION MUTUAL DE LOS OBREROS CATOLICOS PADRE FEDERICO GROTE</field>
+    </record>
+    <record id="afip_code_health_34" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">003504</field>
+        <field name="name">OS DE CONDUCTORES TITULARES DE TAXIS DE LA CIUDAD AUTONOMA DE BUENOS AIRES</field>
+    </record>
+    <record id="afip_code_health_35" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">003603</field>
+        <field name="name">OS PROGRAMAS MEDICOS SA DE CONSULTORIA MUTUAL</field>
+    </record>
+    <record id="afip_code_health_36" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">003702</field>
+        <field name="name">OS YACIMIENTOS CARBONIFEROS</field>
+    </record>
+    <record id="afip_code_health_37" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">003801</field>
+        <field name="name">OS WITCEL</field>
+    </record>
+    <record id="afip_code_health_38" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">003900</field>
+        <field name="name">OS TÉCNICOS DE VUELO LIN.AEREAS</field>
+    </record>
+    <record id="afip_code_health_39" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">003900</field>
+        <field name="name">OS TÉCNICOS DE VUELO LIN.AEREAS</field>
+    </record>
+    <record id="afip_code_health_40" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">100106</field>
+        <field name="name">OS PARA EL PERSONAL DE LA INDUSTRIA ACEITERA DESMOTADORA Y AFINES</field>
+    </record>
+    <record id="afip_code_health_41" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">100205</field>
+        <field name="name">OS DE ACTORES</field>
+    </record>
+    <record id="afip_code_health_42" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">100403</field>
+        <field name="name">OS DEL PERSONAL SUPERIOR Y PROFESIONAL DE EMPRESAS AEROCOMERCIALES</field>
+    </record>
+    <record id="afip_code_health_43" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">100502</field>
+        <field name="name">OS DEL PERSONAL AERONAUTICO</field>
+    </record>
+    <record id="afip_code_health_44" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">100601</field>
+        <field name="name">OS DEL PERSONAL DE AERONAVEGACION DE ENTES PRIVADOS</field>
+    </record>
+    <record id="afip_code_health_45" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">100700</field>
+        <field name="name">OS DEL PERSONAL TECNICO AERONAUTICO</field>
+    </record>
+    <record id="afip_code_health_46" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">100809</field>
+        <field name="name">OS DE AERONAVEGANTES</field>
+    </record>
+    <record id="afip_code_health_47" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">100908</field>
+        <field name="name">OS DE EMPLEADOS DE AGENCIAS DE INFORMES (O.S.E.D.I.)</field>
+    </record>
+    <record id="afip_code_health_48" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">101000</field>
+        <field name="name">OS DEL PERSONAL DE AGUAS GASEOSAS Y AFINES</field>
+    </record>
+    <record id="afip_code_health_49" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">101109</field>
+        <field name="name">OS DE ALFAJOREROS, REPOSTEROS, PIZZEROS Y HELADEROS</field>
+    </record>
+    <record id="afip_code_health_50" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">101208</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA DE LA ALIMENTACION</field>
+    </record>
+    <record id="afip_code_health_51" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">101604</field>
+        <field name="name">OS DEL PERSONAL DEL AUTOMOVIL CLUB ARGENTINO</field>
+    </record>
+    <record id="afip_code_health_52" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">101802</field>
+        <field name="name">OS DEL PERSONAL DEL AZUCAR DEL INGENIO LA ESPERANZA</field>
+    </record>
+    <record id="afip_code_health_53" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">101901</field>
+        <field name="name">OS DEL PERSONAL DEL AZUCAR DEL INGENIO LEDESMA</field>
+    </record>
+    <record id="afip_code_health_54" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">102300</field>
+        <field name="name">OS DEL PERSONAL DEL AZUCAR DEL INGENIO SAN MARTIN</field>
+    </record>
+    <record id="afip_code_health_55" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">102706</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA AZUCARERA</field>
+    </record>
+    <record id="afip_code_health_56" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">102904</field>
+        <field name="name">OS DEL PERSONAL DE BARRACAS DE LANAS, CUEROS Y ANEXOS</field>
+    </record>
+    <record id="afip_code_health_57" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">103006</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA BOTONERA</field>
+    </record>
+    <record id="afip_code_health_58" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">103105</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA DEL CALZADO</field>
+    </record>
+    <record id="afip_code_health_59" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">103204</field>
+        <field name="name">OS DE CONDUCTORES CAMIONEROS Y PERSONAL DEL TRANSPORTE AUTOMOTOR DE CARGAS</field>
+    </record>
+    <record id="afip_code_health_60" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">103402</field>
+        <field name="name">OS DEL PERSONAL DE CARGA Y DESCARGA</field>
+    </record>
+    <record id="afip_code_health_61" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">103600</field>
+        <field name="name">OS DEL PERSONAL AUXILIAR DE CASAS PARTICULARES</field>
+    </record>
+    <record id="afip_code_health_62" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">103709</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA DEL CAUCHO</field>
+    </record>
+    <record id="afip_code_health_63" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">103808</field>
+        <field name="name">OS DEL PERSONAL DEL CAUCHO</field>
+    </record>
+    <record id="afip_code_health_64" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">103907</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA DEL CAUCHO DE SANTA FE</field>
+    </record>
+    <record id="afip_code_health_65" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">104108</field>
+        <field name="name">OS DE CERAMISTAS</field>
+    </record>
+    <record id="afip_code_health_66" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">104207</field>
+        <field name="name">OS DEL PERSONAL DE LA CERAMICA, SANITARIOS, PORCELANA DE MESA Y AFINES</field>
+    </record>
+    <record id="afip_code_health_67" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">104306</field>
+        <field name="name">OS DEL PERSONAL DE LA ACTIVIDAD CERVECERA Y AFINES</field>
+    </record>
+    <record id="afip_code_health_68" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">104405</field>
+        <field name="name">OS DEL PERSONAL CINEMATOGRAFICO DE MAR DEL PLATA</field>
+    </record>
+    <record id="afip_code_health_69" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">104504</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA CINEMATOGRAFICA</field>
+    </record>
+    <record id="afip_code_health_70" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">104603</field>
+        <field name="name">OS DE OPERADORES CINEMATOGRAFICOS</field>
+    </record>
+    <record id="afip_code_health_71" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">104801</field>
+        <field name="name">OS DE COLOCADORES DE AZULEJOS, MOSAICOS, GRANITEROS, LUSTRADORES Y PORCELANEROS</field>
+    </record>
+    <record id="afip_code_health_72" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">105002</field>
+        <field name="name">OS DE CONDUCTORES NAVALES</field>
+    </record>
+    <record id="afip_code_health_73" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">105309</field>
+        <field name="name">OS DEL PERSONAL ADMINISTRATIVO Y TECNICO DE LA CONSTRUCCION Y AFINES</field>
+    </record>
+    <record id="afip_code_health_74" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">105408</field>
+        <field name="name">OS DEL PERSONAL DE LA CONSTRUCCION</field>
+    </record>
+    <record id="afip_code_health_75" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">105507</field>
+        <field name="name">OS DE LOS CORTADORES DE LA INDUMENTARIA</field>
+    </record>
+    <record id="afip_code_health_76" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">105606</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA DEL CUERO Y AFINES</field>
+    </record>
+    <record id="afip_code_health_77" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">105705</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA DEL CHACINADO Y AFINES</field>
+    </record>
+    <record id="afip_code_health_78" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">105804</field>
+        <field name="name">OS DE CHOFERES DE CAMIONES</field>
+    </record>
+    <record id="afip_code_health_79" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">106005</field>
+        <field name="name">OS DEL PERSONAL DE ENTIDADES DEPORTIVAS Y CIVILES</field>
+    </record>
+    <record id="afip_code_health_80" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">106104</field>
+        <field name="name">OS DE EMPLEADOS DE DESPACHANTES DE ADUANA</field>
+    </record>
+    <record id="afip_code_health_81" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">106203</field>
+        <field name="name">OS DEL PERS. DE DISTRIBUIDORES CINEMATOGRAF. DE LA R.A.</field>
+    </record>
+    <record id="afip_code_health_82" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">106302</field>
+        <field name="name">OS DE DOCENTES PARTICULARES</field>
+    </record>
+    <record id="afip_code_health_83" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">106401</field>
+        <field name="name">OS DEL PERSONAL DE EDIFCIOS DE RENTA Y HORIZONTAL DE LA REPUBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_84" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">106500</field>
+        <field name="name">OS DEL PERSONAL DE EDIFICIOS DE RENTAS Y HORIZONTAL DE CAPITAL FEDERAL Y GRAN BUENOS ARIES</field>
+    </record>
+    <record id="afip_code_health_85" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">106609</field>
+        <field name="name">OS ELECTRICISTAS NAVALES</field>
+    </record>
+    <record id="afip_code_health_86" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">106708</field>
+        <field name="name">OS DE OBREROS EMPACADORES DE FRUTA DE RIO NEGRO Y NEUQUEN</field>
+    </record>
+    <record id="afip_code_health_87" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">106807</field>
+        <field name="name">OS DEL PERSONAL DE LA ENSEÑANZA PRIVADA</field>
+    </record>
+    <record id="afip_code_health_88" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">106906</field>
+        <field name="name">OS DEL PERSONAL DE ESCRIBANIAS DE LA PROVINCIA DE BUENOS AIRES</field>
+    </record>
+    <record id="afip_code_health_89" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">107008</field>
+        <field name="name">OS DEL PERSONAL DE ESCRIBANOS</field>
+    </record>
+    <record id="afip_code_health_90" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">107107</field>
+        <field name="name">OS DEL PERSONAL DEL ESPECTACULO PUBLICO</field>
+    </record>
+    <record id="afip_code_health_91" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">107206</field>
+        <field name="name">OS DEL PERSONAL DE ESTACIONES DE SERVICIO, GARAGES, PLAYAS DE ESTACIONAMIENTO Y LAVADEROS AUTOMATICOS</field>
+    </record>
+    <record id="afip_code_health_92" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">107404</field>
+        <field name="name">OS DEL PERSONAL DE FARMACIA</field>
+    </record>
+    <record id="afip_code_health_93" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">107800</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA DEL FIBROCEMENTO</field>
+    </record>
+    <record id="afip_code_health_94" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">107909</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA FIDEERA</field>
+    </record>
+    <record id="afip_code_health_95" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">108001</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA FORESTAL DE SANTIAGO DEL ESTERO</field>
+    </record>
+    <record id="afip_code_health_96" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">108100</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA DEL FOSFORO</field>
+    </record>
+    <record id="afip_code_health_97" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">108209</field>
+        <field name="name">OS DE FOTOGRAFOS</field>
+    </record>
+    <record id="afip_code_health_98" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">108407</field>
+        <field name="name">OS DEL PERSONAL DE LA ACTIVIDAD FRUCTICOLA</field>
+    </record>
+    <record id="afip_code_health_99" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">108506</field>
+        <field name="name">OS DEL PERSONAL DE MANIPULEO, EMPAQUE Y EXPEDICION DE FRUTA FRESCA Y HORTALIZAS DE CUYO</field>
+    </record>
+    <record id="afip_code_health_100" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">108803</field>
+        <field name="name">OS DEL PERSONAL DE LA UNION DE TRABAJADORES DEL TURISMO, HOTELEROS Y GASTRONOMICOS DE LA RA (OSUTHGRA)</field>
+    </record>
+    <record id="afip_code_health_101" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">109004</field>
+        <field name="name">OS DEL PERSONAL GRAFICO</field>
+    </record>
+    <record id="afip_code_health_102" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">109202</field>
+        <field name="name">OS DE GUINCHEROS Y MAQUINISTAS DE GRUAS MOVILES</field>
+    </record>
+    <record id="afip_code_health_103" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">109301</field>
+        <field name="name">OS DEL PERSONAL DE CONSIGNATARIOS DEL MERCADO NACIONAL DE HACIENDA DE LINIERS</field>
+    </record>
+    <record id="afip_code_health_104" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">109400</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA DEL HIELO Y MERCADOS PARTICULARES</field>
+    </record>
+    <record id="afip_code_health_105" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">109509</field>
+        <field name="name">OS DEL PERSONAL DE LOS HIPODROMOS DE BUENOS AIRES Y SAN ISIDRO</field>
+    </record>
+    <record id="afip_code_health_106" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">109608</field>
+        <field name="name">OS DEL PERSONAL MENSUALIZADO DEL JOCKEY CLUB DE BUENOS AIRES Y LOS HIPODROMOS DE PALERMO Y SAN ISIDRO</field>
+    </record>
+    <record id="afip_code_health_107" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">109707</field>
+        <field name="name">OS DEL PERSONAL DE IMPRENTA, DIARIOS Y AFINES</field>
+    </record>
+    <record id="afip_code_health_108" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">110008</field>
+        <field name="name">OS DEL PERSONAL DE JABONEROS</field>
+    </record>
+    <record id="afip_code_health_109" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">110107</field>
+        <field name="name">OS DE JARDINEROS,PARQUISTAS,VIVERISTAS Y FLORIC.DE R.A.</field>
+    </record>
+    <record id="afip_code_health_110" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">110206</field>
+        <field name="name">OS DEL PERSONAL DE JOCKEY CLUB DE ROSARIO</field>
+    </record>
+    <record id="afip_code_health_111" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">110305</field>
+        <field name="name">OS DEL PERSONAL LADRILLERO</field>
+    </record>
+    <record id="afip_code_health_112" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">110404</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA LADRILLERA A MAQUINA</field>
+    </record>
+    <record id="afip_code_health_113" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">110503</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA LECHERA</field>
+    </record>
+    <record id="afip_code_health_114" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">110602</field>
+        <field name="name">OS DE LOCUTORES</field>
+    </record>
+    <record id="afip_code_health_115" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">110701</field>
+        <field name="name">OS DE LA FEDERACION ARGENTINA DE TRABAJADORES DE LUZ Y FUERZA</field>
+    </record>
+    <record id="afip_code_health_116" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">110800</field>
+        <field name="name">OS DE LOS TRABAJADORES DE LAS EMPRESAS DE ELECTRICIDAD</field>
+    </record>
+    <record id="afip_code_health_117" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">110909</field>
+        <field name="name">OS DEL PERSONAL DE LUZ Y FUERZA DE CORDOBA</field>
+    </record>
+    <record id="afip_code_health_118" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">111001</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA MADERERA</field>
+    </record>
+    <record id="afip_code_health_119" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">111209</field>
+        <field name="name">OS DEL PERSONAL DE MAESTRANZA</field>
+    </record>
+    <record id="afip_code_health_120" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">111308</field>
+        <field name="name">OS DE MAQUINISTAS DE TEATRO Y TELEVISION</field>
+    </record>
+    <record id="afip_code_health_121" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">111407</field>
+        <field name="name">OS DE CAPITANES DE ULTRAMAR Y OFICIALES DE LA MARINA MERCANTE</field>
+    </record>
+    <record id="afip_code_health_122" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">111506</field>
+        <field name="name">OS CAPITANES BAQUEANOS FLUVIALES DE LA MARINA MERCANTE</field>
+    </record>
+    <record id="afip_code_health_123" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">111605</field>
+        <field name="name">OS DE EMPLEADOS DE LA MARINA MERCANTE</field>
+    </record>
+    <record id="afip_code_health_124" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">111704</field>
+        <field name="name">OS DE ENCARGADOS APUNTADORES MARITIMOS</field>
+    </record>
+    <record id="afip_code_health_125" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">111803</field>
+        <field name="name">OS DEL PERSONAL MARITIMO</field>
+    </record>
+    <record id="afip_code_health_126" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">111902</field>
+        <field name="name">OS DEL SINDICATO DE MECANICOS Y AFINES DEL TRANSPORTE AUTOMOTO</field>
+    </record>
+    <record id="afip_code_health_127" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">112004</field>
+        <field name="name">OS DEL PERSONAL SUPERIOR DE MERCEDES BENZ ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_128" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">112103</field>
+        <field name="name">OS DE LA UNION OBRERA METALURGICO DE LA REPUBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_129" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">112202</field>
+        <field name="name">OS DE LOS SUPERVISORES DE LA INDUSTRIA METALMECANICA DE LA REPUBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_130" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">112301</field>
+        <field name="name">OS DEL PERSONAL DE MICROS Y OMNIBUS DE MENDOZA</field>
+    </record>
+    <record id="afip_code_health_131" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">112400</field>
+        <field name="name">OS DE LA ACTIVIDAD MINERA</field>
+    </record>
+    <record id="afip_code_health_132" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">112509</field>
+        <field name="name">OS MODELOS ARGENTINOS</field>
+    </record>
+    <record id="afip_code_health_133" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">112608</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA MOLINERA</field>
+    </record>
+    <record id="afip_code_health_134" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">112707</field>
+        <field name="name">OS DEL PERSONAL MOSAISTA</field>
+    </record>
+    <record id="afip_code_health_135" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">112806</field>
+        <field name="name">OS DE MUSICOS</field>
+    </record>
+    <record id="afip_code_health_136" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">113205</field>
+        <field name="name">OS DE JEFES Y OFICIALES NAVALES DE RADIOCOMUNICACIONES</field>
+    </record>
+    <record id="afip_code_health_137" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">113304</field>
+        <field name="name">OS DE JEFES Y OFICIALES MAQUINISTAS NAVALES</field>
+    </record>
+    <record id="afip_code_health_138" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">113403</field>
+        <field name="name">OS DEL PERSONAL NAVAL</field>
+    </record>
+    <record id="afip_code_health_139" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">113601</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA DEL NEUMATICO</field>
+    </record>
+    <record id="afip_code_health_140" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">113601</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA NAVAL</field>
+    </record>
+    <record id="afip_code_health_141" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">113809</field>
+        <field name="name">OS DE COMISARIOS NAVALES</field>
+    </record>
+    <record id="afip_code_health_142" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">113908</field>
+        <field name="name">OS DEL PERSONAL DE PANADERIAS</field>
+    </record>
+    <record id="afip_code_health_143" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">114000</field>
+        <field name="name">OS DE PANADEROS, PASTELEROS Y FACTUREROS DE ENTRE RIOS</field>
+    </record>
+    <record id="afip_code_health_144" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">114109</field>
+        <field name="name">OS DEL PERSONAL DEL PAPEL, CARTON Y QUIMICOS</field>
+    </record>
+    <record id="afip_code_health_145" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">114109</field>
+        <field name="name">OS DE LA INDUSTRIA DE PASTAS ALIMENTICIAS</field>
+    </record>
+    <record id="afip_code_health_146" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">114208</field>
+        <field name="name">OS DE LA INDUSTRIA DE PASTAS ALIMENTICIAS</field>
+    </record>
+    <record id="afip_code_health_147" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">114307</field>
+        <field name="name">OS TRABAJ. PAST, CONFIT, PIZZEROS, HELAD. Y ALFAJ. DE LA R.A</field>
+    </record>
+    <record id="afip_code_health_148" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">114505</field>
+        <field name="name">OS DE PATRONES DE CABOTAJE DE RIOS Y PUERTOS</field>
+    </record>
+    <record id="afip_code_health_149" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">114505</field>
+        <field name="name">OS DEL PERSONAL DE PELUQUERIAS, ESTETICA Y AFINES</field>
+    </record>
+    <record id="afip_code_health_150" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">114901</field>
+        <field name="name">OS OFICIALES PELUQUEROS Y PEINADORES DE ROSARIO</field>
+    </record>
+    <record id="afip_code_health_151" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">115003</field>
+        <field name="name">OS DEL PERSONAL DE LA ACTIVIDAD PERFUMISTA</field>
+    </record>
+    <record id="afip_code_health_152" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">115102</field>
+        <field name="name">OS DE TRABADORES DE PRENSA DE BUENOS AIRES</field>
+    </record>
+    <record id="afip_code_health_153" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">115201</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA DEL PESCADO DE MAR DEL PLATA</field>
+    </record>
+    <record id="afip_code_health_154" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">115300</field>
+        <field name="name">OS DE PETROLEROS</field>
+    </record>
+    <record id="afip_code_health_155" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">115409</field>
+        <field name="name">OS DEL PETROLEO Y GAS PRIVADO</field>
+    </record>
+    <record id="afip_code_health_156" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">115508</field>
+        <field name="name">OS DE PETROLEROS DE CORDOBA</field>
+    </record>
+    <record id="afip_code_health_157" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">115607</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA PETROQUIMICA</field>
+    </record>
+    <record id="afip_code_health_158" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">115706</field>
+        <field name="name">OS DE PILOTOS DE LINEAS AEREAS COMERCIALES Y REGULARES</field>
+    </record>
+    <record id="afip_code_health_159" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">115805</field>
+        <field name="name">OS DEL PERSONAL DE FABRICAS DE PINTURA</field>
+    </record>
+    <record id="afip_code_health_160" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">116006</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA DEL PLASTICO</field>
+    </record>
+    <record id="afip_code_health_161" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">116105</field>
+        <field name="name">OS DE CAPATACES ESTIBADORES PORTUARIOS</field>
+    </record>
+    <record id="afip_code_health_162" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">116204</field>
+        <field name="name">OS DE PORTUARIOS ARGENTINOS</field>
+    </record>
+    <record id="afip_code_health_163" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">116709</field>
+        <field name="name">OS PORTUARIOS DE PUERTO SAN MARTIN Y BELLA VISTA</field>
+    </record>
+    <record id="afip_code_health_164" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">117207</field>
+        <field name="name">OS DEL PERSONAL DE PRENSA DE LA REPUBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_165" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">117405</field>
+        <field name="name">OS DEL PERSONAL DE PRENSA DE BAHIA BLANCA</field>
+    </record>
+    <record id="afip_code_health_166" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">117603</field>
+        <field name="name">OS DEL PERSONAL DE PRENSA DE LA PROVINCIA DEL CHACO</field>
+    </record>
+    <record id="afip_code_health_167" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">117702</field>
+        <field name="name">OS DEL PERSONAL DE PRENSA DE MAR DEL PLATA</field>
+    </record>
+    <record id="afip_code_health_168" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">117801</field>
+        <field name="name">OS DEL PERSONAL DE PRENSA DE MENDOZA</field>
+    </record>
+    <record id="afip_code_health_169" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">118002</field>
+        <field name="name">OS EMPLEADOS DE PRENSA DE CORDOBA</field>
+    </record>
+    <record id="afip_code_health_170" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">118200</field>
+        <field name="name">OS DE AGENTES DE PROPAGANDA MEDICA DE LA REPUBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_171" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">118309</field>
+        <field name="name">OS DE AGENTES DE PROPAGANDA MEDICA DE CORDOBA</field>
+    </record>
+    <record id="afip_code_health_172" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">118408</field>
+        <field name="name">OS DE AGENTES DE PROPAGANDA MEDICA DE ENTRE RIOS</field>
+    </record>
+    <record id="afip_code_health_173" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">118507</field>
+        <field name="name">OS DE AGENTES DE PROPAGANDA MEDICA DE ROSARIO</field>
+    </record>
+    <record id="afip_code_health_174" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">118606</field>
+        <field name="name">OS DEL PERSONAL DE LA PUBLICIDAD</field>
+    </record>
+    <record id="afip_code_health_175" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">118705</field>
+        <field name="name">OS DEL PERSONAL DE INDUSTRIAS QUIMICAS Y PETROQUIMICAS</field>
+    </record>
+    <record id="afip_code_health_176" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">118804</field>
+        <field name="name">OS DE RECIBIDORES DE GRANOS Y ANEXOS</field>
+    </record>
+    <record id="afip_code_health_177" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">118903</field>
+        <field name="name">OS DEL PERSONAL DE RECOLECCION Y BARRIDO DE ROSARIO</field>
+    </record>
+    <record id="afip_code_health_178" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">119005</field>
+        <field name="name">OS DEL PERSONAL DE REFINERIAS DE MAIZ</field>
+    </record>
+    <record id="afip_code_health_179" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">119203</field>
+        <field name="name">OS DE RELOJEROS Y JOYEROS</field>
+    </record>
+    <record id="afip_code_health_180" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">119302</field>
+        <field name="name">OS DEL PERSONAL RURAL Y ESTIBADORES DE LA REPUBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_181" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">119500</field>
+        <field name="name">OS DEL PERSONAL DE LA SANIDAD ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_182" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">119609</field>
+        <field name="name">OS DEL PERSONAL DE INSTALACIONES SANITARIAS</field>
+    </record>
+    <record id="afip_code_health_183" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">119708</field>
+        <field name="name">OS DEL PERSONAL DE SEGURIDAD COMERCIAL, INDUSTRIAL EINVESTIGACIONES PRIVADAS</field>
+    </record>
+    <record id="afip_code_health_184" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">119906</field>
+        <field name="name">OS DE SERENOS DE BUQUES</field>
+    </record>
+    <record id="afip_code_health_185" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">120306</field>
+        <field name="name">OS DEL PERSONAL DE SUPERVISION DE LA EMPRESA SUBTERRANEOS DE BUENOS AIRES</field>
+    </record>
+    <record id="afip_code_health_186" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">120405</field>
+        <field name="name">OS DEL PERSONAL DE DIRECCION DE LA EMPRESA SUBTERRANEOS BUENOS AIRES</field>
+    </record>
+    <record id="afip_code_health_187" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">120504</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA DEL TABACO</field>
+    </record>
+    <record id="afip_code_health_188" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">120603</field>
+        <field name="name">OS DE EMPLEADOS DEL TABACO</field>
+    </record>
+    <record id="afip_code_health_189" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">120702</field>
+        <field name="name">OS DEL PERSONAL DE LAS TELECOMUNICACIONES DE LA REPUBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_190" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">120801</field>
+        <field name="name">OS DE TRABAJADORES DE LAS COMUNICACIONES (OSTRAC)</field>
+    </record>
+    <record id="afip_code_health_191" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">120900</field>
+        <field name="name">OS DEL PERSONAL DE TELEVISION</field>
+    </record>
+    <record id="afip_code_health_192" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">121002</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA TEXTIL</field>
+    </record>
+    <record id="afip_code_health_193" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">121101</field>
+        <field name="name">OS DE EMPLEADOS TEXTILES Y AFINES</field>
+    </record>
+    <record id="afip_code_health_194" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">121309</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA DEL TRACTOR</field>
+    </record>
+    <record id="afip_code_health_195" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">121507</field>
+        <field name="name">OS DE LA INDUSTRIA DEL TRANSPORTE AUTOMOTOR DE CORDOBA</field>
+    </record>
+    <record id="afip_code_health_196" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">121606</field>
+        <field name="name">OS DE CONDUCTORES DE TRANSPORTE COLECTIVO DE PASAJEROS</field>
+    </record>
+    <record id="afip_code_health_197" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">121705</field>
+        <field name="name">OS DEL PERSONAL DE LA ACTIVIDAD DEL TURF</field>
+    </record>
+    <record id="afip_code_health_198" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">121804</field>
+        <field name="name">OS CONDUCTORES DE TAXIS DE CORDOBA</field>
+    </record>
+    <record id="afip_code_health_199" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">121903</field>
+        <field name="name">OS DE VAREADORES</field>
+    </record>
+    <record id="afip_code_health_200" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">122005</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA DEL VESTIDO Y AFINES</field>
+    </record>
+    <record id="afip_code_health_201" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">122104</field>
+        <field name="name">OS DE VIAJANTES VENDEDORES DE LA REPUBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_202" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">122302</field>
+        <field name="name">OS DEL PERSONAL DE LA ACTIVIDAD VIAL</field>
+    </record>
+    <record id="afip_code_health_203" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">122401</field>
+        <field name="name">OS DE EMPLEADOS DE LA INDUSTRIA DEL VIDRIO</field>
+    </record>
+    <record id="afip_code_health_204" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">122500</field>
+        <field name="name">OS DEL PERSONAL DE LA INDUSTRIA DEL VIDRIO</field>
+    </record>
+    <record id="afip_code_health_205" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">122609</field>
+        <field name="name">OS DEL PERSONAL DE LA ACTIVIDAD VITIVINICOLA</field>
+    </record>
+    <record id="afip_code_health_206" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">122807</field>
+        <field name="name">OS DEL PERSONAL DE VIGILANCIA Y SEGURIDAD COMERCIAL, INDUSTRIAL E INVESTIGACIONES PRIVADAS DE CORDOBA</field>
+    </record>
+    <record id="afip_code_health_207" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">122906</field>
+        <field name="name">OS DEL PERSONAL. ESTACIONES DE SERVICIO, GARAGES, PLAYAS Y LAVADEROS AUTOMATICOS DE LA PROVINCIA DE SANTA FE</field>
+    </record>
+    <record id="afip_code_health_208" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">123008</field>
+        <field name="name">OS PARA EL PERSONAL DE ESTACIONES DE SERVICIO, GARAGES, PLAYAS DE ESTACIONAMIENTO, LAVADEROS AUTOMATICOS Y GOMERIAS DE LA REPUBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_209" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">123107</field>
+        <field name="name">OS DE TALLERISTAS A DOMICILIO</field>
+    </record>
+    <record id="afip_code_health_210" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">123305</field>
+        <field name="name">OS DEL PERSONAL DE SOCIEDADES DE AUTORES Y AFINES</field>
+    </record>
+    <record id="afip_code_health_211" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">123404</field>
+        <field name="name">OS DEL PERSONAL DE PRENSA DE ROSARIO</field>
+    </record>
+    <record id="afip_code_health_212" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">123503</field>
+        <field name="name">OS DEL PERSONAL DE PRENSA DE TUCUMAN</field>
+    </record>
+    <record id="afip_code_health_213" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">123602</field>
+        <field name="name">OS DE TRABAJADORES DE PERKINS ARGENTINA S.A.I.C.</field>
+    </record>
+    <record id="afip_code_health_214" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">123701</field>
+        <field name="name">OS DE PEONES DE TAXIS DE LA CAPITAL FEDERAL</field>
+    </record>
+    <record id="afip_code_health_215" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">123909</field>
+        <field name="name">OS DE VENDEDORES AMBULANTES DE LA REPUBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_216" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">123909</field>
+        <field name="name">OS DE BOXEADORES AGREMIADOS DE LA REPUBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_217" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">124001</field>
+        <field name="name">OS DE BOXEADORES AGREMIADOS DE LA REPUBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_218" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">124506</field>
+        <field name="name">OS DE LOS TRABAJADORES DE LA INDUSTRIA DEL GAS</field>
+    </record>
+    <record id="afip_code_health_219" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">125103</field>
+        <field name="name">OS DE LOS PROFESIONALES UNIVERSITARIOS DEL AGUA Y LA ENERGIA ELECTRICA</field>
+    </record>
+    <record id="afip_code_health_220" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">125301</field>
+        <field name="name">OS FEDERAL DE LA FEDERACION DE TRABAJADORES OBRAS SANITARIA</field>
+    </record>
+    <record id="afip_code_health_221" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">125509</field>
+        <field name="name">OS DE LA FEDERACION ARGENTINA DEL TRABAJADOR DE LAS UNIVERSIDADES NACIONALE</field>
+    </record>
+    <record id="afip_code_health_222" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">125707</field>
+        <field name="name">OS UNION PERSONAL DE LA UNION DE TRABAJADORES CIVIL DE LA NACION</field>
+    </record>
+    <record id="afip_code_health_223" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">125905</field>
+        <field name="name">OS ARBITROS DEPORTIVOS DE LA REPUBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_224" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">126007</field>
+        <field name="name">OS DE LA FEDERACION GREMIAL DE LA INDUSTRIA DE LA CARNE Y SUS DERIVADOS</field>
+    </record>
+    <record id="afip_code_health_225" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">126106</field>
+        <field name="name">OS DE LOS TRABAJADORES DE LA EDUCACION PRIVADA</field>
+    </record>
+    <record id="afip_code_health_226" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">126205</field>
+        <field name="name">OS DE LOS EMPLEADOS DE COMERCIO Y ACTIVIDADES CIVILES</field>
+    </record>
+    <record id="afip_code_health_227" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">126304</field>
+        <field name="name">OS BANCARIA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_228" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">126502</field>
+        <field name="name">O.S.DE LA CONFEDERACION DE OBREROS Y EMPLEADOS MUNICIPALES ARGENTINA ( O.S.C.O.E.M.A)</field>
+    </record>
+    <record id="afip_code_health_229" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">126601</field>
+        <field name="name">OS DEL PERSONAL DE INDUSTRIAS QUIMICAS Y PETROQUIMICAS DE ZARATE CAMPANA</field>
+    </record>
+    <record id="afip_code_health_230" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">126700</field>
+        <field name="name">OS DEL PERSONAL DE LA ACTIVIDAD AZUCARERA TUCUMANA</field>
+    </record>
+    <record id="afip_code_health_231" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">126809</field>
+        <field name="name">OS DE CONDUCT.DE REMISES Y AUTOS AL INSTANTE Y AFINES</field>
+    </record>
+    <record id="afip_code_health_232" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">126908</field>
+        <field name="name">OBRA SOCIAL DE LOS MEDICOS DE LA CIUDAD DE BUENOS AIRES</field>
+    </record>
+    <record id="afip_code_health_233" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">127000</field>
+        <field name="name">OBRA SOCIAL DE TRABAJADORES DE ESTACIONES DE SERVICIO (OSTES)</field>
+    </record>
+    <record id="afip_code_health_234" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">127109</field>
+        <field name="name">OBRA SOCIAL DEL PERSONAL DE TELECOMUNICACIONES SINDICATO BUENOS AIRES (OSPETELCO)</field>
+    </record>
+    <record id="afip_code_health_235" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">127208</field>
+        <field name="name">OS DE MANDOS MEDIOS DE TELECOMUNICACIONES EN LA REPUBLICA ARGENTINA Y MERCOSUR (OSMMEDT)</field>
+    </record>
+    <record id="afip_code_health_236" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">127307</field>
+        <field name="name">OS DE TRABAJADORES VIALES Y AFINES DE LA REPUBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_237" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">127406</field>
+        <field name="name">O S DE OBREROS Y EMPLEADOS TINTOREROS, SOMBREREROS Y LAVAD. R.A.</field>
+    </record>
+    <record id="afip_code_health_238" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">127505</field>
+        <field name="name">OS DE LAS ASOCIACIONES DE EMPLEADOS DE FARMACIA</field>
+    </record>
+    <record id="afip_code_health_239" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">127604</field>
+        <field name="name">OS PARA EL PERSONAL DE OBRAS Y SERVICIOS SANITARIOS</field>
+    </record>
+    <record id="afip_code_health_240" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">127703</field>
+        <field name="name">OS PERSONAL ESTACIONES DE SERVICIO, GARAGES, PLAYAS Y LAVADEROS DE LA PROVINCIA DEL CHACO</field>
+    </record>
+    <record id="afip_code_health_241" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">127802</field>
+        <field name="name">OS DE LUZ Y FUERZA DE LA PATAGONIA</field>
+    </record>
+    <record id="afip_code_health_242" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">127901</field>
+        <field name="name">OS DE PETROLEROS PRIVADOS</field>
+    </record>
+    <record id="afip_code_health_243" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">128003</field>
+        <field name="name">OS DEL PERSONAL DE LA FED. DE SINDICATOS DE LA IND. QUIMICA Y PETROQUIMICA</field>
+    </record>
+    <record id="afip_code_health_244" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">128102</field>
+        <field name="name">OS DE LA UNION DE TRABAJADORES DEL INSSJP</field>
+    </record>
+    <record id="afip_code_health_245" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">128201</field>
+        <field name="name">OS DEL SINDICATO UNICO DE RECOLECTORES DE RESIDUOS</field>
+    </record>
+    <record id="afip_code_health_246" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">128300</field>
+        <field name="name">OBRA SOCIAL PEONES DE TAXI DE ROSARIO</field>
+    </record>
+    <record id="afip_code_health_247" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">128409</field>
+        <field name="name">OS DEL SINDICATO OBREROS Y EMPLEADOS DE EMPRESAS DE LIMPIEZA, SERVICIOS Y AFINES DE CÓRDOBA</field>
+    </record>
+    <record id="afip_code_health_248" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">128508</field>
+        <field name="name">OS DE FARMACEUTICOS Y BIOQUIMICOS</field>
+    </record>
+    <record id="afip_code_health_249" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">128607</field>
+        <field name="name">OS DE TRABAJADORES DEL PETROLEO Y GAS PRIVADO DEL CHUBUT</field>
+    </record>
+    <record id="afip_code_health_250" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">128706</field>
+        <field name="name">OS DEL PERSONAL DE DRAGADO Y BALIZAMIENTO</field>
+    </record>
+    <record id="afip_code_health_251" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">128805</field>
+        <field name="name">OS DEL PERSONAL ADUANERO DE LA REPÚBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_252" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">128904</field>
+        <field name="name">OS DE LOS TRABAJADORES ARGENTINOS DE CENTROS DE CONTACTOS</field>
+    </record>
+    <record id="afip_code_health_253" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">129006</field>
+        <field name="name">OS ASOCIACIÓN DEL PERSONAL SUPERIOR DE EPEC (OSAPSE)</field>
+    </record>
+    <record id="afip_code_health_254" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">200400</field>
+        <field name="name">OS DEL PERSONAL DE LA EMPRESA NACIONAL DE CORREOS Y TELEGRAFOS S.A. Y DE LAS COMUNICACIONES DE LA REPUBLICA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_255" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">300704</field>
+        <field name="name">OS CERAS JOHNSON</field>
+    </record>
+    <record id="afip_code_health_256" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">302106</field>
+        <field name="name">OS PARA DIRECTIVOS, TECNICOS Y EMPLEADOS DE JOHN DEERE ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_257" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">302304</field>
+        <field name="name">OS COMPAÑÍA MINERA AGUILAR S.A.</field>
+    </record>
+    <record id="afip_code_health_258" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">302809</field>
+        <field name="name">OS REFINERIAS DE MAIZ S.A.I.C.F</field>
+    </record>
+    <record id="afip_code_health_259" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">303109</field>
+        <field name="name">OS SUPERCO</field>
+    </record>
+    <record id="afip_code_health_260" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">303307</field>
+        <field name="name">OS CABOT ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_261" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">303406</field>
+        <field name="name">OS DEL PERSONAL DE SHELL - CAPSA</field>
+    </record>
+    <record id="afip_code_health_262" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">303703</field>
+        <field name="name">O.S.DEL PERSONAL DE PBBPOLISUR DE BAHIA BLANCA</field>
+    </record>
+    <record id="afip_code_health_263" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">303901</field>
+        <field name="name">OS DE FORD ARGENTINA SCA</field>
+    </record>
+    <record id="afip_code_health_264" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">304003</field>
+        <field name="name">OS DE VOLKSWAGEN ARGENTINA S.A</field>
+    </record>
+    <record id="afip_code_health_265" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">400503</field>
+        <field name="name">O.S.ASOCIACION DEL PERSONAL DE DIRECCION Y JERERQUICO DE LA INDUSTRIA DEL CIGARRILLO</field>
+    </record>
+    <record id="afip_code_health_266" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">400602</field>
+        <field name="name">OS DEL PERSONAL DIRECTIVO DE LA INDUSTRIA DE LA CONSTRUCCION</field>
+    </record>
+    <record id="afip_code_health_267" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">400701</field>
+        <field name="name">OS CAMARA DE LA INDUSTRIA CURTIDORA ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_268" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">400800</field>
+        <field name="name">O.S.DE EJECUTIVOS Y DEL PERSONAL DE DIRECCION DE EMPRESAS</field>
+    </record>
+    <record id="afip_code_health_269" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">400909</field>
+        <field name="name">OS ACCION SOCIAL DE EMPRESARIOS</field>
+    </record>
+    <record id="afip_code_health_270" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">401001</field>
+        <field name="name">OS DEL PERSONAL DE DIRECCION DE LAS EMPRESAS QUE ACTUAN EN FRUTOS DEL PAIS</field>
+    </record>
+    <record id="afip_code_health_271" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">401100</field>
+        <field name="name">OS DEL PERSONAL DE DIRECCION ALFREDO FORTABAT</field>
+    </record>
+    <record id="afip_code_health_272" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">401209</field>
+        <field name="name">OS DEL PERSONAL DE DIRECCION DE LA INDUSTRIA METALURGICA Y DEMAS ACTIVIDADES EMPRESARIAS</field>
+    </record>
+    <record id="afip_code_health_273" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">401308</field>
+        <field name="name">OS PARA EL PERSONAL DE DIRECCION DE LA INDUSTRIA MADERERA</field>
+    </record>
+    <record id="afip_code_health_274" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">401704</field>
+        <field name="name">OS DEL PERSONAL DE DIRECCION DE LA INDUSTRIA PRIVADA DEL PETROLEO</field>
+    </record>
+    <record id="afip_code_health_275" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">401803</field>
+        <field name="name">OS ASOCIACION MUTUAL DEL PERSONAL DE PHILIPS ARGENTINA (AMPAR)</field>
+    </record>
+    <record id="afip_code_health_276" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">401902</field>
+        <field name="name">OS DEL PERSONAL DE DIRECCION DE PERFUMERIAS E. W. HOPE</field>
+    </record>
+    <record id="afip_code_health_277" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">402004</field>
+        <field name="name">OS DEL PERSONAL DE DIRECCION DE LA SANIDAD LUIS PASTEUR</field>
+    </record>
+    <record id="afip_code_health_278" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">402103</field>
+        <field name="name">OS ASOCIACION DEL PERSONAL DE DIRECCION DE LA INDUSTRIA SIDERURGICA</field>
+    </record>
+    <record id="afip_code_health_279" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">402202</field>
+        <field name="name">OS MUTUALIDAD INDUSTRIAL TEXTIL ARGENTINA</field>
+    </record>
+    <record id="afip_code_health_280" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">402301</field>
+        <field name="name">OS ASOCIACION DEL PERSONAL SUPERIOR DE LA ORGANIZACIÓN TECHINT</field>
+    </record>
+    <record id="afip_code_health_281" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">402400</field>
+        <field name="name">OS PARA EL PERSONAL DE DIRECCION DE LA INDUTRIA VITIVINICOLA Y AFINES</field>
+    </record>
+    <record id="afip_code_health_282" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">402509</field>
+        <field name="name">O.S.YPF</field>
+    </record>
+    <record id="afip_code_health_283" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">402608</field>
+        <field name="name">OS ASOCIACION DE SERVICIOS SOCIALES PARA EMPRESARIOS Y PERSONAL DE DIRECCION DE EMPRESAS DEL COMERCIO, SERVICIOS, PRODUCCION, INDUSTRIA Y CIVIL (ASPE)</field>
+    </record>
+    <record id="afip_code_health_284" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">402707</field>
+        <field name="name">OS DE DIRECCION OSDO</field>
+    </record>
+    <record id="afip_code_health_285" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">402806</field>
+        <field name="name">OS DE DIRECCION DE LA ACTIVIDAD AEROCOMERCIAL PRIVADA</field>
+    </record>
+    <record id="afip_code_health_286" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">500807</field>
+        <field name="name">INSTITUTO NACIONAL DE SERVICIOS SOCIALES PARA JUBILADOS Y PENSIONADOS</field>
+    </record>
+    <record id="afip_code_health_287" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">600309</field>
+        <field name="name">ASOCIACION DE OBRAS SOCIALES DE BELLA VISTA</field>
+    </record>
+    <record id="afip_code_health_288" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">600408</field>
+        <field name="name">ASOCIACION DE OBRAS SOCIALES DE COMODORO RIVADAVIA</field>
+    </record>
+    <record id="afip_code_health_289" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">602305</field>
+        <field name="name">ASOCIACION DE OBRAS SOCIALES DE ROSARIO</field>
+    </record>
+    <record id="afip_code_health_290" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">800303</field>
+        <field name="name">OS PAPEL MISIONERO S.A.I.F. Y C.</field>
+    </record>
+    <record id="afip_code_health_291" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">800501</field>
+        <field name="name">OS DE ACEROS PARANA</field>
+    </record>
+    <record id="afip_code_health_292" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">900102</field>
+        <field name="name">O.S.DEL PERSONAL DE EMPRESAS FIAT Y EMPRESAS PEUGEOT CITROEN ARG.</field>
+    </record>
+    <record id="afip_code_health_293" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">700108</field>
+        <field name="name">OS DEL PERSONAL MUNICIPAL DE AVELLANEDA</field>
+    </record>
+    <record id="afip_code_health_294" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">700801</field>
+        <field name="name">OS DEL PERSONAL MUNICIPAL DE LA MATANZA</field>
+    </record>
+    <record id="afip_code_health_295" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">701002</field>
+        <field name="name">OS DEL PERSONAL MUNICIPAL DE TRES DE FEBRERO</field>
+    </record>
+    <record id="afip_code_health_296" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">800105</field>
+        <field name="name">OS ATANOR S.A.</field>
+    </record>
+    <record id="afip_code_health_297" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">800303</field>
+        <field name="name">OS PAPEL MISIONERO S.A.I.F. Y C.</field>
+    </record>
+    <record id="afip_code_health_298" model="l10n_ar.payroll.afip.code">
+        <field name="type">7</field>
+        <field name="code">800501</field>
+        <field name="name">OS DE ACEROS PARANA</field>
+    </record>
+</odoo>

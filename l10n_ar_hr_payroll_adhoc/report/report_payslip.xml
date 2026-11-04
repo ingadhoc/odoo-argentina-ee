@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_payslip_ar" model="ir.actions.report">
+        <field name="name">Payslip (AR)</field>
+        <field name="model">hr.payslip</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">l10n_ar_hr_payroll_adhoc.report_payslip_ar</field>
+        <field name="report_file">l10n_ar_hr_payroll_adhoc.report_payslip_ar</field>
+        <field name="print_report_name">'Payslip - %s - %s' % (object.employee_id.name, object.date_to.strftime('%m-%Y'))</field>
+        <field name="binding_model_id" ref="hr_payroll.model_hr_payslip"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Concept rows: code, detail, units, base and amount -->
+    <template id="report_payslip_ar_lines">
+        <tr t-foreach="lines" t-as="line">
+            <td class="text-end" t-out="line.salary_rule_id.l10n_ar_lsd_code or line.code"/>
+            <td t-out="line.name"/>
+            <td class="text-end">
+                <t t-if="line.rate != 100"><t t-out="abs(line.rate)" t-options="{'widget': 'float', 'precision': 2}"/>%</t>
+                <t t-elif="line.quantity != 1" t-out="line.quantity" t-options="{'widget': 'float', 'precision': 2}"/>
+            </td>
+            <td class="text-end"><span t-if="line.rate != 100 or line.quantity != 1" t-field="line.amount"/></td>
+            <td class="text-end"><span t-out="abs(line.total)" t-options="{'widget': 'monetary', 'display_currency': line.slip_id.currency_id}"/></td>
+        </tr>
+    </template>
+
+    <!-- Payslip in the format of art. 140 of Law 20.744 -->
+    <template id="report_payslip_ar">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <t t-set="company" t-value="o.company_id"/>
+                    <t t-set="employee" t-value="o.employee_id"/>
+                    <t t-set="run" t-value="o.payslip_run_id"/>
+                    <t t-set="currency" t-value="{'widget': 'monetary', 'display_currency': o.currency_id}"/>
+                    <t t-set="rem" t-value="o._l10n_ar_total(['REM'])"/>
+                    <t t-set="norem" t-value="o._l10n_ar_total(['NOREM', 'INDEM'])"/>
+                    <t t-set="deductions" t-value="abs(o._l10n_ar_total(['DED']))"/>
+                    <t t-set="employer" t-value="o._l10n_ar_total(['COMP'])"/>
+                    <div class="page" style="font-size: 11px;">
+                        <div class="row mb-2">
+                            <div class="col-2">
+                                <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 60px;"/>
+                            </div>
+                            <div class="col-6">
+                                <h5 class="mb-0" t-out="company.name"/>
+                                <div t-out="' - '.join(filter(None, [company.street, company.city, company.state_id.name]))"/>
+                                <div>C.U.I.T. <t t-out="company.partner_id.l10n_ar_formatted_vat or company.vat"/></div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <strong>Receipt Law 20.744</strong>
+                                <div t-out="run.name or o.name"/>
+                            </div>
+                        </div>
+                        <table class="table table-sm table-bordered text-center mb-1">
+                            <tr class="table-light fw-bold">
+                                <td>Month</td><td>Year</td><td>Full Name</td><td>File No.</td>
+                                <td>Salary</td><td>Seniority</td>
+                            </tr>
+                            <tr>
+                                <td t-out="o.date_to.strftime('%m')"/>
+                                <td t-out="o.date_to.year"/>
+                                <td t-out="employee.name"/>
+                                <td t-out="employee.l10n_ar_file_number"/>
+                                <td><span t-out="o.version_id.wage" t-options="currency"/></td>
+                                <td t-out="o._l10n_ar_seniority_display()"/>
+                            </tr>
+                            <tr class="table-light fw-bold">
+                                <td colspan="2">Start Date</td><td>Job Category</td><td>CUIL</td>
+                                <td>Place of Payment</td><td>Contributions Paid On</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><span t-out="employee.l10n_ar_seniority_date or o.version_id.contract_date_start" t-options="{'widget': 'date'}"/></td>
+                                <td t-out="employee.job_title or employee.job_id.name"/>
+                                <td t-out="employee.ssnid"/>
+                                <td t-out="company.city"/>
+                                <td><span t-out="run.l10n_ar_contribution_date" t-options="{'widget': 'date'}"/></td>
+                            </tr>
+                            <tr class="table-light fw-bold"><td colspan="3">Payment Date</td><td colspan="3">Health Insurance</td></tr>
+                            <tr>
+                                <td colspan="3"><span t-out="run.l10n_ar_payment_date" t-options="{'widget': 'date'}"/></td>
+                                <td colspan="3" t-out="employee.l10n_ar_health_insurance_id.name"/>
+                            </tr>
+                        </table>
+
+                        <table class="table table-sm mb-1">
+                            <thead>
+                                <tr class="table-secondary fw-bold">
+                                    <td colspan="4">Total Employer Cost</td>
+                                    <td class="text-end"><span t-out="rem + norem + employer" t-options="currency"/></td>
+                                </tr>
+                                <tr class="fw-bold">
+                                    <td class="text-end">Code</td><td>Detail</td><td class="text-end">Units</td>
+                                    <td class="text-end">Base</td><td class="text-end">Amount</td>
+                                </tr>
+                            </thead>
+                            <t t-call="l10n_ar_hr_payroll_adhoc.report_payslip_ar_lines">
+                                <t t-set="lines" t-value="o._l10n_ar_lines(['COMP'])"/>
+                            </t>
+                            <tr class="fw-bold border-top">
+                                <td colspan="4">Employer Contributions Subtotal</td>
+                                <td class="text-end"><span t-out="employer" t-options="currency"/></td>
+                            </tr>
+                        </table>
+
+                        <table class="table table-sm mb-1">
+                            <thead>
+                                <tr class="table-secondary fw-bold">
+                                    <td colspan="4">Gross Salary</td>
+                                    <td class="text-end"><span t-out="rem + norem" t-options="currency"/></td>
+                                </tr>
+                                <tr class="fw-bold">
+                                    <td class="text-end">Code</td><td>Detail</td><td class="text-end">Units</td>
+                                    <td class="text-end">Base</td><td class="text-end">Amount</td>
+                                </tr>
+                            </thead>
+                            <t t-set="rem_lines" t-value="o._l10n_ar_lines(['REM'])"/>
+                            <t t-set="norem_lines" t-value="o._l10n_ar_lines(['NOREM', 'INDEM'])"/>
+                            <t t-set="ded_lines" t-value="o._l10n_ar_lines(['DED'])"/>
+                            <tr t-if="rem_lines" class="table-light fw-bold"><td colspan="5">Remunerative</td></tr>
+                            <t t-call="l10n_ar_hr_payroll_adhoc.report_payslip_ar_lines">
+                                <t t-set="lines" t-value="rem_lines"/>
+                            </t>
+                            <tr t-if="norem_lines" class="table-light fw-bold"><td colspan="5">Non-remunerative</td></tr>
+                            <t t-call="l10n_ar_hr_payroll_adhoc.report_payslip_ar_lines">
+                                <t t-set="lines" t-value="norem_lines"/>
+                            </t>
+                            <tr t-if="ded_lines" class="table-light fw-bold"><td colspan="5">Deductions</td></tr>
+                            <t t-call="l10n_ar_hr_payroll_adhoc.report_payslip_ar_lines">
+                                <t t-set="lines" t-value="ded_lines"/>
+                            </t>
+                        </table>
+
+                        <table class="table table-sm table-bordered mb-1">
+                            <tr class="fw-bold">
+                                <td>Salary Breakdown</td>
+                                <td>Remunerative: <span t-out="rem" t-options="currency"/></td>
+                                <td>Non-remunerative: <span t-out="norem" t-options="currency"/></td>
+                                <td>Deductions: <span t-out="deductions" t-options="currency"/></td>
+                            </tr>
+                            <tr class="table-secondary fw-bold">
+                                <td colspan="3" class="text-end">Net Salary</td>
+                                <td class="text-end"><span t-field="o.net_wage"/></td>
+                            </tr>
+                        </table>
+                        <p class="fw-bold mb-0">Amount in words: <t t-out="o.currency_id.amount_to_text(o.net_wage)"/></p>
+                        <p>CBU for salary deposit: <t t-out="employee.primary_bank_account_id.acc_number"/></p>
+
+                        <t t-set="composition" t-value="o._l10n_ar_salary_composition()"/>
+                        <t t-set="chart" t-value="o._l10n_ar_employer_cost_chart()"/>
+                        <table class="table table-sm table-bordered mb-1">
+                            <tr class="table-secondary fw-bold"><td colspan="3">Salary Breakdown Detail</td></tr>
+                            <tr>
+                                <td>
+                                    <div class="fw-bold">Total Union Cost</div>
+                                    <div><span t-out="composition['union']['total']" t-options="currency"/></div>
+                                    <div>Employer: <span t-out="composition['union']['employer']" t-options="currency"/></div>
+                                    <div>Employee: <span t-out="composition['union']['employee']" t-options="currency"/></div>
+                                </td>
+                                <td>
+                                    <div class="fw-bold">Total INSSJP Cost</div>
+                                    <div><span t-out="composition['inssjp']['total']" t-options="currency"/></div>
+                                    <div>Employee: <span t-out="composition['inssjp']['employee']" t-options="currency"/></div>
+                                    <div>Employer: <span t-out="composition['inssjp']['employer']" t-options="currency"/></div>
+                                </td>
+                                <td rowspan="3" class="text-center align-middle">
+                                    <div class="fw-bold">Total Employer Cost</div>
+                                    <t t-out="chart['svg']"/>
+                                    <div t-foreach="chart['segments']" t-as="seg" class="text-start" style="font-size: 9px;">
+                                        <span t-attf-style="display: inline-block; width: 8px; height: 8px; background-color: #{seg['color']};"/>
+                                        <t t-out="seg['name']"/> <t t-out="seg['pct']"/>%
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="fw-bold">Total Social Security</div>
+                                    <div><span t-out="composition['social_security']['total']" t-options="currency"/></div>
+                                    <div>Employer: <span t-out="composition['social_security']['employer']" t-options="currency"/></div>
+                                    <div>Employee: <span t-out="composition['social_security']['employee']" t-options="currency"/></div>
+                                </td>
+                                <td>
+                                    <div class="fw-bold">Total ART Cost</div>
+                                    <div><span t-out="composition['art']['total']" t-options="currency"/></div>
+                                    <div>Employer: <span t-out="composition['art']['employer']" t-options="currency"/></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="fw-bold">Total Health Insurance</div>
+                                    <div><span t-out="composition['health']['total']" t-options="currency"/></div>
+                                    <div>Employer: <span t-out="composition['health']['employer']" t-options="currency"/></div>
+                                    <div>Employee: <span t-out="composition['health']['employee']" t-options="currency"/></div>
+                                </td>
+                                <td>
+                                    <div class="fw-bold">Total Life Insurance Cost</div>
+                                    <div><span t-out="composition['life']['total']" t-options="currency"/></div>
+                                    <div>Employer: <span t-out="composition['life']['employer']" t-options="currency"/></div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div class="border p-2 mt-4">
+                            <div class="row" style="margin-top: 50px;">
+                                <div class="col-5 offset-1 text-center border-top">Employee Signature</div>
+                                <div class="col-5 offset-1 text-center border-top">Employer Signature</div>
+                            </div>
+                            <p class="text-center fst-italic mt-2 mb-0" style="font-size: 9px;">
+                                I received the amount of this settlement as payment of my remuneration for the stated period, and its duplicate, in accordance with current law.
+                            </p>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
