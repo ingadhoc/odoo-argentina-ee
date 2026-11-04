@@ -11,7 +11,9 @@ class AccountMove(models.Model):
         # b) y no tenian fp o la fp no tenía "percepciones argentinas"
         # c) tiene impuestos con "is_backward_tax" archivados
         # re-calculamos pa percepción desde partner tax
-        for rec in self.filtered(lambda m: m.is_sale_document() and m.country_code == "AR"):
+        for rec, new in zip(self, res):
+            if not (rec.is_sale_document() and rec.country_code == "AR"):
+                continue
             backward_taxes = rec.line_ids.mapped("tax_line_id").filtered("is_backward_tax")
             for bw_tax in backward_taxes:
                 if bw_tax.active:
@@ -21,25 +23,31 @@ class AccountMove(models.Model):
                 partner_field = rec.partner_id.l10n_ar_partner_perception_ids
                 tax_line = rec.line_ids.filtered(lambda l: l.tax_line_id == bw_tax)[:1]
 
-                if partner_tax := partner_field.filtered(
+                partner_taxes = partner_field.filtered(
                     lambda x: x.company_id == tax_line.company_id
                     and x.tax_id.l10n_ar_state_id == tax_line.tax_line_id.l10n_ar_state_id
                     and (x.from_date <= tax_line.date if x.from_date else not x.from_date)
-                    and (x.to_date >= tax_line.date if x.to_date else not x.from_date)
-                ):
-                    for line in res.line_ids.filtered(lambda l: bw_tax in l.tax_ids):
+                    and (x.to_date >= tax_line.date if x.to_date else not x.to_date)
+                )
+                # prefer the one with both dates
+                if partner_tax := partner_taxes.filtered(lambda x: x.from_date and x.to_date)[:1] or partner_taxes[:1]:
+                    for line in new.line_ids.filtered(lambda l: bw_tax in l.tax_ids):
                         # remove backward tax and add partner tax
                         line.tax_ids = [(3, bw_tax.id), (4, partner_tax.tax_id.id)]
                 else:
-                    for line in res.line_ids.filtered(lambda l: bw_tax in l.tax_ids):
+                    for line in new.line_ids.filtered(lambda l: bw_tax in l.tax_ids):
                         # just remove backward tax
                         line.tax_ids = [(3, bw_tax.id)]
-                res.message_post(
-                    body=_(
-                        "The backward tax '%(tax_name)s (id: %(tax_id)s)' was removed from the copied move "
-                        "because there is no corresponding partner tax configured."
+                    new.message_post(
+                        body=_(
+                            "The backward tax '%(tax_name)s (id: %(tax_id)s)' was removed from the copied move "
+                            "because there is no corresponding partner tax configured."
+                        )
+                        % {"tax_name": bw_tax.name, "tax_id": bw_tax.id},
                     )
-                    % {"tax_name": bw_tax.name, "tax_id": bw_tax.id},
-                )
 
+        # archived backward taxes not replaced above are removed
+        for new in res:
+            for line in new.line_ids.filtered(lambda l: any(t.is_backward_tax and not t.active for t in l.tax_ids)):
+                line.tax_ids = [(3, t.id) for t in line.tax_ids.filtered(lambda t: t.is_backward_tax and not t.active)]
         return res
