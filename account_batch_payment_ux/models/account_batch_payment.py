@@ -26,17 +26,15 @@ class AccountBatchPayment(models.Model):
                 "The following payments are reconciled and cannot be reset to draft state:\n%s",
                 "\n".join(matched_entries.mapped("name")),
             )
-            action_error = {
-                "view_mode": "list",
-                "name": _("Matched Entries"),
-                "res_model": "account.bank.statement.line",
-                "type": "ir.actions.act_window",
-                "domain": [("id", "in", matched_entries.mapped("reconciled_statement_line_ids").ids)],
-                "views": [
-                    (self.env.ref("account_accountant.view_bank_statement_line_kanban_bank_rec_widget").id, "kanban"),
-                    (self.env.ref("account_accountant.view_bank_statement_line_tree_bank_rec_widget").id, "list"),
-                ],
-            }
+            statement_lines = matched_entries._get_batch_matched_statement_lines()
+            action_error = self.env["account.bank.statement.line"]._action_open_bank_reconciliation_widget(
+                extra_domain=[("id", "in", statement_lines.ids)],
+                default_context={
+                    "create": False,
+                    "default_journal_id": statement_lines[:1].journal_id.id,
+                },
+                name=_("Matched Entries"),
+            )
             raise RedirectWarning(error_msg, action_error, _("Show matched entries"))
         if self.payment_ids.move_id:
             self.payment_ids.move_id.is_move_sent = False
