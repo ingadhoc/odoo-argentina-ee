@@ -27,7 +27,6 @@ class AfipImportWizardLine(models.TransientModel):
     currency_rate = fields.Float("Exchange Rate")
     amount_total = fields.Float("Total")
     document_type = fields.Char()
-    move_type = fields.Char(string="Invoice Type")
     exists = fields.Boolean("Already Exists", compute="_compute_exists", store=True)
     iva_0 = fields.Float("VAT 0%")
     neto_grav_iva_0 = fields.Float("Net Taxable VAT 0%")
@@ -46,7 +45,13 @@ class AfipImportWizardLine(models.TransientModel):
     exento = fields.Float(string="Exempt")
     cae = fields.Char("CAE")
 
-    @api.depends("invoice_number", "partner_vat", "partner_identification_type")
+    @api.depends(
+        "invoice_number",
+        "partner_vat",
+        "partner_identification_type",
+        "wizard_id.journal_id.type",
+        "wizard_id.company_id",
+    )
     def _compute_exists(self):
         # An ARCA listing repeats the same supplier on many lines, and resolving one
         # document costs a couple of queries: it is resolved once per supplier.
@@ -256,18 +261,17 @@ class AfipImportWizardLine(models.TransientModel):
             base_amount -= self.otros_tributos
         return base_amount
 
-    def _create_line(self, partner, price_unit, tax_ids):
+    def _create_line(self, price_unit, tax_ids):
         """The command that adds one invoice line with its amount and its taxes.
 
-        The contact comes resolved from the caller: a document resolves to a couple of
-        queries, and one invoice can need a line per VAT rate.
+        The contact is not written here: the line takes it from the invoice, and writing
+        it again lets the two drift apart.
         """
         vals = {
             "name": _("Created by invoice import"),
             "quantity": 1.0,
             "price_unit": price_unit,
             "tax_ids": [(6, 0, tax_ids)],
-            "partner_id": partner.id,
         }
         return (0, 0, vals)
 

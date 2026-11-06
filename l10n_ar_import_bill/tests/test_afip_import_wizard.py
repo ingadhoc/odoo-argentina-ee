@@ -386,3 +386,25 @@ class TestAfipImportWizard(TestArCommon):
 
         line._compute_exists()
         self.assertFalse(line.exists, "Invoice 00005-00000999 is not imported yet")
+
+    def test_every_dropped_spreadsheet_is_imported(self):
+        """Dropping several listings at once must not silently keep only the first."""
+        journal = self.company_data["default_journal_purchase"]
+        with open(path.join(path.dirname(__file__), "fixtures", "invoice_partner_test.xlsx"), "rb") as f:
+            contenido = f.read()
+        attachments = self.env["ir.attachment"].create(
+            [
+                {"name": "uno.xlsx", "raw": contenido},
+                {"name": "dos.xlsx", "raw": contenido},
+            ]
+        )
+
+        action = journal.import_bills_from_xls(attachments)
+        wizard = self.env["afip.import.wizard"].browse(action["res_id"])
+
+        una_sola = self._get_wizard_from_file("invoice_partner_test.xlsx")
+        self.assertEqual(
+            len(wizard.line_ids),
+            2 * len(una_sola.line_ids),
+            "The two dropped files have to end up in the same wizard",
+        )

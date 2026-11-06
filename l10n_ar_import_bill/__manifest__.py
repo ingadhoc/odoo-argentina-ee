@@ -6,7 +6,7 @@
     "author": "ADHOC SA",
     "website": "www.adhoc.com.ar",
     "license": "LGPL-3",
-    "summary": "",
+    "summary": "Import invoices from the ARCA 'Mis Comprobantes' spreadsheet",
     "depends": ["account_accountant", "l10n_ar_edi", "account_invoice_tax", "account_balance_import"],
     "data": [
         "security/ir.access.csv",

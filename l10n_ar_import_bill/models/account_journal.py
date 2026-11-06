@@ -65,6 +65,9 @@ class AccountJournal(models.Model):
         return super().create_document_from_attachment(attachment_ids)
 
     def import_bills_from_xls(self, attachments):
+        # Every spreadsheet dropped at once goes into the same wizard: returning after
+        # the first one dropped the rest without saying so.
+        line_vals = []
         for attachment in attachments:
             file_content = attachment.raw.content
             try:
@@ -202,23 +205,23 @@ class AccountJournal(models.Model):
 
             # Filtrar solo las columnas que existen en el modelo
             filtered_df = df[valid_fields]
-            line_vals = [(0, 0, row) for row in filtered_df.to_dict(orient="records")]
+            line_vals += [(0, 0, row) for row in filtered_df.to_dict(orient="records")]
 
-            wizard = self.env["afip.import.wizard"].create(
-                {
-                    "journal_id": self.id,
-                    "company_id": self.company_id.id,
-                }
-            )
-            wizard.write({"line_ids": line_vals})
+        wizard = self.env["afip.import.wizard"].create(
+            {
+                "journal_id": self.id,
+                "company_id": self.company_id.id,
+            }
+        )
+        wizard.write({"line_ids": line_vals})
 
-            # Determine wizard name based on journal type
-            wizard_name = _("Import Customer Invoices") if self.type == "sale" else _("Import Vendor Bills")
+        # Determine wizard name based on journal type
+        wizard_name = _("Import Customer Invoices") if self.type == "sale" else _("Import Vendor Bills")
 
-            return wizard._get_records_action(
-                name=wizard_name,
-                target="new",
-            )
+        return wizard._get_records_action(
+            name=wizard_name,
+            target="new",
+        )
 
     def _validate_required_columns(self, df, required_columns):
         """Valida que el DataFrame contenga todas las columnas requeridas.

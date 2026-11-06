@@ -199,7 +199,7 @@ class AfipImportWizard(models.TransientModel):
                             )
 
                         if iva_tax:
-                            move_vals["line_ids"].append(line._create_line(partner, neto_amount, [iva_tax.id]))
+                            move_vals["line_ids"].append(line._create_line(neto_amount, [iva_tax.id]))
                         else:
                             raise UserError(
                                 _("No VAT tax found for the %s%% rate. Check whether this tax is disabled.") % vat_rate
@@ -211,7 +211,7 @@ class AfipImportWizard(models.TransientModel):
                         raise UserError(
                             _("No VAT Exempt tax found. You must create a purchase tax with the 'VAT Exempt' group.")
                         )
-                    move_vals["line_ids"].append(line._create_line(partner, line.exento, [tax_iva_exento.id]))
+                    move_vals["line_ids"].append(line._create_line(line.exento, [tax_iva_exento.id]))
 
                 # Add line for "no gravado" if it has a value
                 if line.no_gravado > 0:
@@ -222,7 +222,7 @@ class AfipImportWizard(models.TransientModel):
                                 "'Non-Taxable VAT' group."
                             )
                         )
-                    move_vals["line_ids"].append(line._create_line(partner, line.no_gravado, [tax_iva_no_gravado.id]))
+                    move_vals["line_ids"].append(line._create_line(line.no_gravado, [tax_iva_no_gravado.id]))
 
                 # Handle case when no VAT lines were created
                 if not move_vals["line_ids"]:
@@ -234,13 +234,11 @@ class AfipImportWizard(models.TransientModel):
                             )
                         )
                     # Si no encuentra IVA ni importe "No Gravado" agrega la linea como "IVA No Corresponde"
-                    move_vals["line_ids"].append(
-                        line._create_line(partner, line._neto_sin_iva(), [tax_iva_no_corresponde.id])
-                    )
+                    move_vals["line_ids"].append(line._create_line(line._neto_sin_iva(), [tax_iva_no_corresponde.id]))
             else:
                 # Sujeto Exento / Monotributo: reciben comprobantes B/C sin IVA
                 # discriminado y no tienen impuestos de IVA en su plan de cuentas.
-                move_vals["line_ids"].append(line._create_line(partner, line._neto_sin_iva(), []))
+                move_vals["line_ids"].append(line._create_line(line._neto_sin_iva(), []))
 
             move = self.env["account.move"].create(move_vals)
 
