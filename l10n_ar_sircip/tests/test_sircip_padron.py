@@ -216,10 +216,12 @@ class TestSircipPadron(common.TransactionCase):
     def test_load_test_padron_button(self):
         """The settings button loads the previous and the current month, and only where test data is allowed."""
         company = self.env.company
-        # Form goes through onchange, like the settings view
-        self.assertTrue(Form(self.env["res.config.settings"]).l10n_ar_sircip_can_load_test_padron)
-        settings = self.env["res.config.settings"].create({})
-        settings.action_l10n_ar_sircip_load_test_padron()
+        # Fixed to True: saas_client_l10n_ar, when installed, turns it off in production server mode (e.g. runbot)
+        with patch.object(type(company), "_l10n_ar_can_load_test_data", return_value=True):
+            # Form goes through onchange, like the settings view
+            self.assertTrue(Form(self.env["res.config.settings"]).l10n_ar_sircip_can_load_test_padron)
+            settings = self.env["res.config.settings"].create({})
+            settings.action_l10n_ar_sircip_load_test_padron()
         today = fields.Date.context_today(settings)
         months = {today.replace(day=1), (today - relativedelta(months=1)).replace(day=1)}
         padrons = self.env["res.company.jurisdiction.padron"].search(
