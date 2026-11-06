@@ -1533,3 +1533,20 @@ msgstr ""
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "receivable"
 msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid ""
+"Select %(company)s in the company selector to validate this return: the "
+"closing entry of the whole legal entity is built there."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid ""
+"The closing entry of this return is built in %(company)s for the whole legal"
+" entity, and these accounts belong only to a branch: %(accounts)s. Share "
+"them with %(company)s or move them up to it."
+msgstr ""

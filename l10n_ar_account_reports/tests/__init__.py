@@ -3,3 +3,4 @@ from . import test_sicore_txt
 from . import test_txt_field_format
 from . import test_open_bugs
 from . import test_inflation_adjustment
+from . import test_legal_entity_returns

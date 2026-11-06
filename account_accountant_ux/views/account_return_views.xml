@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="account_return_kanban_view" model="ir.ui.view">
+        <field name="name">account.return.kanban.accountant_ux</field>
+        <field name="model">account.return</field>
+        <field name="inherit_id" ref="account_reports.account_return_kanban_view"/>
+        <field name="arch" type="xml">
+            <field name="show_companies" position="after">
+                <field name="show_companies_mismatch_warning"/>
+                <field name="is_tax_return"/>
+            </field>
+            <!-- On tax returns the closing includes every company of the return, selected or not -->
+            <xpath expr="//div[@role='alert'][hasclass('alert-warning')]" position="attributes">
+                <attribute name="invisible">not context.get('in_checks_view') or not show_companies_mismatch_warning or is_tax_return</attribute>
+            </xpath>
+            <xpath expr="//div[@role='alert'][hasclass('alert-warning')]" position="after">
+                <div class="alert alert-warning text-center" role="alert" invisible="not context.get('in_checks_view') or not show_companies_mismatch_warning or not is_tax_return">
+                    This return includes all these companies, even the ones not selected. Select them all to see complete checks.
+                </div>
+            </xpath>
+            <xpath expr="//field[@name='company_ids']/.." position="before">
+                <div class="row oe_stat_text px-0 text-muted" invisible="not show_companies">Companies in this return:</div>
+            </xpath>
+            <xpath expr="//field[@name='company_ids']/.." position="after">
+                <div class="row oe_stat_text px-0 text-muted" invisible="context.get('in_checks_view') or not show_companies or not show_companies_mismatch_warning or not is_tax_return">This return includes all these companies, even the ones not selected. Select them all to see complete checks.</div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1697,3 +1697,25 @@ msgstr "pagable"
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "receivable"
 msgstr "por cobrar"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid ""
+"Select %(company)s in the company selector to validate this return: the "
+"closing entry of the whole legal entity is built there."
+msgstr ""
+"Seleccione %(company)s en el selector de empresas para validar esta "
+"declaración: el asiento de cierre de toda la entidad fiscal se genera ahí."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid ""
+"The closing entry of this return is built in %(company)s for the whole legal"
+" entity, and these accounts belong only to a branch: %(accounts)s. Share "
+"them with %(company)s or move them up to it."
+msgstr ""
+"El asiento de cierre de esta declaración se genera en %(company)s para toda "
+"la entidad fiscal, y estas cuentas pertenecen solo a una sucursal: "
+"%(accounts)s. Compártalas con %(company)s o muévalas a esa empresa."
