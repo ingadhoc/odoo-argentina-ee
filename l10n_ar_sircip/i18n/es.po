@@ -440,3 +440,28 @@ msgstr ""
 " la posición fiscal %(fiscal_position)s es manual con impuesto por defecto "
 "en cero, y el contacto no tiene alícuota de %(state)s para el período "
 "%(period)s: el documento sale sin la percepción de %(state)s."
+
+#. module: l10n_ar_sircip
+#: model:ir.model.fields,field_description:l10n_ar_sircip.field_res_config_settings__l10n_ar_sircip_can_load_test_padron
+msgid "Can Load SIRCIP Test Padron"
+msgstr "Puede cargar el padrón de prueba SIRCIP"
+
+#. module: l10n_ar_sircip
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sircip.res_config_settings_view_form_sircip
+msgid "Load test padron"
+msgstr "Cargar padrón de prueba"
+
+#. module: l10n_ar_sircip
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sircip.res_config_settings_view_form_sircip
+msgid "Loads a padron with fictitious CUITs for the previous and the current month, to try SIRCIP without a real file. Not available in production databases."
+msgstr "Carga un padrón con CUITs ficticios para el mes anterior y el actual, para probar SIRCIP sin un archivo real. No está disponible en bases productivas."
+
+#. module: l10n_ar_sircip
+#: code:addons/l10n_ar_sircip/models/res_config_settings.py:0
+msgid "The SIRCIP test padron can not be loaded in this database."
+msgstr "En esta base no se puede cargar el padrón de prueba SIRCIP."
+
+#. module: l10n_ar_sircip
+#: code:addons/l10n_ar_sircip/models/res_config_settings.py:0
+msgid "SIRCIP test padron loaded for the previous and the current month."
+msgstr "Padrón de prueba SIRCIP cargado para el mes anterior y el actual."
