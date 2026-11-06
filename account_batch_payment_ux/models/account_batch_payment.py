@@ -22,9 +22,10 @@ class AccountBatchPayment(models.Model):
         """Only sent batch payments can be changed to draft state"""
         matched_entries = self.payment_ids.filtered("is_matched")
         if matched_entries:
-            error_msg = "The following payments are reconciled and cannot be reset to draft state: \n"
-            for entry in matched_entries:
-                error_msg += f"{entry.name} \n"
+            error_msg = _(
+                "The following payments are reconciled and cannot be reset to draft state:\n%s",
+                "\n".join(matched_entries.mapped("name")),
+            )
             action_error = {
                 "view_mode": "list",
                 "name": _("Matched Entries"),
