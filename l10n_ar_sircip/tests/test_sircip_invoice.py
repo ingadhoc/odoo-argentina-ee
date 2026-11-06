@@ -162,8 +162,12 @@ class TestSircipInvoice(TestSircipCommon):
                     "order_line": [Command.create({"product_id": self.product_iva_21.id, "price_unit": 1000.0})],
                 }
             )
+            # Not through action_confirm: with sale_exception installed (as in the full OBA build), its exception
+            # rules (e.g. unapproved partner) stop the order before l10n_ar_sale runs this check, and sale_exception
+            # also patches action_confirm in _register_hook, so neither the test order nor an at_install tag avoid it.
+            delivery_fp = order._l10n_ar_delivery_fiscal_position()
             with self.assertRaises(RedirectWarning):
-                order.action_confirm()
+                delivery_fp._l10n_ar_check_perceptions(order.partner_id, self.today)
 
     def test_sale_order_delivery(self):
         """On the sale order, the SIRCIP perception also follows the order delivery address (passed by
