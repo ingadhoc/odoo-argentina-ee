@@ -1,6 +1,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
-import base64
+import numbers
+import re
 from io import BytesIO
 
 import pandas as pd
@@ -16,6 +17,24 @@ SPREADSHEET_MIMETYPES = (
     "application/vnd.oasis.opendocument.spreadsheet",  # .ods
     "text/csv",
 )
+
+
+def clean_document_number(value):
+    """The document number as text, whatever the spreadsheet holds.
+
+    ARCA writes it as a number and pandas reads it back as a float, so the integer
+    conversion is what strips the ".0". A passport is text and an empty cell is a NaN:
+    neither survives `int()`, which used to abort the whole listing.
+    """
+    if pd.isna(value):
+        return ""
+    if isinstance(value, numbers.Number):
+        return str(int(value))
+    text = str(value).strip()
+    # "20111111112.0": the number Excel stored, with the tail pandas adds to it.
+    if re.fullmatch(r"\d+\.0+", text):
+        return text[: text.index(".")]
+    return text
 
 
 class AccountJournal(models.Model):
@@ -46,8 +65,11 @@ class AccountJournal(models.Model):
         return super().create_document_from_attachment(attachment_ids)
 
     def import_bills_from_xls(self, attachments):
+        # Every spreadsheet dropped at once goes into the same wizard: returning after
+        # the first one dropped the rest without saying so.
+        line_vals = []
         for attachment in attachments:
-            file_content = base64.b64decode(attachment.datas)
+            file_content = attachment.raw.content
             try:
                 df = pd.read_excel(BytesIO(file_content), engine="openpyxl")  # use openpyxl for .xlsx
             except Exception as e:
@@ -112,7 +134,7 @@ class AccountJournal(models.Model):
             df["Fecha"] = pd.to_datetime(df["Fecha"], dayfirst=True).dt.date
 
             # Optimización: Convertir VAT a string de una vez
-            df[vat_column] = df[vat_column].astype(int).astype(str)
+            df[vat_column] = df[vat_column].map(clean_document_number)
 
             # Optimización: Generar número de factura usando vectorización
             df["Punto de Venta"] = df["Punto de Venta"].astype(int)
@@ -183,23 +205,23 @@ class AccountJournal(models.Model):
 
             # Filtrar solo las columnas que existen en el modelo
             filtered_df = df[valid_fields]
-            line_vals = [(0, 0, row) for row in filtered_df.to_dict(orient="records")]
+            line_vals += [(0, 0, row) for row in filtered_df.to_dict(orient="records")]
 
-            wizard = self.env["afip.import.wizard"].create(
-                {
-                    "journal_id": self.id,
-                    "company_id": self.company_id.id,
-                }
-            )
-            wizard.write({"line_ids": line_vals})
+        wizard = self.env["afip.import.wizard"].create(
+            {
+                "journal_id": self.id,
+                "company_id": self.company_id.id,
+            }
+        )
+        wizard.write({"line_ids": line_vals})
 
-            # Determine wizard name based on journal type
-            wizard_name = _("Import Customer Invoices") if self.type == "sale" else _("Import Vendor Bills")
+        # Determine wizard name based on journal type
+        wizard_name = _("Import Customer Invoices") if self.type == "sale" else _("Import Vendor Bills")
 
-            return wizard._get_records_action(
-                name=wizard_name,
-                target="new",
-            )
+        return wizard._get_records_action(
+            name=wizard_name,
+            target="new",
+        )
 
     def _validate_required_columns(self, df, required_columns):
         """Valida que el DataFrame contenga todas las columnas requeridas.

@@ -5,7 +5,7 @@
     <t t-name="account_base_import.accountImportTemplate" t-inherit="account_base_import.accountImportTemplate" t-inherit-mode="extension">
         <!-- Import Sales and Purchases from ARCA in right column -->
         <xpath expr="//div[@name='right_column']" position="inside">
-            <div class="pt-4" t-if="countryCode == 'AR'" name="import_sales_arca">
+            <div class="pt-4" t-if="this.countryCode == 'AR'" name="import_sales_arca">
                 <div class="row">
                     <div class="col-10">
                         <h3>Import Sales from ARCA</h3>
@@ -15,7 +15,7 @@
                     <div class="col-2 border-start"/>
                 </div>
             </div>
-            <div class="pt-4" t-if="countryCode == 'AR'" name="import_purchases_arca">
+            <div class="pt-4" t-if="this.countryCode == 'AR'" name="import_purchases_arca">
                 <div class="row">
                     <div class="col-10">
                         <h3>Import Purchases from ARCA</h3>
