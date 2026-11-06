@@ -133,22 +133,10 @@ class AccountReport(models.Model):
         2. one of the selected companies is an ancestor of all the others. That one files,
            and the entry is built there.
 
-        The second condition is not bureaucracy. It says without ambiguity where the entry
-        lands, and it rejects the one selection that cannot work: two sisters without their
-        parent. ``account.account._check_company_domain`` is
-        ``check_companies_domain_parent_of`` (``account/models/account_account.py``), so a
-        parent reaches its branches' selections but an account living only in one branch is
-        not reachable from its sister — the entry would not come out with a strange number,
-        it would fail the company check. A single company, the whole entity, and a parent
-        with any subset of its branches all pass for free.
-
-        ``parent_ids`` holds the company itself and comes ordered from the root
-        (``res_company._compute_parent_ids``), so "ancestor of all the others" is a
-        membership test. At most one company can satisfy it.
+        The criterion itself lives in ``res.company._get_filing_company`` (``account_ux``),
+        shared with the inflation adjustment.
         """
-        if len(companies.legal_entity_root_id) != 1:
-            return self.env["res.company"]
-        return companies.filtered(lambda company: all(company in other.parent_ids for other in companies))
+        return companies._get_filing_company()
 
     def action_closure_journal_entry(self, options):
         """Abre el wizard de liquidación para que el usuario elija el diario.
@@ -499,11 +487,12 @@ class AccountReport(models.Model):
         """
         super()._generate_common_warnings(options, warnings)
 
+        # The user picked these companies; a partial settlement is warned in its wizard instead.
         if self.filter_multi_company == "selector":
             return
 
         report_companies = self.env["res.company"].browse(self.get_report_company_ids(options))
-        missing = self.env.company._get_branches_with_same_vat().sudo() - report_companies
+        missing = report_companies._get_legal_entity_companies_left_out()
         if missing:
             warnings["account_accountant_ux.warning_missing_legal_entity_companies"] = {
                 "alert_type": "info",

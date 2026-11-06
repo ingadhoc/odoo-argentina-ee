@@ -50,10 +50,16 @@ class AccountTaxSettlementWizard(models.TransientModel):
         string="Permite desbalance",
     )
     already_settled_warning = fields.Char(
-        string="Ya liquidado",
+        string="Already Settled",
         readonly=True,
-        help="Advertencia si la compañía que liquida ya tiene un asiento de liquidación de este "
-        "reporte en el período. No bloquea: puede ser una corrección.",
+        help="Warns if the settling company already has a settlement entry of this report in the "
+        "period. It does not block: it may be a correction.",
+    )
+    missing_companies_warning = fields.Char(
+        string="Companies Left Out",
+        readonly=True,
+        help="Warns if companies of the same legal entity are not selected: their balances will not "
+        "be in the entry. It does not block: settling branch by branch is allowed.",
     )
 
     @api.model
@@ -70,7 +76,29 @@ class AccountTaxSettlementWizard(models.TransientModel):
                 res["settlement_journal_id"] = journal.id
         if company_id and "already_settled_warning" in fields_list:
             res["already_settled_warning"] = self._get_already_settled_warning(company_id)
+        if company_id and "missing_companies_warning" in fields_list:
+            res["missing_companies_warning"] = self._get_missing_companies_warning()
         return res
+
+    @api.model
+    def _get_missing_companies_warning(self):
+        """The report's suggestion, repeated on the last screen before the entry is created."""
+        report = self.env["account.report"].browse(self.env.context.get("default_report_id"))
+        if not report:
+            return False
+        options = self.env.context.get("account_report_generation_options")
+        companies = (
+            self.env["res.company"].browse(report.get_report_company_ids(options)) if options else self.env.companies
+        )
+        missing = companies._get_legal_entity_companies_left_out(selectable_only=True)
+        if not missing:
+            return False
+        return _(
+            "These companies of the same legal entity are not selected, so their balances will not be in "
+            "this entry: %(companies)s. Select them in the company selector if you meant to settle the "
+            "whole entity.",
+            companies=", ".join(missing.mapped("display_name")),
+        )
 
     @api.model
     def _get_already_settled_warning(self, company_id):
