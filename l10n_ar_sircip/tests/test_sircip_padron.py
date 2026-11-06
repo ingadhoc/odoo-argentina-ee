@@ -10,7 +10,7 @@ from unittest.mock import patch
 from dateutil.relativedelta import relativedelta
 from odoo import fields
 from odoo.exceptions import UserError, ValidationError
-from odoo.tests import common
+from odoo.tests import Form, common
 
 # Letters F, A, X, B and V; {period} is filled with the padron month
 SAMPLE_PADRON = (
@@ -216,8 +216,9 @@ class TestSircipPadron(common.TransactionCase):
     def test_load_test_padron_button(self):
         """The settings button loads the previous and the current month, and only where test data is allowed."""
         company = self.env.company
+        # Form goes through onchange, like the settings view
+        self.assertTrue(Form(self.env["res.config.settings"]).l10n_ar_sircip_can_load_test_padron)
         settings = self.env["res.config.settings"].create({})
-        self.assertTrue(settings.l10n_ar_sircip_can_load_test_padron)
         settings.action_l10n_ar_sircip_load_test_padron()
         today = fields.Date.context_today(settings)
         months = {today.replace(day=1), (today - relativedelta(months=1)).replace(day=1)}
@@ -226,7 +227,7 @@ class TestSircipPadron(common.TransactionCase):
         )
         self.assertLessEqual(months, set(padrons.mapped("l10n_ar_padron_from_date")))
         with patch.object(type(company), "_l10n_ar_can_load_test_data", return_value=False):
+            self.assertFalse(Form(self.env["res.config.settings"]).l10n_ar_sircip_can_load_test_padron)
             settings = self.env["res.config.settings"].create({})
-            self.assertFalse(settings.l10n_ar_sircip_can_load_test_padron)
             with self.assertRaises(UserError):
                 settings.action_l10n_ar_sircip_load_test_padron()
