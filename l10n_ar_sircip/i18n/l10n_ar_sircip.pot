@@ -389,3 +389,28 @@ msgid ""
 "the contact has no %(state)s aliquot for the period %(period)s: the document"
 " goes without the %(state)s perception."
 msgstr ""
+
+#. module: l10n_ar_sircip
+#: model:ir.model.fields,field_description:l10n_ar_sircip.field_res_config_settings__l10n_ar_sircip_can_load_test_padron
+msgid "Can Load SIRCIP Test Padron"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sircip.res_config_settings_view_form_sircip
+msgid "Load test padron"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sircip.res_config_settings_view_form_sircip
+msgid "Loads a padron with fictitious CUITs for the previous and the current month, to try SIRCIP without a real file. Not available in production databases."
+msgstr ""
+
+#. module: l10n_ar_sircip
+#: code:addons/l10n_ar_sircip/models/res_config_settings.py:0
+msgid "The SIRCIP test padron can not be loaded in this database."
+msgstr ""
+
+#. module: l10n_ar_sircip
+#: code:addons/l10n_ar_sircip/models/res_config_settings.py:0
+msgid "SIRCIP test padron loaded for the previous and the current month."
+msgstr ""

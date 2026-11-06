@@ -146,6 +146,11 @@ carga el padrón de demostración como padrón del mes de esa fecha (archivo ``p
 el mes ya tiene padrón SIRCIP, no hace nada. Sus CUITs son ficticios: los clientes reales de la base quedan fuera
 del padrón y les corresponde *no inscripto* (2 %) si la entrega es en una provincia adherida (ver Pendientes, 23).
 
+Desde *Ajustes > Contabilidad > Localización argentina*, con la compañía marcada como agente SIRCIP, el botón
+**Cargar padrón de prueba** lo carga para el mes anterior y el actual. Lo ven los administradores, salvo en bases
+productivas: un módulo que sabe que la base es productiva sobreescribe ``res.company._l10n_ar_can_load_test_data()``
+(de ``l10n_ar_tax``) y el botón no aparece.
+
 **Formato del padrón (CSV separado por comas):**
 
 .. code-block:: text

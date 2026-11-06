@@ -15,6 +15,12 @@
                             <label for="l10n_ar_sircip_account_id" class="col-lg-4 o_light_label"/>
                             <field name="l10n_ar_sircip_account_id" options="{'no_create': True}"/>
                         </div>
+                        <field name="l10n_ar_sircip_can_load_test_padron" invisible="1"/>
+                        <div class="mt-2" invisible="not l10n_ar_sircip_can_load_test_padron">
+                            <button name="action_l10n_ar_sircip_load_test_padron" type="object" class="btn-link" icon="fa-arrow-right"
+                                string="Load test padron"
+                                help="Loads a padron with fictitious CUITs for the previous and the current month, to try SIRCIP without a real file. Not available in production databases."/>
+                        </div>
                     </div>
                 </setting>
             </xpath>
