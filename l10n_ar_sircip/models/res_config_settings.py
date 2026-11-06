@@ -3,7 +3,7 @@
 # directory
 ##############################################################################
 from dateutil.relativedelta import relativedelta
-from odoo import _, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -16,6 +16,7 @@ class ResConfigSettings(models.TransientModel):
         string="Can Load SIRCIP Test Padron", compute="_compute_l10n_ar_sircip_can_load_test_padron"
     )
 
+    @api.depends("company_id")
     def _compute_l10n_ar_sircip_can_load_test_padron(self):
         for rec in self:
             rec.l10n_ar_sircip_can_load_test_padron = rec.company_id._l10n_ar_can_load_test_data()
