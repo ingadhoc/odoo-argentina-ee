@@ -2,18 +2,11 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from odoo import fields, models
+from odoo import models
 
 
 class ResCompany(models.Model):
     _inherit = "res.company"
-
-    block_intercompany_conciliation = fields.Boolean(
-        string="Bloquear conciliación entre diferentes compañías",
-        help="Si está activado, se bloqueará la conciliación entre movimientos "
-        "de diferentes compañías ya sean entre empresas o sucursales.",
-        default=False,
-    )
 
     def _validate_locks(self, values):
         # Bypass controlado por parámetro de sistema 'account.bypass_lock_date_validation'.
