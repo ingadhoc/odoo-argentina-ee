@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="mail_template_payslip_ar" model="mail.template">
+        <field name="name">Payroll: Payslip (AR)</field>
+        <field name="model_id" ref="hr_payroll.model_hr_payslip"/>
+        <field name="subject">Payslip {{ object.date_to.strftime('%m/%Y') }} - {{ object.employee_id.name }}</field>
+        <field name="email_from">{{ (object.company_id.email_formatted or user.email_formatted) }}</field>
+        <field name="partner_to">{{ object.employee_id.work_contact_id.id }}</field>
+        <field name="use_default_to" eval="False"/>
+        <field name="report_template_ids" eval="[(4, ref('action_report_payslip_ar'))]"/>
+        <field name="lang">{{ object.employee_id.lang }}</field>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html" type="html">
+<div style="font-size: 14px;">
+    Hello <t t-out="object.employee_id.name"/>,<br/><br/>
+    Please find attached your payslip for the period <t t-out="object.date_to.strftime('%m/%Y')"/>.<br/><br/>
+    Best regards,<br/>
+    <t t-out="object.company_id.name"/>
+</div>
+        </field>
+    </record>
+</odoo>
