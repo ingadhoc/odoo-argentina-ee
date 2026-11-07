@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="recover_invoices_form" model="ir.ui.view">
+        <field name="name">l10n_ar_edi_ff.recover.form</field>
+        <field name="model">l10n_ar_edi_ff.recover</field>
+        <field name="arch" type="xml">
+            <form string="Recover documents from ARCA">
+                <field name="state" invisible="1" force_save="1"/>
+                <field name="company_id" invisible="1"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="available_document_type_ids" invisible="1"/>
+                <div class="alert alert-info" role="alert" invisible="state != 'setup'">
+                    When ARCA authorizes a document and its answer does not reach Odoo, the document is
+                    authorized in ARCA and not in Odoo. This wizard asks ARCA for each number Odoo does not
+                    have, matches it with the drafts of the journal and assigns it to its draft. A document with no draft
+                    has to be loaded as a draft first.
+                </div>
+                <group invisible="state != 'setup'">
+                    <group>
+                        <field name="journal_id" options="{'no_create': True}"/>
+                        <field name="document_type_id" options="{'no_create': True}"/>
+                    </group>
+                    <group>
+                        <field name="number_from" force_save="1"/>
+                        <field name="number_to"/>
+                    </group>
+                </group>
+                <group invisible="state != 'review'">
+                    <group>
+                        <field name="journal_id" readonly="1"/>
+                        <field name="document_type_id" readonly="1"/>
+                    </group>
+                </group>
+                <field name="line_ids" invisible="state != 'review'" nolabel="1">
+                    <list editable="bottom" create="false" delete="false" decoration-muted="not move_id">
+                        <field name="company_id" column_invisible="1"/>
+                        <field name="currency_id" column_invisible="1"/>
+                        <field name="auth_mode" column_invisible="1" force_save="1"/>
+                        <field name="auth_code_due" column_invisible="1" force_save="1"/>
+                        <field name="result" column_invisible="1" force_save="1"/>
+                        <field name="number" force_save="1"/>
+                        <field name="date" force_save="1"/>
+                        <field name="document_number" force_save="1"/>
+                        <field name="amount_total" force_save="1"/>
+                        <field name="auth_code" force_save="1"/>
+                        <field name="partner_id" force_save="1"/>
+                        <field name="move_id"/>
+                        <field name="note" force_save="1"/>
+                    </list>
+                </field>
+                <footer>
+                    <button name="action_fetch" string="Get from ARCA" type="object" class="btn-primary"
+                            invisible="state != 'setup'"/>
+                    <button name="action_apply" string="Recover" type="object" class="btn-primary"
+                            invisible="state != 'review'"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_recover_invoices" model="ir.actions.act_window">
+        <field name="name">Recover documents from ARCA</field>
+        <field name="res_model">l10n_ar_edi_ff.recover</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_recover_invoices" parent="account.menu_finance_entries"
+              action="action_recover_invoices" sequence="101"/>
+
+</odoo>
