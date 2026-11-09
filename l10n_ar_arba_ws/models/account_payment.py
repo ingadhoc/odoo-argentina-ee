@@ -11,18 +11,15 @@ class AccountPayment(models.Model):
         asignado por ARBA para cada linea de retencion informada.
         """
         res = super().action_post()
-        for payment in self:
-            # Solo si la compañia tiene modo automatico de retenciones ARBA entonces
-            # informamos a ARBA, sino continuamos
-            if payment.company_id.l10n_ar_arba_wh_mode != "automatic":
-                continue
-
-            # Filtramos solo las lineas asociadas a retencion de arba que no tengan
-            # numero de certificado aun (no informadas)
-            wh_lines = payment.l10n_ar_withholding_line_ids.filtered(
-                lambda x: x.is_arba_ws_needed and not x.l10n_ar_cert_number
-            )
-            wh_lines.send_to_arba()
+        # Solo si la compañia tiene modo automatico de retenciones ARBA, y solo las lineas asociadas a
+        # retencion de arba que no tengan numero de certificado aun (no informadas)
+        wh_lines = self.l10n_ar_withholding_line_ids.filtered(
+            lambda x: x.company_id.l10n_ar_arba_wh_mode == "automatic"
+            and x.is_arba_ws_needed
+            and not x.l10n_ar_cert_number
+        )
+        if wh_lines:
+            wh_lines._send_to_arba_after_commit()
         return res
 
     def action_draft(self):

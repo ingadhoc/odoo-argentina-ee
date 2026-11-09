@@ -102,6 +102,20 @@ class TestArbaWithholdingWs(TestArCommon):
         self.assertEqual(self.wh_line.ref, "00001313")
         self.assertEqual(self.wh_line.l10n_ar_dj_arba_id, self.ddjj)
 
+    def test_post_sends_to_arba_only_after_commit(self):
+        """ARBA keeps what it receives even if the posting is rolled back, so nothing is sent before the commit."""
+        self.company_ri.l10n_ar_arba_wh_mode = "automatic"
+        payment = self.wh_line.payment_id
+        with self._arba_answers((200, {"nroEmision": "2026/00001/00000300"})) as calls:
+            payment.action_post()
+            self.assertFalse(calls)
+            self.assertFalse(self.wh_line.l10n_ar_cert_number)
+            self.env.cr.postcommit.run()
+
+        self.env.invalidate_all()
+        self.assertEqual(self.wh_line.l10n_ar_cert_number, "2026/00001/00000300")
+        self.assertEqual(self.wh_line.l10n_ar_dj_arba_id, self.ddjj)
+
     @mute_logger(WS_LOGGER)
     def test_connection_reset_then_duplicated_links_existing_withholding(self):
         """The first POST reaches ARBA but its answer is lost: the retry is rejected as duplicated

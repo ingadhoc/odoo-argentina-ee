@@ -1,4 +1,8 @@
+import logging
+
 from odoo import fields, models
+
+_logger = logging.getLogger(__name__)
 
 
 class L10nArPaymentWithholding(models.Model):
@@ -37,3 +41,24 @@ class L10nArPaymentWithholding(models.Model):
         """Send the withholding to ARBA webservice and store the certificate number"""
         for withholding in self.filtered(lambda x: not x.l10n_ar_cert_number and x.amount > 0):
             withholding.l10n_ar_dj_arba_id._create_withholding(withholding)
+
+    def _send_to_arba_after_commit(self):
+        """Send the withholdings to ARBA only once the current transaction is committed.
+        ARBA keeps the withholding even if the transaction is rolled back afterwards, and the next
+        attempt goes with another number, so ARBA would end up with a second one."""
+        env, wh_ids = self.env, self.ids
+
+        def send_to_arba():
+            with env.registry.cursor() as cr:
+                for withholding in env(cr=cr)[self._name].browse(wh_ids).exists():
+                    try:
+                        with cr.savepoint():
+                            withholding.send_to_arba()
+                    except Exception as exp:
+                        # The payment is already posted: leave the error where the user can retry
+                        _logger.exception("ARBA WS ERROR sending withholding %s", withholding.id)
+                        withholding.payment_id.message_post(
+                            body=withholding.env._("ERROR trying to inform the withholding: ") + str(exp)
+                        )
+
+        self.env.cr.postcommit.add(send_to_arba)
