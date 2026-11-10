@@ -249,14 +249,15 @@ número (11) sin ceros a la izquierda, y monto (14) igual a base × alícuota / 
 que es como lo valida el portal. El tipo de comprobante (8) sigue la tabla oficial: factura ``1``, nota de
 débito ``2``, recibo ``3``, nota de venta al contado ``4``, factura, nota de débito y nota de crédito de
 exportación ``5``, ``6`` y ``106``, liquidaciones ``7``, nota de crédito ``102``, y otros débitos y créditos
-``20`` y ``120``. Formato completo: ``doc/sircip/Diseno_de_Registros_del_Sistema_SIRCIP.pdf``.
+``20`` y ``120``. Formato completo: el diseño de registros de la Comisión Arbitral (ver Referencias oficiales).
 
 Referencias Oficiales
 =====================
 
-Los documentos de referencia se encuentran en la carpeta ``doc/sircip/``:
+Fuentes públicas de la Comisión Arbitral y del sector, vigentes al 29/09/2026:
 
 * `Diseño de Registros SIRCIP (PDF oficial) <https://www.ca.gob.ar/descargas/sircip/registros/Diseno_de_Registros_del_Sistema_SIRCIP.pdf>`_
+* `Padrón simulado para pruebas <https://drive.google.com/file/d/1652FyqtBO4z6OOkFoKPvWPIL9VjxSrmW/view>`_
 * `Provincias adheridas al SIRCIP <https://docs.google.com/spreadsheets/d/1yqf8C6ztxJZsmEQRC4-g2RttgMoJCqMi-Y-0_1mlugE/edit?gid=0#gid=0>`_
 * `Matriz de Aplicación de Códigos (Campo 7) <https://docs.google.com/spreadsheets/d/1MXUlg43Ng-xBIx7xO5epLf21qJCEX7oFWpCzZ2b8PIk/edit?gid=664128533#gid=664128533>`_
 * `Recopilación Q&A CESSI <https://docs.google.com/document/d/1Apl-WG06AZZHXB70uVAWbzcg3sw1ncshoaBVcTdw8AE/edit?tab=t.0>`_
@@ -310,8 +311,8 @@ Se tachan (``[x]``) a medida que se resuelven. La numeración es la de la activi
   en la base de test de un cliente. Hoy: solo los CUITs ficticios de la demo.
 
 **Posiciones en el campo 7 por jurisdicción**
-  El mapa ``SIRCIP_CAMPO7_POSITION`` en ``models/account_fiscal_position_l10n_ar_tax.py`` sale del PDF y de los
-  ejemplos del padrón. Si ARCA cambia el orden de las jurisdicciones, hay que actualizarlo.
+  El mapa ``SIRCIP_CAMPO7_POSITION`` en ``models/account_fiscal_position_l10n_ar_tax.py`` sale del diseño de
+  registros y de los ejemplos del padrón. Si ARCA cambia el orden de las jurisdicciones, hay que actualizarlo.
 
 Créditos
 ========

@@ -13,7 +13,7 @@ from odoo.exceptions import ValidationError
 _logger = logging.getLogger(__name__)
 
 # Padron letter -> aliquot (%)
-# Source: doc/sircip/Diseno_de_Registros_del_Sistema_SIRCIP.pdf
+# Source: SIRCIP record design of the Comision Arbitral
 SIRCIP_LETTER_ALIQUOT = {
     "A": 0.00,
     "B": 0.01,

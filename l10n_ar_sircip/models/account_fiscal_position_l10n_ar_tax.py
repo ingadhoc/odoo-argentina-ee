@@ -11,7 +11,7 @@ from .res_company_jurisdiction_padron import SIRCIP_LETTER_ALIQUOT
 
 # Index of each jurisdiction in padron field 7 (campo 7): 25 digits read right to left, where the
 # rightmost char (index 24) is always '0' and index = 924 - jurisdiction_code.
-# Source: doc/sircip/Diseno_de_Registros_del_Sistema_SIRCIP.pdf
+# Source: SIRCIP record design of the Comision Arbitral
 SIRCIP_CAMPO7_POSITION = {
     "901": 23,  # CABA (code C)
     "902": 22,  # Buenos Aires (code B)
