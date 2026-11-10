@@ -76,6 +76,19 @@ class TestSircipCompany(TestSircipCommon):
                     Command.create({"default_tax_id": self.tax_perc_iibb.id, "tax_type": "perception"})
                 ]
 
+    def test_adhered_provinces_from_settings(self):
+        """Settings show the adhered provinces and saving them marks and unmarks the provinces."""
+        mendoza = self.env.ref("base.state_ar_m")
+        # Demo data marks other provinces too
+        self.env["res.country.state"].search([("l10n_ar_is_sircip", "=", True)]).l10n_ar_is_sircip = False
+        (self.chaco | self.salta).l10n_ar_is_sircip = True
+        settings = self.env["res.config.settings"].with_company(self.company_ri).create({})
+        self.assertEqual(settings.l10n_ar_sircip_state_ids, self.chaco | self.salta)
+        settings.l10n_ar_sircip_state_ids = self.chaco | mendoza
+        settings.execute()
+        adhered = self.env["res.country.state"].search([("l10n_ar_is_sircip", "=", True)])
+        self.assertEqual(adhered, self.chaco | mendoza)
+
     def test_sircip_state_is_not_a_province(self):
         """The SIRCIP pseudo-province is neither offered nor assignable on contacts, but it is on the padron
         and the tax."""

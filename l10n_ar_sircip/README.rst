@@ -58,7 +58,7 @@ Para cada compañía que sea agente de percepción SIRCIP:
 #. En ``Contabilidad → Configuración → Ajustes → Localización argentina``, marcar **Agente de percepción
    SIRCIP**. Si el plan de cuentas no trae la cuenta de percepciones IIBB aplicadas, elegir la **Cuenta de
    percepción SIRCIP**; si no, se crea sola. Guardar.
-#. Marcar las provincias adheridas (ver abajo).
+#. Elegir las **Provincias adheridas a SIRCIP** en el mismo bloque de Ajustes (ver abajo).
 #. Cargar el padrón del mes (ver *Carga del Padrón*).
 #. Revisar las posiciones fiscales: el formulario avisa si a alguna le falta la línea SIRCIP o tiene percepciones
    de provincias adheridas.
@@ -73,8 +73,16 @@ Provincias adheridas
 El módulo se instala **sin provincias marcadas**. La entrada en vigencia de SIRCIP es el **01/12/2026**
 (Disposición de Presidencia 7/2026 de la Comisión Arbitral), con las jurisdicciones que se detallen en una
 disposición posterior. Cada jurisdicción informa desde cuándo implementa SIRCIP y, hasta entonces, se siguen
-usando los regímenes actuales. A medida que eso ocurra, marcar
-**Adherida a SIRCIP** (``l10n_ar_is_sircip``) en ``Contactos → Configuración → Provincias``.
+usando los regímenes actuales. A medida que eso ocurra, sumarlas en **Provincias adheridas a SIRCIP**, en el
+bloque SIRCIP de Ajustes, o marcar **Adherida a SIRCIP** (``l10n_ar_is_sircip``) en
+``Contactos → Configuración → Provincias``. Las provincias son las mismas para todas las compañías.
+
+.. warning::
+
+   Sin provincias marcadas, a un cliente **fuera del padrón** no se le aplica ninguna percepción SIRCIP, ni
+   siquiera el 2% *no inscripto*: Odoo no puede saber que la entrega es en una provincia adherida. Ajustes lo
+   avisa mientras no haya ninguna marcada. Es lo primero que conviene revisar si un cliente fuera del padrón
+   con entrega en una provincia adherida sale sin percepción.
 
 **Fuente oficial de adhesiones:** `Spreadsheet de provincias SIRCIP <https://docs.google.com/spreadsheets/d/1yqf8C6ztxJZsmEQRC4-g2RttgMoJCqMi-Y-0_1mlugE/edit?gid=0#gid=0>`_
 

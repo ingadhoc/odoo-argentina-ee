@@ -15,6 +15,21 @@ class ResConfigSettings(models.TransientModel):
     l10n_ar_sircip_can_load_test_padron = fields.Boolean(
         string="Can Load SIRCIP Test Padron", compute="_compute_l10n_ar_sircip_can_load_test_padron"
     )
+    l10n_ar_sircip_state_ids = fields.Many2many(
+        "res.country.state",
+        string="SIRCIP Adhered Provinces",
+        compute="_compute_l10n_ar_sircip_state_ids",
+        readonly=False,
+        domain="[('country_id.code', '=', 'AR')]",
+        help="Provinces adhered to SIRCIP, shared by all the companies. Out of the padron, a customer gets the 2% "
+        "'no inscripto' perception only if the delivery is in one of them.",
+    )
+
+    @api.depends("company_id")
+    def _compute_l10n_ar_sircip_state_ids(self):
+        states = self.env["res.country.state"].search([("l10n_ar_is_sircip", "=", True)])
+        for rec in self:
+            rec.l10n_ar_sircip_state_ids = states
 
     @api.depends("company_id")
     def _compute_l10n_ar_sircip_can_load_test_padron(self):
@@ -23,6 +38,10 @@ class ResConfigSettings(models.TransientModel):
 
     def set_values(self):
         super().set_values()
+        if self.l10n_ar_sircip_agent:
+            adhered = self.env["res.country.state"].search([("l10n_ar_is_sircip", "=", True)])
+            (adhered - self.l10n_ar_sircip_state_ids).l10n_ar_is_sircip = False
+            (self.l10n_ar_sircip_state_ids - adhered).l10n_ar_is_sircip = True
         # Saving with the option on completes new companies and new fiscal positions
         self.company_id._l10n_ar_sircip_setup()
 
