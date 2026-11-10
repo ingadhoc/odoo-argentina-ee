@@ -19,6 +19,8 @@ class ResConfigSettings(models.TransientModel):
         "res.country.state",
         string="SIRCIP Adhered Provinces",
         compute="_compute_l10n_ar_sircip_state_ids",
+        # Stored on the settings record, so the value edited in the form reaches set_values
+        store=True,
         readonly=False,
         domain="[('country_id.code', '=', 'AR')]",
         help="Provinces adhered to SIRCIP, shared by all the companies. Out of the padron, a customer gets the 2% "

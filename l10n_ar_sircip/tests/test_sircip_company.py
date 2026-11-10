@@ -84,7 +84,12 @@ class TestSircipCompany(TestSircipCommon):
         (self.chaco | self.salta).l10n_ar_is_sircip = True
         settings = self.env["res.config.settings"].with_company(self.company_ri).create({})
         self.assertEqual(settings.l10n_ar_sircip_state_ids, self.chaco | self.salta)
-        settings.l10n_ar_sircip_state_ids = self.chaco | mendoza
+        # As the web client does: the edited value comes in the create of a new settings record
+        settings = (
+            self.env["res.config.settings"]
+            .with_company(self.company_ri)
+            .create({"l10n_ar_sircip_state_ids": [Command.set((self.chaco | mendoza).ids)]})
+        )
         settings.execute()
         adhered = self.env["res.country.state"].search([("l10n_ar_is_sircip", "=", True)])
         self.assertEqual(adhered, self.chaco | mendoza)
