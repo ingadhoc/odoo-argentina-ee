@@ -151,8 +151,12 @@ publica el del mes siguiente el día 22, y cargarlo en el mes equivocado da erro
 
 **Padrón de prueba:** para probar sin un archivo real, ``res.company._l10n_ar_sircip_load_test_padron(fecha)``
 carga el padrón de demostración como padrón del mes de esa fecha (archivo ``padron_sircip_PRUEBA_<aaaamm>.txt``). Si
-el mes ya tiene padrón SIRCIP, no hace nada. Sus CUITs son ficticios: los clientes reales de la base quedan fuera
-del padrón y les corresponde *no inscripto* (2 %) si la entrega es en una provincia adherida (ver Pendientes, 23).
+el mes ya tiene padrón SIRCIP, no hace nada. El padrón de demostración (``demo/padron_sircip_demo.txt``) son las
+filas del **padrón simulado** que publica la Comisión Arbitral (todas las letras y los dígitos 1 a 5 como aparecen
+en las provincias adheridas y no adheridas), con los CUITs reemplazados por ficticios, más cinco clientes de demo
+con un solo dígito distinto de 2 (*SIRCIP Demo Digit 1…5*), que usan los contactos de demostración. Los clientes
+reales de la base quedan fuera del padrón y les corresponde *no inscripto* (2 %) si la entrega es en una
+provincia adherida (ver Pendientes, 23).
 
 Desde *Ajustes > Contabilidad > Localización argentina*, con la compañía marcada como agente SIRCIP, el botón
 **Cargar padrón de prueba** lo carga para el mes anterior y el actual. Lo ven los administradores, salvo en bases
