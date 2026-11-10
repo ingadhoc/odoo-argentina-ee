@@ -208,9 +208,12 @@ Generación del TXT de DDJJ
 
 #. Ir al diario **Liquidación SIRCIP Aplicado**.
 #. Seleccionar las percepciones del período a liquidar.
-#. Usar la acción **Descargar TXT** para generar el archivo ``SIRCIP_DDJJ.txt``. En el diario, el tipo de
-   liquidación es **TXT DDJJ SIRCIP (módulo SIRCIP)**.
-#. Importar en el menú *Declaración Jurada* del `Portal Federal Tributario — DDJJ <https://www.ca.gob.ar/sistemas/sircip>`_.
+#. Usar la acción **Descargar TXT** para generar el archivo ``SIRCIP_DDJJ.zip``, con un único
+   ``SIRCIP_DDJJ.txt`` adentro, como lo pide el portal. En el diario, el tipo de liquidación es **TXT DDJJ
+   SIRCIP (módulo SIRCIP)**.
+#. Importar el ZIP en el menú *Declaraciones Juradas* del `Portal Federal Tributario <https://www.ca.gob.ar/sistemas/sircip>`_.
+   El portal pide además tipear a mano la **cantidad de registros** y el **monto total** (suma del monto
+   percibido, campo 14): la ventana de descarga los muestra en un aviso arriba del archivo.
 
 .. note::
 
@@ -262,7 +265,7 @@ Se tachan (``[x]``) a medida que se resuelven. La numeración es la de la activi
 - ``[x]`` 3. Campos 10 y 11 como el ejemplo oficial (``2``, ``3431222``), sin ceros a la izquierda.
 - ``[x]`` 4. Campo 8 con todos los tipos de comprobante oficiales.
 - ``[x]`` 5. Informativo (tipo 2) para cualquier jurisdicción de entrega.
-- ``[ ]`` 6. Presentación en ZIP, con la cantidad de registros y el monto total a la vista. Hoy: TXT suelto.
+- ``[x]`` 6. Presentación en ZIP, con la cantidad de registros y el monto total a la vista.
 
 **Normativa y padrón:**
 

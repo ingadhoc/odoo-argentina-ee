@@ -2,6 +2,9 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
+import io
+import zipfile
+
 from odoo import Command
 from odoo.exceptions import ValidationError
 from odoo.tests import tagged
@@ -41,10 +44,34 @@ class TestSircipDdjj(TestSircipCommon):
                 {"name": "SIRCIP", "code": "SIRC", "type": "general", "settlement_tax": "iibb_aplicado_sircip"}
             )
 
-    def _ddjj_rows(self, moves):
+    def _ddjj_file(self, moves):
         lines = moves.line_ids.filtered("tax_line_id.l10n_ar_sircip_record_type")
-        content = self.settlement_journal.iibb_aplicado_sircip_files_values(lines)[0]["txt_content"]
+        return self.settlement_journal.iibb_aplicado_sircip_files_values(lines)[0]
+
+    def _ddjj_rows(self, moves):
+        with zipfile.ZipFile(io.BytesIO(self._ddjj_file(moves)["txt_content"])) as zip_file:
+            content = zip_file.read("SIRCIP_DDJJ.txt").decode()
         return [row.split(",") for row in content.split("\r\n") if row]
+
+    def test_ddjj_zip_and_portal_values(self):
+        """The DDJJ is a ZIP with a single TXT, and the download shows the record count and total amount that the
+        portal asks to type by hand."""
+        moves = self._sircip_invoice(self.partners["digit2"], post=True) | self._sircip_invoice(
+            self.partners["not_registered"], post=True
+        )
+        values = self._ddjj_file(moves)
+        self.assertEqual(values["txt_filename"], "SIRCIP_DDJJ.zip")
+        with zipfile.ZipFile(io.BytesIO(values["txt_content"])) as zip_file:
+            self.assertEqual(zip_file.namelist(), ["SIRCIP_DDJJ.txt"])
+        rows = self._ddjj_rows(moves)
+        total = "%.2f" % sum(float(row[AMOUNT]) for row in rows)
+        self.assertIn("Number of records: %s" % len(rows), values["notes"])
+        self.assertIn("Total amount: %s" % total, values["notes"])
+        wizard = self.env["res.download_files_wizard"].browse(
+            self.env["res.download_files_wizard"].action_get_files([values])["res_id"]
+        )
+        self.assertEqual(wizard.line_ids.txt_filename, "SIRCIP_DDJJ.zip")
+        self.assertIn("Total amount: %s" % total, wizard.notes_html)
 
     def test_ddjj_records(self):
         """Each perception is declared with its record type, delivery jurisdiction and amount; letter A invoices

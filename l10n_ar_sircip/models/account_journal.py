@@ -2,7 +2,11 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
+import io
+import zipfile
+
 from dateutil.relativedelta import relativedelta
+from markupsafe import Markup, escape
 from odoo import _, fields, models
 from odoo.addons.l10n_ar_account_tax_settlement.models.account_journal import (
     get_line_tax_base,
@@ -61,7 +65,7 @@ class AccountJournal(models.Model):
         Record types 1, 4 and 5 come from the line tax, also on credit notes, which go with negative amounts and
         the original invoice. Type 2 (informative, letter A) comes from the period invoices to those customers.
         Type 3 (excluded) is not supported yet.
-        Sources: doc/sircip/Diseno_de_Registros_del_Sistema_SIRCIP.pdf and the Comision Arbitral operating guide.
+        Sources: the SIRCIP record design and operating guide of the Comision Arbitral.
         """
         self.ensure_one()
         rows = []
@@ -79,7 +83,17 @@ class AccountJournal(models.Model):
             )
         rows += self._sircip_informative_rows(move_lines)
         content = "".join(",".join(row) + "\r\n" for row in rows)
-        return [{"txt_filename": "SIRCIP_DDJJ.txt", "txt_content": content}]
+        # The portal takes a ZIP with a single TXT, and the record count and total amount typed by hand
+        buffer = io.BytesIO()
+        with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
+            zip_file.writestr("SIRCIP_DDJJ.txt", content)
+        total = sum(float(row[13]) for row in rows)
+        notes = Markup("<p>%s</p><ul><li>%s</li><li>%s</li></ul>") % (
+            _("When filing the DDJJ in the SIRCIP portal, type these values by hand:"),
+            escape(_("Number of records: %(count)s", count=len(rows))),
+            escape(_("Total amount: %(total)s", total="%.2f" % total)),
+        )
+        return [{"txt_filename": "SIRCIP_DDJJ.zip", "txt_content": buffer.getvalue(), "notes": notes}]
 
     def _sircip_ddjj_row(self, move, date, record_type, base, aliquot):
         partner = move.commercial_partner_id
