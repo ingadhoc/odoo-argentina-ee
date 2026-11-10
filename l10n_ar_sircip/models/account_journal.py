@@ -84,16 +84,18 @@ class AccountJournal(models.Model):
         rows += self._sircip_informative_rows(move_lines)
         content = "".join(",".join(row) + "\r\n" for row in rows)
         # The portal takes a ZIP with a single TXT, and the record count and total amount typed by hand
+        months = sorted({date.strftime("%Y%m") for date in move_lines.mapped("date")})
+        name = "_".join(["SIRCIP_DDJJ"] + (months[:1] + months[-1:] if len(months) > 1 else months))
         buffer = io.BytesIO()
         with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
-            zip_file.writestr("SIRCIP_DDJJ.txt", content)
+            zip_file.writestr("%s.txt" % name, content)
         total = sum(float(row[13]) for row in rows)
         notes = Markup("<p>%s</p><ul><li>%s</li><li>%s</li></ul>") % (
             _("When filing the DDJJ in the SIRCIP portal, type these values by hand:"),
             escape(_("Number of records: %(count)s", count=len(rows))),
             escape(_("Total amount: %(total)s", total="%.2f" % total)),
         )
-        return [{"txt_filename": "SIRCIP_DDJJ.zip", "txt_content": buffer.getvalue(), "notes": notes}]
+        return [{"txt_filename": "%s.zip" % name, "txt_content": buffer.getvalue(), "notes": notes}]
 
     def _sircip_ddjj_row(self, move, date, record_type, base, aliquot):
         partner = move.commercial_partner_id

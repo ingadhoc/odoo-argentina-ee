@@ -220,8 +220,9 @@ Generación del TXT de DDJJ
 
 #. Ir al diario **Liquidación SIRCIP Aplicado**.
 #. Seleccionar las percepciones del período a liquidar.
-#. Usar la acción **Descargar TXT** para generar el archivo ``SIRCIP_DDJJ.zip``, con un único
-   ``SIRCIP_DDJJ.txt`` adentro, como lo pide el portal. En el diario, el tipo de liquidación es **TXT DDJJ
+#. Usar la acción **Descargar TXT** para generar el archivo ``SIRCIP_DDJJ_<aaaamm>.zip``, con un
+   único ``SIRCIP_DDJJ_<aaaamm>.txt`` adentro, como lo pide el portal. El período es el mes de las
+   percepciones (si son de varios meses, ``SIRCIP_DDJJ_<desde>_<hasta>``). En el diario, el tipo de liquidación es **TXT DDJJ
    SIRCIP (módulo SIRCIP)**.
 #. Importar el ZIP en el menú *Declaraciones Juradas* del `Portal Federal Tributario <https://www.ca.gob.ar/sistemas/sircip>`_.
    El portal pide además tipear a mano la **cantidad de registros** y el **monto total** (suma del monto

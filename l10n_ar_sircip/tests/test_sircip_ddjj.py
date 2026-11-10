@@ -50,7 +50,7 @@ class TestSircipDdjj(TestSircipCommon):
 
     def _ddjj_rows(self, moves):
         with zipfile.ZipFile(io.BytesIO(self._ddjj_file(moves)["txt_content"])) as zip_file:
-            content = zip_file.read("SIRCIP_DDJJ.txt").decode()
+            content = zip_file.read(zip_file.namelist()[0]).decode()
         return [row.split(",") for row in content.split("\r\n") if row]
 
     def test_ddjj_zip_and_portal_values(self):
@@ -60,9 +60,10 @@ class TestSircipDdjj(TestSircipCommon):
             self.partners["not_registered"], post=True
         )
         values = self._ddjj_file(moves)
-        self.assertEqual(values["txt_filename"], "SIRCIP_DDJJ.zip")
+        name = "SIRCIP_DDJJ_%s" % self.today.strftime("%Y%m")
+        self.assertEqual(values["txt_filename"], "%s.zip" % name)
         with zipfile.ZipFile(io.BytesIO(values["txt_content"])) as zip_file:
-            self.assertEqual(zip_file.namelist(), ["SIRCIP_DDJJ.txt"])
+            self.assertEqual(zip_file.namelist(), ["%s.txt" % name])
         rows = self._ddjj_rows(moves)
         total = "%.2f" % sum(float(row[AMOUNT]) for row in rows)
         self.assertIn("Number of records: %s" % len(rows), values["notes"])
@@ -70,7 +71,7 @@ class TestSircipDdjj(TestSircipCommon):
         wizard = self.env["res.download_files_wizard"].browse(
             self.env["res.download_files_wizard"].action_get_files([values])["res_id"]
         )
-        self.assertEqual(wizard.line_ids.txt_filename, "SIRCIP_DDJJ.zip")
+        self.assertEqual(wizard.line_ids.txt_filename, "%s.zip" % name)
         self.assertIn("Total amount: %s" % total, wizard.notes_html)
 
     def test_ddjj_records(self):
