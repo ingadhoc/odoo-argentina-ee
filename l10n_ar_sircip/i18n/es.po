@@ -465,3 +465,57 @@ msgstr "En esta base no se puede cargar el padrón de prueba SIRCIP."
 #: code:addons/l10n_ar_sircip/models/res_config_settings.py:0
 msgid "SIRCIP test padron loaded for the previous and the current month."
 msgstr "Padrón de prueba SIRCIP cargado para el mes anterior y el actual."
+
+#. module: l10n_ar_sircip
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sircip.res_config_settings_view_form_sircip
+msgid "Add the provinces as they adhere, following the"
+msgstr "Agregue las provincias a medida que adhieren, según la"
+
+#. module: l10n_ar_sircip
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sircip.res_config_settings_view_form_sircip
+msgid ""
+"No province is marked as adhered: customers out of the padron get no SIRCIP "
+"perception, not even the 2% \"no inscripto\"."
+msgstr ""
+"No hay ninguna provincia marcada como adherida: a los clientes fuera "
+"del padrón no se les aplica ninguna percepción SIRCIP, ni siquiera el "
+"2% \"no inscripto\"."
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_journal.py:0
+msgid "Number of records: %(count)s"
+msgstr "Cantidad de registros: %(count)s"
+
+#. module: l10n_ar_sircip
+#: model:ir.model.fields,help:l10n_ar_sircip.field_res_config_settings__l10n_ar_sircip_state_ids
+msgid ""
+"Provinces adhered to SIRCIP, shared by all the companies. Out of the padron,"
+" a customer gets the 2% 'no inscripto' perception only if the delivery is in"
+" one of them."
+msgstr ""
+"Provincias adheridas a SIRCIP, compartidas por todas las compañías. Un "
+"cliente fuera del padrón lleva la percepción del 2% 'no inscripto' "
+"solo si la entrega es en una de ellas."
+
+#. module: l10n_ar_sircip
+#: model:ir.model.fields,field_description:l10n_ar_sircip.field_res_config_settings__l10n_ar_sircip_state_ids
+msgid "SIRCIP Adhered Provinces"
+msgstr "Provincias adheridas a SIRCIP"
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_journal.py:0
+msgid "Total amount: %(total)s"
+msgstr "Monto total: %(total)s"
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_journal.py:0
+msgid "When filing the DDJJ in the SIRCIP portal, type these values by hand:"
+msgstr "Al presentar la DDJJ en el portal SIRCIP, tipee a mano estos valores:"
+
+#. module: l10n_ar_sircip
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sircip.res_config_settings_view_form_sircip
+msgid "official list"
+msgstr "lista oficial"

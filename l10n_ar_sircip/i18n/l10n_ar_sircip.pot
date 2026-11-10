@@ -414,3 +414,51 @@ msgstr ""
 #: code:addons/l10n_ar_sircip/models/res_config_settings.py:0
 msgid "SIRCIP test padron loaded for the previous and the current month."
 msgstr ""
+
+#. module: l10n_ar_sircip
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sircip.res_config_settings_view_form_sircip
+msgid "Add the provinces as they adhere, following the"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sircip.res_config_settings_view_form_sircip
+msgid ""
+"No province is marked as adhered: customers out of the padron get no SIRCIP "
+"perception, not even the 2% \"no inscripto\"."
+msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_journal.py:0
+msgid "Number of records: %(count)s"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#: model:ir.model.fields,help:l10n_ar_sircip.field_res_config_settings__l10n_ar_sircip_state_ids
+msgid ""
+"Provinces adhered to SIRCIP, shared by all the companies. Out of the padron,"
+" a customer gets the 2% 'no inscripto' perception only if the delivery is in"
+" one of them."
+msgstr ""
+
+#. module: l10n_ar_sircip
+#: model:ir.model.fields,field_description:l10n_ar_sircip.field_res_config_settings__l10n_ar_sircip_state_ids
+msgid "SIRCIP Adhered Provinces"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_journal.py:0
+msgid "Total amount: %(total)s"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_journal.py:0
+msgid "When filing the DDJJ in the SIRCIP portal, type these values by hand:"
+msgstr ""
+
+#. module: l10n_ar_sircip
+#: model_terms:ir.ui.view,arch_db:l10n_ar_sircip.res_config_settings_view_form_sircip
+msgid "official list"
+msgstr ""
