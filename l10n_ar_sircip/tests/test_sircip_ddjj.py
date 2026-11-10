@@ -10,20 +10,25 @@ from odoo.tools import float_round
 from .common import TestSircipCommon
 
 # 0-based positions of the DDJJ TXT fields
-CUIT, CRC, DATE, REGIME, RECORD, JURISDICTION, BASE, ALIQUOT, AMOUNT, ORIGINAL, ORIGINAL_CRC, ABM = (
-    0,
-    1,
-    2,
-    3,
-    4,
-    6,
-    11,
-    12,
-    13,
-    14,
-    15,
-    16,
-)
+(
+    CUIT,
+    CRC,
+    DATE,
+    REGIME,
+    RECORD,
+    EXEMPT,
+    JURISDICTION,
+    DOC_TYPE,
+    LETTER,
+    POS,
+    NUMBER,
+    BASE,
+    ALIQUOT,
+    AMOUNT,
+    ORIGINAL,
+    REFUND_CRC,
+    ABM,
+) = range(17)
 
 
 @tagged("post_install", "-at_install")
@@ -55,15 +60,23 @@ class TestSircipDdjj(TestSircipCommon):
         rows = self._ddjj_rows(surcharge | not_registered | refund)
         by_record = {}
         for row in rows:
-            by_record.setdefault((row[CUIT], row[RECORD]), []).append(row)
+            if row[DOC_TYPE] != "102":
+                by_record.setdefault((row[CUIT], row[RECORD]), []).append(row)
         digit2_cuit = self.partners["digit2"].vat
 
-        with self.subTest("fixed fields: regime 1, ABM A, delivery jurisdiction and 17 fields"):
+        with self.subTest("fixed fields: regime 1, exempt code 0, ABM A, delivery jurisdiction and 17 fields"):
             for row in rows:
                 self.assertEqual(len(row), 17)
                 self.assertEqual(row[REGIME], "1")
+                self.assertEqual(row[EXEMPT], "0")
                 self.assertEqual(row[ABM], "A")
                 self.assertEqual(row[JURISDICTION], "906")
+                self.assertEqual(row[REFUND_CRC], "")
+        with self.subTest("point of sale and number without leading zeros"):
+            pos, number = surcharge.l10n_latam_document_number.split("-")
+            (row,) = by_record[(digit2_cuit, "1")]
+            self.assertEqual((row[DOC_TYPE], row[LETTER]), ("1", "A"))
+            self.assertEqual((row[POS], row[NUMBER]), (str(int(pos)), str(int(number))))
         with self.subTest("amount is base x aliquot / 100, rounded to 2"):
             for row in rows:
                 expected = float_round(float(row[BASE]) * float(row[ALIQUOT]) / 100.0, precision_digits=2)
@@ -78,18 +91,29 @@ class TestSircipDdjj(TestSircipCommon):
         with self.subTest("letter A: informative type 2, aliquot 0 and the invoice base"):
             (row,) = by_record[(self.partners["letter_a"].vat, "2")]
             self.assertEqual((row[ALIQUOT], row[AMOUNT], row[BASE]), ("0.00", "0.00", "500.00"))
-        with self.subTest("credit note: type 6 with the original document and its CRC"):
-            cancelled = by_record[(digit2_cuit, "6")]
-            self.assertEqual(len(cancelled), 2)
-            for row in cancelled:
-                self.assertEqual(row[ORIGINAL], surcharge.l10n_latam_document_number)
-                self.assertEqual(row[ORIGINAL_CRC], self.crc["digit2"])
+        with self.subTest("credit note: the original record type, negative amounts and the original document"):
+            pos, number = surcharge.l10n_latam_document_number.split("-")
+            refund_rows = [row for row in rows if row[DOC_TYPE] == "102"]
+            self.assertEqual(sorted(row[RECORD] for row in refund_rows), ["1", "5"])
+            for row in refund_rows:
+                self.assertEqual(row[CUIT], digit2_cuit)
+                self.assertLess(float(row[BASE]), 0)
+                self.assertLess(float(row[AMOUNT]), 0)
+                self.assertEqual(row[ORIGINAL], "001A%05d%08d" % (int(pos), int(number)))
+                self.assertEqual(row[CRC], self.crc["digit2"])
         with self.subTest("delivery in Salta: declared in the Salta jurisdiction (917)"):
             salta = self._sircip_invoice(
                 self.partners["digit2"], shipping=self._delivery(self.partners["digit2"], self.salta), post=True
             )
             (row,) = (row for row in self._ddjj_rows(salta) if row[CUIT] == digit2_cuit)
             self.assertEqual((row[RECORD], row[JURISDICTION]), ("1", "917"))
+        with self.subTest("letter A delivered in a non adhered province: also informative"):
+            letter_a = self.partners["letter_a"]
+            self._sircip_invoice(
+                letter_a, shipping=self._delivery(letter_a, self.corrientes), price_unit=300.0, post=True
+            )
+            informative = [(row[JURISDICTION], row[BASE]) for row in self._ddjj_rows(salta) if row[RECORD] == "2"]
+            self.assertIn(("905", "300.00"), informative)
         with self.subTest("digit 4: its provincial perception is not declared, only the SIRCIP one"):
             partner = self.partners["digit4"]
             invoice = self._sircip_invoice(

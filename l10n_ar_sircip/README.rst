@@ -214,23 +214,27 @@ Generación del TXT de DDJJ
 
 .. note::
 
-   Hay otra implementación del TXT de SIRCIP en ``l10n_ar_account_tax_settlement``
-   (`PR #896 <https://github.com/ingadhoc/odoo-argentina-ee/pull/896>`_, sin mezclar), que en el diario aparece
-   como **TXT Percepciones Aplicadas SIRCIP** y genera ``Percepciones_sircip.txt``. Se va a unificar en una sola
-   (ver Pendientes); mientras tanto, la de este módulo es la que usa el tipo de registro, el CRC y la provincia
-   de entrega.
+   La otra implementación del TXT de SIRCIP, en ``l10n_ar_account_tax_settlement``
+   (`PR #896 <https://github.com/ingadhoc/odoo-argentina-ee/pull/896>`_), se cerró sin mezclar: queda solo la
+   de este módulo. De ahí se tomó la tabla de tipos de comprobante.
 
 Registros que genera (campo 5, *tipo de registro*):
 
 * **1 Percepción**, **4 No inscripto** y **5 Sobretasa**: uno por percepción, según el impuesto.
-* **6 Anulada**: las notas de crédito, con el número y el CRC de la factura original. Una nota de crédito
-  sin factura original frena la generación, porque el portal la rechaza.
-* **2 Informativo**: las facturas de los meses liquidados a clientes con letra A y entrega en provincia
-  adherida. No llevan percepción: salen de cruzar las facturas del mes.
+* **Notas de crédito**: el mismo tipo de registro que la percepción que devuelven (1, 4 o 5), comprobante
+  ``102``, base y monto **negativos**, el CRC de la factura original y, en el campo 15, la factura original
+  como tipo + letra + punto de venta + número (``001A0000203431222``). Una nota de crédito sin factura
+  original frena la generación, porque el portal la rechaza.
+* **2 Informativo**: las facturas de los meses liquidados a clientes con letra A, sea cual sea la provincia
+  de entrega. No llevan percepción: salen de cruzar las facturas del mes.
 
-Campos fijos: régimen (4) siempre ``1`` (Régimen General), ABM (17) siempre ``A``, jurisdicción (7) la de
-entrega y monto (14) igual a base × alícuota / 100 redondeado a 2 decimales, que es como lo valida el
-portal. Formato completo: ``doc/sircip/Diseno_de_Registros_del_Sistema_SIRCIP.pdf``.
+Campos fijos: régimen (4) siempre ``1`` (Régimen General), código de operación exceptuada (6) siempre ``0``,
+CRC de devolución (16) vacío, ABM (17) siempre ``A``, jurisdicción (7) la de entrega, punto de venta (10) y
+número (11) sin ceros a la izquierda, y monto (14) igual a base × alícuota / 100 redondeado a 2 decimales,
+que es como lo valida el portal. El tipo de comprobante (8) sigue la tabla oficial: factura ``1``, nota de
+débito ``2``, recibo ``3``, nota de venta al contado ``4``, factura, nota de débito y nota de crédito de
+exportación ``5``, ``6`` y ``106``, liquidaciones ``7``, nota de crédito ``102``, y otros débitos y créditos
+``20`` y ``120``. Formato completo: ``doc/sircip/Diseno_de_Registros_del_Sistema_SIRCIP.pdf``.
 
 Referencias Oficiales
 =====================
@@ -249,16 +253,15 @@ Pendientes
 
 Se tachan (``[x]``) a medida que se resuelven. La numeración es la de la actividad de la tarea.
 
-**TXT de DDJJ** (según el diseño de registros vigente y la Guía Operativa de la Comisión Arbitral; lo trabaja
-la subtarea de la DDJJ, que además decide cómo unificar las dos implementaciones del TXT):
+**TXT de DDJJ** (según el diseño de registros vigente y la Guía Operativa de la Comisión Arbitral):
 
-- ``[ ]`` 1. NC: mismo tipo de registro que la percepción original (1, 4 o 5), comprobante 102, campos 12 y 14
-  negativos, campo 15 con tipo + letra + punto de venta + número (``001A0002311312221``), campo 16 vacío y CRC
-  de la percepción original. Hoy: tipo 6, importes positivos, ``00002-03431222`` y campo 16 lleno.
-- ``[ ]`` 2. Campo 6 en ``0``. Hoy: vacío.
-- ``[ ]`` 3. Campos 10 y 11 como el ejemplo oficial (``2``, ``3431222``). Hoy: con ceros a la izquierda.
-- ``[ ]`` 4. Campo 8 con todos los tipos de comprobante oficiales. Hoy: solo 1, 2 y 102.
-- ``[ ]`` 5. Informativo (tipo 2) para cualquier jurisdicción de entrega. Hoy: solo si es adherida.
+- ``[x]`` 1. NC: mismo tipo de registro que la percepción original (1, 4 o 5), comprobante 102, campos 12 y 14
+  negativos, campo 15 con tipo + letra + punto de venta + número (``001A0000203431222``), campo 16 vacío y CRC
+  de la percepción original.
+- ``[x]`` 2. Campo 6 en ``0``.
+- ``[x]`` 3. Campos 10 y 11 como el ejemplo oficial (``2``, ``3431222``), sin ceros a la izquierda.
+- ``[x]`` 4. Campo 8 con todos los tipos de comprobante oficiales.
+- ``[x]`` 5. Informativo (tipo 2) para cualquier jurisdicción de entrega.
 - ``[ ]`` 6. Presentación en ZIP, con la cantidad de registros y el monto total a la vista. Hoy: TXT suelto.
 
 **Normativa y padrón:**
