@@ -24,6 +24,12 @@ class DownloadFilesWizard(models.TransientModel):
 
     arba_warning_html = fields.Html(string="ARBA Warning", compute="_compute_arba_warning_html")
 
+    notes_html = fields.Html(
+        string="Notes",
+        readonly=True,
+        help="Data to keep in mind when filing the files, e.g. what has to be typed by hand in the tax portal.",
+    )
+
     @api.depends("show_arba_warning")
     def _compute_arba_warning_html(self):
         for wizard in self:
@@ -36,7 +42,11 @@ class DownloadFilesWizard(models.TransientModel):
 
     @api.model
     def action_get_files(self, files_values, settlement_tax=None):
-        # transformamos a binary y agregamos formato para campos o2m
+        """Open the wizard with the files to download.
+
+        Each value has ``txt_filename`` and ``txt_content`` (text, or bytes for binary files like a ZIP), and may
+        bring ``notes``, an HTML shown as a warning on top of the files.
+        """
         has_arba = settlement_tax and (settlement_tax == "iibb_aplicado" or settlement_tax == "iibb_aplicado_act_7")
 
         wizard = self.env["res.download_files_wizard"].create(
@@ -47,13 +57,18 @@ class DownloadFilesWizard(models.TransientModel):
                         False,
                         {
                             "txt_filename": x["txt_filename"],
-                            "txt_binary": base64.b64encode(x["txt_content"].encode("utf-8")),
+                            "txt_binary": base64.b64encode(
+                                x["txt_content"]
+                                if isinstance(x["txt_content"], bytes)
+                                else x["txt_content"].encode("utf-8")
+                            ),
                         },
                     )
                     for x in files_values
                     if x["txt_content"]
                 ],
                 "show_arba_warning": has_arba,
+                "notes_html": "".join(x["notes"] for x in files_values if x.get("notes")) or False,
             }
         )
 
