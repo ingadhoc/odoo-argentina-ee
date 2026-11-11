@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_monthly_basic" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">Basic Salary</field>
+        <field name="code">BASIC</field>
+        <field name="sequence">10</field>
+        <field name="category_id" ref="category_rem"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = payslip._l10n_ar_daily_wage()
+result_qty = payslip._l10n_ar_basic_days()</field>
+    </record>
+    <record id="rule_monthly_feriado" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">Public Holiday</field>
+        <field name="code">FERIADO</field>
+        <field name="sequence">11</field>
+        <field name="category_id" ref="category_rem"/>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = payslip._l10n_ar_holiday_days() &gt; 0</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = payslip._l10n_ar_day_wage_25()
+result_qty = payslip._l10n_ar_holiday_days()</field>
+    </record>
+    <record id="rule_monthly_plusvac" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">Vacation Bonus</field>
+        <field name="code">PLUSVAC</field>
+        <field name="sequence">12</field>
+        <field name="category_id" ref="category_rem"/>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = payslip._l10n_ar_vacation_days() &gt; 0</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = payslip._l10n_ar_vacation_plus()
+result_qty = payslip._l10n_ar_vacation_days()</field>
+    </record>
+    <record id="rule_monthly_ar_rem" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">Other Remunerative</field>
+        <field name="code">AR_REM</field>
+        <field name="sequence">15</field>
+        <field name="category_id" ref="category_rem"/>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = 'AR_REM' in inputs</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = inputs['AR_REM'].amount
+result_name = inputs['AR_REM'].name</field>
+    </record>
+    <record id="rule_monthly_jub" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">Retirement</field>
+        <field name="code">JUB</field>
+        <field name="sequence">30</field>
+        <field name="category_id" ref="hr_payroll.DED"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = payslip._l10n_ar_contribution_base(categories)
+result_rate = -payslip._rule_parameter('l10n_ar_jub')</field>
+    </record>
+    <record id="rule_monthly_ley19032" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">Law 19.032</field>
+        <field name="code">LEY19032</field>
+        <field name="sequence">31</field>
+        <field name="category_id" ref="hr_payroll.DED"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = payslip._l10n_ar_contribution_base(categories)
+result_rate = -payslip._rule_parameter('l10n_ar_law19032')</field>
+    </record>
+    <record id="rule_monthly_os" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">Health Insurance</field>
+        <field name="code">OS</field>
+        <field name="sequence">32</field>
+        <field name="category_id" ref="hr_payroll.DED"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = payslip._l10n_ar_contribution_base(categories)
+result_rate = -payslip._rule_parameter('l10n_ar_health')</field>
+    </record>
+    <record id="rule_monthly_ar_norem" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">Non-remunerative</field>
+        <field name="code">AR_NOREM</field>
+        <field name="sequence">50</field>
+        <field name="category_id" ref="category_norem"/>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = 'AR_NOREM' in inputs</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = inputs['AR_NOREM'].amount
+result_name = inputs['AR_NOREM'].name</field>
+    </record>
+    <record id="rule_monthly_gross" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">Remunerative Gross</field>
+        <field name="code">GROSS</field>
+        <field name="sequence">90</field>
+        <field name="category_id" ref="hr_payroll.GROSS"/>
+        <field name="appears_on_payslip" eval="False"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = categories['REM']</field>
+    </record>
+    <record id="rule_monthly_deduction" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">Deduction</field>
+        <field name="code">DEDUCTION</field>
+        <field name="sequence">170</field>
+        <field name="category_id" ref="hr_payroll.DED"/>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = 'DEDUCTION' in inputs</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = -inputs['DEDUCTION'].amount
+result_name = inputs['DEDUCTION'].name</field>
+    </record>
+    <record id="rule_monthly_attach_salary" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">Wage Garnishment</field>
+        <field name="code">ATTACH_SALARY</field>
+        <field name="sequence">171</field>
+        <field name="category_id" ref="hr_payroll.DED"/>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = 'ATTACH_SALARY' in inputs</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = -inputs['ATTACH_SALARY'].amount
+result_name = inputs['ATTACH_SALARY'].name</field>
+    </record>
+    <record id="rule_monthly_net" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">Net Salary</field>
+        <field name="code">NET</field>
+        <field name="sequence">200</field>
+        <field name="category_id" ref="hr_payroll.NET"/>
+        <field name="employee_move_line" eval="True"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = categories['REM'] + categories['NOREM'] + categories['INDEM'] + categories['DED']</field>
+    </record>
+    <record id="rule_monthly_cjub" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">Employer Retirement</field>
+        <field name="code">CJUB</field>
+        <field name="sequence">300</field>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = categories['REM']
+result_rate = payslip._rule_parameter('l10n_ar_er_jub')</field>
+    </record>
+    <record id="rule_monthly_cley19032" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">Employer Law 19.032</field>
+        <field name="code">CLEY19032</field>
+        <field name="sequence">301</field>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = categories['REM']
+result_rate = payslip._rule_parameter('l10n_ar_er_law19032')</field>
+    </record>
+    <record id="rule_monthly_cfne" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">National Employment Fund</field>
+        <field name="code">CFNE</field>
+        <field name="sequence">302</field>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = categories['REM']
+result_rate = payslip._rule_parameter('l10n_ar_er_fne')</field>
+    </record>
+    <record id="rule_monthly_canssal" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">ANSSAL</field>
+        <field name="code">CANSSAL</field>
+        <field name="sequence">303</field>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = categories['REM']
+result_rate = payslip._rule_parameter('l10n_ar_er_anssal')</field>
+    </record>
+    <record id="rule_monthly_cfam" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">Family Allowances</field>
+        <field name="code">CFAM</field>
+        <field name="sequence">304</field>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = categories['REM']
+result_rate = payslip._rule_parameter('l10n_ar_er_family')</field>
+    </record>
+    <record id="rule_monthly_cos" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">Employer Health Insurance</field>
+        <field name="code">COS</field>
+        <field name="sequence">305</field>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = categories['REM']
+result_rate = payslip._rule_parameter('l10n_ar_er_health')</field>
+    </record>
+    <record id="rule_monthly_art" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">ART</field>
+        <field name="code">ART</field>
+        <field name="sequence">306</field>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="condition_select">none</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = categories['REM']
+result_rate = payslip._rule_parameter('l10n_ar_art')</field>
+    </record>
+    <record id="rule_monthly_artf" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">ART Fixed Fee</field>
+        <field name="code">ARTF</field>
+        <field name="sequence">307</field>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = categories['REM'] &gt; 0</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = payslip._rule_parameter('l10n_ar_art_fixed')</field>
+    </record>
+    <record id="rule_monthly_scvo" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">Mandatory Life Insurance</field>
+        <field name="code">SCVO</field>
+        <field name="sequence">308</field>
+        <field name="category_id" ref="hr_payroll.COMP"/>
+        <field name="condition_select">python</field>
+        <field name="condition_python">result = categories['REM'] &gt; 0</field>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = payslip._rule_parameter('l10n_ar_life_insurance')</field>
+    </record>
+</odoo>
