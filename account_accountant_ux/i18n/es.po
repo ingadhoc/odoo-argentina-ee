@@ -203,8 +203,6 @@ msgid "Accounting Return"
 msgstr "Declaración contable"
 
 #. module: account_accountant_ux
-<<<<<<< HEAD
-=======
 #: model:ir.model.fields,help:account_accountant_ux.field_account_tax_settlement_wizard__already_settled_warning
 msgid ""
 "Advertencia si la compañía que liquida ya tiene un asiento de liquidación de"
@@ -212,7 +210,6 @@ msgid ""
 msgstr ""
 
 #. module: account_accountant_ux
->>>>>>> 35e2b3f ([I18N] account_accountant_ux: export and translate for 20.0)
 #: model:ir.actions.server,name:account_accountant_ux.action_aged_payable
 msgid "Aged Payable Report"
 msgstr "Reporte de Antigüedad de Cuentas por Pagar"
@@ -231,11 +228,6 @@ msgstr "Balances parciales por contacto"
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_report__allow_settlement
 msgid "Allow Settlement"
 msgstr "Permitir la liquidación"
-
-#. module: account_accountant_ux
-#: model:ir.model.fields,field_description:account_accountant_ux.field_account_tax_settlement_wizard__already_settled_warning
-msgid "Already Settled"
-msgstr "Ya liquidado"
 
 #. module: account_accountant_ux
 #. odoo-python
@@ -296,7 +288,6 @@ msgstr "Cambiar fecha de bloqueo"
 
 #. module: account_accountant_ux
 #: model:ir.model,name:account_accountant_ux.model_res_company
-<<<<<<< HEAD
 msgid "Companies"
 msgstr "Empresas"
 
@@ -306,8 +297,6 @@ msgid "Companies Left Out"
 msgstr "Compañías sin seleccionar"
 
 #. module: account_accountant_ux
-=======
->>>>>>> 35e2b3f ([I18N] account_accountant_ux: export and translate for 20.0)
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_auto_reconcile_wizard__company_id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_change_lock_date__company_id
 #: model:ir.model.fields,field_description:account_accountant_ux.field_account_fiscal_year__company_id
@@ -732,15 +721,6 @@ msgstr ""
 "Aviso si quedaron sin seleccionar compañías de la misma entidad fiscal: sus "
 "saldos no van a estar en el asiento. No bloquea: se puede liquidar sucursal "
 "por sucursal."
-
-#. module: account_accountant_ux
-#: model:ir.model.fields,help:account_accountant_ux.field_account_tax_settlement_wizard__already_settled_warning
-msgid ""
-"Warns if the settling company already has a settlement entry of this report "
-"in the period. It does not block: it may be a correction."
-msgstr ""
-"Advertencia si la compañía que liquida ya tiene un asiento de liquidación "
-"de este reporte en el período. No bloquea: puede ser una corrección."
 
 #. module: account_accountant_ux
 #. odoo-javascript
