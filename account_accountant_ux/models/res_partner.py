@@ -127,3 +127,24 @@ class ResPartner(models.Model):
             return domain
         else:
             return super()._debit_search(operator, operand)
+
+    def _compute_total_due(self):
+        """Leave the lines marked no_followup out of the partner totals, as the follow-up report does.
+
+        Natively they only stay out of the *_followup totals.
+        """
+        super()._compute_total_due()
+        for account_type, overdue, partner, amount_residual_sum in self.env["account.move.line"]._read_group(
+            domain=Domain.AND([self._get_unreconciled_aml_domain(), Domain("no_followup", "=", True)]),
+            groupby=["account_type", "followup_overdue", "partner_id"],
+            aggregates=["amount_residual:sum"],
+        ):
+            partner.total_all_due -= amount_residual_sum
+            if overdue:
+                partner.total_all_overdue -= amount_residual_sum
+            if account_type == "asset_receivable":
+                partner.total_due -= amount_residual_sum
+                if overdue:
+                    partner.total_overdue -= amount_residual_sum
+        for partner in self:
+            partner.total_all_due_abs = abs(partner.total_all_due)

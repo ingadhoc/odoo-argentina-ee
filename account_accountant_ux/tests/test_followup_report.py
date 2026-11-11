@@ -69,6 +69,40 @@ class TestFollowupReport(AccountTestInvoicingCommon):
         }
         self.assertEqual(totals, {"total_due": 150.0, "total_overdue": 100.0})
 
+    def test_partner_totals_exclude_no_followup_lines(self):
+        """Given two overdue invoices, one marked no follow-up, when the partner totals are computed, then
+        they count only the other one, as the follow-up report does."""
+        invoices = self.env["account.move"]
+        for amount in (100.0, 40.0):
+            invoice = self.init_invoice(
+                "out_invoice",
+                partner=self.partner_a,
+                invoice_date=self.today - relativedelta(days=40),
+                amounts=[amount],
+            )
+            invoice.invoice_payment_term_id = False
+            invoice.invoice_date_due = self.today - relativedelta(days=30)
+            invoice.invoice_line_ids.tax_ids = False
+            invoice.action_post()
+            invoices |= invoice
+        invoices[1].line_ids.filtered(
+            lambda line: line.account_id.account_type == "asset_receivable"
+        ).no_followup = True
+
+        partner = self.partner_a.with_company(self.env.company)
+        self.assertRecordValues(
+            partner,
+            [
+                {
+                    "total_all_due": 100.0,
+                    "total_all_due_abs": 100.0,
+                    "total_all_overdue": 100.0,
+                    "total_due": 100.0,
+                    "total_overdue": 100.0,
+                }
+            ],
+        )
+
     def _get_report_lines(self):
         options = self.report.get_options(
             {
