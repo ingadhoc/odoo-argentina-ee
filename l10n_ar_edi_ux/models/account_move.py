@@ -24,6 +24,19 @@ class AccountMove(models.Model):
         help="Solo se envía esta información si la factura es de exportación y el 'Concepto AFIP' es 'Productos / Exportación definitiva de bienes'",
     )
 
+    @api.ondelete(at_uninstall=False)
+    def _unlink_except_l10n_ar_afip_authorized(self):
+        authorized = self.filtered(lambda x: x.journal_id.l10n_ar_afip_ws and x.l10n_ar_afip_result in ("A", "O"))
+        if authorized:
+            raise UserError(
+                _(
+                    "You can't delete documents already authorized in ARCA (they have a CAE): %(documents)s.\n"
+                    "Issue a credit note to cancel them. Deleting an authorized document puts the numbering "
+                    "out of sync with ARCA and can cause errors in your tax returns.",
+                    documents=", ".join(authorized.mapped("display_name")),
+                )
+            )
+
     def _found_related_invoice(self):
         """
         TODO borrar cuando se mezcle https://github.com/odoo/enterprise/pull/12972/files
