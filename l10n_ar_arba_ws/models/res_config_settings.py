@@ -1,4 +1,4 @@
-from odoo import _, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -12,6 +12,17 @@ class ResConfigSettings(models.TransientModel):
     l10n_ar_arba_client_id = fields.Char(related="company_id.l10n_ar_arba_client_id", readonly=False)
     l10n_ar_arba_client_secret = fields.Char(related="company_id.l10n_ar_arba_client_secret", readonly=False)
     l10n_ar_arba_wh_mode = fields.Selection(related="company_id.l10n_ar_arba_wh_mode", readonly=False)
+    l10n_ar_arba_ws_shared_msg = fields.Char("A122R Shared Credentials", compute="_compute_l10n_ar_arba_ws_shared_msg")
+
+    @api.depends("company_id")
+    def _compute_l10n_ar_arba_ws_shared_msg(self):
+        for rec in self:
+            ws_company = rec.company_id._l10n_ar_arba_ws_company()
+            rec.l10n_ar_arba_ws_shared_msg = ws_company != rec.company_id and _(
+                "It uses the A122R credentials (CIT, client ID, secret and environment) of company %s. "
+                "Set a CIT on this company to use its own.",
+                ws_company.name,
+            )
 
     def l10n_ar_arba_test_ws_connection(self):
         self.ensure_one()

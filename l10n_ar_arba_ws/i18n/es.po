@@ -520,6 +520,21 @@ msgid "It uses the ARBA credentials of company %s"
 msgstr "Usa las credenciales de ARBA de la empresa %s"
 
 #. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/res_config_settings.py:0
+msgid ""
+"It uses the A122R credentials (CIT, client ID, secret and environment) of "
+"company %s. Set a CIT on this company to use its own."
+msgstr ""
+"Usa las credenciales A122R (CIT, client ID, secret y entorno) de la empresa "
+"%s. Configure un CIT en esta empresa para usar las propias."
+
+#. module: l10n_ar_arba_ws
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_config_settings__l10n_ar_arba_ws_shared_msg
+msgid "A122R Shared Credentials"
+msgstr "Credenciales A122R compartidas"
+
+#. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
 msgid "It will apply to"
 msgstr "Aplicará al"

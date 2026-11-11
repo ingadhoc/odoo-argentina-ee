@@ -90,3 +90,11 @@ class TestArbaWsBranches(TransactionCase):
         self.assertEqual(ddjj.company_id, self.root)
         self.assertEqual(dj_model._ensure_dj(today, self.root), ddjj, "One DDJJ per fiscal entity and period")
         self.assertEqual(dj_model._ensure_dj(today, self.other_cuit).company_id, self.other_cuit)
+
+    def test_settings_of_a_branch_say_whose_credentials_it_uses(self):
+        branch_settings = self.env["res.config.settings"].with_company(self.branch).create({})
+        self.assertIn(self.root.name, branch_settings.l10n_ar_arba_ws_shared_msg)
+        self.assertFalse(self.env["res.config.settings"].with_company(self.root).create({}).l10n_ar_arba_ws_shared_msg)
+        self.assertFalse(
+            self.env["res.config.settings"].with_company(self.other_cuit).create({}).l10n_ar_arba_ws_shared_msg
+        )
