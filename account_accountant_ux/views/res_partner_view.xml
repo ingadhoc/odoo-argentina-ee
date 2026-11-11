@@ -8,7 +8,7 @@
         <field name="arch" type="xml">
             <div name="button_box" position="inside">
                 <button class="oe_stat_button" type="object" groups="account.group_account_invoice"
-                    name="action_open_reconcile" icon="fa-dollar">
+                    name="action_open_reconcile" icon="attach_money">
                     <div class="o_stat_info">
                         <span class="o_stat_text">Payment </span>
                         <span class="o_stat_text">Matching</span>
@@ -74,16 +74,12 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="account_followup.res_partner_view_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//button[@name='open_follow_up_report']" position="attributes">
-                <attribute name="invisible">not has_moves</attribute>
-            </xpath>
-
             <xpath expr="//button[@name='open_follow_up_report']//span[hasclass('o_stat_text')]" position="replace">
                 <span class="o_stat_text">Follow-up Report</span>
             </xpath>
             <xpath expr="//button[@name='action_open_reconcile']" position="after">
                 <button class="oe_stat_button" type="action" groups="account.group_account_invoice"
-                        name="%(account_accountant_ux.action_partner_ledger)d" icon="fa-book">
+                        name="%(account_accountant_ux.action_partner_ledger)d" icon="book">
                     <div class="o_stat_info">
                         <span class="o_stat_text">Partner</span>
                         <span class="o_stat_text">Ledger</span>

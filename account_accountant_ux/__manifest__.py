@@ -19,13 +19,13 @@
 ##############################################################################
 {
     "name": "Accounting Accountant UX",
-    "version": "19.0.1.16.0",
+    "version": "20.0.1.0.0",
     "category": "Accounting",
     "sequence": 14,
     "summary": "",
     "author": "ADHOC SA",
     "website": "www.adhoc.com.ar",
-    "license": "AGPL-3",
+    "license": "LGPL-3",
     "images": [],
     "depends": [
         "account_reports",
@@ -34,7 +34,7 @@
         "account_followup",
     ],
     "data": [
-        "security/ir.model.access.csv",
+        "security/ir.access.csv",
         "views/res_company_view.xml",
         "views/res_partner_view.xml",
         "views/account_move_line.xml",
@@ -44,20 +44,17 @@
         "wizards/account_reconcile_wizard.xml",
         "wizards/account_tax_settlement_wizard_views.xml",
         "data/account_accountant_data.xml",
-        "data/account_followup_report_data.xml",
         "views/account_journal_dashboard_view.xml",
     ],
     "assets": {
         "web.assets_backend": [
             "account_accountant_ux/static/src/components/account_report/filters/filters.js",
-            "account_accountant_ux/static/src/components/account_report/controller.js",
-            "account_accountant_ux/static/src/account_report_filters_patch.js",
             "account_accountant_ux/static/src/components/account_report/warnings.xml",
             "account_accountant_ux/static/src/move_line_list_reconcile_patch.js",
         ],
     },
     "demo": [],
-    "installable": False,
+    "installable": True,
     "auto_install": True,
     "application": False,
 }

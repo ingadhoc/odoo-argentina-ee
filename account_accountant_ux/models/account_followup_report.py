@@ -1,93 +1,105 @@
-from odoo import _, api, models
+from collections import defaultdict
+
+from odoo import _, fields, models
+from odoo.addons.account_reports.utils.report_data_objects import AccountReportColumnData, AccountReportLineData
 
 
-class FollowupReportCustomHandler(models.AbstractModel):
+class AccountFollowupCustomHandler(models.AbstractModel):
     _inherit = "account.followup.report.handler"
 
-    @api.model
-    def _setup_followup_report_columns(self):
-        """Replace the balance column with amount_residual in the followup report.
+    def _custom_line_postprocessor(self, report, options, lines):
+        lines = super()._custom_line_postprocessor(report, options, lines)
+        return self._add_partner_total_lines(report, options, lines)
 
-        Called from data on every install and update, since updating account_reports recreates balance.
-        """
-        report = self.env.ref("account_reports.followup_report")
-        if not report:
-            return
-        report.column_ids.filtered(lambda c: c.expression_label == "balance").unlink()
-        if not report.column_ids.filtered(lambda c: c.expression_label == "amount_residual"):
-            self.env["account.report.column"].create(
-                {
-                    "name": "Importe Residual",
-                    "expression_label": "amount_residual",
-                    "report_id": report.id,
-                    "sequence": 100,
-                    "figure_type": "monetary",
-                }
-            )
+    def _add_partner_total_lines(self, report, options, lines):
+        """Append Total Due / Total Overdue below each partner, summed from its move lines."""
+        columns = options["columns"]
+        residual_indexes = [i for i, col in enumerate(columns) if col["expression_label"] == "amount_residual"]
+        if not residual_indexes:
+            return lines
+        index_by_label = defaultdict(dict)
+        for i, col in enumerate(columns):
+            index_by_label[col["expression_label"]][col["column_group_index"]] = i
 
-    def _custom_options_initializer(self, report, options, previous_options):
-        super()._custom_options_initializer(report, options, previous_options)
-        # Lines left in a partial reconciliation chain have no full_reconcile_id even when fully paid.
-        options["forced_domain"] = options.get("forced_domain", []) + [("amount_residual", "!=", 0)]
+        children_by_partner_line_id = defaultdict(list)
+        last_child_position = {}
+        paginated_partner_line_ids = set()
+        for position, line in enumerate(lines):
+            markup = report._get_markup(line.id)
+            if markup == "load_more":
+                paginated_partner_line_ids.add(line.parent_id)
+            elif isinstance(markup, dict) and markup.get("groupby") == "id":
+                children_by_partner_line_id[line.parent_id].append(line)
+                last_child_position[line.parent_id] = position
 
-    def _get_report_line_move_line(
-        self, options, aml_query_result, partner_line_id, init_bal_by_col_group, level_shift=0
-    ):
-        """Add amount_residual value to the line."""
-        line = super()._get_report_line_move_line(
-            options, aml_query_result, partner_line_id, init_bal_by_col_group, level_shift
+        # With pagination the lines are partial: the totals come with the "load more" call, which returns them all.
+        total_lines_by_position = {}
+        today = fields.Date.context_today(report)
+        for partner_line_id, children in children_by_partner_line_id.items():
+            if partner_line_id in paginated_partner_line_ids:
+                continue
+            model, partner_id = report._get_model_info_from_id(partner_line_id)
+            if model != "res.partner" or not partner_id:
+                continue
+
+            totals = {}
+            for residual_index in residual_indexes:
+                group_index = columns[residual_index]["column_group_index"]
+                maturity_index = index_by_label["date_maturity"].get(group_index)
+                no_followup_index = index_by_label["no_followup"].get(group_index)
+                total_due = total_overdue = 0.0
+                for child in children:
+                    if no_followup_index is not None and child.columns[no_followup_index].no_format:
+                        continue
+                    amount = child.columns[residual_index].no_format or 0.0
+                    total_due += amount
+                    date_maturity = child.columns[maturity_index].no_format if maturity_index is not None else None
+                    if date_maturity and date_maturity < today:
+                        total_overdue += amount
+                totals[residual_index] = (total_due, total_overdue)
+
+            level = children[0].level
+            total_lines_by_position[last_child_position[partner_line_id]] = [
+                self._get_partner_total_line(
+                    report,
+                    options,
+                    partner_line_id,
+                    "total_due",
+                    _("Total Due"),
+                    {i: due for i, (due, _overdue) in totals.items()},
+                    level,
+                ),
+                self._get_partner_total_line(
+                    report,
+                    options,
+                    partner_line_id,
+                    "total_overdue",
+                    _("Total Overdue"),
+                    {i: overdue for i, (_due, overdue) in totals.items()},
+                    level,
+                ),
+            ]
+
+        if not total_lines_by_position:
+            return lines
+        result = []
+        for position, line in enumerate(lines):
+            result.append(line)
+            result.extend(total_lines_by_position.get(position, []))
+        return result
+
+    def _get_partner_total_line(self, report, options, partner_line_id, markup, name, amount_by_index, level):
+        """Build a partner summary line showing the amounts in the residual columns."""
+        return AccountReportLineData(
+            id=report._get_generic_line_id(None, None, markup=markup, parent_line_id=partner_line_id),
+            name=name,
+            level=level,
+            parent_id=partner_line_id,
+            columns=[
+                report._build_column_data(amount_by_index[i], column, options=options)
+                if i in amount_by_index
+                else AccountReportColumnData()
+                for i, column in enumerate(options["columns"])
+            ],
+            css_class="total",
         )
-        line["amount_residual"] = aml_query_result.get("amount_residual", 0.0)
-        return line
-
-    def _get_partner_aml_report_lines(
-        self, report, options, partner_line_id, aml_results, progress, offset=0, level_shift=0
-    ):
-        """Append Total Due / Total Overdue lines summed from the report's own aml_results."""
-        lines, next_progress, treated_results_count, has_more = super()._get_partner_aml_report_lines(
-            report, options, partner_line_id, aml_results, progress, offset, level_shift
-        )
-
-        # Render the total once, on the partner's last page (has_more=False).
-        if has_more:
-            return lines, next_progress, treated_results_count, has_more
-
-        _dummy1, _dummy2, partner_id = report._parse_line_id(partner_line_id)[-1]
-        if not partner_id:
-            return lines, next_progress, treated_results_count, has_more
-
-        # Single page (offset 0) → aml_results has every line; paginated → re-query the full set.
-        partner_amls = aml_results if not offset else self._get_aml_values(options, [partner_id]).get(partner_id, [])
-
-        followup_amls = [aml for aml in partner_amls if not aml.get("no_followup")]
-        total_due = sum(aml["amount_residual"] for aml in followup_amls)
-        total_overdue = sum(aml["amount_residual"] for aml in self._filter_overdue_amls_from_results(followup_amls))
-
-        lines.append(
-            self._get_partner_total_line(
-                report, options, partner_line_id, "total_due", _("Total Due"), total_due, level_shift
-            )
-        )
-        lines.append(
-            self._get_partner_total_line(
-                report, options, partner_line_id, "total_overdue", _("Total Overdue"), total_overdue, level_shift
-            )
-        )
-
-        return lines, next_progress, treated_results_count, has_more
-
-    def _get_partner_total_line(self, report, options, partner_line_id, markup, name, amount, level_shift):
-        """Build a partner summary line showing ``amount`` in the last column."""
-        last_index = len(options["columns"]) - 1
-        columns = [
-            report._build_column_dict(amount, column, options=options) if idx == last_index else {}
-            for idx, column in enumerate(options["columns"])
-        ]
-        return {
-            "id": report._get_generic_line_id(None, None, markup=markup, parent_line_id=partner_line_id),
-            "name": name,
-            "level": 3 + level_shift,
-            "parent_id": partner_line_id,
-            "columns": columns,
-            "class": "total",
-        }

@@ -128,44 +128,23 @@ class ResPartner(models.Model):
         else:
             return super()._debit_search(operator, operand)
 
-    @api.depends_context("company", "allowed_company_ids")
-    @api.depends("invoice_ids", "invoice_ids.line_ids.no_followup")
     def _compute_total_due(self):
-        """Override to exclude lines with no_followup=True from totals."""
-        from collections import defaultdict
+        """Leave the lines marked no_followup out of the partner totals, as the follow-up report does.
 
-        due_data = defaultdict(float)
-        overdue_data = defaultdict(float)
-        receivable_due_data = defaultdict(float)
-        receivable_overdue_data = defaultdict(float)
-        receivable_overdue_followup_data = defaultdict(float)
-        unreconciled_aml_ids = defaultdict(list)
-        for account_type, overdue, partner, no_followup, amount_residual_sum, aml_ids in self.env[
-            "account.move.line"
-        ]._read_group(
-            domain=self._get_unreconciled_aml_domain(),
-            groupby=["account_type", "followup_overdue", "partner_id", "no_followup"],
-            aggregates=["amount_residual:sum", "id:array_agg"],
+        Natively they only stay out of the *_followup totals.
+        """
+        super()._compute_total_due()
+        for account_type, overdue, partner, amount_residual_sum in self.env["account.move.line"]._read_group(
+            domain=Domain.AND([self._get_unreconciled_aml_domain(), Domain("no_followup", "=", True)]),
+            groupby=["account_type", "followup_overdue", "partner_id"],
+            aggregates=["amount_residual:sum"],
         ):
-            # Skip lines with no_followup=True
-            if no_followup:
-                continue
-
-            if account_type == "asset_receivable":
-                unreconciled_aml_ids[partner] += aml_ids
-                receivable_due_data[partner] += amount_residual_sum
-                if overdue:
-                    receivable_overdue_data[partner] += amount_residual_sum
-                    receivable_overdue_followup_data[partner] += amount_residual_sum
-
-            due_data[partner] += amount_residual_sum
+            partner.total_all_due -= amount_residual_sum
             if overdue:
-                overdue_data[partner] += amount_residual_sum
-
+                partner.total_all_overdue -= amount_residual_sum
+            if account_type == "asset_receivable":
+                partner.total_due -= amount_residual_sum
+                if overdue:
+                    partner.total_overdue -= amount_residual_sum
         for partner in self:
-            partner.total_all_due = due_data.get(partner, 0.0)
-            partner.total_all_overdue = overdue_data.get(partner, 0.0)
-            partner.total_due = receivable_due_data.get(partner, 0.0)
-            partner.total_overdue = receivable_overdue_data.get(partner, 0.0)
-            partner.total_overdue_followup = receivable_overdue_followup_data.get(partner, 0.0)
-            partner.unreconciled_aml_ids = self.env["account.move.line"].browse(unreconciled_aml_ids.get(partner, []))
+            partner.total_all_due_abs = abs(partner.total_all_due)
