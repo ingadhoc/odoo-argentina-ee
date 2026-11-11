@@ -57,18 +57,20 @@ class ResCompany(models.Model):
         self.ensure_one()
         return self._l10n_ar_get_same_cuit_company_with("arba_cit") or self.sudo()
 
-    def _l10n_ar_get_arba_ws_connection(self):
+    def _l10n_ar_get_arba_ws_connection(self, cr=None):
         """A122R connection, with the credentials of ``_l10n_ar_arba_ws_company``.
 
         A122R does not use the ARCA certificate, so the connection never goes to the company
         that holds the certificate (``l10n_ar_edi_ux``).
+
+        :param cr: cursor to get the connection in (e.g. to commit a new token on its own). The
+            company is still looked up in the current transaction, where it may not be committed yet.
         """
         self.ensure_one()
-        return (
-            self._l10n_ar_arba_ws_company()
-            .with_context(l10n_ar_skip_cert_ancestor=True)
-            ._l10n_ar_get_connection("A122R")
-        )
+        company = self._l10n_ar_arba_ws_company()
+        if cr:
+            company = company.with_env(company.env(cr=cr))
+        return company.with_context(l10n_ar_skip_cert_ancestor=True)._l10n_ar_get_connection("A122R")
 
     def _get_arba_ws_environment_type(self):
         """Necesario para agregar luego capa seguridad en bases test/train"""

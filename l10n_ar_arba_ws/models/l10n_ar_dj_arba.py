@@ -339,7 +339,7 @@ class L10nArDjArba(models.Model):
         error = False
         # A new token is committed in its own cursor, not in the payment posting this runs in
         with self.env.registry.cursor() as cr:
-            token = self.company_id.with_env(self.env(cr=cr))._l10n_ar_get_arba_ws_connection().token
+            token = self.company_id._l10n_ar_get_arba_ws_connection(cr=cr).token
         url = self.env["l10n_ar.afipws.connection"]._l10n_ar_get_afip_ws_url(WS_NAME, env_type) + url
         headers = {
             "Content-Type": "application/json",
