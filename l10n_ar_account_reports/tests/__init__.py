@@ -4,3 +4,4 @@ from . import test_txt_field_format
 from . import test_open_bugs
 from . import test_inflation_adjustment
 from . import test_balance_sheet_earnings
+from . import test_legal_entity_returns
