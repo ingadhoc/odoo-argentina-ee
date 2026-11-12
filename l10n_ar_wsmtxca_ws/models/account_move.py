@@ -10,6 +10,10 @@ class AccountMove(models.Model):
 
     def _l10n_ar_do_afip_ws_request_cae(self, client, auth, transport):
         """Override to handle wsmtxca webservice logic."""
+        # This override ends the chain for wsmtxca, so l10n_ar_edi_ux never gets to run its check on them.
+        for inv in self.filtered(lambda x: x.journal_id.l10n_ar_afip_ws == "wsmtxca" and not x.l10n_ar_afip_auth_code):
+            inv._check_vat_condition()
+
         non_wsmtxca = self.filtered(lambda x: x.journal_id.l10n_ar_afip_ws != "wsmtxca")
         if non_wsmtxca:
             return_info = super(AccountMove, non_wsmtxca)._l10n_ar_do_afip_ws_request_cae(client, auth, transport)
