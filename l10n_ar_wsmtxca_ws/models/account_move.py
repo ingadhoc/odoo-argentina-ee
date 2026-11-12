@@ -239,7 +239,7 @@ class AccountMove(models.Model):
                 "unidadesMtx": "1",
                 "codigoMtx": self._get_codigoMtx(line),
                 "codigo": line.product_id.default_code or None,
-                "descripcion": line.name,
+                "descripcion": line.label,
                 "codigoUnidadMedida": int(Pro_umed) or 7,
                 "cantidad": quantity if not is_senia_or_discount else None,
                 "precioUnitario": precioUnitario if not is_senia_or_discount else None,
