@@ -1,12 +1,12 @@
 # © 2025 ADHOC SA
-# License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl).
+# License LGPL-3.0 or later (https://www.gnu.org/licenses/lgpl).
 {
     "name": "Account Payment pro for l10n_ar_edi",
     "version": "20.0.1.0.0",
     "category": "Payment",
     "website": "www.adhoc.com.ar",
     "author": "ADHOC SA",
-    "license": "AGPL-3",
+    "license": "LGPL-3",
     "external_dependencies": {
         "python": [],
         "bin": [],
