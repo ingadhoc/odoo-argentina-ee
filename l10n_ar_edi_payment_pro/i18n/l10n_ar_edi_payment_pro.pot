@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 20.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-12 14:36+0000\n"
-"PO-Revision-Date: 2026-11-12 14:36+0000\n"
+"POT-Creation-Date: 2026-11-12 14:53+0000\n"
+"PO-Revision-Date: 2026-11-12 14:53+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -120,6 +120,11 @@ msgid ""
 "   :target: https://www.adhoc.com.ar\n"
 "\n"
 "ADHOC SA es una empresa argentina especializada en desarrollo de soluciones Odoo.\n"
+msgstr ""
+
+#. module: l10n_ar_edi_payment_pro
+#: model:ir.model.fields,field_description:l10n_ar_edi_payment_pro.field_account_payment_invoice_wizard__l10n_ar_afip_ws
+msgid "ARCA WS"
 msgstr ""
 
 #. module: l10n_ar_edi_payment_pro
