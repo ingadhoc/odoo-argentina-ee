@@ -30,10 +30,10 @@ class AccountMove(models.Model):
 
             ws_method = "autorizarComprobante"
             request_data = inv.wsmtxca_get_cae_request(client)
-            auth = inv.journal_id._wsmtxca_convert_auth(auth)
-            self._ws_verify_request_data(client, auth, ws_method, request_data)
+            ws_auth = inv.journal_id._wsmtxca_convert_auth(auth)
+            self._ws_verify_request_data(client, ws_auth, ws_method, request_data)
 
-            response = client.service[ws_method](auth, request_data)
+            response = client.service[ws_method](ws_auth, request_data)
             if response:
                 if response.resultado in ["A", "O"] and response.comprobanteResponse:
                     result = response.comprobanteResponse
@@ -44,25 +44,25 @@ class AccountMove(models.Model):
                         "l10n_ar_afip_result": response.resultado,
                     }
 
-            if response.arrayObservaciones:
-                obs = "".join(
-                    [
-                        _("\n* Code %s: %s", ob.codigo, ob.descripcion)
-                        for ob in response.arrayObservaciones.codigoDescripcion
-                    ]
-                )
-                return_codes += [str(ob.codigo) for ob in response.arrayObservaciones.codigoDescripcion]
-            if response.arrayErrores:
-                errors = "".join(
-                    [
-                        _("\n* Code %s: %s", err.codigo, err.descripcion)
-                        for err in response.arrayErrores.codigoDescripcion
-                    ]
-                )
-                return_codes += [str(err.codigo) for err in response.arrayErrores.codigoDescripcion]
-            if response.evento:
-                events = "".join([_("\n* Code %s: %s", response.evento.codigo, response.evento.descripcion)])
-                return_codes += [str(response.evento.codigo)]
+                if response.arrayObservaciones:
+                    obs = "".join(
+                        [
+                            _("\n* Code %s: %s", ob.codigo, ob.descripcion)
+                            for ob in response.arrayObservaciones.codigoDescripcion
+                        ]
+                    )
+                    return_codes += [str(ob.codigo) for ob in response.arrayObservaciones.codigoDescripcion]
+                if response.arrayErrores:
+                    errors = "".join(
+                        [
+                            _("\n* Code %s: %s", err.codigo, err.descripcion)
+                            for err in response.arrayErrores.codigoDescripcion
+                        ]
+                    )
+                    return_codes += [str(err.codigo) for err in response.arrayErrores.codigoDescripcion]
+                if response.evento:
+                    events = "".join([_("\n* Code %s: %s", response.evento.codigo, response.evento.descripcion)])
+                    return_codes += [str(response.evento.codigo)]
 
             return_info = inv._prepare_return_msg(afip_ws, errors, obs, events, return_codes)
             afip_result = values.get("l10n_ar_afip_result")
@@ -156,7 +156,7 @@ class AccountMove(models.Model):
         # RG2904 informa códigos de producto: una línea sin producto no tiene
         # código que informar. Las juntamos todas para no corregir de a una.
         lines_without_product = [
-            base_line["record"].name
+            base_line["record"].label
             for base_line in base_lines
             if base_line["record"].display_type not in ("line_section", "line_note")
             and not base_line["record"].product_id
