@@ -1533,3 +1533,11 @@ msgstr ""
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "receivable"
 msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid ""
+"Select %(company)s in the company selector to validate this return: the "
+"closing entry of the whole legal entity is built there."
+msgstr ""

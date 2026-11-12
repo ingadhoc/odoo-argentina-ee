@@ -49,6 +49,13 @@ class AccountReturnType(models.Model):
         "no carryover mechanism and no automatic tax_lock_date update.",
     )
 
+    @api.model
+    def _generate_or_refresh_all_returns(self, root_companies):
+        # Set by res.company.write on the branches that get the opening date from their head.
+        if self.env.context.get("l10n_ar_skip_returns_refresh"):
+            return
+        return super()._generate_or_refresh_all_returns(root_companies)
+
     @api.depends("country_id")
     def _compute_l10n_ar_is_simple_closing_return(self):
         """Compute if this return type should use simple closing (no carryover, no tax_lock_date).

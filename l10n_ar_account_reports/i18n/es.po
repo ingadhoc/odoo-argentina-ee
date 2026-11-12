@@ -1697,3 +1697,13 @@ msgstr "pagable"
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "receivable"
 msgstr "por cobrar"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid ""
+"Select %(company)s in the company selector to validate this return: the "
+"closing entry of the whole legal entity is built there."
+msgstr ""
+"Seleccione %(company)s en el selector de empresas para validar esta "
+"declaración: el asiento de cierre de toda la entidad fiscal se genera ahí."
