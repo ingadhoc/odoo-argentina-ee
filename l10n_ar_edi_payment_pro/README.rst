@@ -50,6 +50,7 @@ Cuando creas un pago con facturación automática, el wizard ahora incluye:
 
    * Fecha de inicio del período
    * Fecha de fin del período
+   * Son obligatorias cuando el diario es de factura electrónica de mercado interno (``wsfe``), el documento es una nota de crédito o de débito y no se elige factura de origen: es la misma exigencia que ARCA hace al publicar la nota
 
 2. **Factura de Origen**:
 
