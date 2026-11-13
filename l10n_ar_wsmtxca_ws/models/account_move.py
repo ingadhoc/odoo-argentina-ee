@@ -10,6 +10,10 @@ class AccountMove(models.Model):
 
     def _l10n_ar_do_afip_ws_request_cae(self, client, auth, transport):
         """Override to handle wsmtxca webservice logic."""
+        # This override ends the chain for wsmtxca, so l10n_ar_edi_ux never gets to run its check on them.
+        for inv in self.filtered(lambda x: x.journal_id.l10n_ar_afip_ws == "wsmtxca" and not x.l10n_ar_afip_auth_code):
+            inv._check_vat_condition()
+
         non_wsmtxca = self.filtered(lambda x: x.journal_id.l10n_ar_afip_ws != "wsmtxca")
         if non_wsmtxca:
             return_info = super(AccountMove, non_wsmtxca)._l10n_ar_do_afip_ws_request_cae(client, auth, transport)
@@ -26,10 +30,10 @@ class AccountMove(models.Model):
 
             ws_method = "autorizarComprobante"
             request_data = inv.wsmtxca_get_cae_request(client)
-            auth = inv.journal_id._wsmtxca_convert_auth(auth)
-            self._ws_verify_request_data(client, auth, ws_method, request_data)
+            ws_auth = inv.journal_id._wsmtxca_convert_auth(auth)
+            self._ws_verify_request_data(client, ws_auth, ws_method, request_data)
 
-            response = client.service[ws_method](auth, request_data)
+            response = client.service[ws_method](ws_auth, request_data)
             if response:
                 if response.resultado in ["A", "O"] and response.comprobanteResponse:
                     result = response.comprobanteResponse
@@ -40,25 +44,25 @@ class AccountMove(models.Model):
                         "l10n_ar_afip_result": response.resultado,
                     }
 
-            if response.arrayObservaciones:
-                obs = "".join(
-                    [
-                        _("\n* Code %s: %s", ob.codigo, ob.descripcion)
-                        for ob in response.arrayObservaciones.codigoDescripcion
-                    ]
-                )
-                return_codes += [str(ob.codigo) for ob in response.arrayObservaciones.codigoDescripcion]
-            if response.arrayErrores:
-                errors = "".join(
-                    [
-                        _("\n* Code %s: %s", err.codigo, err.descripcion)
-                        for err in response.arrayErrores.codigoDescripcion
-                    ]
-                )
-                return_codes += [str(err.codigo) for err in response.arrayErrores.codigoDescripcion]
-            if response.evento:
-                events = "".join([_("\n* Code %s: %s", response.evento.codigo, response.evento.descripcion)])
-                return_codes += [str(response.evento.codigo)]
+                if response.arrayObservaciones:
+                    obs = "".join(
+                        [
+                            _("\n* Code %s: %s", ob.codigo, ob.descripcion)
+                            for ob in response.arrayObservaciones.codigoDescripcion
+                        ]
+                    )
+                    return_codes += [str(ob.codigo) for ob in response.arrayObservaciones.codigoDescripcion]
+                if response.arrayErrores:
+                    errors = "".join(
+                        [
+                            _("\n* Code %s: %s", err.codigo, err.descripcion)
+                            for err in response.arrayErrores.codigoDescripcion
+                        ]
+                    )
+                    return_codes += [str(err.codigo) for err in response.arrayErrores.codigoDescripcion]
+                if response.evento:
+                    events = "".join([_("\n* Code %s: %s", response.evento.codigo, response.evento.descripcion)])
+                    return_codes += [str(response.evento.codigo)]
 
             return_info = inv._prepare_return_msg(afip_ws, errors, obs, events, return_codes)
             afip_result = values.get("l10n_ar_afip_result")
@@ -152,7 +156,7 @@ class AccountMove(models.Model):
         # RG2904 informa códigos de producto: una línea sin producto no tiene
         # código que informar. Las juntamos todas para no corregir de a una.
         lines_without_product = [
-            base_line["record"].name
+            base_line["record"].label
             for base_line in base_lines
             if base_line["record"].display_type not in ("line_section", "line_note")
             and not base_line["record"].product_id
@@ -239,7 +243,7 @@ class AccountMove(models.Model):
                 "unidadesMtx": "1",
                 "codigoMtx": self._get_codigoMtx(line),
                 "codigo": line.product_id.default_code or None,
-                "descripcion": line.name,
+                "descripcion": line.label,
                 "codigoUnidadMedida": int(Pro_umed) or 7,
                 "cantidad": quantity if not is_senia_or_discount else None,
                 "precioUnitario": precioUnitario if not is_senia_or_discount else None,
