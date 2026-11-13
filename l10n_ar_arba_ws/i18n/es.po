@@ -581,6 +581,11 @@ msgstr ""
 "proveedores"
 
 #. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
+msgid "Only for DDJJ without withholdings, so they can be deleted"
+msgstr "Solo para DDJJ sin retenciones, para poder eliminarlas"
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.fields.selection,name:l10n_ar_arba_ws.selection__l10n_ar_dj_arba__state__open
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
 msgid "Open"
@@ -638,6 +643,17 @@ msgstr ""
 "generado)"
 
 #. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
+msgid "Reset to Draft"
+msgstr "Volver a borrador"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "Reset to draft. The ARBA DDJJ ID %s was removed from this record."
+msgstr "Vuelta a borrador. Se quitó de este registro el ID de DDJJ ARBA %s."
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_user_id
 msgid "Responsible User"
 msgstr "Usuario Responsable"
@@ -687,6 +703,7 @@ msgid "Testing"
 msgstr "Pruebas"
 
 #. module: l10n_ar_arba_ws
+<<<<<<< c29883342cf777f1d5bf1b08e2c4c929c52bd3b2
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
 msgid ""
 "Tests the connection to the ARBA A122R webservice using the selected ARBA "
@@ -698,6 +715,14 @@ msgstr ""
 "la base."
 
 #. module: l10n_ar_arba_ws
+||||||| efa5af1a2d3dfd0751125a3e03ead936533e92f1
+=======
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
+msgid "The ARBA DDJJ ID will be removed from this record. Continue?"
+msgstr "Se quitará de este registro el ID de DDJJ ARBA. ¿Desea continuar?"
+
+#. module: l10n_ar_arba_ws
+>>>>>>> 445f0544f4420ae50a9603856774b3d44fc2c9a6
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "The DDJJ's status has been updated"
@@ -802,6 +827,84 @@ msgstr "Retenciones"
 
 #. module: l10n_ar_arba_ws
 #. odoo-python
+<<<<<<< c29883342cf777f1d5bf1b08e2c4c929c52bd3b2
+||||||| efa5af1a2d3dfd0751125a3e03ead936533e92f1
+#: code:addons/l10n_ar_arba_ws/models/account_payment.py:0
+msgid "Warning - ARBA Withholdings"
+msgstr "Advertencia - Retenciones ARBA"
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid "⚠️ Warning:"
+msgstr "⚠️ Advertencia:"
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid "This payment has <strong><field name=\"withholding_count\"/> withholding(s)</strong> that have already been reported to ARBA through a Tax Return (DDJJ)."
+msgstr "Este pago tiene <strong><field name=\"withholding_count\"/> retención(es)</strong> que ya fueron informadas a ARBA a través de una Declaración Jurada (DDJJ)."
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid "We recommend not making modifications to the payment, as they will not impact the withholdings already reported."
+msgstr "Recomendamos no realizar modificaciones en el pago, ya que las mismas no impactarán en las retenciones ya informadas."
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid "I understand, reset to draft"
+msgstr "Entiendo, volver a borrador"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+=======
+#: code:addons/l10n_ar_arba_ws/models/account_payment.py:0
+msgid "Warning - ARBA Withholdings"
+msgstr "Advertencia - Retenciones ARBA"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid ""
+"You cannot reset to draft a DDJJ ARBA that has withholding lines. Delete the "
+"withholding lines linked to these payments first: %s"
+msgstr ""
+"No puede volver a borrador una DDJJ ARBA que tiene líneas de retención. "
+"Primero elimine las líneas de retención vinculadas a estos pagos: %s"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid ""
+"You cannot reset to draft the DDJJ ARBA %(ddjj)s: there would be two DDJJ in "
+"draft for the same period and company (%(company)s). Delete the other draft "
+"one first."
+msgstr ""
+"No puede volver a borrador la DDJJ ARBA %(ddjj)s: quedarían dos DDJJ en "
+"borrador para el mismo período y compañía (%(company)s). Primero elimine el "
+"otro borrador."
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid "⚠️ Warning:"
+msgstr "⚠️ Advertencia:"
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid "This payment has <strong><field name=\"withholding_count\"/> withholding(s)</strong> that have already been reported to ARBA through a Tax Return (DDJJ)."
+msgstr "Este pago tiene <strong><field name=\"withholding_count\"/> retención(es)</strong> que ya fueron informadas a ARBA a través de una Declaración Jurada (DDJJ)."
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid "We recommend not making modifications to the payment, as they will not impact the withholdings already reported."
+msgstr "Recomendamos no realizar modificaciones en el pago, ya que las mismas no impactarán en las retenciones ya informadas."
+
+#. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
+msgid "I understand, reset to draft"
+msgstr "Entiendo, volver a borrador"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+>>>>>>> 445f0544f4420ae50a9603856774b3d44fc2c9a6
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "You can only delete DDJJ ARBA records in draft state."
 msgstr ""
