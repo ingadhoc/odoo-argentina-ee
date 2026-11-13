@@ -61,13 +61,36 @@ class TestResetToDraft(TestArWithholdingArRi):
 
     def test_ddjj_with_withholdings_stays_blocked(self):
         ddjj = self._create_ddjj("open", "900000003")
-        self._create_withholding_line(ddjj)
+        line = self._create_withholding_line(ddjj)
 
-        with self.assertRaisesRegex(UserError, "has withholding lines"):
+        with self.assertRaisesRegex(UserError, "has withholding lines") as error:
             ddjj.action_draft()
+        self.assertIn(line.payment_id.display_name, str(error.exception))
         self.assertEqual(ddjj.state, "open")
         self.assertEqual(ddjj.name, "900000003")
 
         with self.assertRaisesRegex(UserError, "draft state"):
             ddjj.unlink()
         self.assertTrue(ddjj.exists())
+
+    def test_draft_ddjj_with_withholdings_cannot_be_deleted(self):
+        ddjj = self.dj_model.create({"company_id": self.arba_company.id, "date": TEST_PERIOD_DATE})
+        self._create_withholding_line(ddjj)
+
+        with self.assertRaisesRegex(UserError, "has withholding lines"):
+            ddjj.unlink()
+        self.assertTrue(ddjj.exists())
+
+    def test_reset_blocked_by_other_draft_of_the_period(self):
+        ddjj = self._create_ddjj("open", "900000004")
+        other_draft = self.dj_model.create({"company_id": self.arba_company.id, "date": TEST_PERIOD_DATE})
+
+        with self.assertRaisesRegex(UserError, "two DDJJ in draft"):
+            ddjj.action_draft()
+        self.assertEqual(ddjj.state, "open")
+
+        other_draft.unlink()
+        closed = self._create_ddjj("close", "900000005")
+        with self.assertRaisesRegex(UserError, "two DDJJ in draft"):
+            (ddjj | closed).action_draft()
+        self.assertEqual((ddjj | closed).mapped("state"), ["open", "close"])
