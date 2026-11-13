@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!-- SIRCIP pseudo-province: identifies the SIRCIP padron and taxes, never a contact's province -->
+    <record id="state_ar_sircip" model="res.country.state">
+        <field name="name">SIRCIP</field>
+        <field name="code">SI</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+
+    <!-- Adhered provinces (l10n_ar_is_sircip) are set by each customer as jurisdictions start SIRCIP -->
+
+    <record id="tag_perc_iibb_sircip_aplicada" model="account.account.tag">
+        <field name="name">Perc IIBB SIRCIP Aplicada</field>
+        <field name="applicability">taxes</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+
+</odoo>
