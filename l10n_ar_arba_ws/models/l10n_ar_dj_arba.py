@@ -386,6 +386,62 @@ class L10nArDjArba(models.Model):
 
     # Buttons
 
+    def action_draft(self):
+        """Reset to draft a DDJJ without withholdings, from any state, so it can be deleted.
+
+        The ARBA data is cleared: with the ID kept, action_open would only update the status and
+        _ensure_dj would reuse this draft for the next payment of the period.
+        """
+        records_with_withholdings = self.filtered("l10n_ar_withholding_ids")
+        if records_with_withholdings:
+            raise UserError(
+                self.env._(
+                    "You cannot reset to draft a DDJJ ARBA that has withholding lines. "
+                    "Delete the withholding lines linked to these payments first: %s",
+                    ", ".join(records_with_withholdings.l10n_ar_withholding_ids.payment_id.mapped("display_name")),
+                )
+            )
+        to_reset = self.filtered(lambda record: record.state != "draft")
+        for ddjj in to_reset:
+            from_date, to_date = ddjj._find_dates(ddjj.date)
+            # Checked here so the user gets a reset-specific message instead of the period constraint one
+            other_draft = self.search(
+                [
+                    ("company_id", "=", ddjj.company_id.id),
+                    ("date", ">=", from_date),
+                    ("date", "<=", to_date),
+                    ("id", "!=", ddjj.id),
+                    "|",
+                    ("state", "=", "draft"),
+                    ("id", "in", to_reset.ids),
+                ],
+                limit=1,
+            )
+            if other_draft:
+                raise UserError(
+                    self.env._(
+                        "You cannot reset to draft the DDJJ ARBA %(ddjj)s: there would be two DDJJ in draft for "
+                        "the same period and company (%(company)s). Delete the other draft one first.",
+                        ddjj=ddjj.display_name,
+                        company=ddjj.company_id.name,
+                    )
+                )
+        for ddjj in to_reset:
+            if ddjj.name:
+                ddjj.message_post(
+                    body=self.env._("Reset to draft. The ARBA DDJJ ID %s was removed from this record.", ddjj.name)
+                )
+            ddjj.write(
+                {
+                    "state": "draft",
+                    "name": False,
+                    "is_refund": False,
+                    "open_date": False,
+                    "due_date": False,
+                    "close_date": False,
+                }
+            )
+
     def action_open(self):
         """Se conecta a ARBA y cera una la declaración jurada que quedan en estado abierto para que la
         podemos usar. Si todo va bien tendremos de respuesta un ID de declaracion y varios datos
