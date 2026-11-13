@@ -564,6 +564,11 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
+msgid "Only for DDJJ without withholdings, so they can be deleted"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.fields.selection,name:l10n_ar_arba_ws.selection__l10n_ar_dj_arba__state__open
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
 msgid "Open"
@@ -619,6 +624,17 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
+msgid "Reset to Draft"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "Reset to draft. The ARBA DDJJ ID %s was removed from this record."
+msgstr ""
+
+#. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_user_id
 msgid "Responsible User"
 msgstr ""
@@ -664,6 +680,7 @@ msgid "Testing"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+<<<<<<< c29883342cf777f1d5bf1b08e2c4c929c52bd3b2
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
 msgid ""
 "Tests the connection to the ARBA A122R webservice using the selected ARBA "
@@ -672,6 +689,14 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_arba_ws
+||||||| efa5af1a2d3dfd0751125a3e03ead936533e92f1
+=======
+#: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
+msgid "The ARBA DDJJ ID will be removed from this record. Continue?"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+>>>>>>> 445f0544f4420ae50a9603856774b3d44fc2c9a6
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "The DDJJ's status has been updated"
@@ -789,6 +814,7 @@ msgstr ""
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "You cannot delete a DDJJ ARBA that has withholding lines."
 msgstr ""
+<<<<<<< c29883342cf777f1d5bf1b08e2c4c929c52bd3b2
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
@@ -804,3 +830,23 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
 msgid "⇒ Test WS A122R Connection"
 msgstr ""
+||||||| efa5af1a2d3dfd0751125a3e03ead936533e92f1
+=======
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid ""
+"You cannot reset to draft a DDJJ ARBA that has withholding lines. Delete the "
+"withholding lines linked to these payments first: %s"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid ""
+"You cannot reset to draft the DDJJ ARBA %(ddjj)s: there would be two DDJJ in "
+"draft for the same period and company (%(company)s). Delete the other draft "
+"one first."
+msgstr ""
+>>>>>>> 445f0544f4420ae50a9603856774b3d44fc2c9a6
