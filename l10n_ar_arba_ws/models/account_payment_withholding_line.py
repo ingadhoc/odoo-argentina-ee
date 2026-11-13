@@ -1,8 +1,8 @@
 from odoo import fields, models
 
 
-class L10nArPaymentWithholding(models.Model):
-    _inherit = "l10n_ar.payment.withholding"
+class AccountPaymentWithholdingLine(models.Model):
+    _inherit = "account.payment.withholding.line"
 
     l10n_ar_cert_number = fields.Char(readonly=True, string="ARBA Withholding Certificate Number")
     l10n_ar_dj_arba_id = fields.Many2one(
@@ -28,12 +28,12 @@ class L10nArPaymentWithholding(models.Model):
         state_ar_b = self.env.ref("base.state_ar_b", raise_if_not_found=False)
         for rec in self:
             rec.is_arba_ws_needed = (
-                state_ar_b
-                and rec.tax_id.l10n_ar_state_id == state_ar_b
-                and rec.tax_id.l10n_ar_withholding_payment_type == "supplier"
+                state_ar_b and rec.tax_id.l10n_ar_state_id == state_ar_b and rec.tax_id.type_tax_use == "purchase"
             )
 
     def send_to_arba(self):
         """Send the withholding to ARBA webservice and store the certificate number"""
-        for withholding in self.filtered(lambda x: not x.l10n_ar_cert_number and x.amount > 0):
+        for withholding in self.filtered(
+            lambda x: not x.l10n_ar_cert_number and x._get_company_currency_amounts()["amount"] > 0
+        ):
             withholding.l10n_ar_dj_arba_id._create_withholding(withholding)

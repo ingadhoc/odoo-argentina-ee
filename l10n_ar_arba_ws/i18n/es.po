@@ -4,17 +4,17 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 18.0+e\n"
+"Project-Id-Version: Odoo Server 20.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-05-21 19:30+0000\n"
-"PO-Revision-Date: 2026-03-20 09:02+0000\n"
+"POT-Creation-Date: 2026-11-13 13:46+0000\n"
+"PO-Revision-Date: 2026-11-13 13:46+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: \n"
+"Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: \n"
+"Plural-Forms: nplurals=3; plural=(n == 1) ? 0 : ((n != 0 && n % 1000000 == 0) ? 1 : 2);\n"
 
 #. module: l10n_ar_arba_ws
 #. odoo-python
@@ -42,19 +42,95 @@ msgid "* %(webservice)s: Connection is available (ARBA env: %(arba_env)s)"
 msgstr "* %(webservice)s: Conexión disponible (entorno ARBA: %(arba_env)s)"
 
 #. module: l10n_ar_arba_ws
-#: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__l10n_ar_arba_wh_mode
+#: model:ir.model.fields,help:l10n_ar_arba_ws.field_account_payment_withholding_line__l10n_ar_arba_wh_mode
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_res_company__l10n_ar_arba_wh_mode
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_res_config_settings__l10n_ar_arba_wh_mode
 msgid ""
-"* Automatic: Withholdings will be automatically reported to ARBA when the "
-"payment is confirmed\n"
-"* Batch Import: Withholdings must be manually reported to ARBA by clicking "
-"the 'Inform to ARBA' button after payment validation"
+"* Automatic: Withholdings will be automatically reported to ARBA when the payment is confirmed\n"
+"* Batch Import: Withholdings must be manually reported to ARBA by clicking the 'Inform to ARBA' button after payment validation"
 msgstr ""
 "* Automático: Las retenciones serán informadas automáticamente a ARBA cuando "
 "el pago sea confirmado\n"
 "* Importación por Lote: Las retenciones deben ser informadas manualmente a "
 "ARBA haciendo clic en el botón 'Informar a ARBA' luego de validar el pago"
+
+#. module: l10n_ar_arba_ws
+#: model:ir.module.module,description:base.module_l10n_ar_arba_ws
+msgid ""
+".. |company| replace:: ADHOC SA\n"
+"\n"
+".. |company_logo| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-logo.png\n"
+"   :alt: ADHOC SA\n"
+"   :target: https://www.adhoc.com.ar\n"
+"\n"
+".. |icon| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-icon.png\n"
+"\n"
+".. image:: https://img.shields.io/badge/license-LGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/lgpl\n"
+"   :alt: License: LGPL-3\n"
+"\n"
+"=======================\n"
+"ARBA Webservice (A122R)\n"
+"=======================\n"
+"\n"
+"Este módulo implementa:\n"
+"\n"
+"* Webservice para conectar con ARBA al webservice A122R que permite para retenciones de ingresos brutos:\n"
+"\n"
+"   * Inciar una declaración jurada, vincular una ya abierta en ARBA y actualizar su estado (también con una acción planificada diaria)\n"
+"   * Crear un Comprobante de retención para cada retención de ARBA de un pago a proveedor, al validar el pago (modo automático) o con el botón \"ARBA\" de la línea de retención\n"
+"   * Avisar, al volver a borrador un pago, que tiene retenciones ya informadas a ARBA\n"
+"\n"
+"Installation\n"
+"============\n"
+"\n"
+"To install this module, you need to:\n"
+"\n"
+"#. Only need to install the module\n"
+"\n"
+"Configuration\n"
+"=============\n"
+"\n"
+"To configure this module, you need to:\n"
+"\n"
+"* En 'Contabilidad / Configuración / Ajustes' en sección \"Localización para Argentina\" sector ARBA van a poder\n"
+"\n"
+"   * Configurar el ambiente a conectarse a ARBA (produccion, test, demo)\n"
+"   * Configurar contraseña para conectar al webservice\n"
+"   * Configurar el client ID y Client Secret\n"
+"   * Elegir el modo de informe de retenciones: automático al validar el pago, o importación por lotes\n"
+"\n"
+"DEV:\n"
+"   * Seguimos la especificación del webservice A122R de ARBA disponible en el documento \"Interfaz ServiciosA122RApiExternos.pdf\" provisto por ARBA.\n"
+"   * Para pruebas en desarrollo se puede ir a la colección Postman \"A122RServices (ARBA WS)\" disponible con el usuario de Soporte Adhoc.\n"
+"\n"
+"Usage\n"
+"=====\n"
+"\n"
+".. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas\n"
+"   :alt: Try me on Runbot\n"
+"   :target: http://runbot.adhoc.com.ar/\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Images\n"
+"------\n"
+"\n"
+"* |company| |icon|\n"
+"\n"
+"Contributors\n"
+"------------\n"
+"\n"
+"Maintainer\n"
+"----------\n"
+"\n"
+"|company_logo|\n"
+"\n"
+"This module is maintained by the |company|.\n"
+"\n"
+"To contribute to this module, please visit https://www.adhoc.com.ar.\n"
+msgstr ""
 
 #. module: l10n_ar_arba_ws
 #. odoo-python
@@ -72,13 +148,13 @@ msgstr "2da"
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "<br>Response: %s"
-msgstr ""
+msgstr "<br>Respuesta: %s"
 
 #. module: l10n_ar_arba_ws
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "<br>Unknown: %s"
-msgstr ""
+msgstr "<br>Desconocido: %s"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
@@ -89,8 +165,7 @@ msgstr "<span class=\"o_form_label\">Webservice Retenciones (A122R)</span>"
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_form
 msgid ""
 "<span class=\"oe_title\" colspan=\"2\">\n"
-"                            Select a date to calculate the applicable "
-"period\n"
+"                            Select a date to calculate the applicable period\n"
 "                        </span>"
 msgstr ""
 "<span class=\"oe_title\" colspan=\"2\">\n"
@@ -101,7 +176,7 @@ msgstr ""
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
 msgid "<strong>⚠️ Warning:</strong>"
-msgstr ""
+msgstr "<strong>⚠️ Advertencia:</strong>"
 
 #. module: l10n_ar_arba_ws
 #. odoo-python
@@ -120,7 +195,7 @@ msgid "ARBA DDJJ"
 msgstr "DDJJ ARBA"
 
 #. module: l10n_ar_arba_ws
-#: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__l10n_ar_dj_arba_id
+#: model:ir.model.fields,help:l10n_ar_arba_ws.field_account_payment_withholding_line__l10n_ar_dj_arba_id
 msgid "ARBA DDJJ associated with this withholding"
 msgstr "DDJJ ARBA asociada a esta retención"
 
@@ -147,17 +222,22 @@ msgid "ARBA WS - Update DDJJ"
 msgstr "ARBA WS - Actualizar DDJJ"
 
 #. module: l10n_ar_arba_ws
-#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__l10n_ar_cert_number
+#: model:ir.module.module,shortdesc:base.module_l10n_ar_arba_ws
+msgid "ARBA Webservice (A122R)"
+msgstr "Webservice ARBA (A122R)"
+
+#. module: l10n_ar_arba_ws
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_account_payment_withholding_line__l10n_ar_cert_number
 msgid "ARBA Withholding Certificate Number"
 msgstr "Número de Certificado de Retención ARBA"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model,name:l10n_ar_arba_ws.model_arba_withholding_draft_warning
 msgid "ARBA Withholding Draft Warning"
-msgstr ""
+msgstr "Advertencia de retenciones ARBA al pasar a borrador"
 
 #. module: l10n_ar_arba_ws
-#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__l10n_ar_arba_wh_mode
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_account_payment_withholding_line__l10n_ar_arba_wh_mode
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_company__l10n_ar_arba_wh_mode
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_config_settings__l10n_ar_arba_wh_mode
 msgid "ARBA Withholding Mode"
@@ -166,12 +246,12 @@ msgstr "Modo de Retención ARBA"
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
 msgid "ARBA Withholding Warning"
-msgstr ""
+msgstr "Advertencia de retenciones ARBA"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model,name:l10n_ar_arba_ws.model_l10n_ar_afipws_connection
 msgid "ARCA Webservice Connection"
-msgstr "Conexión Webservice de ARCA"
+msgstr "Conexión del webservice de ARCA"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_needaction
@@ -187,6 +267,11 @@ msgstr "Actividades"
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_exception_decoration
 msgid "Activity Exception Decoration"
 msgstr "Decoración de Excepción de Actividad"
+
+#. module: l10n_ar_arba_ws
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_plans_ids
+msgid "Activity Plans"
+msgstr "Planes de actividad"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_state
@@ -259,10 +344,6 @@ msgstr "Cerrado"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model,name:l10n_ar_arba_ws.model_res_company
-msgid "Companies"
-msgstr "Empresas"
-
-#. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__company_id
 msgid "Company"
 msgstr "Empresa"
@@ -291,7 +372,7 @@ msgstr "Creado el"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.actions.act_window,name:l10n_ar_arba_ws.l10n_ar_dj_arba_action
-#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__l10n_ar_dj_arba_id
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_account_payment_withholding_line__l10n_ar_dj_arba_id
 #: model:ir.ui.menu,name:l10n_ar_arba_ws.l10n_ar_dj_arba_menu_act
 msgid "DDJJ ARBA"
 msgstr ""
@@ -300,7 +381,7 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "DDJJ could not be opened, the withholding cannot be created"
-msgstr ""
+msgstr "No se pudo abrir la DDJJ, no se puede crear la retención"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__date
@@ -319,14 +400,14 @@ msgstr ""
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_account_payment__display_name
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_account_payment_withholding_line__display_name
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_arba_withholding_draft_warning__display_name
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_afipws_connection__display_name
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__display_name
-#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__display_name
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_company__display_name
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_config_settings__display_name
 msgid "Display Name"
-msgstr "Nombre a Mostrar"
+msgstr "Mostrar nombre"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__distribution_analytic_account_ids
@@ -351,12 +432,15 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"ERROR - %s:\n"
+"\n"
+"%s"
 
 #. module: l10n_ar_arba_ws
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "ERROR trying to inform the withholding: "
-msgstr ""
+msgstr "ERROR al intentar informar la retención: "
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
@@ -373,8 +457,8 @@ msgstr "Error al abrir la declaración: No se obtuvo el ID de DDJJ"
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid ""
-"Error when creating DDJJ ARBA, there is already one for the same period (%s) "
-"and company (%s)"
+"Error when creating DDJJ ARBA, there is already one for the same period (%s)"
+" and company (%s)"
 msgstr ""
 "Error al crear DDJJ ARBA, ya habia otra para el mismo periodo (%s) y empresa "
 "(%s)"
@@ -405,15 +489,16 @@ msgid "Followers (Partners)"
 msgstr "Seguidores (Contactos)"
 
 #. module: l10n_ar_arba_ws
-#: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_type_icon
-msgid "Font awesome icon e.g. fa-tasks"
-msgstr "Ícono Font Awesome, por ejemplo fa-tasks"
-
-#. module: l10n_ar_arba_ws
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "Get DDJJ Information"
 msgstr "Obtener la información de la DDJJ"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid "Get Withholding Information"
+msgstr "Obtener información de la retención"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__has_message
@@ -427,10 +512,10 @@ msgstr "Entiendo, volver a borrador"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_account_payment__id
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_account_payment_withholding_line__id
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_arba_withholding_draft_warning__id
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_afipws_connection__id
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__id
-#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__id
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_company__id
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_res_config_settings__id
 msgid "ID"
@@ -449,7 +534,7 @@ msgstr "Ícono para indicar una actividad de excepción."
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__name
 msgid "Id DDJJ"
-msgstr ""
+msgstr "ID DDJJ"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_needaction
@@ -473,7 +558,7 @@ msgid "It is annulment"
 msgstr "Es anulación"
 
 #. module: l10n_ar_arba_ws
-#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__is_arba_ws_needed
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_account_payment_withholding_line__is_arba_ws_needed
 msgid "It needs to be sent to the ARBA A122R webservice"
 msgstr "Debe enviarse al webservice ARBA A122R"
 
@@ -483,7 +568,7 @@ msgid "It will apply to"
 msgstr "Aplicará al"
 
 #. module: l10n_ar_arba_ws
-#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__l10n_ar_state_id
+#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_account_payment_withholding_line__l10n_ar_state_id
 msgid "Jurisdiction"
 msgstr "Jurisdicción"
 
@@ -509,6 +594,11 @@ msgstr "Vincular una DDJJ existente:"
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_main_attachment_id
 msgid "Main Attachment"
 msgstr "Adjunto Principal"
+
+#. module: l10n_ar_arba_ws
+#: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_type_icon
+msgid "Material Symbols icon e.g. checklist"
+msgstr "Icono de Material Symbols, por ejemplo, checklist"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__message_has_error
@@ -566,7 +656,7 @@ msgid "Number of messages with delivery error"
 msgstr "Número de mensajes con error de entrega"
 
 #. module: l10n_ar_arba_ws
-#: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_payment_withholding__is_arba_ws_needed
+#: model:ir.model.fields,help:l10n_ar_arba_ws.field_account_payment_withholding_line__is_arba_ws_needed
 msgid ""
 "Only applies to incurred withholding for ARBA on taxes with type supplier "
 "payments"
@@ -592,19 +682,15 @@ msgid "Open Declaration"
 msgstr "Abrir Declaración"
 
 #. module: l10n_ar_arba_ws
+#: model:ir.model,name:l10n_ar_arba_ws.model_account_payment
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_arba_withholding_draft_warning__payment_id
 msgid "Payment"
-msgstr ""
+msgstr "Pago"
 
 #. module: l10n_ar_arba_ws
-#: model:ir.model,name:l10n_ar_arba_ws.model_l10n_ar_payment_withholding
-msgid "Payment withholding lines"
-msgstr "Líneas de pago de retención"
-
-#. module: l10n_ar_arba_ws
-#: model:ir.model,name:l10n_ar_arba_ws.model_account_payment
-msgid "Payments"
-msgstr "Pagos"
+#: model:ir.model,name:l10n_ar_arba_ws.model_account_payment_withholding_line
+msgid "Payment withholding line"
+msgstr "Línea de retención de pago"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.l10n_ar_dj_arba_view_search
@@ -712,7 +798,7 @@ msgstr "La retención fue informada a ARBA (%s) exitosamente"
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
 msgid "This payment has"
-msgstr ""
+msgstr "Este pago tiene"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_dj_arba__activity_exception_decoration
@@ -763,24 +849,14 @@ msgstr ""
 "impactarán en las retenciones ya informadas."
 
 #. module: l10n_ar_arba_ws
-#: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_l10n_ar_dj_arba__website_message_ids
-msgid "Website Messages"
-msgstr "Mensajes del Sitio Web"
-
-#. module: l10n_ar_arba_ws
-#: model:ir.model.fields,help:l10n_ar_arba_ws.field_l10n_ar_dj_arba__website_message_ids
-msgid "Website communication history"
-msgstr "Historial de comunicación del sitio web"
-
-#. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_arba_withholding_draft_warning__withholding_count
 msgid "Withholding Count"
-msgstr ""
+msgstr "Cantidad de retenciones"
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,field_description:l10n_ar_arba_ws.field_arba_withholding_draft_warning__withholding_info
 msgid "Withholding Info"
-msgstr ""
+msgstr "Información de retenciones"
 
 #. module: l10n_ar_arba_ws
 #. odoo-python
@@ -798,7 +874,7 @@ msgstr "Retenciones"
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "You can only delete DDJJ ARBA records in draft state."
-msgstr ""
+msgstr "Solo puede eliminar DDJJ ARBA en estado borrador."
 
 #. module: l10n_ar_arba_ws
 #. odoo-python
@@ -815,46 +891,14 @@ msgstr "No puede eliminar una DDJJ ARBA que tiene líneas de retención."
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
 msgid "that have already been reported to ARBA through a Tax Return (DDJJ)."
-msgstr ""
+msgstr "que ya fueron informadas a ARBA mediante una declaración jurada (DDJJ)."
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
 msgid "withholding(s)"
-msgstr ""
+msgstr "retención(es)"
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.res_config_settings_view_form
 msgid "⇒ Test WS A122R Connection"
 msgstr "⇒ Probar conexión WS A122R"
-
-#~ msgid "Amount:"
-#~ msgstr "Monto:"
-
-#~ msgid "Certificate:"
-#~ msgstr "Certificado:"
-
-#~ msgid "Warning - ARBA Withholdings"
-#~ msgstr "Advertencia - Retenciones ARBA"
-
-#~ msgid "⚠️ Warning:"
-#~ msgstr "⚠️ Advertencia:"
-
-#~ msgid ""
-#~ "This payment has <strong><field name=\"withholding_count\"/> "
-#~ "withholding(s)</strong> that have already been reported to ARBA through a "
-#~ "Tax Return (DDJJ)."
-#~ msgstr ""
-#~ "Este pago tiene <strong><field name=\"withholding_count\"/> "
-#~ "retención(es)</strong> que ya fueron informadas a ARBA a través de una "
-#~ "Declaración Jurada (DDJJ)."
-
-#~ msgid "<br>Response ERROR: %s"
-#~ msgstr "<br>ERROR en Respuesta: %s"
-
-#~ msgid "<br>Unknown ERROR: %s"
-#~ msgstr "<br>ERROR Desconocido: %s"
-
-#~ msgid ""
-#~ "ERROR we were not able to create the withholding because of another "
-#~ "error: "
-#~ msgstr "ERROR no pudimos crear la renteción debido a otro error: "

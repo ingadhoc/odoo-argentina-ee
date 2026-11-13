@@ -11,7 +11,7 @@
                 <field name="state"/>
                 <field name="is_refund"/>
                 <field name="company_id" groups="base.group_multi_company"/>
-                <button name="action_update_status" type="object" title="Update" help="Update the status via ws" icon="fa-refresh"/>
+                <button name="action_update_status" type="object" title="Update" help="Update the status via ws" icon="refresh"/>
             </list>
         </field>
     </record>

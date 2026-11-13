@@ -44,13 +44,15 @@ class TestArbaWithholdingWs(TestArCommon):
         )
         # compute the automatic withholdings first, otherwise they would replace the line created below
         payment.flush_recordset()
-        cls.wh_line = cls.env["l10n_ar.payment.withholding"].create(
+        cls.wh_line = cls.env["account.payment.withholding.line"].create(
             {
                 "payment_id": payment.id,
                 "tax_id": arba_tax.id,
                 "name": "00001313",
                 "base_amount": 253275.0,
                 "amount": 1772.93,
+                "l10n_ar_base_amount": 253275.0,
+                "l10n_ar_amount": 1772.93,
             }
         )
 
