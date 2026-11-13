@@ -396,11 +396,37 @@ class L10nArDjArba(models.Model):
         if records_with_withholdings:
             raise UserError(
                 self.env._(
-                    "You cannot reset to draft a DDJJ ARBA that has withholding lines: %s",
-                    ", ".join(records_with_withholdings.mapped("display_name")),
+                    "You cannot reset to draft a DDJJ ARBA that has withholding lines. "
+                    "Delete the withholding lines linked to these payments first: %s",
+                    ", ".join(records_with_withholdings.l10n_ar_withholding_ids.payment_id.mapped("display_name")),
                 )
             )
-        for ddjj in self.filtered(lambda record: record.state != "draft"):
+        to_reset = self.filtered(lambda record: record.state != "draft")
+        for ddjj in to_reset:
+            from_date, to_date = ddjj._find_dates(ddjj.date)
+            # Checked here so the user gets a reset-specific message instead of the period constraint one
+            other_draft = self.search(
+                [
+                    ("company_id", "=", ddjj.company_id.id),
+                    ("date", ">=", from_date),
+                    ("date", "<=", to_date),
+                    ("id", "!=", ddjj.id),
+                    "|",
+                    ("state", "=", "draft"),
+                    ("id", "in", to_reset.ids),
+                ],
+                limit=1,
+            )
+            if other_draft:
+                raise UserError(
+                    self.env._(
+                        "You cannot reset to draft the DDJJ ARBA %(ddjj)s: there would be two DDJJ in draft for "
+                        "the same period and company (%(company)s). Delete the other draft one first.",
+                        ddjj=ddjj.display_name,
+                        company=ddjj.company_id.name,
+                    )
+                )
+        for ddjj in to_reset:
             if ddjj.name:
                 ddjj.message_post(
                     body=self.env._("Reset to draft. The ARBA DDJJ ID %s was removed from this record.", ddjj.name)

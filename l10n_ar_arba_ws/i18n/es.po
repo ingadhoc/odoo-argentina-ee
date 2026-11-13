@@ -755,8 +755,24 @@ msgstr "Advertencia - Retenciones ARBA"
 #. module: l10n_ar_arba_ws
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
-msgid "You cannot reset to draft a DDJJ ARBA that has withholding lines: %s"
-msgstr "No puede volver a borrador una DDJJ ARBA que tiene líneas de retención: %s"
+msgid ""
+"You cannot reset to draft a DDJJ ARBA that has withholding lines. Delete the "
+"withholding lines linked to these payments first: %s"
+msgstr ""
+"No puede volver a borrador una DDJJ ARBA que tiene líneas de retención. "
+"Primero elimine las líneas de retención vinculadas a estos pagos: %s"
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
+msgid ""
+"You cannot reset to draft the DDJJ ARBA %(ddjj)s: there would be two DDJJ in "
+"draft for the same period and company (%(company)s). Delete the other draft "
+"one first."
+msgstr ""
+"No puede volver a borrador la DDJJ ARBA %(ddjj)s: quedarían dos DDJJ en "
+"borrador para el mismo período y compañía (%(company)s). Primero elimine el "
+"otro borrador."
 
 #. module: l10n_ar_arba_ws
 #: model_terms:ir.ui.view,arch_db:l10n_ar_arba_ws.view_arba_withholding_draft_warning_form
