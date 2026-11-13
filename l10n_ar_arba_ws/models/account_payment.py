@@ -19,7 +19,7 @@ class AccountPayment(models.Model):
 
             # Filtramos solo las lineas asociadas a retencion de arba que no tengan
             # numero de certificado aun (no informadas)
-            wh_lines = payment.l10n_ar_withholding_line_ids.filtered(
+            wh_lines = payment.withholding_line_ids.filtered(
                 lambda x: x.is_arba_ws_needed and not x.l10n_ar_cert_number
             )
             wh_lines.send_to_arba()
@@ -32,7 +32,7 @@ class AccountPayment(models.Model):
         if not self.env.context.get("skip_arba_draft_warning"):
             for payment in self:
                 # Buscar retenciones que ya fueron informadas a ARBA
-                wh_lines = payment.l10n_ar_withholding_line_ids.filtered(
+                wh_lines = payment.withholding_line_ids.filtered(
                     lambda x: x.is_arba_ws_needed and x.l10n_ar_cert_number and x.l10n_ar_dj_arba_id
                 )
 
@@ -44,7 +44,7 @@ class AccountPayment(models.Model):
                             f"<li><strong>{wh.name}</strong> - "
                             f"Certificate: {wh.l10n_ar_cert_number} - "
                             f"DDJJ: {wh.l10n_ar_dj_arba_id.display_name} "
-                            f"(Amount: ${wh.amount:,.2f})</li>"
+                            f"(Amount: ${wh._get_company_currency_amounts()['amount']:,.2f})</li>"
                         )
                     wh_info_html += "</ul>"
 
