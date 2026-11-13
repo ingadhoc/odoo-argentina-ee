@@ -31,7 +31,7 @@
         "l10n_ar_edi",
     ],
     "data": [
-        "security/ir.model.access.csv",
+        "security/ir.access.csv",
         "data/ir_cron_data.xml",
         "views/l10n_ar_dj_arba_views.xml",
         "views/account_payment_views.xml",
