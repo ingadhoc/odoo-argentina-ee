@@ -6,9 +6,9 @@
 
 .. |icon| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-icon.png
 
-.. image:: https://img.shields.io/badge/license-AGPL--3-blue.png
-   :target: https://www.gnu.org/licenses/agpl
-   :alt: License: AGPL-3
+.. image:: https://img.shields.io/badge/license-LGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/lgpl
+   :alt: License: LGPL-3
 
 =======================
 ARBA Webservice (A122R)
@@ -18,10 +18,9 @@ Este módulo implementa:
 
 * Webservice para conectar con ARBA al webservice A122R que permite para retenciones de ingresos brutos:
 
-   * Inciar una declaración jurada
-   * Crear un Comprobante de retención
-   * Descargar el PDF oficial del comprobante de retención
-   * Dar de baja un Comprobante de retención (TODO OJO no estamos seguros)
+   * Inciar una declaración jurada, vincular una ya abierta en ARBA y actualizar su estado (también con una acción planificada diaria)
+   * Crear un Comprobante de retención para cada retención de ARBA de un pago a proveedor, al validar el pago (modo automático) o con el botón "ARBA" de la línea de retención
+   * Avisar, al volver a borrador un pago, que tiene retenciones ya informadas a ARBA
 
 Installation
 ============
@@ -40,6 +39,7 @@ To configure this module, you need to:
    * Configurar el ambiente a conectarse a ARBA (produccion, test, demo)
    * Configurar contraseña para conectar al webservice
    * Configurar el client ID y Client Secret
+   * Elegir el modo de informe de retenciones: automático al validar el pago, o importación por lotes
 
 DEV:
    * Seguimos la especificación del webservice A122R de ARBA disponible en el documento "Interfaz ServiciosA122RApiExternos.pdf" provisto por ARBA.
