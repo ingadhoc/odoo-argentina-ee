@@ -406,6 +406,16 @@ class TestAfipConnection(TransactionCase):
     # _check_match_between_certificate_and_company tests
     # ------------------------------------------------------------------
 
+    def test_32_webservice_without_certificate_keeps_own_connection(self):
+        """A webservice that does not use the ARCA certificate (ARBA A122R) asks for its
+        connection with ``l10n_ar_skip_cert_ancestor``: the branch keeps it, it never goes to
+        the company that holds the certificate."""
+        with self._mock_token_generation() as companies_used:
+            connection = self._get_connection(self.child_company.with_context(l10n_ar_skip_cert_ancestor=True))
+
+        self.assertEqual(companies_used, [self.child_company])
+        self.assertEqual(connection.company_id, self.child_company)
+
     def test_35_check_certificate_match_does_not_raise(self):
         """When company CUIT equals certificate CUIT no UserError is raised."""
         try:

@@ -247,8 +247,12 @@ class L10nArDjArba(models.Model):
         un intento previo de abrir contra ARBA falló (ej. caída intermitente del webservice), lo que dejaba
         al usuario bloqueado para informar cualquier retención de ese período.
 
+        La DDJJ es del agente (CUIT) en ARBA, no de la sucursal: va en la compañía cuyas credenciales
+        A122R se usan, así todas las sucursales de una entidad fiscal informan en la misma.
+
         :return: DDJJ ARBA recordset of the matching DDJJ for the given period"""
         from_date, to_date = self._find_dates(wh_date)
+        company = company._l10n_ar_arba_ws_company()
         dj_arba = self.search(
             [
                 ("company_id", "=", company.id),
@@ -335,7 +339,7 @@ class L10nArDjArba(models.Model):
         error = False
         # A new token is committed in its own cursor, not in the payment posting this runs in
         with self.env.registry.cursor() as cr:
-            token = self.company_id.with_env(self.env(cr=cr))._l10n_ar_get_connection(WS_NAME).token
+            token = self.company_id._l10n_ar_get_arba_ws_connection(cr=cr).token
         url = self.env["l10n_ar.afipws.connection"]._l10n_ar_get_afip_ws_url(WS_NAME, env_type) + url
         headers = {
             "Content-Type": "application/json",
