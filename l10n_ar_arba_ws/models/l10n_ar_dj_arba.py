@@ -43,7 +43,7 @@ class L10nArDjArba(models.Model):
     )
 
     l10n_ar_withholding_ids = fields.One2many(
-        "l10n_ar.payment.withholding",
+        "account.payment.withholding.line",
         "l10n_ar_dj_arba_id",
         string="Withholdings",
         readonly=True,
@@ -163,6 +163,8 @@ class L10nArDjArba(models.Model):
             self.message_post(body=msg)
             return
 
+        # ARBA gets the withholding in ARS, and the rate as a positive number
+        amounts = wh_line._get_company_currency_amounts()
         # TODO commercial partner queremos usarlo?
         request_data = {
             "idDj": self.name,
@@ -170,9 +172,9 @@ class L10nArDjArba(models.Model):
             "razonSocialContribuyente": wh_line.payment_id.partner_id.name,
             "cuitAgente": int(self.company_id.partner_id.ensure_vat()),
             "sucursal": 1,  # TODO revisar que valor string <= 5, debiendo ser numéricos
-            "alicuota": wh_line.tax_id.amount,
-            "baseImponible": wh_line.base_amount,
-            "importeRetencion": wh_line.amount,
+            "alicuota": abs(wh_line.tax_id.amount),
+            "baseImponible": amounts["base_amount"],
+            "importeRetencion": amounts["amount"],
             "fechaOperacion": wh_line.payment_id.date.strftime("%Y-%m-%dT%H:%M:%S.000Z"),
             "nTransaccionAgente": re.sub("[^0-9]", "", wh_line.name),  # Obligatorio String(20)
         }
