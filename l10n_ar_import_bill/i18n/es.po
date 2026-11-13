@@ -7,13 +7,13 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 19.0+e\n"
+"Project-Id-Version: Odoo Server 20.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-06-30 11:22+0000\n"
-"PO-Revision-Date: 2026-04-20 15:41+0000\n"
+"POT-Creation-Date: 2026-10-27 18:08+0000\n"
+"PO-Revision-Date: 2026-10-27 18:08+0000\n"
 "Last-Translator: julia elizondo <jue@adhoc.inc>\n"
 "Language-Team: Spanish <https://translation.dev-adhoc.com/projects/odoo-"
-"argentina-ee-19-0/odoo-argentina-ee-19-0-l10n_ar_import_bill/es/>\n"
+"argentina-ee-20-0/odoo-argentina-ee-20-0-l10n_ar_import_bill/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -23,28 +23,28 @@ msgstr ""
 "X-Generator: Weblate 5.10.4\n"
 
 #. module: l10n_ar_import_bill
+#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
+msgid ""
+"<i class=\"oi\" data-icon=\"info\" title=\"Info\"/> <span "
+"invisible=\"total_bills_exists == 0\">Invoices highlighted in yellow will "
+"not be created: they are already on file, or they come more than once in the"
+" files imported together.</span>"
+msgstr ""
+"<i class=\"oi\" data-icon=\"info\" title=\"Info\"/> <span "
+"invisible=\"total_bills_exists == 0\">Los comprobantes resaltados en "
+"amarillo no se van a crear: ya están cargados, o vienen más de una vez en "
+"los archivos importados juntos.</span>"
+
+#. module: l10n_ar_import_bill
 #: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_file_wizard_form
 #: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
 msgid ""
-"<i class=\"fa fa-exclamation-triangle\" title=\"Warning\"/>\n"
-"                   <span>Importing sales from ARCA: Only invoices dated "
-"before the accounting start date will be imported.</span>"
+"<i class=\"oi\" data-icon=\"warning\" title=\"Warning\"/>\n"
+"                   <span>Only invoices dated before the accounting start date will be imported.</span>"
 msgstr ""
-"<i class=\"fa fa-exclamation-triangle\" title=\"Warning\"/>\n"
-"                   <span>Importación de ventas desde ARCA: Solo se "
-"importarán las facturas con fecha anterior a la fecha de inicio de la "
-"contabilidad.</span>"
-
-#. module: l10n_ar_import_bill
-#: model_terms:ir.ui.view,arch_db:l10n_ar_import_bill.view_afip_import_wizard_form
-msgid ""
-"<i class=\"fa fa-info-circle\" title=\"Info\"/> <span "
-"invisible=\"total_bills_exists == 0\">Invoices highlighted in yellow will "
-"not be created because they already exist. </span>"
-msgstr ""
-"<i class=\"fa fa-info-circle\" title=\"Info\"/> <span "
-"invisible=\"total_bills_exists == 0\">Las facturas resaltadas en amarillo no "
-"se crearán porque ya existen. </span>"
+"<i class=\"oi\" data-icon=\"warning\" title=\"Warning\"/>\n"
+"                   <span>Solo se importarán los comprobantes con fecha "
+"anterior a la fecha de inicio de la contabilidad.</span>"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__file_data
@@ -54,7 +54,7 @@ msgstr "Archivo Excel ARCA"
 #. module: l10n_ar_import_bill
 #: model:ir.model,name:l10n_ar_import_bill.model_account_import_summary
 msgid "Account import summary view"
-msgstr "Vista de resumen de la importación de cuentas"
+msgstr "Vista de resumen de importación de cuenta"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,help:l10n_ar_import_bill.field_afip_import_wizard__counterpart_account_id
@@ -75,6 +75,16 @@ msgid ""
 msgstr ""
 "Se subió un archivo que no se corresponde ni con ventas ni con compras para "
 "importar facturas desde ARCA."
+
+#. module: l10n_ar_import_bill
+#: model:ir.module.module,summary:base.module_l10n_ar_import_bill
+msgid "Import invoices from the ARCA 'Mis Comprobantes' spreadsheet"
+msgstr "Importa comprobantes desde la planilla Mis Comprobantes de ARCA"
+
+#. module: l10n_ar_import_bill
+#: model:ir.module.module,shortdesc:base.module_l10n_ar_import_bill
+msgid "Argentinian Importing Bills from ARCA"
+msgstr "Importación de facturas desde ARCA"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__auto_validate
@@ -143,6 +153,18 @@ msgstr "Creado por"
 #. module: l10n_ar_import_bill
 #. odoo-python
 #: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard_line.py:0
+msgid ""
+"The line of invoice %s has neither a document nor a name for the contact, so "
+"the contact cannot be identified. Complete it in the ARCA file and import "
+"again."
+msgstr ""
+"La línea del comprobante %s no tiene documento ni nombre del contacto, así "
+"que no se puede identificar a quién corresponde. Complételo en el archivo de "
+"ARCA y vuelva a importar."
+
+#. module: l10n_ar_import_bill
+#. odoo-python
+#: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard_line.py:0
 msgid "Created by invoice import"
 msgstr "Creado por importación de facturas"
 
@@ -168,7 +190,7 @@ msgstr "Eliminar"
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__display_name
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__display_name
 msgid "Display Name"
-msgstr "Nombre para mostrar"
+msgstr "Mostrar nombre"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__document_type
@@ -313,11 +335,6 @@ msgid "Invoice Number"
 msgstr "Número de Factura"
 
 #. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__move_type
-msgid "Invoice Type"
-msgstr "Tipo de Factura"
-
-#. module: l10n_ar_import_bill
 #: model:ir.model,name:l10n_ar_import_bill.model_account_journal
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__journal_id
 msgid "Journal"
@@ -413,7 +430,8 @@ msgstr ""
 #. module: l10n_ar_import_bill
 #. odoo-python
 #: code:addons/l10n_ar_import_bill/wizards/afip_import_wizard.py:0
-msgid "No VAT tax found for the %s%% rate. Check whether this tax is disabled."
+msgid ""
+"No VAT tax found for the %s%% rate. Check whether this tax is disabled."
 msgstr ""
 "No se encontró un impuesto de IVA para la alícuota %s%%. Revise si este "
 "impuesto está deshabilitado."
@@ -474,9 +492,7 @@ msgstr "Por favor, suba un archivo Excel para importar."
 msgid ""
 "The file does not contain the following required columns: %s.\n"
 "\n"
-"If you did not make manual changes to the Excel file, ARCA may have changed "
-"the file format. In that case, please report the issue through a support "
-"ticket."
+"If you did not make manual changes to the Excel file, ARCA may have changed the file format. In that case, please report the issue through a support ticket."
 msgstr ""
 "El archivo no contiene las siguientes columnas requeridas: %s.\n"
 "\n"
@@ -498,11 +514,6 @@ msgstr "Total de Facturas Existentes"
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard__total_bills_to_create
 msgid "Total Invoices to Create"
 msgstr "Total de Facturas a Crear"
-
-#. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva_0
-msgid "VAT 0%"
-msgstr "IVA 0%"
 
 #. module: l10n_ar_import_bill
 #: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__iva_10_5

@@ -1,5 +1,3 @@
-import math
-
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
@@ -36,7 +34,7 @@ class AfipImportWizard(models.TransientModel):
 
     file_data = fields.Binary(string="ARCA Excel File", help="Excel file exported from ARCA")
     file_name = fields.Char()
-    journal_domain = fields.Binary(
+    journal_domain = fields.Json(
         compute="_compute_journal_domain",
     )
 
@@ -48,7 +46,8 @@ class AfipImportWizard(models.TransientModel):
             domain = [("type", "=", "purchase"), ("l10n_latam_use_documents", "=", True)]
         else:
             domain = []
-        self.journal_domain = domain
+        for wizard in self:
+            wizard.journal_domain = domain
 
     def action_process_file(self):
         """Process the uploaded file and open the main import wizard"""
@@ -59,7 +58,7 @@ class AfipImportWizard(models.TransientModel):
         attachment = self.env["ir.attachment"].create(
             {
                 "name": self.file_name or "import.xlsx",
-                "datas": self.file_data,
+                "raw": self.file_data,
             }
         )
         return self.journal_id.with_context(
@@ -70,11 +69,15 @@ class AfipImportWizard(models.TransientModel):
     # common code for both import from settings and from journal
     #####
 
+    @api.depends("line_ids.exists")
     def _compute_bills_to_create(self):
-        self.total_bills_to_create = len(self.line_ids.filtered(lambda l: not l.exists))
+        for wizard in self:
+            wizard.total_bills_to_create = len(wizard.line_ids.filtered(lambda line: not line.exists))
 
+    @api.depends("line_ids.exists")
     def _compute_bills_exists(self):
-        self.total_bills_exists = len(self.line_ids.filtered(lambda l: l.exists))
+        for wizard in self:
+            wizard.total_bills_exists = len(wizard.line_ids.filtered(lambda line: line.exists))
 
     def action_confirm(self):  # noqa: C901
         # Validate if importing from settings (sales from ARCA)
@@ -168,8 +171,10 @@ class AfipImportWizard(models.TransientModel):
 
             if is_vat_responsible:
                 # Agregamos la linea con IVA y otros tributos (si existen).
+                # There is no "IVA 0%" column in the ARCA listing: at 0% there is no
+                # amount to bring, so there is nothing to derive the net from either.
                 vat_rates = [
-                    (0.0, line.iva_0, line.neto_grav_iva_0),
+                    (0.0, 0.0, line.neto_grav_iva_0),
                     (2.5, line.iva_2_5, line.neto_grav_iva_2_5),
                     (5.0, line.iva_5, line.neto_grav_iva_5),
                     (10.5, line.iva_10_5, line.neto_grav_iva_10_5),
@@ -178,7 +183,8 @@ class AfipImportWizard(models.TransientModel):
                 ]
 
                 for vat_rate, vat_amount, neto_amount in vat_rates:
-                    if not math.isnan(neto_amount) and neto_amount > 0:
+                    neto_amount = line._neto_gravado(vat_rate, vat_amount, neto_amount)
+                    if neto_amount > 0:
                         # Search for the specific VAT tax
                         if vat_rate == 0.0:
                             # For 0% VAT, search for tax with AFIP code 3 and amount 0
@@ -197,9 +203,6 @@ class AfipImportWizard(models.TransientModel):
                             )
 
                         if iva_tax:
-                            if math.isnan(neto_amount) or neto_amount == 0:
-                                neto_amount = round(vat_amount / (vat_rate / 100), 2)
-
                             move_vals["line_ids"].append(line._create_line(neto_amount, [iva_tax.id]))
                         else:
                             raise UserError(
@@ -207,7 +210,7 @@ class AfipImportWizard(models.TransientModel):
                             )
 
                 # Add line for "exento" if it has a value
-                if not math.isnan(line.exento) and line.exento > 0:
+                if line.exento > 0:
                     if not tax_iva_exento:
                         raise UserError(
                             _("No VAT Exempt tax found. You must create a purchase tax with the 'VAT Exempt' group.")
@@ -215,7 +218,7 @@ class AfipImportWizard(models.TransientModel):
                     move_vals["line_ids"].append(line._create_line(line.exento, [tax_iva_exento.id]))
 
                 # Add line for "no gravado" if it has a value
-                if not math.isnan(line.no_gravado) and line.no_gravado > 0:
+                if line.no_gravado > 0:
                     if not tax_iva_no_gravado:
                         raise UserError(
                             _(
@@ -243,8 +246,11 @@ class AfipImportWizard(models.TransientModel):
 
             move = self.env["account.move"].create(move_vals)
 
-            # Agregamos el rate despues de crear la factura, para que Odoo no lo recalcule
-            if line.currency_rate and line.currency_rate != 1:
+            # Agregamos el rate despues de crear la factura, para que Odoo no lo recalcule.
+            # The field comes from `account_ux`, which this module does not depend on: a
+            # base without it imported the listing until the first foreign currency
+            # document, and died there.
+            if line.currency_rate and line.currency_rate != 1 and "inverse_invoice_currency_rate" in move._fields:
                 move.inverse_invoice_currency_rate = line.currency_rate
 
             # Si tiene otros tributos, modificamos el valor por defecto con el wizard
