@@ -120,6 +120,45 @@ class AccountReport(models.Model):
             }
         )
 
+    def get_options(self, previous_options):
+        options = super().get_options(previous_options)
+        # Billing users read and export the partner reports, but do not send them or open reminders.
+        user = self.env.user
+        if user.has_group("account_accountant_ux.group_partner_report_reader") and not user.has_groups(
+            "account.group_account_basic,account.group_account_readonly,account.group_account_manager"
+        ):
+            options["buttons"] = [
+                button
+                for button in options["buttons"]
+                if button.get("action") == "export_file"
+                and button.get("action_param") in ("export_to_pdf", "export_to_xlsx")
+            ]
+        return options
+
+    def _is_partner_report_for_billing_user(self):
+        """Whether a billing user, without an accountant group, runs one of the partner reports."""
+        if self.env.su or not self:
+            return False
+        user = self.env.user
+        partner_reports = (
+            self.env.ref("account_reports.partner_ledger_report")
+            | self.env.ref("account_reports.customer_statement_report")
+            | self.env.ref("account_reports.followup_report")
+        )
+        return (
+            self <= partner_reports
+            and user.has_group("account_accountant_ux.group_partner_report_reader")
+            and not user.has_groups("account.group_account_readonly,account.group_account_basic")
+        )
+
+    def _get_report_query(self, options, date_scope, domain=None, cta_date_to=None):
+        # Since 20.0 the report query requires an accountant group; billing users still run the partner reports.
+        if self._is_partner_report_for_billing_user():
+            return super(AccountReport, self.sudo())._get_report_query(
+                options, date_scope, domain=domain, cta_date_to=cta_date_to
+            )
+        return super()._get_report_query(options, date_scope, domain=domain, cta_date_to=cta_date_to)
+
     def _get_settlement_company(self, companies):
         """The company that files the settlement for ``companies``, empty if none can.
 
@@ -449,7 +488,11 @@ class AccountReport(models.Model):
         allowed: what the settlement gate refuses is mixing Tax IDs, not filing branch by
         branch.
         """
-        super()._generate_common_warnings(options, warnings)
+        if self._is_partner_report_for_billing_user():
+            # The native warnings search tax returns, which billing users cannot read; partner reports have none.
+            super(AccountReport, self.sudo())._generate_common_warnings(options, warnings)
+        else:
+            super()._generate_common_warnings(options, warnings)
 
         # The user picked these companies; a partial settlement is warned in its wizard instead.
         if self.filter_multi_company == "selector":

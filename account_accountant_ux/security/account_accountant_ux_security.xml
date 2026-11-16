@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Lets billing users open the partner reports from the contact, without the rest of the accounting reports -->
+    <record id="group_partner_report_reader" model="res.groups">
+        <field name="name">Read partner ledger, customer statement and follow-up reports</field>
+    </record>
+
+    <record id="account.group_account_invoice" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('group_partner_report_reader'))]"/>
+    </record>
+
+    <record id="access_account_report_partner_report_reader" model="ir.access">
+        <field name="name">Account report: partner reports only</field>
+        <field name="model_id" ref="account.model_account_report"/>
+        <field name="group_id" ref="group_partner_report_reader"/>
+        <field name="operation">r</field>
+        <field name="domain" eval="str([('id', 'in', [ref('account_reports.partner_ledger_report'), ref('account_reports.customer_statement_report'), ref('account_reports.followup_report')])])"/>
+    </record>
+
+    <record id="access_account_report_line_partner_report_reader" model="ir.access">
+        <field name="name">Account report line: partner reports only</field>
+        <field name="model_id" ref="account.model_account_report_line"/>
+        <field name="group_id" ref="group_partner_report_reader"/>
+        <field name="operation">r</field>
+        <field name="domain" eval="str([('report_id', 'in', [ref('account_reports.partner_ledger_report'), ref('account_reports.customer_statement_report'), ref('account_reports.followup_report')])])"/>
+    </record>
+
+    <record id="access_account_report_expression_partner_report_reader" model="ir.access">
+        <field name="name">Account report expression: partner reports only</field>
+        <field name="model_id" ref="account.model_account_report_expression"/>
+        <field name="group_id" ref="group_partner_report_reader"/>
+        <field name="operation">r</field>
+        <field name="domain" eval="str([('report_line_id.report_id', 'in', [ref('account_reports.partner_ledger_report'), ref('account_reports.customer_statement_report'), ref('account_reports.followup_report')])])"/>
+    </record>
+
+    <record id="access_account_report_column_partner_report_reader" model="ir.access">
+        <field name="name">Account report column: partner reports only</field>
+        <field name="model_id" ref="account.model_account_report_column"/>
+        <field name="group_id" ref="group_partner_report_reader"/>
+        <field name="operation">r</field>
+        <field name="domain" eval="str([('report_id', 'in', [ref('account_reports.partner_ledger_report'), ref('account_reports.customer_statement_report'), ref('account_reports.followup_report')])])"/>
+    </record>
+
+</odoo>
