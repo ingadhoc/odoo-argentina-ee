@@ -2,7 +2,7 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from odoo import api, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -61,8 +61,10 @@ class AccountReconcileWizard(models.TransientModel):
                 "all" in blocks or ("other_legal_entity" in blocks and len(companies.legal_entity_root_id) > 1)
             ):
                 raise UserError(
-                    "Cannot reconcile journal items from different companies. "
-                    "Please check the 'Block Inter-Company Reconciliation' option "
-                    "of the root company of the companies involved."
+                    _(
+                        "Cannot reconcile journal items from different companies. "
+                        "Please check the 'Block Inter-Company Reconciliation' option "
+                        "of the root company of the companies involved."
+                    )
                 )
         return super().reconcile()
