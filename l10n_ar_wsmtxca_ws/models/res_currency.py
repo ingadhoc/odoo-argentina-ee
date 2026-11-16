@@ -1,6 +1,6 @@
 import logging
 
-from odoo import _, models
+from odoo import _, fields, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -34,5 +34,8 @@ class ResCurrency(models.Model):
             _logger.warning("Errors getting currency rate from WSMTXCA: %s", response.arrayErrores)
             return date_rate, False
         rate = float(response.cotizacionMoneda)
-        date = date_rate.strftime("%Y-%m-%d") if date_rate else getattr(response, "fechaCotizacion", False)
-        return date, rate
+        # ARCA expects the date as %Y-%m-%d, but l10n_ar_edi parses the returned one with %Y%m%d.
+        date = fields.Date.to_date(date_rate or getattr(response, "fechaCotizacion", False))
+        if not date:
+            raise UserError(_("ARCA did not return the date of the currency rate for %s.", self.name))
+        return date.strftime("%Y%m%d"), rate
