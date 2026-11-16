@@ -87,6 +87,12 @@ msgstr ""
 
 #. module: l10n_ar_wsmtxca_ws
 #. odoo-python
+#: code:addons/l10n_ar_wsmtxca_ws/models/res_currency.py:0
+msgid "ARCA did not return the date of the currency rate for %s."
+msgstr "ARCA no devolvió la fecha de la cotización de la moneda %s."
+
+#. module: l10n_ar_wsmtxca_ws
+#. odoo-python
 #: code:addons/l10n_ar_wsmtxca_ws/models/account_journal.py:0
 msgid "Codificación de producto - RG2904 (WSMTXCA)"
 msgstr ""
