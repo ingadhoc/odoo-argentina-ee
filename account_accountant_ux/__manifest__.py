@@ -34,8 +34,17 @@
         "account_followup",
     ],
     "data": [
+<<<<<<< e289e85828dc66d9c77d95534e6e5e177bdeaf42
         "security/ir.access.csv",
         "views/res_company_view.xml",
+||||||| e4def65c4daae1ed153eeb48eb4ebd16c9d00549
+        "security/account_accountant_ux_security.xml",
+        "security/ir.model.access.csv",
+        "views/res_company_view.xml",
+=======
+        "security/account_accountant_ux_security.xml",
+        "security/ir.model.access.csv",
+>>>>>>> 095629d164afd867289b6ddb5a35586f6db09f1f
         "views/res_partner_view.xml",
         "views/account_move_line.xml",
         "views/account_report_view.xml",
