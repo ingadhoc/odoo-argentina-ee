@@ -119,6 +119,21 @@ class AccountReport(models.Model):
             }
         )
 
+    def get_options(self, previous_options):
+        options = super().get_options(previous_options)
+        # Billing users read and export the partner reports, but do not send them or open reminders.
+        user = self.env.user
+        if user.has_group("account_accountant_ux.group_partner_report_reader") and not user.has_groups(
+            "account.group_account_basic,account.group_account_readonly,account.group_account_manager"
+        ):
+            options["buttons"] = [
+                button
+                for button in options["buttons"]
+                if button.get("action") == "export_file"
+                and button.get("action_param") in ("export_to_pdf", "export_to_xlsx")
+            ]
+        return options
+
     def _get_settlement_company(self, companies):
         """The company that files the settlement for ``companies``, empty if none can.
 
