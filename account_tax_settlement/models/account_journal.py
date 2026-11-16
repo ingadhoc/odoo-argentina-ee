@@ -152,43 +152,42 @@ class AccountJournal(models.Model):
 
     def _get_tax_settlement_entry_lines_vals(self, domain=None):
         # TODO agregar la parte dinamica
-        grouped_move_lines = self.env["account.move.line"].read_group(
-            domain, ["account_id", "balance", "amount_currency:sum"], ["account_id"]
+        # We group by currency too: account.move.line.read_group hides amount_currency when not grouped by
+        # currency_id, and we need the real amount in the account secondary currency to settle it
+        groups = self.env["account.move.line"]._read_group(
+            domain or [], ["account_id", "currency_id"], ["balance:sum", "amount_currency:sum"]
         )
+        accounts_data = {}
+        for account, currency, group_balance, group_amount_currency in groups:
+            account_data = accounts_data.setdefault(account, {"balance": 0.0, "amount_currency": 0.0})
+            account_data["balance"] += group_balance
+            if currency == account.currency_id:
+                account_data["amount_currency"] += group_amount_currency
 
         new_move_lines = []
-        balance = 0.0
-        # hacemos esto para verificar que todos sean de la misma moneda
         company_currency = self.company_id.currency_id
-        is_zero = self.company_id.currency_id.is_zero
-        for group in grouped_move_lines:
-            group_balance = company_currency.round(group["balance"])
+        is_zero = company_currency.is_zero
+        for account, account_data in accounts_data.items():
+            group_balance = company_currency.round(account_data["balance"])
             if is_zero(group_balance):
                 continue
-            balance += group_balance
-            # amount_currency += group_amount_currency
-            # balane es debito menos credito, si es positivo entonces hay mas
+            # balance es debito menos credito, si es positivo entonces hay mas
             # debito y tenemos que mandar a credito
             new_vals_line = {
                 "name": self.name,
                 "debit": group_balance < 0.0 and -group_balance,
                 "credit": group_balance >= 0.0 and group_balance,
-                "account_id": group["account_id"][0],
+                "account_id": account.id,
             }
             # if we find an account with secondary currency, we consider that
             #  the new aml must have currency and amount currency
-            if (
-                currency := group["account_id"][0]
-                and self.env["account.account"].browse(group["account_id"][0]).currency_id
-            ):
-                if new_vals_line["debit"] > 0.0:
-                    amount_currency = (
-                        group["amount_currency"] < 0.0 and -group["amount_currency"] or group["amount_currency"]
-                    )
+            if currency := account.currency_id:
+                if currency == company_currency:
+                    amount_currency = abs(group_balance)
                 else:
-                    amount_currency = (
-                        group["amount_currency"] > 0.0 and -group["amount_currency"] or group["amount_currency"]
-                    )
+                    amount_currency = abs(currency.round(account_data["amount_currency"]))
+                if new_vals_line["credit"]:
+                    amount_currency = -amount_currency
                 new_vals_line.update({"currency_id": currency.id, "amount_currency": amount_currency})
             new_move_lines.append(new_vals_line)
 
