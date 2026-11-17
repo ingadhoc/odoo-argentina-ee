@@ -17,6 +17,7 @@
     ],
     "data": [
         "security/ir.model.access.csv",
+        "security/l10n_ar_hr_payroll_security.xml",
         "data/l10n_ar_afip_code_data.xml",
         "report/report_payslip.xml",
         "data/hr_payslip_input_type_data.xml",

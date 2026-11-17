@@ -162,6 +162,18 @@ class TestL10nArPayroll(TestPayslipValidationCommon):
             extra = slip.line_ids.filtered(lambda l: l.code == "AR_REM")
             self.assertEqual(sorted(extra.mapped("total")), [500.0, 1000.0])
             self.assertIn("Bonus", extra.mapped("name"))
+        with self.subTest("each line keeps the quantity and unit of its own input, also around an empty one"):
+            slip.input_line_ids = [Command.unlink(line.id) for line in slip.input_line_ids if line.code == "AR_REM"] + [
+                self._input("AR_REM", 1000.0, 2, "D"),
+                self._input("AR_REM", 0.0, 5, "D"),
+                self._input("AR_REM", 500.0, 10, "%"),
+            ]
+            slip.compute_sheet()
+            extra = slip.line_ids.filtered(lambda l: l.code == "AR_REM" and l.total)
+            self.assertEqual(
+                sorted((line.total, line.l10n_ar_quantity, line.l10n_ar_unit) for line in extra),
+                [(500.0, 10, "%"), (1000.0, 2, "D")],
+            )
 
     def test_batch_entry_and_payments(self):
         """A batch of two employees with the same amounts gives one entry and one payment per employee.
@@ -280,13 +292,31 @@ class TestL10nArPayroll(TestPayslipValidationCommon):
 
     def test_lsd_file(self):
         """The payroll book file takes the concepts, their units and the capped base as they were written."""
+        company_partner = self.env.company.partner_id
+        company_partner.write(
+            {"l10n_latam_identification_type_id": self.env.ref("l10n_ar.it_cuit").id, "vat": "30711111111"}
+        )
         run = self._create_run(self.employee)
         slip = run.slip_ids
-        self._write_concepts(slip, base=0)
+        self._write_concepts(slip)
         slip.action_payslip_done()
         wizard = self.env["l10n_ar.lsd.wizard"].create({"run_ids": [Command.set(run.ids)]})
 
+        with self.subTest("without the CBU the file is not generated"):
+            with self.assertRaises(UserError):
+                wizard.action_generate()
+        # Spaces on purpose: the file takes the sanitized number.
+        bank_account = self.env["res.partner.bank"].create(
+            {"acc_number": "28505909 40090418135201", "partner_id": self.employee.work_contact_id.id}
+        )
+        self.employee.sudo().bank_account_ids = [Command.link(bank_account.id)]
+        with self.subTest("without the CUIT of the company the file is not generated"):
+            company_partner.vat = False
+            with self.assertRaises(UserError):
+                wizard.action_generate()
+            company_partner.vat = "30711111111"
         with self.subTest("without the capped base the file is not generated"):
+            slip.l10n_ar_contribution_base = 0
             with self.assertRaises(UserError):
                 wizard.action_generate()
 
@@ -294,6 +324,14 @@ class TestL10nArPayroll(TestPayslipValidationCommon):
         slip.l10n_ar_contribution_base = 900000.0
         wizard.action_generate()
         rows = b64decode(wizard.lsd_file).decode("latin-1").split("\r\n")
+        with self.subTest("each record type has the fixed length of its layout"):
+            lengths = {}
+            for row in filter(None, rows):
+                lengths.setdefault(row[:2], set()).add(len(row))
+            self.assertEqual(lengths, {"01": {35}, "02": {115}, "03": {51}, "04": {370}})
+        with self.subTest("record 02: the sanitized CBU"):
+            record_02 = next(row for row in rows if row.startswith("02"))
+            self.assertEqual(record_02[73:95], "2850590940090418135201")
         concepts = {row[13:23].strip(): row for row in rows if row.startswith("03")}
         with self.subTest("record 03: units of days and percentages, debit for deductions"):
             self.assertEqual(concepts["BASIC"][23:29], "02800D")
@@ -306,3 +344,14 @@ class TestL10nArPayroll(TestPayslipValidationCommon):
         with self.subTest("record 04: the capped base goes to the capped bases, the remuneration to the rest"):
             self.assertEqual(record_04.count(f"{90000000:015d}"), 3)
             self.assertEqual(record_04.count(f"{103333333:015d}"), 6)
+        with self.subTest("payslips of different months are not mixed in one file"):
+            other = slip.copy(
+                {
+                    "payslip_run_id": run.id,
+                    "date_from": self.date_from + relativedelta(months=-1),
+                    "date_to": self.date_from + relativedelta(days=-1),
+                }
+            )
+            other.state = "validated"
+            with self.assertRaises(UserError):
+                wizard.action_generate()
