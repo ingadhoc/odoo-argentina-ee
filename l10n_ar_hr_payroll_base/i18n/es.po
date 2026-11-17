@@ -118,6 +118,12 @@ msgid "All batches must belong to the same company."
 msgstr "Todos los lotes tienen que ser de la misma compañía."
 
 #. module: l10n_ar_hr_payroll_base
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_base/wizard/l10n_ar_lsd_wizard.py:0
+msgid "All payslips must belong to the same month."
+msgstr "Todos los recibos tienen que ser del mismo mes."
+
+#. module: l10n_ar_hr_payroll_base
 #: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_base.report_payslip_ar
 msgid "Amount"
 msgstr "Monto"
@@ -971,8 +977,20 @@ msgstr "Servicios eventuales, art. 2 inc. B"
 #. module: l10n_ar_hr_payroll_base
 #. odoo-python
 #: code:addons/l10n_ar_hr_payroll_base/wizard/l10n_ar_lsd_wizard.py:0
+msgid "The CBU (22 digits) of %s is missing."
+msgstr "Falta el CBU (22 dígitos) de %s."
+
+#. module: l10n_ar_hr_payroll_base
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_base/wizard/l10n_ar_lsd_wizard.py:0
 msgid "The CUIL (11 digits) of %s is missing."
 msgstr "Falta el CUIL (11 dígitos) de %s."
+
+#. module: l10n_ar_hr_payroll_base
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_base/wizard/l10n_ar_lsd_wizard.py:0
+msgid "The CUIT (11 digits) of %s is missing."
+msgstr "Falta el CUIT (11 dígitos) de %s."
 
 #. module: l10n_ar_hr_payroll_base
 #. odoo-python
