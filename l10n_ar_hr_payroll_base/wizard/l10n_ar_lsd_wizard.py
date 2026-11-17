@@ -33,8 +33,12 @@ class L10nArLsdWizard(models.TransientModel):
         payment_date = self.run_ids.filtered("l10n_ar_payment_date")[:1].l10n_ar_payment_date
         if not payment_date:
             raise UserError(self.env._("Set the payment date on the batch."))
+        if len({(d.year, d.month) for d in slips.mapped("date_to")}) > 1:
+            raise UserError(self.env._("All payslips must belong to the same month."))
         period = max(slips.mapped("date_to"))
         cuit = company.partner_id.l10n_ar_vat or ""
+        if len(cuit) != 11 or not cuit.isdigit():
+            raise UserError(self.env._("The CUIT (11 digits) of %s is missing.", company.name))
         rows = [f"01{cuit}SJ{period:%Y%m}M{self.liquidation_number:05d}30{len(slips.employee_id):06d}"]
         for employee in slips.employee_id:
             rows += self._get_employee_rows(employee, slips.filtered(lambda s: s.employee_id == employee), payment_date)
@@ -58,9 +62,11 @@ class L10nArLsdWizard(models.TransientModel):
         if len(cuil) != 11:
             raise UserError(self.env._("The CUIL (11 digits) of %s is missing.", employee.name))
         job = (employee.job_title or employee.job_id.name or "")[:50]
-        cbu = employee.primary_bank_account_id.acc_number or ""
+        cbu = employee.primary_bank_account_id.sanitized_acc_number or ""
+        if len(cbu) != 22 or not cbu.isdigit():
+            raise UserError(self.env._("The CBU (22 digits) of %s is missing.", employee.name))
         rows = [
-            f'02{cuil}{(employee.l10n_ar_file_number or ""):<10}{job:<50}{cbu:0>22}030'
+            f'02{cuil}{(employee.l10n_ar_file_number or ""):<10}{job:<50}{cbu}030'
             f'{payment_date:%Y%m%d}{payment_date:%Y%m%d}3'
         ]
 
