@@ -19,7 +19,13 @@
 ##############################################################################
 {
     "name": "Accounting Accountant UX",
+<<<<<<< 5bb499d250defdcaca187665eb1cc92d117e82dc
     "version": "19.0.1.16.0",
+||||||| c29883342cf777f1d5bf1b08e2c4c929c52bd3b2
+    "version": "19.0.1.19.0",
+=======
+    "version": "19.0.1.20.0",
+>>>>>>> 626ec2202fb0edb7f63d5c28644c7fd61d77ac0b
     "category": "Accounting",
     "sequence": 14,
     "summary": "",
@@ -34,6 +40,7 @@
         "account_followup",
     ],
     "data": [
+        "security/account_accountant_ux_security.xml",
         "security/ir.model.access.csv",
         "views/res_company_view.xml",
         "views/res_partner_view.xml",
