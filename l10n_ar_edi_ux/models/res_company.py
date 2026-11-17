@@ -159,7 +159,12 @@ class ResCompany(models.Model):
         A missing CUIT on a branch that has a parent is detected early and
         reported with a clear message."""
         self.ensure_one()
-        if not self.sudo().l10n_ar_afip_ws_crt_id and self.parent_id:
+        if (
+            not self.sudo().l10n_ar_afip_ws_crt_id
+            and self.parent_id
+            # webservices that do not use the ARCA certificate (ARBA A122R) handle their own credentials
+            and not self.env.context.get("l10n_ar_skip_cert_ancestor")
+        ):
             if not self.vat:
                 raise UserError(
                     _(

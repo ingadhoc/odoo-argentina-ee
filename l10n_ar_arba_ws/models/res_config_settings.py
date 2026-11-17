@@ -1,4 +1,4 @@
-from odoo import _, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
 
@@ -12,11 +12,23 @@ class ResConfigSettings(models.TransientModel):
     l10n_ar_arba_client_id = fields.Char(related="company_id.l10n_ar_arba_client_id", readonly=False)
     l10n_ar_arba_client_secret = fields.Char(related="company_id.l10n_ar_arba_client_secret", readonly=False)
     l10n_ar_arba_wh_mode = fields.Selection(related="company_id.l10n_ar_arba_wh_mode", readonly=False)
+    l10n_ar_arba_ws_shared_msg = fields.Char("A122R Shared Credentials", compute="_compute_l10n_ar_arba_ws_shared_msg")
+
+    @api.depends("company_id")
+    def _compute_l10n_ar_arba_ws_shared_msg(self):
+        for rec in self:
+            ws_company = rec.company_id._l10n_ar_arba_ws_company()
+            rec.l10n_ar_arba_ws_shared_msg = ws_company != rec.company_id and _(
+                "It uses the A122R credentials (CIT, client ID, secret and environment) of company %s. "
+                "Set a CIT on this company to use its own.",
+                ws_company.name,
+            )
 
     def l10n_ar_arba_test_ws_connection(self):
         self.ensure_one()
         afip_ws = "A122R"
-        arba_env = self.company_id.l10n_ar_arba_env
+        ws_company = self.company_id._l10n_ar_arba_ws_company()
+        arba_env = ws_company.l10n_ar_arba_env
         # Call _l10n_ar_get_token_data directly to bypass _get_environment_type() (AFIP env),
         # which in testing databases always returns 'testing' regardless of the ARBA environment.
         # The ARBA token URL is determined by company.l10n_ar_arba_env, not the AFIP env.
@@ -27,6 +39,8 @@ class ResConfigSettings(models.TransientModel):
                 webservice=afip_ws,
                 arba_env=arba_env,
             )
+            if ws_company != self.company_id:
+                msg += "\n" + _("It uses the ARBA credentials of company %s", ws_company.name)
         except UserError as error:
             msg = _("* %(webservice)s: Connection failed. %(message)s", webservice=afip_ws, message=str(error).strip())
         except Exception as error:

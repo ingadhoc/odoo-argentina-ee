@@ -53,7 +53,8 @@ class L10nArAfipwsConnection(models.Model):
         }
         """
         generation_time = fields.Datetime.now()
-        environment_type = company.l10n_ar_arba_env
+        ws_company = company._l10n_ar_arba_ws_company()
+        environment_type = ws_company.l10n_ar_arba_env
 
         if environment_type == "demo":
             return {
@@ -70,9 +71,9 @@ class L10nArAfipwsConnection(models.Model):
         url = ws_url.get(environment_type)
 
         user = company.partner_id.ensure_vat()
-        password = company.arba_cit
-        client_secret = company.l10n_ar_arba_client_secret
-        client_id = company.l10n_ar_arba_client_id
+        password = ws_company.arba_cit
+        client_secret = ws_company.l10n_ar_arba_client_secret
+        client_id = ws_company.l10n_ar_arba_client_id
 
         error = False
         try:
