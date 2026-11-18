@@ -9,5 +9,6 @@ class HrWorkEntryType(models.Model):
         "Employment Status (AR)",
         domain=[("type", "=", "6")],
         help="Employment status of the days with this work entry, for the digital payroll book. "
-        "If empty, those days keep the status of the employee history.",
+        "If empty, those days keep the status of the employee history, and time off of this type stops the "
+        "digital payroll book.",
     )

@@ -104,6 +104,17 @@ result_name = inputs['OS'].name</field>
         <field name="amount_select">input</field>
         <field name="amount_other_input_id" ref="input_ar_norem"/>
     </record>
+    <record id="rule_monthly_guard" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">Daycare Reimbursement</field>
+        <field name="code">GUARD</field>
+        <field name="sequence">51</field>
+        <field name="category_id" ref="category_norem"/>
+        <field name="condition_select">input</field>
+        <field name="condition_other_input_id" ref="input_guard"/>
+        <field name="amount_select">input</field>
+        <field name="amount_other_input_id" ref="input_guard"/>
+    </record>
     <record id="rule_monthly_vng" model="hr.salary.rule">
         <field name="struct_id" ref="structure_monthly"/>
         <field name="name">Unused Vacations</field>
@@ -442,6 +453,17 @@ result_name = inputs['OS'].name</field>
         <field name="amount_select">input</field>
         <field name="amount_other_input_id" ref="input_ar_norem"/>
     </record>
+    <record id="rule_sac_guard" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_sac"/>
+        <field name="name">Daycare Reimbursement</field>
+        <field name="code">GUARD</field>
+        <field name="sequence">51</field>
+        <field name="category_id" ref="category_norem"/>
+        <field name="condition_select">input</field>
+        <field name="condition_other_input_id" ref="input_guard"/>
+        <field name="amount_select">input</field>
+        <field name="amount_other_input_id" ref="input_guard"/>
+    </record>
     <record id="rule_sac_vng" model="hr.salary.rule">
         <field name="struct_id" ref="structure_sac"/>
         <field name="name">Unused Vacations</field>
@@ -779,6 +801,17 @@ result_name = inputs['OS'].name</field>
         <field name="condition_other_input_id" ref="input_ar_norem"/>
         <field name="amount_select">input</field>
         <field name="amount_other_input_id" ref="input_ar_norem"/>
+    </record>
+    <record id="rule_final_guard" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_final"/>
+        <field name="name">Daycare Reimbursement</field>
+        <field name="code">GUARD</field>
+        <field name="sequence">51</field>
+        <field name="category_id" ref="category_norem"/>
+        <field name="condition_select">input</field>
+        <field name="condition_other_input_id" ref="input_guard"/>
+        <field name="amount_select">input</field>
+        <field name="amount_other_input_id" ref="input_guard"/>
     </record>
     <record id="rule_final_vng" model="hr.salary.rule">
         <field name="struct_id" ref="structure_final"/>

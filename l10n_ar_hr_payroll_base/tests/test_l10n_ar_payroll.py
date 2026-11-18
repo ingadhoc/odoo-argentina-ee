@@ -162,6 +162,26 @@ class TestL10nArPayroll(TestPayslipValidationCommon):
             extra = slip.line_ids.filtered(lambda l: l.code == "AR_REM")
             self.assertEqual(sorted(extra.mapped("total")), [500.0, 1000.0])
             self.assertIn("Bonus", extra.mapped("name"))
+        with self.subTest("the daycare reimbursement adds to the net, its receipts do not"):
+            net = slip.net_wage
+            slip.input_line_ids = [
+                self._input("GUARD", 3000.0),
+                self._input("GUARD_REC", 2000.0),
+                self._input("GUARD_REC", 1500.0),
+            ]
+            slip.compute_sheet()
+            daycare = slip.line_ids.filtered(lambda l: l.code == "GUARD")
+            self.assertEqual((daycare.total, daycare.category_id.code), (3000.0, "NOREM"))
+            self.assertFalse(slip.line_ids.filtered(lambda l: l.code == "GUARD_REC"))
+            self.assertEqual(slip.currency_id.compare_amounts(slip.net_wage, net + 3000.0), 0)
+        with self.subTest("the printed payslip shows its own wage when it has one"):
+            slip.l10n_ar_wage = 777777.77
+            html = (
+                self.env["ir.actions.report"]
+                ._render_qweb_html("l10n_ar_hr_payroll_base.action_report_payslip_ar", slip.ids)[0]
+                .decode()
+            )
+            self.assertIn("777", html)
         with self.subTest("each line keeps the quantity and unit of its own input, also around an empty one"):
             slip.input_line_ids = [Command.unlink(line.id) for line in slip.input_line_ids if line.code == "AR_REM"] + [
                 self._input("AR_REM", 1000.0, 2, "D"),
@@ -278,6 +298,14 @@ class TestL10nArPayroll(TestPayslipValidationCommon):
                     Command.create({"date_from": monday + relativedelta(days=day), "situation_id": self.active.id})
                     for day in (11, 12, 13, 14)
                 ]
+        with self.subTest("time off of a type without employment status stops the payroll book"):
+            entry_type = vacation_type.work_entry_type_id.sudo()
+            situation = entry_type.l10n_ar_situation_id
+            entry_type.l10n_ar_situation_id = False
+            with self.assertRaises(UserError):
+                wizard._check_time_off_situations(slip)
+            entry_type.l10n_ar_situation_id = situation
+            wizard._check_time_off_situations(slip)
         with self.subTest("family data in force at the end of the period"):
             self.employee.sudo().l10n_ar_family_ids = [
                 Command.create({"date_from": self.date_from, "kind": "spouse", "dependent": True}),
@@ -322,6 +350,9 @@ class TestL10nArPayroll(TestPayslipValidationCommon):
 
         # Below the remuneration on purpose, to tell the capped bases from the full ones.
         slip.l10n_ar_contribution_base = 900000.0
+        slip.line_ids.filtered(lambda l: l.code == "BASIC").salary_rule_id.write(
+            {"l10n_ar_lsd_code": "sue1", "l10n_ar_lsd_code_second_half": "sue2"}
+        )
         wizard.action_generate()
         rows = b64decode(wizard.lsd_file).decode("latin-1").split("\r\n")
         with self.subTest("each record type has the fixed length of its layout"):
@@ -333,6 +364,11 @@ class TestL10nArPayroll(TestPayslipValidationCommon):
             record_02 = next(row for row in rows if row.startswith("02"))
             self.assertEqual(record_02[73:95], "2850590940090418135201")
         concepts = {row[13:23].strip(): row for row in rows if row.startswith("03")}
+        basic_code = "sue2" if self.date_to.month > 6 else "sue1"
+        with self.subTest("record 03: the LSD code of the rule, by semester when it has one for the second half"):
+            self.assertNotIn("BASIC", concepts)
+            self.assertIn(basic_code, concepts)
+        concepts["BASIC"] = concepts[basic_code]
         with self.subTest("record 03: units of days and percentages, debit for deductions"):
             self.assertEqual(concepts["BASIC"][23:29], "02800D")
             self.assertEqual(concepts["JUB"][23:29], "01100%")

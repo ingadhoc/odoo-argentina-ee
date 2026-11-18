@@ -64,7 +64,7 @@
                                 <td t-out="o.date_to.year"/>
                                 <td t-out="employee.name"/>
                                 <td t-out="employee.l10n_ar_file_number"/>
-                                <td><span t-out="o.version_id.wage" t-options="currency"/></td>
+                                <td><span t-out="o.l10n_ar_wage or o.version_id.wage" t-options="currency"/></td>
                                 <td t-out="o._l10n_ar_seniority_display()"/>
                             </tr>
                             <tr class="table-light fw-bold">

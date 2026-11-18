@@ -28,6 +28,11 @@ class HrPayslip(models.Model):
         help="Employee contribution base after the legal cap, for record 04 of the digital payroll book. "
         "Written by whoever computes the payslip: Odoo does not compute it.",
     )
+    l10n_ar_wage = fields.Monetary(
+        "Payslip Wage",
+        help="Wage shown on the printed payslip, when it differs from the wage of the employee record "
+        "(e.g. a hybrid wage, paid partly as a salary category). Written by whoever computes the payslip.",
+    )
     l10n_ar_situation_line_ids = fields.One2many(
         "l10n_ar.payroll.slip.situation",
         "payslip_id",
