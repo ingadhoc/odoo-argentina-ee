@@ -1,6 +1,6 @@
 import logging
 
-from odoo import _, models
+from odoo import _, fields, models
 from odoo.exceptions import UserError
 
 _logger = logging.getLogger(__name__)
@@ -9,10 +9,10 @@ _logger = logging.getLogger(__name__)
 class ResCurrency(models.Model):
     _inherit = "res.currency"
 
-    def _l10n_ar_get_afip_ws_currency_rate(self, afip_ws="wsfe", date_rate=None):
+    def _l10n_ar_get_afip_ws_currency_rate(self, client, auth, afip_ws="wsfe", date_rate=None):
         """Retrieve the currency exchange rate and date from AFIP web services."""
         if afip_ws != "wsmtxca":
-            return super()._l10n_ar_get_afip_ws_currency_rate(afip_ws, date_rate)
+            return super()._l10n_ar_get_afip_ws_currency_rate(client, auth, afip_ws, date_rate)
         self.ensure_one()
         if not self.l10n_ar_afip_code:
             raise UserError(
@@ -23,8 +23,6 @@ class ResCurrency(models.Model):
             )
         if self.l10n_ar_afip_code == "PES":
             raise UserError(_("No rate for ARS (is the base currency for AFIP)"))
-        connection = self.env.company._l10n_ar_get_connection(afip_ws)
-        client, auth = connection._get_client()
         auth = self.env["account.journal"]._wsmtxca_convert_auth(auth)
         req_data = {"codigoMoneda": self.l10n_ar_afip_code}
         if date_rate:
@@ -34,5 +32,9 @@ class ResCurrency(models.Model):
             _logger.warning("Errors getting currency rate from WSMTXCA: %s", response.arrayErrores)
             return date_rate, False
         rate = float(response.cotizacionMoneda)
-        date = date_rate.strftime("%Y-%m-%d") if date_rate else getattr(response, "fechaCotizacion", False)
-        return date, rate
+        # ARCA expects the date as %Y-%m-%d, but l10n_ar_edi parses the returned one with %Y%m%d
+        # (the wsfe format), so normalize it whichever way it came.
+        date = fields.Date.to_date(
+            date_rate or getattr(response, "fechaCotizacion", False) or fields.Date.context_today(self)
+        )
+        return date.strftime("%Y%m%d"), rate
