@@ -99,6 +99,12 @@ automática y la responsabilidad AFIP del cliente), no en **Percepción - SIRCIP
 fiscal se aplican a toda factura que la use, cualquiera sea la entrega. **Percepción - SIRCIP** tiene secuencia
 9999 y no tiene provincias, así que cualquier posición fiscal de la provincia de entrega le gana.
 
+**Percepción - SIRCIP** tiene que quedar **última**. Una posición fiscal para todo el país (sin provincias ni
+códigos postales) y con la misma responsabilidad AFIP empata con ella, y en un empate Odoo elige la de
+secuencia más baja: si queda después de **Percepción - SIRCIP**, nunca se aplica y sus percepciones
+provinciales se pierden. Cuando pasa, las dos posiciones fiscales lo avisan en el formulario; se arregla
+bajándole la secuencia a la otra.
+
 Con **dígito 4** en la provincia de entrega también percibe la provincia, y Odoo no puede adivinar su
 alícuota. Al validar la factura o confirmar el pedido, según la posición fiscal del documento y el contacto
 (vale para cualquier provincia de entrega):

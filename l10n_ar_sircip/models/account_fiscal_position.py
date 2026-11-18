@@ -11,12 +11,17 @@ class AccountFiscalPosition(models.Model):
 
     l10n_ar_sircip_warning = fields.Text(string="SIRCIP Warning", compute="_compute_l10n_ar_sircip_warning")
 
-    @api.depends("company_id.l10n_ar_sircip_agent", "l10n_ar_tax_ids.default_tax_id", "l10n_ar_tax_ids.tax_type")
+    @api.depends(
+        "company_id.l10n_ar_sircip_agent", "l10n_ar_tax_ids.default_tax_id", "l10n_ar_tax_ids.tax_type", "sequence"
+    )
     def _compute_l10n_ar_sircip_warning(self):
-        """Warn agent companies of perception positions lacking the SIRCIP line or holding adhered provinces."""
+        """Warn agent companies of perception positions lacking the SIRCIP line, holding adhered provinces, or
+        ranked after the SIRCIP one."""
         for rec in self:
             messages = []
             perceptions = rec.l10n_ar_tax_ids.filtered(lambda x: x.tax_type == "perception")
+            if rec.company_id.l10n_ar_sircip_agent and rec._origin:
+                messages += rec._origin._l10n_ar_sircip_order_warnings()
             if rec.company_id.l10n_ar_sircip_agent and perceptions:
                 sircip = perceptions.filtered(lambda x: x._l10n_ar_is_sircip())
                 if not sircip:
@@ -35,6 +40,56 @@ class AccountFiscalPosition(models.Model):
                         )
                     )
             rec.l10n_ar_sircip_warning = "\n".join(messages)
+
+    def _l10n_ar_sircip_shadowed(self):
+        """Auto-applied perception positions that tie with the SIRCIP one and do not come before it.
+
+        Odoo picks the position by its ranking (responsibility, provinces, country, ...) and, on a tie, by the lowest
+        sequence. The SIRCIP position covers the whole country with the same responsibilities, so a tied position
+        that comes after it never applies and its provincial perceptions are lost, without any warning.
+        """
+        self.ensure_one()
+        return self.search(
+            [
+                ("company_id", "=", self.company_id.id),
+                ("id", "!=", self.id),
+                ("auto_apply", "=", True),
+                ("sequence", ">=", self.sequence),
+                ("l10n_ar_tax_ids.tax_type", "=", "perception"),
+                ("country_id", "=", self.country_id.id),
+                ("state_ids", "=", False),
+                ("country_group_id", "=", False),
+                ("vat_required", "=", self.vat_required),
+                ("l10n_ar_afip_responsibility_type_ids", "in", self.l10n_ar_afip_responsibility_type_ids.ids),
+            ]
+        ).filtered(lambda x: not (x.zip_from and x.zip_to))
+
+    def _l10n_ar_sircip_order_warnings(self):
+        """Order warnings for the SIRCIP position and for the positions it shadows."""
+        self.ensure_one()
+        sircip = self.env.ref("l10n_ar_sircip.fiscal_position_sircip_%s" % self.company_id.id, raise_if_not_found=False)
+        if not sircip or not sircip.auto_apply:
+            return []
+        if self == sircip:
+            shadowed = sircip._l10n_ar_sircip_shadowed()
+            if not shadowed:
+                return []
+            return [
+                self.env._(
+                    "This fiscal position must be the last one (highest sequence) among the perception ones. "
+                    "%(positions)s tie with it and come after it, so Odoo picks this one and never applies them.",
+                    positions=", ".join(shadowed.mapped("display_name")),
+                )
+            ]
+        if self in sircip._l10n_ar_sircip_shadowed():
+            return [
+                self.env._(
+                    "This fiscal position ties with %(sircip)s and comes after it, so Odoo picks that one and never "
+                    "applies this one: give it a lower sequence.",
+                    sircip=sircip.display_name,
+                )
+            ]
+        return []
 
     @api.model_create_multi
     def create(self, vals_list):

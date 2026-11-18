@@ -143,3 +143,35 @@ class TestSircipCompany(TestSircipCommon):
                 ),
                 len(self.settlement_journal),
             )
+
+    def test_sircip_fiscal_position_goes_last(self):
+        """A perception position for the whole country ties with the SIRCIP one, so it has to come first: when it
+        comes after, both warn, and the one for a province never ties."""
+        perception = [Command.create({"default_tax_id": self.tax_perc_iibb.id, "tax_type": "perception"})]
+        values = {
+            "company_id": self.company_ri.id,
+            "auto_apply": True,
+            "country_id": self.env.ref("base.ar").id,
+            "l10n_ar_afip_responsibility_type_ids": [Command.set(self.env.ref("l10n_ar.res_IVARI").ids)],
+            "l10n_ar_tax_ids": perception,
+        }
+        country_wide = self.env["account.fiscal.position"].create(dict(values, name="Percepción país", sequence=10))
+        province = self.env["account.fiscal.position"].create(
+            dict(
+                values,
+                name="Percepción provincia",
+                sequence=99999,
+                state_ids=[Command.set(self.tax_perc_iibb.l10n_ar_state_id.ids)],
+            )
+        )
+        sircip = self.env.ref("l10n_ar_sircip.fiscal_position_sircip_%s" % self.company_ri.id)
+        positions = sircip | country_wide | province
+        with self.subTest("before the SIRCIP one, nothing to warn"):
+            self.assertFalse(positions.filtered("l10n_ar_sircip_warning"))
+        with self.subTest("after the SIRCIP one, both warn"):
+            sircip.sequence = 1
+            positions.invalidate_recordset(["l10n_ar_sircip_warning"])
+            self.assertIn(country_wide.display_name, sircip.l10n_ar_sircip_warning)
+            self.assertIn(sircip.display_name, country_wide.l10n_ar_sircip_warning)
+            self.assertNotIn(province.display_name, sircip.l10n_ar_sircip_warning)
+            self.assertFalse(province.l10n_ar_sircip_warning)
