@@ -244,6 +244,9 @@ Registros que genera (campo 5, *tipo de registro*):
 * **2 Informativo**: las facturas de los meses liquidados a clientes con letra A, sea cual sea la provincia
   de entrega. No llevan percepción: salen de cruzar las facturas del mes.
 
+Solo entran **ventas**: una percepción SIRCIP que la compañía sufre en una factura de proveedor no se declara
+acá, aunque su impuesto tenga un tipo de registro SIRCIP por error.
+
 Campos fijos: régimen (4) siempre ``1`` (Régimen General), código de operación exceptuada (6) siempre ``0``,
 CRC de devolución (16) vacío, ABM (17) siempre ``A``, jurisdicción (7) la de entrega, punto de venta (10) y
 número (11) sin ceros a la izquierda, y monto (14) igual a base × alícuota / 100 redondeado a 2 decimales,
@@ -251,6 +254,19 @@ que es como lo valida el portal. El tipo de comprobante (8) sigue la tabla ofici
 débito ``2``, recibo ``3``, nota de venta al contado ``4``, factura, nota de débito y nota de crédito de
 exportación ``5``, ``6`` y ``106``, liquidaciones ``7``, nota de crédito ``102``, y otros débitos y créditos
 ``20`` y ``120``. Formato completo: el diseño de registros de la Comisión Arbitral (ver Referencias oficiales).
+
+Percepciones sufridas
+---------------------
+
+Cuando un proveedor agente de SIRCIP nos percibe, la percepción se carga en la factura de proveedor con el
+impuesto **Percepción SIRCIP sufrida**, como las sufridas de cada provincia. Ese impuesto lo crea
+``l10n_ar_account_tax_settlement`` en todas las compañías argentinas, sean agentes o no, así que no hace
+falta este módulo para usarlo.
+
+No va en el TXT de SIFERE: según la Comisión Arbitral, una vez que el agente presenta su DDJJ, SIFERE Web
+carga solo las percepciones SIRCIP en las deducciones del percibido, ya distribuidas por jurisdicción (igual
+que SIRCREB y SIRTAC). Si fuera en el TXT, se deducirían dos veces. Tampoco va en la DDJJ de SIRCIP, que
+declara solo lo que percibe la compañía. El detalle, en el README de ``l10n_ar_account_tax_settlement``.
 
 Referencias Oficiales
 =====================

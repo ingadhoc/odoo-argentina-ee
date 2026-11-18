@@ -69,7 +69,10 @@ class AccountJournal(models.Model):
         """
         self.ensure_one()
         rows = []
-        for line in move_lines.filtered(lambda x: x.move_id.is_invoice() and x.tax_line_id.l10n_ar_sircip_record_type):
+        for line in move_lines.filtered(
+            # Only sales: a SIRCIP perception suffered on a vendor bill is not declared by the company
+            lambda x: x.move_id.is_sale_document() and x.tax_line_id.l10n_ar_sircip_record_type
+        ):
             tax = line.tax_line_id
             sign = -1 if line.move_id.move_type == "out_refund" else 1
             rows.append(

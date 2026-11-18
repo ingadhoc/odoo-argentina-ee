@@ -167,3 +167,34 @@ class TestSircipDdjj(TestSircipCommon):
         refund.action_post()
         with self.assertRaisesRegex(ValidationError, "original invoice"):
             self._ddjj_rows(refund)
+
+    def test_ddjj_without_suffered_perceptions(self):
+        """SIRCIP perceptions suffered on vendor bills are not declared by the company, not even with a purchase tax
+        set with a SIRCIP record type by mistake."""
+        suffered = self.env.ref(
+            "l10n_ar_account_tax_settlement.tax_percepcion_iibb_sircip_sufrida_%s" % self.company_ri.id
+        )
+        vat = self.env.ref("account.%s_ri_tax_vat_21_compras" % self.company_ri.id)
+        misconfigured = suffered.copy({"name": "SIRCIP sufrida mal configurada", "l10n_ar_sircip_record_type": "1"})
+        bill = self.env["account.move"].create(
+            {
+                "move_type": "in_invoice",
+                "partner_id": self.partners["digit1"].id,
+                "journal_id": self.company_data["default_journal_purchase"].id,
+                "invoice_date": self.today,
+                "l10n_latam_document_type_id": self.env.ref("l10n_ar.dc_a_f").id,
+                "l10n_latam_document_number": "0001-00000101",
+                "invoice_line_ids": [
+                    Command.create(
+                        {
+                            "product_id": self.product_iva_21.id,
+                            "price_unit": 1000.0,
+                            "tax_ids": [Command.set((vat | suffered | misconfigured).ids)],
+                        }
+                    )
+                ],
+            }
+        )
+        bill.action_post()
+        invoice = self._sircip_invoice(self.partners["digit1"], post=True)
+        self.assertEqual(self._ddjj_rows(invoice | bill), self._ddjj_rows(invoice))
