@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="l10n_ar_payroll_situation_company_rule" model="ir.rule">
+        <field name="name">Employment status history: multi-company</field>
+        <field name="model_id" ref="model_l10n_ar_payroll_situation"/>
+        <field name="domain_force">[('employee_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="l10n_ar_payroll_family_company_rule" model="ir.rule">
+        <field name="name">Family data: multi-company</field>
+        <field name="model_id" ref="model_l10n_ar_payroll_family"/>
+        <field name="domain_force">[('employee_id.company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="l10n_ar_payroll_slip_situation_company_rule" model="ir.rule">
+        <field name="name">Payslip employment status: multi-company</field>
+        <field name="model_id" ref="model_l10n_ar_payroll_slip_situation"/>
+        <field name="domain_force">[('payslip_id.company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>
