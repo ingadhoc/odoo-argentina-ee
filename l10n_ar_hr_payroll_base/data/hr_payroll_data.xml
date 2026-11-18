@@ -40,7 +40,9 @@
         <field name="code">LEAVE700</field>
         <field name="is_leave" eval="True"/>
     </record>
+    <!-- Active on every update: archived, unpaid time off is paid as a worked day -->
     <record id="hr_work_entry.work_entry_type_unpaid_leave" model="hr.work.entry.type">
+        <field name="active" eval="True"/>
         <field name="l10n_ar_situation_id" ref="afip_code_situation_1"/>
     </record>
     <!-- Each company adjusts its time off types: loaded once -->

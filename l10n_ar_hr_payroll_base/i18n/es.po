@@ -205,6 +205,14 @@ msgid "Companies"
 msgstr ""
 
 #. module: l10n_ar_hr_payroll_base
+#: model:ir.model.fields,help:l10n_ar_hr_payroll_base.field_hr_salary_rule__l10n_ar_lsd_code_second_half
+msgid ""
+"Concept code in the digital payroll book for payslips from July to December,"
+" when it differs from the LSD Code (e.g. the SAC of each semester). If "
+"empty, the LSD Code is used."
+msgstr "Código del concepto en el libro de sueldos digital para los recibos de julio a diciembre, cuando difiere del Código LSD (por ejemplo, el SAC de cada semestre). Si está vacío, se usa el Código LSD."
+
+#. module: l10n_ar_hr_payroll_base
 #: model:ir.model.fields,help:l10n_ar_hr_payroll_base.field_hr_salary_rule__l10n_ar_lsd_code
 msgid ""
 "Concept code in the digital payroll book. If empty, the rule code is used."
@@ -250,6 +258,19 @@ msgstr ""
 #: model:ir.model.fields,help:l10n_ar_hr_payroll_base.field_hr_payslip_run__l10n_ar_contribution_date
 msgid "Date of the last social security deposit, shown on the payslip."
 msgstr "Fecha del último depósito de aportes, se informa en el recibo."
+
+#. module: l10n_ar_hr_payroll_base
+#: model:hr.payslip.input.type,name:l10n_ar_hr_payroll_base.input_guard_rec
+msgid "Daycare Receipt"
+msgstr "Guardería – comprobante"
+
+#. module: l10n_ar_hr_payroll_base
+#: model:hr.payslip.input.type,name:l10n_ar_hr_payroll_base.input_guard
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_final_guard
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_monthly_guard
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_sac_guard
+msgid "Daycare Reimbursement"
+msgstr "Reintegro por guardería"
 
 #. module: l10n_ar_hr_payroll_base
 #: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_base.selection__hr_payslip_input__l10n_ar_unit__d
@@ -444,8 +465,9 @@ msgstr "Situación de revista de cada parte del período, para el libro de sueld
 #: model:ir.model.fields,help:l10n_ar_hr_payroll_base.field_hr_work_entry_type__l10n_ar_situation_id
 msgid ""
 "Employment status of the days with this work entry, for the digital payroll "
-"book. If empty, those days keep the status of the employee history."
-msgstr "Situación de revista de los días con esta entrada de trabajo, para el libro de sueldos digital. Si está vacía, esos días mantienen la situación del historial del empleado."
+"book. If empty, those days keep the status of the employee history, and time"
+" off of this type stops the digital payroll book."
+msgstr "Situación de revista de los días con esta entrada de trabajo, para el libro de sueldos digital. Si está vacía, esos días mantienen la situación del historial del empleado, y una ausencia de este tipo frena el libro de sueldos digital."
 
 #. module: l10n_ar_hr_payroll_base
 #: model:hr.payslip.input.type,name:l10n_ar_hr_payroll_base.input_cfam
@@ -602,6 +624,11 @@ msgstr "LCT: Aguinaldo (SAC)"
 #: model:ir.model.fields,field_description:l10n_ar_hr_payroll_base.field_hr_salary_rule__l10n_ar_lsd_code
 msgid "LSD Code"
 msgstr "Código LSD"
+
+#. module: l10n_ar_hr_payroll_base
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_base.field_hr_salary_rule__l10n_ar_lsd_code_second_half
+msgid "LSD Code (2nd Half)"
+msgstr "Código LSD (2º semestre)"
 
 #. module: l10n_ar_hr_payroll_base
 #: model:ir.model.fields,field_description:l10n_ar_hr_payroll_base.field_l10n_ar_lsd_wizard__write_uid
@@ -772,6 +799,11 @@ msgid "Payslip Line"
 msgstr ""
 
 #. module: l10n_ar_hr_payroll_base
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_base.field_hr_payslip__l10n_ar_wage
+msgid "Payslip Wage"
+msgstr "Sueldo del recibo"
+
+#. module: l10n_ar_hr_payroll_base
 #: model:mail.template,subject:l10n_ar_hr_payroll_base.mail_template_payslip_ar
 msgid ""
 "Payslip {{ object.date_to.strftime('%m/%Y') }} - "
@@ -919,6 +951,14 @@ msgstr "Antigüedad"
 #: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_sac_iatg
 msgid "Seniority Severance"
 msgstr "Indemnización por antigüedad"
+
+#. module: l10n_ar_hr_payroll_base
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_base/wizard/l10n_ar_lsd_wizard.py:0
+msgid ""
+"Set the employment status (AR) of these work entry types, used by time off "
+"in the period: %s"
+msgstr "Completá la situación de revista (AR) de estos tipos de entrada de trabajo, que usan ausencias del período: %s"
 
 #. module: l10n_ar_hr_payroll_base
 #. odoo-python
@@ -1137,6 +1177,14 @@ msgstr "Vacaciones"
 #: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_sac_attach_salary
 msgid "Wage Garnishment"
 msgstr "Embargo"
+
+#. module: l10n_ar_hr_payroll_base
+#: model:ir.model.fields,help:l10n_ar_hr_payroll_base.field_hr_payslip__l10n_ar_wage
+msgid ""
+"Wage shown on the printed payslip, when it differs from the wage of the "
+"employee record (e.g. a hybrid wage, paid partly as a salary category). "
+"Written by whoever computes the payslip."
+msgstr "Sueldo que se muestra en el recibo impreso, cuando difiere del sueldo de la ficha del empleado (por ejemplo, un sueldo híbrido, pagado en parte como categoría salarial). Lo escribe quien calcula el recibo."
 
 #. module: l10n_ar_hr_payroll_base
 #: model_terms:ir.ui.view,arch_db:l10n_ar_hr_payroll_base.report_payslip_ar

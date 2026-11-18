@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-28 13:50+0000\n"
-"PO-Revision-Date: 2026-10-28 13:50+0000\n"
+"POT-Creation-Date: 2026-11-18 18:45+0000\n"
+"PO-Revision-Date: 2026-11-18 18:45+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -202,6 +202,14 @@ msgid "Companies"
 msgstr ""
 
 #. module: l10n_ar_hr_payroll_base
+#: model:ir.model.fields,help:l10n_ar_hr_payroll_base.field_hr_salary_rule__l10n_ar_lsd_code_second_half
+msgid ""
+"Concept code in the digital payroll book for payslips from July to December,"
+" when it differs from the LSD Code (e.g. the SAC of each semester). If "
+"empty, the LSD Code is used."
+msgstr ""
+
+#. module: l10n_ar_hr_payroll_base
 #: model:ir.model.fields,help:l10n_ar_hr_payroll_base.field_hr_salary_rule__l10n_ar_lsd_code
 msgid ""
 "Concept code in the digital payroll book. If empty, the rule code is used."
@@ -244,6 +252,19 @@ msgstr ""
 #. module: l10n_ar_hr_payroll_base
 #: model:ir.model.fields,help:l10n_ar_hr_payroll_base.field_hr_payslip_run__l10n_ar_contribution_date
 msgid "Date of the last social security deposit, shown on the payslip."
+msgstr ""
+
+#. module: l10n_ar_hr_payroll_base
+#: model:hr.payslip.input.type,name:l10n_ar_hr_payroll_base.input_guard_rec
+msgid "Daycare Receipt"
+msgstr ""
+
+#. module: l10n_ar_hr_payroll_base
+#: model:hr.payslip.input.type,name:l10n_ar_hr_payroll_base.input_guard
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_final_guard
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_monthly_guard
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_sac_guard
+msgid "Daycare Reimbursement"
 msgstr ""
 
 #. module: l10n_ar_hr_payroll_base
@@ -439,7 +460,8 @@ msgstr ""
 #: model:ir.model.fields,help:l10n_ar_hr_payroll_base.field_hr_work_entry_type__l10n_ar_situation_id
 msgid ""
 "Employment status of the days with this work entry, for the digital payroll "
-"book. If empty, those days keep the status of the employee history."
+"book. If empty, those days keep the status of the employee history, and time"
+" off of this type stops the digital payroll book."
 msgstr ""
 
 #. module: l10n_ar_hr_payroll_base
@@ -593,6 +615,11 @@ msgstr ""
 #. module: l10n_ar_hr_payroll_base
 #: model:ir.model.fields,field_description:l10n_ar_hr_payroll_base.field_hr_salary_rule__l10n_ar_lsd_code
 msgid "LSD Code"
+msgstr ""
+
+#. module: l10n_ar_hr_payroll_base
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_base.field_hr_salary_rule__l10n_ar_lsd_code_second_half
+msgid "LSD Code (2nd Half)"
 msgstr ""
 
 #. module: l10n_ar_hr_payroll_base
@@ -764,6 +791,11 @@ msgid "Payslip Line"
 msgstr ""
 
 #. module: l10n_ar_hr_payroll_base
+#: model:ir.model.fields,field_description:l10n_ar_hr_payroll_base.field_hr_payslip__l10n_ar_wage
+msgid "Payslip Wage"
+msgstr ""
+
+#. module: l10n_ar_hr_payroll_base
 #: model:mail.template,subject:l10n_ar_hr_payroll_base.mail_template_payslip_ar
 msgid ""
 "Payslip {{ object.date_to.strftime('%m/%Y') }} - {{ object.employee_id.name "
@@ -908,6 +940,14 @@ msgstr ""
 #: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_monthly_iatg
 #: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_sac_iatg
 msgid "Seniority Severance"
+msgstr ""
+
+#. module: l10n_ar_hr_payroll_base
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_base/wizard/l10n_ar_lsd_wizard.py:0
+msgid ""
+"Set the employment status (AR) of these work entry types, used by time off "
+"in the period: %s"
 msgstr ""
 
 #. module: l10n_ar_hr_payroll_base
@@ -1123,6 +1163,14 @@ msgstr ""
 #: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_monthly_attach_salary
 #: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_sac_attach_salary
 msgid "Wage Garnishment"
+msgstr ""
+
+#. module: l10n_ar_hr_payroll_base
+#: model:ir.model.fields,help:l10n_ar_hr_payroll_base.field_hr_payslip__l10n_ar_wage
+msgid ""
+"Wage shown on the printed payslip, when it differs from the wage of the "
+"employee record (e.g. a hybrid wage, paid partly as a salary category). "
+"Written by whoever computes the payslip."
 msgstr ""
 
 #. module: l10n_ar_hr_payroll_base

@@ -18,6 +18,7 @@
                     <field name="l10n_ar_kind" invisible="1"/>
                     <group>
                         <field name="l10n_ar_contribution_base" readonly="state not in ('draft', 'verify')"/>
+                        <field name="l10n_ar_wage" readonly="state not in ('draft', 'verify')"/>
                     </group>
                     <field name="l10n_ar_situation_line_ids" readonly="state not in ('draft', 'verify')">
                         <list editable="bottom">
@@ -49,6 +50,7 @@
         <field name="arch" type="xml">
             <field name="appears_on_payslip" position="after">
                 <field name="l10n_ar_lsd_code"/>
+                <field name="l10n_ar_lsd_code_second_half"/>
             </field>
         </field>
     </record>
