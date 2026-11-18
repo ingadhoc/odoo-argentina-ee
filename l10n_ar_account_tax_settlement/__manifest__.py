@@ -38,6 +38,7 @@
         "data/inflation_adjustment_index.xml",
         "data/ir_actions_server.xml",
         "data/account_report_data.xml",
+        "data/account_tax_data.xml",
         "views/inflation_adjustmen_index_view.xml",
         "views/account_tax_view.xml",
         "views/account_payment_view.xml",
@@ -45,7 +46,9 @@
         "wizards/tax_settlement_reassign_view.xml",
         "security/ir.model.access.csv",
     ],
-    "demo": [],
+    "demo": [
+        "demo/account_supplier_invoice_demo.xml",
+    ],
     "test": [],
     "installable": True,
     "auto_install": ["l10n_ar"],
