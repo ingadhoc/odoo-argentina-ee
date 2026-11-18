@@ -462,3 +462,20 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:l10n_ar_sircip.res_config_settings_view_form_sircip
 msgid "official list"
 msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
+msgid ""
+"This fiscal position must be the last one (highest sequence) among the "
+"perception ones. %(positions)s tie with it and come after it, so Odoo picks "
+"this one and never applies them."
+msgstr ""
+
+#. module: l10n_ar_sircip
+#. odoo-python
+#: code:addons/l10n_ar_sircip/models/account_fiscal_position.py:0
+msgid ""
+"This fiscal position ties with %(sircip)s and comes after it, so Odoo picks "
+"that one and never applies this one: give it a lower sequence."
+msgstr ""

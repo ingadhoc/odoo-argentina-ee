@@ -555,3 +555,27 @@ msgid ""
 "Ya existe un indice para el periodo %s %s. Solo puedes tener un indice de "
 "inflación por mes"
 msgstr ""
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,field_description:l10n_ar_account_tax_settlement.field_account_tax__l10n_ar_sifere_excluded
+msgid "Excluded from SIFERE"
+msgstr "Excluido de SIFERE"
+
+#. module: l10n_ar_account_tax_settlement
+#: model:ir.model.fields,help:l10n_ar_account_tax_settlement.field_account_tax__l10n_ar_sifere_excluded
+msgid ""
+"Suffered perceptions of this tax are not reported in the SIFERE TXT, because"
+" SIFERE Web already loads them by itself (e.g. SIRCIP)."
+msgstr ""
+"Las percepciones sufridas de este impuesto no van en el TXT de SIFERE, "
+"porque SIFERE Web ya las carga solo (por ejemplo, SIRCIP)."
+
+#. module: l10n_ar_account_tax_settlement
+#. odoo-python
+#: code:addons/l10n_ar_account_tax_settlement/models/account_journal.py:0
+msgid ""
+"These perceptions are not in the file because SIFERE Web loads them by "
+"itself (their tax is excluded from SIFERE):"
+msgstr ""
+"Estas percepciones no están en el archivo porque SIFERE Web las carga solo "
+"(su impuesto está excluido de SIFERE):"
