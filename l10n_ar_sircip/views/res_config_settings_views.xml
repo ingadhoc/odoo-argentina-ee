@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="res_config_settings_view_form_sircip" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.sircip</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="l10n_ar.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//block[@id='argentina_localization']" position="inside">
+                <setting id="l10n_ar_sircip_agent" string="SIRCIP Perception Agent"
+                    help="Creates the SIRCIP taxes, account, fiscal position and settlement journal, and adds the SIRCIP line to the fiscal positions with perceptions, also to the ones created later.">
+                    <field name="l10n_ar_sircip_agent"/>
+                    <div class="content-group mt-2" invisible="not l10n_ar_sircip_agent">
+                        <div class="row">
+                            <label for="l10n_ar_sircip_account_id" class="col-lg-4 o_light_label"/>
+                            <field name="l10n_ar_sircip_account_id" options="{'no_create': True}"/>
+                        </div>
+                        <div class="row mt-2">
+                            <label for="l10n_ar_sircip_state_ids" class="col-lg-4 o_light_label"/>
+                            <field name="l10n_ar_sircip_state_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        </div>
+                        <div class="text-muted">
+                            Add the provinces as they adhere, following the
+                            <a href="https://docs.google.com/spreadsheets/d/1yqf8C6ztxJZsmEQRC4-g2RttgMoJCqMi-Y-0_1mlugE/edit?gid=0#gid=0" target="_blank" rel="noopener noreferrer">official list</a>.
+                        </div>
+                        <div class="alert alert-warning mt-2" role="alert" invisible="l10n_ar_sircip_state_ids">
+                            No province is marked as adhered: customers out of the padron get no SIRCIP perception, not even the 2% "no inscripto".
+                        </div>
+                        <field name="l10n_ar_sircip_can_load_test_padron" invisible="1"/>
+                        <div class="mt-2" invisible="not l10n_ar_sircip_can_load_test_padron">
+                            <button name="action_l10n_ar_sircip_load_test_padron" type="object" class="btn-link" icon="fa-arrow-right"
+                                string="Load test padron"
+                                help="Loads a padron with fictitious CUITs for the previous and the current month, to try SIRCIP without a real file. Not available in production databases."/>
+                        </div>
+                    </div>
+                </setting>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

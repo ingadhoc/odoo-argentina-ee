@@ -1,0 +1,200 @@
+##############################################################################
+# For copyright and license notices, see __manifest__.py file in module root
+# directory
+##############################################################################
+import io
+import zipfile
+
+from odoo import Command
+from odoo.exceptions import ValidationError
+from odoo.tests import tagged
+from odoo.tools import float_round
+
+from .common import TestSircipCommon
+
+# 0-based positions of the DDJJ TXT fields
+(
+    CUIT,
+    CRC,
+    DATE,
+    REGIME,
+    RECORD,
+    EXEMPT,
+    JURISDICTION,
+    DOC_TYPE,
+    LETTER,
+    POS,
+    NUMBER,
+    BASE,
+    ALIQUOT,
+    AMOUNT,
+    ORIGINAL,
+    REFUND_CRC,
+    ABM,
+) = range(17)
+
+
+@tagged("post_install", "-at_install")
+class TestSircipDdjj(TestSircipCommon):
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        if not cls.settlement_journal:
+            cls.settlement_journal = cls.env["account.journal"].create(
+                {"name": "SIRCIP", "code": "SIRC", "type": "general", "settlement_tax": "iibb_aplicado_sircip"}
+            )
+
+    def _ddjj_file(self, moves):
+        lines = moves.line_ids.filtered("tax_line_id.l10n_ar_sircip_record_type")
+        return self.settlement_journal.iibb_aplicado_sircip_files_values(lines)[0]
+
+    def _ddjj_rows(self, moves):
+        with zipfile.ZipFile(io.BytesIO(self._ddjj_file(moves)["txt_content"])) as zip_file:
+            content = zip_file.read(zip_file.namelist()[0]).decode()
+        return [row.split(",") for row in content.split("\r\n") if row]
+
+    def test_ddjj_zip_and_portal_values(self):
+        """The DDJJ is a ZIP with a single TXT, and the download shows the record count and total amount that the
+        portal asks to type by hand."""
+        moves = self._sircip_invoice(self.partners["digit2"], post=True) | self._sircip_invoice(
+            self.partners["not_registered"], post=True
+        )
+        values = self._ddjj_file(moves)
+        name = "SIRCIP_DDJJ_%s" % self.today.strftime("%Y%m")
+        self.assertEqual(values["txt_filename"], "%s.zip" % name)
+        with zipfile.ZipFile(io.BytesIO(values["txt_content"])) as zip_file:
+            self.assertEqual(zip_file.namelist(), ["%s.txt" % name])
+        rows = self._ddjj_rows(moves)
+        total = "%.2f" % sum(float(row[AMOUNT]) for row in rows)
+        self.assertIn("Number of records: %s" % len(rows), values["notes"])
+        self.assertIn("Total amount: %s" % total, values["notes"])
+        wizard = self.env["res.download_files_wizard"].browse(
+            self.env["res.download_files_wizard"].action_get_files([values])["res_id"]
+        )
+        self.assertEqual(wizard.line_ids.txt_filename, "%s.zip" % name)
+        self.assertIn("Total amount: %s" % total, wizard.notes_html)
+
+    def test_ddjj_records(self):
+        """Each perception is declared with its record type, delivery jurisdiction and amount; letter A invoices
+        go as informative and credit notes reference the original invoice."""
+        surcharge = self._sircip_invoice(self.partners["digit2"], post=True)
+        not_registered = self._sircip_invoice(self.partners["not_registered"], post=True)
+        # No perception: its informative record comes from the month's invoices
+        self._sircip_invoice(self.partners["letter_a"], price_unit=500.0, post=True)
+        refund = surcharge._reverse_moves(
+            [{"invoice_date": self.today, "l10n_latam_document_type_id": self.env.ref("l10n_ar.dc_a_nc").id}]
+        )
+        refund.action_post()
+        rows = self._ddjj_rows(surcharge | not_registered | refund)
+        by_record = {}
+        for row in rows:
+            if row[DOC_TYPE] != "102":
+                by_record.setdefault((row[CUIT], row[RECORD]), []).append(row)
+        digit2_cuit = self.partners["digit2"].vat
+
+        with self.subTest("fixed fields: regime 1, exempt code 0, ABM A, delivery jurisdiction and 17 fields"):
+            for row in rows:
+                self.assertEqual(len(row), 17)
+                self.assertEqual(row[REGIME], "1")
+                self.assertEqual(row[EXEMPT], "0")
+                self.assertEqual(row[ABM], "A")
+                self.assertEqual(row[JURISDICTION], "906")
+                self.assertEqual(row[REFUND_CRC], "")
+        with self.subTest("point of sale and number without leading zeros"):
+            pos, number = surcharge.l10n_latam_document_number.split("-")
+            (row,) = by_record[(digit2_cuit, "1")]
+            self.assertEqual((row[DOC_TYPE], row[LETTER]), ("1", "A"))
+            self.assertEqual((row[POS], row[NUMBER]), (str(int(pos)), str(int(number))))
+        with self.subTest("amount is base x aliquot / 100, rounded to 2"):
+            for row in rows:
+                expected = float_round(float(row[BASE]) * float(row[ALIQUOT]) / 100.0, precision_digits=2)
+                self.assertEqual(row[AMOUNT], "%.2f" % expected)
+        with self.subTest("digit 2: one type 1 and one type 5 record, with the padron CRC"):
+            self.assertEqual(len(by_record.get((digit2_cuit, "1"), [])), 1)
+            self.assertEqual(len(by_record.get((digit2_cuit, "5"), [])), 1)
+            self.assertEqual(by_record[(digit2_cuit, "5")][0][CRC], self.crc["digit2"])
+        with self.subTest("not registered: type 4, no CRC"):
+            (row,) = by_record[(self.partners["not_registered"].vat, "4")]
+            self.assertEqual(row[CRC], "")
+        with self.subTest("letter A: informative type 2, aliquot 0 and the invoice base"):
+            (row,) = by_record[(self.partners["letter_a"].vat, "2")]
+            self.assertEqual((row[ALIQUOT], row[AMOUNT], row[BASE]), ("0.00", "0.00", "500.00"))
+        with self.subTest("credit note: the original record type, negative amounts and the original document"):
+            pos, number = surcharge.l10n_latam_document_number.split("-")
+            refund_rows = [row for row in rows if row[DOC_TYPE] == "102"]
+            self.assertEqual(sorted(row[RECORD] for row in refund_rows), ["1", "5"])
+            for row in refund_rows:
+                self.assertEqual(row[CUIT], digit2_cuit)
+                self.assertLess(float(row[BASE]), 0)
+                self.assertLess(float(row[AMOUNT]), 0)
+                self.assertEqual(row[ORIGINAL], "001A%05d%08d" % (int(pos), int(number)))
+                self.assertEqual(row[CRC], self.crc["digit2"])
+        with self.subTest("delivery in Salta: declared in the Salta jurisdiction (917)"):
+            salta = self._sircip_invoice(
+                self.partners["digit2"], shipping=self._delivery(self.partners["digit2"], self.salta), post=True
+            )
+            (row,) = (row for row in self._ddjj_rows(salta) if row[CUIT] == digit2_cuit)
+            self.assertEqual((row[RECORD], row[JURISDICTION]), ("1", "917"))
+        with self.subTest("letter A delivered in a non adhered province: also informative"):
+            letter_a = self.partners["letter_a"]
+            self._sircip_invoice(
+                letter_a, shipping=self._delivery(letter_a, self.corrientes), price_unit=300.0, post=True
+            )
+            informative = [(row[JURISDICTION], row[BASE]) for row in self._ddjj_rows(salta) if row[RECORD] == "2"]
+            self.assertIn(("905", "300.00"), informative)
+        with self.subTest("digit 4: its provincial perception is not declared, only the SIRCIP one"):
+            partner = self.partners["digit4"]
+            invoice = self._sircip_invoice(
+                partner, post=True, fiscal_position=self._corrientes_fiscal_position(self._corrientes_tax(3.0))
+            )
+            self.assertEqual(
+                [(row[RECORD], row[JURISDICTION]) for row in self._ddjj_rows(invoice) if row[CUIT] == partner.vat],
+                [("1", "905")],
+            )
+
+    def test_ddjj_credit_note_without_original(self):
+        """A credit note without its original invoice is stopped, since the DDJJ would be rejected."""
+        refund = self.env["account.move"].create(
+            {
+                "move_type": "out_refund",
+                "partner_id": self.partners["digit1"].id,
+                "journal_id": self.sale_journal.id,
+                "invoice_date": self.today,
+                "fiscal_position_id": self.fiscal_position.id,
+                "invoice_line_ids": [Command.create({"product_id": self.product_iva_21.id, "price_unit": 100.0})],
+            }
+        )
+        refund.action_post()
+        with self.assertRaisesRegex(ValidationError, "original invoice"):
+            self._ddjj_rows(refund)
+
+    def test_ddjj_without_suffered_perceptions(self):
+        """SIRCIP perceptions suffered on vendor bills are not declared by the company, not even with a purchase tax
+        set with a SIRCIP record type by mistake."""
+        suffered = self.env.ref(
+            "l10n_ar_account_tax_settlement.tax_percepcion_iibb_sircip_sufrida_%s" % self.company_ri.id
+        )
+        vat = self.env.ref("account.%s_ri_tax_vat_21_compras" % self.company_ri.id)
+        misconfigured = suffered.copy({"name": "SIRCIP sufrida mal configurada", "l10n_ar_sircip_record_type": "1"})
+        bill = self.env["account.move"].create(
+            {
+                "move_type": "in_invoice",
+                "partner_id": self.partners["digit1"].id,
+                "journal_id": self.company_data["default_journal_purchase"].id,
+                "invoice_date": self.today,
+                "l10n_latam_document_type_id": self.env.ref("l10n_ar.dc_a_f").id,
+                "l10n_latam_document_number": "0001-00000101",
+                "invoice_line_ids": [
+                    Command.create(
+                        {
+                            "product_id": self.product_iva_21.id,
+                            "price_unit": 1000.0,
+                            "tax_ids": [Command.set((vat | suffered | misconfigured).ids)],
+                        }
+                    )
+                ],
+            }
+        )
+        bill.action_post()
+        invoice = self._sircip_invoice(self.partners["digit1"], post=True)
+        self.assertEqual(self._ddjj_rows(invoice | bill), self._ddjj_rows(invoice))

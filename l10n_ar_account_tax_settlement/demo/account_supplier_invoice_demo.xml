@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="True">
+
+    <!-- Suffered IIBB perceptions: provincial ones go to the SIFERE TXT, SIRCIP ones do not -->
+    <record id="demo_sup_invoice_perc_provincias" model="account.move" context="{'allowed_company_ids': [ref('base.company_ri')]}">
+        <field name="ref">Percepciones sufridas de CABA, Buenos Aires y Córdoba</field>
+        <field name="partner_id" ref="l10n_ar.res_partner_adhoc"/>
+        <field name="move_type">in_invoice</field>
+        <field name="l10n_latam_document_type_id" ref="l10n_ar.dc_a_f"/>
+        <field name="l10n_latam_document_number">0005-00000101</field>
+        <field name="invoice_date" eval="time.strftime('%Y-%m')+'-01'"/>
+        <field name="invoice_line_ids" eval="[
+            (0, 0, {'product_id': ref('product.product_product_2'), 'price_unit': 100000.0, 'quantity': 1,
+            'tax_ids': [(6, 0, [
+                ref('account.%s_ri_tax_vat_21_compras' % ref('base.company_ri')),
+                ref('account.%s_ri_tax_percepcion_iibb_caba_sufrida' % ref('base.company_ri')),
+                ref('account.%s_ri_tax_percepcion_iibb_ba_sufrida' % ref('base.company_ri')),
+                ref('account.%s_ri_tax_percepcion_iibb_co_sufrida' % ref('base.company_ri')),
+            ])]}),
+        ]"/>
+    </record>
+
+    <record id="demo_sup_invoice_perc_sircip" model="account.move" context="{'allowed_company_ids': [ref('base.company_ri')]}">
+        <field name="ref">Percepción SIRCIP sufrida</field>
+        <field name="partner_id" ref="l10n_ar.res_partner_adhoc"/>
+        <field name="move_type">in_invoice</field>
+        <field name="l10n_latam_document_type_id" ref="l10n_ar.dc_a_f"/>
+        <field name="l10n_latam_document_number">0005-00000102</field>
+        <field name="invoice_date" eval="time.strftime('%Y-%m')+'-01'"/>
+        <field name="invoice_line_ids" eval="[
+            (0, 0, {'product_id': ref('product.product_product_2'), 'price_unit': 50000.0, 'quantity': 1,
+            'tax_ids': [(6, 0, [
+                ref('account.%s_ri_tax_vat_21_compras' % ref('base.company_ri')),
+                ref('l10n_ar_account_tax_settlement.tax_percepcion_iibb_sircip_sufrida_%s' % ref('base.company_ri')),
+            ])]}),
+        ]"/>
+    </record>
+
+    <record id="demo_sup_invoice_perc_sircip_caba" model="account.move" context="{'allowed_company_ids': [ref('base.company_ri')]}">
+        <field name="ref">Percepciones sufridas de SIRCIP y CABA</field>
+        <field name="partner_id" ref="l10n_ar.res_partner_adhoc"/>
+        <field name="move_type">in_invoice</field>
+        <field name="l10n_latam_document_type_id" ref="l10n_ar.dc_a_f"/>
+        <field name="l10n_latam_document_number">0005-00000103</field>
+        <field name="invoice_date" eval="time.strftime('%Y-%m')+'-01'"/>
+        <field name="invoice_line_ids" eval="[
+            (0, 0, {'product_id': ref('product.product_product_2'), 'price_unit': 80000.0, 'quantity': 1,
+            'tax_ids': [(6, 0, [
+                ref('account.%s_ri_tax_vat_21_compras' % ref('base.company_ri')),
+                ref('l10n_ar_account_tax_settlement.tax_percepcion_iibb_sircip_sufrida_%s' % ref('base.company_ri')),
+                ref('account.%s_ri_tax_percepcion_iibb_caba_sufrida' % ref('base.company_ri')),
+            ])]}),
+        ]"/>
+    </record>
+
+    <function model="account.move" name="action_post">
+        <value eval="[ref('demo_sup_invoice_perc_provincias'), ref('demo_sup_invoice_perc_sircip'), ref('demo_sup_invoice_perc_sircip_caba')]"/>
+    </function>
+
+</odoo>

@@ -1,0 +1,66 @@
+##############################################################################
+# For copyright and license notices, see __manifest__.py file in module root
+# directory
+##############################################################################
+from dateutil.relativedelta import relativedelta
+from odoo import _, api, fields, models
+from odoo.exceptions import UserError
+
+
+class ResConfigSettings(models.TransientModel):
+    _inherit = "res.config.settings"
+
+    l10n_ar_sircip_agent = fields.Boolean(related="company_id.l10n_ar_sircip_agent", readonly=False)
+    l10n_ar_sircip_account_id = fields.Many2one(related="company_id.l10n_ar_sircip_account_id", readonly=False)
+    l10n_ar_sircip_can_load_test_padron = fields.Boolean(
+        string="Can Load SIRCIP Test Padron", compute="_compute_l10n_ar_sircip_can_load_test_padron"
+    )
+    l10n_ar_sircip_state_ids = fields.Many2many(
+        "res.country.state",
+        string="SIRCIP Adhered Provinces",
+        compute="_compute_l10n_ar_sircip_state_ids",
+        # Stored on the settings record, so the value edited in the form reaches set_values
+        store=True,
+        readonly=False,
+        domain="[('country_id.code', '=', 'AR')]",
+        help="Provinces adhered to SIRCIP, shared by all the companies. Out of the padron, a customer gets the 2% "
+        "'no inscripto' perception only if the delivery is in one of them.",
+    )
+
+    @api.depends("company_id")
+    def _compute_l10n_ar_sircip_state_ids(self):
+        states = self.env["res.country.state"].search([("l10n_ar_is_sircip", "=", True)])
+        for rec in self:
+            rec.l10n_ar_sircip_state_ids = states
+
+    @api.depends("company_id")
+    def _compute_l10n_ar_sircip_can_load_test_padron(self):
+        for rec in self:
+            rec.l10n_ar_sircip_can_load_test_padron = rec.company_id._l10n_ar_can_load_test_data()
+
+    def set_values(self):
+        super().set_values()
+        if self.l10n_ar_sircip_agent:
+            adhered = self.env["res.country.state"].search([("l10n_ar_is_sircip", "=", True)])
+            (adhered - self.l10n_ar_sircip_state_ids).l10n_ar_is_sircip = False
+            (self.l10n_ar_sircip_state_ids - adhered).l10n_ar_is_sircip = True
+        # Saving with the option on completes new companies and new fiscal positions
+        self.company_id._l10n_ar_sircip_setup()
+
+    def action_l10n_ar_sircip_load_test_padron(self):
+        """Load the test padron for the previous and the current month."""
+        self.ensure_one()
+        company = self.company_id
+        if not company._l10n_ar_can_load_test_data():
+            raise UserError(_("The SIRCIP test padron can not be loaded in this database."))
+        today = fields.Date.context_today(self)
+        company._l10n_ar_sircip_load_test_padron(today - relativedelta(months=1))
+        company._l10n_ar_sircip_load_test_padron(today)
+        return {
+            "type": "ir.actions.client",
+            "tag": "display_notification",
+            "params": {
+                "type": "success",
+                "message": _("SIRCIP test padron loaded for the previous and the current month."),
+            },
+        }
