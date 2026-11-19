@@ -1707,3 +1707,13 @@ msgid ""
 msgstr ""
 "Seleccione %(company)s en el selector de empresas para validar esta "
 "declaración: el asiento de cierre de toda la entidad fiscal se genera ahí."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid ""
+"%(company)s has no Tax ID, so it has no tax return. Set its Tax ID to start "
+"filing returns."
+msgstr ""
+"%(company)s no tiene CUIT, por lo que no tiene declaración fiscal. Defina su "
+"CUIT para comenzar a presentar declaraciones."

@@ -54,6 +54,8 @@ class AccountReturnType(models.Model):
         # Set by res.company.write on the branches that get the opening date from their head.
         if self.env.context.get("l10n_ar_skip_returns_refresh"):
             return
+        # Companies without Tax ID have nothing to file in Argentina.
+        root_companies = root_companies.filtered(lambda c: c.vat or c.account_fiscal_country_id.code != "AR")
         return super()._generate_or_refresh_all_returns(root_companies)
 
     @api.depends("country_id")

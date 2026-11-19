@@ -30,6 +30,8 @@ msgid ""
 "%(company)s already has a settlement entry of this report for this period: %"
 "(entries)s. Creating another one settles the same balances twice."
 msgstr ""
+"%(company)s ya tiene un asiento de liquidación de este reporte para este "
+"período: %(entries)s. Crear otro liquida los mismos saldos dos veces."
 
 #. module: account_accountant_ux
 #. odoo-javascript
@@ -39,6 +41,9 @@ msgid ""
 "            Select them in the company selector if you meant to file the "
 "whole entity."
 msgstr ""
+".\n"
+"            Selecciónelas en el selector de empresas si quería presentar "
+"toda la entidad."
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.res_partner_view_form
@@ -76,6 +81,9 @@ msgid ""
 "belong to %(entities)s. Select companies of a single legal entity in the "
 "company selector."
 msgstr ""
+"Una liquidación nunca se presenta entre CUIT distintos, y las empresas "
+"seleccionadas pertenecen a %(entities)s. Seleccione empresas de una única "
+"entidad fiscal en el selector de empresas."
 
 #. module: account_accountant_ux
 #. odoo-javascript
@@ -168,6 +176,7 @@ msgstr ""
 #: code:addons/account_accountant_ux/models/account_partner_ledger.py:0
 msgid "CSV export only works with one column group"
 msgstr ""
+"La exportación a CSV solo funciona con un grupo de columnas"
 
 #. module: account_accountant_ux
 #. odoo-javascript
@@ -446,6 +455,11 @@ msgid ""
 "cannot be used by another one. Add %(head)s to the selection to settle them "
 "together, or select one company at a time and settle each on its own."
 msgstr ""
+"Ninguna de las empresas seleccionadas es la casa matriz de las otras, por "
+"lo que no hay una empresa en la que se pueda generar el asiento: una "
+"cuenta que existe solo en una sucursal no puede ser usada por otra. "
+"Agregue %(head)s a la selección para liquidarlas juntas, o seleccione una "
+"empresa a la vez y liquide cada una por separado."
 
 #. module: account_accountant_ux
 #. odoo-python
@@ -573,6 +587,7 @@ msgstr ""
 #: code:addons/account_accountant_ux/models/account_fiscal_year.py:0
 msgid "The ending date must not be prior to the starting date."
 msgstr ""
+"La fecha de fin no puede ser anterior a la fecha de inicio."
 
 #. module: account_accountant_ux
 #. odoo-python
@@ -583,6 +598,10 @@ msgid ""
 "Settle %(owners)s on their own —select each of them alone in the company "
 "selector— or move those accounts up to the company that files."
 msgstr ""
+"Estas cuentas pertenecen solo a una sucursal, por lo que el asiento no se "
+"puede generar en %(company)s incluyéndolas: %(accounts)s.\n"
+"Liquide %(owners)s por separado —seleccione cada una sola en el selector "
+"de empresas— o suba esas cuentas a la empresa que presenta."
 
 #. module: account_accountant_ux
 #. odoo-python
@@ -604,6 +623,10 @@ msgid ""
 "entity are\n"
 "            not selected, so their operations are not in these numbers:"
 msgstr ""
+"Este reporte se presenta por entidad fiscal, y estas empresas de la misma "
+"entidad fiscal\n"
+"            no están seleccionadas, por lo que sus operaciones no están "
+"en estos números:"
 
 #. module: account_accountant_ux
 #. odoo-python
@@ -684,6 +707,8 @@ msgid ""
 "You can not have an overlap between two fiscal years, please correct the "
 "start and/or end dates of your fiscal years."
 msgstr ""
+"No puede haber superposición entre dos ejercicios fiscales, corrija las "
+"fechas de inicio y/o fin de sus ejercicios fiscales."
 
 #. module: account_accountant_ux
 #. odoo-python
@@ -720,6 +745,11 @@ msgid ""
 "the whole legal entity. Create it on «%(head)s», or give «%(company)s» its "
 "own Tax ID if it really is a different legal entity."
 msgstr ""
+"«%(company)s» no es la cabecera de su entidad fiscal —lo es «%(head)s»— "
+"por lo que no puede tener un ejercicio fiscal propio: el ejercicio fiscal "
+"se define una sola vez para toda la entidad fiscal. Cree el ejercicio en "
+"«%(head)s», o asígnele a «%(company)s» su propio CUIT si realmente es una "
+"entidad fiscal distinta."
 
 #. module: account_accountant_ux
 #: model_terms:ir.ui.view,arch_db:account_accountant_ux.account_return_kanban_view

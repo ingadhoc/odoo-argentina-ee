@@ -122,3 +122,18 @@ class TestLegalEntityReturns(AccountTestInvoicingCommon):
         self.assertEqual(self.entity.mapped("account_opening_date"), [self.parent.account_opening_date] * 3)
         with self.assertRaises(ValidationError):
             self.branch_1.account_opening_date = "2025-01-01"
+
+    def test_company_without_tax_id_cannot_start_a_tax_return(self):
+        company = self._create_company(name="Auxiliar sin CUIT", vat=False, country_id=self.env.ref("base.ar").id)
+        self.env.user.company_ids |= company
+        self.assertEqual(company.account_fiscal_country_id.code, "AR")
+        with self.assertRaises(UserError):
+            self.env["account.return"].with_company(company).action_open_tax_return_view()
+
+    def test_validate_requires_access_to_every_branch(self):
+        tax_return = self._create_return(self.ar_return_type, self.entity)
+        self.env.user.company_ids -= self.branch_2
+        with self.assertRaises(UserError):
+            tax_return.with_user(self.env.user)._generate_tax_closing_entries_create_values(
+                tax_return._get_closing_report_options()
+            )

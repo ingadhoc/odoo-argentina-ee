@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from odoo import Command, _, fields, models
+from odoo import Command, _, api, fields, models
 from odoo.exceptions import RedirectWarning, UserError
 
 
@@ -92,6 +92,19 @@ class AccountReturn(models.Model):
                 button_text=_("Configure accounts"),
             )
 
+    @api.model
+    def action_open_tax_return_view(self, additional_return_domain=None, additional_context=None):
+        # Without a Tax ID there is nothing to file: do not offer to set the opening date.
+        company = self.env.company
+        if company.account_fiscal_country_id.code == "AR" and not company.vat:
+            raise UserError(
+                _(
+                    "%(company)s has no Tax ID, so it has no tax return. Set its Tax ID to start filing returns.",
+                    company=company.display_name,
+                )
+            )
+        return super().action_open_tax_return_view(additional_return_domain, additional_context)
+
     def _generate_tax_closing_entries_create_values(self, options):
         """One closing entry for the whole legal entity, built in the company of the return.
 
@@ -107,6 +120,8 @@ class AccountReturn(models.Model):
             return super()._generate_tax_closing_entries_create_values(options)
 
         self.ensure_one()
+        # The entry is built in sudo: check here, as native does on submit, that the user reaches every branch.
+        self._check_all_branches_allowed()
         self._ensure_tax_group_configuration_for_tax_closing()
         closing = self.sudo().with_context(l10n_ar_tax_groups_checked=True)
         lines_vals = []
