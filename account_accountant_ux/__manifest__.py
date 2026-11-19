@@ -44,6 +44,7 @@
         "wizards/account_reconcile_wizard.xml",
         "wizards/account_tax_settlement_wizard_views.xml",
         "data/account_accountant_data.xml",
+        "data/account_report_settlement.xml",
         "views/account_journal_dashboard_view.xml",
     ],
     "assets": {
