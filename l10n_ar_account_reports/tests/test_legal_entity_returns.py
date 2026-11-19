@@ -124,7 +124,12 @@ class TestLegalEntityReturns(AccountTestInvoicingCommon):
             self.branch_1.account_opening_date = "2025-01-01"
 
     def test_company_without_tax_id_cannot_start_a_tax_return(self):
-        company = self._create_company(name="Auxiliar sin CUIT", vat=False, country_id=self.env.ref("base.ar").id)
+        company = self._create_company(
+            name="Auxiliar sin CUIT",
+            vat=False,
+            country_id=self.env.ref("base.ar").id,
+            currency_id=self.env.ref("base.ARS").id,
+        )
         self.env.user.company_ids |= company
         self.assertEqual(company.account_fiscal_country_id.code, "AR")
         with self.assertRaises(UserError):
