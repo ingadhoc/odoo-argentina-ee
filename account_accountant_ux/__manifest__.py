@@ -19,7 +19,7 @@
 ##############################################################################
 {
     "name": "Accounting Accountant UX",
-    "version": "19.0.1.22.0",
+    "version": "19.0.1.23.0",
     "category": "Accounting",
     "sequence": 14,
     "summary": "",
@@ -45,6 +45,7 @@
         "wizards/account_tax_settlement_wizard_views.xml",
         "data/account_accountant_data.xml",
         "data/account_followup_report_data.xml",
+        "data/account_report_settlement.xml",
         "views/account_journal_dashboard_view.xml",
     ],
     "assets": {
