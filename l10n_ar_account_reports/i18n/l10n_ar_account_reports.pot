@@ -348,6 +348,11 @@ msgid "Argentinian SIRCAR Report Custom Handler"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_salta_report_handler
+msgid "Argentinian Salta Report Custom Handler"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_l10n_ar_santa_fe_report_handler
 msgid "Argentinian Santa Fe Report Custom Handler"
 msgstr ""
@@ -401,6 +406,7 @@ msgstr ""
 #: code:addons/l10n_ar_account_reports/models/mendoza_report.py:0
 #: code:addons/l10n_ar_account_reports/models/misiones_report.py:0
 #: code:addons/l10n_ar_account_reports/models/pba_report.py:0
+#: code:addons/l10n_ar_account_reports/models/salta_report.py:0
 #: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
 #: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
 #: code:addons/l10n_ar_account_reports/models/sifere_report.py:0
@@ -555,6 +561,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_mendoza_report_handler__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_misiones_report_handler__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_pba_report_handler__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_salta_report_handler__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_santa_fe_report_handler__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sicore_report_handler__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sifere_report_handler__display_name
@@ -689,6 +696,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_mendoza_report_handler__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_misiones_report_handler__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_pba_report_handler__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_salta_report_handler__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_santa_fe_report_handler__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sicore_report_handler__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sifere_report_handler__id
@@ -720,6 +728,12 @@ msgstr ""
 #: model:account.report,name:l10n_ar_account_reports.l10n_ar_pba_report
 #: model:account.return.type,name:l10n_ar_account_reports.ar_pba_iibb_return_type
 msgid "IIBB PBA (Agente)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report,name:l10n_ar_account_reports.l10n_ar_salta_report
+#: model:account.return.type,name:l10n_ar_account_reports.ar_salta_iibb_return_type
+msgid "IIBB Salta SIPOT (Agente)"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -1148,6 +1162,7 @@ msgstr ""
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_caba_report_caba_perceptions_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_misiones_report_misiones_perceptions_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_pba_report_pba_perceptions_line
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_salta_report_salta_perceptions_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_santa_fe_report_santa_fe_perceptions_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sircar_report_sircar_perceptions_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_tucuman_report_tucuman_perceptions_line
