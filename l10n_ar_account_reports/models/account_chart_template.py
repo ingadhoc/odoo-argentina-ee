@@ -84,6 +84,7 @@ class AccountChartTemplate(models.AbstractModel):
             "l10n_ar_account_reports.ar_santa_fe_iibb_return_type": "ri_retencion_iibb_a_pagar",
             "l10n_ar_account_reports.ar_tucuman_iibb_return_type": "ri_retencion_iibb_a_pagar",
             "l10n_ar_account_reports.ar_misiones_iibb_return_type": "ri_retencion_iibb_a_pagar",
+            "l10n_ar_account_reports.ar_salta_iibb_return_type": "ri_retencion_iibb_a_pagar",
             "l10n_ar_account_reports.ar_sircar_iibb_return_type": "ri_retencion_iibb_a_pagar",
         }
         for company in companies:

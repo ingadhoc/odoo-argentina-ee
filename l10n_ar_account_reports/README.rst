@@ -53,6 +53,8 @@ Archivos para declaración de impuestos
 * MISIONES: https://atmisiones.gob.ar/agentes-de-retencion-y-percepcion/ (ingresar en "https://atmisiones.gob.ar/", abajo a la derecha hacer click en "Guías y Manuales de Usuario" luego en "Manuales de Usuarios" finalmente en "Agentes Ret/Percep") --> hacer click en "AG IIBB -Instructivo del Formato Archivo carga DDJJ Retenciones desde 01-06-2023" y "AG IIBB -Instructivo del Formato Archivo carga DDJJ Percepción desde 01-06-2023".
             Correo DGR: mesadeayuda@tsgroup.com.ar
 
+* SALTA: especificación en doc/Salta/Informacion General SIPOT.pdf (aplicativo SIPOT 3.3 de la Dirección General de Rentas de Salta), en la página 18, bajo el título "Formulario F912 ó F906 Declaración Jurada Informativa Mensual Agente de Percepción Actividades Económicas". Se implementó solo el TXT de percepciones (F912), con registros de 140 caracteres. No incluye retenciones (F914). Los comprobantes que no son factura, nota de crédito ni nota de débito A, B o C se informan como OTRO.
+
 * SIRCAR: especificación en /doc/sircar
 
 * SIFERE: especificación en /doc/sifere
