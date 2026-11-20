@@ -25,6 +25,7 @@
                     <button name="action_open" type="object" string="Open" help="Connect to webservice" invisible="state != 'draft'"/>
                     <button name="action_find_existing" type="object" string="Find" help="Find open DDJJ and load info" invisible="state != 'draft'" groups="base.group_no_one"/>
                     <button name="action_update_status" type="object" string="Update Status" help="Update the status via ws" invisible="state == 'draft'"/>
+                    <button name="action_draft" type="object" string="Reset to Draft" help="Only for DDJJ without withholdings, so they can be deleted" invisible="state == 'draft' or l10n_ar_withholding_ids" confirm="The ARBA DDJJ ID will be removed from this record. Continue?"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
