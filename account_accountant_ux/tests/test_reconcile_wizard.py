@@ -95,3 +95,85 @@ class TestReconcileWizardCompanyCurrency(AccountTestInvoicingCommon):
         # al pasar por moneda secundaria.
         self.assertAlmostEqual(wizard.amount, 510.0)
         self.assertAlmostEqual(wizard.amount_currency, 510.0)
+
+    def _payable_line(self, account, date, balance, amount_currency):
+        move = self.env["account.move"].create(
+            {
+                "move_type": "entry",
+                "date": date,
+                "journal_id": self.company_data["default_journal_misc"].id,
+                "line_ids": [
+                    Command.create(
+                        {
+                            "account_id": account.id,
+                            "partner_id": self.partner_a.id,
+                            "balance": balance,
+                            "currency_id": self.foreign_currency.id,
+                            "amount_currency": amount_currency,
+                        }
+                    ),
+                    Command.create(
+                        {
+                            "account_id": self.company_data["default_account_expense"].id,
+                            "balance": -balance,
+                            "currency_id": self.foreign_currency.id,
+                            "amount_currency": -amount_currency,
+                        }
+                    ),
+                ],
+            }
+        )
+        move.action_post()
+        return move.line_ids.filtered(lambda l: l.account_id == account)
+
+    def test_wizard_keeps_account_currency(self):
+        """En una cuenta con moneda propia el write-off sale en esa moneda: una línea
+        en moneda de compañía viola la restricción de moneda secundaria de la cuenta."""
+        self.env["res.currency.rate"].create(
+            {
+                "name": "2016-02-01",
+                "rate": 1 / 1450,
+                "currency_id": self.foreign_currency.id,
+                "company_id": self.company.id,
+            }
+        )
+        account = self.env["account.account"].create(
+            {
+                "name": "Payable EUR",
+                "code": "211099",
+                "account_type": "liability_payable",
+                "reconcile": True,
+                "currency_id": self.foreign_currency.id,
+            }
+        )
+        # -100 EUR a 1400 y +99,50 EUR a 1450: queda saldo en EUR y diferencia de cambio.
+        credit_line = self._payable_line(account, self.date, -140000.0, -100.0)
+        debit_line = self._payable_line(account, fields.Date.from_string("2016-02-01"), 144275.0, 99.50)
+
+        wizard = (
+            self.env["account.reconcile.wizard"]
+            .with_context(
+                active_model="account.move.line",
+                active_ids=(credit_line | debit_line).ids,
+            )
+            .create({})
+        )
+
+        self.assertEqual(wizard.reco_currency_id, self.foreign_currency)
+        self.assertAlmostEqual(abs(wizard.amount_currency), 0.50)
+
+        wizard.write(
+            {
+                "account_id": self.company_data["default_account_expense"].id,
+                "allow_partials": False,
+            }
+        )
+        wizard.reconcile()
+
+        self.assertTrue(credit_line.reconciled)
+        self.assertTrue(debit_line.reconciled)
+        write_off_line = (credit_line | debit_line).full_reconcile_id.reconciled_line_ids.filtered(
+            lambda l: l.account_id == account and l not in credit_line | debit_line and l.amount_currency
+        )
+        self.assertEqual(write_off_line.currency_id, self.foreign_currency)
+        self.assertAlmostEqual(abs(write_off_line.amount_currency), 0.50)
