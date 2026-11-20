@@ -14,6 +14,8 @@ class AccountPaymentInvoiceWizard(models.TransientModel):
         "account.move",
     )
     commercial_partner_id = fields.Many2one("res.partner", related="payment_id.partner_id.commercial_partner_id")
+    l10n_ar_afip_ws = fields.Selection(related="journal_id.l10n_ar_afip_ws")
+    l10n_latam_document_internal_type = fields.Selection(related="journal_document_type_id.internal_type")
 
     def get_invoice_vals(self):
         self.ensure_one()
