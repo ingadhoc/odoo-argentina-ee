@@ -97,9 +97,11 @@ class ResCompany(models.Model):
 
     def _parse_arca_data(self, available_currencies):
         """Ask ARCA with a single company and one connection, one currency at a time, so an error in one
-        currency does not stop the others, skipping the currencies without ARCA code. Only today's rates
-        are kept, unless l10n_ar_force_create_rate is in context."""
-        rate_date = fields.Date.to_string(self._l10n_ar_currency_today())
+        currency does not stop the others, skipping the currencies without ARCA code. Only the rates of the
+        previous day are kept, unless l10n_ar_force_create_rate is in context."""
+        # ARCA publishes the rate of a day to be used from the next one, and Odoo uses a rate from the day
+        # after its date, so the rate is stored with the date ARCA returns
+        rate_date = fields.Date.to_string(self._l10n_ar_currency_today() - relativedelta(days=1))
         res = {self.env.ref("base.ARS").name: (1.0, rate_date)}
         arca_currencies = self._l10n_ar_arca_currencies(available_currencies)
         if skipped := available_currencies - arca_currencies - self.env.ref("base.ARS"):
@@ -127,20 +129,22 @@ class ResCompany(models.Model):
             if not rate:
                 _logger.warning("ARCA returned no rate for %s", currency.name)
                 continue
-            # ARCA publishes the rate of a day to be used from the next one
-            arca_date = fields.Date.to_string(datetime.strptime(arca_date, "%Y%m%d") + relativedelta(days=1))
+            arca_date = fields.Date.to_string(datetime.strptime(arca_date, "%Y%m%d"))
             if arca_date == rate_date or force_create_rate:
                 res[currency.name] = (1.0 / rate, rate_date)
             else:
                 _logger.info(
-                    "Returned ARCA rate for %s is not today's rate (%s vs %s)", currency.name, arca_date, rate_date
+                    "Returned ARCA rate for %s is not the previous day's rate (%s vs %s)",
+                    currency.name,
+                    arca_date,
+                    rate_date,
                 )
         return res
 
     def _l10n_ar_set_last_currency_sync_date(self, parsed_data):
-        """Mark the day as synced once the rates are created, when every active currency with ARCA code has
-        that day's rate, from ARCA or already loaded. Without foreign currencies it is not marked, so the
-        retry cron takes a currency activated later in the day (it does not connect to ARCA meanwhile)."""
+        """Mark today as synced once the rates are created, when every active currency with ARCA code has
+        the rate of the parsed date, from ARCA or already loaded. Without foreign currencies it is not marked,
+        so the retry cron takes a currency activated later in the day (it does not connect to ARCA meanwhile)."""
         rate_date = str(parsed_data.get(self.env.ref("base.ARS").name, (None, ""))[1])
         currencies = self._l10n_ar_arca_currencies(self.env["res.currency"].search([]))
         if not rate_date or not currencies:
@@ -153,7 +157,7 @@ class ResCompany(models.Model):
                 .currency_id
             )
             if not missing - loaded:
-                company.l10n_ar_last_currency_sync_date = rate_date
+                company.l10n_ar_last_currency_sync_date = self._l10n_ar_currency_today()
 
     def _generate_currency_rates(self, parsed_data):
         """Sobre escribimos este método para lograr dos cosas:
