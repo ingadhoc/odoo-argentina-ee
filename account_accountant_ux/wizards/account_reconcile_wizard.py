@@ -19,6 +19,8 @@ class AccountReconcileWizard(models.TransientModel):
                 not wizard.company_id.reconcile_on_company_currency
                 or not wizard.reco_currency_id
                 or wizard.reco_currency_id == wizard.company_currency_id
+                # Accounts with their own currency keep the native behavior.
+                or wizard.move_line_ids.account_id.currency_id - wizard.company_currency_id
             ):
                 continue
             # Con reconcile_on_company_currency la conciliación es íntegramente
