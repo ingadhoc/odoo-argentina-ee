@@ -10,7 +10,7 @@
             </xpath>
             <!-- On tax returns the closing includes every company of the return, selected or not -->
             <xpath expr="//field[@name='company_ids']/.." position="after">
-                <div class="row oe_stat_text px-0 text-muted fw-bold" invisible="context.get('in_checks_view') or not show_companies_mismatch_warning or not is_tax_return">This return includes all these companies, even the ones not selected.</div>
+                <div class="row oe_stat_text px-0 text-muted" invisible="context.get('in_checks_view') or not show_companies_mismatch_warning or not is_tax_return"><strong>This return includes all these companies, even the ones not selected.</strong></div>
             </xpath>
         </field>
     </record>
