@@ -2,7 +2,8 @@
 # For copyright and license notices, see __manifest__.py file in module root
 # directory
 ##############################################################################
-from odoo import api, models
+from odoo import api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class ResCompany(models.Model):
@@ -21,9 +22,26 @@ class ResCompany(models.Model):
         # Parents first: each branch is checked against its parent's date.
         for company in self.sorted(lambda company: (company.parent_path or "").count("/")):
             if company.legal_entity_root_id != company:
+                company._l10n_ar_check_opening_date_is_set_on_head(vals["account_opening_date"])
                 company = company.with_context(l10n_ar_skip_returns_refresh=True)
             super(ResCompany, company).write(vals)
         return True
+
+    def _l10n_ar_check_opening_date_is_set_on_head(self, opening_date):
+        """A branch with the Tax ID of its head cannot have its own opening date: explain where to set it."""
+        self.ensure_one()
+        head = self.legal_entity_root_id
+        if fields.Date.to_date(opening_date) == head.account_opening_date:
+            return
+        raise ValidationError(
+            self.env._(
+                "The company '%(company)s' has the same Tax ID as its parent '%(parent)s'. "
+                "Please switch to the company '%(parent)s' and set the opening date there. "
+                "'%(company)s' will inherit the opening date from '%(parent)s'.",
+                company=self.display_name,
+                parent=head.display_name,
+            )
+        )
 
     @api.model
     def fields_get(self, allfields=None, attributes=None):

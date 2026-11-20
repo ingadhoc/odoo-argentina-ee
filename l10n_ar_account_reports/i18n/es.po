@@ -1717,3 +1717,16 @@ msgid ""
 msgstr ""
 "%(company)s no tiene CUIT, por lo que no tiene declaración fiscal. Defina su "
 "CUIT para comenzar a presentar declaraciones."
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/res_company.py:0
+msgid ""
+"The company '%(company)s' has the same Tax ID as its parent '%(parent)s'. "
+"Please switch to the company '%(parent)s' and set the opening date there. "
+"'%(company)s' will inherit the opening date from '%(parent)s'."
+msgstr ""
+"La compañía '%(company)s' tiene el mismo CUIT que su compañía padre "
+"'%(parent)s'. Posiciónese en la compañía '%(parent)s' y establezca allí la "
+"fecha de apertura. La compañía '%(company)s' heredará la fecha de apertura "
+"de '%(parent)s'."
