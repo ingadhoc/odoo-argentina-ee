@@ -43,7 +43,7 @@ class L10nArDjArba(models.Model):
     )
 
     l10n_ar_withholding_ids = fields.One2many(
-        "l10n_ar.payment.withholding",
+        "account.payment.withholding.line",
         "l10n_ar_dj_arba_id",
         string="Withholdings",
         readonly=True,
@@ -163,6 +163,8 @@ class L10nArDjArba(models.Model):
             self.message_post(body=msg)
             return
 
+        # ARBA gets the withholding in ARS, and the rate as a positive number
+        amounts = wh_line._get_company_currency_amounts()
         # TODO commercial partner queremos usarlo?
         request_data = {
             "idDj": self.name,
@@ -170,9 +172,9 @@ class L10nArDjArba(models.Model):
             "razonSocialContribuyente": wh_line.payment_id.partner_id.name,
             "cuitAgente": int(self.company_id.partner_id.ensure_vat()),
             "sucursal": 1,  # TODO revisar que valor string <= 5, debiendo ser numéricos
-            "alicuota": wh_line.tax_id.amount,
-            "baseImponible": wh_line.base_amount,
-            "importeRetencion": wh_line.amount,
+            "alicuota": abs(wh_line.tax_id.amount),
+            "baseImponible": amounts["base_amount"],
+            "importeRetencion": amounts["amount"],
             "fechaOperacion": wh_line.payment_id.date.strftime("%Y-%m-%dT%H:%M:%S.000Z"),
             "nTransaccionAgente": re.sub("[^0-9]", "", wh_line.name),  # Obligatorio String(20)
         }
@@ -382,6 +384,62 @@ class L10nArDjArba(models.Model):
             raise UserError(self.env._("You cannot delete a DDJJ ARBA that has withholding lines."))
 
     # Buttons
+
+    def action_draft(self):
+        """Reset to draft a DDJJ without withholdings, from any state, so it can be deleted.
+
+        The ARBA data is cleared: with the ID kept, action_open would only update the status and
+        _ensure_dj would reuse this draft for the next payment of the period.
+        """
+        records_with_withholdings = self.filtered("l10n_ar_withholding_ids")
+        if records_with_withholdings:
+            raise UserError(
+                self.env._(
+                    "You cannot reset to draft a DDJJ ARBA that has withholding lines. "
+                    "Delete the withholding lines linked to these payments first: %s",
+                    ", ".join(records_with_withholdings.l10n_ar_withholding_ids.payment_id.mapped("display_name")),
+                )
+            )
+        to_reset = self.filtered(lambda record: record.state != "draft")
+        for ddjj in to_reset:
+            from_date, to_date = ddjj._find_dates(ddjj.date)
+            # Checked here so the user gets a reset-specific message instead of the period constraint one
+            other_draft = self.search(
+                [
+                    ("company_id", "=", ddjj.company_id.id),
+                    ("date", ">=", from_date),
+                    ("date", "<=", to_date),
+                    ("id", "!=", ddjj.id),
+                    "|",
+                    ("state", "=", "draft"),
+                    ("id", "in", to_reset.ids),
+                ],
+                limit=1,
+            )
+            if other_draft:
+                raise UserError(
+                    self.env._(
+                        "You cannot reset to draft the DDJJ ARBA %(ddjj)s: there would be two DDJJ in draft for "
+                        "the same period and company (%(company)s). Delete the other draft one first.",
+                        ddjj=ddjj.display_name,
+                        company=ddjj.company_id.name,
+                    )
+                )
+        for ddjj in to_reset:
+            if ddjj.name:
+                ddjj.message_post(
+                    body=self.env._("Reset to draft. The ARBA DDJJ ID %s was removed from this record.", ddjj.name)
+                )
+            ddjj.write(
+                {
+                    "state": "draft",
+                    "name": False,
+                    "is_refund": False,
+                    "open_date": False,
+                    "due_date": False,
+                    "close_date": False,
+                }
+            )
 
     def action_open(self):
         """Se conecta a ARBA y cera una la declaración jurada que quedan en estado abierto para que la
