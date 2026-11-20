@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="l10n_ar_salta_report" model="account.report">
+        <field name="name">IIBB Salta SIPOT (Agente)</field>
+        <field name="root_report_id" ref="account.generic_tax_report"/>
+        <field name="sequence">120</field>
+        <field name="country_id" ref="base.ar"/>
+        <field name="filter_hierarchy">never</field>
+        <field name="filter_unreconciled" eval="False"/>
+        <field name="filter_period_comparison" eval="False"/>
+        <field name="filter_growth_comparison" eval="False"/>
+        <field name="custom_handler_model_id" ref="model_l10n_ar_salta_report_handler"/>
+        <field name="column_ids">
+            <record id="l10n_ar_salta_report_column_total" model="account.report.column">
+                <field name="name">Balance</field>
+                <field name="name@es_419">Balance</field>
+                <field name="expression_label">balance</field>
+            </record>
+        </field>
+        <field name="line_ids">
+            <record id="l10n_ar_salta_report_salta_perceptions_line" model="account.report.line">
+                <field name="name">Sale Perceptions</field>
+                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_state_id.code", "=", "A"), ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"), ("tax_line_id.type_tax_use", "=", "sale")])</field>
+            </record>
+        </field>
+    </record>
+
+    <record id="ar_salta_iibb_return_type" model="account.return.type">
+        <field name="name">IIBB Salta SIPOT (Agente)</field>
+        <field name="report_id" ref="l10n_ar_account_reports.l10n_ar_salta_report"/>
+        <field name="default_deadline_periodicity">monthly</field>
+        <field name="auto_generate" eval="False"/>
+        <field name="country_id" ref="base.ar"/>
+        <field name="default_deadline_days_delay">5</field>
+        <field name="payment_partner_id" ref="l10n_ar.par_iibb_pagar"/>
+    </record>
+</odoo>

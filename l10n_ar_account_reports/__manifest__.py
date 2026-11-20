@@ -57,6 +57,7 @@
         "data/misiones_report.xml",
         "data/santa_fe_report.xml",
         "data/tucuman_report.xml",
+        "data/salta_report.xml",
         "data/sicore_report.xml",
         "data/sire_report.xml",
         "data/inflation_adjustment_index.xml",
