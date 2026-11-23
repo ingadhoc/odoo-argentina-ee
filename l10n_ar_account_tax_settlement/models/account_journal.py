@@ -1011,7 +1011,7 @@ class AccountJournal(models.Model):
             content.append(format_amount(alicuot, 6, 2, "."))
 
             # 9 Monto percibido
-            content.append(format_amount(-line.balance, 12, 2, "."))
+            content.append(format_amount(float_round(-line.balance, precision_digits=2), 12, 2, "."))
 
             # 10 Tipo de Régimen de Percepción
             # (código correspondiente según tabla definida por la jurisdicción)
