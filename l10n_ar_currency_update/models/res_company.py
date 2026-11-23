@@ -96,7 +96,7 @@ class ResCompany(models.Model):
                 self.env.company = env_company
             except Exception as e:
                 self.env.company = env_company
-                _logger.log(25, "Could not get rate for currency %s. This is what we get:\n%s", currency.name, e)
+                _logger.log(25, "Could not get rate for currency %s. This is what we get: %s", currency.name, e)
             else:
                 for company in self.filtered(lambda x: x.currency_provider == 'afip'):
                     company.l10n_ar_last_currency_sync_date = fields.Date.context_today(self.with_context(tz='America/Argentina/Buenos_Aires'))
