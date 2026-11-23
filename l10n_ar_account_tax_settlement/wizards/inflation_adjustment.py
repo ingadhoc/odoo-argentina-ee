@@ -68,6 +68,8 @@ class InflationAdjustment(models.TransientModel):
         res['company_id'] = company.id
         company_fiscalyear_dates = company.compute_fiscalyear_dates(
             (today - relativedelta(year=today.year-1)))
+        if 'record' in company_fiscalyear_dates:
+            del company_fiscalyear_dates['record']
         for key, value in company_fiscalyear_dates.items():
             company_fiscalyear_dates[key] = value
         res.update(company_fiscalyear_dates)
