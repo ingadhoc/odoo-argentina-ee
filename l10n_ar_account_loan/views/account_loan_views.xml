@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="account_loan_form_view" model="ir.ui.view">
+        <field name="name">account.loan.form.l10n_ar</field>
+        <field name="model">account.loan</field>
+        <field name="inherit_id" ref="account_loans.account_loan_form_view"/>
+        <field name="arch" type="xml">
+
+            <!-- Header: register disbursement -->
+            <xpath expr="//header/field[@name='state']" position="before">
+                <button name="action_register_disbursement" type="object"
+                        string="Register Disbursement" class="oe_highlight"
+                        invisible="not is_ar_loan or state == 'draft' or disbursement_move_id"/>
+            </xpath>
+
+            <!-- Smart buttons -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_open_disbursement" type="object"
+                        class="oe_stat_button" icon="fa-bank"
+                        invisible="not disbursement_move_id">
+                    <span class="o_stat_text">Disbursement</span>
+                </button>
+                <button name="action_open_invoices" type="object"
+                        class="oe_stat_button" icon="fa-file-text-o"
+                        invisible="invoice_count == 0">
+                    <field name="invoice_count" widget="statinfo" string="Bills"/>
+                </button>
+            </xpath>
+
+            <!-- Native "Posted Entries" counts generated_move_ids (empty for AR loans, so
+                 always 0). AR moves are shown by the Disbursement / Bills buttons instead. -->
+            <xpath expr="//field[@name='nb_posted_entries']/.." position="attributes">
+                <attribute name="invisible">is_ar_loan or state == 'draft'</attribute>
+            </xpath>
+
+            <!-- AR flag on top of the loan settings -->
+            <xpath expr="//field[@name='amount_borrowed']" position="before">
+                <field name="is_ar_loan"/>
+                <field name="disbursement_move_id" invisible="1"/>
+            </xpath>
+
+            <!-- AR settings live in the same settings column (no separate group),
+                 replacing the native ones which only feed the disabled monthly entries -->
+            <xpath expr="//group[@name='loan_settings_column1']" position="inside">
+                <field name="partner_id" invisible="not is_ar_loan" readonly="disbursement_move_id"/>
+                <field name="bank_journal_id" invisible="not is_ar_loan" readonly="disbursement_move_id"/>
+                <field name="loan_payable_account_id" invisible="not is_ar_loan" readonly="disbursement_move_id"/>
+                <field name="interest_account_id" invisible="not is_ar_loan"/>
+                <field name="interest_tax_ids" widget="many2many_tags" invisible="not is_ar_loan"/>
+            </xpath>
+
+            <!-- Native settings drive the monthly entries the AR flow disables → hide them in AR -->
+            <xpath expr="//field[@name='long_term_account_id']" position="attributes">
+                <attribute name="invisible">is_ar_loan</attribute>
+            </xpath>
+            <xpath expr="//field[@name='short_term_account_id']" position="attributes">
+                <attribute name="invisible">is_ar_loan</attribute>
+            </xpath>
+            <xpath expr="//field[@name='expense_account_id']" position="attributes">
+                <attribute name="invisible">is_ar_loan</attribute>
+            </xpath>
+            <xpath expr="//field[@name='journal_id']" position="attributes">
+                <attribute name="invisible">is_ar_loan</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="account_loan_line_list_view" model="ir.ui.view">
+        <field name="name">account.loan.line.list.l10n_ar</field>
+        <field name="model">account.loan.line</field>
+        <field name="inherit_id" ref="account_loans.account_loan_line_list_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='payment']" position="after">
+                <field name="loan_is_ar_loan" column_invisible="1"/>
+                <field name="is_grace_period" optional="show"/>
+                <field name="capital_reconciled" optional="show"/>
+                <field name="capital_move_line_id" optional="hide"/>
+                <field name="invoice_id" optional="show"/>
+                <button name="action_generate_invoice" type="object"
+                        string="Generate Bill" icon="fa-file-text-o"
+                        invisible="not loan_is_ar_loan or invoice_id or interest == 0 or loan_state != 'running'"/>
+                <button name="action_open_invoice" type="object"
+                        string="View Bill" icon="fa-external-link"
+                        invisible="not invoice_id"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
