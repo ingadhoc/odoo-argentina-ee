@@ -114,7 +114,12 @@ class L10n_ArSifereReportHandler(models.AbstractModel):
 
         lines = []
         desp_imp = []
-        for line in move_lines.filtered("amount_currency").sorted(key=lambda r: r.date, reverse=True):
+        # same order as v18 (lines grouped by tax, then date and number descending)
+        sorted_lines = move_lines.filtered("amount_currency").sorted(
+            key=lambda r: (r.date, r.move_name or "", -r.id), reverse=True
+        )
+        sorted_lines = sorted_lines.sorted(key=lambda r: (r.tax_line_id.sequence, r.tax_line_id.id))
+        for line in sorted_lines:
             content = ""
 
             if file_type == "despachos":
