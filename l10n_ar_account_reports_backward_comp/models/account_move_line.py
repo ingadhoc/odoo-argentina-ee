@@ -19,6 +19,23 @@ class AccountMoveLine(models.Model):
             self.partner_id.l10n_ar_partner_perception_ids if is_perception else self.partner_id.l10n_ar_partner_tax_ids
         )
         date = date or self.date
+        earnings_types = ["earnings", "earnings_scale"]
+        is_earnings = self.tax_line_id.l10n_ar_tax_type in earnings_types
+        regime_code = self.withholding_id.regime_code
+        if regime_code and is_earnings:
+            # migrated earnings withholding: the regime stored on the withholding is the one that was applied,
+            # so it wins over the partner aliquot (the regime the partner has today)
+            # (not regime_tax_id, which is reset if the payment entry is rebuilt)
+            if regime_tax := self.env["account.tax"].search(
+                [
+                    *self.env["account.tax"]._check_company_domain(self.company_id),
+                    ("l10n_ar_code", "=", regime_code),
+                    ("l10n_ar_tax_type", "in", earnings_types),
+                    ("l10n_ar_withholding_payment_type", "=", "supplier"),
+                ],
+                limit=1,
+            ):
+                return regime_tax
         if self.tax_line_id.l10n_ar_tax_type == "earnings":
             if partner_tax := partner_field.filtered(
                 lambda x: x.company_id == self.company_id
@@ -28,8 +45,6 @@ class AccountMoveLine(models.Model):
                 and (x.to_date >= date if x.to_date else True)
             ):
                 return partner_tax.tax_id
-        earnings_types = ["earnings", "earnings_scale"]
-        is_earnings = self.tax_line_id.l10n_ar_tax_type in earnings_types
         if partner_tax := partner_field.filtered(
             lambda x: x.company_id == self.company_id
             and x.tax_id.l10n_ar_state_id == self.tax_line_id.l10n_ar_state_id
@@ -39,20 +54,4 @@ class AccountMoveLine(models.Model):
             and (x.to_date >= date if x.to_date else not x.to_date)
         ):
             return partner_tax.tax_id
-        regime_code = self.withholding_id.regime_code
-        if regime_code and is_earnings:
-            # migrated earnings withholding without partner aliquot: use the regime stored on the withholding
-            # (not regime_tax_id, which is reset if the payment entry is rebuilt)
-            return (
-                self.env["account.tax"].search(
-                    [
-                        *self.env["account.tax"]._check_company_domain(self.company_id),
-                        ("l10n_ar_code", "=", regime_code),
-                        ("l10n_ar_tax_type", "in", earnings_types),
-                        ("l10n_ar_withholding_payment_type", "=", "supplier"),
-                    ],
-                    limit=1,
-                )
-                or self.tax_line_id
-            )
         return self.tax_line_id
