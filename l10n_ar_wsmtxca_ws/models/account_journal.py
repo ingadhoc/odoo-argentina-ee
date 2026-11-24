@@ -50,8 +50,10 @@ class AccountJournal(models.Model):
         if afip_ws != "wsmtxca":
             return super()._l10n_ar_get_afip_last_invoice_number(document_type)
         self.ensure_one()
-        # Same guard as l10n_ar_edi: do not reach ARCA while a test is running.
-        if modules.module.current_test:
+        # Same guard as l10n_ar_edi: skip ARCA in tests and in testing without certificate.
+        if modules.module.current_test or (
+            self.company_id._get_environment_type() == "testing" and not self.company_id.sudo().l10n_ar_afip_ws_crt_id
+        ):
             return 0
 
         pos_number = self.l10n_ar_afip_pos_number
