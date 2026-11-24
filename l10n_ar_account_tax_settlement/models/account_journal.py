@@ -1125,8 +1125,9 @@ class AccountJournal(models.Model):
 
                 # el numero de la retencion
                 pos, number = get_pos_and_number(line.withholding_id.name)
-                content += f"{pos:>04s}"
-                content += f"{number:>016s}"
+                # fixed width: 4 digits for the pos and 16 for the number
+                content += f"{pos[-4:]:>04s}"
+                content += f"{number[-16:]:>016s}"
             else:
                 document_parts = move._get_document_number_parts()
                 pos = document_parts["point_of_sale"]
