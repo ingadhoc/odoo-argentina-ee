@@ -150,8 +150,9 @@ class L10n_ArSifereReportHandler(models.AbstractModel):
 
                 # el numero de la retencion
                 pos, number = get_pos_and_number(line.name)
-                content += f"{pos:>04s}"
-                content += f"{number:>016s}"
+                # fixed width: 4 digits for the pos and 16 for the number
+                content += f"{pos[-4:]:>04s}"
+                content += f"{number[-16:]:>016s}"
             else:
                 document_parts = move._l10n_ar_get_document_number_parts(
                     move.l10n_latam_document_number, move.l10n_latam_document_type_id.code
