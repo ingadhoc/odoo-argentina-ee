@@ -21,6 +21,7 @@ Este módulo implementa:
    * Inciar una declaración jurada, vincular una ya abierta en ARBA y actualizar su estado (también con una acción planificada diaria)
    * Crear un Comprobante de retención para cada retención de ARBA de un pago a proveedor, al validar el pago (modo automático). Si una retención no llegó a informarse, el botón "ARBA" de su línea, que solo aparece en modo automático y con el pago ya validado, la envía de nuevo
    * Avisar, al volver a borrador un pago, que tiene retenciones ya informadas a ARBA
+   * Volver a borrador una DDJJ sin retenciones, desde cualquier estado, para poder eliminarla (se borra el ID de ARBA del registro)
 
 Installation
 ============
