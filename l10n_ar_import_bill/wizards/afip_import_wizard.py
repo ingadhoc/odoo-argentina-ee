@@ -69,15 +69,15 @@ class AfipImportWizard(models.TransientModel):
     # common code for both import from settings and from journal
     #####
 
-    @api.depends("line_ids.exists")
+    @api.depends("line_ids.already_exists")
     def _compute_bills_to_create(self):
         for wizard in self:
-            wizard.total_bills_to_create = len(wizard.line_ids.filtered(lambda line: not line.exists))
+            wizard.total_bills_to_create = len(wizard.line_ids.filtered(lambda line: not line.already_exists))
 
-    @api.depends("line_ids.exists")
+    @api.depends("line_ids.already_exists")
     def _compute_bills_exists(self):
         for wizard in self:
-            wizard.total_bills_exists = len(wizard.line_ids.filtered(lambda line: line.exists))
+            wizard.total_bills_exists = len(wizard.line_ids.filtered(lambda line: line.already_exists))
 
     def action_confirm(self):  # noqa: C901
         # Validate if importing from settings (sales from ARCA)
@@ -90,7 +90,7 @@ class AfipImportWizard(models.TransientModel):
 
             # Check for invoices after accounting start date
             if self.company_id.account_opening_date:
-                for line in self.line_ids.filtered(lambda l: not l.exists):
+                for line in self.line_ids.filtered(lambda l: not l.already_exists):
                     if line.date_invoice and line.date_invoice >= self.company_id.account_opening_date:
                         raise UserError(
                             _(
@@ -106,7 +106,7 @@ class AfipImportWizard(models.TransientModel):
 
             counterpart_account_id = self.counterpart_account_id.id
 
-        if all(line.exists for line in self.line_ids):
+        if all(line.already_exists for line in self.line_ids):
             return {
                 "type": "ir.actions.client",
                 "tag": "display_notification",
@@ -145,7 +145,7 @@ class AfipImportWizard(models.TransientModel):
                 base_domain + [("tax_group_id.l10n_ar_vat_afip_code", "=", "2")], limit=1
             )
 
-        for line in self.line_ids.filtered(lambda l: not l.exists):
+        for line in self.line_ids.filtered(lambda l: not l.already_exists):
             partner = line._get_partner_by_vat()
 
             document_type = line._get_document_type()

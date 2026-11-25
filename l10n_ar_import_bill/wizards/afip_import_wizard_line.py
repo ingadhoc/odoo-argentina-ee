@@ -33,7 +33,9 @@ class AfipImportWizardLine(models.TransientModel):
     currency_rate = fields.Float("Exchange Rate")
     amount_total = fields.Float("Total")
     document_type = fields.Char()
-    exists = fields.Boolean("Already Exists", compute="_compute_exists", store=True)
+    # Not "exists": a field with the name of the ORM method hides it on the lines, and the daily vacuum of the
+    # transient records fails on them ("Expected singleton").
+    already_exists = fields.Boolean(compute="_compute_already_exists", store=True)
     neto_grav_iva_0 = fields.Float("Net Taxable VAT 0%")
     iva_2_5 = fields.Float("VAT 2.5%")
     neto_grav_iva_2_5 = fields.Float("Net Taxable VAT 2.5%")
@@ -62,13 +64,13 @@ class AfipImportWizardLine(models.TransientModel):
         "wizard_id.journal_id.type",
         "wizard_id.company_id",
     )
-    def _compute_exists(self):
+    def _compute_already_exists(self):
         identifiers = {line.id: line._get_identifier() for line in self | self.wizard_id.line_ids}
         repeated = self._repeated_lines(identifiers)
         partners_by_document = {}
         for line in self:
             if line.id in repeated:
-                line.exists = True
+                line.already_exists = True
                 continue
 
             # Determine move types based on journal type
@@ -79,7 +81,7 @@ class AfipImportWizardLine(models.TransientModel):
 
             existing_invoice = line._existing_invoices(move_types, identifiers, partners_by_document)
 
-            line.exists = bool(existing_invoice)
+            line.already_exists = bool(existing_invoice)
 
     def _repeated_lines(self, identifiers):
         """The lines whose document already came in an earlier line of the same wizard.

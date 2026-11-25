@@ -215,7 +215,7 @@ msgid "Account used as counterpart when importing from settings"
 msgstr ""
 
 #. module: l10n_ar_import_bill
-#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__exists
+#: model:ir.model.fields,field_description:l10n_ar_import_bill.field_afip_import_wizard_line__already_exists
 msgid "Already Exists"
 msgstr ""
 
