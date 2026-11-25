@@ -234,6 +234,12 @@ class AccountReturnType(models.Model):
                 ("tax_line_id.type_tax_use", "=", "sale"),
                 ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
             ]
+        if external_id == "l10n_ar_account_reports.ar_salta_iibb_return_type":
+            return [
+                ("tax_line_id.l10n_ar_state_id.code", "=", "A"),
+                ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
+                ("tax_line_id.type_tax_use", "=", "sale"),
+            ]
         if external_id == "l10n_ar_account_reports.ar_santa_fe_iibb_return_type":
             return [
                 ("tax_line_id.l10n_ar_state_id.code", "=", "S"),
@@ -383,6 +389,7 @@ class AccountReturnType(models.Model):
             "l10n_ar_account_reports.ar_caba_iibb_return_type",
             "l10n_ar_account_reports.ar_mendoza_iibb_return_type",
             "l10n_ar_account_reports.ar_misiones_iibb_return_type",
+            "l10n_ar_account_reports.ar_salta_iibb_return_type",
             "l10n_ar_account_reports.ar_santa_fe_iibb_return_type",
             "l10n_ar_account_reports.ar_tucuman_iibb_return_type",
             "l10n_ar_account_reports.sicore_return_type",
