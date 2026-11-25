@@ -37,6 +37,17 @@ class AccountReport(models.Model):
         # Only show the filter if require_custom_filter is enabled
         options["filters"]["show_all_custom"] = self.filter_show_all_custom and self.require_custom_filter
 
+    def _get_filter_journals(self, options, additional_domain=None):
+        # Partner balance must show the whole debt, even with journals restricted by record filters (e.g. stores)
+        partner_ledger = self.env.ref("account_reports.partner_ledger_report", raise_if_not_found=False)
+        if partner_ledger and self.root_report_id == partner_ledger:
+            return (
+                super(AccountReport, self.sudo())
+                ._get_filter_journals(options, additional_domain=additional_domain)
+                .sudo(False)
+            )
+        return super()._get_filter_journals(options, additional_domain=additional_domain)
+
     def _get_options_domain(self, options, date_scope):
         """Override to add a dummy domain if custom filter is required and no filters are applied."""
         domain = super()._get_options_domain(options, date_scope)
