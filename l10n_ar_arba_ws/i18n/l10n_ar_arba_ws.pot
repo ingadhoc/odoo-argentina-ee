@@ -642,9 +642,7 @@ msgstr ""
 
 #. module: l10n_ar_arba_ws
 #: model:ir.model.fields,help:l10n_ar_arba_ws.field_account_payment_withholding_line__is_arba_ws_needed
-msgid ""
-"Only applies to incurred withholding for ARBA on taxes with type supplier "
-"payments"
+msgid "Only applies to incurred withholding for ARBA on purchase taxes"
 msgstr ""
 
 #. module: l10n_ar_arba_ws
@@ -782,6 +780,13 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_arba_ws/models/l10n_ar_dj_arba.py:0
 msgid "The declaration was successfully opened"
+msgstr ""
+
+#. module: l10n_ar_arba_ws
+#. odoo-python
+#: code:addons/l10n_ar_arba_ws/models/account_payment_withholding_line.py:0
+msgid ""
+"The withholding %s was not reported to ARBA: its amount in company currency is 0."
 msgstr ""
 
 #. module: l10n_ar_arba_ws
