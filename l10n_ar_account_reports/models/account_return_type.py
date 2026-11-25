@@ -49,6 +49,40 @@ class AccountReturnType(models.Model):
         "no carryover mechanism and no automatic tax_lock_date update.",
     )
 
+    @api.model
+    def _generate_or_refresh_all_returns(self, root_companies):
+        # Set by res.company.write on the branches that get the opening date from their head.
+        if self.env.context.get("l10n_ar_skip_returns_refresh"):
+            return
+        # Companies without Tax ID have nothing to file in Argentina.
+        root_companies = root_companies.filtered(lambda c: c.vat or c.account_fiscal_country_id.code != "AR")
+        root_companies |= self._l10n_ar_get_heads_under_undated_roots(root_companies)
+        return super()._generate_or_refresh_all_returns(root_companies)
+
+    @api.model
+    def _l10n_ar_get_heads_under_undated_roots(self, root_companies):
+        """Legal entity heads with their own opening date whose tree root has none.
+
+        Native only generates from the root and reaches other-Tax-ID branches through it,
+        so they stay without returns until the root gets an opening date.
+        """
+        undated_roots = root_companies.filtered(lambda c: not c.account_opening_date)
+        if not undated_roots:
+            return self.env["res.company"]
+        heads = (
+            self.env["res.company"]
+            .sudo()
+            .search(
+                [
+                    ("id", "child_of", undated_roots.ids),
+                    ("id", "not in", undated_roots.ids),
+                    ("account_opening_date", "!=", False),
+                ]
+            )
+            .filtered(lambda c: c.vat and c.legal_entity_root_id == c)
+        )
+        return self.env["res.company"].browse(heads.ids)
+
     @api.depends("country_id")
     def _compute_l10n_ar_is_simple_closing_return(self):
         """Compute if this return type should use simple closing (no carryover, no tax_lock_date).
