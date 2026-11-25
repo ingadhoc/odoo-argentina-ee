@@ -44,13 +44,15 @@ class TestArbaWithholdingWs(TestArCommon):
         )
         # compute the automatic withholdings first, otherwise they would replace the line created below
         payment.flush_recordset()
-        cls.wh_line = cls.env["l10n_ar.payment.withholding"].create(
+        cls.wh_line = cls.env["account.payment.withholding.line"].create(
             {
                 "payment_id": payment.id,
                 "tax_id": arba_tax.id,
                 "name": "00001313",
                 "base_amount": 253275.0,
                 "amount": 1772.93,
+                "l10n_ar_base_amount": 253275.0,
+                "l10n_ar_amount": 1772.93,
             }
         )
 
@@ -59,9 +61,11 @@ class TestArbaWithholdingWs(TestArCommon):
         """Each answer is an exception to raise or a (status_code, body) pair, consumed in call order."""
         answers = list(answers)
         calls = []
+        self.arba_bodies = []
 
         def _fake_request(method, url, **kwargs):
             calls.append((method, url))
+            self.arba_bodies.append(json.loads(kwargs["data"]))
             answer = answers.pop(0)
             if isinstance(answer, Exception):
                 raise answer
@@ -145,3 +149,31 @@ class TestArbaWithholdingWs(TestArCommon):
         self.assertFalse(self.wh_line.l10n_ar_cert_number)
         self.assertEqual(self.wh_line.name, "00001313")
         self.assertIn("ERROR_DUPLICIDAD_NUMERO_TRANSACCION", self.wh_line.payment_id.message_ids[0].body)
+
+    def test_arba_gets_the_ars_amounts_and_a_positive_rate(self):
+        """A withholding in another currency is informed with its ARS values, and the 20.0 tax keeps its amount
+        negative: ARBA still gets the rate as a positive number."""
+        self.company_ri.use_payment_pro = True
+        # the line in the payment currency (USD) and, stored aside, its ARS values
+        self.wh_line.write({"base_amount": 211.06, "amount": 1.48})
+        self.wh_line.tax_id.amount = -2.5
+        self.assertAlmostEqual(self.wh_line._get_company_currency_amounts()["amount"], 1772.93)
+
+        with self._arba_answers((200, {"nroEmision": "2026/00001/00000300"})):
+            self.ddjj._create_withholding(self.wh_line)
+
+        (body,) = self.arba_bodies
+        self.assertEqual(body["alicuota"], 2.5)
+        self.assertEqual(body["baseImponible"], 253275.0)
+        self.assertEqual(body["importeRetencion"], 1772.93)
+
+    def test_withholding_of_zero_ars_is_not_informed_and_leaves_a_note(self):
+        self.company_ri.use_payment_pro = True
+        self.wh_line.write({"l10n_ar_base_amount": 0.0, "l10n_ar_amount": 0.0})
+
+        with self._arba_answers() as calls:
+            self.wh_line.send_to_arba()
+
+        self.assertFalse(calls)
+        self.assertFalse(self.wh_line.l10n_ar_cert_number)
+        self.assertIn("was not reported to ARBA", self.wh_line.payment_id.message_ids[0].body)
