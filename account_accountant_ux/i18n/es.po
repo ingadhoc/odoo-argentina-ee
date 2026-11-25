@@ -781,3 +781,15 @@ msgstr ""
 "que no puede tener un ejercicio fiscal propio: el ejercicio fiscal se define"
 " una sola vez para toda la entidad fiscal. Créelo en «%(head)s», o asígnele "
 "a «%(company)s» su propio CUIT si realmente es una entidad fiscal distinta."
+
+#. module: account_accountant_ux
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.account_return_kanban_view
+msgid "Companies in this return:"
+msgstr "Compañías en esta declaración:"
+
+#. module: account_accountant_ux
+#: model_terms:ir.ui.view,arch_db:account_accountant_ux.account_return_kanban_view
+msgid "<strong>This return includes all these companies, even the ones not selected.</strong>"
+msgstr ""
+"<strong>Esta declaración incluye todas estas compañías, incluso las que no "
+"están seleccionadas.</strong>"
