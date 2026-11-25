@@ -72,7 +72,12 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
 
         validate_document_numbers(move_lines)
 
-        for line in move_lines.filtered("amount_currency").sorted(key=lambda r: r.date, reverse=True):
+        # same order as v18: perceptions first, then withholdings, each by date and number descending
+        sorted_lines = move_lines.filtered("amount_currency").sorted()
+        sorted_lines = sorted_lines.sorted(
+            key=lambda r: r._get_settlement_tax().type_tax_use not in ("sale", "purchase")
+        )
+        for line in sorted_lines:
             content = ""
 
             partner = line.partner_id
