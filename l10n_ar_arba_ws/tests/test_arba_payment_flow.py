@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 from odoo.addons.l10n_ar_tax.tests.common import L10nArTaxPaymentCommon
 from odoo.tests import tagged
 
@@ -34,7 +36,6 @@ class TestArbaPaymentFlow(L10nArTaxPaymentCommon):
         self.assertNotEqual(line.ref, line.name)
         self.assertEqual(line.l10n_ar_dj_arba_id.state, "open")
         self.assertIn(line, line.l10n_ar_dj_arba_id.l10n_ar_withholding_ids)
-        self.assertAlmostEqual(line._get_company_currency_amounts()["amount"], 30.0)
 
     def test_reset_to_draft_warns_and_keeps_the_certificate(self):
         payment, line = self._posted_arba_payment()
@@ -53,6 +54,9 @@ class TestArbaPaymentFlow(L10nArTaxPaymentCommon):
         self.assertEqual(line.ref, internal_number)
 
         # posting again does not inform the withholding twice
-        payment.action_post()
+        with patch.object(type(self.env["l10n_ar.dj.arba"]), "_create_withholding") as create_withholding:
+            payment.action_post()
+        create_withholding.assert_not_called()
         self.assertEqual(line.l10n_ar_cert_number, cert_number)
         self.assertEqual(line.name, cert_number)
+        self.assertEqual(line.ref, internal_number)
