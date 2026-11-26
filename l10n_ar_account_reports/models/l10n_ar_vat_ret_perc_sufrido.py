@@ -1,10 +1,14 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 import re
 
-from odoo import _, fields, models
+from odoo import _, api, fields, models
 from odoo.exceptions import RedirectWarning, UserError
 
 from .helpers import get_standard_lines_domain
+
+# CUIT de ARCA: la especificación de ARCA pide informarlo como agente en las
+# percepciones aduaneras, que van en un archivo aparte de las impositivas.
+ARCA_CUIT = "33693450239"
 
 
 class L10n_ArIvaReportHandler(models.AbstractModel):
@@ -33,6 +37,14 @@ class L10n_ArIvaReportHandler(models.AbstractModel):
                 "file_export_type": "TXT",
                 "branch_allowed": True,
             },
+            {
+                "name": "Percepciones aduaneras de IVA sufridas",
+                "sequence": 30,
+                "action": "export_file",
+                "action_param": "perc_aduaneras_iva_sufridas_txt",
+                "file_export_type": "TXT",
+                "branch_allowed": True,
+            },
         ]
 
         options["buttons"].extend(export_buttons)
@@ -48,6 +60,13 @@ class L10n_ArIvaReportHandler(models.AbstractModel):
         return {
             "file_name": "Percepciones IVA Sufridas.txt",
             "file_content": self._vat_perc_ret_get_txt_files(options, "perc"),
+            "file_type": "txt",
+        }
+
+    def perc_aduaneras_iva_sufridas_txt(self, options):
+        return {
+            "file_name": "Percepciones Aduaneras IVA Sufridas.txt",
+            "file_content": self._vat_perc_ret_get_txt_files(options, "perc_aduanera"),
             "file_type": "txt",
         }
 
@@ -74,12 +93,22 @@ class L10n_ArIvaReportHandler(models.AbstractModel):
             domain += [
                 ("tax_line_id.l10n_ar_withholding_payment_type", "=", "customer"),
             ]
-        elif file_type == "perc":
+        elif file_type in ("perc", "perc_aduanera"):
             domain += [
                 ("tax_line_id.type_tax_use", "=", "purchase"),
             ]
 
-        return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
+        move_lines = self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
+        if file_type == "perc":
+            return move_lines.filtered(lambda line: not self._is_customs_perception(line))
+        if file_type == "perc_aduanera":
+            return move_lines.filtered(self._is_customs_perception)
+        return move_lines
+
+    @api.model
+    def _is_customs_perception(self, line):
+        """Las percepciones aduaneras se informan con el CUIT de ARCA como agente."""
+        return re.sub(r"\D", "", line.move_id.partner_id.vat or "") == ARCA_CUIT
 
     def _get_vat_txt_content(self, move_lines, file_type):
         """Returns the lines to be printed in the txt file.
@@ -128,7 +157,7 @@ class L10n_ArIvaReportHandler(models.AbstractModel):
                 # importe retención (long 16)
                 content += "%016.2f" % line.balance
                 content += "\r\n"
-            elif file_type == "perc":
+            elif file_type in ("perc", "perc_aduanera"):
                 tax = line._get_settlement_tax()
                 # regimen (long 3)
                 codigo_regimen = tax.l10n_ar_code

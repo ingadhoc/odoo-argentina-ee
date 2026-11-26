@@ -10,6 +10,7 @@ from odoo.tests import tagged
 
 from .common import TestL10nArAccountReportsCommon
 
+ARCA_CUIT = "33693450239"
 DATE_FROM = "2035-01-01"
 DATE_TO = "2035-01-31"
 
@@ -21,7 +22,8 @@ TUCUMAN_LINES = ["tucuman_withholdings_line", "tucuman_perceptions_line"]
 # (``l10n_ar_<prefijo>_report``), su handler y las líneas de la liquidación.
 #
 #   only      recorte cuando dos archivos se reparten los apuntes de la misma
-#             línea: CABA y Tucumán separan las notas de crédito
+#             línea: CABA y Tucumán separan las notas de crédito, IVA sufrido
+#             separa las percepciones aduaneras (CUIT de ARCA) de las impositivas
 #   records   registros esperados, contados sobre el escenario de abajo
 #   header    renglones del archivo que no son un apunte
 #
@@ -65,7 +67,10 @@ TXT_FILES = [
     ("tucuman", "tucuman_retper_txt", TUCUMAN_LINES, None, 4, 0),
     ("tucuman", "tucuman_ncfact_txt", TUCUMAN_LINES, "refunds", 1, 0),
     ("iva", "ret_iva_sufridas_txt", ["iva_withholdings_line"], None, 1, 0),
-    ("iva", "perc_iva_sufridas_txt", ["iva_perceptions_line"], None, 1, 0),
+    # Las percepciones aduaneras (agente: CUIT de ARCA) van en un archivo aparte
+    # de las impositivas.
+    ("iva", "perc_iva_sufridas_txt", ["iva_perceptions_line"], "impositivas", 1, 0),
+    ("iva", "perc_aduaneras_iva_sufridas_txt", ["iva_perceptions_line"], "aduaneras", 1, 0),
 ]
 
 
@@ -114,6 +119,14 @@ class TestTxtLineCount(TestL10nArAccountReportsCommon):
         # IVA sufrido.
         cls._create_invoice(cls.perception_suffered_taxes["C"], "2035-01-17", move_type="in_invoice")
         cls._create_invoice(cls.tax_perception_vat_suffered, "2035-01-18", move_type="in_invoice")
+        # Percepción aduanera: el agente es ARCA y va en su propio archivo.
+        cls.partner_customs = cls.partner_perceived.copy({"name": "ARCA Aduana", "vat": ARCA_CUIT})
+        cls._create_invoice(
+            cls.tax_perception_vat_suffered,
+            "2035-01-21",
+            move_type="in_invoice",
+            partner_id=cls.partner_customs.id,
+        )
         # Retenciones sufridas en una cobranza.
         cls._create_payment_with_withholdings(
             cls.withholding_suffered_iibb + cls.withholding_suffered_vat,
@@ -149,7 +162,10 @@ class TestTxtLineCount(TestL10nArAccountReportsCommon):
                         {"calling_line_dict_id": report._get_generic_line_id("account.report.line", report_line.id)},
                     )
                 )
-        if only:
+        if only in ("impositivas", "aduaneras"):
+            is_customs = only == "aduaneras"
+            move_lines = move_lines.filtered(lambda line: (line.move_id.partner_id.vat == ARCA_CUIT) is is_customs)
+        elif only:
             is_refund = only == "refunds"
             move_lines = move_lines.filtered(lambda line: (line.move_id.move_type == "out_refund") is is_refund)
         return move_lines
@@ -190,6 +206,18 @@ class TestTxtLineCount(TestL10nArAccountReportsCommon):
                     % (method_name, len(move_lines), len(records) - header, "\n".join(r[:80] for r in records)),
                 )
                 self.assert_latin1_safe(records, method_name)
+
+    def test_iva_sufrido_separa_percepciones_aduaneras_de_impositivas(self):
+        """ARCA pide un archivo solo con percepciones impositivas y otro solo con
+        aduaneras (agente: CUIT de ARCA): no se pueden mezclar."""
+        report = self.env.ref("l10n_ar_account_reports.l10n_ar_iva_report")
+        options = self._report_options(report, DATE_FROM, DATE_TO)
+        handler = self.env["l10n_ar.iva.report.handler"]
+        impositivas = self._txt_records(handler.perc_iva_sufridas_txt(options)["file_content"])
+        aduaneras = self._txt_records(handler.perc_aduaneras_iva_sufridas_txt(options)["file_content"])
+        # régimen (3) + CUIT del agente (11)
+        self.assertEqual([record[3:14] for record in impositivas], [self.partner_perceived.vat])
+        self.assertEqual([record[3:14] for record in aduaneras], [ARCA_CUIT])
 
     def test_ningun_archivo_se_genera_con_asientos_no_publicados(self):
         """Un archivo con retenciones en borrador se presenta al organismo con
