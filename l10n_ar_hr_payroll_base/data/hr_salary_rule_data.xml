@@ -115,6 +115,17 @@ result_name = inputs['OS'].name</field>
         <field name="amount_select">input</field>
         <field name="amount_other_input_id" ref="input_guard"/>
     </record>
+    <record id="rule_monthly_redondeo" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_monthly"/>
+        <field name="name">Rounding</field>
+        <field name="code">REDONDEO</field>
+        <field name="sequence">52</field>
+        <field name="category_id" ref="category_norem"/>
+        <field name="condition_select">input</field>
+        <field name="condition_other_input_id" ref="input_redondeo"/>
+        <field name="amount_select">input</field>
+        <field name="amount_other_input_id" ref="input_redondeo"/>
+    </record>
     <record id="rule_monthly_vng" model="hr.salary.rule">
         <field name="struct_id" ref="structure_monthly"/>
         <field name="name">Unused Vacations</field>
@@ -464,6 +475,17 @@ result_name = inputs['OS'].name</field>
         <field name="amount_select">input</field>
         <field name="amount_other_input_id" ref="input_guard"/>
     </record>
+    <record id="rule_sac_redondeo" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_sac"/>
+        <field name="name">Rounding</field>
+        <field name="code">REDONDEO</field>
+        <field name="sequence">52</field>
+        <field name="category_id" ref="category_norem"/>
+        <field name="condition_select">input</field>
+        <field name="condition_other_input_id" ref="input_redondeo"/>
+        <field name="amount_select">input</field>
+        <field name="amount_other_input_id" ref="input_redondeo"/>
+    </record>
     <record id="rule_sac_vng" model="hr.salary.rule">
         <field name="struct_id" ref="structure_sac"/>
         <field name="name">Unused Vacations</field>
@@ -812,6 +834,17 @@ result_name = inputs['OS'].name</field>
         <field name="condition_other_input_id" ref="input_guard"/>
         <field name="amount_select">input</field>
         <field name="amount_other_input_id" ref="input_guard"/>
+    </record>
+    <record id="rule_final_redondeo" model="hr.salary.rule">
+        <field name="struct_id" ref="structure_final"/>
+        <field name="name">Rounding</field>
+        <field name="code">REDONDEO</field>
+        <field name="sequence">52</field>
+        <field name="category_id" ref="category_norem"/>
+        <field name="condition_select">input</field>
+        <field name="condition_other_input_id" ref="input_redondeo"/>
+        <field name="amount_select">input</field>
+        <field name="amount_other_input_id" ref="input_redondeo"/>
     </record>
     <record id="rule_final_vng" model="hr.salary.rule">
         <field name="struct_id" ref="structure_final"/>

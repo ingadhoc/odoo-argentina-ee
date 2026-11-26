@@ -885,6 +885,14 @@ msgid "Retirement"
 msgstr "Jubilación"
 
 #. module: l10n_ar_hr_payroll_base
+#: model:hr.payslip.input.type,name:l10n_ar_hr_payroll_base.input_redondeo
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_final_redondeo
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_monthly_redondeo
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_sac_redondeo
+msgid "Rounding"
+msgstr "Redondeo"
+
+#. module: l10n_ar_hr_payroll_base
 #: model:hr.salary.rule.category,name:l10n_ar_hr_payroll_base.category_sac
 #: model:ir.model.fields.selection,name:l10n_ar_hr_payroll_base.selection__hr_payroll_structure__l10n_ar_kind__sac
 msgid "SAC"

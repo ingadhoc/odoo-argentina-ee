@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 19.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-11-26 12:26+0000\n"
-"PO-Revision-Date: 2026-11-26 12:26+0000\n"
+"POT-Creation-Date: 2026-11-26 15:37+0000\n"
+"PO-Revision-Date: 2026-11-26 15:37+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -874,6 +874,14 @@ msgstr ""
 #: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_monthly_jub
 #: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_sac_jub
 msgid "Retirement"
+msgstr ""
+
+#. module: l10n_ar_hr_payroll_base
+#: model:hr.payslip.input.type,name:l10n_ar_hr_payroll_base.input_redondeo
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_final_redondeo
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_monthly_redondeo
+#: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_sac_redondeo
+msgid "Rounding"
 msgstr ""
 
 #. module: l10n_ar_hr_payroll_base

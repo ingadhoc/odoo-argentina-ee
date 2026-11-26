@@ -176,6 +176,13 @@ class TestL10nArPayroll(TestPayslipValidationCommon):
             self.assertEqual((daycare.total, daycare.category_id.code), (3000.0, "NOREM"))
             self.assertFalse(slip.line_ids.filtered(lambda l: l.code == "GUARD_REC"))
             self.assertEqual(slip.currency_id.compare_amounts(slip.net_wage, net + 3000.0), 0)
+        with self.subTest("the rounding adds to the net as a non-remunerative concept"):
+            net = slip.net_wage
+            slip.input_line_ids = [self._input("REDONDEO", 0.34)]
+            slip.compute_sheet()
+            rounding = slip.line_ids.filtered(lambda l: l.code == "REDONDEO")
+            self.assertEqual((rounding.total, rounding.category_id.code), (0.34, "NOREM"))
+            self.assertEqual(slip.currency_id.compare_amounts(slip.net_wage, net + 0.34), 0)
         with self.subTest("the printed payslip shows its own wage when it has one, else the employee record's"):
 
             def printed_wage():

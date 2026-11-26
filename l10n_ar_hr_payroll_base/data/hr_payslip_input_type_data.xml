@@ -51,6 +51,11 @@
         <field name="code">GUARD</field>
         <field name="country_id" ref="base.ar"/>
     </record>
+    <record id="input_redondeo" model="hr.payslip.input.type">
+        <field name="name">Rounding</field>
+        <field name="code">REDONDEO</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
     <!-- No rule reads it: one line per child with the receipt amount, kept on the payslip as support -->
     <record id="input_guard_rec" model="hr.payslip.input.type">
         <field name="name">Daycare Receipt</field>
