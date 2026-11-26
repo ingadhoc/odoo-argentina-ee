@@ -69,9 +69,13 @@ class L10n_ArMisionesReportHandler(models.AbstractModel):
         ] + get_standard_lines_domain(self.env["account.report"].get_report_company_ids(options), options)
 
         if file_type == "ret":
-            domain += [("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier")]
+            domain += [
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", True),
+                ("tax_line_id.type_tax_use", "=", "purchase"),
+            ]
         elif file_type == "perc":
-            domain += [("tax_line_id.type_tax_use", "=", "sale")]
+            domain += ["&", ("tax_line_id.is_withholding_tax", "=", False), ("tax_line_id.type_tax_use", "=", "sale")]
 
         return self.env["account.move.line"].search(domain)
 

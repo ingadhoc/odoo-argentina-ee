@@ -1,8 +1,6 @@
 import re
 import unicodedata
 
-from odoo.tools import ustr
-
 #########
 # helpers
 #########
@@ -66,7 +64,7 @@ def get_pos_and_number(full_number):
 def remove_accents_and_dieresis(input_str):
     """Suboptimal-but-better-than-nothing way to replace accented or dieresis-containing
     latin letters by an ASCII equivalent."""
-    input_str = ustr(input_str)
+    input_str = str(input_str)
     nkfd_form = unicodedata.normalize("NFKD", input_str)
     return "".join([c for c in nkfd_form if not unicodedata.combining(c)])
 

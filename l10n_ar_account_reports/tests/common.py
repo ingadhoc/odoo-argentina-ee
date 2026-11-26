@@ -62,16 +62,16 @@ class TestL10nArAccountReportsCommon(TestArWithholdingArRi):
         # Ganancias tiene mínimo no sujeto a retención: con bases chicas el
         # importe da cero y el registro no se informa.
         cls.tax_withholding_earnings = cls._company_tax("ex_tax_withholding_profits_regimen_112_insc")
-        cls.tax_withholding_earnings.l10n_ar_withholding_sequence_id = cls.tax_wth_seq
+        cls.tax_withholding_earnings.withholding_sequence_id = cls.tax_wth_seq
         cls.earnings_base = 500000.0
 
         # El plan AR no trae retenciones sufridas con jurisdicción ni de IVA:
         # se arman copiando las practicadas y dándolas vuelta.
         cls.withholding_suffered_iibb = cls.withholding_taxes["C"].copy(
-            {"name": "Ret IIBB CABA sufrida (test)", "l10n_ar_withholding_payment_type": "customer"}
+            {"name": "Ret IIBB CABA sufrida (test)", "type_tax_use": "sale"}
         )
         cls.withholding_suffered_vat = cls.tax_withholding_vat.copy(
-            {"name": "Ret IVA sufrida (test)", "l10n_ar_withholding_payment_type": "customer"}
+            {"name": "Ret IVA sufrida (test)", "type_tax_use": "sale"}
         )
 
         cls.journal_bank = cls.env["account.journal"].search(
@@ -88,7 +88,6 @@ class TestL10nArAccountReportsCommon(TestArWithholdingArRi):
                 "zip": "2000",
                 "state_id": cls.env.ref("base.state_ar_s").id,
                 "country_id": cls.env.ref("base.ar").id,
-                "l10n_latam_identification_type_id": cls.env.ref("l10n_ar.it_cuit").id,
                 "vat": "30710158254",
                 "l10n_ar_afip_responsibility_type_id": cls.env.ref("l10n_ar.res_IVARI").id,
                 "l10n_ar_gross_income_type": "local",
@@ -119,7 +118,7 @@ class TestL10nArAccountReportsCommon(TestArWithholdingArRi):
                 WITHHOLDING_REGIME,
                 amount=amount,
                 amount_type="percent",
-                l10n_ar_withholding_sequence_id=cls.tax_wth_seq.id,
+                withholding_sequence_id=cls.tax_wth_seq.id,
             )
         )
         return tax

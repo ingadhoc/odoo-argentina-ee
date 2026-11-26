@@ -61,7 +61,9 @@ class L10n_ArMendozaReportHandler(models.AbstractModel):
         domain = [
             ("tax_line_id.l10n_ar_state_id.code", "=", "M"),
             ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
-            ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+            "&",
+            ("tax_line_id.is_withholding_tax", "=", True),
+            ("tax_line_id.type_tax_use", "=", "purchase"),
         ] + get_standard_lines_domain(self.env["account.report"].get_report_company_ids(options), options)
         return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
 

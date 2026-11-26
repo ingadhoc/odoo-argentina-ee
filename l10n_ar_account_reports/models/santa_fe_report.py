@@ -53,8 +53,12 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
             ("tax_line_id.l10n_ar_state_id.code", "=", "S"),
             ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
             "|",
+            "&",
+            ("tax_line_id.is_withholding_tax", "=", False),
             ("tax_line_id.type_tax_use", "=", "sale"),
-            ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+            "&",
+            ("tax_line_id.is_withholding_tax", "=", True),
+            ("tax_line_id.type_tax_use", "=", "purchase"),
         ] + get_standard_lines_domain(self.env["account.report"].get_report_company_ids(options), options)
         return self.env["account.move.line"].search(domain, order="date asc, name asc, id asc")
 
@@ -80,13 +84,13 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
             tax = line._get_settlement_tax()
 
             # 1 - tipo de operacion
-            if tax.type_tax_use in ["sale", "purchase"]:
+            if not tax.is_withholding_tax and tax.type_tax_use in ["sale", "purchase"]:
                 content = "2"
 
                 # para percepciones ho es obligatorio
                 articulo_inciso_calculo = tax.api_articulo_inciso_calculo_percepcion or "000"
                 articulo_inciso_retiene = tax.api_codigo_articulo_percepcion
-            elif tax.l10n_ar_withholding_payment_type in ["customer", "supplier"]:
+            elif tax.is_withholding_tax:
                 content = "1"
 
                 articulo_inciso_calculo = tax.api_articulo_inciso_calculo_retencion
@@ -101,7 +105,7 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
                         ' in the "API" tab.',
                         tax_name=tax.name,
                     ),
-                    action=tax.get_formview_action(),
+                    action=tax.get_record_default_action(),
                     button_text=_("Edit tax"),
                 )
 
@@ -178,7 +182,7 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
                         partner_name=partner.name,
                         partner_id=partner.id,
                     ),
-                    action=partner.get_formview_action(),
+                    action=partner.get_record_default_action(),
                     button_text=_("Edit contact"),
                 )
             if gross_income_type in ["multilateral", "local"]:

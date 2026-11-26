@@ -25,7 +25,7 @@
                     <record id="l10n_ar_iva_report_debito_fiscal_balance" model="account.report.expression">
                         <field name="label">balance</field>
                         <field name="engine">domain</field>
-                        <field name="formula">[("tax_line_id.type_tax_use", "=", "sale"), ("tax_line_id.tax_group_id.l10n_ar_vat_afip_code", "!=", False)]</field>
+                        <field name="formula">["&amp;", ("tax_line_id.is_withholding_tax", "=", False), ("tax_line_id.type_tax_use", "=", "sale"), ("tax_line_id.tax_group_id.l10n_ar_vat_afip_code", "!=", False)]</field>
                         <field name="subformula">-sum</field>
                     </record>
                 </field>
@@ -37,7 +37,7 @@
                     <record id="l10n_ar_iva_report_credito_fiscal_balance" model="account.report.expression">
                         <field name="label">balance</field>
                         <field name="engine">domain</field>
-                        <field name="formula">[("tax_line_id.type_tax_use", "=", "purchase"), ("tax_line_id.tax_group_id.l10n_ar_vat_afip_code", "!=", False)]</field>
+                        <field name="formula">["&amp;", ("tax_line_id.is_withholding_tax", "=", False), ("tax_line_id.type_tax_use", "=", "purchase"), ("tax_line_id.tax_group_id.l10n_ar_vat_afip_code", "!=", False)]</field>
                         <field name="subformula">-sum</field>
                     </record>
                 </field>
@@ -60,7 +60,7 @@
                     <record id="l10n_ar_iva_report_iva_withholdings_line_balance" model="account.report.expression">
                         <field name="label">balance</field>
                         <field name="engine">domain</field>
-                        <field name="formula">[("tax_line_id.l10n_ar_state_id", "=", False), ("tax_line_id.l10n_ar_withholding_payment_type", "=", "customer"), ("tax_line_id.tax_group_id.l10n_ar_tribute_afip_code", "=", "06")]</field>
+                        <field name="formula">[("tax_line_id.l10n_ar_state_id", "=", False), "&amp;", ("tax_line_id.is_withholding_tax", "=", True), ("tax_line_id.type_tax_use", "=", "sale"), ("tax_line_id.tax_group_id.l10n_ar_tribute_afip_code", "=", "06")]</field>
                         <field name="subformula">-sum</field>
                     </record>
                 </field>
@@ -72,7 +72,7 @@
                     <record id="l10n_ar_iva_report_iva_perceptions_line_balance" model="account.report.expression">
                         <field name="label">balance</field>
                         <field name="engine">domain</field>
-                        <field name="formula">[("tax_line_id.l10n_ar_state_id", "=", False), ("tax_line_id.type_tax_use", "=", "purchase"), ("tax_line_id.tax_group_id.l10n_ar_tribute_afip_code", "=", "06")]</field>
+                        <field name="formula">[("tax_line_id.l10n_ar_state_id", "=", False), "&amp;", ("tax_line_id.is_withholding_tax", "=", False), ("tax_line_id.type_tax_use", "=", "purchase"), ("tax_line_id.tax_group_id.l10n_ar_tribute_afip_code", "=", "06")]</field>
                         <field name="subformula">-sum</field>
                     </record>
                 </field>

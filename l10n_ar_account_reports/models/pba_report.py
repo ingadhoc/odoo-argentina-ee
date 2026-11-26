@@ -122,9 +122,13 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
         ] + get_standard_lines_domain(self.env["account.report"].get_report_company_ids(options), options)
 
         if file_type == "ret_a122r":
-            domain += [("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier")]
+            domain += [
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", True),
+                ("tax_line_id.type_tax_use", "=", "purchase"),
+            ]
         elif file_type in ["perc", "perc_act_7"]:
-            domain += [("tax_line_id.type_tax_use", "=", "sale")]
+            domain += ["&", ("tax_line_id.is_withholding_tax", "=", False), ("tax_line_id.type_tax_use", "=", "sale")]
         move_lines = self.env["account.move.line"].search(domain)
         if file_type == "ret_a122r" and self.env["ir.module.module"].search(
             [("name", "=", "l10n_ar_arba_ws"), ("state", "in", ["installed", "to upgrade"])]

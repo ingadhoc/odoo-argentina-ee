@@ -56,7 +56,8 @@ class AccountChartTemplate(models.AbstractModel):
                     ("company_id", "=", invoice.company_id.id),
                     ("l10n_ar_state_id", "!=", invoice.partner_id.state_id.id),
                     ("l10n_ar_state_id.country_id.code", "=", "AR"),
-                    ("l10n_ar_withholding_payment_type", "=", "customer"),
+                    ("is_withholding_tax", "=", True),
+                    ("type_tax_use", "=", "sale"),
                 ],
                 limit=1,
             )
@@ -106,7 +107,12 @@ class AccountChartTemplate(models.AbstractModel):
             name = re.sub(r"\b\d+(\.\d+)?\s*%", f"{rate}%", tax.name)
 
         new_tax = tax.search(
-            [("name", "=", name), ("company_id", "=", self.env.company.id), ("type_tax_use", "=", tax.type_tax_use)],
+            [
+                ("name", "=", name),
+                ("company_id", "=", self.env.company.id),
+                ("type_tax_use", "=", tax.type_tax_use),
+                ("is_withholding_tax", "=", tax.is_withholding_tax),
+            ],
             limit=1,
         )
         if not new_tax:

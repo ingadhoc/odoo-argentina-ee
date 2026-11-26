@@ -72,10 +72,14 @@ class L10n_ArIvaReportHandler(models.AbstractModel):
 
         if file_type == "ret":
             domain += [
-                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "customer"),
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", True),
+                ("tax_line_id.type_tax_use", "=", "sale"),
             ]
         elif file_type == "perc":
             domain += [
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", False),
                 ("tax_line_id.type_tax_use", "=", "purchase"),
             ]
 
@@ -99,7 +103,7 @@ class L10n_ArIvaReportHandler(models.AbstractModel):
                             'There is no regime code in the configuration of tax "%(tax_name)s"',
                             tax_name=line_withholding_tax.name,
                         ),
-                        action=line_withholding_tax.get_formview_action(),
+                        action=line_withholding_tax.get_record_default_action(),
                         button_text=_("Edit tax"),
                     )
                 if len(codigo_regimen) < 3:
@@ -108,7 +112,7 @@ class L10n_ArIvaReportHandler(models.AbstractModel):
                             'The regime code must have 3 digits in the configuration of tax "%(tax_name)s"',
                             tax_name=line_withholding_tax.name,
                         ),
-                        action=line_withholding_tax.get_formview_action(),
+                        action=line_withholding_tax.get_record_default_action(),
                         button_text=_("Edit tax"),
                     )
                 content += codigo_regimen[:3]
@@ -138,7 +142,7 @@ class L10n_ArIvaReportHandler(models.AbstractModel):
                             'There is no regime code in the configuration of tax "%(tax_name)s"',
                             tax_name=tax.name,
                         ),
-                        action=tax.get_formview_action(),
+                        action=tax.get_record_default_action(),
                         button_text=_("Edit tax"),
                     )
                 if len(codigo_regimen) < 3:
@@ -147,7 +151,7 @@ class L10n_ArIvaReportHandler(models.AbstractModel):
                             'The regime code must have 3 digits in the configuration of tax "%(tax_name)s"',
                             tax_name=tax.name,
                         ),
-                        action=tax.get_formview_action(),
+                        action=tax.get_record_default_action(),
                         button_text=_("Edit tax"),
                     )
                 content += codigo_regimen[:3]

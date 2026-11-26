@@ -50,14 +50,14 @@ class AccountReturnType(models.Model):
     )
 
     @api.model
-    def _generate_or_refresh_all_returns(self, root_companies):
+    def _generate_or_refresh_all_returns(self, root_companies, return_types=None):
         # Set by res.company.write on the branches that get the opening date from their head.
         if self.env.context.get("l10n_ar_skip_returns_refresh"):
             return
         # Companies without Tax ID have nothing to file in Argentina.
         root_companies = root_companies.filtered(lambda c: c.vat or c.account_fiscal_country_id.code != "AR")
         root_companies |= self._l10n_ar_get_heads_under_undated_roots(root_companies)
-        return super()._generate_or_refresh_all_returns(root_companies)
+        return super()._generate_or_refresh_all_returns(root_companies, return_types=return_types)
 
     @api.model
     def _l10n_ar_get_heads_under_undated_roots(self, root_companies):
@@ -198,7 +198,6 @@ class AccountReturnType(models.Model):
         period_to=None,
         start_day=1,
         start_month=1,
-        minimal=False,
         lang_code=None,
     ):
         """Extended to support fortnightly period names."""
@@ -209,7 +208,6 @@ class AccountReturnType(models.Model):
                 period_to=period_to,
                 start_day=start_day,
                 start_month=start_month,
-                minimal=minimal,
                 lang_code=lang_code,
             )
         self.ensure_one()
@@ -219,18 +217,11 @@ class AccountReturnType(models.Model):
             # For fortnightly: show "1ra Quincena Mes Año" or "2da Quincena Mes Año"
             fortnight_num = 1 if period_from.day == 1 else 2
             month_name = format_date(self.env, period_from, date_format="LLLL", lang_code=lang_code)
-            if minimal:
-                # Short format: "1Q Dec" or "2Q Dec"
-                month_short = format_date(self.env, period_from, date_format="LLL", lang_code=lang_code)
-                return f"{fortnight_num}Q {month_short}"
-            else:
-                # Full format: "1ra Quincena Diciembre 2024" or "2da Quincena Diciembre 2024"
-                ordinal = "1ra" if fortnight_num == 1 else "2da"
-                return f"{ordinal} Quincena {month_name} {period_from.year}"
+            # "1ra Quincena Diciembre 2024" o "2da Quincena Diciembre 2024"
+            ordinal = "1ra" if fortnight_num == 1 else "2da"
+            return f"{ordinal} Quincena {month_name} {period_from.year}"
 
-        return super()._get_period_name(
-            main_company, period_from, period_to, start_day, start_month, minimal, lang_code
-        )
+        return super()._get_period_name(main_company, period_from, period_to, start_day, start_month, lang_code)
 
     def _get_l10n_ar_activity_domain(self):
         """Returns the domain to detect activity for this return type.
@@ -243,62 +234,92 @@ class AccountReturnType(models.Model):
                 ("tax_line_id.l10n_ar_state_id.code", "=", "C"),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
                 "|",
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", False),
                 ("tax_line_id.type_tax_use", "=", "sale"),
-                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", True),
+                ("tax_line_id.type_tax_use", "=", "purchase"),
             ]
         if external_id == "l10n_ar_account_reports.ar_pba_iibb_return_type":
             return [
                 ("tax_line_id.l10n_ar_state_id.code", "=", "B"),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
                 "|",
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", False),
                 ("tax_line_id.type_tax_use", "=", "sale"),
-                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", True),
+                ("tax_line_id.type_tax_use", "=", "purchase"),
             ]
         if external_id == "l10n_ar_account_reports.ar_mendoza_iibb_return_type":
             return [
                 ("tax_line_id.l10n_ar_state_id.code", "=", "M"),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
-                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", True),
+                ("tax_line_id.type_tax_use", "=", "purchase"),
             ]
         if external_id == "l10n_ar_account_reports.ar_misiones_iibb_return_type":
             return [
                 ("tax_line_id.l10n_ar_state_id.code", "=", "N"),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
                 "|",
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", False),
                 ("tax_line_id.type_tax_use", "=", "sale"),
-                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", True),
+                ("tax_line_id.type_tax_use", "=", "purchase"),
             ]
         if external_id == "l10n_ar_account_reports.ar_santa_fe_iibb_return_type":
             return [
                 ("tax_line_id.l10n_ar_state_id.code", "=", "S"),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
                 "|",
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", False),
                 ("tax_line_id.type_tax_use", "=", "sale"),
-                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", True),
+                ("tax_line_id.type_tax_use", "=", "purchase"),
             ]
         if external_id == "l10n_ar_account_reports.ar_sifere_iibb_return_type":
             return [
                 ("tax_line_id.l10n_ar_state_id", "!=", False),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
                 "|",
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", False),
                 ("tax_line_id.type_tax_use", "=", "purchase"),
-                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "customer"),
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", True),
+                ("tax_line_id.type_tax_use", "=", "sale"),
             ]
         if external_id == "l10n_ar_account_reports.ar_sircar_iibb_return_type":
             return [
                 ("tax_line_id.l10n_ar_state_id.code", "not in", ["C", "B", "T"]),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
                 "|",
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", False),
                 ("tax_line_id.type_tax_use", "=", "sale"),
-                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", True),
+                ("tax_line_id.type_tax_use", "=", "purchase"),
             ]
         if external_id == "l10n_ar_account_reports.ar_tucuman_iibb_return_type":
             return [
                 ("tax_line_id.l10n_ar_state_id.code", "=", "T"),
                 ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
                 "|",
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", False),
                 ("tax_line_id.type_tax_use", "=", "sale"),
-                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", True),
+                ("tax_line_id.type_tax_use", "=", "purchase"),
             ]
         if external_id == "l10n_ar_reports.ar_tax_return_type":
             return [
@@ -306,6 +327,8 @@ class AccountReturnType(models.Model):
                 # GRUPO A: Impuestos con código de IVA AFIP (Ventas o Compras)
                 "&",
                 ("tax_line_id.tax_group_id.l10n_ar_vat_afip_code", "!=", False),
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", False),
                 ("tax_line_id.type_tax_use", "in", ["sale", "purchase"]),
                 # GRUPO B: Retenciones / Percepciones sufridas
                 "&",
@@ -313,7 +336,11 @@ class AccountReturnType(models.Model):
                 ("tax_line_id.l10n_ar_state_id", "=", False),
                 ("tax_line_id.tax_group_id.l10n_ar_tribute_afip_code", "=", "06"),
                 "|",
-                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "customer"),
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", True),
+                ("tax_line_id.type_tax_use", "=", "sale"),
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", False),
                 ("tax_line_id.type_tax_use", "=", "purchase"),
             ]
         if external_id == "l10n_ar_account_reports.sicore_return_type":
@@ -325,8 +352,10 @@ class AccountReturnType(models.Model):
                 "|",
                 # Retenciones de ganancias practicadas en pagos a proveedores.
                 "&",
-                ("tax_line_id.l10n_ar_tax_type", "in", ["earnings", "earnings_scale"]),
-                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+                ("tax_line_id.l10n_ar_withholding_tax_type", "in", ["earnings", "earnings_scale"]),
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", True),
+                ("tax_line_id.type_tax_use", "=", "purchase"),
                 # IVA, identificado por el código de tributo ARCA "06" del grupo de
                 # impuestos: retenciones practicadas en pagos a proveedores y
                 # percepciones aplicadas en ventas.
@@ -336,9 +365,13 @@ class AccountReturnType(models.Model):
                 "|",
                 "&",
                 "&",
-                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", True),
+                ("tax_line_id.type_tax_use", "=", "purchase"),
                 ("tax_line_id.tax_group_id.name", "not ilike", "VAT Sire"),
                 ("tax_line_id.tax_group_id.name", "not ilike", "IVA Sire"),
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", False),
                 ("tax_line_id.type_tax_use", "=", "sale"),
             ]
         if external_id == "l10n_ar_account_reports.sire_return_type":
@@ -347,9 +380,11 @@ class AccountReturnType(models.Model):
             # or "SUSS Sire" tax group with another code. Earnings tax types stay in SICORE.
             return [
                 ("tax_line_id.country_code", "=", "AR"),
-                ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", True),
+                ("tax_line_id.type_tax_use", "=", "purchase"),
                 ("tax_line_id.l10n_ar_state_id", "=", False),
-                ("tax_line_id.l10n_ar_tax_type", "not in", ["earnings", "earnings_scale"]),
+                ("tax_line_id.l10n_ar_withholding_tax_type", "not in", ["earnings", "earnings_scale"]),
                 "|",
                 "&",
                 ("tax_line_id.l10n_ar_tribute_afip_code", "=", "06"),
@@ -384,7 +419,7 @@ class AccountReturnType(models.Model):
         return res
 
     @api.model
-    def _generate_all_returns(self, country_code, main_company, tax_unit=None):
+    def _generate_all_returns(self, country_code, main_company, tax_unit=None, return_types=None):
         """
         Generate all periodic returns for Argentina (AR).
 
@@ -397,7 +432,7 @@ class AccountReturnType(models.Model):
         We search for activity in the current and previous fiscal year to ensure we catch
         all relevant periods, especially around year boundaries.
         """
-        super()._generate_all_returns(country_code, main_company, tax_unit=tax_unit)
+        super()._generate_all_returns(country_code, main_company, tax_unit=tax_unit, return_types=return_types)
 
         if country_code != "AR":
             return
