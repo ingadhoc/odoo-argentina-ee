@@ -9,10 +9,10 @@ _logger = logging.getLogger(__name__)
 class ResCurrency(models.Model):
     _inherit = "res.currency"
 
-    def _l10n_ar_get_afip_ws_currency_rate(self, afip_ws="wsfe", date_rate=None):
+    def _l10n_ar_get_afip_ws_currency_rate(self, client, auth, afip_ws="wsfe", date_rate=None):
         """Retrieve the currency exchange rate and date from AFIP web services."""
         if afip_ws != "wsmtxca":
-            return super()._l10n_ar_get_afip_ws_currency_rate(afip_ws, date_rate)
+            return super()._l10n_ar_get_afip_ws_currency_rate(client, auth, afip_ws, date_rate)
         self.ensure_one()
         if not self.l10n_ar_afip_code:
             raise UserError(
@@ -23,8 +23,6 @@ class ResCurrency(models.Model):
             )
         if self.l10n_ar_afip_code == "PES":
             raise UserError(_("No rate for ARS (is the base currency for AFIP)"))
-        connection = self.env.company._l10n_ar_get_connection(afip_ws)
-        client, auth = connection._get_client()
         auth = self.env["account.journal"]._wsmtxca_convert_auth(auth)
         req_data = {"codigoMoneda": self.l10n_ar_afip_code}
         if date_rate:
