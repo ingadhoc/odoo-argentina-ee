@@ -6,9 +6,9 @@
 
 .. |icon| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-icon.png
 
-.. image:: https://img.shields.io/badge/license-AGPL--3-blue.png
-   :target: https://www.gnu.org/licenses/agpl
-   :alt: License: AGPL-3
+.. image:: https://img.shields.io/badge/license-LGPL--3-blue.png
+   :target: https://www.gnu.org/licenses/lgpl
+   :alt: License: LGPL-3
 
 =====================================================
 Argentinean Electronic Invoicing - WSMTXCA Webservice
@@ -72,7 +72,7 @@ Technical
 The module implements the following model extensions:
 
 * ``account.move``: overrides ``_l10n_ar_do_afip_ws_request_cae`` to handle WSMTXCA-specific CAE requests (``autorizarComprobante``), response parsing, and tribute/tax formatting.
-* ``account.journal``: adds the ``WSMTXCAWS`` POS system option, maps it to the ``wsmtxca`` webservice, implements ``_wsmtxca_convert_auth`` for WSMTXCA authentication, and overrides ``l10n_ar_check_afip_pos_number`` and ``_l10n_ar_get_afip_last_invoice_number`` for WSMTXCA.
+* ``account.journal``: adds the ``WSMTXCAWS`` POS system option, maps it to the ``wsmtxca`` webservice, implements ``_wsmtxca_convert_auth`` for WSMTXCA authentication, and overrides ``l10n_ar_check_afip_pos_number``, ``_l10n_ar_get_afip_last_invoice_number`` and ``_get_codes_per_journal_type`` for WSMTXCA. It also overrides ``l10n_ar_check_afip_doc_types`` and ``_format_afip_doc_types``, which come from ``l10n_ar_edi_ux``.
 * ``res.currency``: overrides ``_l10n_ar_get_afip_ws_currency_rate`` to query exchange rates via the WSMTXCA ``consultarCotizacionMoneda`` service.
 * ``l10n_ar.afipws.connection``: overrides ``_l10n_ar_get_afip_ws_url`` to register the WSMTXCA WSDL endpoints for production and testing environments.
 * ``l10n_ar_afip.ws.consult`` (wizard): extends the invoice consultation wizard to support the ``WSMTXCAWS`` POS system, delegating to ``consultarComprobante`` on the WSMTXCA service.
