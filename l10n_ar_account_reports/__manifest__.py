@@ -42,7 +42,7 @@
         "account_payment_pro_receiptbook",
     ],
     "data": [
-        "security/ir.model.access.csv",
+        "security/ir.access.csv",
         "views/account_return_type_views.xml",
         "views/inflation_adjustment_index_view.xml",
         "data/tags_data.xml",
