@@ -36,17 +36,14 @@ class AccountReport(models.Model):
             }
 
     @api.model
-    def _get_period_dates(self, options, date_in_period, period_type):
-        """Build the period of a sub-monthly return type (fortnightly) from the return type itself.
+    def _compute_period_range(self, date, months_per_period, start_day, start_month):
+        """Un tipo de declaración quincenal no tiene meses por período, y el cálculo nativo divide por eso.
 
-        Native builds every period with ``months_per_period``; a fortnightly return type has 0
-        months per period, and ``_compute_period_range`` divides by it (ZeroDivisionError on
-        ``account_report.py`` of account_reports, ``_compute_period_range``). The boundaries of
-        these periods are the ones the return type already computes.
+        ``_compute_period_range`` de account_reports hace ``month_offset // months_per_period`` y
+        revienta con ZeroDivisionError; llegan ahí ``_get_period_dates`` y
+        ``_get_shifted_dates_period``. Con 0 meses por período el período es la quincena, que es
+        lo que ``account.return.type._get_sub_monthly_period_boundaries`` ya resuelve.
         """
-        return_type = self.env["account.return.type"].browse(
-            options.get("return_periodicity", {}).get("return_type_id")
-        )
-        if period_type == "return_period" and return_type and return_type._is_sub_monthly_period(self.env.company):
-            return return_type._get_period_boundaries(self.env.company, date_in_period)
-        return super()._get_period_dates(options, date_in_period, period_type)
+        if not months_per_period:
+            return self.env["account.return.type"]._l10n_ar_fortnight_boundaries(date)
+        return super()._compute_period_range(date, months_per_period, start_day, start_month)

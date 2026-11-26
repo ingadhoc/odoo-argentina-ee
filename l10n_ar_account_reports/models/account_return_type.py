@@ -130,6 +130,16 @@ class AccountReturnType(models.Model):
 
         return super()._get_period_boundaries(company_id, date, override_period_months, override_start_date)
 
+    @api.model
+    def _l10n_ar_fortnight_boundaries(self, date):
+        """La quincena que contiene ``date``: del 1 al 15, o del 16 al fin de mes."""
+        if date.day <= 15:
+            return datetime.date(date.year, date.month, 1), datetime.date(date.year, date.month, 15)
+        return (
+            datetime.date(date.year, date.month, 16),
+            datetime.date(date.year, date.month, 1) + relativedelta(months=1, days=-1),
+        )
+
     def _get_sub_monthly_period_boundaries(self, company_id, date, override_start_date=None):
         """Returns the boundaries for sub-monthly periods like fortnightly.
         For fortnightly periods:
@@ -145,21 +155,7 @@ class AccountReturnType(models.Model):
         periodicity = self._get_periodicity(company_id)
 
         if periodicity == "fortnightly":
-            day = date.day
-            year = date.year
-            month = date.month
-
-            if day <= 15:
-                # First fortnight: 1st to 15th
-                start_date = datetime.date(year, month, 1)
-                end_date = datetime.date(year, month, 15)
-            else:
-                # Second fortnight: 16th to end of month
-                start_date = datetime.date(year, month, 16)
-                # Get last day of month
-                end_date = datetime.date(year, month, 1) + relativedelta(months=1, days=-1)
-
-            return start_date, end_date
+            return self._l10n_ar_fortnight_boundaries(date)
 
         # Fallback for other sub-monthly periods (if added in future)
         days_per_period = self._get_periodicity_days_delay(company_id)
