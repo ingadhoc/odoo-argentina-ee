@@ -338,6 +338,8 @@ class TestL10nArPayroll(TestPayslipValidationCommon):
         slip.action_payslip_done()
         wizard = self.env["l10n_ar.lsd.wizard"].create({"run_ids": [Command.set(run.ids)]})
 
+        # The demo sets the LSD codes; this case starts without them.
+        slip.line_ids.salary_rule_id.l10n_ar_lsd_code = False
         with self.subTest("without the LSD code of a rule with amounts the file is not generated"):
             with self.assertRaisesRegex(UserError, r"\(BASIC\)"):
                 wizard.action_generate()

@@ -234,6 +234,9 @@ class L10nArPayrollDemo(models.AbstractModel):
         run.slip_ids.filtered(lambda s: s.state != "paid").action_payslip_paid()
 
     def _demo_lsd(self, run):
+        # Each company sets the concepts of its ARCA account; the demo uses the rule codes.
+        for rule in run.slip_ids.line_ids.salary_rule_id.filtered(lambda r: not r.l10n_ar_lsd_code):
+            rule.l10n_ar_lsd_code = rule.code
         wizard = self.env["l10n_ar.lsd.wizard"].create({"run_ids": [Command.set(run.ids)]})
         wizard.action_generate()
         self.env["ir.attachment"].create(
