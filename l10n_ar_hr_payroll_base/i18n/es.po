@@ -215,10 +215,10 @@ msgstr "Código del concepto en el libro de sueldos digital para los recibos de 
 #. module: l10n_ar_hr_payroll_base
 #: model:ir.model.fields,help:l10n_ar_hr_payroll_base.field_hr_salary_rule__l10n_ar_lsd_code
 msgid ""
-"Concept code in the digital payroll book. If empty, the rule code is used."
-msgstr ""
-"Código del concepto en el libro de sueldos digital. Si está vacío se usa el "
-"código de la regla."
+"Concept code in the digital payroll book, as set up in the employer's "
+"account in ARCA. Required to generate the file when the rule has amounts in "
+"the period."
+msgstr "Código del concepto en el libro de sueldos digital, tal como está configurado en la cuenta del empleador en ARCA. Es obligatorio para generar el archivo cuando la regla tiene importes en el período."
 
 #. module: l10n_ar_hr_payroll_base
 #: model:ir.model.fields,field_description:l10n_ar_hr_payroll_base.field_hr_employee__l10n_ar_condition_id
@@ -951,6 +951,12 @@ msgstr "Antigüedad"
 #: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_sac_iatg
 msgid "Seniority Severance"
 msgstr "Indemnización por antigüedad"
+
+#. module: l10n_ar_hr_payroll_base
+#. odoo-python
+#: code:addons/l10n_ar_hr_payroll_base/wizard/l10n_ar_lsd_wizard.py:0
+msgid "Set the LSD code of these salary rules, used in the period: %s"
+msgstr "Completá el código LSD de estas reglas salariales, que tienen importes en el período: %s"
 
 #. module: l10n_ar_hr_payroll_base
 #. odoo-python

@@ -36,6 +36,7 @@ class L10nArLsdWizard(models.TransientModel):
         if len({(d.year, d.month) for d in slips.mapped("date_to")}) > 1:
             raise UserError(self.env._("All payslips must belong to the same month."))
         self._check_time_off_situations(slips)
+        self._check_lsd_codes(slips)
         period = max(slips.mapped("date_to"))
         cuit = company.partner_id.l10n_ar_vat or ""
         if len(cuit) != 11 or not cuit.isdigit():
@@ -57,6 +58,22 @@ class L10nArLsdWizard(models.TransientModel):
             "view_mode": "form",
             "target": "new",
         }
+
+    def _lsd_code(self, line):
+        rule = line.salary_rule_id
+        second_half = line.slip_id.date_to.month > 6 and rule.l10n_ar_lsd_code_second_half
+        return second_half or rule.l10n_ar_lsd_code
+
+    def _check_lsd_codes(self, slips):
+        """Every concept of the file must be one of the employer's concepts in ARCA, never an Odoo code."""
+        lines = slips._l10n_ar_lines(["REM", "NOREM", "INDEM", "DED"]).filtered(lambda l: not self._lsd_code(l))
+        if lines:
+            raise UserError(
+                self.env._(
+                    "Set the LSD code of these salary rules, used in the period: %s",
+                    ", ".join(sorted({f"{rule.name} ({rule.code})" for rule in lines.salary_rule_id})),
+                )
+            )
 
     def _check_time_off_situations(self, slips):
         """Time off whose work entry type has no employment status would go to the file as the history status."""
@@ -97,9 +114,7 @@ class L10nArLsdWizard(models.TransientModel):
 
         concepts = {}
         for line in slips._l10n_ar_lines(["REM", "NOREM", "INDEM", "DED"]):
-            rule = line.salary_rule_id
-            second_half = line.slip_id.date_to.month > 6 and rule.l10n_ar_lsd_code_second_half
-            code = second_half or rule.l10n_ar_lsd_code or line.code
+            code = self._lsd_code(line)
             unit, qty = (line.l10n_ar_unit, line.l10n_ar_quantity) if line.l10n_ar_unit else (" ", 0)
             concept = concepts.setdefault(code, {"unit": unit, "qty": 0.0, "total": 0.0})
             concept["qty"] = qty if unit == "%" else concept["qty"] + qty

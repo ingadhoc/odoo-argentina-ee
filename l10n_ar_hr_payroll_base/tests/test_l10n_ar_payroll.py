@@ -1,6 +1,8 @@
+import re
 from base64 import b64decode
 
 from dateutil.relativedelta import MO, relativedelta
+from lxml import etree
 from odoo import Command, fields
 from odoo.addons.hr_payroll_account.tests.common import TestPayslipValidationCommon
 from odoo.exceptions import UserError, ValidationError
@@ -174,14 +176,20 @@ class TestL10nArPayroll(TestPayslipValidationCommon):
             self.assertEqual((daycare.total, daycare.category_id.code), (3000.0, "NOREM"))
             self.assertFalse(slip.line_ids.filtered(lambda l: l.code == "GUARD_REC"))
             self.assertEqual(slip.currency_id.compare_amounts(slip.net_wage, net + 3000.0), 0)
-        with self.subTest("the printed payslip shows its own wage when it has one"):
+        with self.subTest("the printed payslip shows its own wage when it has one, else the employee record's"):
+
+            def printed_wage():
+                html = self.env["ir.actions.report"]._render_qweb_html(
+                    "l10n_ar_hr_payroll_base.action_report_payslip_ar", slip.ids
+                )[0]
+                # Digits only, so the check does not depend on the language of the number format.
+                return re.sub(
+                    r"\D", "", etree.fromstring(html, etree.HTMLParser()).xpath("string(//td[@name='td_wage'])")
+                )
+
+            self.assertEqual(printed_wage(), "100000000")
             slip.l10n_ar_wage = 777777.77
-            html = (
-                self.env["ir.actions.report"]
-                ._render_qweb_html("l10n_ar_hr_payroll_base.action_report_payslip_ar", slip.ids)[0]
-                .decode()
-            )
-            self.assertIn("777", html)
+            self.assertEqual(printed_wage(), "77777777")
         with self.subTest("each line keeps the quantity and unit of its own input, also around an empty one"):
             slip.input_line_ids = [Command.unlink(line.id) for line in slip.input_line_ids if line.code == "AR_REM"] + [
                 self._input("AR_REM", 1000.0, 2, "D"),
@@ -330,6 +338,11 @@ class TestL10nArPayroll(TestPayslipValidationCommon):
         slip.action_payslip_done()
         wizard = self.env["l10n_ar.lsd.wizard"].create({"run_ids": [Command.set(run.ids)]})
 
+        with self.subTest("without the LSD code of a rule with amounts the file is not generated"):
+            with self.assertRaisesRegex(UserError, r"\(BASIC\)"):
+                wizard.action_generate()
+        for rule in slip.line_ids.salary_rule_id:
+            rule.l10n_ar_lsd_code = rule.code
         with self.subTest("without the CBU the file is not generated"):
             with self.assertRaises(UserError):
                 wizard.action_generate()
