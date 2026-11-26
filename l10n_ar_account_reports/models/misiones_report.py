@@ -80,7 +80,7 @@ class L10n_ArMisionesReportHandler(models.AbstractModel):
         Implementado segun especificación indicada en ticket 60295. También se puede ver detalles en readme
         """
         lines = []
-        for line in move_lines.filtered("amount_currency").sorted(key=lambda r: (r.date, r.id), reverse=True):
+        for line in move_lines.filtered("amount_currency").sorted(key=lambda r: (r.date, r.id)):
             content = ""
             payment = line.payment_id
             tax = line._get_settlement_tax()
