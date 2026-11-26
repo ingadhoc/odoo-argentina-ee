@@ -7,7 +7,7 @@ import zipfile
 from odoo import _, api, fields, models
 from odoo.exceptions import RedirectWarning, UserError
 
-from .helpers import format_amount, get_line_tax_base, get_standard_lines_domain
+from .helpers import format_amount, get_line_tax_base, get_standard_lines_domain, get_tax_rate
 
 
 class L10n_ArSircarReportHandler(models.AbstractModel):
@@ -106,7 +106,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
         if file_type == "ret":
             for line in move_lines.filtered("amount_currency").sorted(key=lambda r: r.date, reverse=True):
                 tax = line._get_settlement_tax()
-                alicuot = tax.amount
+                alicuot = get_tax_rate(tax)
 
                 internal_type = line.l10n_latam_document_type_id.internal_type
 
@@ -191,7 +191,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
         elif file_type == "perc":
             for line in move_lines.filtered("amount_currency").sorted(key=lambda r: r.date, reverse=True):
                 tax = line._get_settlement_tax()
-                alicuot = tax.amount
+                alicuot = get_tax_rate(tax)
                 # 1 Número de Renglón (único por archivo)
                 content = []
                 content.append("%05d" % line_nbr)

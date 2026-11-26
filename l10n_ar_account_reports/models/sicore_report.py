@@ -4,7 +4,7 @@ import re
 from odoo import _, fields, models
 from odoo.exceptions import RedirectWarning, UserError
 
-from .helpers import get_standard_lines_domain, validate_document_numbers
+from .helpers import get_standard_lines_domain, get_tax_rate, validate_document_numbers
 
 
 class L10n_ArSicoreReportHandler(models.AbstractModel):
@@ -60,7 +60,7 @@ class L10n_ArSicoreReportHandler(models.AbstractModel):
         regimen_field = f"{regimen_code:0>3}"
         codcond = "01"
         if regimen_code == "602":
-            codcond = "13" if (tax.amount_type == "percent" and tax.amount == 3) else "14"
+            codcond = "13" if (tax.amount_type == "percent" and get_tax_rate(tax) == 3) else "14"
         elif regimen_code in ("214", "493"):
             codcond = "00"
         return regimen_field, codcond

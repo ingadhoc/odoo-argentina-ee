@@ -463,6 +463,10 @@ class AccountReturnType(models.Model):
             if not return_type:
                 continue
 
+            # Since 20.0 the caller can scope the refresh to some return types; honour it.
+            if return_types is not None and return_type not in return_types:
+                continue
+
             if not return_type._can_return_exist(main_company, tax_unit):
                 continue
 

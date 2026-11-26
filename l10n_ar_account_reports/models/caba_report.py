@@ -5,7 +5,7 @@ from odoo import _, fields, models
 from odoo.exceptions import RedirectWarning, UserError
 from odoo.tools.float_utils import float_round
 
-from .helpers import format_amount, get_standard_lines_domain
+from .helpers import format_amount, get_standard_lines_domain, get_tax_rate
 
 
 class L10n_ArCabaReportHandler(models.AbstractModel):
@@ -118,7 +118,7 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
                     action=partner.get_record_default_action(),
                     button_text=_("Edit contact"),
                 )
-            alicuot = tax.amount
+            alicuot = get_tax_rate(tax)
 
             ret_perc_applied = False
             es_percepcion = False

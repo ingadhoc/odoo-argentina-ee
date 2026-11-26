@@ -8,7 +8,13 @@ from odoo import _, fields, models
 from odoo.exceptions import UserError
 from odoo.tools.float_utils import float_round
 
-from .helpers import format_amount, get_line_tax_base, get_standard_lines_domain, validate_document_numbers
+from .helpers import (
+    format_amount,
+    get_line_tax_base,
+    get_standard_lines_domain,
+    get_tax_rate,
+    validate_document_numbers,
+)
 
 _logger = logging.getLogger(__name__)
 
@@ -210,7 +216,7 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
             monto_imponible = float_round(-get_line_tax_base(line), precision_digits=2)
             content += format_amount(monto_imponible, 14, 2, ",")
             # Alícuota (long 5.2, desde 53 a 57)
-            alicuota = float_round(tax.amount, precision_digits=2)
+            alicuota = float_round(get_tax_rate(tax), precision_digits=2)
             content += "%05.2f" % alicuota
             # este es para el primer tipo de la especificación
             # Importe de la percepción (long 13.2, desde 58 hasta 70)
@@ -295,7 +301,7 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
 
             # Alícuota (long 5.2, desde 47 a 51)
             tax = line._get_settlement_tax()
-            content += "%05.2f" % tax.amount
+            content += "%05.2f" % get_tax_rate(tax)
 
             # Base imponible (long 16.2, desde 52 hasta 67)
             # Con separador decimal (, o .). Mayor a cero, o Excepto para Nota de crédito,

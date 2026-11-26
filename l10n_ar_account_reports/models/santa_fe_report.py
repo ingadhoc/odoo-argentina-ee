@@ -4,7 +4,7 @@ import re
 from odoo import _, fields, models
 from odoo.exceptions import RedirectWarning, UserError
 
-from .helpers import get_pos_and_number, get_standard_lines_domain, validate_document_numbers
+from .helpers import get_pos_and_number, get_standard_lines_domain, get_tax_rate, validate_document_numbers
 
 
 class L10n_ArSantaFeReportHandler(models.AbstractModel):
@@ -250,7 +250,7 @@ class L10n_ArSantaFeReportHandler(models.AbstractModel):
             content += format_amount(base_amount, 12, 2)
 
             # 19 - Alícuota / alicuota
-            content += format_amount(tax.amount, 2, 2)
+            content += format_amount(get_tax_rate(tax), 2, 2)
 
             # 20 - Impuesto Determinado
             content += format_amount(abs(-line.balance), 12, 2)

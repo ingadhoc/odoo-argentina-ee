@@ -17,6 +17,17 @@ def format_amount(amount, padding=15, decimals=2, sep=""):
     return res
 
 
+def get_tax_rate(tax):
+    """Rate of a tax as the files report it: always positive.
+
+    Since 20.0 a withholding tax carries a negative ``amount``
+    (``l10n_account_withholding_tax/models/account_tax.py``,
+    ``_onchange_is_withholding_tax``), while a perception keeps it positive.
+    The fiscal files report the rate without a sign, as in 19.
+    """
+    return abs(tax.amount)
+
+
 def get_line_tax_base(move_line):
     return sum(move_line.move_id.line_ids.filtered(lambda x: move_line.tax_line_id in x.tax_ids).mapped("balance"))
 

@@ -3,7 +3,7 @@
 from odoo import _, fields, models
 from odoo.exceptions import UserError
 
-from .helpers import get_standard_lines_domain
+from .helpers import get_standard_lines_domain, get_tax_rate
 
 
 class L10n_ArMisionesReportHandler(models.AbstractModel):
@@ -88,7 +88,7 @@ class L10n_ArMisionesReportHandler(models.AbstractModel):
             content = ""
             payment = line.payment_id
             tax = line._get_settlement_tax()
-            alicuot = tax.amount
+            alicuot = get_tax_rate(tax)
             if file_type == "ret":
                 # Fecha
                 content += fields.Date.from_string(payment.date).strftime("%d-%m-%Y") + ","
@@ -127,9 +127,7 @@ class L10n_ArMisionesReportHandler(models.AbstractModel):
                     # pago -> grupo de pagos --> nc --> factura --> grupo de pagos --> pago (con retenc misiones)
                     origin_invoice = payment.reconciled_bill_ids.reversed_entry_id
                     # Se buscan aquellos pagos donde se está pagando la origin_invoice
-                    origin_invoice_withholdings = origin_invoice.reconciled_payment_ids.mapped(
-                        "l10n_ar_withholding_line_ids"
-                    )
+                    origin_invoice_withholdings = origin_invoice.reconciled_payment_ids.mapped("withholding_line_ids")
                     origin_invoice_misiones_withholdings = origin_invoice_withholdings.filtered(
                         lambda x: x.tax_id == line.withholding_id._get_withholding_tax()
                     )

@@ -308,11 +308,11 @@ class InflationAdjustment(models.TransientModel):
             # search account.move.lines
             domain = self.get_move_line_domain()
             domain += [("date", ">=", period.get("date_from")), ("date", "<=", period.get("date_to"))]
-            # ``date:month`` is the granularity 19 took by default when grouping on a date;
-            # since 20.0 it has to be declared.
-            data = account_move_line._read_group(domain, ["account_id", "date:month"], ["balance:sum"])
+            # Only by account: 19 called read_group with lazy=True, which grouped by the first
+            # groupby and ignored the rest, so there was one line per account per period.
+            data = account_move_line._read_group(domain, ["account_id"], ["balance:sum"])
             date_from = period.get("date_from")
-            for account, _line_date, balance in data:
+            for account, balance in data:
                 adjustment = balance * period.get("factor")
                 if self.company_id.currency_id.is_zero(adjustment):
                     continue
