@@ -1,6 +1,12 @@
+import logging
+
 from odoo import _, api, fields, models
 from odoo.addons.l10n_ar_edi.models.account_move import WS_DATE_FORMAT
 from odoo.exceptions import UserError
+from requests.exceptions import RequestException
+from zeep.exceptions import TransportError
+
+_logger = logging.getLogger(__name__)
 
 
 class AccountMove(models.Model):
@@ -88,7 +94,15 @@ class AccountMove(models.Model):
         """Check if the partner has CondicionIVAReceptorId configured."""
         for inv in self.filtered(lambda x: x.journal_id.l10n_ar_afip_ws and not x.l10n_ar_afip_auth_code):
             inv._check_vat_condition()
-        return super()._l10n_ar_do_afip_ws_request_cae(client, auth, transport)
+        try:
+            return super()._l10n_ar_do_afip_ws_request_cae(client, auth, transport)
+        except (RequestException, TransportError) as error:
+            connection = self.env["l10n_ar.afipws.connection"]
+            kind = connection._l10n_ar_arca_error_kind(error, request_sent=True)
+            if not kind:
+                raise
+            _logger.info("ARCA CAE request failed (%s): %r", kind, error)
+            raise UserError(connection._l10n_ar_arca_error_message(kind)) from error
 
     def _post(self, soft=True):
         """Be able to validate electronic vendor bills that are type ARCA POS"""
