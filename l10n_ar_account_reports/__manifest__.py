@@ -19,7 +19,7 @@
 ##############################################################################
 {
     "name": "Accounting Reports Customized for Argentina",
-    "version": "19.0.1.24.0",
+    "version": "20.0.1.0.0",
     "category": "Accounting",
     "sequence": 14,
     "summary": "",
@@ -73,7 +73,7 @@
         ],
     },
     "test": [],
-    "installable": False,
+    "installable": True,
     "auto_install": ["l10n_ar"],
     "application": False,
     "post_init_hook": "_post_init_hook_configure_ar_account_tags",
