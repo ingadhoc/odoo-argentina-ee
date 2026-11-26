@@ -210,7 +210,7 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
 
                 # 10 - Tipo de documento del Retenido
                 # vat
-                # Códigos ARCA (catálogo A4): 80 CUIT, 86 CUIL, 87 CDI.
+                # ARCA codes (catalogue A4): 80 CUIT, 86 CUIL, 87 CDI.
                 if partner.l10n_ar_afip_code not in ["80", "86", "87"]:
                     raise RedirectWarning(
                         message=_(

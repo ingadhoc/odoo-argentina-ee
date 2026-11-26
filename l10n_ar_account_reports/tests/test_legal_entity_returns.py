@@ -52,8 +52,8 @@ class TestLegalEntityReturns(AccountTestInvoicingCommon):
         cls.generic_return_type = cls.env["account.return.type"].create(
             {"name": "VAT (generic)", "report_id": report.id}
         )
-        # Desde 20.0 las cuentas del asiento de cierre se configuran en el tipo de declaración
-        # (antes estaban en el grupo de impuestos). Sin ellas el cierre nativo no arranca.
+        # Since 20.0 the closing entry accounts live on the return type (they were on the tax
+        # group before). Without them the native closing refuses to start.
         for company in cls.entity:
             Account = cls.env["account.account"].with_company(company)
             payable = Account.create(

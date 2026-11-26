@@ -132,7 +132,7 @@ class AccountReturnType(models.Model):
 
     @api.model
     def _l10n_ar_fortnight_boundaries(self, date):
-        """La quincena que contiene ``date``: del 1 al 15, o del 16 al fin de mes."""
+        """The fortnight ``date`` falls in: the 1st to the 15th, or the 16th to the end of the month."""
         if date.day <= 15:
             return datetime.date(date.year, date.month, 1), datetime.date(date.year, date.month, 15)
         return (
@@ -213,7 +213,7 @@ class AccountReturnType(models.Model):
             # For fortnightly: show "1ra Quincena Mes Año" or "2da Quincena Mes Año"
             fortnight_num = 1 if period_from.day == 1 else 2
             month_name = format_date(self.env, period_from, date_format="LLLL", lang_code=lang_code)
-            # "1ra Quincena Diciembre 2024" o "2da Quincena Diciembre 2024"
+            # "1ra Quincena Diciembre 2024" or "2da Quincena Diciembre 2024"
             ordinal = "1ra" if fortnight_num == 1 else "2da"
             return f"{ordinal} Quincena {month_name} {period_from.year}"
 

@@ -187,8 +187,8 @@ class TestL10nArAccountReportsCommon(TestArWithholdingArRi):
             .with_context(**invoice.action_register_payment()["context"])
             .create({"journal_id": cls.journal_bank.id, "amount": invoice.amount_total, "date": date})
         )
-        # Sin secuencia en el impuesto (las sufridas no la tienen), el número del certificado
-        # lo pide el pago al postear (l10n_ar_tax, account_payment.action_post).
+        # Without a sequence on the tax (suffered ones have none), the payment asks for the
+        # certificate number on posting (l10n_ar_tax, account_payment.action_post).
         payment.withholding_line_ids = [Command.clear()] + [
             Command.create(
                 {

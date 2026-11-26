@@ -269,7 +269,7 @@ class InflationAdjustment(models.TransientModel):
         # Generate account.move.line adjustment for start of the period
         domain = self.get_move_line_domain()
         domain += [("account_id.include_initial_balance", "=", True), ("date", "<", self.date_from)]
-        # En 20.0 read_group recibe (domain, groupby, aggregates) y devuelve tuplas, no diccionarios.
+        # In 20.0 read_group takes (domain, groupby, aggregates) and returns tuples, not dicts.
         init_data = account_move_line._read_group(domain, ["account_id"], ["balance:sum"])
         date_to = self.date_to
         before_date_from = self.date_from + relativedelta(months=-1)
@@ -308,8 +308,8 @@ class InflationAdjustment(models.TransientModel):
             # search account.move.lines
             domain = self.get_move_line_domain()
             domain += [("date", ">=", period.get("date_from")), ("date", "<=", period.get("date_to"))]
-            # ``date:month`` es la granularidad que 19 tomaba por defecto al agrupar por una fecha;
-            # desde 20.0 hay que declararla.
+            # ``date:month`` is the granularity 19 took by default when grouping on a date;
+            # since 20.0 it has to be declared.
             data = account_move_line._read_group(domain, ["account_id", "date:month"], ["balance:sum"])
             date_from = period.get("date_from")
             for account, _line_date, balance in data:
