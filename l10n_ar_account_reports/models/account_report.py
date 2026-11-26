@@ -1,4 +1,4 @@
-from odoo import models
+from odoo import api, models
 
 
 class AccountReport(models.Model):
@@ -34,3 +34,19 @@ class AccountReport(models.Model):
                     for company in excluded.sudo()
                 ),
             }
+
+    @api.model
+    def _get_period_dates(self, options, date_in_period, period_type):
+        """Build the period of a sub-monthly return type (fortnightly) from the return type itself.
+
+        Native builds every period with ``months_per_period``; a fortnightly return type has 0
+        months per period, and ``_compute_period_range`` divides by it (ZeroDivisionError on
+        ``account_report.py`` of account_reports, ``_compute_period_range``). The boundaries of
+        these periods are the ones the return type already computes.
+        """
+        return_type = self.env["account.return.type"].browse(
+            options.get("return_periodicity", {}).get("return_type_id")
+        )
+        if period_type == "return_period" and return_type and return_type._is_sub_monthly_period(self.env.company):
+            return return_type._get_period_boundaries(self.env.company, date_in_period)
+        return super()._get_period_dates(options, date_in_period, period_type)

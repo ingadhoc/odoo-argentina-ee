@@ -47,6 +47,24 @@ class AccountReturn(models.Model):
             domain += l10n_ar_domain
         return domain
 
+    def _ensure_tax_closing_accounts_configured(self, company):
+        """EXTENDS account_reports
+
+        Para las liquidaciones argentinas no corremos la validación nativa, que exige en el tipo de
+        declaración las cuentas a pagar y a cobrar del asiento de cierre: nuestro asiento no las usa.
+        La contrapartida sale de ``l10n_ar_account_id`` del tipo de declaración o, si no está, de la
+        cuenta a pagar o a cobrar del partner de pago, y ``_add_tax_group_closing_items`` avisa con
+        su propio error cuando falta alguna de las dos.
+
+        En 19 la nativa era ``_ensure_tax_group_configuration_for_tax_closing``, que pedía las cuentas
+        en los grupos de impuestos; en 20.0 esas cuentas se fueron de ``account.tax.group`` al tipo de
+        declaración, y la validación pasó a este método (``account_reports/models/account_return.py``,
+        ``_ensure_tax_closing_accounts_configured``), llamado desde ``_compute_tax_closing_entry``.
+        """
+        if self.type_id.l10n_ar_is_simple_closing_return:
+            return
+        return super()._ensure_tax_closing_accounts_configured(company)
+
     @api.model
     def action_open_tax_return_view(self, additional_return_domain=None, additional_context=None):
         # Without a Tax ID there is nothing to file: do not offer to set the opening date.

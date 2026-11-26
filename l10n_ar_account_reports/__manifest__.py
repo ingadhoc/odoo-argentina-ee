@@ -25,7 +25,7 @@
     "summary": "",
     "author": "ADHOC SA",
     "website": "www.adhoc.com.ar",
-    "license": "AGPL-3",
+    "license": "LGPL-3",
     "images": [],
     "depends": [
         "accountant",  # en si este modulo no es necesario pero de alguna manera este modulo solo tiene sentido para

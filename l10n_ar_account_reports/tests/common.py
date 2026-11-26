@@ -112,11 +112,15 @@ class TestL10nArAccountReportsCommon(TestArWithholdingArRi):
 
     @classmethod
     def _setup_withholding(cls, template_code, amount=3.0):
+        """La alícuota de una retención va negativa: es la convención del motor genérico de 20.0
+        (así vienen en el plan AR, ``l10n_ar_withholding/data/template/account.tax-ar_ex.csv``).
+        Con un importe positivo, ``_l10n_ar_apply_withholding_tax`` devuelve 0 y la línea se
+        descarta al postear el pago."""
         tax = cls._company_tax(template_code)
         tax.write(
             dict(
                 WITHHOLDING_REGIME,
-                amount=amount,
+                amount=-abs(amount),
                 amount_type="percent",
                 withholding_sequence_id=cls.tax_wth_seq.id,
             )
@@ -183,11 +187,20 @@ class TestL10nArAccountReportsCommon(TestArWithholdingArRi):
             .with_context(**invoice.action_register_payment()["context"])
             .create({"journal_id": cls.journal_bank.id, "amount": invoice.amount_total, "date": date})
         )
-        payment.l10n_ar_withholding_line_ids = [Command.clear()] + [
-            Command.create({"tax_id": tax.id, "base_amount": price_unit}) for tax in taxes
+        # Sin secuencia en el impuesto (las sufridas no la tienen), el número del certificado
+        # lo pide el pago al postear (l10n_ar_tax, account_payment.action_post).
+        payment.withholding_line_ids = [Command.clear()] + [
+            Command.create(
+                {
+                    "tax_id": tax.id,
+                    "base_amount": price_unit,
+                    **({} if tax.withholding_sequence_id else {"name": cls._next_document_number()}),
+                }
+            )
+            for tax in taxes
         ]
         # Sin el recálculo queda el importe que arrastra el registro de pagos.
-        payment.l10n_ar_withholding_line_ids._compute_amount()
+        payment.withholding_line_ids._compute_amount()
         payment.action_post()
         cls.env.flush_all()
         return payment

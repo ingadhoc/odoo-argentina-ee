@@ -63,7 +63,7 @@ class AccountChartTemplate(models.AbstractModel):
             )
 
             if tax:
-                l10n_ar_withholding_line_ids = [
+                withholding_line_ids = [
                     Command.create(
                         {
                             "name": "0001-00000001",
@@ -73,11 +73,11 @@ class AccountChartTemplate(models.AbstractModel):
                     )
                 ]
             else:
-                l10n_ar_withholding_line_ids = []
+                withholding_line_ids = []
 
             # para este partner creamos tmb retención de IVA
             if invoice.partner_id.id == self.env.ref("l10n_ar_account_reports.res_partner_adhoc_pba").id:
-                l10n_ar_withholding_line_ids.append(
+                withholding_line_ids.append(
                     Command.create(
                         {
                             "name": "0001-00000002",
@@ -90,7 +90,7 @@ class AccountChartTemplate(models.AbstractModel):
                 "amount": invoice.amount_residual - withholding_amount if tax else invoice.amount_residual,
                 # queremos el pago en el mes pasado
                 "date": invoice.invoice_date,
-                "l10n_ar_withholding_line_ids": l10n_ar_withholding_line_ids,
+                "withholding_line_ids": withholding_line_ids,
             }
             payment = self.env["account.payment"].with_context(**action_context).create(vals)
             payment.action_post()

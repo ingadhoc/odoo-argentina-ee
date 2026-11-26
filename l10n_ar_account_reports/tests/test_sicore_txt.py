@@ -56,7 +56,7 @@ class TestSicoreTxt(TestL10nArAccountReportsCommon):
         self.assertEqual(record[76:78], "01")
         # Base e importe son campos distintos: ganancias descuenta el mínimo no
         # sujeto a retención, así que el importe no es base por alícuota.
-        withholding = payment.l10n_ar_withholding_line_ids
+        withholding = payment.withholding_line_ids
         self.assertEqual(record[52:66], "%014.2f" % self.earnings_base)
         self.assertEqual(record[79:93], "%014.2f" % withholding.amount)
         self.assertNotEqual(
