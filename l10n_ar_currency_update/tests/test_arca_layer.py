@@ -34,9 +34,9 @@ class TestArcaLayer(TransactionCase):
         )
         (cls.company_1 | cls.company_2).write({"currency_provider": "arca", "currency_interval_unit": "daily"})
         cls.today = cls.company_1._l10n_ar_currency_today()
-        cls.today_str = fields.Date.to_string(cls.today)
         cls.yesterday_str = fields.Date.to_string(cls.today - timedelta(days=1))
-        # The sync date is marked only when every active currency with ARCA code has today's rate
+        cls.older_str = fields.Date.to_string(cls.today - timedelta(days=2))
+        # The sync date is marked only when every active currency with ARCA code has the previous day's rate
         cls.arca_currencies = cls.env["res.currency"].search([("l10n_ar_afip_code", "!=", False)]) - cls.ARS
 
     def _parse(self, companies, arca_result, rate_company=None, context=None, currencies=None, connection_error=None):
@@ -62,9 +62,8 @@ class TestArcaLayer(TransactionCase):
             if not value:
                 return None, False
             rate, date = value
-            # ARCA returns the day before the one the rate is used for, and ARS per unit
-            arca_date = datetime.strptime(date, "%Y-%m-%d") - timedelta(days=1)
-            return arca_date.strftime("%Y%m%d"), 1.0 / rate
+            # ARCA returns ARS per unit
+            return datetime.strptime(date, "%Y-%m-%d").strftime("%Y%m%d"), 1.0 / rate
 
         rate_company = self.company_1 if rate_company is None else rate_company
         currencies = (self.ARS | self.USD | self.EUR) if currencies is None else currencies
@@ -78,8 +77,8 @@ class TestArcaLayer(TransactionCase):
             res = companies.with_context(**(context or {}))._parse_arca_data(currencies)
         return res, calls
 
-    def _today_rates(self):
-        return {"ARS": (1.0, self.today_str)} | {c.name: (0.001, self.today_str) for c in self.arca_currencies}
+    def _day_rates(self):
+        return {"ARS": (1.0, self.yesterday_str)} | {c.name: (0.001, self.yesterday_str) for c in self.arca_currencies}
 
     def test_connect_with_rate_company(self):
         """With several Argentinian companies ARCA is asked with the company that has the certificate, even
@@ -87,7 +86,7 @@ class TestArcaLayer(TransactionCase):
         self.assertNotEqual(self.env.company, self.company_2)
         _res, calls = self._parse(
             self.company_1 | self.company_2,
-            {"USD": (0.001, self.today_str), "EUR": (0.0009, self.today_str)},
+            {"USD": (0.001, self.yesterday_str), "EUR": (0.0009, self.yesterday_str)},
             rate_company=self.company_2,
         )
         self.assertEqual({name for _company, name in calls}, {"USD", "EUR"})
@@ -98,17 +97,17 @@ class TestArcaLayer(TransactionCase):
         """An ARCA error in one currency does not stop the update of the other ones, as in 19.0"""
         with self.assertLogs(LOGGER, level="WARNING") as logs:
             res, calls = self._parse(
-                self.company_1, {"USD": (0.001, self.today_str), "EUR": UserError("ARCA error for EUR")}
+                self.company_1, {"USD": (0.001, self.yesterday_str), "EUR": UserError("ARCA error for EUR")}
             )
         self.assertIn("ARCA error for EUR", logs.output[0])
         self.assertEqual(len(calls), 2)
-        self.assertEqual(res["USD"], (0.001, self.today_str))
+        self.assertEqual(res["USD"], (0.001, self.yesterday_str))
         self.assertNotIn("EUR", res)
 
     def test_skip_currencies_without_arca_code(self):
         """Currencies without ARCA code are not sent to ARCA, so the native error does not stop the update"""
         self.EUR.l10n_ar_afip_code = False
-        _res, calls = self._parse(self.company_1, {"USD": (0.001, self.today_str)})
+        _res, calls = self._parse(self.company_1, {"USD": (0.001, self.yesterday_str)})
         sent = {name for _company, name in calls}
         self.assertIn("USD", sent)
         self.assertNotIn("EUR", sent)
@@ -117,29 +116,41 @@ class TestArcaLayer(TransactionCase):
         """Without foreign currencies ARCA is not asked, and only the ARS rate is returned"""
         res, calls = self._parse(self.company_1, {}, currencies=self.ARS)
         self.assertFalse(calls)
-        self.assertEqual(res, {"ARS": (1.0, self.today_str)})
+        self.assertEqual(res, {"ARS": (1.0, self.yesterday_str)})
 
-    def test_only_today_rate(self):
-        """A rate that is not today's is not kept"""
-        res, _calls = self._parse(self.company_1, {"USD": (0.001, self.today_str), "EUR": (0.0009, self.yesterday_str)})
-        self.assertEqual(res["USD"], (0.001, self.today_str))
+    def test_only_previous_day_rate(self):
+        """Only the rate of the previous day is kept, with that date"""
+        res, _calls = self._parse(self.company_1, {"USD": (0.001, self.yesterday_str), "EUR": (0.0009, self.older_str)})
+        self.assertEqual(res["USD"], (0.001, self.yesterday_str))
         self.assertNotIn("EUR", res)
-        self.assertEqual(res["ARS"], (1.0, self.today_str))
+        self.assertEqual(res["ARS"], (1.0, self.yesterday_str))
 
     def test_force_create_rate(self):
-        """With l10n_ar_force_create_rate the last published rate is kept, dated today"""
+        """With l10n_ar_force_create_rate the last published rate is kept, dated the previous day"""
         res, _calls = self._parse(
             self.company_1,
-            {"USD": (0.001, self.yesterday_str), "EUR": (0.0009, self.yesterday_str)},
+            {"USD": (0.001, self.older_str), "EUR": (0.0009, self.older_str)},
             context={"l10n_ar_force_create_rate": True},
         )
-        self.assertEqual(res["USD"], (0.001, self.today_str))
+        self.assertEqual(res["USD"], (0.001, self.yesterday_str))
+
+    def test_rate_used_from_today(self):
+        """The rate ARCA publishes for the previous day is the one used today"""
+        self.env["res.currency.rate"].create(
+            {"currency_id": self.USD.id, "name": self.older_str, "rate": 1 / 900.0, "company_id": self.company_1.id}
+        )
+        res, _calls = self._parse(
+            self.company_1, {"USD": (1 / 1000.0, self.yesterday_str)}, currencies=self.ARS | self.USD
+        )
+        self.company_1._generate_currency_rates(res)
+        self.assertEqual(self.USD._convert(1.0, self.ARS, self.company_1, self.yesterday_str), 900.0)
+        self.assertEqual(self.USD._convert(1.0, self.ARS, self.company_1, self.today), 1000.0)
 
     def test_no_company_with_valid_certificate(self):
         """Without a company with a valid certificate only ARS is returned, and the update does not fail"""
         with self.assertLogs(LOGGER, level="WARNING"):
             res, calls = self._parse(self.company_1, {}, rate_company=self.env["res.company"])
-        self.assertEqual(res, {"ARS": (1.0, self.today_str)})
+        self.assertEqual(res, {"ARS": (1.0, self.yesterday_str)})
         self.assertFalse(calls)
         with (
             patch.object(
@@ -154,9 +165,9 @@ class TestArcaLayer(TransactionCase):
         """A connection error stops asking ARCA, so no currency is asked, and only ARS is returned"""
         with self.assertLogs(LOGGER, level="WARNING"):
             res, calls = self._parse(
-                self.company_1, {"USD": (0.001, self.today_str)}, connection_error=UserError("WSAA error")
+                self.company_1, {"USD": (0.001, self.yesterday_str)}, connection_error=UserError("WSAA error")
             )
-        self.assertEqual(res, {"ARS": (1.0, self.today_str)})
+        self.assertEqual(res, {"ARS": (1.0, self.yesterday_str)})
         self.assertFalse(calls)
 
     def test_one_connection_for_all_currencies(self):
@@ -189,24 +200,24 @@ class TestArcaLayer(TransactionCase):
             ),
             self.assertRaises(UserError),
         ):
-            companies._generate_currency_rates(self._today_rates())
+            companies._generate_currency_rates(self._day_rates())
         self.assertFalse(self.company_1.l10n_ar_last_currency_sync_date)
 
-        missing = self._today_rates()
+        missing = self._day_rates()
         missing.pop("USD")
         companies._generate_currency_rates(missing)
         self.assertFalse(self.company_1.l10n_ar_last_currency_sync_date)
 
-        companies._generate_currency_rates(self._today_rates())
+        companies._generate_currency_rates(self._day_rates())
         self.assertEqual(self.company_1.l10n_ar_last_currency_sync_date, self.today)
         self.assertEqual(self.company_2.l10n_ar_last_currency_sync_date, self.today)
 
     def test_sync_date_with_loaded_rate(self):
         """A currency that ARCA did not return but is already loaded for the day counts as synced"""
         self.env["res.currency.rate"].create(
-            {"currency_id": self.USD.id, "name": self.today, "rate": 0.002, "company_id": self.company_1.id}
+            {"currency_id": self.USD.id, "name": self.yesterday_str, "rate": 0.002, "company_id": self.company_1.id}
         )
-        missing = self._today_rates()
+        missing = self._day_rates()
         missing.pop("USD")
         (self.company_1 | self.company_2)._generate_currency_rates(missing)
         self.assertEqual(self.company_1.l10n_ar_last_currency_sync_date, self.today)
@@ -215,7 +226,7 @@ class TestArcaLayer(TransactionCase):
     def test_sync_date_without_foreign_currency(self):
         """Without foreign currencies the day is not marked, so the retry cron takes a currency added later"""
         self.arca_currencies.l10n_ar_afip_code = False
-        (self.company_1 | self.company_2)._generate_currency_rates({"ARS": (1.0, self.today_str)})
+        (self.company_1 | self.company_2)._generate_currency_rates({"ARS": (1.0, self.yesterday_str)})
         self.assertFalse(self.company_1.l10n_ar_last_currency_sync_date)
 
     def test_rate_company_certificate(self):
@@ -276,12 +287,16 @@ class TestArcaLayer(TransactionCase):
     def test_existing_rate_not_overwritten(self):
         """A rate already loaded for the day is kept, the native provider would overwrite it"""
         existing = self.env["res.currency.rate"].create(
-            {"currency_id": self.USD.id, "name": self.today, "rate": 0.002, "company_id": self.company_1.id}
+            {"currency_id": self.USD.id, "name": self.yesterday_str, "rate": 0.002, "company_id": self.company_1.id}
         )
-        self.company_1._generate_currency_rates({"USD": (0.001, self.today_str), "ARS": (1.0, self.today_str)})
+        self.company_1._generate_currency_rates({"USD": (0.001, self.yesterday_str), "ARS": (1.0, self.yesterday_str)})
         self.assertEqual(existing.rate, 0.002)
         rates = self.env["res.currency.rate"].search(
-            [("currency_id", "=", self.USD.id), ("name", "=", self.today), ("company_id", "=", self.company_1.id)]
+            [
+                ("currency_id", "=", self.USD.id),
+                ("name", "=", self.yesterday_str),
+                ("company_id", "=", self.company_1.id),
+            ]
         )
         self.assertEqual(rates, existing)
 
