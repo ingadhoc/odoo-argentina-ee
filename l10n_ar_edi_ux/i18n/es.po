@@ -153,7 +153,7 @@ msgstr "Fecha Inicio Servicio ARCA"
 #. module: l10n_ar_edi_ux
 #: model:ir.model,name:l10n_ar_edi_ux.model_l10n_ar_afipws_connection
 msgid "ARCA Webservice Connection"
-msgstr "Conexión Webservice de AFIP"
+msgstr "Conexión al servicio web de ARCA"
 
 #. module: l10n_ar_edi_ux
 #. odoo-python
@@ -1046,7 +1046,7 @@ msgstr "Actualizar desde Padrón"
 #: model:ir.actions.act_window,name:l10n_ar_edi_ux.action_base_partner_update_from_padron
 #: model:ir.ui.menu,name:l10n_ar_edi_ux.menu_base_partner_update_from_padron
 msgid "Update Partners From Padron ARCA"
-msgstr "Actualizar contactos desde el padrón de AFIP"
+msgstr "Actualizar contactos desde el padrón de ARCA"
 
 #. module: l10n_ar_edi_ux
 #: model_terms:ir.ui.view,arch_db:l10n_ar_edi_ux.view_base_partner_update_from_padron_form

@@ -25,12 +25,12 @@ msgstr ""
 #. module: l10n_ar_currency_update
 #: model:ir.model.fields,field_description:l10n_ar_currency_update.field_res_company__l10n_ar_last_currency_sync_date
 msgid "ARCA Last Sync Date"
-msgstr "Fecha de última sincronización de AFIP"
+msgstr "Fecha de última sincronización de ARCA"
 
 #. module: l10n_ar_currency_update
 #: model:ir.model.fields.selection,name:l10n_ar_currency_update.selection__res_company__currency_provider__afip
 msgid "ARCA Web Service (Argentina)"
-msgstr "Web service AFIP (Argentina)"
+msgstr "Servicio web de ARCA (Argentina)"
 
 #. module: l10n_ar_currency_update
 #. odoo-python
@@ -64,7 +64,7 @@ msgstr "Moneda"
 #. module: l10n_ar_currency_update
 #: model:ir.actions.server,name:l10n_ar_currency_update.ir_cron_re_check_afip_currency_rate_ir_actions_server
 msgid "Currency: Re Check ARCA Currency Rate"
-msgstr "Moneda: Re chequear la tasa de moneda AFIP"
+msgstr "Moneda: volver a consultar la cotización de ARCA"
 
 #. module: l10n_ar_currency_update
 #: model:ir.model.fields,field_description:l10n_ar_currency_update.field_res_company__display_name
