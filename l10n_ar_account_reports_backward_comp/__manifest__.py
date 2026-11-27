@@ -30,6 +30,7 @@
         "l10n_ar_account_reports",
     ],
     "data": [],
+    "post_init_hook": "post_init_hook",
     "demo": [],
     "test": [],
     "installable": True,
