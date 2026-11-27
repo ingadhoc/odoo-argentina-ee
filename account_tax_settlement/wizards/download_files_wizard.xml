@@ -18,6 +18,9 @@
         <field name="arch" type="xml">
             <form string="Download Files">
                 <field name="arba_warning_html" nolabel="1"/>
+                <div class="alert alert-warning" role="alert" invisible="not notes_html">
+                    <field name="notes_html" nolabel="1"/>
+                </div>
 
                 <field name="line_ids">
                     <list>

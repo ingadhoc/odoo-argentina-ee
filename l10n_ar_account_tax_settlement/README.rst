@@ -20,6 +20,24 @@ Este módulo imlementa:
 * Funcionalidad y datos para auste por inflación (The index are extracted from https://www.facpce.org.ar/indices-facpce/)
 * Al momento de instalar el módulo o crear nuevas compañías argentinas con plan de cuentas establecido se crean los diarios de liquidación de impuestos correspondientes.
 * Aviso y reasignación de la liquidación cuando se edita un pago con retenciones ya declaradas.
+* Impuesto **Percepción SIRCIP sufrida**, que no va en el TXT de SIFERE.
+
+Percepciones SIRCIP sufridas
+============================
+
+Cuando un proveedor agente de SIRCIP nos percibe, la percepción se carga en la factura de proveedor con el
+impuesto de compra **Percepción SIRCIP sufrida**, igual que las sufridas de cada provincia (importe fijo,
+que se ajusta en la factura). El módulo lo crea en todas las compañías argentinas, sean agentes de SIRCIP o
+no, con su propia cuenta (*Percepción IIBB SIRCIP sufrida*, junto a las de percepciones sufridas del plan)
+y la etiqueta *Pagos a Cuenta IIBB*, así que se liquida en el diario **Liquidación de IIBB** como las demás.
+Se crea al instalar o actualizar el módulo y al instalar el plan de cuentas de una compañía nueva.
+
+Lo que cambia es el TXT de SIFERE: según la Comisión Arbitral, una vez que el agente presenta su DDJJ,
+SIFERE Web carga solo las percepciones SIRCIP en las deducciones del percibido, ya distribuidas por
+jurisdicción (igual que SIRCREB y SIRTAC). Si fueran en el TXT, se deducirían dos veces. Por eso el
+impuesto tiene tildado **Excluido de SIFERE**: sus percepciones no van al archivo de percepciones sufridas,
+y la ventana de descarga avisa qué comprobantes las traen. El mismo tilde sirve para cualquier otro
+impuesto de compra que SIFERE Web cargue solo.
 
 Reasignación de liquidaciones de retenciones
 ============================================

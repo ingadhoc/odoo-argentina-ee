@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- SIRCIP suffered perception tax of the existing Argentinian companies; new ones get it with their chart -->
+    <function model="account.chart.template" name="_l10n_ar_create_sircip_suffered_tax"/>
+
+</odoo>

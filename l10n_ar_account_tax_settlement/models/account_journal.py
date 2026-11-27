@@ -4,6 +4,7 @@ import logging
 import re
 import unicodedata
 
+from markupsafe import Markup
 from odoo import _, fields, models
 from odoo.exceptions import RedirectWarning, ValidationError
 from odoo.tools import ustr
@@ -1094,7 +1095,8 @@ class AccountJournal(models.Model):
         ret = ""
         perc = ""
         desp_imp = ""
-        for line in move_lines:
+        excluded = move_lines.filtered(lambda x: x._get_settlement_tax().l10n_ar_sifere_excluded)
+        for line in move_lines - excluded:
             if line.l10n_latam_document_type_id.code in ["66", "67"]:
                 desp_imp += " - " + line.move_id.display_name + "\n"
                 continue
@@ -1185,10 +1187,24 @@ class AccountJournal(models.Model):
                 "En los registros seleccionados encontramos algunos despachos de importación, los mismos deben"
                 "cargarse a mano. Los registros despachos corrspondientes son:\n"
             ) + desp_imp
+        notes = False
+        if excluded:
+            notes = Markup("<p>%s</p><ul>%s</ul>") % (
+                _(
+                    "These perceptions are not in the file because SIFERE Web loads them by itself (their tax is "
+                    "excluded from SIFERE):"
+                ),
+                Markup().join(
+                    Markup("<li>%s</li>")
+                    % ("%s: %s" % (move.display_name, ", ".join(lines.tax_line_id.mapped("name"))))
+                    for move, lines in excluded.grouped("move_id").items()
+                ),
+            )
         return [
             {
                 "txt_filename": "Percepciones sufridas SIFERE.txt",
                 "txt_content": perc,
+                "notes": notes,
             },
             {
                 "txt_filename": "Retenciones sufridas SIFERE.txt",
