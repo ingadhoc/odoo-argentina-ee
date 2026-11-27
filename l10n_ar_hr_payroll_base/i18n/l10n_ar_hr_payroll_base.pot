@@ -257,11 +257,6 @@ msgid "Date of the last social security deposit, shown on the payslip."
 msgstr ""
 
 #. module: l10n_ar_hr_payroll_base
-#: model:hr.payslip.input.type,name:l10n_ar_hr_payroll_base.input_guard_rec
-msgid "Daycare Receipt"
-msgstr ""
-
-#. module: l10n_ar_hr_payroll_base
 #: model:hr.payslip.input.type,name:l10n_ar_hr_payroll_base.input_guard
 #: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_final_guard
 #: model:hr.salary.rule,name:l10n_ar_hr_payroll_base.rule_monthly_guard

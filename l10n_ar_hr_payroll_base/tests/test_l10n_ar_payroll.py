@@ -164,17 +164,12 @@ class TestL10nArPayroll(TestPayslipValidationCommon):
             extra = slip.line_ids.filtered(lambda l: l.code == "AR_REM")
             self.assertEqual(sorted(extra.mapped("total")), [500.0, 1000.0])
             self.assertIn("Bonus", extra.mapped("name"))
-        with self.subTest("the daycare reimbursement adds to the net, its receipts do not"):
+        with self.subTest("the daycare reimbursement adds to the net as a non-remunerative concept"):
             net = slip.net_wage
-            slip.input_line_ids = [
-                self._input("GUARD", 3000.0),
-                self._input("GUARD_REC", 2000.0),
-                self._input("GUARD_REC", 1500.0),
-            ]
+            slip.input_line_ids = [self._input("GUARD", 3000.0)]
             slip.compute_sheet()
             daycare = slip.line_ids.filtered(lambda l: l.code == "GUARD")
             self.assertEqual((daycare.total, daycare.category_id.code), (3000.0, "NOREM"))
-            self.assertFalse(slip.line_ids.filtered(lambda l: l.code == "GUARD_REC"))
             self.assertEqual(slip.currency_id.compare_amounts(slip.net_wage, net + 3000.0), 0)
         with self.subTest("the rounding adds to the net as a non-remunerative concept"):
             net = slip.net_wage
