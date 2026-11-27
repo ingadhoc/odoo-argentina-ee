@@ -1,6 +1,8 @@
+import re
 from base64 import b64decode
 
 from dateutil.relativedelta import MO, relativedelta
+from lxml import etree
 from odoo import Command, fields
 from odoo.addons.hr_payroll_account.tests.common import TestPayslipValidationCommon
 from odoo.exceptions import UserError, ValidationError
@@ -162,6 +164,34 @@ class TestL10nArPayroll(TestPayslipValidationCommon):
             extra = slip.line_ids.filtered(lambda l: l.code == "AR_REM")
             self.assertEqual(sorted(extra.mapped("total")), [500.0, 1000.0])
             self.assertIn("Bonus", extra.mapped("name"))
+        with self.subTest("the daycare reimbursement adds to the net as a non-remunerative concept"):
+            net = slip.net_wage
+            slip.input_line_ids = [self._input("GUARD", 3000.0)]
+            slip.compute_sheet()
+            daycare = slip.line_ids.filtered(lambda l: l.code == "GUARD")
+            self.assertEqual((daycare.total, daycare.category_id.code), (3000.0, "NOREM"))
+            self.assertEqual(slip.currency_id.compare_amounts(slip.net_wage, net + 3000.0), 0)
+        with self.subTest("the rounding adds to the net as a non-remunerative concept"):
+            net = slip.net_wage
+            slip.input_line_ids = [self._input("REDONDEO", 0.34)]
+            slip.compute_sheet()
+            rounding = slip.line_ids.filtered(lambda l: l.code == "REDONDEO")
+            self.assertEqual((rounding.total, rounding.category_id.code), (0.34, "NOREM"))
+            self.assertEqual(slip.currency_id.compare_amounts(slip.net_wage, net + 0.34), 0)
+        with self.subTest("the printed payslip shows its own wage when it has one, else the employee record's"):
+
+            def printed_wage():
+                html = self.env["ir.actions.report"]._render_qweb_html(
+                    "l10n_ar_hr_payroll_base.action_report_payslip_ar", slip.ids
+                )[0]
+                # Digits only, so the check does not depend on the language of the number format.
+                return re.sub(
+                    r"\D", "", etree.fromstring(html, etree.HTMLParser()).xpath("string(//td[@name='td_wage'])")
+                )
+
+            self.assertEqual(printed_wage(), "100000000")
+            slip.l10n_ar_wage = 777777.77
+            self.assertEqual(printed_wage(), "77777777")
         with self.subTest("each line keeps the quantity and unit of its own input, also around an empty one"):
             slip.input_line_ids = [Command.unlink(line.id) for line in slip.input_line_ids if line.code == "AR_REM"] + [
                 self._input("AR_REM", 1000.0, 2, "D"),
@@ -278,6 +308,14 @@ class TestL10nArPayroll(TestPayslipValidationCommon):
                     Command.create({"date_from": monday + relativedelta(days=day), "situation_id": self.active.id})
                     for day in (11, 12, 13, 14)
                 ]
+        with self.subTest("time off of a type without employment status stops the payroll book"):
+            entry_type = vacation_type.work_entry_type_id.sudo()
+            situation = entry_type.l10n_ar_situation_id
+            entry_type.l10n_ar_situation_id = False
+            with self.assertRaises(UserError):
+                wizard._check_time_off_situations(slip)
+            entry_type.l10n_ar_situation_id = situation
+            wizard._check_time_off_situations(slip)
         with self.subTest("family data in force at the end of the period"):
             self.employee.sudo().l10n_ar_family_ids = [
                 Command.create({"date_from": self.date_from, "kind": "spouse", "dependent": True}),
@@ -302,6 +340,13 @@ class TestL10nArPayroll(TestPayslipValidationCommon):
         slip.action_payslip_done()
         wizard = self.env["l10n_ar.lsd.wizard"].create({"run_ids": [Command.set(run.ids)]})
 
+        # The demo sets the LSD codes; this case starts without them.
+        slip.line_ids.salary_rule_id.l10n_ar_lsd_code = False
+        with self.subTest("without the LSD code of a rule with amounts the file is not generated"):
+            with self.assertRaisesRegex(UserError, r"\(BASIC\)"):
+                wizard.action_generate()
+        for rule in slip.line_ids.salary_rule_id:
+            rule.l10n_ar_lsd_code = rule.code
         with self.subTest("without the CBU the file is not generated"):
             with self.assertRaises(UserError):
                 wizard.action_generate()
@@ -322,6 +367,9 @@ class TestL10nArPayroll(TestPayslipValidationCommon):
 
         # Below the remuneration on purpose, to tell the capped bases from the full ones.
         slip.l10n_ar_contribution_base = 900000.0
+        slip.line_ids.filtered(lambda l: l.code == "BASIC").salary_rule_id.write(
+            {"l10n_ar_lsd_code": "sue1", "l10n_ar_lsd_code_second_half": "sue2"}
+        )
         wizard.action_generate()
         rows = b64decode(wizard.lsd_file).decode("latin-1").split("\r\n")
         with self.subTest("each record type has the fixed length of its layout"):
@@ -333,6 +381,11 @@ class TestL10nArPayroll(TestPayslipValidationCommon):
             record_02 = next(row for row in rows if row.startswith("02"))
             self.assertEqual(record_02[73:95], "2850590940090418135201")
         concepts = {row[13:23].strip(): row for row in rows if row.startswith("03")}
+        basic_code = "sue2" if self.date_to.month > 6 else "sue1"
+        with self.subTest("record 03: the LSD code of the rule, by semester when it has one for the second half"):
+            self.assertNotIn("BASIC", concepts)
+            self.assertIn(basic_code, concepts)
+        concepts["BASIC"] = concepts[basic_code]
         with self.subTest("record 03: units of days and percentages, debit for deductions"):
             self.assertEqual(concepts["BASIC"][23:29], "02800D")
             self.assertEqual(concepts["JUB"][23:29], "01100%")

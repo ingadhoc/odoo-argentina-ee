@@ -46,6 +46,16 @@
         <field name="code">AR_NOREM</field>
         <field name="country_id" ref="base.ar"/>
     </record>
+    <record id="input_guard" model="hr.payslip.input.type">
+        <field name="name">Daycare Reimbursement</field>
+        <field name="code">GUARD</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
+    <record id="input_redondeo" model="hr.payslip.input.type">
+        <field name="name">Rounding</field>
+        <field name="code">REDONDEO</field>
+        <field name="country_id" ref="base.ar"/>
+    </record>
     <record id="input_vng" model="hr.payslip.input.type">
         <field name="name">Unused Vacations</field>
         <field name="code">VNG</field>
