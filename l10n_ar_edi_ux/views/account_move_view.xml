@@ -35,6 +35,9 @@
             </div>
 
 
+            <xpath expr="//page[@name='afip']//field[@name='l10n_ar_afip_auth_code']" position="attributes">
+                <attribute name="readonly">state != 'draft' or l10n_ar_afip_result in ('A', 'O')</attribute>
+            </xpath>
         </field>
     </record>
 
