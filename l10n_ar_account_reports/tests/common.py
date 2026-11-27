@@ -73,6 +73,10 @@ class TestL10nArAccountReportsCommon(TestArWithholdingArRi):
         cls.withholding_suffered_vat = cls.tax_withholding_vat.copy(
             {"name": "Ret IVA sufrida (test)", "type_tax_use": "sale"}
         )
+        # The regime code is set on its own: since 20.0 account.tax clears l10n_ar_code on any
+        # create or write that carries type_tax_use, and a copy carries it
+        # (l10n_ar_withholding/models/account_tax.py, _l10n_ar_clean_regime_vals).
+        cls.withholding_suffered_vat.write({"l10n_ar_code": WITHHOLDING_REGIME["l10n_ar_code"]})
 
         cls.journal_bank = cls.env["account.journal"].search(
             [("type", "=", "bank"), ("company_id", "=", cls.company_ri.id)], limit=1
