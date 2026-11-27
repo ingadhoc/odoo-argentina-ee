@@ -1,8 +1,6 @@
 import re
 import unicodedata
 
-from odoo.tools import ustr
-
 #########
 # helpers
 #########
@@ -17,6 +15,17 @@ def format_amount(amount, padding=15, decimals=2, sep=""):
     if sep:
         res = f"{res[:-decimals]}{sep}{res[-decimals:]}"
     return res
+
+
+def get_tax_rate(tax):
+    """Rate of a tax as the files report it: always positive.
+
+    Since 20.0 a withholding tax carries a negative ``amount``
+    (``l10n_account_withholding_tax/models/account_tax.py``,
+    ``_onchange_is_withholding_tax``), while a perception keeps it positive.
+    The fiscal files report the rate without a sign, as in 19.
+    """
+    return abs(tax.amount)
 
 
 def get_line_tax_base(move_line):
@@ -66,7 +75,7 @@ def get_pos_and_number(full_number):
 def remove_accents_and_dieresis(input_str):
     """Suboptimal-but-better-than-nothing way to replace accented or dieresis-containing
     latin letters by an ASCII equivalent."""
-    input_str = ustr(input_str)
+    input_str = str(input_str)
     nkfd_form = unicodedata.normalize("NFKD", input_str)
     return "".join([c for c in nkfd_form if not unicodedata.combining(c)])
 

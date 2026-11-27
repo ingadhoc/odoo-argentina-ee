@@ -66,13 +66,12 @@ class InflationAdjustment(models.TransientModel):
         compute="_compute_missing_entries_warning",
     )
 
-    def get_account_id(self, line):
-        return line.get("account_id")[0]
-
     @api.model
     def default_get(self, field_list):
         res = super(InflationAdjustment, self).default_get(field_list)
-        today = fields.Datetime.now()
+        # A date, not a datetime: in 20.0 compute_fiscalyear_dates caches periods by date and compares
+        # the argument against them (account_accountant/models/res_company.py, compute_fiscalyear_dates).
+        today = fields.Date.context_today(self)
         companies = self.env.companies
         head = companies._get_filing_company()
         # Without a head the wizard still opens; _check_companies refuses it at confirm.
@@ -270,11 +269,8 @@ class InflationAdjustment(models.TransientModel):
         # Generate account.move.line adjustment for start of the period
         domain = self.get_move_line_domain()
         domain += [("account_id.include_initial_balance", "=", True), ("date", "<", self.date_from)]
-        init_data = account_move_line.read_group(
-            domain,
-            ["account_id", "balance"],
-            ["account_id"],
-        )
+        # In 20.0 read_group takes (domain, groupby, aggregates) and returns tuples, not dicts.
+        init_data = account_move_line._read_group(domain, ["account_id"], ["balance:sum"])
         date_to = self.date_to
         before_date_from = self.date_from + relativedelta(months=-1)
         before_index = self.env["inflation.adjustment.index"].find(before_date_from)
@@ -288,17 +284,17 @@ class InflationAdjustment(models.TransientModel):
             )
 
         initial_factor = (self.end_index / before_index.value) - 1.0
-        for line in init_data:
-            adjustment = line.get("balance") * initial_factor
+        for account, balance in init_data:
+            adjustment = balance * initial_factor
             if self.company_id.currency_id.is_zero(adjustment):
                 continue
             else:
                 adjustment = self.company_id.currency_id.round(adjustment)
             lines.append(
                 {
-                    "account_id": self.get_account_id(line),
+                    "account_id": account.id,
                     "name": _("Inflation adjustment opening balances (%s * %.2f%%)")
-                    % (FormatAmount(line.get("balance")), initial_factor * 100.0),
+                    % (FormatAmount(balance), initial_factor * 100.0),
                     "date_maturity": before_date_from,
                     "debit" if adjustment > 0 else "credit": abs(adjustment),
                 }
@@ -312,21 +308,23 @@ class InflationAdjustment(models.TransientModel):
             # search account.move.lines
             domain = self.get_move_line_domain()
             domain += [("date", ">=", period.get("date_from")), ("date", "<=", period.get("date_to"))]
-            data = account_move_line.read_group(domain, ["account_id", "balance"], ["account_id", "date"])
+            # Only by account: 19 called read_group with lazy=True, which grouped by the first
+            # groupby and ignored the rest, so there was one line per account per period.
+            data = account_move_line._read_group(domain, ["account_id"], ["balance:sum"])
             date_from = period.get("date_from")
-            for line in data:
-                adjustment = line.get("balance") * period.get("factor")
+            for account, balance in data:
+                adjustment = balance * period.get("factor")
                 if self.company_id.currency_id.is_zero(adjustment):
                     continue
                 else:
                     adjustment = self.company_id.currency_id.round(adjustment)
                 lines.append(
                     {
-                        "account_id": self.get_account_id(line),
+                        "account_id": account.id,
                         "name": _("Inflation adjustment %s (%s * %.2f%%)")
                         % (
                             format_date(self.env, date_from, date_format="MM/Y"),
-                            FormatAmount(line.get("balance")),
+                            FormatAmount(balance),
                             period.get("factor") * 100.0,
                         ),
                         "date_maturity": period.get("date_from"),

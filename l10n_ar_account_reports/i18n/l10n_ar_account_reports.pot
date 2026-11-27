@@ -4,16 +4,24 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 19.0+e\n"
+"Project-Id-Version: Odoo Server 20.0+e\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-26 19:16+0000\n"
-"PO-Revision-Date: 2026-10-26 19:16+0000\n"
+"POT-Creation-Date: 2026-11-26 13:44+0000\n"
+"PO-Revision-Date: 2026-11-26 13:44+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid ""
+"%(company)s has no Tax ID, so it has no tax return. Set its Tax ID to start "
+"filing returns."
+msgstr ""
 
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_debito_fiscal
@@ -38,6 +46,153 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_iva_report_saldo_tecnico
 msgid "(=) Saldo Técnico (1er Párrafo)"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.module.module,description:base.module_l10n_ar_account_reports
+msgid ""
+".. |company| replace:: ADHOC SA\n"
+"\n"
+".. |company_logo| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-logo.png\n"
+"   :alt: ADHOC SA\n"
+"   :target: https://www.adhoc.com.ar\n"
+"\n"
+".. |icon| image:: https://raw.githubusercontent.com/ingadhoc/maintainer-tools/master/resources/adhoc-icon.png\n"
+"\n"
+".. image:: https://img.shields.io/badge/license-LGPL--3-blue.png\n"
+"   :target: https://www.gnu.org/licenses/lgpl\n"
+"   :alt: License: LGPL-3\n"
+"\n"
+"============================================\n"
+"Accounting Reports with Accounting Documents\n"
+"============================================\n"
+"\n"
+"Customizes Odoo standard accounting reports to meet specific Argentine requirements, adding necessary fiscal information for balance presentation and generating additional reports for check control.\n"
+"\n"
+"Functional description\n"
+"======================\n"
+"\n"
+"This module adds two main functionalities:\n"
+"\n"
+"**Partner Ledger Report Enhancement**\n"
+"\n"
+"Modifies the native Partner Ledger (Libro Mayor de Empresas) report to include Argentine fiscal information alongside each partner's name. The standard Odoo report only shows \"Partner Name\", while with this module it displays \"Partner Name (CUIT: 1234567890)\".\n"
+"\n"
+"This functionality is essential for fiscal compliance in Argentina, as the report serves as the official detail of Debtors and Creditors at year-end, required for Annual Balance presentation to accounting and tax authorities.\n"
+"\n"
+"**Interface changes:**\n"
+"- Adds a new \"Cheques a fecha\" menu under Accounting → Reporting → Legal Statements\n"
+"- Includes a wizard with fields to select limit date and journal (optional)\n"
+"- Generates a PDF report with detailed listing of pending checks\n"
+"- Archivos para declaración de distintos impuestos (principalmente percepciones y retenciones)\n"
+"\n"
+"**Inflation adjustment index management**\n"
+"\n"
+"Provides a model to manage inflation adjustment indices, which are used to adjust amounts for inflation. The model ensures that only one index can be set per month and that the date of the index corresponds to the first day of the month. The indexes are updated automatically from https://www.facpce.org.ar/indices-facpce/ .\n"
+"\n"
+"Archivos para declaración de impuestos\n"
+"======================================\n"
+"\n"
+"* ARBA (PBA):\n"
+"   * https://web.arba.gov.ar/agentes#presentacion-de-ddjj --> hacer click en \"Instructivos y Marco Normativo - NOVEDAD -\" dentro de DDJJ Periódicas Web IIBB\n"
+"   * TXT Webservice (A122R): https://web.arba.gov.ar/Instructivos-y-Marco-Normativo-A-122R (ese enlace se obtiene de https://web.arba.gov.ar/agentes#presentacion-de-ddjj , luego hay que ir a la sección \"Comprobantes de Retención (A-122R) Nuevo\" y hacer click en \"Instructivo y Marco Normativo\"). Vigente desde 01/03/2026.\n"
+"\n"
+"* AGIP:  https://www.agip.gob.ar/agentes/agentes-de-recaudacion/ib-agentes-recaudacion/aplicativo-arciba/aclaraciones-sobre-las-adecuaciones-al-aplicativo-e-arciba- (Version 3.0 aplicada el 07-05-2024)\n"
+"   * Notas de credito  https://www.agip.gob.ar/filemanager/source/Agentes/De%20Recaudacion/Ingresos%20brutos/NC.PDF\n"
+"   * Retencion y percepciones  https://www.agip.gob.ar/filemanager/source/Agentes/De%20Recaudacion/Ingresos%20brutos/RP.PDF\n"
+"\n"
+"* MENDOZA https://www.atm.mendoza.gov.ar/portalatm/ModificarParametros?tipo=descargarUrl&url=/zoneBottom/serviciosDescargas/sarepe/files/SAREPE.pdf\n"
+"\n"
+"* MISIONES: https://atmisiones.gob.ar/agentes-de-retencion-y-percepcion/ (ingresar en \"https://atmisiones.gob.ar/\", abajo a la derecha hacer click en \"Guías y Manuales de Usuario\" luego en \"Manuales de Usuarios\" finalmente en \"Agentes Ret/Percep\") --> hacer click en \"AG IIBB -Instructivo del Formato Archivo carga DDJJ Retenciones desde 01-06-2023\" y \"AG IIBB -Instructivo del Formato Archivo carga DDJJ Percepción desde 01-06-2023\".\n"
+"            Correo DGR: mesadeayuda@tsgroup.com.ar\n"
+"\n"
+"* SIRCAR: especificación en /doc/sircar\n"
+"\n"
+"* SIFERE: especificación en /doc/sifere\n"
+"\n"
+"* SANTA FE: especificación en /doc/Santa Fe (siprib). La especificación se obtuvo de https://www.santafe.gov.ar/index.php/web/content/view/full/249467/%28subtema%29/102284 --> aplicativo SiPRIB (versión 4.0 Release 2) de SIAP.\n"
+"\n"
+"* TUCUMAN: especificación en doc/Tucuman/MRETPER6R2.pdf a partir de la página 12\n"
+"\n"
+"* SICORE: la especificación se encuentra en /doc/sicore/ y se obtuvo del aplicativo SICORE v9.0 r22 de SIAP.\n"
+"\n"
+"Installation\n"
+"============\n"
+"\n"
+"To install this module, you need to:\n"
+"\n"
+"#. Install the module from Apps menu\n"
+"#. The module will auto-install if l10n_ar and account_reports are installed\n"
+"\n"
+"Configuration\n"
+"=============\n"
+"\n"
+"This module automatically:\n"
+"\n"
+"#. Enhances the Partner Ledger report with CUIT information\n"
+"#. Adds the \"Cheques a fecha\" menu under Accounting → Reporting → Legal Statements\n"
+"\n"
+"Some tax returns need configuration, described below.\n"
+"\n"
+"**SIRE (Agente) tax return:**\n"
+"\n"
+"The \"SIRE (Agente)\" return is fortnightly (1st to 15th and 16th to end of month) and includes vendor payment withholdings (\"Tipo de Impuesto\" = \"Retención Pago de Proveedor\") in one of the \"Sire\" tax groups below (names matched in upper or lower case). The module creates three tax groups for companies with the \"Responsable Inscripto\" or \"Exento\" chart of accounts: \"Retenciones de IVA Sire\" (ARCA tribute code \"06\"), \"Retenciones de Ganancias Beneficiarios del Exterior Sire\" and \"Retenciones de SUSS Sire\" (ARCA tribute code \"01\"). The report has three lines:\n"
+"\n"
+"#. \"Retenciones de IVA\": taxes with ARCA tribute code \"06\" in a tax group whose name contains \"IVA Sire\" or \"VAT Sire\", such as \"Retenciones de IVA Sire\".\n"
+"#. \"Retenciones de ganancias beneficiarios del exterior\": taxes with another ARCA tribute code in a tax group whose name contains \"Beneficiarios del Exterior Sire\" or \"Beneficiaries Profits Sire\", such as \"Retenciones de Ganancias Beneficiarios del Exterior Sire\".\n"
+"#. \"Retenciones de SUSS por compra\": taxes with another ARCA tribute code in a tax group whose name contains \"SUSS Sire\", such as \"Retenciones de SUSS Sire\".\n"
+"\n"
+"If a withholding tax is in another tax group (for example \"Retención de SUSS\" from the Argentinian chart of accounts), go to Accounting → Configuration → Taxes, open the tax and, in \"Opciones avanzadas\", set the right \"Sire\" tax group.\n"
+"\n"
+"VAT withholdings in an \"IVA Sire\" / \"VAT Sire\" tax group are left out of the \"SICORE (Agente)\" report and TXT, so the same withholding is not settled twice. Earnings withholdings (\"Earnings\" or \"Earnings Scale\" type) always go to \"SICORE (Agente)\", even in a \"Sire\" tax group: none of the \"SIRE (Agente)\" lines take them.\n"
+"\n"
+"The \"SIRE (Agente)\" returns are created only when there are SIRE withholdings, and not right after changing the tax group. To create them, use one of these options:\n"
+"\n"
+"#. Open the \"SIRE (Agente)\" report on a period with SIRE withholdings and click \"Returns\". This creates the returns of the whole fiscal year at once.\n"
+"#. Wait for the daily scheduled action that creates the tax returns.\n"
+"\n"
+"By default the \"SIRE (Agente)\" closing entry uses the payable account of the ARCA contact. To use another account, set it in \"AR Closing Account\" on the \"SIRE (Agente)\" return type.\n"
+"\n"
+"The \"SUSS (Agente)\" report and return type were removed: SUSS withholdings are settled in \"SIRE (Agente)\".\n"
+"\n"
+"Usage\n"
+"=====\n"
+"\n"
+"**Partner Ledger Report:**\n"
+"#. Go to Accounting → Reporting → Partner Ledger\n"
+"#. Generate the report normally - partner names will automatically include CUIT information\n"
+"\n"
+"**Checks to Date Report:**\n"
+"#. Go to Accounting → Reporting → Legal Statements → Cheques a fecha\n"
+"#. Select the date up to which you want to see pending checks\n"
+"#. Optionally filter by journal\n"
+"#. Click \"Confirmar\" to generate the PDF report\n"
+"\n"
+".. image:: https://odoo-community.org/website/image/ir.attachment/5784_f2813bd/datas\n"
+"   :alt: Try me on Runbot\n"
+"   :target: http://runbot.adhoc.com.ar/\n"
+"\n"
+"Credits\n"
+"=======\n"
+"\n"
+"Images\n"
+"------\n"
+"\n"
+"* |company| |icon|\n"
+"\n"
+"Contributors\n"
+"============\n"
+"\n"
+"* ADHOC SA\n"
+"\n"
+"Maintainer\n"
+"==========\n"
+"\n"
+"|company_logo|\n"
+"\n"
+"This module is maintained by ADHOC SA.\n"
+"\n"
+"To contribute to this module, please visit https://www.adhoc.com.ar.\n"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -266,6 +421,16 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_account_report
+msgid "Accounting Report"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:ir.module.module,shortdesc:base.module_l10n_ar_account_reports
+msgid "Accounting Reports Customized for Argentina"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:ir.model,name:l10n_ar_account_reports.model_account_return
 msgid "Accounting Return"
 msgstr ""
@@ -427,7 +592,6 @@ msgid "Closing Entries"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#: model:ir.model,name:l10n_ar_account_reports.model_res_company
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__company_ids
 msgid "Companies"
 msgstr ""
@@ -440,6 +604,7 @@ msgid ""
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:ir.model,name:l10n_ar_account_reports.model_res_company
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment__company_id
 msgid "Company"
 msgstr ""
@@ -449,12 +614,6 @@ msgstr ""
 msgid ""
 "Company the entry is built in: the one of the selected companies that is a "
 "parent of the others."
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/account_return.py:0
-msgid "Configure accounts"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -539,6 +698,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_move_line__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partial_reconcile__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partner_ledger_report_handler__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_report__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_creation_wizard__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__display_name
@@ -554,6 +714,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sifere_report_handler__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sircar_report_handler__display_name
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_tucuman_report_handler__display_name
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_res_company__display_name
 msgid "Display Name"
 msgstr ""
 
@@ -568,12 +729,6 @@ msgstr ""
 #: code:addons/l10n_ar_account_reports/models/santa_fe_report.py:0
 #: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
 msgid "Edit contact"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
-msgid "Edit identification type"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -608,6 +763,18 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment_index__xml_id
 msgid "External ID"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/res_company.py:0
+msgid ""
+"For Argentina: if the company is not subject to tax, leave the Tax ID empty."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sire_report_foreign_profits_line
+msgid "Foreign Beneficiaries Profits Withholdings"
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -659,6 +826,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_move_line__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partial_reconcile__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_partner_ledger_report_handler__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_report__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_creation_wizard__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_account_return_type__id
@@ -674,6 +842,7 @@ msgstr ""
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sifere_report_handler__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_sircar_report_handler__id
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_l10n_ar_tucuman_report_handler__id
+#: model:ir.model.fields,field_description:l10n_ar_account_reports.field_res_company__id
 msgid "ID"
 msgstr ""
 
@@ -1094,12 +1263,6 @@ msgid "SICORE (Agente)"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#: model:account.report,name:l10n_ar_account_reports.l10n_ar_suss_report
-#: model:account.return.type,name:l10n_ar_account_reports.suss_return_type
-msgid "SUSS (Agente)"
-msgstr ""
-
-#. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
 msgid "SICORE Aplicado.txt"
@@ -1130,16 +1293,6 @@ msgid "SIRE (Agente)"
 msgstr ""
 
 #. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sire_report_foreign_profits_line
-msgid "Foreign Beneficiaries Profits Withholdings"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sire_report_vat_withholding_line
-msgid "VAT Withholdings"
-msgstr ""
-
-#. module: l10n_ar_account_reports
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_caba_report_caba_perceptions_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_misiones_report_misiones_perceptions_line
 #: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_pba_report_pba_perceptions_line
@@ -1162,6 +1315,14 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.inflation_adjustment_index_search
 msgid "Search Description"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/account_return.py:0
+msgid ""
+"Select %(company)s in the company selector to validate this return: the "
+"closing entry of the whole legal entity is built there."
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -1213,18 +1374,6 @@ msgstr ""
 #. module: l10n_ar_account_reports
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
-msgid "Tax groups"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/res_company.py:0
-msgid "For Argentina: if the company is not subject to tax, leave the Tax ID empty."
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "Tax to pay"
 msgstr ""
 
@@ -1242,6 +1391,15 @@ msgstr ""
 msgid ""
 "The VAT responsibility \"%s\" is not supported for Santa Fe "
 "withholding/perception"
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/res_company.py:0
+msgid ""
+"The company '%(company)s' has the same Tax ID as its parent '%(parent)s'. "
+"Please switch to the company '%(parent)s' and set the opening date there. "
+"'%(company)s' will inherit the opening date from '%(parent)s'."
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -1272,22 +1430,6 @@ msgstr ""
 
 #. module: l10n_ar_account_reports
 #. odoo-python
-#: code:addons/l10n_ar_account_reports/models/account_return.py:0
-msgid ""
-"The following tax groups, used by the taxes of this period, are missing the "
-"accounts needed for the tax closing entry: %(tax_groups)s"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
-msgid ""
-"The identification type \"%(identification_type)s\" does not have ARCA code "
-"set."
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
 #: code:addons/l10n_ar_account_reports/models/inflation_adjustment_index.py:0
 msgid "The index must start on the first day of each month"
 msgstr ""
@@ -1314,6 +1456,14 @@ msgstr ""
 msgid ""
 "The partner \"%(partner_name)s\" (id %(partner_id)s) does not have the vat "
 "set."
+msgstr ""
+
+#. module: l10n_ar_account_reports
+#. odoo-python
+#: code:addons/l10n_ar_account_reports/models/sicore_report.py:0
+msgid ""
+"The partner \"%(partner_name)s\" (id %(partner_id)s) has no identifier with "
+"an ARCA code."
 msgstr ""
 
 #. module: l10n_ar_account_reports
@@ -1468,6 +1618,11 @@ msgid "Unrecognized document type"
 msgstr ""
 
 #. module: l10n_ar_account_reports
+#: model:account.report.line,name:l10n_ar_account_reports.l10n_ar_sire_report_vat_withholding_line
+msgid "VAT Withholdings"
+msgstr ""
+
+#. module: l10n_ar_account_reports
 #: model:ir.model.fields,field_description:l10n_ar_account_reports.field_inflation_adjustment_index__value
 msgid "Value"
 msgstr ""
@@ -1528,29 +1683,4 @@ msgstr ""
 #. odoo-python
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "receivable"
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/account_return.py:0
-msgid ""
-"Select %(company)s in the company selector to validate this return: the "
-"closing entry of the whole legal entity is built there."
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/account_return.py:0
-msgid ""
-"%(company)s has no Tax ID, so it has no tax return. Set its Tax ID to start "
-"filing returns."
-msgstr ""
-
-#. module: l10n_ar_account_reports
-#. odoo-python
-#: code:addons/l10n_ar_account_reports/models/res_company.py:0
-msgid ""
-"The company '%(company)s' has the same Tax ID as its parent '%(parent)s'. "
-"Please switch to the company '%(parent)s' and set the opening date there. "
-"'%(company)s' will inherit the opening date from '%(parent)s'."
 msgstr ""

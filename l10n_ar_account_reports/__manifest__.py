@@ -19,13 +19,13 @@
 ##############################################################################
 {
     "name": "Accounting Reports Customized for Argentina",
-    "version": "19.0.1.24.0",
+    "version": "20.0.1.0.0",
     "category": "Accounting",
     "sequence": 14,
     "summary": "",
     "author": "ADHOC SA",
     "website": "www.adhoc.com.ar",
-    "license": "AGPL-3",
+    "license": "LGPL-3",
     "images": [],
     "depends": [
         "accountant",  # en si este modulo no es necesario pero de alguna manera este modulo solo tiene sentido para
@@ -42,7 +42,7 @@
         "account_payment_pro_receiptbook",
     ],
     "data": [
-        "security/ir.model.access.csv",
+        "security/ir.access.csv",
         "views/account_return_type_views.xml",
         "views/inflation_adjustment_index_view.xml",
         "data/tags_data.xml",
@@ -73,7 +73,7 @@
         ],
     },
     "test": [],
-    "installable": False,
+    "installable": True,
     "auto_install": ["l10n_ar"],
     "application": False,
     "post_init_hook": "_post_init_hook_configure_ar_account_tags",

@@ -4,7 +4,7 @@ import re
 from odoo import _, fields, models
 from odoo.exceptions import RedirectWarning, UserError
 
-from .helpers import get_standard_lines_domain, validate_document_numbers
+from .helpers import get_standard_lines_domain, get_tax_rate, validate_document_numbers
 
 
 class L10n_ArSicoreReportHandler(models.AbstractModel):
@@ -39,7 +39,7 @@ class L10n_ArSicoreReportHandler(models.AbstractModel):
         percepciones de IVA se reconocen por el código de tributo ARCA "06" de su
         grupo de impuestos, no por el tipo de retención.
         """
-        return "0217" if tax.l10n_ar_tax_type in ("earnings", "earnings_scale") else "0767"
+        return "0217" if tax.l10n_ar_withholding_tax_type in ("earnings", "earnings_scale") else "0767"
 
     def _sicore_regime(self, tax, tax_code, is_withholding):
         """Devuelve (campo régimen [3], código de condición [2]) de un impuesto.
@@ -60,7 +60,7 @@ class L10n_ArSicoreReportHandler(models.AbstractModel):
         regimen_field = f"{regimen_code:0>3}"
         codcond = "01"
         if regimen_code == "602":
-            codcond = "13" if (tax.amount_type == "percent" and tax.amount == 3) else "14"
+            codcond = "13" if (tax.amount_type == "percent" and get_tax_rate(tax) == 3) else "14"
         elif regimen_code in ("214", "493"):
             codcond = "00"
         return regimen_field, codcond
@@ -71,24 +71,24 @@ class L10n_ArSicoreReportHandler(models.AbstractModel):
         Cada aviso redirige al registro donde se corrige el dato faltante: el
         código ARCA está en el tipo de identificación y el CUIT en el contacto.
         """
-        identification_type = partner.l10n_latam_identification_type_id
-        if not identification_type.l10n_ar_afip_code:
+        if not partner.l10n_ar_afip_code:
             raise RedirectWarning(
                 message=_(
-                    'The identification type "%(identification_type)s" does not have ARCA code set.',
-                    identification_type=identification_type.name,
+                    'The partner "%(partner_name)s" (id %(partner_id)s) has no identifier with an ARCA code.',
+                    partner_name=partner.name,
+                    partner_id=partner.id,
                 ),
-                action=identification_type.get_formview_action(),
-                button_text=_("Edit identification type"),
+                action=partner.get_record_default_action(),
+                button_text=_("Edit contact"),
             )
-        if not partner.vat:
+        if not partner.l10n_ar_afip_id_value:
             raise RedirectWarning(
                 message=_(
                     'The partner "%(partner_name)s" (id %(partner_id)s) does not have the vat set.',
                     partner_name=partner.name,
                     partner_id=partner.id,
                 ),
-                action=partner.get_formview_action(),
+                action=partner.get_record_default_action(),
                 button_text=_("Edit contact"),
             )
 
@@ -106,12 +106,12 @@ class L10n_ArSicoreReportHandler(models.AbstractModel):
         # Fecha Emision Boletin          [10] (dd/mm/yyyy)
         content += fields.Date.from_string(issue_date).strftime("%d/%m/%Y")
         # Tipo Documento Retenido (document type code)       [ 2]
-        content += f"{int(partner.l10n_latam_identification_type_id.l10n_ar_afip_code):02d}"
+        content += f"{int(partner.l10n_ar_afip_code):02d}"
         # Numero Documento Retenido (vat)     [20]
         # El campo espera el número sin separadores; el tipo va en el campo
         # anterior. No usamos ensure_vat() porque solo devuelve el CUIT, y acá
         # también hay que soportar DNI, CUIL y pasaporte.
-        content += re.sub(r"\D", "", partner.vat or "").ljust(20)
+        content += re.sub(r"\D", "", partner.l10n_ar_afip_id_value or "").ljust(20)
         # Numero Certificado Original    [14]
         content += f"{0:014d}"
         content += "\r\n"
@@ -167,11 +167,13 @@ class L10n_ArSicoreReportHandler(models.AbstractModel):
         # Restringimos a apuntes con pago para no procesar asientos manuales,
         # de los que no podemos sacar ni el comprobante ni la base de cálculo.
         domain = [
-            ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+            "&",
+            ("tax_line_id.is_withholding_tax", "=", True),
+            ("tax_line_id.type_tax_use", "=", "purchase"),
             ("tax_line_id.country_code", "=", "AR"),
             ("tax_line_id.l10n_ar_state_id", "=", False),
             "|",
-            ("tax_line_id.l10n_ar_tax_type", "in", ["earnings", "earnings_scale"]),
+            ("tax_line_id.l10n_ar_withholding_tax_type", "in", ["earnings", "earnings_scale"]),
             "&",
             "&",
             ("tax_line_id.l10n_ar_tribute_afip_code", "=", "06"),
@@ -201,7 +203,7 @@ class L10n_ArSicoreReportHandler(models.AbstractModel):
                         payment_name=line.payment_id.display_name,
                         payment_id=line.payment_id.id,
                     ),
-                    action=line.payment_id.get_formview_action(),
+                    action=line.payment_id.get_record_default_action(),
                     button_text=_("View payment"),
                 )
 
@@ -263,6 +265,8 @@ class L10n_ArSicoreReportHandler(models.AbstractModel):
         # Restringimos a comprobantes de venta (facturas/NC/ND) para no procesar
         # asientos manuales sin fecha ni número de comprobante.
         domain = [
+            "&",
+            ("tax_line_id.is_withholding_tax", "=", False),
             ("tax_line_id.type_tax_use", "=", "sale"),
             ("tax_line_id.l10n_ar_state_id", "=", False),
             ("tax_line_id.l10n_ar_tribute_afip_code", "=", "06"),

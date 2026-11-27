@@ -5,7 +5,7 @@ from odoo import _, fields, models
 from odoo.exceptions import RedirectWarning, UserError
 from odoo.tools.float_utils import float_round
 
-from .helpers import format_amount, get_standard_lines_domain
+from .helpers import format_amount, get_standard_lines_domain, get_tax_rate
 
 
 class L10n_ArCabaReportHandler(models.AbstractModel):
@@ -70,8 +70,12 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
             ("tax_line_id.l10n_ar_state_id.code", "=", "C"),
             ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
             "|",
+            "&",
+            ("tax_line_id.is_withholding_tax", "=", False),
             ("tax_line_id.type_tax_use", "=", "sale"),
-            ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+            "&",
+            ("tax_line_id.is_withholding_tax", "=", True),
+            ("tax_line_id.type_tax_use", "=", "purchase"),
         ] + self._caba_get_lines_domain(options, refund)
         return self.env["account.move.line"].search(domain)
 
@@ -111,19 +115,19 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
                         partner_name=partner.name,
                         partner_id=partner.id,
                     ),
-                    action=partner.get_formview_action(),
+                    action=partner.get_record_default_action(),
                     button_text=_("Edit contact"),
                 )
-            alicuot = tax.amount
+            alicuot = get_tax_rate(tax)
 
             ret_perc_applied = False
             es_percepcion = False
             # 1 - Tipo de Operación
-            if tax.type_tax_use in ["sale", "purchase"]:
+            if not tax.is_withholding_tax and tax.type_tax_use in ["sale", "purchase"]:
                 # tax.amount_type == 'partner_tax':
                 es_percepcion = True
                 content = "2"
-            elif tax.l10n_ar_withholding_payment_type in ["customer", "supplier"]:
+            elif tax.is_withholding_tax:
                 # tax.withholding_type == 'partner_tax':
                 content = "1"
 
@@ -206,11 +210,8 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
 
                 # 10 - Tipo de documento del Retenido
                 # vat
-                if partner.l10n_latam_identification_type_id.name not in [
-                    "CUIT",
-                    "CUIL",
-                    "CDI",
-                ]:
+                # ARCA codes (catalogue A4): 80 CUIT, 86 CUIL, 87 CDI.
+                if partner.l10n_ar_afip_code not in ["80", "86", "87"]:
                     raise RedirectWarning(
                         message=_(
                             'The contact "%(partner_name)s" (id %(partner_id)s) must have the identification type'
@@ -218,11 +219,11 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
                             partner_name=partner.name,
                             partner_id=partner.id,
                         ),
-                        action=partner.get_formview_action(),
+                        action=partner.get_record_default_action(),
                         button_text=_("Edit contact"),
                     )
-                doc_type_mapping = {"CUIT": "3", "CUIL": "2", "CDI": "1"}
-                content += doc_type_mapping[partner.l10n_latam_identification_type_id.name]
+                doc_type_mapping = {"80": "3", "86": "2", "87": "1"}
+                content += doc_type_mapping[partner.l10n_ar_afip_code]
 
                 # 11 - Nro de documento del Retenido
                 content += str(partner._get_id_number_sanitize())
@@ -237,7 +238,7 @@ class L10n_ArCabaReportHandler(models.AbstractModel):
                             partner_name=partner.name,
                             partner_id=partner.id,
                         ),
-                        action=partner.get_formview_action(),
+                        action=partner.get_record_default_action(),
                         button_text=self.env._("Edit contact"),
                     )
 

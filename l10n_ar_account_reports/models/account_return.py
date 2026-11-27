@@ -1,35 +1,35 @@
 from collections import defaultdict
 
 from odoo import Command, _, api, fields, models
-from odoo.exceptions import RedirectWarning, UserError
+from odoo.exceptions import UserError
 
 
 class AccountReturn(models.Model):
     _inherit = "account.return"
 
-    def _get_closing_report_options(self):
-        """Avoid custom_return_period for sub-monthly return types.
+    def _get_closing_report_options(self, **extra_options):
+        """Avoid the return period for sub-monthly return types.
 
         account_reports uses months_per_period to compute period offsets when the
-        filter is ``custom_return_period``. For sub-monthly return types,
+        period type is ``return_period``. For sub-monthly return types,
         months_per_period can be 0, which crashes the core computation
         (division by zero / invalid floor division).
         """
         if not self.type_id._is_sub_monthly_period(self.company_id):
-            return super()._get_closing_report_options()
+            return super()._get_closing_report_options(**extra_options)
 
         report = self.type_id.report_id
         options = {
             "date": {
                 "date_from": fields.Date.to_string(self.date_from),
                 "date_to": fields.Date.to_string(self.date_to),
-                "filter": "custom",
-                "mode": "range",
+                "period_type": "custom",
             },
             "selected_variant_id": report.id,
             "sections_source_id": report.id,
             "tax_unit": "company_only" if not self.tax_unit_id else self.tax_unit_id.id,
             "selected_return_type_id": self.type_id.id,
+            **{key: value for key, value in extra_options.items() if value},
         }
         company_ids = self.company_ids.ids
         return (
@@ -47,50 +47,23 @@ class AccountReturn(models.Model):
             domain += l10n_ar_domain
         return domain
 
-    def _ensure_tax_group_configuration_for_tax_closing(self, tax_group_ids=None):
+    def _ensure_tax_closing_accounts_configured(self, company):
         """EXTENDS account_reports
 
-        Para las liquidaciones argentinas hacemos una validación propia y NO corremos la nativa de Odoo, porque
-        esa exige las cuentas en TODOS los grupos de impuestos de las compañías del return, participen o no de
-        la liquidación. En bases migradas eso obliga a configurar grupos duplicados y grupos de impuestos ajenos
-        a la declaración que se está liquidando. Acá pedimos las cuentas solo en los grupos de impuestos que
-        realmente se usan en la liquidación, es decir los de los apuntes que entran al asiento de este período.
-        Si no lo hiciéramos, el asiento de liquidación saldría en cero (0.0).
+        Para las liquidaciones argentinas no corremos la validación nativa, que exige en el tipo de
+        declaración las cuentas a pagar y a cobrar del asiento de cierre: nuestro asiento no las usa.
+        La contrapartida sale de ``l10n_ar_account_id`` del tipo de declaración o, si no está, de la
+        cuenta a pagar o a cobrar del partner de pago, y ``_add_tax_group_closing_items`` avisa con
+        su propio error cuando falta alguna de las dos.
 
-        Para más detalle ver el mensaje del pull request / commit que introdujo este método.
+        En 19 la nativa era ``_ensure_tax_group_configuration_for_tax_closing``, que pedía las cuentas
+        en los grupos de impuestos; en 20.0 esas cuentas se fueron de ``account.tax.group`` al tipo de
+        declaración, y la validación pasó a este método (``account_reports/models/account_return.py``,
+        ``_ensure_tax_closing_accounts_configured``), llamado desde ``_compute_tax_closing_entry``.
         """
-        if not self.type_id.l10n_ar_is_simple_closing_return:
-            return super()._ensure_tax_group_configuration_for_tax_closing(tax_group_ids)
-        # Already checked for every company of the return (_generate_tax_closing_entries_create_values).
-        if self.env.context.get("l10n_ar_tax_groups_checked"):
+        if self.type_id.l10n_ar_is_simple_closing_return:
             return
-
-        self.ensure_one()
-        # Usamos el tax_group_id del apunte (related stored) y no el catálogo de impuestos: así entran los
-        # impuestos archivados que arrastran los pagos migrados de la versión anterior, que son justamente los
-        # que suelen tener el grupo sin configurar.
-        domain = [
-            ("company_id", "in", self.company_ids.ids),
-            ("date", ">=", self.date_from),
-            ("date", "<=", self.date_to),
-            ("parent_state", "=", "posted"),
-            ("tax_repartition_line_id.use_in_tax_closing", "=", True),
-            "|",
-            ("tax_group_id.tax_payable_account_id", "=", False),
-            ("tax_group_id.tax_receivable_account_id", "=", False),
-        ] + self._get_vat_closing_entry_additional_domain()
-        groups_read = self.env["account.move.line"].sudo()._read_group(domain, groupby=["tax_group_id"])
-        incomplete_tax_groups = self.env["account.tax.group"].union(*(group for (group,) in groups_read))
-        if incomplete_tax_groups:
-            raise RedirectWarning(
-                message=_(
-                    "The following tax groups, used by the taxes of this period, are missing the accounts needed "
-                    "for the tax closing entry: %(tax_groups)s",
-                    tax_groups=", ".join(f"{group.name} ({group.company_id.name})" for group in incomplete_tax_groups),
-                ),
-                action=incomplete_tax_groups._get_records_action(name=_("Tax groups")),
-                button_text=_("Configure accounts"),
-            )
+        return super()._ensure_tax_closing_accounts_configured(company)
 
     @api.model
     def action_open_tax_return_view(self, additional_return_domain=None, additional_context=None):
@@ -122,8 +95,9 @@ class AccountReturn(models.Model):
         self.ensure_one()
         # The entry is built in sudo: check here, as native does on submit, that the user reaches every branch.
         self._check_all_branches_allowed()
-        self._ensure_tax_group_configuration_for_tax_closing()
-        closing = self.sudo().with_context(l10n_ar_tax_groups_checked=True)
+        # The accounts of the closing entry are checked per company by _compute_tax_closing_entry,
+        # which this method calls below (_ensure_tax_closing_accounts_configured in account_reports).
+        closing = self.sudo()
         lines_vals = []
         tax_group_subtotal = defaultdict(float)
         for company in self.company_ids:
@@ -191,13 +165,13 @@ class AccountReturn(models.Model):
                 )
         return super()._get_tax_closing_payable_and_receivable_accounts()
 
-    def _evaluate_total_amount_to_pay_from_tax_closing_accounts(self, payable_accounts, receivable_accounts):
+    def _evaluate_total_amount_to_pay_from_tax_closing_accounts(self, receivable_accounts):
         """Para simple closing returns, total_amount_to_pay = period_amount_to_pay (sin carryover).
         Esto evita que saldos históricos en las cuentas afecten el monto mostrado.
         """
         if self.type_id.l10n_ar_is_simple_closing_return:
             return self.period_amount_to_pay
-        return super()._evaluate_total_amount_to_pay_from_tax_closing_accounts(payable_accounts, receivable_accounts)
+        return super()._evaluate_total_amount_to_pay_from_tax_closing_accounts(receivable_accounts)
 
     def _on_post_submission_event(self):
         """No queremos que luego de submit dispare directamente pago, prefiero que se haga click en en boton,
@@ -274,7 +248,7 @@ class AccountReturn(models.Model):
             )
         ]
 
-    def _proceed_with_locking(self, options_to_inject=None):
+    def _proceed_with_locking(self):
         """
         For Argentinian provincial tax returns (Ingresos Brutos), we handle the locking process differently.
         We don't want to set the tax_lock_date when validating the "asiento de liquidación".
@@ -284,9 +258,7 @@ class AccountReturn(models.Model):
             company: company.tax_lock_date for company in self.company_ids.filtered(lambda c: c.country_id.code == "AR")
         }
         # mandamos contexto para que no se postee si no queremos
-        res = super(AccountReturn, self.with_context(post_from_tax_return=True))._proceed_with_locking(
-            options_to_inject=options_to_inject
-        )
+        res = super(AccountReturn, self.with_context(post_from_tax_return=True))._proceed_with_locking()
 
         # por ahora no queremos ningun informe argentino que haga lock porque, IVA, que es el principal lo estamos
         # dejando editable para que el usuario termine de acomodarlo, luego deberá hacer lock manualmente

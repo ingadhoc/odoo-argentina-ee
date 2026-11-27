@@ -20,7 +20,7 @@
         <field name="line_ids">
             <record id="l10n_ar_mendoza_report_mendoza_withholdings_line" model="account.report.line">
                 <field name="name">Purchase Withholdings</field>
-                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_state_id.code", "=", "M"), ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"), ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier")])</field>
+                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_state_id.code", "=", "M"), ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"), "&amp;", ("tax_line_id.is_withholding_tax", "=", True), ("tax_line_id.type_tax_use", "=", "purchase")])</field>
             </record>
         </field>
     </record>

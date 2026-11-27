@@ -37,7 +37,6 @@
         <field name='l10n_ar_afip_responsibility_type_id' ref="l10n_ar.res_IVARI"/>
         <field name="website">https://www.smarted.com/</field>
         <field name="email">contacto@smarted.com</field>
-        <field name='l10n_latam_identification_type_id' ref="l10n_ar.it_cuit"/>
         <field name='vat'>30714295698</field>
         <field name="name">Smarted PBA</field>
         <field name="state_id" ref="base.state_ar_b"/>

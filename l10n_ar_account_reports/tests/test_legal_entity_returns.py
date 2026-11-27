@@ -52,6 +52,31 @@ class TestLegalEntityReturns(AccountTestInvoicingCommon):
         cls.generic_return_type = cls.env["account.return.type"].create(
             {"name": "VAT (generic)", "report_id": report.id}
         )
+        # Since 20.0 the closing entry accounts live on the return type (they were on the tax
+        # group before). Without them the native closing refuses to start.
+        for company in cls.entity:
+            Account = cls.env["account.account"].with_company(company)
+            payable = Account.create(
+                {
+                    "name": "Tax payable (test)",
+                    "code": "2.1.9.99.%03d" % company.id,
+                    "account_type": "liability_payable",
+                    "non_trade": True,
+                    "company_ids": [(6, 0, company.ids)],
+                }
+            )
+            receivable = Account.create(
+                {
+                    "name": "Tax receivable (test)",
+                    "code": "1.1.9.99.%03d" % company.id,
+                    "account_type": "asset_receivable",
+                    "non_trade": True,
+                    "company_ids": [(6, 0, company.ids)],
+                }
+            )
+            return_type = cls.generic_return_type.with_company(company)
+            return_type.tax_payable_account_id = payable
+            return_type.tax_receivable_account_id = receivable
 
     def _create_return(self, return_type, selected_companies):
         tax_return = self.env["account.return"].create(
@@ -74,7 +99,7 @@ class TestLegalEntityReturns(AccountTestInvoicingCommon):
         """Even with only the parent ticked: one balanced entry, the whole tax against the payment partner."""
         tax_return = self._create_return(self.ar_return_type, self.parent)
         with patch.object(self.registry["account.return"], "_generate_locking_attachments", lambda self, options: None):
-            tax_return.action_validate(bypass_failing_tests=True)
+            tax_return.action_validate()
 
         move = tax_return.closing_move_ids
         self.assertEqual(len(move), 1)

@@ -1,4 +1,4 @@
-from odoo import models
+from odoo import api, models
 
 
 class AccountReport(models.Model):
@@ -34,3 +34,16 @@ class AccountReport(models.Model):
                     for company in excluded.sudo()
                 ),
             }
+
+    @api.model
+    def _compute_period_range(self, date, months_per_period, start_day, start_month):
+        """Un tipo de declaración quincenal no tiene meses por período, y el cálculo nativo divide por eso.
+
+        ``_compute_period_range`` de account_reports hace ``month_offset // months_per_period`` y
+        revienta con ZeroDivisionError; llegan ahí ``_get_period_dates`` y
+        ``_get_shifted_dates_period``. Con 0 meses por período el período es la quincena, que es
+        lo que ``account.return.type._get_sub_monthly_period_boundaries`` ya resuelve.
+        """
+        if not months_per_period:
+            return self.env["account.return.type"]._l10n_ar_fortnight_boundaries(date)
+        return super()._compute_period_range(date, months_per_period, start_day, start_month)

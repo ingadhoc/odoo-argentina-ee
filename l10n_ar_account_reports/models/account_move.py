@@ -41,7 +41,7 @@ class AccountMove(models.Model):
                 )
             )
             account_return.total_amount_to_pay = account_return._evaluate_total_amount_to_pay_from_tax_closing_accounts(
-                payable_accounts, receivable_accounts
+                receivable_accounts
             )
         return posted
 

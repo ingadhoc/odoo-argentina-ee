@@ -19,17 +19,17 @@
         <field name="line_ids">
             <record id="l10n_ar_sicore_report_profits_line" model="account.report.line">
                 <field name="name">Purchase Profits Withholdings</field>
-                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_tax_type", "in", ["earnings", "earnings_scale"]), ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"), ("tax_line_id.l10n_ar_state_id", "=", False), ("tax_line_id.country_code", "=", "AR"), ("balance", "!=", 0)])</field>
+                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_withholding_tax_type", "in", ["earnings", "earnings_scale"]), "&amp;", ("tax_line_id.is_withholding_tax", "=", True), ("tax_line_id.type_tax_use", "=", "purchase"), ("tax_line_id.l10n_ar_state_id", "=", False), ("tax_line_id.country_code", "=", "AR"), ("balance", "!=", 0)])</field>
             </record>
             <record id="l10n_ar_sicore_report_vat_withholding_line" model="account.report.line">
                 <field name="name">Purchase VAT Withholdings</field>
                 <field name="hide_if_zero" eval="True"/>
-                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_tribute_afip_code", "=", "06"), ("tax_line_id.tax_group_id.name", "not ilike", "VAT Sire"), ("tax_line_id.tax_group_id.name", "not ilike", "IVA Sire"), ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"), ("tax_line_id.l10n_ar_state_id", "=", False), ("tax_line_id.country_code", "=", "AR"), ("balance", "!=", 0)])</field>
+                <field name="domain_formula">-sum([("tax_line_id.l10n_ar_tribute_afip_code", "=", "06"), ("tax_line_id.tax_group_id.name", "not ilike", "VAT Sire"), ("tax_line_id.tax_group_id.name", "not ilike", "IVA Sire"), "&amp;", ("tax_line_id.is_withholding_tax", "=", True), ("tax_line_id.type_tax_use", "=", "purchase"), ("tax_line_id.l10n_ar_state_id", "=", False), ("tax_line_id.country_code", "=", "AR"), ("balance", "!=", 0)])</field>
             </record>
             <record id="l10n_ar_sicore_report_vat_perception_line" model="account.report.line">
                 <field name="name">Sale VAT Perceptions</field>
                 <field name="hide_if_zero" eval="True"/>
-                <field name="domain_formula">-sum([("tax_line_id.type_tax_use", "=", "sale"), ("tax_line_id.l10n_ar_state_id", "=", False), ("tax_line_id.l10n_ar_tribute_afip_code", "=", "06"), ("tax_line_id.country_code", "=", "AR"), ("balance", "!=", 0)])</field>
+                <field name="domain_formula">-sum(["&amp;", ("tax_line_id.is_withholding_tax", "=", False), ("tax_line_id.type_tax_use", "=", "sale"), ("tax_line_id.l10n_ar_state_id", "=", False), ("tax_line_id.l10n_ar_tribute_afip_code", "=", "06"), ("tax_line_id.country_code", "=", "AR"), ("balance", "!=", 0)])</field>
             </record>
         </field>
     </record>

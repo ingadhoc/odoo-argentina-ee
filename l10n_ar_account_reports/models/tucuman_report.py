@@ -1,9 +1,11 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
+import re
+
 from odoo import _, api, fields, models
 from odoo.exceptions import UserError
 
-from .helpers import get_standard_lines_domain, remove_accents_and_dieresis, validate_document_numbers
+from .helpers import get_standard_lines_domain, get_tax_rate, remove_accents_and_dieresis, validate_document_numbers
 
 
 class L10n_ArTucumanReportHandler(models.AbstractModel):
@@ -88,8 +90,12 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
             ("tax_line_id.l10n_ar_state_id.code", "=", "T"),
             ("tax_line_id.l10n_ar_state_id.country_id.code", "=", "AR"),
             "|",
+            "&",
+            ("tax_line_id.is_withholding_tax", "=", False),
             ("tax_line_id.type_tax_use", "=", "sale"),
-            ("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier"),
+            "&",
+            ("tax_line_id.is_withholding_tax", "=", True),
+            ("tax_line_id.type_tax_use", "=", "purchase"),
         ] + get_standard_lines_domain(self.env["account.report"].get_report_company_ids(options), options)
 
         # lo hacemos igual que está hoy, probablemente tengamos que hacer busqueda negativa para los otros casos?
@@ -152,9 +158,10 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
             # 1, FECHA, longitud: 8. Formato AAAAMMDD
             content += fields.Date.from_string(line.date).strftime("%Y%m%d")
             # 2, TIPODOC, longitud: 2
-            content += line.partner_id.l10n_latam_identification_type_id.l10n_ar_afip_code
+            content += line.partner_id.l10n_ar_afip_code
             # 3, DOCUMENTO, longitud: 11
-            content += line.partner_id.l10n_ar_vat
+            # Sanitized, as 19 did: l10n_ar_vat came compacted and l10n_ar_afip_id_value does not.
+            content += re.sub(r"\D", "", line.partner_id.l10n_ar_afip_id_value or "")
             # 4, TIPO COMP, longitud: 2
             # 99 para retenciones por el ejemplo que pasó en el archivo adjunto el cliente en la tarea 38200
             content += line.move_id.l10n_latam_document_type_id.code.zfill(2) if is_perception else "99"
@@ -174,7 +181,7 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
             content += "%015.2f" % (abs(line.tax_base_amount) if is_perception else line.withholding_id.base_amount)
             # 9, PORCENTAJE/ALICUOTA, longitud: 6,3
             tax = line._get_settlement_tax()
-            content += "%06.3f" % tax.amount
+            content += "%06.3f" % get_tax_rate(tax)
             # 10, MONTO_RET/PER, longitud: 15,2
             content += "%015.2f" % abs(line.balance)
             content += "\r\n"
@@ -190,9 +197,10 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
             # 1, FECHA, longitud: 8. Formato AAAAMMDD
             content += fields.Date.from_string(line.date).strftime("%Y%m%d")
             # 2, TIPODOC, longitud: 2
-            content += line.partner_id.l10n_latam_identification_type_id.l10n_ar_afip_code
+            content += line.partner_id.l10n_ar_afip_code
             # 3, DOCUMENTO, longitud: 11
-            content += line.partner_id.l10n_ar_vat
+            # Sanitized, as 19 did: l10n_ar_vat came compacted and l10n_ar_afip_id_value does not.
+            content += re.sub(r"\D", "", line.partner_id.l10n_ar_afip_id_value or "")
             # 4, TIPO COMP, longitud: 2
             # 99 para retenciones por el ejemplo que pasó en el archivo adjunto el cliente en la tarea 38200
             content += line.move_id.l10n_latam_document_type_id.code.zfill(2) if is_perception else "99"
@@ -213,7 +221,7 @@ class L10n_ArTucumanReportHandler(models.AbstractModel):
             content += "%015.2f" % (abs(line.tax_base_amount) if is_perception else line.withholding_id.base_amount)
             # 9, PORCENTAJE/ALICUOTA, longitud: 6,3
             tax = line._get_settlement_tax()
-            content += "%06.3f" % tax.amount
+            content += "%06.3f" % get_tax_rate(tax)
             # 10, MONTO_RET/PER, longitud: 15,2
             content += "%015.2f" % abs(line.balance)
             content += "\r\n"

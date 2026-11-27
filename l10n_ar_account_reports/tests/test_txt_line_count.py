@@ -141,10 +141,11 @@ class TestTxtLineCount(TestL10nArAccountReportsCommon):
         for line_name in line_names:
             report_line = self.env.ref("l10n_ar_account_reports.l10n_ar_%s_report_%s" % (prefix, line_name))
             expression = report_line.expression_ids.filtered(lambda expr: expr.label == "balance")
-            for column_group_key in options["column_groups"]:
+            # In 20.0 ``column_groups`` is a list: iterate by index, not by key.
+            for group_index in range(len(options["column_groups"])):
                 move_lines |= self.env["account.move.line"].search(
                     report._get_audit_line_domain(
-                        report._get_column_group_options(options, column_group_key),
+                        report._get_column_group_options(options, group_index),
                         expression,
                         {"calling_line_dict_id": report._get_generic_line_id("account.report.line", report_line.id)},
                     )

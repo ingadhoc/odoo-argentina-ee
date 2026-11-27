@@ -7,7 +7,7 @@ import zipfile
 from odoo import _, api, fields, models
 from odoo.exceptions import RedirectWarning, UserError
 
-from .helpers import format_amount, get_line_tax_base, get_standard_lines_domain
+from .helpers import format_amount, get_line_tax_base, get_standard_lines_domain, get_tax_rate
 
 
 class L10n_ArSircarReportHandler(models.AbstractModel):
@@ -88,9 +88,13 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
         ] + get_standard_lines_domain(self.env["account.report"].get_report_company_ids(options), options)
 
         if file_type == "ret":
-            domain += [("tax_line_id.l10n_ar_withholding_payment_type", "=", "supplier")]
+            domain += [
+                "&",
+                ("tax_line_id.is_withholding_tax", "=", True),
+                ("tax_line_id.type_tax_use", "=", "purchase"),
+            ]
         elif file_type == "perc":
-            domain += [("tax_line_id.type_tax_use", "=", "sale")]
+            domain += ["&", ("tax_line_id.is_withholding_tax", "=", False), ("tax_line_id.type_tax_use", "=", "sale")]
         return self.env["account.move.line"].search(domain)
 
     def _get_sircar_txt_content(self, move_lines, file_type):
@@ -102,7 +106,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
         if file_type == "ret":
             for line in move_lines.filtered("amount_currency").sorted(key=lambda r: r.date, reverse=True):
                 tax = line._get_settlement_tax()
-                alicuot = tax.amount
+                alicuot = get_tax_rate(tax)
 
                 internal_type = line.l10n_latam_document_type_id.internal_type
 
@@ -145,7 +149,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
                             "There is no withholding regime (ARCA Code 'l10n_ar_code') configured for tax '%(tax_name)s'",
                             tax_name=tax.name,
                         ),
-                        action=tax.get_formview_action(),
+                        action=tax.get_record_default_action(),
                         button_text=_("Edit tax"),
                     )
                 content.append(tax.l10n_ar_code)
@@ -158,7 +162,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
                             'There is no jurisdiction set in the tax "%(tax_name)s" or it does not have a jurisdiction code.',
                             tax_name=tax.name,
                         ),
-                        action=tax.get_formview_action(),
+                        action=tax.get_record_default_action(),
                         button_text=_("Edit tax"),
                     )
 
@@ -187,7 +191,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
         elif file_type == "perc":
             for line in move_lines.filtered("amount_currency").sorted(key=lambda r: r.date, reverse=True):
                 tax = line._get_settlement_tax()
-                alicuot = tax.amount
+                alicuot = get_tax_rate(tax)
                 # 1 Número de Renglón (único por archivo)
                 content = []
                 content.append("%05d" % line_nbr)
@@ -239,7 +243,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
                             "There is no perception regime (ARCA Code 'l10n_ar_code') configured for tax: '%(tax_name)s'.",
                             tax_name=tax.name,
                         ),
-                        action=tax.get_formview_action(),
+                        action=tax.get_record_default_action(),
                         button_text=_("Edit tax"),
                     )
                 content.append(tax.l10n_ar_code)
@@ -252,7 +256,7 @@ class L10n_ArSircarReportHandler(models.AbstractModel):
                             'There is no jurisdiction set in the tax "%(tax_name)s" or it does not have a jurisdiction code.',
                             tax_name=tax.name,
                         ),
-                        action=tax.get_formview_action(),
+                        action=tax.get_record_default_action(),
                         button_text=_("Edit tax"),
                     )
 
