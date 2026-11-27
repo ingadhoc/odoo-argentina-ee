@@ -57,7 +57,7 @@
 
                 <field name="line_ids" nolabel="1" readonly="1">
 
-                    <list decoration-warning="exists == True">
+                    <list decoration-warning="already_exists == True">
                         <field name="document_type"/>
                         <field name="invoice_number"/>
                         <field name="partner_name"/>

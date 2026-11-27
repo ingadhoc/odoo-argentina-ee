@@ -192,13 +192,34 @@ class TestAfipImportWizard(TestArCommon):
         to_create = wizard.total_bills_to_create
         self.assertTrue(wizard.total_bills_exists, "The second listing comes in as repeated")
 
-        wizard.line_ids.filtered(lambda line: not line.exists)[0].action_remove()
+        wizard.line_ids.filtered(lambda line: not line.already_exists)[0].action_remove()
 
         self.assertEqual(
             wizard.total_bills_to_create,
             to_create,
             "The copy that is left stops being a repetition of the line that was removed",
         )
+
+    def test_the_lines_keep_the_orm_exists_and_go_with_their_wizard(self):
+        """A field named like the ORM method hid exists() on the lines, so the daily
+        vacuum of the transient records failed on the lines of every old wizard."""
+        journal = self.company_data["default_journal_purchase"]
+        attachments = self.env["ir.attachment"].create(
+            [
+                {"name": "uno.xlsx", "raw": self._fixture("invoice_partner_test.xlsx")},
+                {"name": "otro.xlsx", "raw": self._fixture("Exento.xlsx")},
+            ]
+        )
+        wizard = self.env["afip.import.wizard"].browse(journal.import_bills_from_xls(attachments)["res_id"])
+        lines = wizard.line_ids
+        self.assertGreater(len(lines), 1, "The two listings bring several lines")
+        self.assertEqual(lines.exists(), lines)
+
+        # As the daily vacuum does: no group may delete a wizard, so it unlinks with sudo.
+        wizard.sudo().unlink()
+        self.env.flush_all()
+
+        self.assertFalse(lines.exists(), "The lines go with their wizard")
 
     def test_an_imported_invoice_is_not_imported_again(self):
         """The second import of the same listing creates nothing: it is all already in."""
