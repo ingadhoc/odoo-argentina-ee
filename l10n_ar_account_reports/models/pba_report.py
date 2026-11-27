@@ -24,7 +24,7 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
         # Add export button
         txt_export_button = [
             {
-                "name": "TXT Retenciones IIBB aplicadas ARBA alta por lote A-122R desde 01/03/2026.",
+                "name": "TXT Retenciones IIBB ARBA (A-122R, desde 01/03/2026)",
                 "sequence": 30,
                 "action": "export_file",
                 "action_param": "pba_alta_ret_lote_a122r_01032026_txt",
@@ -32,7 +32,7 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
                 "branch_allowed": True,
             },
             {
-                "name": "TXT Percepciones IIBB aplicadas ARBA desde 01/03/2026: Percepciones (excepto actividad 29, 7 quincenal, 7 y 17 de Bancos)",
+                "name": "TXT Percepciones IIBB ARBA (excepto act. 29, 7 quincenal, 7 y 17 de Bancos)",
                 "sequence": 30,
                 "action": "export_file",
                 "action_param": "pba_perc_desde_01032026_txt",
@@ -40,7 +40,7 @@ class L10n_ArPbaReportHandler(models.AbstractModel):
                 "branch_allowed": True,
             },
             {
-                "name": "TXT Percepciones IIBB aplicadas ARBA desde 01/03/2026: Percepciones Act. 7 método Percibido (quincenal)",
+                "name": "TXT Percepciones IIBB ARBA (act. 7 método percibido, quincenal)",
                 "sequence": 30,
                 "action": "export_file",
                 "action_param": "pba_perc_act_7_desde_01032026_txt",

@@ -474,8 +474,8 @@ msgid ""
 "Can only generate TXT files using posted entries. Please remove Include "
 "unposted entries filter and try again"
 msgstr ""
-"Solo se pueden generar archivos TXT a partir de entradas publicadas. "
-"Desactiva el filtro «Incluir entradas no publicadas» e inténtalo de nuevo"
+"Solo se pueden generar archivos TXT con asientos publicados. Quite el filtro "
+"\"Borradores de asientos\" e intente de nuevo."
 
 #. module: l10n_ar_account_reports
 #: model_terms:ir.ui.view,arch_db:l10n_ar_account_reports.inflation_adjustment_form
@@ -1407,8 +1407,8 @@ msgid ""
 "The identification type \"%(identification_type)s\" does not have ARCA code "
 "set."
 msgstr ""
-"El tipo de identificación «%(identification_type)s» no tiene asignado ningún "
-"código ARCA."
+"El tipo de identificación \"%(identification_type)s\" no tiene asignado "
+"ningún código ARCA."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1433,8 +1433,8 @@ msgid ""
 "The partner \"%(partner_name)s\" (id %(partner_id)s) does not have an "
 "identification number set"
 msgstr ""
-"El partner \"%(partner_name)s\" (id %(partner_id)s) no tiene número de "
-"identificación establecido"
+"El contacto \"%(partner_name)s\" (id %(partner_id)s) no tiene cargado el "
+"número de identificación."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1443,7 +1443,7 @@ msgid ""
 "The partner \"%(partner_name)s\" (id %(partner_id)s) does not have the vat "
 "set."
 msgstr ""
-"El contacto «%(partner_name)s» (id %(partner_id)s) no tiene configurado el "
+"El contacto \"%(partner_name)s\" (id %(partner_id)s) no tiene cargado el "
 "número de identificación."
 
 #. module: l10n_ar_account_reports
@@ -1451,7 +1451,8 @@ msgstr ""
 #: code:addons/l10n_ar_account_reports/models/account_return.py:0
 msgid "The partner '%s' has no %s account configured for company '%s'."
 msgstr ""
-"El contacto «%s» no tiene ninguna cuenta %s configurada para la empresa «%s»."
+"El contacto \"%s\" no tiene ninguna cuenta %s configurada para la empresa "
+"\"%s\"."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1460,7 +1461,7 @@ msgid ""
 "The payment \"%(payment_name)s\" (id %(payment_id)s) has a withholding tax "
 "that is not linked to a withholding, so its base amount cannot be reported."
 msgstr ""
-"El pago «%(payment_name)s» (id %(payment_id)s) tiene un impuesto de "
+"El pago \"%(payment_name)s\" (id %(payment_id)s) tiene un impuesto de "
 "retención que no está vinculado a una retención, así que no se puede "
 "informar su base de cálculo."
 
@@ -1491,8 +1492,8 @@ msgid ""
 "The return type '%s' has no payment partner configured. Please set a Payment "
 "Partner on the return type."
 msgstr ""
-"El tipo de devolución «%s» no tiene ningún contacto de pago configurado. "
-"Configure un contacto de pago para el tipo de devolución."
+"El tipo de declaración \"%s\" no tiene contacto de pago configurado. "
+"Configure un contacto de pago para el tipo de declaración."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1673,8 +1674,8 @@ msgid ""
 "You must set the IIBB registration type for contact \"%(partner_name)s\" "
 "(id: %(partner_id)s)"
 msgstr ""
-"Debe setear el tipo de inscripción de IIBB del contacto \"%(partner_name)s\" "
-"(id: %(partner_id)s)"
+"Debe configurar el tipo de inscripción en IIBB del contacto "
+"\"%(partner_name)s\" (id: %(partner_id)s)."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
@@ -1683,8 +1684,8 @@ msgid ""
 "You must set the IIBB registration type for partner \"%(partner_name)s\" "
 "(id: %(partner_id)s)"
 msgstr ""
-"Debe establecer el tipo de inscripción de IIBB del partner \"%"
-"(partner_name)s\" (id: %(partner_id)s)"
+"Debe configurar el tipo de inscripción en IIBB del contacto "
+"\"%(partner_name)s\" (id: %(partner_id)s)."
 
 #. module: l10n_ar_account_reports
 #. odoo-python
